@@ -160,14 +160,13 @@ h1{
 
 /* COLOR PICKER */
 .cpicker{
-  display:none;flex-direction:column;align-items:center;gap:3px;width:100%;
-  background:#fff;border:2px solid #EDE8E2;border-radius:12px;padding:4px 6px 3px;
+  display:none;flex-direction:row;align-items:center;justify-content:center;gap:6px;width:100%;
+  background:#fff;border:2px solid #EDE8E2;border-radius:50px;padding:3px 8px;
 }
 .cpicker.show{display:flex;}
-.cpicker-label{font-family:'Baloo 2',cursive;font-size:.68rem;font-weight:700;color:#999;}
-.cpicker-row{display:flex;gap:8px;}
+.cpicker-row{display:flex;gap:6px;}
 .cb{
-  width:28px;height:28px;border-radius:50%;border:3px solid transparent;
+  width:22px;height:22px;border-radius:50%;border:3px solid transparent;
   cursor:pointer;transition:transform .18s,box-shadow .18s;
   -webkit-tap-highlight-color:transparent;
 }
@@ -372,7 +371,6 @@ function build(){
         <span class="chint" id="ch${i}"></span>
       </div>
       <div class="cpicker" id="cp${i}">
-        <span class="cpicker-label">🎨 Which colour rule?</span>
         <div class="cpicker-row">
           <button class="cb r" onclick="pickColor(${i},'red')"></button>
           <button class="cb b" onclick="pickColor(${i},'blue')"></button>
@@ -490,6 +488,16 @@ function pickColor(i,color){
     btn.classList.remove("picked");
     if(map[btn.classList[1]]===color) btn.classList.add("picked");
   });
+  // Pintar el corazón del color seleccionado inmediatamente
+  const hp=document.getElementById(`hp${i}`);
+  hp.setAttribute("fill",RC[color].active);
+  hp.setAttribute("stroke",RC[color].stroke);
+  // Animación de boing al cambiar color
+  const hb=document.getElementById(`hb${i}`);
+  hb.classList.remove("boing");
+  void hb.offsetWidth;
+  hb.classList.add("boing");
+  setTimeout(()=>hb.classList.remove("boing"),400);
   updateProgress();
 }
 
