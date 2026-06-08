@@ -8,3 +8,6 @@ Thumbs.db
 
 # Kiro
 .kiro/
+
+# Playwright
+.playwright-mcp/
