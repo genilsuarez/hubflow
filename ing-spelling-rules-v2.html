@@ -143,13 +143,23 @@ body{
 }
 
 /* TITLE */
+.header-row{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;
+}
 h1{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1rem,3.5vw,1.5rem);
-  text-align:center;margin-bottom:0;line-height:1.2;
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(.9rem,3vw,1.3rem);
+  margin-bottom:0;line-height:1.2;
   background:linear-gradient(120deg,var(--red),#FF9F6B,var(--blue));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.subtitle{text-align:center;font-size:.7rem;color:var(--muted);margin-bottom:4px;font-weight:700;}
+.header-badge{
+  display:flex;align-items:center;gap:3px;
+  font-family:'Baloo 2',cursive;font-size:.7rem;font-weight:700;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:50px;padding:2px 8px;color:var(--muted);
+}
+.badge-icon{font-size:.75rem;}
+.badge-val{color:var(--text);font-weight:800;}
 
 /* STATS — displayed in menu sidebar */
 .stat .val{color:var(--text);}
@@ -425,20 +435,18 @@ h1{
 .stars-sub{font-size:.9rem;color:var(--muted);font-weight:700;margin-bottom:16px;}
 .stars-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
-/* HISTORY */
-.history-box{
-  margin-top:12px;padding:10px 14px;border-radius:12px;
-  background:var(--surface);border:2px solid var(--border);
-  font-family:'Baloo 2',cursive;font-size:.75rem;
-}
-.history-box h3{font-size:.8rem;margin-bottom:6px;color:var(--text);}
-.history-entry{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border);}
+/* HISTORY — in sidebar */
+.history-list{padding:0 14px 8px;font-family:'Baloo 2',cursive;font-size:.7rem;}
+.history-entry{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border);}
 .history-entry:last-child{border:none;}
 .history-entry .date{color:var(--muted);}
 .history-entry .pct{font-weight:800;}
 .history-entry .pct.great{color:var(--green-dark);}
 .history-entry .pct.ok{color:#7B621A;}
 .history-entry .pct.try{color:var(--red-dark);}
+[data-theme="dark"] .history-entry .pct.great{color:#6FE8A8;}
+[data-theme="dark"] .history-entry .pct.ok{color:#F7C948;}
+[data-theme="dark"] .history-entry .pct.try{color:#FF9F9F;}
 
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
@@ -529,6 +537,10 @@ h1{
     <button class="menu-item" id="themeToggle" onclick="toggleTheme()">
       <span class="menu-item-icon">🌙</span> Dark mode
     </button>
+
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Recent Scores</span>
+    <div class="history-list" id="historyList"></div>
   </nav>
   <div class="menu-footer">
     <span>LearnHub</span>
@@ -538,8 +550,13 @@ h1{
 
 <!-- ══ FIXED HEADER ══ -->
 <div class="header">
-  <h1>-ing spelling rules <span style="font-size:.7em">v2</span></h1>
-  <p class="subtitle">Learn how to add <strong>-ing</strong> to verbs!</p>
+  <div class="header-row">
+    <h1>-ing rules <span style="font-size:.65em">v2</span></h1>
+    <div class="header-badge" id="headerBadge" style="display:none">
+      <span class="badge-icon">🏆</span>
+      <span class="badge-val" id="headerLastScore">—</span>
+    </div>
+  </div>
 
   <!-- MODE -->
   <div class="mode-bar">
@@ -570,10 +587,6 @@ h1{
   <div class="grid" id="grid"></div>
   <div class="btn-row" id="btnRow"></div>
   <div class="score" id="score"></div>
-  <div class="history-box" id="historyBox" style="display:none">
-    <h3>📜 Recent scores</h3>
-    <div id="historyList"></div>
-  </div>
 </div>
 
 <script>
@@ -695,15 +708,21 @@ function renderStats(){
   const s=getStats();
   document.getElementById("bestScore").textContent=s.best!==null?s.best+"%":"—";
   document.getElementById("timesPlayed").textContent=s.played;
-  // History
-  const box=document.getElementById("historyBox");
+  // Header badge — show last score
+  const badge=document.getElementById("headerBadge");
+  if(s.best!==null){
+    badge.style.display="flex";
+    document.getElementById("headerLastScore").textContent=s.best+"%";
+  }
+  // History in sidebar
   const list=document.getElementById("historyList");
-  if(s.history.length>0){
-    box.style.display="block";
+  if(s.history&&s.history.length>0){
     list.innerHTML=s.history.slice(0,5).map(h=>{
       const cls=h.pct===100?"great":h.pct>=60?"ok":"try";
       return `<div class="history-entry"><span class="date">${h.date} (${h.level||"—"})</span><span class="pct ${cls}">${h.pct}%</span></div>`;
     }).join("");
+  } else {
+    list.innerHTML='<div style="color:var(--muted);padding:4px 0;font-size:.7rem;">No games yet</div>';
   }
 }
 
