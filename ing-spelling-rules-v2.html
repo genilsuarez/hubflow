@@ -1009,9 +1009,37 @@ function onType(i){
   document.getElementById(`ch${i}`).textContent="";
 }
 
-function getHint(ans, attempts){
-  const reveal=Math.min(attempts, ans.length-1);
-  return ans.slice(0,reveal)+"…";
+function getHint(word, attempts){
+  const v = word.verb;
+  const ans = word.ans;
+  const rule = word.rule;
+  const why = word.why;
+  
+  // Attempt 1: hint about the rule category
+  if(attempts === 1){
+    if(rule==="red") return "💡 No big changes needed here";
+    if(rule==="blue") return "💡 Something needs to be removed or changed";
+    if(rule==="green") return "💡 Something needs to be added/doubled";
+  }
+  // Attempt 2: more specific rule hint
+  if(attempts === 2){
+    if(ans.includes("icking")) return "💡 Think about keeping the hard /k/ sound";
+    if(v.endsWith("ie") && ans.endsWith("ying")) return "💡 What happens to -ie before -ing?";
+    if(v.endsWith("ee")) return "💡 Is this -e silent? Or is it a vowel sound?";
+    if(v.endsWith("e") && ans.includes("eing")) return "💡 Does this -e need to stay?";
+    if(v.endsWith("e") && !ans.includes("eing")) return "💡 What do you do with a silent -e?";
+    if(rule==="green" && ans.length > v.length+4) return "💡 The last consonant gets doubled";
+    if(why.includes("don't double")) return "💡 This looks like CVC but it's a trap";
+    return `💡 Think: ${why.split("→")[0]}`;
+  }
+  // Attempt 3: very direct hint — show the tricky transformation
+  if(attempts >= 3){
+    const len = ans.length;
+    // Show: first half visible + … + last 4 chars
+    const shown = ans.slice(0, Math.floor(len/2)) + "…" + ans.slice(-3);
+    return `💡 ${shown} (${len} letters)`;
+  }
+  return "";
 }
 
 function trySpell(i){
@@ -1044,7 +1072,7 @@ function trySpell(i){
     vibrate([50,30,50]);
     recordFail(words[i].verb);
     if(st[i].attempts>=1){
-      document.getElementById(`ch${i}`).textContent=`Hint: ${getHint(words[i].ans, st[i].attempts)}`;
+      document.getElementById(`ch${i}`).textContent=getHint(words[i], st[i].attempts);
     }
     const hb=document.getElementById(`hb${i}`);
     hb.style.animation="none"; void hb.offsetWidth;
