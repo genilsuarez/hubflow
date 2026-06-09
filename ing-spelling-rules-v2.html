@@ -513,6 +513,9 @@ h1{
     <button class="menu-item" id="ml-exceptions" onclick="setLevel('exceptions')">
       <span class="menu-item-icon">⚡</span> Exceptions
     </button>
+    <button class="menu-item" id="ml-god" onclick="setLevel('god')">
+      <span class="menu-item-icon">💀</span> God Mode
+    </button>
 
     <div class="menu-divider"></div>
     <span class="menu-section-label">Stats</span>
@@ -649,6 +652,54 @@ const LEVELS={
     {verb:"canoe",   ans:"canoeing",   rule:"red",   why:"Exception: 'oe' ending → just add -ing"},
     {verb:"queue",   ans:"queueing",   rule:"red",   why:"Exception: keep 'e' (British spelling)"},
   ],
+  god:[
+    // -ie → -ying (tricky)
+    {verb:"die",      ans:"dying",       rule:"blue",  why:"-ie → y + ing"},
+    {verb:"lie",      ans:"lying",       rule:"blue",  why:"-ie → y + ing"},
+    {verb:"vie",      ans:"vying",       rule:"blue",  why:"-ie → y + ing (to compete)"},
+    // Keep -e (mandatory — ambiguity)
+    {verb:"dye",      ans:"dyeing",      rule:"red",   why:"Keep -e: 'dying' already exists (die)"},
+    {verb:"singe",    ans:"singeing",    rule:"red",   why:"Keep -e: 'singing' already exists (sing)"},
+    {verb:"tinge",    ans:"tingeing",    rule:"red",   why:"Keep -e: preserves soft g distinction"},
+    // Keep -e (vowel ending, not silent)
+    {verb:"canoe",    ans:"canoeing",    rule:"red",   why:"-oe is pronounced, not silent → keep -e"},
+    {verb:"hoe",      ans:"hoeing",      rule:"red",   why:"-oe ending → keep -e + ing"},
+    {verb:"shoe",     ans:"shoeing",     rule:"red",   why:"-oe ending → keep -e + ing"},
+    // -ee (not silent, just add)
+    {verb:"see",      ans:"seeing",      rule:"red",   why:"-ee is a vowel sound, not silent e"},
+    {verb:"flee",     ans:"fleeing",     rule:"red",   why:"-ee → just add -ing"},
+    {verb:"guarantee",ans:"guaranteeing",rule:"red",   why:"-ee → just add -ing"},
+    // -c → add -k
+    {verb:"panic",    ans:"panicking",   rule:"green", why:"Add -k to keep hard /k/ sound"},
+    {verb:"picnic",   ans:"picnicking",  rule:"green", why:"Add -k to keep hard /k/ sound"},
+    {verb:"mimic",    ans:"mimicking",   rule:"green", why:"Add -k to keep hard /k/ sound"},
+    {verb:"traffic",  ans:"trafficking", rule:"green", why:"Add -k to keep hard /k/ sound"},
+    // Irregulars / weird ones
+    {verb:"be",       ans:"being",       rule:"red",   why:"Irregular: -e is the word itself, keep it"},
+    {verb:"ski",      ans:"skiing",      rule:"red",   why:"Ends in vowel -i → just add -ing"},
+    {verb:"taxi",     ans:"taxiing",     rule:"red",   why:"Ends in vowel -i → add -ing (double i)"},
+    // British -l doubling (unstressed)
+    {verb:"travel",   ans:"travelling",  rule:"green", why:"British: double -l even without stress"},
+    {verb:"cancel",   ans:"cancelling",  rule:"green", why:"British: double -l even without stress"},
+    {verb:"fuel",     ans:"fuelling",    rule:"green", why:"British: double -l even without stress"},
+    // CVC doubling with stress traps
+    {verb:"refer",    ans:"referring",   rule:"green", why:"Stress on last syllable + CVC → double"},
+    {verb:"occur",    ans:"occurring",   rule:"green", why:"Stress on last syllable + CVC → double"},
+    {verb:"regret",   ans:"regretting",  rule:"green", why:"Stress on last syllable + CVC → double"},
+    {verb:"commit",   ans:"committing",  rule:"green", why:"Stress on last syllable + CVC → double"},
+    // Stress on FIRST = DON'T double (trap!)
+    {verb:"offer",    ans:"offering",    rule:"red",   why:"Stress on FIRST syllable → don't double"},
+    {verb:"benefit",  ans:"benefiting",  rule:"red",   why:"Stress on FIRST syllable → don't double"},
+    {verb:"orbit",    ans:"orbiting",    rule:"red",   why:"Stress on FIRST syllable → don't double"},
+    // -w / -x (look like CVC but don't double)
+    {verb:"relax",    ans:"relaxing",    rule:"red",   why:"-x = /ks/ two sounds → don't double"},
+    {verb:"allow",    ans:"allowing",    rule:"red",   why:"-w after vowel → diphthong, don't double"},
+    // Queue (British)
+    {verb:"queue",    ans:"queueing",    rule:"red",   why:"British: keep -e (pronounced vowel)"},
+    // Normal drop -e mixed in (to confuse)
+    {verb:"achieve",  ans:"achieving",   rule:"blue",  why:"Silent -e → drop it normally"},
+    {verb:"squeeze",  ans:"squeezing",   rule:"blue",  why:"Drop silent -e (the -ee stays, only final -e drops)"},
+  ],
 };
 
 const RC_LIGHT={
@@ -765,7 +816,7 @@ function closeMenu(){
   document.getElementById("menuOverlay").classList.remove("show");
 }
 function updateMenuChips(){
-  const levels=["beginner","intermediate","exceptions"];
+  const levels=["beginner","intermediate","exceptions","god"];
   levels.forEach(l=>{
     const el=document.getElementById("ml-"+l);
     if(el) el.classList.toggle("active",l===level);
