@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>-ing Rules Guide | LearnHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF6EE;--text:#2E2828;--muted:#999;--surface:#fff;--border:#EDE8E2;
+  --red:#FF6B6B;--blue:#4A90D9;--green:#3DBE7A;
+  --red-light:#FFECEC;--blue-light:#E4F0FF;--green-light:#E2FAF0;
+  --red-dark:#CC3333;--blue-dark:#1B5EA8;--green-dark:#1E7A48;
+  --yellow:#F7C948;--yellow-light:#FFFBEA;--purple:#9B59B6;--purple-light:#F3E8FF;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;padding:0;transition:background .3s,color .3s;
+}
+.page{max-width:680px;margin:0 auto;padding:20px 16px 60px;}
+
+/* NAV */
+.nav-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);
+}
+.nav-back{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.85rem;
+  color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
+}
+.nav-back:hover{opacity:.7;}
+.nav-title{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:.8rem;color:var(--muted);
+}
+
+/* HEADINGS */
+h1{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1.4rem,4vw,1.8rem);
+  margin-bottom:6px;line-height:1.2;
+  background:linear-gradient(120deg,var(--red),#FF9F6B,var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.intro{font-size:.9rem;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+
+h2{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:1.1rem;
+  margin:28px 0 10px;color:var(--text);display:flex;align-items:center;gap:8px;
+}
+h2 .tag{
+  font-size:.6rem;padding:2px 8px;border-radius:50px;font-weight:700;
+}
+h2 .tag.base{background:var(--blue-light);color:var(--blue-dark);}
+h2 .tag.exc{background:var(--red-light);color:var(--red-dark);}
+
+/* RULE CARDS */
+.rule-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin-bottom:12px;transition:background .3s,border-color .3s;
+}
+.rule-card.highlight{border-left:4px solid var(--blue);}
+.rule-card.exception{border-left:4px solid var(--red);}
+.rule-card.sub-exc{border-left:4px solid var(--yellow);margin-left:16px;}
+
+.rule-title{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.85rem;
+  margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.rule-title .emoji{font-size:1rem;}
+
+.rule-desc{font-size:.82rem;line-height:1.5;color:var(--text);margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
+
+.examples{
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.ex{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.75rem;
+  padding:3px 10px;border-radius:50px;
+  background:var(--green-light);color:var(--green-dark);
+}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.alt{background:var(--yellow-light);color:#7B621A;}
+[data-theme="dark"] .ex.alt{color:#F7C948;}
+
+.why{
+  font-size:.72rem;color:var(--muted);font-style:italic;margin-top:6px;
+  padding-left:10px;border-left:2px solid var(--border);
+}
+
+/* SUMMARY TABLE */
+.summary-table{
+  width:100%;border-collapse:collapse;margin:16px 0;font-size:.78rem;
+  font-family:'Nunito',sans-serif;
+}
+.summary-table th{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+  text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);
+}
+.summary-table td{
+  padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;
+}
+.summary-table tr:last-child td{border-bottom:none;}
+.summary-table .action{font-weight:700;color:var(--blue-dark);}
+[data-theme="dark"] .summary-table .action{color:#7AC7FF;}
+
+/* FOOTER */
+.guide-footer{
+  margin-top:32px;padding-top:16px;border-top:2px solid var(--border);
+  text-align:center;font-size:.75rem;color:var(--muted);
+}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .rule-card.sub-exc{margin-left:8px;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="ing-spelling-rules-v2.html" class="nav-back">← Back to practice</a>
+  <span class="nav-title">📖 Reference Guide</span>
+</nav>
+
+<h1>-ing Spelling Rules</h1>
+<p class="intro">How to form the present participle (gerund) in English. The base rule is simple — the exceptions are where it gets interesting.</p>
+
+<!-- BASE RULE -->
+<h2>🟢 Base Rule <span class="tag base">Most verbs</span></h2>
+
+<div class="rule-card highlight">
+  <div class="rule-title"><span class="emoji">✅</span> Just add -ing</div>
+  <div class="rule-desc">The majority of English verbs simply take <strong>-ing</strong> at the end with no changes.</div>
+  <div class="examples">
+    <span class="ex">work → working</span>
+    <span class="ex">play → playing</span>
+    <span class="ex">eat → eating</span>
+    <span class="ex">read → reading</span>
+    <span class="ex">talk → talking</span>
+  </div>
+</div>
+
+<!-- DOUBLING -->
+<h2>🟢 CVC Doubling <span class="tag base">Common pattern</span></h2>
+
+<div class="rule-card highlight">
+  <div class="rule-title"><span class="emoji">✅</span> Double the final consonant + -ing</div>
+  <div class="rule-desc">When a verb ends in <strong>Consonant-Vowel-Consonant</strong> (CVC) and the last syllable is stressed, double the final consonant.</div>
+  <div class="examples">
+    <span class="ex">run → running</span>
+    <span class="ex">sit → sitting</span>
+    <span class="ex">stop → stopping</span>
+    <span class="ex">swim → swimming</span>
+    <span class="ex">begin → beginning</span>
+    <span class="ex">prefer → preferring</span>
+  </div>
+  <p class="why">If stress is on the first syllable, don't double: open → opening, listen → listening, visit → visiting.</p>
+</div>
+
+<!-- EXCEPTIONS -->
+<h2>🔴 Exceptions <span class="tag exc">Special cases</span></h2>
+
+<!-- Exception 1: Silent -e -->
+<div class="rule-card exception">
+  <div class="rule-title"><span class="emoji">1️⃣</span> Silent -e → drop it</div>
+  <div class="rule-desc">When a verb ends in a <strong>silent -e</strong>, remove it before adding -ing.</div>
+  <div class="examples">
+    <span class="ex">make → making</span>
+    <span class="ex">come → coming</span>
+    <span class="ex">dance → dancing</span>
+    <span class="ex">write → writing</span>
+  </div>
+</div>
+
+<div class="rule-card sub-exc">
+  <div class="rule-title"><span class="emoji">⚠️</span> Sub-exception: keep the -e</div>
+  <div class="rule-desc">When removing the -e would cause confusion or change pronunciation, keep it.</div>
+  <div class="examples">
+    <span class="ex alt">dye → dyeing</span>
+    <span class="ex alt">age → ageing</span>
+    <span class="ex alt">canoe → canoeing</span>
+    <span class="ex alt">queue → queueing</span>
+  </div>
+  <p class="why">"dye → dyeing" keeps the -e because "dying" already exists (from "die"). "age → ageing" preserves the soft 'g' sound.</p>
+</div>
+
+<!-- Exception 2: -ie → -y -->
+<div class="rule-card exception">
+  <div class="rule-title"><span class="emoji">2️⃣</span> Verbs ending in -ie → change to -y</div>
+  <div class="rule-desc">When a verb ends in <strong>-ie</strong>, change it to -y before adding -ing. You can't have "-ieing" — it's an orthographic rule.</div>
+  <div class="examples">
+    <span class="ex">die → dying</span>
+    <span class="ex">tie → tying</span>
+    <span class="ex">lie → lying</span>
+  </div>
+</div>
+
+<!-- Exception 3: -c → add -k -->
+<div class="rule-card exception">
+  <div class="rule-title"><span class="emoji">3️⃣</span> Verbs ending in -c → add -k</div>
+  <div class="rule-desc">When a verb ends in <strong>-c</strong>, add a -k before -ing to preserve the hard /k/ sound.</div>
+  <div class="examples">
+    <span class="ex">picnic → picnicking</span>
+    <span class="ex">panic → panicking</span>
+  </div>
+  <p class="why">Without the -k, the 'c' before -ing would sound like /s/ (as in "icing") instead of /k/.</p>
+</div>
+
+<!-- Exception 4: -w / -x -->
+<div class="rule-card exception">
+  <div class="rule-title"><span class="emoji">4️⃣</span> Verbs ending in -w or -x → don't double</div>
+  <div class="rule-desc">Even though they look like CVC patterns, <strong>-w</strong> and <strong>-x</strong> are phonetic exceptions — they never get doubled.</div>
+  <div class="examples">
+    <span class="ex">snow → snowing</span>
+    <span class="ex">show → showing</span>
+    <span class="ex">box → boxing</span>
+    <span class="ex">fix → fixing</span>
+  </div>
+  <p class="why">The -x represents two sounds /ks/, so phonetically the consonant is already "doubled". The -w after a vowel forms a diphthong, not a true consonant ending.</p>
+</div>
+
+<!-- SUMMARY TABLE -->
+<h2>📋 Quick Reference</h2>
+
+<div class="rule-card">
+<table class="summary-table">
+  <thead>
+    <tr><th>Ending</th><th>What to do</th><th>Example</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Most verbs</td><td class="action">Just add -ing</td><td>work → working</td></tr>
+    <tr><td>CVC (stressed)</td><td class="action">Double last + -ing</td><td>run → running</td></tr>
+    <tr><td>Silent -e</td><td class="action">Drop -e, add -ing</td><td>make → making</td></tr>
+    <tr><td>-e (needed)</td><td class="action">Keep -e, add -ing</td><td>dye → dyeing</td></tr>
+    <tr><td>-ie</td><td class="action">Change to -y + -ing</td><td>die → dying</td></tr>
+    <tr><td>-c</td><td class="action">Add -k + -ing</td><td>panic → panicking</td></tr>
+    <tr><td>-w / -x</td><td class="action">Just add -ing</td><td>snow → snowing</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="guide-footer">
+  <a href="ing-spelling-rules-v2.html">← Practice these rules interactively</a>
+  <br><br>LearnHub — Genil Suarez
+</div>
+
+</div>
+
+<script>
+// Apply theme from localStorage
+try{
+  const s=JSON.parse(localStorage.getItem("learnhub_ing_v2"));
+  if(s&&s.theme==="dark") document.documentElement.setAttribute("data-theme","dark");
+}catch(e){}
+</script>
+</body>
+</html>
