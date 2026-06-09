@@ -16,7 +16,7 @@
 [data-theme="dark"]{
   --bg:#1a1a2e; --text:#eaeaea; --muted:#888;
   --surface:#16213e; --border:#2a2a4e;
-  --red-light:#3d1f1f; --blue-light:#1a2d4a; --green-light:#1a3d2a;
+  --red-light:#4a2020; --blue-light:#1a2d4a; --green-light:#1a3d2a;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
@@ -202,6 +202,9 @@ h1{
 .rule.red  {background:var(--red-light);  border-color:var(--red);  color:var(--red-dark);}
 .rule.blue {background:var(--blue-light); border-color:var(--blue); color:var(--blue-dark);}
 .rule.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+[data-theme="dark"] .rule.red  {color:#FF9F9F;}
+[data-theme="dark"] .rule.blue {color:#7AC7FF;}
+[data-theme="dark"] .rule.green{color:#6FE8A8;}
 .rule svg{flex-shrink:0;width:16px;height:14px;}
 .rule-ex{
   font-family:'Baloo 2',cursive;font-weight:800;font-size:.68rem;
@@ -275,6 +278,7 @@ h1{
   font-family:'Baloo 2',cursive;font-weight:700;
   font-size:clamp(.72rem,2.8vw,.92rem);color:var(--text);line-height:1;white-space:nowrap;
 }
+[data-theme="dark"] .verb{color:#fff;}
 .ans{
   font-family:'Baloo 2',cursive;font-weight:800;
   font-size:clamp(.65rem,2.2vw,.82rem);
@@ -284,6 +288,9 @@ h1{
 .hbtn.done.rule-red   .ans{color:var(--red-dark);}
 .hbtn.done.rule-blue  .ans{color:var(--blue-dark);}
 .hbtn.done.rule-green .ans{color:var(--green-dark);}
+[data-theme="dark"] .hbtn.done.rule-red   .ans{color:#FF9F9F;}
+[data-theme="dark"] .hbtn.done.rule-blue  .ans{color:#7AC7FF;}
+[data-theme="dark"] .hbtn.done.rule-green .ans{color:#6FE8A8;}
 
 /* EXPLANATION TOOLTIP */
 .explanation{
@@ -319,6 +326,9 @@ h1{
 .cinput.ok   {border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
 .cinput.wrong{border-color:var(--red);  background:var(--red-light);  color:var(--red-dark);animation:shake .32s;}
 .cinput:disabled{opacity:1;cursor:default;}
+.cinput::placeholder{color:var(--muted);}
+[data-theme="dark"] .cinput.ok{color:#6FE8A8;}
+[data-theme="dark"] .cinput.wrong{color:#FF9F9F;}
 .cfeedback{font-size:1rem;min-height:1.2rem;line-height:1;text-align:center;}
 .chint{font-size:.68rem;font-weight:800;color:var(--red-dark);min-height:.85rem;text-align:center;line-height:1.2;}
 
@@ -599,12 +609,23 @@ const LEVELS={
   ],
 };
 
-const RC={
+const RC_LIGHT={
   red:  {idle:"#FFECEC",stroke:"#FF6B6B",active:"#FFCECE"},
   blue: {idle:"#E4F0FF",stroke:"#4A90D9",active:"#C2DCFF"},
   green:{idle:"#E2FAF0",stroke:"#3DBE7A",active:"#B8F0D6"},
 };
-const NEU={fill:"#F5F2EE",stroke:"#D5CCBF"};
+const RC_DARK={
+  red:  {idle:"#5c2a2a",stroke:"#FF6B6B",active:"#803030"},
+  blue: {idle:"#1e3a5f",stroke:"#4A90D9",active:"#2a4f7a"},
+  green:{idle:"#1e4a35",stroke:"#3DBE7A",active:"#2a5f45"},
+};
+const NEU_LIGHT={fill:"#F5F2EE",stroke:"#D5CCBF"};
+const NEU_DARK={fill:"#2a2a4e",stroke:"#444470"};
+
+function getRC(){ return document.documentElement.getAttribute("data-theme")==="dark"?RC_DARK:RC_LIGHT; }
+function getNEU(){ return document.documentElement.getAttribute("data-theme")==="dark"?NEU_DARK:NEU_LIGHT; }
+// Keep RC/NEU as getters for compatibility
+let RC=getRC(), NEU=getNEU();
 
 let mode="study", level="beginner", st={}, words=[];
 let streak=0, timerInterval=null, timeLeft=60;
@@ -672,12 +693,15 @@ function toggleTheme(){
     s.theme="dark";
   }
   saveStore(s);
+  RC=getRC(); NEU=getNEU();
+  build();
 }
 function applyTheme(){
   const s=getStats();
   if(s.theme==="dark"){
     document.documentElement.setAttribute("data-theme","dark");
     document.getElementById("themeToggle").textContent="☀️ Light mode";
+    RC=getRC(); NEU=getNEU();
   }
 }
 
