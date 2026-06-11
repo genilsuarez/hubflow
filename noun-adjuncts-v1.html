@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noun Adjuncts v1</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#FF6B6B;    --red-light:#FFECEC;   --red-dark:#CC3333;
+  --blue:#4A90D9;   --blue-light:#E4F0FF;  --blue-dark:#1B5EA8;
+  --green:#3DBE7A;  --green-light:#E2FAF0; --green-dark:#1E7A48;
+  --bg:#FFF6EE; --text:#2E2828; --muted:#AAA;
+  --surface:#fff; --border:#EDE8E2;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e; --text:#eaeaea; --muted:#888;
+  --surface:#16213e; --border:#2a2a4e;
+  --red-light:#4a2020; --blue-light:#1a2d4a; --green-light:#1a3d2a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{
+  background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;
+  transition:background .3s,color .3s;
+}
+@media(max-width:480px){
+  html,body{overflow:auto;height:auto;min-height:100%;}
+  body{min-height:100dvh;}
+}
+.top-bar{
+  width:100%;max-width:760px;display:flex;justify-content:space-between;align-items:center;
+  padding:3px 14px 1px;flex-shrink:0;
+}
+.back-link{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.85rem;
+  color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
+  transition:opacity .2s;
+}
+.back-link:hover{opacity:.7;}
+.menu-toggle{
+  background:none;border:none;cursor:pointer;font-size:1.3rem;
+  color:var(--text);padding:4px;line-height:1;transition:transform .2s;
+}
+.menu-toggle:hover{transform:scale(1.1);}
+.menu-overlay{
+  display:none;position:fixed;inset:0;z-index:199;
+  background:rgba(0,0,0,.4);opacity:0;transition:opacity .3s ease;
+}
+.menu-overlay.show{display:block;opacity:1;}
+.menu-panel{
+  position:fixed;top:0;left:0;bottom:0;width:260px;max-width:80vw;
+  background:var(--surface);box-shadow:4px 0 30px rgba(0,0,0,.15);
+  z-index:200;display:flex;flex-direction:column;
+  transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.menu-panel.show{transform:translateX(0);}
+.menu-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 12px 8px;border-bottom:1.5px solid var(--border);
+}
+.menu-title{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:.85rem;
+  color:var(--text);display:flex;align-items:center;gap:5px;
+}
+.menu-close{
+  background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--muted);
+  padding:4px;border-radius:8px;transition:background .2s,color .2s;line-height:1;
+}
+.menu-close:hover{background:var(--border);color:var(--text);}
+.menu-nav{
+  flex:1;overflow-y:auto;display:flex;flex-direction:column;
+  gap:1px;padding:6px 8px;
+}
+.menu-item{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;border:none;
+  background:transparent;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.76rem;
+  font-weight:700;color:var(--text);transition:background .15s;width:100%;text-align:left;
+}
+.menu-item:hover{background:var(--border);}
+.menu-item.active{background:var(--blue-light);color:var(--blue);}
+[data-theme="dark"] .menu-item.active{color:#7AC7FF;}
+.menu-item-icon{font-size:.85rem;width:18px;text-align:center;flex-shrink:0;}
+.menu-item .menu-val{margin-left:auto;color:var(--blue);font-weight:800;font-size:.72rem;}
+.menu-divider{height:1px;background:var(--border);margin:3px 10px;}
+.menu-section-label{
+  font-family:'Baloo 2',cursive;font-size:.55rem;font-weight:800;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:3px 10px 1px;
+}
+.menu-footer{
+  padding:8px 12px;border-top:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:.6rem;color:var(--muted);font-weight:700;
+}
+.menu-rules-mini{display:flex;gap:3px;padding:2px 10px 4px;}
+.mini-rule{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
+  font-size:.55rem;font-weight:700;padding:3px 4px;
+  border-radius:6px;border:1.5px solid transparent;text-align:center;
+}
+.mini-rule.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+.mini-rule.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.mini-rule.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+[data-theme="dark"] .mini-rule.red{color:#FF9F9F;}
+[data-theme="dark"] .mini-rule.blue{color:#7AC7FF;}
+[data-theme="dark"] .mini-rule.green{color:#6FE8A8;}
+.header{
+  width:100%;max-width:760px;padding:3px 14px 3px;background:var(--bg);
+  border-bottom:2px solid var(--border);flex-shrink:0;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);z-index:10;transition:background .3s;
+}
+@media(max-width:480px){
+  .header{position:sticky;top:0;padding:3px 10px;}
+  .top-bar{padding:3px 10px 1px;}
+}
+.header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+h1{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(.8rem,2.6vw,1.1rem);
+  margin-bottom:0;line-height:1.1;
+  background:linear-gradient(120deg,var(--blue),var(--green),var(--red));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header-badge{
+  display:flex;align-items:center;gap:3px;font-family:'Baloo 2',cursive;
+  font-size:.7rem;font-weight:700;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:50px;padding:2px 8px;color:var(--muted);
+}
+.badge-icon{font-size:.75rem;}
+.badge-val{color:var(--text);font-weight:800;}
+.mode-bar{
+  display:flex;background:var(--surface);border-radius:50px;padding:2px;gap:2px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:3px;border:2px solid var(--border);
+}
+.mode-btn{
+  flex:1;font-family:'Baloo 2',cursive;font-size:.72rem;font-weight:700;
+  padding:3px;border-radius:50px;border:none;cursor:pointer;
+  transition:all .22s;color:var(--muted);background:transparent;
+}
+.mode-btn.active.study    {background:var(--blue);color:#fff;box-shadow:0 3px 10px rgba(74,144,217,.4);}
+.mode-btn.active.challenge{background:linear-gradient(135deg,var(--red),#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(255,107,107,.4);}
+.mode-btn.active.timed    {background:linear-gradient(135deg,#F7C948,#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(247,201,72,.4);}
+@media(max-width:480px){
+  .mode-bar{margin-bottom:4px;padding:2px;}
+  .mode-btn{font-size:.68rem;padding:4px;}
+}
+.timer-bar{display:none;align-items:center;justify-content:center;gap:8px;margin-bottom:2px;}
+.timer-bar.show{display:flex;}
+.timer-display{font-family:'Baloo 2',cursive;font-weight:800;font-size:.95rem;color:var(--red);min-width:44px;text-align:center;}
+.timer-display.warn{animation:pulse .5s infinite alternate;}
+@keyframes pulse{from{opacity:1}to{opacity:.4}}
+.streak-bar{
+  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.72rem;color:var(--green-dark);
+  animation:popIn .3s ease;
+}
+.streak-bar.show{display:flex;}
+.prog-wrap{margin-bottom:0;}
+.prog-labels{display:flex;justify-content:space-between;font-family:'Baloo 2',cursive;font-size:.62rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
+.prog-track{height:4px;background:var(--border);border-radius:50px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:50px;transition:width .5s cubic-bezier(.34,1.2,.64,1);width:0%;}
+.scroll-body{
+  width:100%;max-width:760px;flex:1;overflow-y:auto;
+  padding:5px 14px 10px;-webkit-overflow-scrolling:touch;
+}
+@media(max-width:480px){
+  .scroll-body{flex:none;overflow-y:visible;padding:6px 10px 20px;}
+}
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px;align-items:start;}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:4px;}}
+.btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:6px;}
+
+/* ── NOUN CARD ── */
+.hcard{
+  display:flex;flex-direction:column;gap:2px;
+  animation:popIn .4s ease both;
+}
+.hcard:nth-child(1){animation-delay:.03s}.hcard:nth-child(2){animation-delay:.06s}
+.hcard:nth-child(3){animation-delay:.09s}.hcard:nth-child(4){animation-delay:.12s}
+.hcard:nth-child(5){animation-delay:.15s}.hcard:nth-child(6){animation-delay:.18s}
+.hcard:nth-child(7){animation-delay:.21s}.hcard:nth-child(8){animation-delay:.24s}
+.hcard:nth-child(9){animation-delay:.27s}.hcard:nth-child(10){animation-delay:.30s}
+.hcard:nth-child(11){animation-delay:.33s}.hcard:nth-child(12){animation-delay:.36s}
+.hcard:nth-child(13){animation-delay:.39s}.hcard:nth-child(14){animation-delay:.42s}
+.hcard:nth-child(15){animation-delay:.45s}.hcard:nth-child(16){animation-delay:.48s}
+
+/* The pill-shaped compound block */
+.ncard{
+  display:flex;align-items:stretch;
+  border-radius:10px;overflow:hidden;
+  border:2px solid var(--border);
+  background:var(--surface);
+  cursor:pointer;width:100%;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s, border-color .22s;
+  -webkit-tap-highlight-color:transparent;outline:none;
+  box-shadow:0 1px 5px rgba(0,0,0,.06);
+  min-height:44px;
+}
+.ncard:hover:not(.done):not(.chal){transform:translateY(-2px) scale(1.02);box-shadow:0 4px 14px rgba(0,0,0,.12);}
+.ncard:active{transform:scale(.97);}
+.ncard.chal{cursor:text;}
+.ncard.chal:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.10);}
+.ncard.done{cursor:default;border-color:var(--card-stroke);}
+
+/* Modifier half */
+.nc-mod{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:7px 7px;
+  border-right:2px solid var(--border);
+  font-family:'Baloo 2',cursive;font-weight:800;
+  font-size:clamp(.68rem,2vw,.85rem);
+  color:var(--muted);
+  background:var(--border);
+  transition:background .35s, color .35s, border-color .35s;
+  text-align:center;line-height:1.1;
+  position:relative;
+}
+/* Arrow connector */
+.nc-mod::after{
+  content:'›';position:absolute;right:-1px;
+  font-size:1rem;color:var(--border);
+  pointer-events:none;
+}
+/* Revealed modifier (study done / challenge correct) */
+.ncard.done .nc-mod{
+  background:var(--card-bg);
+  color:var(--card-text);
+  border-right-color:var(--card-stroke);
+}
+.ncard.done .nc-mod::after{color:var(--card-stroke);}
+
+/* hidden state in challenge */
+.ncard:not(.done) .nc-mod-text.hidden{opacity:0;}
+
+/* Nucleus half */
+.nc-nuc{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:7px 7px;
+  font-family:'Baloo 2',cursive;font-weight:700;
+  font-size:clamp(.68rem,2vw,.85rem);
+  color:var(--text);
+  text-align:center;line-height:1.1;
+  transition:background .35s;
+}
+.ncard.done .nc-nuc{background:rgba(0,0,0,.03);}
+[data-theme="dark"] .ncard.done .nc-nuc{background:rgba(255,255,255,.04);}
+
+/* Rule color variables set per-card */
+.ncard.rule-blue  {--card-bg:var(--blue-light);  --card-stroke:var(--blue);  --card-text:var(--blue-dark);}
+.ncard.rule-green {--card-bg:var(--green-light); --card-stroke:var(--green); --card-text:var(--green-dark);}
+.ncard.rule-red   {--card-bg:var(--red-light);   --card-stroke:var(--red);   --card-text:var(--red-dark);}
+[data-theme="dark"] .ncard.rule-blue  {--card-text:#7AC7FF;}
+[data-theme="dark"] .ncard.rule-green {--card-text:#6FE8A8;}
+[data-theme="dark"] .ncard.rule-red   {--card-text:#FF9F9F;}
+
+/* Challenge placeholder */
+.nc-mod-placeholder{font-size:1rem;color:var(--muted);opacity:.6;}
+
+/* Card footer row */
+.ncard-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:3px;
+  padding:0 1px;
+}
+.explanation{
+  font-size:.55rem;font-weight:700;color:var(--muted);
+  flex:1;min-height:1.4em;line-height:1.2;
+  opacity:0;transition:opacity .3s;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ncard.done~.ncard-footer .explanation,
+.explanation.visible{opacity:1;}
+.audio-btn{
+  background:none;border:none;cursor:pointer;font-size:.75rem;
+  opacity:.5;flex-shrink:0;
+  transition:opacity .2s,transform .2s;padding:1px;line-height:1;
+}
+.audio-btn:hover{opacity:1;transform:scale(1.2);}
+/* ── NOUN CARD — challenge: input integrado en el modificador ── */
+/* En challenge el nc-mod tiene el input dentro */
+.nc-mod.is-input{
+  padding:4px 6px;
+  background:var(--surface);
+  border-right-color:var(--border);
+}
+.nc-mod-input{
+  width:100%;font-family:'Baloo 2',cursive;font-size:clamp(.65rem,2vw,.82rem);
+  font-weight:800;text-align:center;background:transparent;
+  border:none;outline:none;color:var(--text);
+  -webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;
+  padding:0;line-height:1.2;
+}
+.nc-mod-input::placeholder{color:var(--muted);font-weight:700;}
+.nc-mod-input:disabled{cursor:default;}
+/* Estado correcto: fondo coloreado */
+.nc-mod.answered-ok{
+  background:var(--card-bg)!important;
+  border-right-color:var(--card-stroke)!important;
+}
+.nc-mod.answered-ok .nc-mod-input{color:var(--card-text);}
+.nc-mod.answered-ok::after{color:var(--card-stroke)!important;}
+/* Estado incorrecto: fondo rojo suave */
+.nc-mod.answered-wrong{
+  background:var(--red-light)!important;
+  border-right-color:var(--red)!important;
+}
+.nc-mod.answered-wrong .nc-mod-input{color:var(--red-dark);animation:shake .32s;}
+/* Prompt en nc-nuc para challenge: ___ word */
+.nc-nuc .prompt-blank{color:var(--muted);font-weight:700;}
+/* Hint line debajo de la tarjeta */
+.card-hint{
+  font-size:.58rem;font-weight:800;color:var(--red-dark);
+  min-height:.8rem;text-align:center;line-height:1.2;
+  padding:0 2px;
+}
+/* feedback tick/cross integrado en el modificador */
+.nc-mod-fb{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  font-size:.75rem;line-height:1;pointer-events:none;
+  opacity:0;transition:opacity .2s;
+}
+.nc-mod.answered-ok   .nc-mod-fb,
+.nc-mod.answered-wrong .nc-mod-fb{opacity:1;}
+/* boing on ncard */
+.ncard.boing{animation:boing .38s ease;}
+
+.cinput-wrap{display:none;flex-direction:column;align-items:center;gap:1px;width:100%;justify-self:stretch;}
+.cinput-wrap.show{display:flex;}
+.cinput{
+  width:100%;font-family:'Baloo 2',cursive;font-size:clamp(.68rem,2.2vw,.8rem);
+  font-weight:700;text-align:center;border:2px solid var(--border);border-radius:9px;
+  padding:2px 4px;background:var(--surface);color:var(--text);outline:none;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;
+}
+@media(max-width:480px){.cinput{font-size:.68rem;padding:3px 4px;border-radius:8px;}}
+.cinput:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(74,144,217,.2);}
+.cinput.ok   {border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
+.cinput.wrong{border-color:var(--red);background:var(--red-light);color:var(--red-dark);animation:shake .32s;}
+.cinput:disabled{opacity:1;cursor:default;}
+.cinput::placeholder{color:var(--muted);}
+[data-theme="dark"] .cinput.ok{color:#6FE8A8;}
+[data-theme="dark"] .cinput.wrong{color:#FF9F9F;}
+.cfeedback{font-size:.85rem;min-height:1rem;line-height:1;text-align:center;}
+.chint{font-size:.58rem;font-weight:800;color:var(--red-dark);min-height:.75rem;text-align:center;line-height:1.2;}
+.cpicker{
+  display:none;flex-direction:row;align-items:center;justify-content:center;gap:4px;width:100%;
+  background:var(--surface);border:2px solid var(--border);border-radius:50px;padding:2px 6px;
+  justify-self:stretch;
+}
+.cpicker.show{display:flex;}
+.cpicker-row{display:flex;gap:5px;}
+.cb{
+  width:18px;height:18px;border-radius:50%;border:2.5px solid transparent;
+  cursor:pointer;transition:transform .18s,box-shadow .18s;-webkit-tap-highlight-color:transparent;
+}
+@media(max-width:480px){
+  .cpicker{padding:2px 5px;gap:3px;border-radius:25px;}
+  .cpicker-row{gap:4px;}
+  .cb{width:16px;height:16px;border-width:2px;}
+}
+.cb:hover{transform:scale(1.22);}
+.cb.r{background:var(--red);}
+.cb.b{background:var(--blue);}
+.cb.g{background:var(--green);}
+.cb.picked    {border-color:var(--text);transform:scale(1.18);box-shadow:0 0 0 2px var(--surface),0 0 0 3px var(--text);}
+.cb.correct-c {border-color:var(--green-dark)!important;box-shadow:0 0 0 2px var(--green)!important;}
+.cb.wrong-c   {border-color:var(--red-dark)  !important;box-shadow:0 0 0 2px var(--red)  !important;}
+.cresult{font-size:.58rem;font-weight:800;color:var(--muted);min-height:.75rem;text-align:center;line-height:1.2;}
+.btn{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.8rem;
+  padding:7px 18px;border-radius:50px;border:none;cursor:pointer;
+  transition:transform .15s,box-shadow .15s;display:flex;align-items:center;gap:5px;
+}
+@media(max-width:480px){.btn{font-size:.72rem;padding:6px 14px;}}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:scale(.97);}
+.btn-blue  {background:linear-gradient(135deg,#4A90D9,#7AC7FF);color:#fff;box-shadow:0 5px 18px rgba(74,144,217,.32);}
+.btn-green {background:linear-gradient(135deg,var(--green),#6FE8A8);color:#fff;box-shadow:0 5px 18px rgba(61,190,122,.32);}
+.btn-red   {background:linear-gradient(135deg,var(--red),#FF9F6B);color:#fff;box-shadow:0 5px 18px rgba(255,107,107,.32);}
+.btn-ghost {background:var(--surface);border:2.5px solid var(--border);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--blue);}
+.score{
+  display:none;text-align:center;border-radius:16px;padding:14px 18px;margin-top:12px;
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;animation:popIn .4s ease;
+}
+.score.great{background:var(--green-light);border:2px solid var(--green);color:var(--green-dark);}
+.score.ok   {background:#FFFBEA;border:2px solid #ECC94B;color:#7B621A;}
+.score.try  {background:var(--red-light);border:2px solid var(--red);color:var(--red-dark);}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999;}
+.stars-overlay{
+  display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.45);animation:fadeIn .3s ease;
+}
+.stars-overlay.show{display:flex;}
+.stars-box{
+  background:var(--surface);border-radius:28px;padding:32px 40px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:popIn .4s cubic-bezier(.34,1.56,.64,1);max-width:380px;width:90%;
+}
+@media(max-width:480px){
+  .stars-box{padding:24px 20px;border-radius:20px;max-width:300px;}
+  .stars-title{font-size:1.2rem;}
+  .stars-sub{font-size:.8rem;}
+  .star{font-size:2.2rem;}
+}
+.stars-row{display:flex;justify-content:center;gap:8px;margin:12px 0 6px;}
+.star{font-size:2.8rem;opacity:.25;transition:opacity .3s,transform .3s;}
+.star.lit{opacity:1;transform:scale(1.15);}
+.stars-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.5rem;margin-bottom:4px;color:var(--text);}
+.stars-sub{font-size:.9rem;color:var(--muted);font-weight:700;margin-bottom:16px;}
+.stars-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.history-list{padding:0 10px 2px;font-family:'Baloo 2',cursive;font-size:.63rem;}
+.history-entry{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border);}
+.history-entry:last-child{border:none;}
+.history-entry .date{color:var(--muted);}
+.history-entry .pct{font-weight:800;}
+.history-entry .pct.great{color:var(--green-dark);}
+.history-entry .pct.ok{color:#7B621A;}
+.history-entry .pct.try{color:var(--red-dark);}
+[data-theme="dark"] .history-entry .pct.great{color:#6FE8A8;}
+[data-theme="dark"] .history-entry .pct.ok{color:#F7C948;}
+[data-theme="dark"] .history-entry .pct.try{color:#FF9F9F;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
+@keyframes boing{0%,100%{transform:scale(1)}40%{transform:scale(1.15) rotate(-4deg)}70%{transform:scale(.97)}}
+.boing{animation:boing .38s ease;}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="stars-overlay" id="starsOverlay" role="dialog" aria-label="Results">
+  <div class="stars-box">
+    <div class="stars-row">
+      <span class="star" id="star1" aria-hidden="true">⭐</span>
+      <span class="star" id="star2" aria-hidden="true">⭐</span>
+      <span class="star" id="star3" aria-hidden="true">⭐</span>
+    </div>
+    <div class="stars-title" id="starsTitle"></div>
+    <div class="stars-sub" id="starsSub"></div>
+    <div class="stars-btns">
+      <button class="btn btn-red"   onclick="closeStars();setMode('challenge')">🔄 Try Again</button>
+      <button class="btn btn-ghost" onclick="closeStars();setMode('study')">📖 Study</button>
+    </div>
+  </div>
+</div>
+<div class="top-bar">
+  <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+  <a href="index.html" class="back-link" aria-label="Back to home">Home →</a>
+</div>
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<aside class="menu-panel" id="menuPanel">
+  <div class="menu-header">
+    <span class="menu-title">📚 Settings</span>
+    <button class="menu-close" onclick="closeMenu()" aria-label="Close menu">✕</button>
+  </div>
+  <nav class="menu-nav">
+    <span class="menu-section-label">Level</span>
+    <button class="menu-item active" id="ml-beginner" onclick="setLevel('beginner')">
+      <span class="menu-item-icon">🌱</span> Beginner
+    </button>
+    <button class="menu-item" id="ml-intermediate" onclick="setLevel('intermediate')">
+      <span class="menu-item-icon">📗</span> Intermediate
+    </button>
+    <button class="menu-item" id="ml-exceptions" onclick="setLevel('exceptions')">
+      <span class="menu-item-icon">⚡</span> Exceptions
+    </button>
+    <button class="menu-item" id="ml-god" onclick="setLevel('god')">
+      <span class="menu-item-icon">💀</span> God Mode
+    </button>
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Stats</span>
+    <div class="menu-item" style="cursor:default;">
+      <span class="menu-item-icon">🏆</span> Best <span class="menu-val" id="bestScore">—</span>
+    </div>
+    <div class="menu-item" style="cursor:default;">
+      <span class="menu-item-icon">📊</span> Played <span class="menu-val" id="timesPlayed">0</span>
+    </div>
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Rules</span>
+    <div class="menu-rules-mini">
+      <div class="mini-rule blue">🔵 Noun<br><em>stone wall</em></div>
+      <div class="mini-rule green">🟢 -ing<br><em>swim pool</em></div>
+      <div class="mini-rule red">🔴 's/of<br><em>eng's rep</em></div>
+    </div>
+    <div class="menu-divider"></div>
+    <button class="menu-item" id="themeToggle" onclick="toggleTheme()">
+      <span class="menu-item-icon">🌙</span> Dark mode
+    </button>
+    <a class="menu-item" href="ing-spelling-rules-v2.html" style="text-decoration:none;color:var(--text);">
+      <span class="menu-item-icon">🔗</span> -ing Spelling Rules
+    </a>
+    <a class="menu-item" href="ed-spelling-rules-v1.html" style="text-decoration:none;color:var(--text);">
+      <span class="menu-item-icon">🔗</span> -ed Spelling Rules
+    </a>
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Recent</span>
+    <div class="history-list" id="historyList"></div>
+  </nav>
+  <div class="menu-footer">
+    <span>LearnHub</span><span>v1.0</span>
+  </div>
+</aside>
+<div class="header">
+  <div class="header-row">
+    <h1>Noun Adjuncts <span style="font-size:.65em">v1</span></h1>
+    <div class="header-badge" id="headerBadge" style="display:none">
+      <span class="badge-icon">🏆</span>
+      <span class="badge-val" id="headerLastScore">—</span>
+    </div>
+  </div>
+  <div class="mode-bar">
+    <button class="mode-btn study active" onclick="setMode('study')">📖 Study</button>
+    <button class="mode-btn challenge"    onclick="setMode('challenge')">⚡ Challenge</button>
+    <button class="mode-btn timed"        onclick="setMode('timed')">⏱️ Timed</button>
+  </div>
+  <div class="timer-bar" id="timerBar">
+    <span class="timer-display" id="timerDisplay">1:00</span>
+  </div>
+  <div class="streak-bar" id="streakBar" role="alert" aria-live="polite">
+    🔥 <span id="streakText">0 in a row!</span>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-labels"><span id="progTxt">0 / 16</span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+</div>
+<div class="scroll-body">
+  <div class="grid" id="grid"></div>
+  <div class="btn-row" id="btnRow"></div>
+  <div class="score" id="score"></div>
+</div>
+
+<script>
+const LEVELS={
+  beginner:[
+    {prompt:"___ wall",    modifier:"stone",   nucleus:"wall",   full:"stone wall",   rule:"blue",  why:"Noun adjunct: sustantivo modifica sustantivo directamente", focus:"material"},
+    {prompt:"___ door",    modifier:"car",     nucleus:"door",   full:"car door",     rule:"blue",  why:"Noun adjunct: parte de un vehículo", focus:"object"},
+    {prompt:"___ server",  modifier:"cloud",   nucleus:"server", full:"cloud server", rule:"blue",  why:"Noun adjunct: tipo de servidor (tecnología)", focus:"type"},
+    {prompt:"___ party",   modifier:"garden",  nucleus:"party",  full:"garden party", rule:"blue",  why:"Noun adjunct: lugar donde ocurre el evento", focus:"location"},
+    {prompt:"___ stop",    modifier:"bus",     nucleus:"stop",   full:"bus stop",     rule:"blue",  why:"Noun adjunct: para qué tipo de transporte", focus:"type"},
+    {prompt:"___ cup",     modifier:"coffee",  nucleus:"cup",    full:"coffee cup",   rule:"blue",  why:"Noun adjunct: contenido habitual del recipiente", focus:"content"},
+    {prompt:"___ table",   modifier:"kitchen", nucleus:"table",  full:"kitchen table",rule:"blue",  why:"Noun adjunct: ubicación del mueble", focus:"location"},
+    {prompt:"___ station", modifier:"fire",    nucleus:"station",full:"fire station", rule:"blue",  why:"Noun adjunct: tipo de servicio de emergencia", focus:"type"},
+    {prompt:"___ coat",    modifier:"rain",    nucleus:"coat",   full:"rain coat",    rule:"blue",  why:"Noun adjunct: propósito de la prenda", focus:"purpose"},
+    {prompt:"___ shift",   modifier:"night",   nucleus:"shift",  full:"night shift",  rule:"blue",  why:"Noun adjunct: cuándo ocurre el turno", focus:"time"},
+    {prompt:"___ shelf",   modifier:"book",    nucleus:"shelf",  full:"book shelf",   rule:"blue",  why:"Noun adjunct: qué almacena el mueble", focus:"content"},
+    {prompt:"___ house",   modifier:"beach",   nucleus:"house",  full:"beach house",  rule:"blue",  why:"Noun adjunct: ubicación de la casa", focus:"location"},
+    {prompt:"___ glasses", modifier:"sun",     nucleus:"glasses",full:"sun glasses",  rule:"blue",  why:"Noun adjunct: propósito del accesorio", focus:"purpose"},
+    {prompt:"___ sign",    modifier:"road",    nucleus:"sign",   full:"road sign",    rule:"blue",  why:"Noun adjunct: dónde se encuentra la señal", focus:"location"},
+    {prompt:"___ box",     modifier:"lunch",   nucleus:"box",    full:"lunch box",    rule:"blue",  why:"Noun adjunct: contenido o uso del recipiente", focus:"content"},
+    {prompt:"___ bag",     modifier:"air",     nucleus:"bag",    full:"air bag",      rule:"blue",  why:"Noun adjunct: mecanismo (seguridad de auto)", focus:"mechanism"},
+  ],
+  intermediate:[
+    {prompt:"___ pool",    modifier:"swimming",nucleus:"pool",   full:"swimming pool",   rule:"green", why:"-ing nominal: el modificador indica la actividad/propósito", focus:"purpose"},
+    {prompt:"___ park",    modifier:"car",     nucleus:"park",   full:"car park",        rule:"blue",  why:"Noun adjunct: para qué tipo de vehículo", focus:"type"},
+    {prompt:"___ class",   modifier:"cooking", nucleus:"class",  full:"cooking class",   rule:"green", why:"-ing nominal: el modificador indica la disciplina/actividad", focus:"activity"},
+    {prompt:"___ book",    modifier:"cook",    nucleus:"book",   full:"cook book",       rule:"blue",  why:"Noun adjunct: 'cook' actúa como sustantivo modificador", focus:"type"},
+    {prompt:"___ space",   modifier:"parking", nucleus:"space",  full:"parking space",   rule:"green", why:"-ing nominal: actividad que define el espacio", focus:"activity"},
+    {prompt:"___ stop",    modifier:"bus",     nucleus:"stop",   full:"bus stop",        rule:"blue",  why:"Noun adjunct: tipo de transporte", focus:"type"},
+    {prompt:"___ license", modifier:"driving", nucleus:"license",full:"driving license", rule:"green", why:"-ing nominal: la actividad que autoriza el permiso", focus:"activity"},
+    {prompt:"___ pad",     modifier:"note",    nucleus:"pad",    full:"note pad",        rule:"blue",  why:"Noun adjunct: para qué sirve el bloc", focus:"purpose"},
+    {prompt:"___ shoes",   modifier:"running", nucleus:"shoes",  full:"running shoes",   rule:"green", why:"-ing nominal: actividad para la que están diseñados", focus:"activity"},
+    {prompt:"___ track",   modifier:"sprint",  nucleus:"track",  full:"sprint track",    rule:"blue",  why:"Noun adjunct: tipo de pista (deporte)", focus:"type"},
+    {prompt:"___ desk",    modifier:"writing", nucleus:"desk",   full:"writing desk",    rule:"green", why:"-ing nominal: actividad principal en ese mueble", focus:"activity"},
+    {prompt:"___ room",    modifier:"board",   nucleus:"room",   full:"board room",      rule:"blue",  why:"Noun adjunct: tipo de sala corporativa", focus:"type"},
+    {prompt:"___ room",    modifier:"meeting", nucleus:"room",   full:"meeting room",    rule:"green", why:"-ing nominal: actividad que ocurre en esa sala", focus:"activity"},
+    {prompt:"___ box",     modifier:"tool",    nucleus:"box",    full:"tool box",        rule:"blue",  why:"Noun adjunct: contenido de la caja", focus:"content"},
+    {prompt:"___ machine", modifier:"washing", nucleus:"machine",full:"washing machine", rule:"green", why:"-ing nominal: función/actividad de la máquina", focus:"function"},
+    {prompt:"___ bag",     modifier:"hand",    nucleus:"bag",    full:"hand bag",        rule:"blue",  why:"Noun adjunct: cómo se lleva el bolso", focus:"manner"},
+  ],
+  exceptions:[
+    {prompt:"engineer's ___",modifier:"report",   nucleus:"report",    full:"engineer's report",      rule:"red",   why:"Genitivo 's: pertenencia — el reporte es del ingeniero", focus:"possession"},
+    {prompt:"cup of ___",    modifier:"coffee",   nucleus:"cup",       full:"cup of coffee",           rule:"red",   why:"Partitivo 'of': contenido dentro del contenedor", focus:"partitive"},
+    {prompt:"children's ___",modifier:"hospital", nucleus:"hospital",  full:"children's hospital",     rule:"red",   why:"Genitivo 's con plural irregular (no children's→childrens)", focus:"possession"},
+    {prompt:"team's ___",    modifier:"decision", nucleus:"decision",  full:"team's decision",         rule:"red",   why:"Genitivo 's: decisión tomada por el equipo", focus:"possession"},
+    {prompt:"piece of ___",  modifier:"advice",   nucleus:"piece",     full:"piece of advice",         rule:"red",   why:"Partitivo 'of': 'advice' es incontable, necesita cuantificador", focus:"partitive"},
+    {prompt:"wall of ___",   modifier:"fire",     nucleus:"wall",      full:"wall of fire",            rule:"red",   why:"'of' enfatiza la composición dramática, no uso funcional", focus:"composition"},
+    {prompt:"___ policy",    modifier:"company",  nucleus:"policy",    full:"company policy",          rule:"blue",  why:"Noun adjunct: sin 's — policy pertenece al tipo/dominio company", focus:"domain"},
+    {prompt:"___ pool",      modifier:"swimming", nucleus:"pool",      full:"swimming pool",           rule:"green", why:"-ing nominal: propósito de la instalación", focus:"purpose"},
+    {prompt:"manager of ___",modifier:"engineering",nucleus:"manager", full:"manager of engineering",  rule:"red",   why:"'of' para roles con disciplinas abstractas (formal/escrito)", focus:"role"},
+    {prompt:"___ engineer",  modifier:"software", nucleus:"engineer",  full:"software engineer",       rule:"blue",  why:"Noun adjunct: persona que trabaja en software (rol)", focus:"person"},
+    {prompt:"___ engineering",modifier:"software",nucleus:"engineering",full:"software engineering",  rule:"green", why:"-ing nominal: la disciplina/campo de estudio", focus:"discipline"},
+    {prompt:"___ book",      modifier:"cook",     nucleus:"book",      full:"cook book",               rule:"blue",  why:"Noun adjunct directo: sustantivo modifica sustantivo", focus:"type"},
+    {prompt:"___ oil",       modifier:"cooking",  nucleus:"oil",       full:"cooking oil",             rule:"green", why:"-ing nominal: propósito del aceite (para cocinar)", focus:"purpose"},
+    {prompt:"___ wall",      modifier:"stone",    nucleus:"wall",      full:"stone wall",              rule:"blue",  why:"Noun adjunct: material de construcción directo", focus:"material"},
+    {prompt:"wall of ___",   modifier:"stone",    nucleus:"wall",      full:"wall of stone",           rule:"red",   why:"'of' enfatiza la composición/material con tono literario", focus:"emphasis"},
+    {prompt:"___ shift",     modifier:"night",    nucleus:"shift",     full:"night shift",             rule:"blue",  why:"Noun adjunct: cuándo ocurre el turno de trabajo", focus:"time"},
+  ],
+  god:[
+    {prompt:"___ engineering manager",modifier:"cloud",      nucleus:"manager",     full:"cloud engineering manager",    rule:"green", why:"-ing nominal + rol: disciplina (engineering) + dominio (cloud)", focus:"title"},
+    {prompt:"senior ___ engineer",    modifier:"software",   nucleus:"engineer",    full:"senior software engineer",     rule:"blue",  why:"Noun adjunct: 'software' modifica 'engineer' directamente", focus:"title"},
+    {prompt:"___ science team",        modifier:"data",       nucleus:"team",        full:"data science team",            rule:"green", why:"-ing nominal implied: 'data science' es la disciplina del equipo", focus:"domain"},
+    {prompt:"head of ___",             modifier:"engineering",nucleus:"head",        full:"head of engineering",          rule:"red",   why:"'of' para jefatura sobre disciplinas abstractas (rol jerárquico)", focus:"hierarchy"},
+    {prompt:"VP of ___",               modifier:"product",    nucleus:"VP",          full:"VP of product",                rule:"red",   why:"'of' en títulos ejecutivos con dominio abstracto", focus:"title"},
+    {prompt:"___ manager",             modifier:"platform",   nucleus:"manager",     full:"platform manager",             rule:"blue",  why:"Noun adjunct: dominio concreto modifica rol", focus:"title"},
+    {prompt:"soft blue ___ house",     modifier:"brick",      nucleus:"house",       full:"soft blue brick house",        rule:"blue",  why:"Orden canónico: Opinion→Color→Material→Noun (sin cambio morfológico)", focus:"order"},
+    {prompt:"___ architect",           modifier:"cloud",      nucleus:"architect",   full:"cloud architect",              rule:"blue",  why:"Noun adjunct: dominio tecnológico modifica rol", focus:"title"},
+    {prompt:"___ director",            modifier:"engineering",nucleus:"director",    full:"engineering director",         rule:"green", why:"-ing nominal: la disciplina lidera el rol (engineering como campo)", focus:"title"},
+    {prompt:"___ owner",               modifier:"product",    nucleus:"owner",       full:"product owner",                rule:"blue",  why:"Noun adjunct: 'product' es el dominio del propietario", focus:"title"},
+    {prompt:"___ manager",             modifier:"delivery",   nucleus:"manager",     full:"delivery manager",             rule:"blue",  why:"Noun adjunct: proceso que gestiona el manager", focus:"title"},
+    {prompt:"___ manager",             modifier:"people",     nucleus:"manager",     full:"people manager",               rule:"blue",  why:"Noun adjunct: qué gestiona el manager (personas)", focus:"title"},
+    {prompt:"chief ___ officer",       modifier:"technology", nucleus:"officer",     full:"chief technology officer",     rule:"blue",  why:"Noun adjunct: dominio del cargo ejecutivo", focus:"title"},
+    {prompt:"___ architect",           modifier:"solutions",  nucleus:"architect",   full:"solutions architect",          rule:"blue",  why:"Noun adjunct: tipo de arquitecto (plural sustantivo)", focus:"title"},
+    {prompt:"___ learning engineer",   modifier:"machine",    nucleus:"engineer",    full:"machine learning engineer",    rule:"green", why:"-ing nominal: 'machine learning' es el campo de la ingeniería", focus:"discipline"},
+    {prompt:"site ___ engineer",       modifier:"reliability",nucleus:"engineer",    full:"site reliability engineer",    rule:"blue",  why:"Noun adjunct: 'reliability' (sustantivo) modifica 'engineer'", focus:"title"},
+  ],
+};
+
+const RC_LIGHT={
+  red:  {idle:"#FFECEC",stroke:"#FF6B6B",active:"#FFCECE"},
+  blue: {idle:"#E4F0FF",stroke:"#4A90D9",active:"#C2DCFF"},
+  green:{idle:"#E2FAF0",stroke:"#3DBE7A",active:"#B8F0D6"},
+};
+const RC_DARK={
+  red:  {idle:"#5c2a2a",stroke:"#FF6B6B",active:"#803030"},
+  blue: {idle:"#1e3a5f",stroke:"#4A90D9",active:"#2a4f7a"},
+  green:{idle:"#1e4a35",stroke:"#3DBE7A",active:"#2a5f45"},
+};
+const NEU_LIGHT={fill:"#F5F2EE",stroke:"#D5CCBF"};
+const NEU_DARK={fill:"#2a2a4e",stroke:"#444470"};
+
+function getRC(){ return document.documentElement.getAttribute("data-theme")==="dark"?RC_DARK:RC_LIGHT; }
+function getNEU(){ return document.documentElement.getAttribute("data-theme")==="dark"?NEU_DARK:NEU_LIGHT; }
+let RC=getRC(), NEU=getNEU();
+
+let mode="study", level="beginner", st={}, words=[];
+let streak=0, timerInterval=null, timeLeft=60;
+
+/* ══ STORAGE ══ */
+const STORE_KEY="learnhub_noun_adjuncts_v1";
+function loadStore(){
+  try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; }
+}
+function saveStore(data){ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+function getStats(){
+  const s=loadStore();
+  return {best:s.best||null,played:s.played||0,history:s.history||[],failedWords:s.failedWords||{},theme:s.theme||"light"};
+}
+function recordScore(pct){
+  const s=loadStore();
+  s.played=(s.played||0)+1;
+  if(!s.best||pct>s.best) s.best=pct;
+  if(!s.history) s.history=[];
+  s.history.unshift({date:new Date().toLocaleDateString(),pct,level,mode:mode==="timed"?"timed":"challenge"});
+  if(s.history.length>10) s.history=s.history.slice(0,10);
+  saveStore(s);
+  renderStats();
+}
+function recordFail(key){
+  const s=loadStore();
+  if(!s.failedWords) s.failedWords={};
+  s.failedWords[key]=(s.failedWords[key]||0)+1;
+  saveStore(s);
+}
+function renderStats(){
+  const s=getStats();
+  document.getElementById("bestScore").textContent=s.best!==null?s.best+"%":"—";
+  document.getElementById("timesPlayed").textContent=s.played;
+  const badge=document.getElementById("headerBadge");
+  if(s.best!==null){
+    badge.style.display="flex";
+    document.getElementById("headerLastScore").textContent=s.best+"%";
+  }
+  const list=document.getElementById("historyList");
+  if(s.history&&s.history.length>0){
+    list.innerHTML=s.history.slice(0,5).map(h=>{
+      const cls=h.pct===100?"great":h.pct>=60?"ok":"try";
+      return `<div class="history-entry"><span class="date">${h.date} (${h.level||"—"})</span><span class="pct ${cls}">${h.pct}%</span></div>`;
+    }).join("");
+  } else {
+    list.innerHTML='<div style="color:var(--muted);padding:4px 0;font-size:.7rem;">No games yet</div>';
+  }
+}
+
+/* ══ THEME ══ */
+function toggleTheme(){
+  const s=loadStore();
+  const isDark=document.documentElement.getAttribute("data-theme")==="dark";
+  if(isDark){
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">🌙</span> Dark mode';
+    s.theme="light";
+  } else {
+    document.documentElement.setAttribute("data-theme","dark");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">☀️</span> Light mode';
+    s.theme="dark";
+  }
+  saveStore(s);
+  RC=getRC(); NEU=getNEU();
+  build();
+}
+function applyTheme(){
+  const s=getStats();
+  if(s.theme==="dark"){
+    document.documentElement.setAttribute("data-theme","dark");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">☀️</span> Light mode';
+    RC=getRC(); NEU=getNEU();
+  }
+}
+
+/* ══ MENU ══ */
+function toggleMenu(){
+  document.getElementById("menuPanel").classList.add("show");
+  document.getElementById("menuOverlay").classList.add("show");
+}
+function closeMenu(){
+  document.getElementById("menuPanel").classList.remove("show");
+  document.getElementById("menuOverlay").classList.remove("show");
+}
+function updateMenuChips(){
+  ["beginner","intermediate","exceptions","god"].forEach(l=>{
+    const el=document.getElementById("ml-"+l);
+    if(el) el.classList.toggle("active",l===level);
+  });
+}
+
+/* ══ AUDIO ══ */
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US"; u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+
+/* ══ HAPTIC ══ */
+function vibrate(ms){
+  if(navigator.vibrate) navigator.vibrate(ms);
+}
+
+/* ══ SHUFFLE (spaced repetition aware) ══ */
+function shuffle(arr){
+  const s=loadStore();
+  const fails=s.failedWords||{};
+  const weighted=[...arr].sort((a,b)=>(fails[b.full]||0)-(fails[a.full]||0));
+  for(let i=weighted.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    if((fails[weighted[i].full]||0)===(fails[weighted[j].full]||0)){
+      [weighted[i],weighted[j]]=[weighted[j],weighted[i]];
+    }
+  }
+  return weighted;
+}
+
+/* ══ LEVEL ══ */
+function setLevel(l){
+  level=l;
+  updateMenuChips();
+  closeMenu();
+  build();
+}
+
+/* ══ BUILD ══ */
+function build(){
+  stopTimer();
+  words=shuffle(LEVELS[level]);
+  const g=document.getElementById("grid");
+  g.innerHTML=""; st={}; streak=0;
+  updateStreak();
+
+  words.forEach((w,i)=>{
+    st[i]={done:false,spelledOk:false,colorPicked:null,locked:false,attempts:0};
+    const c=document.createElement("div");
+    c.className="hcard";
+    const isC=(mode==="challenge"||mode==="timed");
+    const safeFull=w.full.replace(/'/g,"&#39;");
+    const safeModifier=w.modifier.replace(/'/g,"&#39;");
+
+    // Nucleus display: in challenge show full prompt with ___ gap; in study show just nucleus
+    const promptDisplay = isC
+      ? w.prompt.replace("___", `<span class="prompt-blank">___</span>`)
+      : w.nucleus;
+
+    // Modifier slot: in study show the word; in challenge embed the input
+    const modSlot = isC
+      ? `<div class="nc-mod is-input rule-${w.rule}" id="nm${i}">
+           <input class="nc-mod-input" id="ci${i}" type="text" placeholder="???"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             aria-label="Type the modifier"
+             oninput="onType(${i})" onkeydown="if(event.key==='Enter'){event.preventDefault();trySpell(${i})}">
+           <span class="nc-mod-fb" id="cf${i}"></span>
+         </div>`
+      : `<div class="nc-mod" id="nm${i}"><span class="nc-mod-text">${safeModifier}</span></div>`;
+
+    c.innerHTML=`
+      <button class="ncard rule-${w.rule}${isC?" chal":""}" id="hb${i}" onclick="heartClick(${i})" aria-label="${safeFull}">
+        ${modSlot}
+        <div class="nc-nuc" id="nn${i}">${promptDisplay}</div>
+      </button>
+      <div class="ncard-footer">
+        <span class="explanation" id="ex${i}">${w.why}</span>
+        <button class="audio-btn" onclick="speak('${safeFull}')" aria-label="Listen to ${safeFull}">🔊</button>
+      </div>
+      ${isC ? `<span class="card-hint" id="ch${i}"></span>` : ''}
+      <div class="cpicker" id="cp${i}" role="group" aria-label="Pick the category for ${safeFull}">
+        <div class="cpicker-row">
+          <button class="cb r" onclick="pickColor(${i},'red')"   aria-label="Red: genitive or of"></button>
+          <button class="cb b" onclick="pickColor(${i},'blue')"  aria-label="Blue: direct noun adjunct"></button>
+          <button class="cb g" onclick="pickColor(${i},'green')" aria-label="Green: -ing nominal"></button>
+        </div>
+        <span class="cresult" id="cr${i}"></span>
+      </div>`;
+    g.appendChild(c);
+  });
+
+  renderButtons();
+  updateProgress();
+  document.getElementById("score").style.display="none";
+  if(mode==="timed") startTimer();
+}
+
+/* ══ MODE ══ */
+function setMode(m){
+  mode=m;
+  document.querySelector(".mode-btn.study").classList.toggle("active",m==="study");
+  document.querySelector(".mode-btn.challenge").classList.toggle("active",m==="challenge");
+  document.querySelector(".mode-btn.timed").classList.toggle("active",m==="timed");
+  document.getElementById("timerBar").classList.toggle("show",m==="timed");
+  build();
+}
+
+/* ══ TIMER ══ */
+function startTimer(){
+  timeLeft=60;
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft<=10) document.getElementById("timerDisplay").classList.add("warn");
+    if(timeLeft<=0){ stopTimer(); checkAll(); }
+  },1000);
+}
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  document.getElementById("timerDisplay").classList.remove("warn");
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timeLeft/60);
+  const s=timeLeft%60;
+  document.getElementById("timerDisplay").textContent=`${m}:${s.toString().padStart(2,"0")}`;
+}
+
+/* ══ STREAK ══ */
+function updateStreak(){
+  const bar=document.getElementById("streakBar");
+  if(streak>=2){
+    bar.classList.add("show");
+    document.getElementById("streakText").textContent=`${streak} in a row!`;
+  } else {
+    bar.classList.remove("show");
+  }
+}
+
+/* ══ STUDY: tap card ══ */
+function heartClick(i){
+  if(mode==="challenge"||mode==="timed"){ focusInput(i); return; }
+  const nc=document.getElementById(`hb${i}`);
+  if(nc.classList.contains("done")) return;
+  nc.classList.add("done","boing");
+  setTimeout(()=>nc.classList.remove("boing"),400);
+  // Reveal the modifier text
+  const nm=document.getElementById(`nm${i}`);
+  nm.innerHTML=`<span class="nc-mod-text">${words[i].modifier}</span>`;
+  // Show explanation
+  const ex=document.getElementById(`ex${i}`);
+  if(ex) ex.classList.add("visible");
+  st[i].done=true;
+  speak(words[i].full);
+  vibrate(30);
+  updateProgress();
+}
+function revealAll(){ words.forEach((_,i)=>{ if(!st[i].done) heartClick(i); }); }
+
+/* ══ CHALLENGE: focus ══ */
+function focusInput(i){
+  const ci=document.getElementById(`ci${i}`);
+  if(ci&&!ci.disabled) ci.focus();
+}
+
+/* ══ AUTO-ADVANCE ══ */
+function advanceToNext(i){
+  for(let n=i+1;n<words.length;n++){
+    if(!st[n].spelledOk){
+      setTimeout(()=>{
+        const next=document.getElementById(`ci${n}`);
+        if(next&&!next.disabled){
+          next.focus();
+          next.scrollIntoView({behavior:"smooth",block:"center"});
+        }
+      },300);
+      return;
+    }
+  }
+}
+
+/* ══ CHALLENGE: typing ══ */
+function onType(i){
+  const ci=document.getElementById(`ci${i}`);
+  const nm=document.getElementById(`nm${i}`);
+  if(nm){ nm.classList.remove("answered-wrong"); }
+  const ch=document.getElementById(`ch${i}`);
+  if(ch) ch.textContent="";
+  const cf=document.getElementById(`cf${i}`);
+  if(cf) cf.textContent="";
+}
+
+function getHint(word, attempts){
+  const rule=word.rule;
+  const modifier=word.modifier;
+  const focus=word.focus;
+
+  if(attempts===1){
+    if(rule==="blue"){
+      if(focus==="material")   return "💡 ¿Qué material está hecho o compuesto?";
+      if(focus==="location")   return "💡 ¿Dónde se encuentra o ubica el núcleo?";
+      if(focus==="type")       return "💡 ¿Qué tipo de cosa es?";
+      if(focus==="content")    return "💡 ¿Qué contiene habitualmente?";
+      if(focus==="purpose")    return "💡 ¿Para qué sirve?";
+      if(focus==="time")       return "💡 ¿Cuándo sucede?";
+      if(focus==="person")     return "💡 ¿Qué persona o rol describe?";
+      if(focus==="title")      return "💡 Un sustantivo modifica directamente al rol";
+      if(focus==="domain")     return "💡 ¿A qué dominio o área pertenece?";
+      return "💡 El modificador es un sustantivo directo (noun adjunct)";
+    }
+    if(rule==="green"){
+      if(focus==="activity")   return "💡 ¿Qué actividad o proceso define al núcleo?";
+      if(focus==="purpose")    return "💡 ¿Para qué actividad está diseñado?";
+      if(focus==="function")   return "💡 ¿Cuál es la función principal?";
+      if(focus==="discipline") return "💡 ¿A qué disciplina o campo pertenece?";
+      if(focus==="title")      return "💡 ¿Qué campo o actividad define el rol?";
+      return "💡 El modificador termina en -ing (actividad o disciplina)";
+    }
+    if(rule==="red"){
+      if(focus==="possession") return "💡 ¿De quién es? Piensa en genitivo 's";
+      if(focus==="partitive")  return "💡 ¿Es una cantidad de algo incontable? Usa 'of'";
+      if(focus==="composition")return "💡 ¿La relación es de composición o énfasis? Usa 'of'";
+      if(focus==="role")       return "💡 ¿El rol gestiona una disciplina abstracta? Usa 'of'";
+      if(focus==="hierarchy")  return "💡 ¿Es una jefatura sobre algo abstracto? Usa 'of'";
+      return "💡 Esta relación necesita 's, of, o un adjetivo puro";
+    }
+  }
+  if(attempts===2){
+    if(rule==="green") return `💡 ¿Termina en -ing? (${modifier.length} letras)`;
+    if(rule==="red" && modifier.length<=6) return `💡 Empieza por '${modifier[0]}' (${modifier.length} letras)`;
+    if(rule==="blue") return `💡 Empieza por '${modifier[0].toUpperCase()}' (${modifier.length} letras)`;
+    return `💡 El modificador tiene ${modifier.length} letras`;
+  }
+  if(attempts>=3){
+    const half=Math.ceil(modifier.length/2);
+    return `💡 ${modifier.slice(0,half)}… (${modifier.length} letras)`;
+  }
+  return "";
+}
+
+function trySpell(i){
+  if(st[i].spelledOk) return;
+  const ci=document.getElementById(`ci${i}`);
+  const nm=document.getElementById(`nm${i}`);
+  const cf=document.getElementById(`cf${i}`);
+  const ch=document.getElementById(`ch${i}`);
+  const val=ci.value.trim().toLowerCase();
+  nm.classList.remove("answered-ok","answered-wrong");
+  void nm.offsetWidth;
+  if(val===words[i].modifier.toLowerCase()){
+    nm.classList.add("answered-ok");
+    ci.disabled=true;
+    if(cf) cf.textContent="✅";
+    if(ch) ch.textContent="";
+    st[i].spelledOk=true;
+    streak++;
+    updateStreak();
+    vibrate(30);
+    // Update nucleus to plain word (remove ___ prompt)
+    const nn=document.getElementById(`nn${i}`);
+    if(nn) nn.textContent=words[i].nucleus;
+    // Mark card done for CSS color reveal
+    const nc=document.getElementById(`hb${i}`);
+    nc.classList.add("done","boing");
+    setTimeout(()=>nc.classList.remove("boing"),400);
+    // Show explanation
+    const ex=document.getElementById(`ex${i}`);
+    if(ex) ex.classList.add("visible");
+    const cp=document.getElementById(`cp${i}`);
+    cp.classList.add("show","boing");
+    speak(words[i].full);
+    updateProgress();
+    advanceToNext(i);
+  } else {
+    nm.classList.add("answered-wrong");
+    st[i].attempts++;
+    streak=0;
+    updateStreak();
+    vibrate([50,30,50]);
+    recordFail(words[i].full);
+    if(ch && st[i].attempts>=1){
+      ch.textContent=getHint(words[i],st[i].attempts);
+    }
+    const hb=document.getElementById(`hb${i}`);
+    hb.style.animation="none"; void hb.offsetWidth; hb.style.animation="";
+    ci.select();
+  }
+}
+
+/* ══ COLOR PICK ══ */
+function pickColor(i,color){
+  if(!st[i].spelledOk||st[i].locked) return;
+  st[i].colorPicked=color;
+  const map={r:"red",b:"blue",g:"green"};
+  document.querySelectorAll(`#cp${i} .cb`).forEach(btn=>{
+    btn.classList.remove("picked");
+    if(map[btn.classList[1]]===color) btn.classList.add("picked");
+  });
+  // Flash the card border with picked color
+  const nc=document.getElementById(`hb${i}`);
+  nc.classList.remove("boing"); void nc.offsetWidth;
+  nc.classList.add("boing");
+  setTimeout(()=>nc.classList.remove("boing"),400);
+  vibrate(20);
+  updateProgress();
+}
+
+/* ══ CHECK ALL ══ */
+function checkAll(){
+  stopTimer();
+  let spell=0,clr=0;
+  words.forEach((w,i)=>{
+    if(st[i].locked){spell++;clr++;return;}
+    const ci=document.getElementById(`ci${i}`);
+    const cf=document.getElementById(`cf${i}`);
+    const ch=document.getElementById(`ch${i}`);
+    const nc=document.getElementById(`hb${i}`);
+    const nm=document.getElementById(`nm${i}`);
+    const nn=document.getElementById(`nn${i}`);
+    const cp=document.getElementById(`cp${i}`);
+    const cr=document.getElementById(`cr${i}`);
+    const ex=document.getElementById(`ex${i}`);
+    if(!st[i].spelledOk && ci){
+      const val=ci.value.trim().toLowerCase();
+      ci.disabled=true;
+      if(val===w.modifier.toLowerCase()){
+        nm.classList.add("answered-ok");
+        if(cf) cf.textContent="✅";
+        if(ch) ch.textContent="";
+        st[i].spelledOk=true;
+        cp.classList.add("show");
+      } else {
+        nm.classList.add("answered-wrong");
+        if(cf) cf.textContent="❌";
+        if(ch) ch.textContent=`→ ${w.modifier}`;
+        recordFail(w.full);
+      }
+    }
+    // Reveal nucleus without the prompt gap
+    if(nn) nn.textContent=w.nucleus;
+    nc.classList.add("done");
+    if(ex) ex.classList.add("visible");
+
+    if(st[i].spelledOk) spell++;
+    const picked=st[i].colorPicked;
+    const colorOk=picked===w.rule;
+    const map={r:"red",b:"blue",g:"green"};
+    cp.querySelectorAll(".cb").forEach(btn=>{
+      const bc=map[btn.classList[1]];
+      btn.disabled=true;
+      btn.classList.remove("picked","correct-c","wrong-c");
+      if(bc===w.rule) btn.classList.add("correct-c");
+      if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
+    });
+    if(picked) cr.textContent=colorOk?"✅ Correct!":`❌ → ${w.rule.toUpperCase()}`;
+    else if(st[i].spelledOk) cr.textContent=`→ ${w.rule.toUpperCase()}`;
+    if(colorOk) clr++;
+    st[i].locked=st[i].done=true;
+  });
+  updateProgress();
+  renderButtons(true);
+  const total=words.length;
+  const pct=Math.round(((spell+clr)/(total*2))*100);
+  const stars=pct===100?3:pct>=60?2:1;
+  recordScore(pct);
+  setTimeout(()=>showStars(stars,spell,clr,total,pct),400);
+}
+
+/* ══ STARS + CONFETTI ══ */
+function showStars(stars,spell,clr,total,pct){
+  const overlay=document.getElementById("starsOverlay");
+  const title=document.getElementById("starsTitle");
+  const sub=document.getElementById("starsSub");
+  overlay.classList.add("show");
+  [1,2,3].forEach(n=>{
+    setTimeout(()=>{
+      if(n<=stars) document.getElementById(`star${n}`).classList.add("lit");
+    },n*350);
+  });
+  if(stars===3){
+    title.textContent="🏆 Perfect score!";
+    sub.textContent=`${spell}/${total} modifiers + ${clr}/${total} colours`;
+    setTimeout(launchConfetti,400);
+    vibrate([100,50,100,50,200]);
+  } else if(stars===2){
+    title.textContent="⭐ Great job!";
+    sub.textContent=`${spell}/${total} modifiers · ${clr}/${total} colours (${pct}%)`;
+    vibrate([50,30,50]);
+  } else {
+    title.textContent="💪 Keep practising!";
+    sub.textContent=`${spell}/${total} modifiers · ${clr}/${total} colours — you can do better!`;
+  }
+}
+function closeStars(){
+  document.getElementById("starsOverlay").classList.remove("show");
+  [1,2,3].forEach(n=>document.getElementById(`star${n}`).classList.remove("lit"));
+  stopConfetti();
+}
+
+/* ══ CONFETTI ══ */
+const canvas=document.getElementById("confetti-canvas");
+const ctx=canvas.getContext("2d");
+let particles=[],animId=null;
+const COLORS=["#FF6B6B","#4A90D9","#3DBE7A","#FF9F6B","#F7C948","#C97FE8"];
+
+function launchConfetti(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  particles=Array.from({length:140},()=>({
+    x:Math.random()*canvas.width,
+    y:-10-Math.random()*canvas.height*.3,
+    r:Math.random()*7+3,
+    d:Math.random()*2+1,
+    color:COLORS[Math.floor(Math.random()*COLORS.length)],
+    tilt:Math.random()*10-5,
+    tiltV:Math.random()*.2-.1,
+    shape:Math.random()>.5?"circle":"rect",
+  }));
+  if(animId) cancelAnimationFrame(animId);
+  drawConfetti();
+}
+function drawConfetti(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    ctx.save();
+    ctx.translate(p.x,p.y);
+    ctx.rotate(p.tilt*Math.PI/180);
+    ctx.fillStyle=p.color;
+    if(p.shape==="circle"){
+      ctx.beginPath();ctx.arc(0,0,p.r,0,2*Math.PI);ctx.fill();
+    } else {
+      ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.4);
+    }
+    ctx.restore();
+    p.y+=p.d+1.5;
+    p.tilt+=p.tiltV;
+    p.x+=Math.sin(p.y*.02)*1.2;
+  });
+  particles=particles.filter(p=>p.y<canvas.height+20);
+  if(particles.length>0) animId=requestAnimationFrame(drawConfetti);
+  else ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+function stopConfetti(){
+  if(animId){cancelAnimationFrame(animId);animId=null;}
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles=[];
+}
+
+/* ══ PROGRESS ══ */
+function updateProgress(){
+  const done=mode==="study"
+    ?Object.values(st).filter(x=>x.done).length
+    :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
+  const pct=Math.round(done/words.length*100);
+  document.getElementById("progTxt").textContent=`${done} / ${words.length}`;
+  document.getElementById("progPct").textContent=`${pct}%`;
+  document.getElementById("progFill").style.width=pct+"%";
+}
+
+/* ══ BUTTONS ══ */
+function renderButtons(checked=false){
+  const row=document.getElementById("btnRow");
+  row.innerHTML="";
+  if(mode==="study"){
+    row.innerHTML=`
+      <button class="btn btn-blue"  onclick="revealAll()">✨ Show All</button>
+      <button class="btn btn-ghost" onclick="build()">🔄 Reset</button>`;
+  } else if(!checked){
+    row.innerHTML=`
+      <button class="btn btn-green" onclick="checkAll()">✅ Check Answers</button>
+      <button class="btn btn-ghost" onclick="build()">🔄 Reset</button>`;
+  } else {
+    row.innerHTML=`
+      <button class="btn btn-red"   onclick="setMode(mode)">🔄 Try Again</button>
+      <button class="btn btn-ghost" onclick="setMode('study')">📖 Study</button>`;
+  }
+}
+
+/* ══ INIT ══ */
+applyTheme();
+renderStats();
+build();
+</script>
+</body>
+</html>
