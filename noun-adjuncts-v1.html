@@ -324,6 +324,10 @@ h1{
 /* boing on ncard */
 .ncard.boing{animation:boing .38s ease;}
 
+/* Color pick feedback on the card border */
+.ncard.pick-ok   {border-color:var(--card-stroke);border-width:3px;box-shadow:0 0 0 2px var(--card-stroke);}
+.ncard.pick-wrong{border-color:var(--red)!important;border-width:3px;box-shadow:0 0 0 2px var(--red);}
+
 .cinput-wrap{display:none;flex-direction:column;align-items:center;gap:1px;width:100%;justify-self:stretch;}
 .cinput-wrap.show{display:flex;}
 .cinput{
@@ -1007,12 +1011,32 @@ function pickColor(i,color){
   if(!st[i].spelledOk||st[i].locked) return;
   st[i].colorPicked=color;
   const map={r:"red",b:"blue",g:"green"};
+
+  // Mark the picked dot
   document.querySelectorAll(`#cp${i} .cb`).forEach(btn=>{
     btn.classList.remove("picked");
     if(map[btn.classList[1]]===color) btn.classList.add("picked");
   });
-  // Flash the card border with picked color
+
+  // Update card visuals to reflect the chosen color immediately
   const nc=document.getElementById(`hb${i}`);
+  const nm=document.getElementById(`nm${i}`);
+  // Remove any previous pick classes
+  nc.classList.remove("rule-red","rule-blue","rule-green","pick-wrong","pick-ok");
+  nm.classList.remove("answered-ok");
+  // Apply chosen color to the card
+  nc.classList.add(`rule-${color}`);
+  nm.classList.add("answered-ok");
+
+  // Show ok/wrong ring on the card border
+  const correctRule=words[i].rule;
+  if(color===correctRule){
+    nc.classList.add("pick-ok");
+  } else {
+    nc.classList.add("pick-wrong");
+  }
+
+  // Boing
   nc.classList.remove("boing"); void nc.offsetWidth;
   nc.classList.add("boing");
   setTimeout(()=>nc.classList.remove("boing"),400);
@@ -1053,7 +1077,11 @@ function checkAll(){
     }
     // Reveal nucleus without the prompt gap
     if(nn) nn.textContent=w.nucleus;
-    nc.classList.add("done");
+    // Lock card to correct rule color
+    nc.classList.remove("rule-red","rule-blue","rule-green","pick-ok","pick-wrong");
+    nc.classList.add(`rule-${w.rule}`,"done");
+    const nmFinal=document.getElementById(`nm${i}`);
+    if(nmFinal) nmFinal.classList.add("answered-ok");
     if(ex) ex.classList.add("visible");
 
     if(st[i].spelledOk) spell++;
