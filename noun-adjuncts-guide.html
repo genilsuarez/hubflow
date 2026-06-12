@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noun Adjuncts — Guía de Referencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#FF6B6B;    --red-light:#FFECEC;   --red-dark:#CC3333;
+  --blue:#4A90D9;   --blue-light:#E4F0FF;  --blue-dark:#1B5EA8;
+  --green:#3DBE7A;  --green-light:#E2FAF0; --green-dark:#1E7A48;
+  --bg:#F7F9FC; --text:#1A2233; --muted:#8A94A6;
+  --surface:#FFFFFF; --border:#E3E9F2;
+}
+[data-theme="dark"]{
+  --bg:#12141F; --text:#E8E4F0; --muted:#7B7B9D;
+  --surface:#1C1F30; --border:#2E3250;
+  --red-light:#3D1A1A; --blue-light:#162040; --green-light:#122E1E;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);font-family:'Manrope',sans-serif;color:var(--text);
+  max-width:680px;margin:0 auto;padding:16px 16px 48px;
+  transition:background .3s,color .3s;
+}
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.back-link{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;
+  color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
+  transition:opacity .2s;
+}
+.back-link:hover{opacity:.7;}
+.theme-btn{
+  background:var(--surface);border:2px solid var(--border);border-radius:50px;
+  padding:4px 12px;font-size:.75rem;cursor:pointer;color:var(--text);
+  font-family:'Manrope',sans-serif;font-weight:700;transition:all .2s;
+}
+.theme-btn:hover{border-color:var(--blue);}
+
+/* HERO */
+.hero{margin-bottom:24px;}
+.hero h1{
+  font-family:'Manrope',sans-serif;font-weight:800;
+  font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.03em;
+  color:var(--text);line-height:1.2;margin-bottom:6px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.hero h1 .mono{font-family:'JetBrains Mono',monospace;color:var(--blue);}
+.ver-chip{
+  font-family:'Manrope',sans-serif;font-size:.5em;font-weight:800;
+  background:#EAF1FB;color:var(--blue);border-radius:5px;padding:1px 7px;
+  letter-spacing:.02em;line-height:1.7;
+}
+.hero p{font-size:.88rem;color:var(--muted);font-weight:600;line-height:1.55;max-width:540px;}
+
+/* DECISION TREE BOX */
+.dt-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:16px 18px;margin-bottom:24px;
+}
+.dt-box h2{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+.dt-flow{display:flex;flex-direction:column;}
+.dt-step{
+  border-radius:10px;border:1.5px solid var(--border);
+  background:var(--bg);overflow:hidden;
+}
+.dt-question{
+  padding:10px 12px 5px;
+  font-size:.84rem;font-weight:700;color:var(--text);line-height:1.3;
+}
+.dt-question em{
+  display:block;font-style:normal;font-size:.78em;
+  color:var(--muted);margin-top:3px;line-height:1.4;
+}
+.dt-yes{
+  display:flex;align-items:center;gap:8px;
+  padding:5px 12px 10px;
+}
+.dt-yes-label{
+  font-size:.72rem;font-weight:900;color:var(--text);
+  letter-spacing:.02em;flex-shrink:0;
+  font-family:'JetBrains Mono',monospace;
+}
+.dt-yes-line{
+  flex:1;height:1.5px;background:var(--border);
+  max-width:24px;
+}
+.dt-badge{
+  font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:50px;
+  flex-shrink:0;border:1.5px solid transparent;
+}
+.dt-badge.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+.dt-badge.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.dt-badge.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+[data-theme="dark"] .dt-badge.red{color:#FF9F9F;}
+[data-theme="dark"] .dt-badge.blue{color:#7AC7FF;}
+[data-theme="dark"] .dt-badge.green{color:#6FE8A8;}
+.dt-no{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 16px;
+}
+.dt-no-label{
+  font-size:.72rem;font-weight:900;color:var(--muted);
+  letter-spacing:.02em;flex-shrink:0;
+  font-family:'JetBrains Mono',monospace;
+}
+.dt-no-arrow{font-size:.8rem;color:var(--muted);}
+.dt-no-text{font-size:.7rem;font-weight:600;color:var(--muted);font-style:italic;}
+.dt-last{
+  border-radius:10px;border:1.5px solid var(--border);
+  background:var(--bg);padding:10px 12px;
+  display:flex;align-items:center;gap:10px;
+}
+.dt-last-label{font-size:.84rem;font-weight:700;color:var(--text);flex:1;}
+.dt-always{font-size:.68rem;font-weight:700;color:var(--muted);font-style:italic;flex-shrink:0;}
+.dt-warning{
+  display:flex;align-items:flex-start;gap:8px;background:#FFFBEA;
+  border:1.5px solid #ECC94B;border-radius:10px;padding:8px 12px;margin-top:12px;
+}
+[data-theme="dark"] .dt-warning{background:#3a3000;border-color:#7a6000;}
+.dt-warning .icon{font-size:1rem;flex-shrink:0;}
+.dt-warning p{font-size:.78rem;font-weight:700;line-height:1.4;color:#7B621A;}
+[data-theme="dark"] .dt-warning p{color:#F7C948;}
+.dt-warning code{font-family:'JetBrains Mono',monospace;font-size:.75em;}
+
+/* SECTIONS */
+.section{margin-bottom:28px;}
+.section-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+  padding-bottom:8px;border-bottom:2px solid var(--border);
+}
+.section-badge{
+  font-size:.75rem;font-weight:800;padding:3px 10px;border-radius:50px;
+  border:1.5px solid transparent;
+}
+.section-badge.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.section-badge.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+.section-badge.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+.section-title{font-size:.95rem;font-weight:800;color:var(--text);}
+.section-sub{font-size:.72rem;color:var(--muted);font-weight:600;margin-top:1px;}
+
+.rule-card{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin-bottom:8px;
+}
+.rule-card h3{
+  font-size:.8rem;font-weight:800;color:var(--text);margin-bottom:4px;
+}
+.rule-card p{font-size:.78rem;color:var(--muted);font-weight:600;line-height:1.5;margin-bottom:8px;}
+.examples{display:flex;flex-direction:column;gap:4px;}
+.example{
+  display:flex;align-items:flex-start;gap:8px;padding:6px 10px;
+  border-radius:8px;background:var(--bg);
+}
+.ex-word{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;
+  color:var(--text);flex-shrink:0;min-width:130px;
+}
+.ex-word.blue{color:var(--blue-dark);}
+.ex-word.green{color:var(--green-dark);}
+.ex-word.red{color:var(--red-dark);}
+[data-theme="dark"] .ex-word.blue{color:#7AC7FF;}
+[data-theme="dark"] .ex-word.green{color:#6FE8A8;}
+[data-theme="dark"] .ex-word.red{color:#FF9F9F;}
+.ex-why{font-size:.7rem;color:var(--muted);font-weight:600;line-height:1.4;}
+.ex-wrong{
+  font-size:.68rem;color:var(--red-dark);font-weight:700;
+  font-family:'JetBrains Mono',monospace;
+}
+[data-theme="dark"] .ex-wrong{color:#FF9F9F;}
+
+/* CONTRAST TABLE */
+.contrast-table{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  overflow:hidden;
+}
+.ct-header{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+  background:var(--border);padding:6px 12px;
+  font-size:.65rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
+}
+.ct-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+  padding:7px 12px 0;border-top:1px solid var(--border);align-items:center;
+}
+.ct-row:hover{background:var(--bg);}
+.ct-row:hover .ct-note{background:var(--bg);}
+.ct-form{font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:700;}
+.ct-form.blue{color:var(--blue-dark);}
+.ct-form.green{color:var(--green-dark);}
+.ct-form.red{color:var(--red-dark);}
+[data-theme="dark"] .ct-form.blue{color:#7AC7FF;}
+[data-theme="dark"] .ct-form.green{color:#6FE8A8;}
+[data-theme="dark"] .ct-form.red{color:#FF9F9F;}
+.ct-note{
+  font-size:.65rem;color:var(--muted);font-weight:600;line-height:1.4;
+  grid-column:1/-1;
+  margin:5px -12px 0;padding:4px 12px 6px;
+  border-top:1px dashed var(--border);
+  background:var(--bg);
+}
+
+/* SINGULAR RULE */
+.singular-box{
+  background:var(--blue-light);border:1.5px solid var(--blue);border-radius:12px;
+  padding:12px 14px;margin-bottom:16px;
+}
+[data-theme="dark"] .singular-box{background:#162040;}
+.singular-box h3{font-size:.82rem;font-weight:800;color:var(--blue-dark);margin-bottom:4px;}
+[data-theme="dark"] .singular-box h3{color:#7AC7FF;}
+.singular-box p{font-size:.78rem;color:var(--blue-dark);font-weight:600;line-height:1.5;margin-bottom:8px;}
+[data-theme="dark"] .singular-box p{color:#7AC7FF;}
+.sing-examples{display:flex;gap:6px;flex-wrap:wrap;}
+.sing-pill{
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;
+  background:var(--surface);border:1.5px solid var(--blue);color:var(--blue-dark);
+  border-radius:50px;padding:2px 10px;
+}
+[data-theme="dark"] .sing-pill{color:#7AC7FF;}
+.sing-pill.wrong{
+  border-color:var(--red);color:var(--red-dark);text-decoration:line-through;
+  background:var(--red-light);
+}
+[data-theme="dark"] .sing-pill.wrong{color:#FF9F9F;background:var(--red-light);}
+.exception-box{
+  background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;
+  padding:10px 12px;margin-top:8px;
+}
+.exception-box h4{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+.exception-box ul{list-style:none;display:flex;flex-direction:column;gap:3px;}
+.exception-box li{font-size:.76rem;font-weight:700;line-height:1.3;}
+.exception-box li code{font-family:'JetBrains Mono',monospace;color:var(--blue-dark);}
+[data-theme="dark"] .exception-box li code{color:#7AC7FF;}
+.exception-box li span{font-size:.68rem;color:var(--muted);font-weight:600;}
+.exception-box.green{background:var(--green-light);border-color:var(--green);}
+.exception-box.green h4{color:var(--green-dark);}
+.exception-box.green li code{color:var(--green-dark);}
+[data-theme="dark"] .exception-box.green{background:#0e2a1a;}
+[data-theme="dark"] .exception-box.green h4,[data-theme="dark"] .exception-box.green li code{color:#6FE8A8;}
+
+footer{
+  margin-top:32px;padding-top:16px;border-top:1.5px solid var(--border);
+  text-align:center;font-size:.68rem;color:var(--muted);font-weight:700;
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="noun-adjuncts-v1.html" class="back-link">← Volver al ejercicio</a>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+</div>
+
+<div class="hero">
+  <h1><span class="mono">Noun</span> Adjuncts <span class="ver-chip">Guía</span></h1>
+  <p>Tres estructuras para modificar sustantivos en inglés. Cada una responde a una relación diferente entre palabras.</p>
+</div>
+
+<!-- DECISION TREE -->
+<div class="dt-box">
+  <h2>Árbol de decisión</h2>
+  <div class="dt-flow">
+
+    <div class="dt-step">
+      <div class="dt-question">
+        ¿Hay posesión real (de alguien) o es una cantidad de algo incontable?
+        <em>the engineer's report · a cup of coffee · a piece of advice</em>
+      </div>
+      <div class="dt-yes">
+        <span class="dt-yes-label">✓ SÍ</span>
+        <span class="dt-yes-line"></span>
+        <span class="dt-badge red">🔴 's / of</span>
+      </div>
+    </div>
+
+    <div class="dt-no">
+      <span class="dt-no-label">✗ NO</span>
+      <span class="dt-no-arrow">↓</span>
+      <span class="dt-no-text">siguiente pregunta</span>
+    </div>
+
+    <div class="dt-step">
+      <div class="dt-question">
+        ¿El modificador expresa una actividad o disciplina?
+        <em>swimming · cooking · driving · waiting · washing</em>
+      </div>
+      <div class="dt-yes">
+        <span class="dt-yes-label">✓ SÍ</span>
+        <span class="dt-yes-line"></span>
+        <span class="dt-badge green">🟢 -ing</span>
+      </div>
+    </div>
+
+    <div class="dt-no">
+      <span class="dt-no-label">✗ NO</span>
+      <span class="dt-no-arrow">↓</span>
+      <span class="dt-no-text">siguiente pregunta</span>
+    </div>
+
+    <div class="dt-last">
+      <span class="dt-last-label">Sustantivo que describe tipo, material, lugar, tiempo o propósito</span>
+      <span class="dt-always">siempre →</span>
+      <span class="dt-badge blue">🔵 Noun</span>
+    </div>
+
+    <div class="dt-warning">
+      <span class="icon">⚠️</span>
+      <p>Regla del singular: el modifier 🔵 va SIEMPRE en singular, aunque el referente sea plural.<br>
+      <code>shoe shop</code> ✓ · <code>shoes shop</code> ✗ &nbsp;|&nbsp; <code>book shelf</code> ✓ · <code>books shelf</code> ✗</p>
+    </div>
+  </div>
+</div>
+
+<!-- BLUE SECTION -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-badge blue">🔵 Noun Adjunct</span>
+    <div>
+      <div class="section-title">Sustantivo + Sustantivo directo</div>
+      <div class="section-sub">El modifier describe tipo, material, lugar, tiempo, contenido o propósito</div>
+    </div>
+  </div>
+
+  <div class="rule-card">
+    <h3>La regla base</h3>
+    <p>Un sustantivo modifica a otro directamente, sin preposición ni morfología especial. El modifier va ANTES del núcleo y en SINGULAR.</p>
+    <div class="examples">
+      <div class="example">
+        <span class="ex-word blue">stone wall</span>
+        <span class="ex-why">Material → tipo de muro. ✗ <span class="ex-wrong">stone's wall</span> (solo personas poseen con 's)</span>
+      </div>
+      <div class="example">
+        <span class="ex-word blue">night shift</span>
+        <span class="ex-why">Tiempo → cuándo sucede el turno. ✗ <span class="ex-wrong">night's shift</span></span>
+      </div>
+      <div class="example">
+        <span class="ex-word blue">coffee cup</span>
+        <span class="ex-why">Contenido habitual. ≠ "cup of coffee" (partitivo = una porción)</span>
+      </div>
+      <div class="example">
+        <span class="ex-word blue">beach house</span>
+        <span class="ex-why">Ubicación. ✗ <span class="ex-wrong">beach's house</span> — lugares usan adjunct, no genitivo</span>
+      </div>
+      <div class="example">
+        <span class="ex-word blue">book shelf</span>
+        <span class="ex-why">Contenido. Modifier SINGULAR — ✗ <span class="ex-wrong">books shelf</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SINGULAR RULE -->
+  <div class="singular-box">
+    <h3>La regla del singular</h3>
+    <p>El modifier siempre va en singular, aunque el núcleo sea plural o el referente implique "muchos".</p>
+    <div class="sing-examples">
+      <span class="sing-pill">shoe shop</span>
+      <span class="sing-pill wrong">shoes shop</span>
+      <span class="sing-pill">book shelf</span>
+      <span class="sing-pill wrong">books shelf</span>
+      <span class="sing-pill">tooth brush</span>
+      <span class="sing-pill wrong">teeth brush</span>
+      <span class="sing-pill">bus stop</span>
+      <span class="sing-pill wrong">buses stop</span>
+    </div>
+    <div class="exception-box">
+      <h4>Excepciones lexicalizadas</h4>
+      <ul>
+        <li><code>sports car</code> <span>— el idioma congeló esta forma por el uso; 'sports' no significa "muchos deportes", es la expresión fija · ✗ <em>sport car</em> (suena arcaico)</span></li>
+        <li><code>savings account</code> <span>— 'savings' (ahorros) existe solo en plural como concepto; la expresión se fijó así · ✗ <em>saving account</em></span></li>
+        <li><code>arms race</code> <span>— 'arms' = armamentos, término que solo existe en plural · ✗ <em>arm race</em></span></li>
+        <li><code>customs officer</code> <span>— 'customs' = aduana, institución que el inglés trata siempre en plural · ✗ <em>custom officer</em></span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- GREEN SECTION -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-badge green">🟢 -ing Nominal</span>
+    <div>
+      <div class="section-title">Actividad o disciplina como modifier</div>
+      <div class="section-sub">El -ing nominaliza el verbo: generalmente como modificador, a veces como núcleo (disciplinas)</div>
+    </div>
+  </div>
+
+  <div class="rule-card">
+    <h3>¿Cuándo usar -ing?</h3>
+    <p>Cuando el modifier expresa la actividad, función o disciplina que define al núcleo. No es el verbo conjugado, es el sustantivo verbal.</p>
+    <div class="examples">
+      <div class="example">
+        <span class="ex-word green">swimming pool</span>
+        <span class="ex-why">La actividad (nadar) define el propósito. ✗ <span class="ex-wrong">swim pool</span> — 'swim' solo es verbo</span>
+      </div>
+      <div class="example">
+        <span class="ex-word green">washing machine</span>
+        <span class="ex-why">La función de la máquina. ✗ <span class="ex-wrong">wash machine</span> — 'wash' solo es verbo</span>
+      </div>
+      <div class="example">
+        <span class="ex-word green">running shoes</span>
+        <span class="ex-why">Actividad para la que están diseñados</span>
+      </div>
+      <div class="example">
+        <span class="ex-word green">software engineering</span>
+        <span class="ex-why">⚠ Excepción posicional: el -ing es el <strong>núcleo</strong>, no el modifier. ≠ <span class="ex-wrong">software engineer</span> (persona → 🔵)</span>
+      </div>
+      <div class="example">
+        <span class="ex-word green">driving license</span>
+        <span class="ex-why">UK: la actividad autoriza · US: <span style="color:var(--red-dark)">driver's license</span> (genitivo)</span>
+      </div>
+    </div>
+
+    <div class="exception-box green">
+      <h4>⚠ Excepción posicional: -ing como sustantivo núcleo</h4>
+      <ul>
+        <li>Normalmente el -ing va <strong>primero</strong> porque es un gerundio que <em>describe</em> al núcleo:<br>
+          <span>→ <code>swimming pool</code> — swimming modifica a pool</span></li>
+        <li style="margin-top:5px">Pero <code>engineering</code>, <code>accounting</code>, <code>nursing</code> se lexicalizaron como <strong>sustantivos de disciplina</strong>. Al ser el concepto principal, van al <strong>final</strong> — igual que cualquier Noun+Noun:<br>
+          <span>→ <code>software engineering</code> — software modifica al campo</span></li>
+        <li style="margin-top:5px"><span>Patrón: [Noun-modifier] + [disciplina-noun-ing]</span><br>
+          <code>software engineering</code> · <code>civil engineering</code> · <code>mechanical engineering</code></li>
+        <li style="margin-top:5px"><span>✗ Confusión frecuente:</span> <code style="color:var(--blue-dark);font-family:'JetBrains Mono',monospace">software engineer</code> <span>→ la persona (🔵 Noun+Noun, sin nominalización)</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- RED SECTION -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-badge red">🔴 Genitivo 's / of</span>
+    <div>
+      <div class="section-title">Posesión real o partitivo</div>
+      <div class="section-sub">Cuando hay posesión genuina, jerarquía o cantidad de algo incontable</div>
+    </div>
+  </div>
+
+  <div class="rule-card">
+    <h3>Genitivo 's — posesión personal o institucional</h3>
+    <p>Usa 's cuando algo pertenece genuinamente a una persona, grupo o institución específica.</p>
+    <div class="examples">
+      <div class="example">
+        <span class="ex-word red">engineer's report</span>
+        <span class="ex-why">El informe ES DEL ingeniero. ✗ <span class="ex-wrong">engineer report</span> — sin 's no hay posesión</span>
+      </div>
+      <div class="example">
+        <span class="ex-word red">team's decision</span>
+        <span class="ex-why">La decisión pertenece al equipo. ≠ team decision (tipo de decisión, distinto)</span>
+      </div>
+      <div class="example">
+        <span class="ex-word red">master's degree</span>
+        <span class="ex-why">Genitivo fosilizado en títulos académicos. ✗ <span class="ex-wrong">master degree</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-card">
+    <h3>Partitivo 'of' — cantidades y composición</h3>
+    <p>Usa 'of' para partitivos (cantidad de incontables), composición enfática, o roles sobre disciplinas abstractas.</p>
+    <div class="examples">
+      <div class="example">
+        <span class="ex-word red">cup of coffee</span>
+        <span class="ex-why">Partitivo: una porción. ≠ coffee cup (el tipo de taza que usas habitualmente)</span>
+      </div>
+      <div class="example">
+        <span class="ex-word red">piece of advice</span>
+        <span class="ex-why">'advice' es incontable — necesita cuantificador. ✗ <span class="ex-wrong">advice piece</span></span>
+      </div>
+      <div class="example">
+        <span class="ex-word red">head of engineering</span>
+        <span class="ex-why">Jefatura sobre disciplina abstracta (registro formal). ≈ engineering head (informal)</span>
+      </div>
+      <div class="example">
+        <span class="ex-word red">manager of engineering</span>
+        <span class="ex-why">'of' = registro escrito/profesional · engineering manager = coloquial/cotidiano</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRAST PAIRS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-badge" style="background:var(--border);border-color:var(--muted);color:var(--muted)">🔄</span>
+    <div>
+      <div class="section-title">Pares de contraste</div>
+      <div class="section-sub">Mismas palabras, distinta estructura, distinto significado</div>
+    </div>
+  </div>
+  <div class="contrast-table">
+    <div class="ct-header">
+      <span>🔵 Noun+Noun</span>
+      <span>🟢 -ing</span>
+      <span>🔴 's / of</span>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form blue">coffee cup</span>
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <span class="ct-form red">cup of coffee</span>
+      <div class="ct-note">coffee cup = el tipo de taza · cup of coffee = una porción de café</div>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form blue">cook book</span>
+      <span class="ct-form green">cooking oil</span>
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <div class="ct-note">cook = persona/oficio · cooking = la acción de cocinar</div>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form blue">stone wall</span>
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <span class="ct-form red">wall of stone</span>
+      <div class="ct-note">stone wall = descripción neutra · wall of stone = énfasis dramático/literario</div>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form blue">software engineer</span>
+      <span class="ct-form green">software engineering</span>
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <div class="ct-note">software engineer = 🔵 la persona (modifier directo) · software engineering = 🟢 la disciplina (excepción posicional: -ing es el núcleo, no el modifier)</div>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form blue">company policy</span>
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <span class="ct-form red">team's decision</span>
+      <div class="ct-note">company policy = tipo general (sin posesión específica) · team's decision = este equipo tomó esta decisión</div>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form blue">engineering director</span>
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <span class="ct-form red">head of engineering</span>
+      <div class="ct-note">director informal · head of = registro formal/jerárquico</div>
+    </div>
+    <div class="ct-row">
+      <span class="ct-form" style="color:var(--muted)">—</span>
+      <span class="ct-form green">driving license</span>
+      <span class="ct-form red">driver's license</span>
+      <div class="ct-note">driving license = UK (-ing nominal) · driver's license = US (genitivo)</div>
+    </div>
+  </div>
+</div>
+
+<footer>LearnHub — Noun Adjuncts Guide · Genil Suarez</footer>
+
+<script>
+function toggleTheme(){
+  const isDark=document.documentElement.getAttribute("data-theme")==="dark";
+  if(isDark){
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("themeBtn").textContent="🌙 Dark";
+  } else {
+    document.documentElement.setAttribute("data-theme","dark");
+    document.getElementById("themeBtn").textContent="☀️ Light";
+  }
+}
+</script>
+</body>
+</html>

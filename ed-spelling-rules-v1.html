@@ -4,24 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>-ed Spelling Rules v1</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --red:#FF6B6B;    --red-light:#FFECEC;   --red-dark:#CC3333;
   --blue:#4A90D9;   --blue-light:#E4F0FF;  --blue-dark:#1B5EA8;
   --green:#3DBE7A;  --green-light:#E2FAF0; --green-dark:#1E7A48;
-  --bg:#FFF6EE; --text:#2E2828; --muted:#AAA;
-  --surface:#fff; --border:#EDE8E2;
+  --bg:#F7F9FC; --text:#1A2233; --muted:#8A94A6;
+  --surface:#FFFFFF; --border:#E3E9F2;
 }
 [data-theme="dark"]{
-  --bg:#1a1a2e; --text:#eaeaea; --muted:#888;
-  --surface:#16213e; --border:#2a2a4e;
-  --red-light:#4a2020; --blue-light:#1a2d4a; --green-light:#1a3d2a;
+  --bg:#12141F; --text:#E8E4F0; --muted:#7B7B9D;
+  --surface:#1C1F30; --border:#2E3250;
+  --red-light:#3D1A1A; --blue-light:#162040; --green-light:#122E1E;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 body{
-  background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);
+  background:var(--bg);font-family:'Manrope',sans-serif;color:var(--text);
   display:flex;flex-direction:column;align-items:center;
   transition:background .3s,color .3s;
 }
@@ -33,10 +33,10 @@ body{
 /* BACK + THEME BAR */
 .top-bar{
   width:100%;max-width:760px;display:flex;justify-content:space-between;align-items:center;
-  padding:6px 14px 2px;flex-shrink:0;
+  padding:3px 14px 0;flex-shrink:0;
 }
 .back-link{
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.85rem;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;
   color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
   transition:opacity .2s;
 }
@@ -44,7 +44,7 @@ body{
 .theme-toggle{
   background:var(--surface);border:2px solid var(--border);border-radius:50px;
   padding:4px 10px;font-size:.75rem;cursor:pointer;color:var(--text);
-  font-family:'Baloo 2',cursive;font-weight:700;transition:all .2s;
+  font-family:'Manrope',sans-serif;font-weight:700;transition:all .2s;
 }
 .theme-toggle:hover{border-color:var(--blue);}
 
@@ -80,7 +80,7 @@ body{
   padding:12px 12px 8px;border-bottom:1.5px solid var(--border);
 }
 .menu-title{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:.85rem;
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.85rem;
   color:var(--text);display:flex;align-items:center;gap:5px;
 }
 .menu-close{
@@ -98,13 +98,15 @@ body{
   display:flex;align-items:center;gap:8px;
   padding:7px 10px;border-radius:8px;border:none;
   background:transparent;cursor:pointer;
-  font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;
+  font-family:'Manrope',sans-serif;font-size:.76rem;font-weight:700;
   color:var(--text);transition:background .15s;
   width:100%;text-align:left;
 }
 .menu-item:hover{background:var(--border);}
 .menu-item.active{background:var(--blue-light);color:var(--blue);}
 [data-theme="dark"] .menu-item.active{color:#7AC7FF;}
+.menu-item.locked{opacity:.45;cursor:not-allowed;}
+.menu-item.locked::after{content:'🔒';margin-left:auto;font-size:.7rem;}
 .menu-item-icon{font-size:.85rem;width:18px;text-align:center;flex-shrink:0;}
 .menu-item .menu-val{margin-left:auto;color:var(--blue);font-weight:800;font-size:.72rem;}
 
@@ -112,7 +114,7 @@ body{
   height:1px;background:var(--border);margin:3px 10px;
 }
 .menu-section-label{
-  font-family:'Baloo 2',cursive;font-size:.55rem;font-weight:800;
+  font-family:'Manrope',sans-serif;font-size:.55rem;font-weight:800;
   color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
   padding:3px 10px 1px;
 }
@@ -142,7 +144,7 @@ body{
 /* FIXED HEADER */
 .header{
   width:100%;max-width:760px;
-  padding:5px 14px 5px;
+  padding:3px 14px 3px;
   background:var(--bg);
   border-bottom:2px solid var(--border);
   flex-shrink:0;
@@ -151,23 +153,33 @@ body{
   transition:background .3s;
 }
 @media(max-width:480px){
-  .header{position:sticky;top:0;padding:4px 10px;}
-  .top-bar{padding:4px 10px 2px;}
+  .header{position:sticky;top:0;padding:2px 10px;}
+  .top-bar{padding:2px 10px 0;}
 }
 
 /* TITLE */
 .header-row{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;
 }
 h1{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(.9rem,3vw,1.3rem);
-  margin-bottom:0;line-height:1.2;
-  background:linear-gradient(120deg,var(--blue),#6FE8A8,var(--green));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:clamp(.85rem,2.8vw,1.2rem);
+  margin-bottom:0;line-height:1.2;color:var(--text);
+  display:flex;align-items:center;gap:6px;
+}
+.h1-suffix{
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  color:var(--blue);letter-spacing:-.02em;
+}
+.h1-label{font-weight:600;color:var(--muted);font-size:.88em;}
+.ver-chip{
+  font-family:'Manrope',sans-serif;font-size:.58em;font-weight:800;
+  background:#EAF1FB;color:var(--blue);
+  border-radius:5px;padding:1px 6px;letter-spacing:.02em;
+  line-height:1.6;flex-shrink:0;
 }
 .header-badge{
   display:flex;align-items:center;gap:3px;
-  font-family:'Baloo 2',cursive;font-size:.7rem;font-weight:700;
+  font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;
   background:var(--surface);border:1.5px solid var(--border);
   border-radius:50px;padding:2px 8px;color:var(--muted);
 }
@@ -176,30 +188,31 @@ h1{
 
 /* MODE TOGGLE */
 .mode-bar{
-  display:flex;background:var(--surface);border-radius:50px;padding:2px;gap:2px;
-  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:5px;
+  display:flex;background:var(--surface);border-radius:50px;padding:2px;gap:1px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:3px;
   border:2px solid var(--border);
 }
 .mode-btn{
-  flex:1;font-family:'Baloo 2',cursive;font-size:.8rem;font-weight:700;
-  padding:5px;border-radius:50px;border:none;cursor:pointer;
+  flex:1;font-family:'Manrope',sans-serif;font-size:.8rem;font-weight:700;
+  padding:4px;border-radius:50px;border:none;cursor:pointer;
   transition:all .22s;color:var(--muted);background:transparent;
 }
 .mode-btn.active.study    {background:var(--blue);color:#fff;box-shadow:0 3px 10px rgba(74,144,217,.4);}
 .mode-btn.active.challenge{background:linear-gradient(135deg,var(--red),#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(255,107,107,.4);}
 .mode-btn.active.timed    {background:linear-gradient(135deg,#F7C948,#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(247,201,72,.4);}
+.mode-btn.active.reverse  {background:linear-gradient(135deg,#9B59B6,#C97FE8);color:#fff;box-shadow:0 3px 10px rgba(155,89,182,.4);}
 @media(max-width:480px){
-  .mode-bar{margin-bottom:4px;padding:2px;}
-  .mode-btn{font-size:.68rem;padding:4px;}
+  .mode-bar{margin-bottom:3px;padding:2px;}
+  .mode-btn{font-size:.68rem;padding:3px;}
 }
 
 /* TIMER */
 .timer-bar{
-  display:none;align-items:center;justify-content:center;gap:8px;margin-bottom:4px;
+  display:none;align-items:center;justify-content:center;gap:8px;margin-bottom:2px;
 }
 .timer-bar.show{display:flex;}
 .timer-display{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:1.1rem;
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:1.1rem;
   color:var(--red);min-width:50px;text-align:center;
 }
 .timer-display.warn{animation:pulse .5s infinite alternate;}
@@ -207,15 +220,23 @@ h1{
 
 /* STREAK */
 .streak-bar{
-  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.8rem;color:var(--green-dark);
+  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.8rem;color:var(--green-dark);
   animation:popIn .3s ease;
 }
 .streak-bar.show{display:flex;}
 
+/* LIVES (God Mode) */
+.lives-bar{
+  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.8rem;color:var(--red-dark);
+}
+.lives-bar.show{display:flex;}
+[data-theme="dark"] .lives-bar{color:#FF9F9F;}
+
 /* PROGRESS */
 .prog-wrap{margin-bottom:0;}
-.prog-labels{display:flex;justify-content:space-between;font-family:'Baloo 2',cursive;font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
+.prog-labels{display:flex;justify-content:space-between;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
 .prog-track{height:5px;background:var(--border);border-radius:50px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:50px;transition:width .5s cubic-bezier(.34,1.2,.64,1);width:0%;}
 
@@ -223,7 +244,7 @@ h1{
 .scroll-body{
   width:100%;max-width:760px;
   flex:1;overflow-y:auto;
-  padding:8px 14px 30px;
+  padding:5px 14px 16px;
   -webkit-overflow-scrolling:touch;
 }
 @media(max-width:480px){
@@ -231,17 +252,16 @@ h1{
 }
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;align-items:start;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px;align-items:start;}
 @media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr);gap:5px;}}
 @media(max-width:360px){.grid{grid-template-columns:repeat(2,1fr);gap:4px;}}
 
 /* BUTTONS */
-.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px;margin-bottom:6px;}
 
 /* HEART CARD */
 .hcard{
   display:grid;
-  grid-template-rows:auto auto auto auto auto auto;
   align-items:center;justify-items:center;
   gap:1px;animation:popIn .4s ease both;
 }
@@ -271,16 +291,16 @@ h1{
 .hinner{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:1px;padding:14% 9% 18%;pointer-events:none;
+  gap:1px;padding:13% 9% 15%;pointer-events:none;
 }
 .verb{
-  font-family:'Baloo 2',cursive;font-weight:700;
-  font-size:clamp(.72rem,2.8vw,.92rem);color:var(--text);line-height:1;white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(.65rem,2.5vw,.88rem);color:var(--text);line-height:1;white-space:nowrap;
 }
 [data-theme="dark"] .verb{color:#fff;}
 .ans{
-  font-family:'Baloo 2',cursive;font-weight:800;
-  font-size:clamp(.65rem,2.2vw,.82rem);
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(.58rem,2vw,.76rem);
   opacity:0;transition:opacity .35s;white-space:nowrap;margin-top:0px;
 }
 .hbtn.done .ans{opacity:1;}
@@ -294,28 +314,33 @@ h1{
 /* EXPLANATION TOOLTIP */
 .explanation{
   font-size:.6rem;font-weight:700;color:var(--muted);text-align:center;
-  width:100%;min-height:1.8em;line-height:1.2;
-  opacity:0;transition:opacity .3s;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  width:100%;line-height:1.2;
+  display:none;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
-.hbtn.done~.audio-btn~.explanation{opacity:1;}
+.heart-wrap:has(.hbtn.done)~.explanation{
+  display:-webkit-box;
+  animation:fadeIn .3s ease;
+}
 
-/* AUDIO BUTTON */
+/* AUDIO BUTTON — floats inside heart-wrap */
+.heart-wrap{position:relative;width:100%;}
 .audio-btn{
-  background:none;border:none;cursor:pointer;font-size:.85rem;
-  opacity:.5;transition:opacity .2s,transform .2s;padding:2px 0;line-height:1;
-  height:1.2em;
+  position:absolute;top:8%;right:8%;
+  background:none;border:none;cursor:pointer;font-size:.72rem;
+  opacity:.45;transition:opacity .2s,transform .2s;padding:0;line-height:1;
+  pointer-events:auto;
 }
 .audio-btn:hover{opacity:1;transform:scale(1.2);}
 
 /* CHALLENGE INPUT */
-.cinput-wrap{display:none;flex-direction:column;align-items:center;gap:2px;width:100%;justify-self:stretch;}
+.cinput-wrap{display:none;flex-direction:column;align-items:center;gap:1px;width:100%;justify-self:stretch;}
 .cinput-wrap.show{display:flex;}
 .cinput{
-  width:100%;font-family:'Baloo 2',cursive;font-size:clamp(.8rem,3vw,.95rem);
-  font-weight:700;text-align:center;
+  width:100%;font-family:'JetBrains Mono',monospace;font-size:clamp(.72rem,2.6vw,.88rem);
+  font-weight:600;text-align:center;
   border:2px solid var(--border);border-radius:12px;
-  padding:3px 5px;background:var(--surface);color:var(--text);
+  padding:2px 5px;background:var(--surface);color:var(--text);
   outline:none;transition:border-color .2s,background .2s,box-shadow .2s;
   -webkit-tap-highlight-color:transparent;
   -webkit-appearance:none;appearance:none;
@@ -328,13 +353,13 @@ h1{
 .cinput::placeholder{color:var(--muted);}
 [data-theme="dark"] .cinput.ok{color:#6FE8A8;}
 [data-theme="dark"] .cinput.wrong{color:#FF9F9F;}
-.cfeedback{font-size:1rem;min-height:1.2rem;line-height:1;text-align:center;}
-.chint{font-size:.68rem;font-weight:800;color:var(--red-dark);min-height:.85rem;text-align:center;line-height:1.2;}
+.cfeedback{font-size:1rem;line-height:1;text-align:center;}
+.chint{font-size:.68rem;font-weight:800;color:var(--red-dark);text-align:center;line-height:1.2;}
 
 /* COLOR PICKER */
 .cpicker{
   display:none;flex-direction:row;align-items:center;justify-content:center;gap:6px;width:100%;
-  background:var(--surface);border:2px solid var(--border);border-radius:50px;padding:3px 8px;
+  background:var(--surface);border:2px solid var(--border);border-radius:50px;padding:2px 8px;
   justify-self:stretch;
 }
 .cpicker.show{display:flex;}
@@ -356,16 +381,16 @@ h1{
 .cb.picked    {border-color:var(--text);transform:scale(1.18);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--text);}
 .cb.correct-c {border-color:var(--green-dark)!important;box-shadow:0 0 0 2px var(--green)!important;}
 .cb.wrong-c   {border-color:var(--red-dark)  !important;box-shadow:0 0 0 2px var(--red)  !important;}
-.cresult{font-size:.68rem;font-weight:800;color:var(--muted);min-height:.85rem;text-align:center;line-height:1.2;}
+.cresult{font-size:.68rem;font-weight:800;color:var(--muted);text-align:center;line-height:1.2;}
 
 /* BUTTONS */
 .btn{
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;
-  padding:10px 22px;border-radius:50px;border:none;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.9rem;
+  padding:7px 20px;border-radius:50px;border:none;cursor:pointer;
   transition:transform .15s,box-shadow .15s;
   display:flex;align-items:center;gap:5px;
 }
-@media(max-width:480px){.btn{font-size:.8rem;padding:8px 16px;}}
+@media(max-width:480px){.btn{font-size:.8rem;padding:6px 14px;}}
 .btn:hover{transform:translateY(-2px);}
 .btn:active{transform:scale(.97);}
 .btn-blue  {background:linear-gradient(135deg,#4A90D9,#7AC7FF);color:#fff;box-shadow:0 5px 18px rgba(74,144,217,.32);}
@@ -377,8 +402,8 @@ h1{
 
 /* SCORE */
 .score{
-  display:none;text-align:center;border-radius:16px;padding:14px 18px;margin-top:12px;
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;
+  display:none;text-align:center;border-radius:16px;padding:10px 18px;margin-top:8px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.9rem;
   animation:popIn .4s ease;
 }
 .score.great{background:var(--green-light);border:2px solid var(--green);color:var(--green-dark);}
@@ -410,12 +435,12 @@ h1{
 .stars-row{display:flex;justify-content:center;gap:8px;margin:12px 0 6px;}
 .star{font-size:2.8rem;opacity:.25;transition:opacity .3s,transform .3s;}
 .star.lit{opacity:1;transform:scale(1.15);}
-.stars-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.5rem;margin-bottom:4px;color:var(--text);}
+.stars-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:4px;color:var(--text);}
 .stars-sub{font-size:.9rem;color:var(--muted);font-weight:700;margin-bottom:16px;}
 .stars-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
 /* HISTORY — in sidebar */
-.history-list{padding:0 10px 2px;font-family:'Baloo 2',cursive;font-size:.63rem;}
+.history-list{padding:0 10px 2px;font-family:'Manrope',sans-serif;font-size:.63rem;}
 .history-entry{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border);}
 .history-entry:last-child{border:none;}
 .history-entry .date{color:var(--muted);}
@@ -449,7 +474,7 @@ h1{
     <div class="stars-title" id="starsTitle"></div>
     <div class="stars-sub" id="starsSub"></div>
     <div class="stars-btns">
-      <button class="btn btn-red"   onclick="closeStars();setMode('challenge')">🔄 Try Again</button>
+      <button class="btn btn-red"   onclick="closeStars();setMode(mode)">🔄 Try Again</button>
       <button class="btn btn-ghost" onclick="closeStars();setMode('study')">📖 Study</button>
     </div>
   </div>
@@ -521,7 +546,7 @@ h1{
 <!-- ══ FIXED HEADER ══ -->
 <div class="header">
   <div class="header-row">
-    <h1>-ed rules <span style="font-size:.65em">v1</span></h1>
+    <h1><span class="h1-suffix">-ed</span> <span class="h1-label">Spelling Rules</span> <span class="ver-chip">v1</span></h1>
     <div class="header-badge" id="headerBadge" style="display:none">
       <span class="badge-icon">🏆</span>
       <span class="badge-val" id="headerLastScore">—</span>
@@ -533,6 +558,7 @@ h1{
     <button class="mode-btn study active" onclick="setMode('study')">📖 Study</button>
     <button class="mode-btn challenge"    onclick="setMode('challenge')">⚡ Challenge</button>
     <button class="mode-btn timed"        onclick="setMode('timed')">⏱️ Timed</button>
+    <button class="mode-btn reverse"      onclick="setMode('reverse')">🔁 Reverse</button>
   </div>
 
   <!-- TIMER -->
@@ -543,6 +569,11 @@ h1{
   <!-- STREAK -->
   <div class="streak-bar" id="streakBar" role="alert" aria-live="polite">
     🔥 <span id="streakText">0 in a row!</span>
+  </div>
+
+  <!-- LIVES (God Mode) -->
+  <div class="lives-bar" id="livesBar" role="alert" aria-live="polite">
+    💀 <span id="livesText"></span>
   </div>
 
   <!-- PROGRESS -->
@@ -630,44 +661,45 @@ const LEVELS={
   ],
   god:[
     // consonant+y → -ied (must change y)
-    {verb:"carry",    ans:"carried",    rule:"blue",  why:"consonant+y → y→i + -ed"},
-    {verb:"marry",    ans:"married",    rule:"blue",  why:"consonant+y → y→i + -ed"},
     {verb:"deny",     ans:"denied",     rule:"blue",  why:"consonant+y → y→i + -ed"},
     {verb:"apply",    ans:"applied",    rule:"blue",  why:"consonant+y → y→i + -ed"},
+    {verb:"bury",     ans:"buried",     rule:"blue",  why:"consonant+y → y→i + -ed"},
+    {verb:"envy",     ans:"envied",     rule:"blue",  why:"consonant+y → y→i + -ed"},
     // vowel+y stays → trap right next to above!
-    {verb:"play",     ans:"played",     rule:"red",   why:"vowel+y (ay) → just add -ed, y stays!"},
     {verb:"convey",   ans:"conveyed",   rule:"red",   why:"vowel+y (ey) → just add -ed"},
     {verb:"destroy",  ans:"destroyed",  rule:"red",   why:"vowel+y (oy) → just add -ed"},
+    {verb:"survey",   ans:"surveyed",   rule:"red",   why:"vowel+y (ey) → just add -ed"},
     // -c → add k before -ed
-    {verb:"panic",    ans:"panicked",   rule:"green", why:"Add -k before -ed to keep hard /k/ sound"},
-    {verb:"mimic",    ans:"mimicked",   rule:"green", why:"Add -k before -ed to keep hard /k/ sound"},
+    {verb:"frolic",   ans:"frolicked",  rule:"green", why:"Add -k before -ed to keep hard /k/ sound"},
     {verb:"traffic",  ans:"trafficked", rule:"green", why:"Add -k before -ed to keep hard /k/ sound"},
+    {verb:"picnic",   ans:"picnicked",  rule:"green", why:"Add -k before -ed to keep hard /k/ sound"},
     // -x / -w: look like CVC but DON'T double
     {verb:"tax",      ans:"taxed",      rule:"red",   why:"-x = /ks/ two sounds → don't double"},
-    {verb:"relax",    ans:"relaxed",    rule:"red",   why:"-x = /ks/ → no doubling"},
+    {verb:"box",      ans:"boxed",      rule:"red",   why:"-x = /ks/ → no doubling"},
     {verb:"follow",   ans:"followed",   rule:"red",   why:"-w ends diphthong → don't double"},
-    {verb:"allow",    ans:"allowed",    rule:"red",   why:"-ow → just add -ed"},
     // CVC doubling with stress on LAST syllable
-    {verb:"prefer",   ans:"preferred",  rule:"green", why:"Stress on last syllable + CVC → double"},
-    {verb:"occur",    ans:"occurred",   rule:"green", why:"Stress on last syllable + CVC → double"},
     {verb:"refer",    ans:"referred",   rule:"green", why:"Stress on last syllable + CVC → double"},
-    {verb:"commit",   ans:"committed",  rule:"green", why:"Stress on last syllable + CVC → double"},
+    {verb:"regret",   ans:"regretted",  rule:"green", why:"Stress on last syllable + CVC → double"},
+    {verb:"permit",   ans:"permitted",  rule:"green", why:"Stress on last syllable + CVC → double"},
+    {verb:"equip",    ans:"equipped",   rule:"green", why:"'qu' = one sound — CVC stands → double the p"},
     // Stress on FIRST syllable = DON'T double (trap!)
-    {verb:"offer",    ans:"offered",    rule:"red",   why:"Stress on FIRST syllable → don't double"},
     {verb:"benefit",  ans:"benefited",  rule:"red",   why:"Stress on FIRST syllable → don't double"},
     {verb:"limit",    ans:"limited",    rule:"red",   why:"Stress on FIRST syllable → don't double"},
     {verb:"target",   ans:"targeted",   rule:"red",   why:"Stress on FIRST syllable → don't double"},
+    {verb:"gossip",   ans:"gossiped",   rule:"red",   why:"Stress on FIRST syllable → don't double"},
+    // Stress on FIRST but DOUBLES anyway (real exceptions!)
+    {verb:"kidnap",   ans:"kidnapped",  rule:"green", why:"Exception: doubles despite first-syllable stress"},
+    {verb:"format",   ans:"formatted",  rule:"green", why:"Exception: doubles despite first-syllable stress"},
+    {verb:"worship",  ans:"worshipped", rule:"green", why:"Exception (UK): doubles despite first-syllable stress"},
     // British -l doubling (unstressed)
-    {verb:"travel",   ans:"travelled",  rule:"green", why:"British: double -l even without main stress"},
     {verb:"cancel",   ans:"cancelled",  rule:"green", why:"British: double -l even without main stress"},
     {verb:"model",    ans:"modelled",   rule:"green", why:"British: double -l even without main stress"},
-    // Drop silent -e (mixed in as anchors)
-    {verb:"create",   ans:"created",    rule:"blue",  why:"Silent -e → drop it, add -ed"},
-    {verb:"achieve",  ans:"achieved",   rule:"blue",  why:"Silent -e → drop it, add -ed"},
-    {verb:"squeeze",  ans:"squeezed",   rule:"blue",  why:"Drop final -e (the -ee stays, only last -e drops)"},
-    // Regular ones as anchors
-    {verb:"walk",     ans:"walked",     rule:"red",   why:"Regular: just add -ed"},
-    {verb:"cook",     ans:"cooked",     rule:"red",   why:"Regular: two vowels → just add -ed"},
+    {verb:"label",    ans:"labelled",   rule:"green", why:"British: double -l even without main stress"},
+    // -ie just add -d (contrast with -ing forms!)
+    {verb:"die",      ans:"died",       rule:"blue",  why:"Ends in -e → just add -d (contrast: dying!)"},
+    {verb:"tie",      ans:"tied",       rule:"blue",  why:"Ends in -e → just add -d (contrast: tying!)"},
+    // Drop silent -e anchor
+    {verb:"squeeze",  ans:"squeezed",   rule:"blue",  why:"Final -e merges → just add -d"},
   ],
 };
 
@@ -690,6 +722,7 @@ let RC=getRC(), NEU=getNEU();
 
 let mode="study", level="beginner", st={}, words=[];
 let streak=0, timerInterval=null, timeLeft=60;
+let lives=3, livesEnabled=false, gameOver=false, bonusPts=0;
 
 /* ══ STORAGE ══ */
 const STORE_KEY="learnhub_ed_v1";
@@ -702,6 +735,7 @@ function getStats(){
   const s=loadStore();
   return {
     best: s.best||null,
+    bestByLevel: s.bestByLevel||{},
     played: s.played||0,
     history: s.history||[],
     failedWords: s.failedWords||{},
@@ -712,11 +746,14 @@ function recordScore(pct){
   const s=loadStore();
   s.played=(s.played||0)+1;
   if(!s.best||pct>s.best) s.best=pct;
+  if(!s.bestByLevel) s.bestByLevel={};
+  if(!s.bestByLevel[level]||pct>s.bestByLevel[level]) s.bestByLevel[level]=pct;
   if(!s.history) s.history=[];
-  s.history.unshift({date:new Date().toLocaleDateString(),pct,level,mode:mode==="timed"?"timed":"challenge"});
+  s.history.unshift({date:new Date().toLocaleDateString(),pct,level,mode});
   if(s.history.length>10) s.history=s.history.slice(0,10);
   saveStore(s);
   renderStats();
+  updateMenuChips();
 }
 function recordFail(verb){
   const s=loadStore();
@@ -726,7 +763,8 @@ function recordFail(verb){
 }
 function renderStats(){
   const s=getStats();
-  document.getElementById("bestScore").textContent=s.best!==null?s.best+"%":"—";
+  const lvlBest=s.bestByLevel[level];
+  document.getElementById("bestScore").textContent=lvlBest?lvlBest+"%":"—";
   document.getElementById("timesPlayed").textContent=s.played;
   const badge=document.getElementById("headerBadge");
   if(s.best!==null){
@@ -736,7 +774,7 @@ function renderStats(){
   const list=document.getElementById("historyList");
   if(s.history&&s.history.length>0){
     list.innerHTML=s.history.slice(0,5).map(h=>{
-      const cls=h.pct===100?"great":h.pct>=60?"ok":"try";
+      const cls=h.pct>=95?"great":h.pct>=75?"ok":"try";
       return `<div class="history-entry"><span class="date">${h.date} (${h.level||"—"})</span><span class="pct ${cls}">${h.pct}%</span></div>`;
     }).join("");
   } else {
@@ -763,11 +801,14 @@ function toggleTheme(){
 }
 function applyTheme(){
   const s=getStats();
-  if(s.theme==="dark"){
+  if(s.theme==="light"){
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">🌙</span> Dark mode';
+  } else {
     document.documentElement.setAttribute("data-theme","dark");
     document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">☀️</span> Light mode';
-    RC=getRC(); NEU=getNEU();
   }
+  RC=getRC(); NEU=getNEU();
 }
 
 /* ══ MENU ══ */
@@ -779,10 +820,18 @@ function closeMenu(){
   document.getElementById("menuPanel").classList.remove("show");
   document.getElementById("menuOverlay").classList.remove("show");
 }
+function isUnlocked(l){
+  const b=(loadStore().bestByLevel)||{};
+  if(l==="exceptions") return (b.intermediate||0)>=75;
+  if(l==="god") return (b.exceptions||0)>=75;
+  return true;
+}
 function updateMenuChips(){
   ["beginner","intermediate","exceptions","god"].forEach(l=>{
     const el=document.getElementById("ml-"+l);
-    if(el) el.classList.toggle("active",l===level);
+    if(!el) return;
+    el.classList.toggle("active",l===level);
+    el.classList.toggle("locked",!isUnlocked(l));
   });
 }
 
@@ -815,8 +864,10 @@ function shuffle(arr){
 
 /* ══ LEVEL ══ */
 function setLevel(l){
+  if(!isUnlocked(l)){ vibrate([50,30,50]); return; }
   level=l;
   updateMenuChips();
+  renderStats();
   closeMenu();
   build();
 }
@@ -827,33 +878,40 @@ function build(){
   words=shuffle(LEVELS[level]);
   const g=document.getElementById("grid");
   g.innerHTML=""; st={}; streak=0;
+  gameOver=false; bonusPts=0;
+  livesEnabled=(level==="god"&&mode!=="study");
+  lives=3; renderLives();
   updateStreak();
 
   words.forEach((w,i)=>{
     st[i]={done:false,spelledOk:false,colorPicked:null,locked:false,attempts:0};
     const c=document.createElement("div");
     c.className="hcard";
-    const isC=(mode==="challenge"||mode==="timed");
+    const isC=(mode==="challenge"||mode==="timed"||mode==="reverse");
+    const shown=mode==="reverse"?w.ans:w.verb;
+    const hidden=mode==="reverse"?w.verb:w.ans;
     const fill=isC?NEU.fill:RC[w.rule].idle;
     const stroke=isC?NEU.stroke:RC[w.rule].stroke;
     c.innerHTML=`
-      <button class="hbtn rule-${w.rule}${isC?" chal":""}" id="hb${i}" onclick="heartClick(${i})" aria-label="${w.verb}">
-        <svg class="hsvg" viewBox="0 0 100 90">
-          <path class="hpath" id="hp${i}"
-            d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z"
-            fill="${fill}" stroke="${stroke}" stroke-width="3.5"/>
-        </svg>
-        <div class="hinner">
-          <span class="verb">${w.verb}</span>
-          <span class="ans" id="at${i}">${w.ans}</span>
-        </div>
-      </button>
-      <button class="audio-btn" onclick="speak('${w.verb}, ${w.ans}')" aria-label="Listen to ${w.verb}">🔊</button>
+      <div class="heart-wrap">
+        <button class="hbtn rule-${w.rule}${isC?" chal":""}" id="hb${i}" onclick="heartClick(${i})" aria-label="${w.verb}">
+          <svg class="hsvg" viewBox="0 0 100 90">
+            <path class="hpath" id="hp${i}"
+              d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z"
+              fill="${fill}" stroke="${stroke}" stroke-width="3.5"/>
+          </svg>
+          <div class="hinner">
+            <span class="verb">${shown}</span>
+            <span class="ans" id="at${i}">${hidden}</span>
+          </div>
+        </button>
+        <button class="audio-btn" onclick="speak('${w.verb}, ${w.ans}')" aria-label="Listen to ${w.verb}">🔊</button>
+      </div>
       <span class="explanation" id="ex${i}">${w.why}</span>
       <div class="cinput-wrap${isC?" show":""}" id="cw${i}">
-        <input class="cinput" id="ci${i}" type="text" placeholder="…ed"
+        <input class="cinput" id="ci${i}" type="text" placeholder="${mode==="reverse"?"base verb":"…ed"}"
           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-          aria-label="Type the past tense of ${w.verb}"
+          aria-label="${mode==="reverse"?"Type the base verb of "+w.ans:"Type the past tense of "+w.verb}"
           oninput="onType(${i})" onkeydown="if(event.key==='Enter'){event.preventDefault();trySpell(${i})}">
         <span class="cfeedback" id="cf${i}" role="alert" aria-live="polite"></span>
         <span class="chint" id="ch${i}"></span>
@@ -882,13 +940,14 @@ function setMode(m){
   document.querySelector(".mode-btn.study").classList.toggle("active",m==="study");
   document.querySelector(".mode-btn.challenge").classList.toggle("active",m==="challenge");
   document.querySelector(".mode-btn.timed").classList.toggle("active",m==="timed");
+  document.querySelector(".mode-btn.reverse").classList.toggle("active",m==="reverse");
   document.getElementById("timerBar").classList.toggle("show",m==="timed");
   build();
 }
 
 /* ══ TIMER ══ */
 function startTimer(){
-  timeLeft=60;
+  timeLeft=words.length*(level==="god"?4:5);
   updateTimerDisplay();
   timerInterval=setInterval(()=>{
     timeLeft--;
@@ -971,6 +1030,15 @@ function getHint(word, attempts){
   const rule=word.rule;
   const why=word.why;
 
+  // Reverse mode: hints about the base verb (no letter reveals in god)
+  if(mode==="reverse"){
+    if(level==="god"||attempts===1) return "💡 Undo the spelling change to recover the base verb";
+    if(attempts===2) return `💡 Starts with '${v[0]}' (${v.length} letters)`;
+    return `💡 ${v.slice(0,Math.ceil(v.length/2))}… (${v.length} letters)`;
+  }
+  // God mode: rule hints only — never reveal letters
+  if(level==="god"&&attempts>=3) attempts=2;
+
   if(attempts===1){
     if(rule==="red")   return "💡 No big changes needed here";
     if(rule==="blue")  return "💡 Something changes at the end before -ed";
@@ -996,21 +1064,30 @@ function getHint(word, attempts){
 }
 
 function trySpell(i){
-  if(st[i].spelledOk) return;
+  if(st[i].spelledOk||st[i].locked) return;
   const ci=document.getElementById(`ci${i}`);
   const val=ci.value.trim().toLowerCase();
+  const target=(mode==="reverse"?words[i].verb:words[i].ans);
   ci.classList.remove("ok","wrong");
   void ci.offsetWidth;
-  if(val===words[i].ans){
+  if(val===target){
     ci.classList.add("ok"); ci.disabled=true;
     document.getElementById(`cf${i}`).textContent="✅";
     document.getElementById(`ch${i}`).textContent="";
     st[i].spelledOk=true;
-    streak++;
+    if(st[i].attempts===0){
+      streak++;
+      if(streak>=3) bonusPts=Math.min(10,bonusPts+1);
+      decayFail(words[i].verb);
+    } else {
+      streak=0;
+    }
     updateStreak();
     vibrate(30);
-    const cp=document.getElementById(`cp${i}`);
-    cp.classList.add("show","boing");
+    if(mode!=="timed"&&mode!=="reverse"){
+      const cp=document.getElementById(`cp${i}`);
+      cp.classList.add("show","boing");
+    }
     const hb=document.getElementById(`hb${i}`);
     hb.classList.add("boing");
     setTimeout(()=>hb.classList.remove("boing"),400);
@@ -1030,14 +1107,66 @@ function trySpell(i){
     const hb=document.getElementById(`hb${i}`);
     hb.style.animation="none"; void hb.offsetWidth; hb.style.animation="";
     ci.select();
+    loseLife();
+  }
+}
+
+/* ══ FAIL DECAY ══ */
+function decayFail(key){
+  const s=loadStore();
+  if(s.failedWords&&s.failedWords[key]){
+    s.failedWords[key]--;
+    if(s.failedWords[key]<=0) delete s.failedWords[key];
+    saveStore(s);
+  }
+}
+
+/* ══ LIVES (God Mode) ══ */
+function loseLife(){
+  if(!livesEnabled||gameOver) return;
+  lives--;
+  renderLives();
+  if(lives<=0){
+    gameOver=true;
+    setTimeout(()=>checkAll(),500);
+  }
+}
+function renderLives(){
+  const bar=document.getElementById("livesBar");
+  bar.classList.toggle("show",livesEnabled);
+  if(livesEnabled){
+    const n=Math.max(0,lives);
+    document.getElementById("livesText").textContent="❤️".repeat(n)+"🖤".repeat(3-n);
   }
 }
 
 /* ══ COLOR PICK ══ */
+const RULE_WHY={
+  red:  "🔴 Solo +ed — no hay cambios en la raíz",
+  blue: "🔵 Cambio +ed — se elimina la -e muda o -y → -ied",
+  green:"🟢 ×2 +ed — vocal corta + consonante final → se dobla",
+};
+const RULE_WHY_WRONG={
+  red:{
+    blue: "elegiste solo +ed (🔴), pero hay cambio de raíz (−e o −y→i) → (🔵)",
+    green:"elegiste solo +ed (🔴), pero hay vocal corta + consonante → dobla (🟢)",
+  },
+  blue:{
+    red:  "elegiste cambio+ed (🔵), pero la raíz no cambia → solo añade -ed (🔴)",
+    green:"elegiste cambio+ed (🔵), pero hay vocal corta + consonante → dobla (🟢)",
+  },
+  green:{
+    red:  "elegiste ×2+ed (🟢), pero no hay CVC → solo añade -ed (🔴)",
+    blue: "elegiste ×2+ed (🟢), pero hay cambio de raíz → −e o −y→i (🔵)",
+  },
+};
+
 function pickColor(i,color){
   if(!st[i].spelledOk||st[i].locked) return;
   st[i].colorPicked=color;
   const map={r:"red",b:"blue",g:"green"};
+  const w=words[i];
+  const isOk=(color===w.rule);
   document.querySelectorAll(`#cp${i} .cb`).forEach(btn=>{
     btn.classList.remove("picked");
     if(map[btn.classList[1]]===color) btn.classList.add("picked");
@@ -1045,20 +1174,39 @@ function pickColor(i,color){
   const hp=document.getElementById(`hp${i}`);
   hp.setAttribute("fill",RC[color].active);
   hp.setAttribute("stroke",RC[color].stroke);
+  const cr=document.getElementById(`cr${i}`);
+  if(isOk){
+    cr.textContent=RULE_WHY[w.rule];
+    cr.style.color="var(--green-dark)";
+  } else {
+    const msg=RULE_WHY_WRONG[color]?.[w.rule];
+    cr.textContent=msg?"✗ "+msg:"✗ → "+w.rule.toUpperCase();
+    cr.style.color="var(--red-dark)";
+  }
   const hb=document.getElementById(`hb${i}`);
   hb.classList.remove("boing"); void hb.offsetWidth;
   hb.classList.add("boing");
   setTimeout(()=>hb.classList.remove("boing"),400);
-  vibrate(20);
+  vibrate(isOk?20:[50,30,50]);
   updateProgress();
 }
 
 /* ══ CHECK ALL ══ */
+function spellCredit(i){
+  if(!st[i].spelledOk) return 0;
+  const a=st[i].attempts;
+  return a===0?1:a===1?0.6:0.3;
+}
 function checkAll(){
   stopTimer();
-  let spell=0,clr=0;
+  let spell=0,clr=0,spellPts=0;
   words.forEach((w,i)=>{
-    if(st[i].locked){spell++;clr++;return;}
+    const target=(mode==="reverse"?w.verb:w.ans);
+    if(st[i].locked){
+      if(st[i].spelledOk){spell++;spellPts+=spellCredit(i);}
+      if(mode!=="timed"&&mode!=="reverse"&&st[i].colorPicked===w.rule) clr++;
+      return;
+    }
     const ci=document.getElementById(`ci${i}`);
     const cf=document.getElementById(`cf${i}`);
     const ch=document.getElementById(`ch${i}`);
@@ -1067,31 +1215,33 @@ function checkAll(){
     const cr=document.getElementById(`cr${i}`);
     if(!st[i].spelledOk){
       const val=ci.value.trim().toLowerCase();
-      if(val===w.ans){
+      if(val===target){
         ci.classList.add("ok"); ci.disabled=true;
         cf.textContent="✅"; ch.textContent="";
         st[i].spelledOk=true;
-        cp.classList.add("show");
+        if(mode!=="timed"&&mode!=="reverse") cp.classList.add("show");
       } else {
         ci.classList.add("wrong"); ci.disabled=true;
-        cf.textContent="❌"; ch.textContent=`→ ${w.ans}`;
+        cf.textContent="❌"; ch.textContent=`→ ${target}`;
         recordFail(w.verb);
       }
     }
-    if(st[i].spelledOk) spell++;
-    const picked=st[i].colorPicked;
-    const colorOk=picked===w.rule;
-    const map={r:"red",b:"blue",g:"green"};
-    cp.querySelectorAll(".cb").forEach(btn=>{
-      const bc=map[btn.classList[1]];
-      btn.disabled=true;
-      btn.classList.remove("picked","correct-c","wrong-c");
-      if(bc===w.rule) btn.classList.add("correct-c");
-      if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
-    });
-    if(picked) cr.textContent=colorOk?"✅ Correct!":`❌ → ${w.rule.toUpperCase()}`;
-    else if(st[i].spelledOk) cr.textContent=`→ ${w.rule.toUpperCase()}`;
-    if(colorOk) clr++;
+    if(st[i].spelledOk){spell++;spellPts+=spellCredit(i);}
+    if(mode!=="timed"&&mode!=="reverse"){
+      const picked=st[i].colorPicked;
+      const colorOk=picked===w.rule;
+      const map={r:"red",b:"blue",g:"green"};
+      cp.querySelectorAll(".cb").forEach(btn=>{
+        const bc=map[btn.classList[1]];
+        btn.disabled=true;
+        btn.classList.remove("picked","correct-c","wrong-c");
+        if(bc===w.rule) btn.classList.add("correct-c");
+        if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
+      });
+      if(picked) cr.textContent=colorOk?"✅ Correct!":`❌ → ${w.rule.toUpperCase()}`;
+      else if(st[i].spelledOk) cr.textContent=`→ ${w.rule.toUpperCase()}`;
+      if(colorOk) clr++;
+    }
     hp.setAttribute("fill",RC[w.rule].active);
     hp.setAttribute("stroke",RC[w.rule].stroke);
     st[i].locked=st[i].done=true;
@@ -1100,8 +1250,10 @@ function checkAll(){
   renderButtons(true);
 
   const total=words.length;
-  const pct=Math.round(((spell+clr)/(total*2))*100);
-  const stars=pct===100?3:pct>=60?2:1;
+  const pct=(mode==="timed"||mode==="reverse")
+    ?Math.min(100,Math.round((spellPts/total)*100)+bonusPts)
+    :Math.min(100,Math.round(((spellPts+clr)/(total*2))*100)+bonusPts);
+  const stars=pct>=95?3:pct>=75?2:pct>=50?1:0;
 
   recordScore(pct);
   setTimeout(()=>showStars(stars,spell,clr,total,pct),400);
@@ -1118,18 +1270,24 @@ function showStars(stars,spell,clr,total,pct){
       if(n<=stars) document.getElementById(`star${n}`).classList.add("lit");
     },n*350);
   });
+  const spellLine=`${spell}/${total} spellings`;
+  const clrLine=`${clr}/${total} colours`;
+  const details=(mode==="timed"||mode==="reverse")?`${spellLine} ⚡ (${pct}%)`:stars===3?`${spellLine} + ${clrLine} (${pct}%)`:`${spellLine} · ${clrLine} (${pct}%)`;
   if(stars===3){
-    title.textContent="🏆 Perfect score!";
-    sub.textContent=`${spell}/${total} spellings + ${clr}/${total} colours`;
+    title.textContent="🏆 Excellent!";
+    sub.textContent=details;
     setTimeout(launchConfetti,400);
     vibrate([100,50,100,50,200]);
   } else if(stars===2){
     title.textContent="⭐ Great job!";
-    sub.textContent=`${spell}/${total} spellings · ${clr}/${total} colours (${pct}%)`;
+    sub.textContent=details;
     vibrate([50,30,50]);
-  } else {
+  } else if(stars===1){
     title.textContent="💪 Keep practising!";
-    sub.textContent=`${spell}/${total} spellings · ${clr}/${total} colours — you can do better!`;
+    sub.textContent=details;
+  } else {
+    title.textContent=gameOver?"💀 Game over!":"😅 Tough one!";
+    sub.textContent=(gameOver?"No lives left — ":"")+details;
   }
 }
 function closeStars(){
@@ -1191,7 +1349,9 @@ function stopConfetti(){
 function updateProgress(){
   const done=mode==="study"
     ?Object.values(st).filter(x=>x.done).length
-    :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
+    :( mode==="timed"||mode==="reverse")
+      ?Object.values(st).filter(x=>x.spelledOk).length
+      :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
   const pct=Math.round(done/words.length*100);
   document.getElementById("progTxt").textContent=`${done} / ${words.length}`;
   document.getElementById("progPct").textContent=`${pct}%`;
@@ -1220,6 +1380,7 @@ function renderButtons(checked=false){
 /* ══ INIT ══ */
 applyTheme();
 renderStats();
+updateMenuChips();
 build();
 </script>
 </body>

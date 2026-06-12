@@ -4,24 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Noun Adjuncts v1</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --red:#FF6B6B;    --red-light:#FFECEC;   --red-dark:#CC3333;
   --blue:#4A90D9;   --blue-light:#E4F0FF;  --blue-dark:#1B5EA8;
   --green:#3DBE7A;  --green-light:#E2FAF0; --green-dark:#1E7A48;
-  --bg:#FFF6EE; --text:#2E2828; --muted:#AAA;
-  --surface:#fff; --border:#EDE8E2;
+  --bg:#F7F9FC; --text:#1A2233; --muted:#8A94A6;
+  --surface:#FFFFFF; --border:#E3E9F2;
 }
 [data-theme="dark"]{
-  --bg:#1a1a2e; --text:#eaeaea; --muted:#888;
-  --surface:#16213e; --border:#2a2a4e;
-  --red-light:#4a2020; --blue-light:#1a2d4a; --green-light:#1a3d2a;
+  --bg:#12141F; --text:#E8E4F0; --muted:#7B7B9D;
+  --surface:#1C1F30; --border:#2E3250;
+  --red-light:#3D1A1A; --blue-light:#162040; --green-light:#122E1E;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 body{
-  background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);
+  background:var(--bg);font-family:'Manrope',sans-serif;color:var(--text);
   display:flex;flex-direction:column;align-items:center;
   transition:background .3s,color .3s;
 }
@@ -34,7 +34,7 @@ body{
   padding:3px 14px 1px;flex-shrink:0;
 }
 .back-link{
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.85rem;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;
   color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
   transition:opacity .2s;
 }
@@ -61,7 +61,7 @@ body{
   padding:12px 12px 8px;border-bottom:1.5px solid var(--border);
 }
 .menu-title{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:.85rem;
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.85rem;
   color:var(--text);display:flex;align-items:center;gap:5px;
 }
 .menu-close{
@@ -75,17 +75,19 @@ body{
 }
 .menu-item{
   display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;border:none;
-  background:transparent;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.76rem;
+  background:transparent;cursor:pointer;font-family:'Manrope',sans-serif;font-size:.76rem;
   font-weight:700;color:var(--text);transition:background .15s;width:100%;text-align:left;
 }
 .menu-item:hover{background:var(--border);}
 .menu-item.active{background:var(--blue-light);color:var(--blue);}
 [data-theme="dark"] .menu-item.active{color:#7AC7FF;}
+.menu-item.locked{opacity:.45;cursor:not-allowed;}
+.menu-item.locked::after{content:'🔒';margin-left:auto;font-size:.7rem;}
 .menu-item-icon{font-size:.85rem;width:18px;text-align:center;flex-shrink:0;}
 .menu-item .menu-val{margin-left:auto;color:var(--blue);font-weight:800;font-size:.72rem;}
 .menu-divider{height:1px;background:var(--border);margin:3px 10px;}
 .menu-section-label{
-  font-family:'Baloo 2',cursive;font-size:.55rem;font-weight:800;
+  font-family:'Manrope',sans-serif;font-size:.55rem;font-weight:800;
   color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:3px 10px 1px;
 }
 .menu-footer{
@@ -93,18 +95,19 @@ body{
   display:flex;align-items:center;justify-content:space-between;
   font-size:.6rem;color:var(--muted);font-weight:700;
 }
-.menu-rules-mini{display:flex;gap:3px;padding:2px 10px 4px;}
-.mini-rule{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
-  font-size:.55rem;font-weight:700;padding:3px 4px;
-  border-radius:6px;border:1.5px solid transparent;text-align:center;
-}
-.mini-rule.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
-.mini-rule.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
-.mini-rule.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
-[data-theme="dark"] .mini-rule.red{color:#FF9F9F;}
-[data-theme="dark"] .mini-rule.blue{color:#7AC7FF;}
-[data-theme="dark"] .mini-rule.green{color:#6FE8A8;}
+.decision-tree{padding:4px 10px 6px;display:flex;flex-direction:column;gap:3px;}
+.dt-title{font-family:'Manrope',sans-serif;font-size:.52rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.dt-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.dt-cond{font-family:'Manrope',sans-serif;font-size:.58rem;font-weight:600;color:var(--text);flex:1;line-height:1.25;}
+.dt-tag{font-family:'Manrope',sans-serif;font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:50px;flex-shrink:0;border:1.5px solid transparent;}
+.dt-tag.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+.dt-tag.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.dt-tag.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+.dt-note{font-family:'Manrope',sans-serif;font-size:.5rem;font-weight:700;color:var(--muted);background:var(--border);border-radius:6px;padding:3px 6px;line-height:1.4;margin-top:1px;}
+.dt-note em{font-style:normal;opacity:.8;}
+[data-theme="dark"] .dt-tag.red{color:#FF9F9F;}
+[data-theme="dark"] .dt-tag.blue{color:#7AC7FF;}
+[data-theme="dark"] .dt-tag.green{color:#6FE8A8;}
 .header{
   width:100%;max-width:760px;padding:3px 14px 3px;background:var(--bg);
   border-bottom:2px solid var(--border);flex-shrink:0;
@@ -116,24 +119,34 @@ body{
 }
 .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
 h1{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(.8rem,2.6vw,1.1rem);
-  margin-bottom:0;line-height:1.1;
-  background:linear-gradient(120deg,var(--blue),var(--green),var(--red));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:clamp(.85rem,2.8vw,1.2rem);
+  margin-bottom:0;line-height:1.2;color:var(--text);
+  display:flex;align-items:center;gap:6px;
+}
+.h1-suffix{
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  color:var(--blue);letter-spacing:-.02em;
+}
+.h1-label{font-weight:600;color:var(--muted);font-size:.88em;}
+.ver-chip{
+  font-family:'Manrope',sans-serif;font-size:.58em;font-weight:800;
+  background:#EAF1FB;color:var(--blue);
+  border-radius:5px;padding:1px 6px;letter-spacing:.02em;
+  line-height:1.6;flex-shrink:0;
 }
 .header-badge{
-  display:flex;align-items:center;gap:3px;font-family:'Baloo 2',cursive;
+  display:flex;align-items:center;gap:3px;font-family:'Manrope',sans-serif;
   font-size:.7rem;font-weight:700;background:var(--surface);border:1.5px solid var(--border);
   border-radius:50px;padding:2px 8px;color:var(--muted);
 }
 .badge-icon{font-size:.75rem;}
 .badge-val{color:var(--text);font-weight:800;}
 .mode-bar{
-  display:flex;background:var(--surface);border-radius:50px;padding:2px;gap:2px;
+  display:flex;background:var(--surface);border-radius:50px;padding:2px;gap:1px;
   box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:3px;border:2px solid var(--border);
 }
 .mode-btn{
-  flex:1;font-family:'Baloo 2',cursive;font-size:.72rem;font-weight:700;
+  flex:1;font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:700;
   padding:3px;border-radius:50px;border:none;cursor:pointer;
   transition:all .22s;color:var(--muted);background:transparent;
 }
@@ -141,22 +154,28 @@ h1{
 .mode-btn.active.challenge{background:linear-gradient(135deg,var(--red),#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(255,107,107,.4);}
 .mode-btn.active.timed    {background:linear-gradient(135deg,#F7C948,#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(247,201,72,.4);}
 @media(max-width:480px){
-  .mode-bar{margin-bottom:4px;padding:2px;}
-  .mode-btn{font-size:.68rem;padding:4px;}
+  .mode-bar{margin-bottom:3px;padding:2px;}
+  .mode-btn{font-size:.68rem;padding:3px;}
 }
 .timer-bar{display:none;align-items:center;justify-content:center;gap:8px;margin-bottom:2px;}
 .timer-bar.show{display:flex;}
-.timer-display{font-family:'Baloo 2',cursive;font-weight:800;font-size:.95rem;color:var(--red);min-width:44px;text-align:center;}
+.timer-display{font-family:'Manrope',sans-serif;font-weight:800;font-size:.95rem;color:var(--red);min-width:44px;text-align:center;}
 .timer-display.warn{animation:pulse .5s infinite alternate;}
 @keyframes pulse{from{opacity:1}to{opacity:.4}}
 .streak-bar{
   display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.72rem;color:var(--green-dark);
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.72rem;color:var(--green-dark);
   animation:popIn .3s ease;
 }
 .streak-bar.show{display:flex;}
+.lives-bar{
+  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.72rem;color:var(--red-dark);
+}
+.lives-bar.show{display:flex;}
+[data-theme="dark"] .lives-bar{color:#FF9F9F;}
 .prog-wrap{margin-bottom:0;}
-.prog-labels{display:flex;justify-content:space-between;font-family:'Baloo 2',cursive;font-size:.62rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
+.prog-labels{display:flex;justify-content:space-between;font-family:'Manrope',sans-serif;font-size:.62rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
 .prog-track{height:4px;background:var(--border);border-radius:50px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:50px;transition:width .5s cubic-bezier(.34,1.2,.64,1);width:0%;}
 .scroll-body{
@@ -173,7 +192,7 @@ h1{
 
 /* ── NOUN CARD ── */
 .hcard{
-  display:flex;flex-direction:column;gap:2px;
+  display:flex;flex-direction:column;gap:1px;
   animation:popIn .4s ease both;
 }
 .hcard:nth-child(1){animation-delay:.03s}.hcard:nth-child(2){animation-delay:.06s}
@@ -208,8 +227,8 @@ h1{
   flex:1;display:flex;align-items:center;justify-content:center;
   padding:7px 7px;
   border-right:2px solid var(--border);
-  font-family:'Baloo 2',cursive;font-weight:800;
-  font-size:clamp(.68rem,2vw,.85rem);
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(.62rem,1.8vw,.78rem);
   color:var(--muted);
   background:var(--border);
   transition:background .35s, color .35s, border-color .35s;
@@ -237,7 +256,7 @@ h1{
 .nc-nuc{
   flex:1;display:flex;align-items:center;justify-content:center;
   padding:7px 7px;
-  font-family:'Baloo 2',cursive;font-weight:700;
+  font-family:'JetBrains Mono',monospace;font-weight:600;
   font-size:clamp(.68rem,2vw,.85rem);
   color:var(--text);
   text-align:center;line-height:1.1;
@@ -263,10 +282,10 @@ h1{
   padding:0 1px;
 }
 .explanation{
-  font-size:.55rem;font-weight:700;color:var(--muted);
-  flex:1;min-height:1.4em;line-height:1.2;
+  font-size:.52rem;font-weight:700;color:var(--muted);
+  flex:1;line-height:1.3;
   opacity:0;transition:opacity .3s;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
 }
 .ncard.done~.ncard-footer .explanation,
 .explanation.visible{opacity:1;}
@@ -284,7 +303,7 @@ h1{
   border-right-color:var(--border);
 }
 .nc-mod-input{
-  width:100%;font-family:'Baloo 2',cursive;font-size:clamp(.65rem,2vw,.82rem);
+  width:100%;font-family:'JetBrains Mono',monospace;font-size:clamp(.6rem,1.8vw,.76rem);
   font-weight:800;text-align:center;background:transparent;
   border:none;outline:none;color:var(--text);
   -webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;
@@ -331,8 +350,8 @@ h1{
 .cinput-wrap{display:none;flex-direction:column;align-items:center;gap:1px;width:100%;justify-self:stretch;}
 .cinput-wrap.show{display:flex;}
 .cinput{
-  width:100%;font-family:'Baloo 2',cursive;font-size:clamp(.68rem,2.2vw,.8rem);
-  font-weight:700;text-align:center;border:2px solid var(--border);border-radius:9px;
+  width:100%;font-family:'JetBrains Mono',monospace;font-size:clamp(.62rem,2vw,.74rem);
+  font-weight:600;text-align:center;border:2px solid var(--border);border-radius:9px;
   padding:2px 4px;background:var(--surface);color:var(--text);outline:none;
   transition:border-color .2s,background .2s,box-shadow .2s;
   -webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;
@@ -370,9 +389,9 @@ h1{
 .cb.picked    {border-color:var(--text);transform:scale(1.18);box-shadow:0 0 0 2px var(--surface),0 0 0 3px var(--text);}
 .cb.correct-c {border-color:var(--green-dark)!important;box-shadow:0 0 0 2px var(--green)!important;}
 .cb.wrong-c   {border-color:var(--red-dark)  !important;box-shadow:0 0 0 2px var(--red)  !important;}
-.cresult{font-size:.58rem;font-weight:800;color:var(--muted);min-height:.75rem;text-align:center;line-height:1.2;}
+.cresult{font-size:.52rem;font-weight:700;color:var(--muted);text-align:center;line-height:1.3;transition:color .2s;}
 .btn{
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.8rem;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.8rem;
   padding:7px 18px;border-radius:50px;border:none;cursor:pointer;
   transition:transform .15s,box-shadow .15s;display:flex;align-items:center;gap:5px;
 }
@@ -385,8 +404,8 @@ h1{
 .btn-ghost {background:var(--surface);border:2.5px solid var(--border);color:var(--muted);}
 .btn-ghost:hover{border-color:var(--blue);}
 .score{
-  display:none;text-align:center;border-radius:16px;padding:14px 18px;margin-top:12px;
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;animation:popIn .4s ease;
+  display:none;text-align:center;border-radius:16px;padding:10px 18px;margin-top:8px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.9rem;animation:popIn .4s ease;
 }
 .score.great{background:var(--green-light);border:2px solid var(--green);color:var(--green-dark);}
 .score.ok   {background:#FFFBEA;border:2px solid #ECC94B;color:#7B621A;}
@@ -411,10 +430,10 @@ h1{
 .stars-row{display:flex;justify-content:center;gap:8px;margin:12px 0 6px;}
 .star{font-size:2.8rem;opacity:.25;transition:opacity .3s,transform .3s;}
 .star.lit{opacity:1;transform:scale(1.15);}
-.stars-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.5rem;margin-bottom:4px;color:var(--text);}
+.stars-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:4px;color:var(--text);}
 .stars-sub{font-size:.9rem;color:var(--muted);font-weight:700;margin-bottom:16px;}
 .stars-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.history-list{padding:0 10px 2px;font-family:'Baloo 2',cursive;font-size:.63rem;}
+.history-list{padding:0 10px 2px;font-family:'Manrope',sans-serif;font-size:.63rem;}
 .history-entry{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border);}
 .history-entry:last-child{border:none;}
 .history-entry .date{color:var(--muted);}
@@ -444,7 +463,7 @@ h1{
     <div class="stars-title" id="starsTitle"></div>
     <div class="stars-sub" id="starsSub"></div>
     <div class="stars-btns">
-      <button class="btn btn-red"   onclick="closeStars();setMode('challenge')">🔄 Try Again</button>
+      <button class="btn btn-red"   onclick="closeStars();setMode(mode)">🔄 Try Again</button>
       <button class="btn btn-ghost" onclick="closeStars();setMode('study')">📖 Study</button>
     </div>
   </div>
@@ -482,13 +501,27 @@ h1{
       <span class="menu-item-icon">📊</span> Played <span class="menu-val" id="timesPlayed">0</span>
     </div>
     <div class="menu-divider"></div>
-    <span class="menu-section-label">Rules</span>
-    <div class="menu-rules-mini">
-      <div class="mini-rule blue">🔵 Noun<br><em>stone wall</em></div>
-      <div class="mini-rule green">🟢 -ing<br><em>swim pool</em></div>
-      <div class="mini-rule red">🔴 's/of<br><em>eng's rep</em></div>
+    <span class="menu-section-label">Estructura</span>
+    <div class="decision-tree">
+      <div class="dt-title">¿Cómo elegir?</div>
+      <div class="dt-row">
+        <span class="dt-cond">Posesión real o partitivo</span>
+        <span class="dt-tag red">🔴 's / of</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-cond">Actividad o disciplina</span>
+        <span class="dt-tag green">🟢 -ing</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-cond">Todo lo demás</span>
+        <span class="dt-tag blue">🔵 Noun</span>
+      </div>
+      <div class="dt-note">⚠️ Modifier siempre SINGULAR<br><em>Excepciones: sports car · savings account</em></div>
     </div>
     <div class="menu-divider"></div>
+    <a class="menu-item" href="noun-adjuncts-guide.html" style="text-decoration:none;color:var(--text);">
+      <span class="menu-item-icon">📖</span> Guía de referencia
+    </a>
     <button class="menu-item" id="themeToggle" onclick="toggleTheme()">
       <span class="menu-item-icon">🌙</span> Dark mode
     </button>
@@ -508,7 +541,7 @@ h1{
 </aside>
 <div class="header">
   <div class="header-row">
-    <h1>Noun Adjuncts <span style="font-size:.65em">v1</span></h1>
+    <h1><span class="h1-suffix">Noun</span> <span class="h1-label">Adjuncts</span> <span class="ver-chip">v1</span></h1>
     <div class="header-badge" id="headerBadge" style="display:none">
       <span class="badge-icon">🏆</span>
       <span class="badge-val" id="headerLastScore">—</span>
@@ -525,6 +558,9 @@ h1{
   <div class="streak-bar" id="streakBar" role="alert" aria-live="polite">
     🔥 <span id="streakText">0 in a row!</span>
   </div>
+  <div class="lives-bar" id="livesBar" role="alert" aria-live="polite">
+    💀 <span id="livesText"></span>
+  </div>
   <div class="prog-wrap">
     <div class="prog-labels"><span id="progTxt">0 / 16</span><span id="progPct">0%</span></div>
     <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
@@ -539,76 +575,210 @@ h1{
 <script>
 const LEVELS={
   beginner:[
-    {prompt:"___ wall",    modifier:"stone",   nucleus:"wall",   full:"stone wall",   rule:"blue",  why:"Noun adjunct: sustantivo modifica sustantivo directamente", focus:"material"},
-    {prompt:"___ door",    modifier:"car",     nucleus:"door",   full:"car door",     rule:"blue",  why:"Noun adjunct: parte de un vehículo", focus:"object"},
-    {prompt:"___ server",  modifier:"cloud",   nucleus:"server", full:"cloud server", rule:"blue",  why:"Noun adjunct: tipo de servidor (tecnología)", focus:"type"},
-    {prompt:"___ party",   modifier:"garden",  nucleus:"party",  full:"garden party", rule:"blue",  why:"Noun adjunct: lugar donde ocurre el evento", focus:"location"},
-    {prompt:"___ stop",    modifier:"bus",     nucleus:"stop",   full:"bus stop",     rule:"blue",  why:"Noun adjunct: para qué tipo de transporte", focus:"type"},
-    {prompt:"___ cup",     modifier:"coffee",  nucleus:"cup",    full:"coffee cup",   rule:"blue",  why:"Noun adjunct: contenido habitual del recipiente", focus:"content"},
-    {prompt:"___ table",   modifier:"kitchen", nucleus:"table",  full:"kitchen table",rule:"blue",  why:"Noun adjunct: ubicación del mueble", focus:"location"},
-    {prompt:"___ station", modifier:"fire",    nucleus:"station",full:"fire station", rule:"blue",  why:"Noun adjunct: tipo de servicio de emergencia", focus:"type"},
-    {prompt:"___ coat",    modifier:"rain",    nucleus:"coat",   full:"rain coat",    rule:"blue",  why:"Noun adjunct: propósito de la prenda", focus:"purpose"},
-    {prompt:"___ shift",   modifier:"night",   nucleus:"shift",  full:"night shift",  rule:"blue",  why:"Noun adjunct: cuándo ocurre el turno", focus:"time"},
-    {prompt:"___ shelf",   modifier:"book",    nucleus:"shelf",  full:"book shelf",   rule:"blue",  why:"Noun adjunct: qué almacena el mueble", focus:"content"},
-    {prompt:"___ house",   modifier:"beach",   nucleus:"house",  full:"beach house",  rule:"blue",  why:"Noun adjunct: ubicación de la casa", focus:"location"},
-    {prompt:"___ glasses", modifier:"sun",     nucleus:"glasses",full:"sun glasses",  rule:"blue",  why:"Noun adjunct: propósito del accesorio", focus:"purpose"},
-    {prompt:"___ sign",    modifier:"road",    nucleus:"sign",   full:"road sign",    rule:"blue",  why:"Noun adjunct: dónde se encuentra la señal", focus:"location"},
-    {prompt:"___ box",     modifier:"lunch",   nucleus:"box",    full:"lunch box",    rule:"blue",  why:"Noun adjunct: contenido o uso del recipiente", focus:"content"},
-    {prompt:"___ bag",     modifier:"air",     nucleus:"bag",    full:"air bag",      rule:"blue",  why:"Noun adjunct: mecanismo (seguridad de auto)", focus:"mechanism"},
+    {prompt:"___ wall",    modifier:"stone",   nucleus:"wall",    full:"stone wall",    rule:"blue",
+     why:"🔵 Noun+Noun: material directo. Modifier SINGULAR — ✗ stones wall · ✗ stone's wall (solo personas/animales poseen con 's)",
+     focus:"material", accept:["brick"]},
+    {prompt:"___ door",    modifier:"car",     nucleus:"door",    full:"car door",      rule:"blue",
+     why:"🔵 Noun+Noun: parte del objeto. ✗ car's door — partes de cosas usan adjunct, no genitivo · ✗ door of car — innecesario",
+     focus:"object", accept:["front","back"]},
+    {prompt:"___ server",  modifier:"cloud",   nucleus:"server",  full:"cloud server",  rule:"blue",
+     why:"🔵 Noun+Noun: tipo de tecnología. ✗ cloud's server — infraestructuras no poseen con 's",
+     focus:"type"},
+    {prompt:"___ party",   modifier:"garden",  nucleus:"party",   full:"garden party",  rule:"blue",
+     why:"🔵 Noun+Noun: lugar del evento. ✗ garden's party — solo personas/orgs usan 's",
+     focus:"location"},
+    {prompt:"___ stop",    modifier:"bus",     nucleus:"stop",    full:"bus stop",      rule:"blue",
+     why:"🔵 Noun+Noun: tipo de parada. Modifier SINGULAR — ✗ buses stop = 'los autobuses paran' (¡es una oración, no un compuesto!)",
+     focus:"type"},
+    {prompt:"___ cup",     modifier:"coffee",  nucleus:"cup",     full:"coffee cup",    rule:"blue",
+     why:"🔵 Noun+Noun: contenido habitual del recipiente. ✗ cup of coffee = partitivo (una porción) — distinto de coffee cup (el tipo de taza)",
+     focus:"content", accept:["tea"]},
+    {prompt:"___ table",   modifier:"kitchen", nucleus:"table",   full:"kitchen table", rule:"blue",
+     why:"🔵 Noun+Noun: ubicación del mueble. ✗ kitchen's table — muebles/objetos usan adjunct, no 's",
+     focus:"location", accept:["coffee","dinner"]},
+    {prompt:"___ station", modifier:"fire",    nucleus:"station", full:"fire station",  rule:"blue",
+     why:"🔵 Noun+Noun: tipo de servicio. Modifier SINGULAR — ✗ fires station · 'fire' describe el tipo, no el dueño",
+     focus:"type"},
+    {prompt:"___ coat",    modifier:"rain",    nucleus:"coat",    full:"rain coat",     rule:"blue",
+     why:"🔵 Noun+Noun: propósito de la prenda. ✗ rain's coat — eventos climáticos no poseen con 's",
+     focus:"purpose"},
+    {prompt:"___ shift",   modifier:"night",   nucleus:"shift",   full:"night shift",   rule:"blue",
+     why:"🔵 Noun+Noun: cuándo ocurre el turno. ✗ night's shift — tiempos/períodos usan adjunct, no genitivo",
+     focus:"time"},
+    {prompt:"___ shelf",   modifier:"book",    nucleus:"shelf",   full:"book shelf",    rule:"blue",
+     why:"🔵 Noun+Noun: qué almacena el mueble. Modifier SINGULAR — ✗ books shelf (aunque almacene muchos libros)",
+     focus:"content"},
+    {prompt:"___ house",   modifier:"beach",   nucleus:"house",   full:"beach house",   rule:"blue",
+     why:"🔵 Noun+Noun: ubicación. ✗ beach's house — lugares geográficos usan adjunct, no 's",
+     focus:"location", accept:["tree","dog"]},
+    {prompt:"___ glasses", modifier:"sun",     nucleus:"glasses", full:"sun glasses",   rule:"blue",
+     why:"🔵 Noun+Noun: propósito. Nucleus plural normal (gafas siempre plural), pero modifier SINGULAR — ✗ suns glasses",
+     focus:"purpose"},
+    {prompt:"___ sign",    modifier:"road",    nucleus:"sign",    full:"road sign",     rule:"blue",
+     why:"🔵 Noun+Noun: ubicación de la señal. ✗ road's sign — objetos en espacios usan adjunct",
+     focus:"location"},
+    {prompt:"___ box",     modifier:"lunch",   nucleus:"box",     full:"lunch box",     rule:"blue",
+     why:"🔵 Noun+Noun: uso del contenedor. Modifier SINGULAR — ✗ lunches box",
+     focus:"content", accept:["tool","gift"]},
+    {prompt:"___ bag",     modifier:"air",     nucleus:"bag",     full:"air bag",       rule:"blue",
+     why:"🔵 Noun+Noun: mecanismo por tipo de agente. ✗ air's bag — mecanismos usan adjunct · ✗ bag of air — cambia el sentido",
+     focus:"mechanism"},
   ],
   intermediate:[
-    {prompt:"___ pool",    modifier:"swimming",nucleus:"pool",   full:"swimming pool",   rule:"green", why:"-ing nominal: el modificador indica la actividad/propósito", focus:"purpose"},
-    {prompt:"___ park",    modifier:"car",     nucleus:"park",   full:"car park",        rule:"blue",  why:"Noun adjunct: para qué tipo de vehículo", focus:"type"},
-    {prompt:"___ class",   modifier:"cooking", nucleus:"class",  full:"cooking class",   rule:"green", why:"-ing nominal: el modificador indica la disciplina/actividad", focus:"activity"},
-    {prompt:"___ book",    modifier:"cook",    nucleus:"book",   full:"cook book",       rule:"blue",  why:"Noun adjunct: 'cook' actúa como sustantivo modificador", focus:"type"},
-    {prompt:"___ space",   modifier:"parking", nucleus:"space",  full:"parking space",   rule:"green", why:"-ing nominal: actividad que define el espacio", focus:"activity"},
-    {prompt:"___ stop",    modifier:"bus",     nucleus:"stop",   full:"bus stop",        rule:"blue",  why:"Noun adjunct: tipo de transporte", focus:"type"},
-    {prompt:"___ license", modifier:"driving", nucleus:"license",full:"driving license", rule:"green", why:"-ing nominal: la actividad que autoriza el permiso", focus:"activity"},
-    {prompt:"___ pad",     modifier:"note",    nucleus:"pad",    full:"note pad",        rule:"blue",  why:"Noun adjunct: para qué sirve el bloc", focus:"purpose"},
-    {prompt:"___ shoes",   modifier:"running", nucleus:"shoes",  full:"running shoes",   rule:"green", why:"-ing nominal: actividad para la que están diseñados", focus:"activity"},
-    {prompt:"___ track",   modifier:"sprint",  nucleus:"track",  full:"sprint track",    rule:"blue",  why:"Noun adjunct: tipo de pista (deporte)", focus:"type"},
-    {prompt:"___ desk",    modifier:"writing", nucleus:"desk",   full:"writing desk",    rule:"green", why:"-ing nominal: actividad principal en ese mueble", focus:"activity"},
-    {prompt:"___ room",    modifier:"board",   nucleus:"room",   full:"board room",      rule:"blue",  why:"Noun adjunct: tipo de sala corporativa", focus:"type"},
-    {prompt:"___ room",    modifier:"meeting", nucleus:"room",   full:"meeting room",    rule:"green", why:"-ing nominal: actividad que ocurre en esa sala", focus:"activity"},
-    {prompt:"___ box",     modifier:"tool",    nucleus:"box",    full:"tool box",        rule:"blue",  why:"Noun adjunct: contenido de la caja", focus:"content"},
-    {prompt:"___ machine", modifier:"washing", nucleus:"machine",full:"washing machine", rule:"green", why:"-ing nominal: función/actividad de la máquina", focus:"function"},
-    {prompt:"___ bag",     modifier:"hand",    nucleus:"bag",    full:"hand bag",        rule:"blue",  why:"Noun adjunct: cómo se lleva el bolso", focus:"manner"},
+    {prompt:"___ pool",    modifier:"swimming", nucleus:"pool",    full:"swimming pool",    rule:"green",
+     why:"🟢 -ing nominal: la actividad (swim→swimming) define el propósito. ✗ swim pool — 'swim' sin -ing no es nominal",
+     focus:"purpose"},
+    {prompt:"___ park",    modifier:"car",      nucleus:"park",    full:"car park",          rule:"blue",
+     why:"🔵 Noun+Noun: tipo de aparcamiento. ✗ cars park — 'cars' plural sería 'los coches aparcan' (oración, no compuesto)",
+     focus:"type"},
+    {prompt:"___ class",   modifier:"cooking",  nucleus:"class",   full:"cooking class",     rule:"green",
+     why:"🟢 -ing nominal: la disciplina (cocinar) define la clase. ✗ cook class — 'cook' es la persona, no la actividad",
+     focus:"activity"},
+    {prompt:"___ book",    modifier:"cook",     nucleus:"book",    full:"cook book",          rule:"blue",
+     why:"🔵 Noun+Noun: 'cook' (oficio/persona) + book. ✗ cooking book — -ing = 'libro de la acción de cocinar' (distinto matiz)",
+     focus:"type"},
+    {prompt:"___ space",   modifier:"parking",  nucleus:"space",   full:"parking space",     rule:"green",
+     why:"🟢 -ing nominal: actividad que define el espacio. ✗ park space — 'park' solo es verbo o parque, ambiguo",
+     focus:"activity"},
+    {prompt:"___ stop",    modifier:"bus",      nucleus:"stop",    full:"bus stop",           rule:"blue",
+     why:"🔵 Noun+Noun: tipo de transporte define la parada. Modifier SINGULAR — ✗ buses stop = 'los autobuses paran' (oración)",
+     focus:"type"},
+    {prompt:"___ license", modifier:"driving",  nucleus:"license", full:"driving license",   rule:"green",
+     why:"🟢 -ing nominal UK: la actividad (conducir) define lo que autoriza. ✗ drive license — 'drive' solo es verbo, necesita -ing",
+     focus:"activity"},
+    {prompt:"___ pad",     modifier:"note",     nucleus:"pad",     full:"note pad",           rule:"blue",
+     why:"🔵 Noun+Noun: propósito del bloc. Modifier SINGULAR — ✗ notes pad · ✗ noting pad — -ing cambiaría el sentido",
+     focus:"purpose"},
+    {prompt:"___ shoes",   modifier:"running",  nucleus:"shoes",   full:"running shoes",     rule:"green",
+     why:"🟢 -ing nominal: actividad para la que están diseñados. ✗ run shoes — 'run' solo es verbo sin -ing",
+     focus:"activity"},
+    {prompt:"___ track",   modifier:"sprint",   nucleus:"track",   full:"sprint track",      rule:"blue",
+     why:"🔵 Noun+Noun: 'sprint' (sustantivo deportivo) define el tipo de pista. ✗ sprinting track — informal/poco estándar",
+     focus:"type"},
+    {prompt:"___ desk",    modifier:"writing",  nucleus:"desk",    full:"writing desk",      rule:"green",
+     why:"🟢 -ing nominal: actividad principal del mueble. ✗ write desk — 'write' solo es verbo, necesita -ing",
+     focus:"activity"},
+    {prompt:"___ room",    modifier:"board",    nucleus:"room",    full:"board room",         rule:"blue",
+     why:"🔵 Noun+Noun: 'board' (junta directiva) define el tipo de sala. ✗ boarding room — sería 'habitación de huéspedes'",
+     focus:"type"},
+    {prompt:"___ room",    modifier:"meeting",  nucleus:"room",    full:"meeting room",      rule:"green",
+     why:"🟢 -ing nominal: la actividad (reunirse) define la sala. ✗ meet room — 'meet' solo es verbo · ✗ board room — sala de junta directiva",
+     focus:"activity"},
+    {prompt:"___ box",     modifier:"tool",     nucleus:"box",     full:"tool box",           rule:"blue",
+     why:"🔵 Noun+Noun: contenido de la caja. Modifier SINGULAR — ✗ tools box (aunque contenga muchas herramientas)",
+     focus:"content"},
+    {prompt:"___ machine", modifier:"washing",  nucleus:"machine", full:"washing machine",   rule:"green",
+     why:"🟢 -ing nominal: función principal de la máquina. ✗ wash machine — 'wash' solo es verbo, necesita -ing para nominalizar",
+     focus:"function"},
+    {prompt:"___ bag",     modifier:"hand",     nucleus:"bag",     full:"hand bag",           rule:"blue",
+     why:"🔵 Noun+Noun: modo de uso (mano). ✗ hand's bag — partes del cuerpo usan adjunct, no 's · ✗ handing bag — incorrecto",
+     focus:"manner"},
   ],
   exceptions:[
-    {prompt:"engineer's ___",modifier:"report",   nucleus:"report",    full:"engineer's report",      rule:"red",   why:"Genitivo 's: pertenencia — el reporte es del ingeniero", focus:"possession"},
-    {prompt:"cup of ___",    modifier:"coffee",   nucleus:"cup",       full:"cup of coffee",           rule:"red",   why:"Partitivo 'of': contenido dentro del contenedor", focus:"partitive"},
-    {prompt:"children's ___",modifier:"hospital", nucleus:"hospital",  full:"children's hospital",     rule:"red",   why:"Genitivo 's con plural irregular (no children's→childrens)", focus:"possession"},
-    {prompt:"team's ___",    modifier:"decision", nucleus:"decision",  full:"team's decision",         rule:"red",   why:"Genitivo 's: decisión tomada por el equipo", focus:"possession"},
-    {prompt:"piece of ___",  modifier:"advice",   nucleus:"piece",     full:"piece of advice",         rule:"red",   why:"Partitivo 'of': 'advice' es incontable, necesita cuantificador", focus:"partitive"},
-    {prompt:"wall of ___",   modifier:"fire",     nucleus:"wall",      full:"wall of fire",            rule:"red",   why:"'of' enfatiza la composición dramática, no uso funcional", focus:"composition"},
-    {prompt:"___ policy",    modifier:"company",  nucleus:"policy",    full:"company policy",          rule:"blue",  why:"Noun adjunct: sin 's — policy pertenece al tipo/dominio company", focus:"domain"},
-    {prompt:"___ pool",      modifier:"swimming", nucleus:"pool",      full:"swimming pool",           rule:"green", why:"-ing nominal: propósito de la instalación", focus:"purpose"},
-    {prompt:"manager of ___",modifier:"engineering",nucleus:"manager", full:"manager of engineering",  rule:"red",   why:"'of' para roles con disciplinas abstractas (formal/escrito)", focus:"role"},
-    {prompt:"___ engineer",  modifier:"software", nucleus:"engineer",  full:"software engineer",       rule:"blue",  why:"Noun adjunct: persona que trabaja en software (rol)", focus:"person"},
-    {prompt:"___ engineering",modifier:"software",nucleus:"engineering",full:"software engineering",  rule:"green", why:"-ing nominal: la disciplina/campo de estudio", focus:"discipline"},
-    {prompt:"___ book",      modifier:"cook",     nucleus:"book",      full:"cook book",               rule:"blue",  why:"Noun adjunct directo: sustantivo modifica sustantivo", focus:"type"},
-    {prompt:"___ oil",       modifier:"cooking",  nucleus:"oil",       full:"cooking oil",             rule:"green", why:"-ing nominal: propósito del aceite (para cocinar)", focus:"purpose"},
-    {prompt:"___ wall",      modifier:"stone",    nucleus:"wall",      full:"stone wall",              rule:"blue",  why:"Noun adjunct: material de construcción directo", focus:"material"},
-    {prompt:"wall of ___",   modifier:"stone",    nucleus:"wall",      full:"wall of stone",           rule:"red",   why:"'of' enfatiza la composición/material con tono literario", focus:"emphasis"},
-    {prompt:"___ shift",     modifier:"night",    nucleus:"shift",     full:"night shift",             rule:"blue",  why:"Noun adjunct: cuándo ocurre el turno de trabajo", focus:"time"},
+    {prompt:"engineer's ___", modifier:"report",      nucleus:"report",      full:"engineer's report",      rule:"red",
+     why:"🔴 Genitivo 's: el informe ES DEL ingeniero. ✗ engineer report — sin 's no hay posesión clara · ✗ report of engineer — poco natural",
+     focus:"possession"},
+    {prompt:"cup of ___",     modifier:"coffee",      nucleus:"cup",         full:"cup of coffee",          rule:"red",
+     why:"🔴 Partitivo 'of': una porción de algo incontable. ✗ coffee cup = el tipo de taza (distinto) · 'a cup of coffee' = la cantidad",
+     focus:"partitive"},
+    {prompt:"children's ___", modifier:"hospital",    nucleus:"hospital",    full:"children's hospital",    rule:"red",
+     why:"🔴 Genitivo 's plural irregular: children+'s (no childrens'). ✗ children hospital — sin 's pierde foco en los pacientes",
+     focus:"possession"},
+    {prompt:"team's ___",     modifier:"decision",    nucleus:"decision",    full:"team's decision",        rule:"red",
+     why:"🔴 Genitivo 's: propiedad del equipo. ✗ team decision — sin 's implica 'tipo de decisión', no 'decisión del equipo'",
+     focus:"possession"},
+    {prompt:"piece of ___",   modifier:"advice",      nucleus:"piece",       full:"piece of advice",        rule:"red",
+     why:"🔴 Partitivo 'of': 'advice' es incontable — necesita cuantificador. ✗ advice piece — no es inglés natural",
+     focus:"partitive"},
+    {prompt:"wall of ___",    modifier:"fire",        nucleus:"wall",        full:"wall of fire",           rule:"red",
+     why:"🔴 'of' composición dramática/énfasis. ✗ fire wall — existe pero es 'cortafuegos' (técnico), distinto significado",
+     focus:"composition"},
+    {prompt:"___ policy",     modifier:"company",     nucleus:"policy",      full:"company policy",         rule:"blue",
+     why:"🔵 Noun+Noun: dominio general (tipo empresa). ✗ company's policy — 's implica UNA empresa específica · sin 's = norma general",
+     focus:"domain"},
+    {prompt:"___ pool",       modifier:"swimming",    nucleus:"pool",        full:"swimming pool",          rule:"green",
+     why:"🟢 -ing nominal: propósito de la instalación. ✗ swim pool — 'swim' solo es verbo · ✗ swimmer's pool — no estándar",
+     focus:"purpose"},
+    {prompt:"manager of ___", modifier:"engineering", nucleus:"manager",     full:"manager of engineering", rule:"red",
+     why:"🔴 'of' para roles+disciplinas abstractas (formal). ✗ engineering manager — ✓ coloquial, existe · 'of' = registro escrito/profesional",
+     focus:"role"},
+    {prompt:"___ engineer",   modifier:"software",    nucleus:"engineer",    full:"software engineer",      rule:"blue",
+     why:"🔵 Noun+Noun: 'software' define el dominio del rol. ✗ software's engineer — dominios técnicos usan adjunct · Modifier SINGULAR",
+     focus:"person"},
+    {prompt:"___ engineering",modifier:"software",    nucleus:"engineering", full:"software engineering",   rule:"green",
+     why:"🟢 -ing nominal con posición invertida: el -ing es el NÚCLEO (último), no el modifier. Disciplina académica/técnica. ✗ software engineer — persona (🔵 Noun+Noun) · Patrón: [Noun] + [disciplina-ing]",
+     focus:"discipline"},
+    {prompt:"___ book",       modifier:"cook",        nucleus:"book",        full:"cook book",              rule:"blue",
+     why:"🔵 Noun+Noun: 'cook' (persona/oficio). ✗ cooking book — -ing = 'libro de la acción de cocinar' (más raro en uso real)",
+     focus:"type"},
+    {prompt:"___ oil",        modifier:"cooking",     nucleus:"oil",         full:"cooking oil",            rule:"green",
+     why:"🟢 -ing nominal: propósito funcional. ✗ cook oil — 'cook' sin -ing no nominaliza · ✗ cooker oil — 'cooker'=cocina (aparato)",
+     focus:"purpose"},
+    {prompt:"___ shop",       modifier:"shoe",        nucleus:"shop",        full:"shoe shop",              rule:"blue",
+     why:"🔵 REGLA SINGULAR: modifier SIEMPRE en singular. ✗ shoes shop — aunque la tienda venda muchos zapatos, se dice 'shoe shop'",
+     focus:"singular"},
+    {prompt:"wall of ___",    modifier:"stone",       nucleus:"wall",        full:"wall of stone",          rule:"red",
+     why:"🔴 'of' énfasis/tono literario. ✗ stone wall — ✓ correcto pero más neutro · 'wall of stone' añade dramatismo o detalle visual",
+     focus:"emphasis"},
+    {prompt:"___ wall",       modifier:"stone",       nucleus:"wall",        full:"stone wall",             rule:"blue",
+     why:"🔵 Noun+Noun: material directo (neutro). ✗ stone's wall — materiales no poseen con 's · ✗ wall of stone — ✓ pero literario/dramático",
+     focus:"material"},
   ],
   god:[
-    {prompt:"___ engineering manager",modifier:"cloud",      nucleus:"manager",     full:"cloud engineering manager",    rule:"green", why:"-ing nominal + rol: disciplina (engineering) + dominio (cloud)", focus:"title"},
-    {prompt:"senior ___ engineer",    modifier:"software",   nucleus:"engineer",    full:"senior software engineer",     rule:"blue",  why:"Noun adjunct: 'software' modifica 'engineer' directamente", focus:"title"},
-    {prompt:"___ science team",        modifier:"data",       nucleus:"team",        full:"data science team",            rule:"green", why:"-ing nominal implied: 'data science' es la disciplina del equipo", focus:"domain"},
-    {prompt:"head of ___",             modifier:"engineering",nucleus:"head",        full:"head of engineering",          rule:"red",   why:"'of' para jefatura sobre disciplinas abstractas (rol jerárquico)", focus:"hierarchy"},
-    {prompt:"VP of ___",               modifier:"product",    nucleus:"VP",          full:"VP of product",                rule:"red",   why:"'of' en títulos ejecutivos con dominio abstracto", focus:"title"},
-    {prompt:"___ manager",             modifier:"platform",   nucleus:"manager",     full:"platform manager",             rule:"blue",  why:"Noun adjunct: dominio concreto modifica rol", focus:"title"},
-    {prompt:"soft blue ___ house",     modifier:"brick",      nucleus:"house",       full:"soft blue brick house",        rule:"blue",  why:"Orden canónico: Opinion→Color→Material→Noun (sin cambio morfológico)", focus:"order"},
-    {prompt:"___ architect",           modifier:"cloud",      nucleus:"architect",   full:"cloud architect",              rule:"blue",  why:"Noun adjunct: dominio tecnológico modifica rol", focus:"title"},
-    {prompt:"___ director",            modifier:"engineering",nucleus:"director",    full:"engineering director",         rule:"green", why:"-ing nominal: la disciplina lidera el rol (engineering como campo)", focus:"title"},
-    {prompt:"___ owner",               modifier:"product",    nucleus:"owner",       full:"product owner",                rule:"blue",  why:"Noun adjunct: 'product' es el dominio del propietario", focus:"title"},
-    {prompt:"___ manager",             modifier:"delivery",   nucleus:"manager",     full:"delivery manager",             rule:"blue",  why:"Noun adjunct: proceso que gestiona el manager", focus:"title"},
-    {prompt:"___ manager",             modifier:"people",     nucleus:"manager",     full:"people manager",               rule:"blue",  why:"Noun adjunct: qué gestiona el manager (personas)", focus:"title"},
-    {prompt:"chief ___ officer",       modifier:"technology", nucleus:"officer",     full:"chief technology officer",     rule:"blue",  why:"Noun adjunct: dominio del cargo ejecutivo", focus:"title"},
-    {prompt:"___ architect",           modifier:"solutions",  nucleus:"architect",   full:"solutions architect",          rule:"blue",  why:"Noun adjunct: tipo de arquitecto (plural sustantivo)", focus:"title"},
-    {prompt:"___ learning engineer",   modifier:"machine",    nucleus:"engineer",    full:"machine learning engineer",    rule:"green", why:"-ing nominal: 'machine learning' es el campo de la ingeniería", focus:"discipline"},
-    {prompt:"site ___ engineer",       modifier:"reliability",nucleus:"engineer",    full:"site reliability engineer",    rule:"blue",  why:"Noun adjunct: 'reliability' (sustantivo) modifica 'engineer'", focus:"title"},
+    {prompt:"senior ___ engineer",  modifier:"software",    nucleus:"engineer",    full:"senior software engineer",    rule:"blue",
+     why:"🔵 Noun+Noun en stack: 'software' modifica 'engineer'. 'Senior' es adjetivo del compuesto completo. ✗ software's engineer — incorrecto",
+     focus:"title"},
+    {prompt:"chief ___ officer",    modifier:"technology",  nucleus:"officer",     full:"chief technology officer",    rule:"blue",
+     why:"🔵 Noun+Noun: 'technology' define el dominio ejecutivo. ✗ technological officer — adj. no forma siglas (CTO) · Modifier SINGULAR",
+     focus:"title"},
+    {prompt:"soft blue ___ house",  modifier:"brick",       nucleus:"house",       full:"soft blue brick house",       rule:"blue",
+     why:"🔵 Orden canónico: Opinión→Color→Material→Noun. 'brick' (material/sustantivo) va pegado al núcleo sin cambio morfológico",
+     focus:"order"},
+    {prompt:"site ___ engineer",    modifier:"reliability", nucleus:"engineer",    full:"site reliability engineer",   rule:"blue",
+     why:"🔵 Noun+Noun: 'reliability' (abstracto pero sustantivo) modifica 'engineer'. ✗ reliable engineer — adj. cambia el significado técnico",
+     focus:"title"},
+    {prompt:"___ owner",            modifier:"product",     nucleus:"owner",       full:"product owner",               rule:"blue",
+     why:"🔵 Noun+Noun: 'product' = dominio del propietario. Modifier SINGULAR — ✗ products owner · término estándar en Agile",
+     focus:"title"},
+    {prompt:"___ belt",             modifier:"seat",        nucleus:"belt",        full:"seat belt",                   rule:"blue",
+     why:"🔵 Noun+Noun: propósito (el asiento). Modifier SINGULAR — ✗ seats belt · ✗ sitting belt — -ing cambiaría el sentido",
+     focus:"purpose"},
+    {prompt:"___ car",              modifier:"sports",      nucleus:"car",         full:"sports car",                  rule:"blue",
+     why:"🔵 EXCEPCIÓN regla singular: 'sports' plural lexicalizado. ✗ sport car — suena arcaico · Otros: savings account, arms race",
+     focus:"singular-exception"},
+    {prompt:"___ account",          modifier:"savings",     nucleus:"account",     full:"savings account",             rule:"blue",
+     why:"🔵 EXCEPCIÓN regla singular: 'savings' permanece plural. ✗ saving account — incorrecto · Otros: sports car, customs officer",
+     focus:"singular-exception"},
+    {prompt:"___ license",          modifier:"driving",     nucleus:"license",     full:"driving license",             rule:"green",
+     why:"🟢 -ing nominal UK: la actividad autoriza. ✗ driver's license — ✓ forma US (genitivo) · Ambas correctas según variante",
+     focus:"activity"},
+    {prompt:"___ board",            modifier:"diving",      nucleus:"board",       full:"diving board",                rule:"green",
+     why:"🟢 -ing nominal: actividad del trampolín. ✗ dive board — 'dive' solo es verbo · ✗ diver's board — no es la forma estándar",
+     focus:"activity"},
+    {prompt:"___ costs",            modifier:"operating",   nucleus:"costs",       full:"operating costs",             rule:"green",
+     why:"🟢 -ing nominal: actividad que genera los costos. ✗ operation costs — más técnico/formal · -ing = más natural en negocios",
+     focus:"function"},
+    {prompt:"___ director",         modifier:"engineering", nucleus:"director",    full:"engineering director",        rule:"green",
+     why:"🟢 -ing nominal: la disciplina lidera el rol. ✗ engineer director — 'engineer' sería la persona, no la disciplina",
+     focus:"title"},
+    {prompt:"___ list",             modifier:"waiting",     nucleus:"list",        full:"waiting list",                rule:"green",
+     why:"🟢 -ing nominal: actividad que define la lista. ✗ wait list — 'wait' solo es verbo · ✗ waiter list — 'waiter'=la persona",
+     focus:"activity"},
+    {prompt:"head of ___",          modifier:"engineering", nucleus:"head",        full:"head of engineering",         rule:"red",
+     why:"🔴 'of' para jefatura+disciplina abstracta (formal). ✗ engineering head — ✓ coloquial · 'head of X' = registro profesional",
+     focus:"hierarchy"},
+    {prompt:"VP of ___",            modifier:"product",     nucleus:"VP",          full:"VP of product",               rule:"red",
+     why:"🔴 'of' en títulos ejecutivos con dominio abstracto. ✗ product VP — ✓ coloquial · 'VP of X' = estructura corporativa estándar",
+     focus:"title"},
+    {prompt:"board of ___",         modifier:"directors",   nucleus:"board",       full:"board of directors",          rule:"red",
+     why:"🔴 'of' fijo: órgano compuesto por personas. ✗ directors board — no estándar · ✗ director board — singular pierde el colectivo",
+     focus:"composition"},
+    {prompt:"driver's ___",         modifier:"license",     nucleus:"license",     full:"driver's license",            rule:"red",
+     why:"🔴 Genitivo 's (US): la licencia 'del' conductor. ✗ driving license — ✓ forma UK (-ing nominal) · Ambas correctas por variante",
+     focus:"possession"},
+    {prompt:"master's ___",         modifier:"degree",      nucleus:"degree",      full:"master's degree",             rule:"red",
+     why:"🔴 Genitivo 's fosilizado en títulos académicos. ✗ master degree — incorrecto en inglés estándar · 'master's' está lexicalizado",
+     focus:"possession"},
   ],
 };
 
@@ -631,26 +801,49 @@ let RC=getRC(), NEU=getNEU();
 
 let mode="study", level="beginner", st={}, words=[];
 let streak=0, timerInterval=null, timeLeft=60;
+let lives=3, livesEnabled=false, gameOver=false, bonusPts=0;
 
 /* ══ STORAGE ══ */
 const STORE_KEY="learnhub_noun_adjuncts_v1";
+const COLOR_WHY={
+  blue:"🔵 Noun+Noun — modifier directo y singular",
+  green:"🟢 -ing nominal — actividad o disciplina",
+  red:"🔴 Genitivo 's o 'of' — posesión o partitivo",
+};
+const COLOR_WHY_WRONG={
+  blue:{
+    green:"elegiste Noun (🔵), pero el modificador es una actividad → necesita -ing (🟢)",
+    red:"elegiste Noun (🔵), pero hay posesión real o partitivo → usa 's / of (🔴)",
+  },
+  green:{
+    blue:"elegiste -ing (🟢), pero el modificador es un sustantivo directo → Noun+Noun (🔵)",
+    red:"elegiste -ing (🟢), pero hay posesión real → usa 's / of (🔴)",
+  },
+  red:{
+    blue:"elegiste 's/of (🔴), pero es adjunct directo sin posesión → Noun+Noun (🔵)",
+    green:"elegiste 's/of (🔴), pero el modificador es una actividad → -ing (🟢)",
+  },
+};
 function loadStore(){
   try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; }
 }
 function saveStore(data){ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
 function getStats(){
   const s=loadStore();
-  return {best:s.best||null,played:s.played||0,history:s.history||[],failedWords:s.failedWords||{},theme:s.theme||"light"};
+  return {best:s.best||null,bestByLevel:s.bestByLevel||{},played:s.played||0,history:s.history||[],failedWords:s.failedWords||{},theme:s.theme||"light"};
 }
 function recordScore(pct){
   const s=loadStore();
   s.played=(s.played||0)+1;
   if(!s.best||pct>s.best) s.best=pct;
+  if(!s.bestByLevel) s.bestByLevel={};
+  if(!s.bestByLevel[level]||pct>s.bestByLevel[level]) s.bestByLevel[level]=pct;
   if(!s.history) s.history=[];
-  s.history.unshift({date:new Date().toLocaleDateString(),pct,level,mode:mode==="timed"?"timed":"challenge"});
+  s.history.unshift({date:new Date().toLocaleDateString(),pct,level,mode});
   if(s.history.length>10) s.history=s.history.slice(0,10);
   saveStore(s);
   renderStats();
+  updateMenuChips();
 }
 function recordFail(key){
   const s=loadStore();
@@ -660,7 +853,8 @@ function recordFail(key){
 }
 function renderStats(){
   const s=getStats();
-  document.getElementById("bestScore").textContent=s.best!==null?s.best+"%":"—";
+  const lvlBest=s.bestByLevel[level];
+  document.getElementById("bestScore").textContent=lvlBest?lvlBest+"%":"—";
   document.getElementById("timesPlayed").textContent=s.played;
   const badge=document.getElementById("headerBadge");
   if(s.best!==null){
@@ -670,7 +864,7 @@ function renderStats(){
   const list=document.getElementById("historyList");
   if(s.history&&s.history.length>0){
     list.innerHTML=s.history.slice(0,5).map(h=>{
-      const cls=h.pct===100?"great":h.pct>=60?"ok":"try";
+      const cls=h.pct>=95?"great":h.pct>=75?"ok":"try";
       return `<div class="history-entry"><span class="date">${h.date} (${h.level||"—"})</span><span class="pct ${cls}">${h.pct}%</span></div>`;
     }).join("");
   } else {
@@ -697,11 +891,14 @@ function toggleTheme(){
 }
 function applyTheme(){
   const s=getStats();
-  if(s.theme==="dark"){
+  if(s.theme==="light"){
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">🌙</span> Dark mode';
+  } else {
     document.documentElement.setAttribute("data-theme","dark");
     document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">☀️</span> Light mode';
-    RC=getRC(); NEU=getNEU();
   }
+  RC=getRC(); NEU=getNEU();
 }
 
 /* ══ MENU ══ */
@@ -713,10 +910,18 @@ function closeMenu(){
   document.getElementById("menuPanel").classList.remove("show");
   document.getElementById("menuOverlay").classList.remove("show");
 }
+function isUnlocked(l){
+  const b=(loadStore().bestByLevel)||{};
+  if(l==="exceptions") return (b.intermediate||0)>=75;
+  if(l==="god") return (b.exceptions||0)>=75;
+  return true;
+}
 function updateMenuChips(){
   ["beginner","intermediate","exceptions","god"].forEach(l=>{
     const el=document.getElementById("ml-"+l);
-    if(el) el.classList.toggle("active",l===level);
+    if(!el) return;
+    el.classList.toggle("active",l===level);
+    el.classList.toggle("locked",!isUnlocked(l));
   });
 }
 
@@ -749,8 +954,10 @@ function shuffle(arr){
 
 /* ══ LEVEL ══ */
 function setLevel(l){
+  if(!isUnlocked(l)){ vibrate([50,30,50]); return; }
   level=l;
   updateMenuChips();
+  renderStats();
   closeMenu();
   build();
 }
@@ -761,6 +968,9 @@ function build(){
   words=shuffle(LEVELS[level]);
   const g=document.getElementById("grid");
   g.innerHTML=""; st={}; streak=0;
+  gameOver=false; bonusPts=0;
+  livesEnabled=(level==="god"&&mode!=="study");
+  lives=3; renderLives();
   updateStreak();
 
   words.forEach((w,i)=>{
@@ -826,7 +1036,7 @@ function setMode(m){
 
 /* ══ TIMER ══ */
 function startTimer(){
-  timeLeft=60;
+  timeLeft=words.length*(level==="god"?4:5);
   updateTimerDisplay();
   timerInterval=setInterval(()=>{
     timeLeft--;
@@ -914,6 +1124,9 @@ function getHint(word, attempts){
   const modifier=word.modifier;
   const focus=word.focus;
 
+  // God mode: conceptual hints only — never reveal letters
+  if(level==="god"&&attempts>=2) attempts=1;
+
   if(attempts===1){
     if(rule==="blue"){
       if(focus==="material")   return "💡 ¿Qué material está hecho o compuesto?";
@@ -958,21 +1171,29 @@ function getHint(word, attempts){
 }
 
 function trySpell(i){
-  if(st[i].spelledOk) return;
+  if(st[i].spelledOk||st[i].locked) return;
   const ci=document.getElementById(`ci${i}`);
   const nm=document.getElementById(`nm${i}`);
   const cf=document.getElementById(`cf${i}`);
   const ch=document.getElementById(`ch${i}`);
   const val=ci.value.trim().toLowerCase();
+  const w=words[i];
+  const ok=val===w.modifier.toLowerCase()||(w.accept||[]).includes(val);
   nm.classList.remove("answered-ok","answered-wrong");
   void nm.offsetWidth;
-  if(val===words[i].modifier.toLowerCase()){
+  if(ok){
     nm.classList.add("answered-ok");
     ci.disabled=true;
     if(cf) cf.textContent="✅";
     if(ch) ch.textContent="";
     st[i].spelledOk=true;
-    streak++;
+    if(st[i].attempts===0){
+      streak++;
+      if(streak>=3) bonusPts=Math.min(10,bonusPts+1);
+      decayFail(w.full);
+    } else {
+      streak=0;
+    }
     updateStreak();
     vibrate(30);
     // Update nucleus to plain word (remove ___ prompt)
@@ -985,8 +1206,10 @@ function trySpell(i){
     // Show explanation
     const ex=document.getElementById(`ex${i}`);
     if(ex) ex.classList.add("visible");
-    const cp=document.getElementById(`cp${i}`);
-    cp.classList.add("show","boing");
+    if(mode!=="timed"){
+      const cp=document.getElementById(`cp${i}`);
+      cp.classList.add("show","boing");
+    }
     speak(words[i].full);
     updateProgress();
     advanceToNext(i);
@@ -1003,6 +1226,36 @@ function trySpell(i){
     const hb=document.getElementById(`hb${i}`);
     hb.style.animation="none"; void hb.offsetWidth; hb.style.animation="";
     ci.select();
+    loseLife();
+  }
+}
+
+/* ══ FAIL DECAY ══ */
+function decayFail(key){
+  const s=loadStore();
+  if(s.failedWords&&s.failedWords[key]){
+    s.failedWords[key]--;
+    if(s.failedWords[key]<=0) delete s.failedWords[key];
+    saveStore(s);
+  }
+}
+
+/* ══ LIVES (God Mode) ══ */
+function loseLife(){
+  if(!livesEnabled||gameOver) return;
+  lives--;
+  renderLives();
+  if(lives<=0){
+    gameOver=true;
+    setTimeout(()=>checkAll(),500);
+  }
+}
+function renderLives(){
+  const bar=document.getElementById("livesBar");
+  bar.classList.toggle("show",livesEnabled);
+  if(livesEnabled){
+    const n=Math.max(0,lives);
+    document.getElementById("livesText").textContent="❤️".repeat(n)+"🖤".repeat(3-n);
   }
 }
 
@@ -1011,45 +1264,56 @@ function pickColor(i,color){
   if(!st[i].spelledOk||st[i].locked) return;
   st[i].colorPicked=color;
   const map={r:"red",b:"blue",g:"green"};
+  const w=words[i];
+  const isOk=(color===w.rule);
 
-  // Mark the picked dot
   document.querySelectorAll(`#cp${i} .cb`).forEach(btn=>{
     btn.classList.remove("picked");
     if(map[btn.classList[1]]===color) btn.classList.add("picked");
   });
 
-  // Update card visuals to reflect the chosen color immediately
   const nc=document.getElementById(`hb${i}`);
   const nm=document.getElementById(`nm${i}`);
-  // Remove any previous pick classes
   nc.classList.remove("rule-red","rule-blue","rule-green","pick-wrong","pick-ok");
   nm.classList.remove("answered-ok");
-  // Apply chosen color to the card
   nc.classList.add(`rule-${color}`);
   nm.classList.add("answered-ok");
 
-  // Show ok/wrong ring on the card border
-  const correctRule=words[i].rule;
-  if(color===correctRule){
+  // Immediate pedagogical feedback
+  const cr=document.getElementById(`cr${i}`);
+  if(isOk){
     nc.classList.add("pick-ok");
+    cr.textContent=COLOR_WHY[w.rule];
+    cr.style.color="var(--green-dark)";
   } else {
     nc.classList.add("pick-wrong");
+    const msg=COLOR_WHY_WRONG[color]&&COLOR_WHY_WRONG[color][w.rule];
+    cr.textContent=msg?"✗ "+msg:"✗ → "+w.rule.toUpperCase();
+    cr.style.color="var(--red-dark)";
   }
 
-  // Boing
   nc.classList.remove("boing"); void nc.offsetWidth;
   nc.classList.add("boing");
   setTimeout(()=>nc.classList.remove("boing"),400);
-  vibrate(20);
+  vibrate(isOk?20:[50,30,50]);
   updateProgress();
 }
 
 /* ══ CHECK ALL ══ */
+function spellCredit(i){
+  if(!st[i].spelledOk) return 0;
+  const a=st[i].attempts;
+  return a===0?1:a===1?0.6:0.3;
+}
 function checkAll(){
   stopTimer();
-  let spell=0,clr=0;
+  let spell=0,clr=0,spellPts=0;
   words.forEach((w,i)=>{
-    if(st[i].locked){spell++;clr++;return;}
+    if(st[i].locked){
+      if(st[i].spelledOk){spell++;spellPts+=spellCredit(i);}
+      if(mode!=="timed"&&st[i].colorPicked===w.rule) clr++;
+      return;
+    }
     const ci=document.getElementById(`ci${i}`);
     const cf=document.getElementById(`cf${i}`);
     const ch=document.getElementById(`ch${i}`);
@@ -1062,12 +1326,12 @@ function checkAll(){
     if(!st[i].spelledOk && ci){
       const val=ci.value.trim().toLowerCase();
       ci.disabled=true;
-      if(val===w.modifier.toLowerCase()){
+      if(val===w.modifier.toLowerCase()||(w.accept||[]).includes(val)){
         nm.classList.add("answered-ok");
         if(cf) cf.textContent="✅";
         if(ch) ch.textContent="";
         st[i].spelledOk=true;
-        cp.classList.add("show");
+        if(mode!=="timed") cp.classList.add("show");
       } else {
         nm.classList.add("answered-wrong");
         if(cf) cf.textContent="❌";
@@ -1084,27 +1348,31 @@ function checkAll(){
     if(nmFinal) nmFinal.classList.add("answered-ok");
     if(ex) ex.classList.add("visible");
 
-    if(st[i].spelledOk) spell++;
-    const picked=st[i].colorPicked;
-    const colorOk=picked===w.rule;
-    const map={r:"red",b:"blue",g:"green"};
-    cp.querySelectorAll(".cb").forEach(btn=>{
-      const bc=map[btn.classList[1]];
-      btn.disabled=true;
-      btn.classList.remove("picked","correct-c","wrong-c");
-      if(bc===w.rule) btn.classList.add("correct-c");
-      if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
-    });
-    if(picked) cr.textContent=colorOk?"✅ Correct!":`❌ → ${w.rule.toUpperCase()}`;
-    else if(st[i].spelledOk) cr.textContent=`→ ${w.rule.toUpperCase()}`;
-    if(colorOk) clr++;
+    if(st[i].spelledOk){spell++;spellPts+=spellCredit(i);}
+    if(mode!=="timed"){
+      const picked=st[i].colorPicked;
+      const colorOk=picked===w.rule;
+      const map={r:"red",b:"blue",g:"green"};
+      cp.querySelectorAll(".cb").forEach(btn=>{
+        const bc=map[btn.classList[1]];
+        btn.disabled=true;
+        btn.classList.remove("picked","correct-c","wrong-c");
+        if(bc===w.rule) btn.classList.add("correct-c");
+        if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
+      });
+      if(picked) cr.textContent=colorOk?"✅ Correct!":`❌ → ${w.rule.toUpperCase()}`;
+      else if(st[i].spelledOk) cr.textContent=`→ ${w.rule.toUpperCase()}`;
+      if(colorOk) clr++;
+    }
     st[i].locked=st[i].done=true;
   });
   updateProgress();
   renderButtons(true);
   const total=words.length;
-  const pct=Math.round(((spell+clr)/(total*2))*100);
-  const stars=pct===100?3:pct>=60?2:1;
+  const pct=mode==="timed"
+    ?Math.min(100,Math.round((spellPts/total)*100)+bonusPts)
+    :Math.min(100,Math.round(((spellPts+clr)/(total*2))*100)+bonusPts);
+  const stars=pct>=95?3:pct>=75?2:pct>=50?1:0;
   recordScore(pct);
   setTimeout(()=>showStars(stars,spell,clr,total,pct),400);
 }
@@ -1120,18 +1388,24 @@ function showStars(stars,spell,clr,total,pct){
       if(n<=stars) document.getElementById(`star${n}`).classList.add("lit");
     },n*350);
   });
+  const spellLine=`${spell}/${total} modifiers`;
+  const clrLine=`${clr}/${total} colours`;
+  const details=mode==="timed"?`${spellLine} ⚡ (${pct}%)`:stars===3?`${spellLine} + ${clrLine} (${pct}%)`:`${spellLine} · ${clrLine} (${pct}%)`;
   if(stars===3){
-    title.textContent="🏆 Perfect score!";
-    sub.textContent=`${spell}/${total} modifiers + ${clr}/${total} colours`;
+    title.textContent="🏆 Excellent!";
+    sub.textContent=details;
     setTimeout(launchConfetti,400);
     vibrate([100,50,100,50,200]);
   } else if(stars===2){
     title.textContent="⭐ Great job!";
-    sub.textContent=`${spell}/${total} modifiers · ${clr}/${total} colours (${pct}%)`;
+    sub.textContent=details;
     vibrate([50,30,50]);
-  } else {
+  } else if(stars===1){
     title.textContent="💪 Keep practising!";
-    sub.textContent=`${spell}/${total} modifiers · ${clr}/${total} colours — you can do better!`;
+    sub.textContent=details;
+  } else {
+    title.textContent=gameOver?"💀 Game over!":"😅 Tough one!";
+    sub.textContent=(gameOver?"No lives left — ":"")+details;
   }
 }
 function closeStars(){
@@ -1193,7 +1467,9 @@ function stopConfetti(){
 function updateProgress(){
   const done=mode==="study"
     ?Object.values(st).filter(x=>x.done).length
-    :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
+    :mode==="timed"
+      ?Object.values(st).filter(x=>x.spelledOk).length
+      :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
   const pct=Math.round(done/words.length*100);
   document.getElementById("progTxt").textContent=`${done} / ${words.length}`;
   document.getElementById("progPct").textContent=`${pct}%`;
@@ -1222,6 +1498,7 @@ function renderButtons(checked=false){
 /* ══ INIT ══ */
 applyTheme();
 renderStats();
+updateMenuChips();
 build();
 </script>
 </body>
