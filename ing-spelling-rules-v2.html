@@ -915,12 +915,12 @@ function _loadVoice(){
   const vs=speechSynthesis.getVoices();
   if(!vs.length) return;
   const en=vs.filter(v=>v.lang==="en-US"||v.lang==="en_US");
-  // Priority: downloaded Enhanced/Neural > macOS newer system voices (parenthetical) > Google > Samantha > default
-  _voice=en.find(v=>/enhanced|neural/i.test(v.name))
-        ||en.find(v=>/\(English \(United States\)\)/.test(v.name)&&/^(Nicky|Flo|Reed|Sandy|Shelley|Eddy)/i.test(v.name))
-        ||en.find(v=>/\(English \(United States\)\)/.test(v.name))
-        ||en.find(v=>/google/i.test(v.name))
-        ||en.find(v=>v.name==="Samantha")
+  // Known female en-US voices in rough quality order
+  const F=/^(Ava|Allison|Susan|Flo|Sandy|Shelley|Nicky|Samantha|Kathy|Vicki|Victoria|Zira|Jenny|Aria)/i;
+  _voice=en.find(v=>/enhanced|neural/i.test(v.name)&&F.test(v.name))  // downloaded premium female
+        ||en.find(v=>/\(English \(United States\)\)/.test(v.name)&&/^(Flo|Sandy|Shelley|Nicky)/i.test(v.name)) // macOS neural female
+        ||en.find(v=>/google/i.test(v.name))   // Google US English (female by default)
+        ||en.find(v=>F.test(v.name))            // any other known female
         ||en.find(v=>v.default)||en[0]||null;
 }
 speechSynthesis.onvoiceschanged=_loadVoice;
@@ -1256,22 +1256,22 @@ function renderLives(){
 
 /* ══ COLOR PICK ══ */
 const RULE_WHY={
-  red:  "🔴 Sin cambios — solo añade -ing, la palabra queda igual",
-  blue: "🔵 La -e final es muda — quítala antes de añadir -ing",
-  green:"🟢 Dobla la consonante final — vocal corta + una sola consonante al final",
+  red:  "🔴 Sin cambios → +ing",
+  blue: "🔵 -e muda → quítala",
+  green:"🟢 CVC → dobla la final",
 };
 const RULE_WHY_WRONG={
   red:{
-    blue: "elegiste 🔴, pero la -e final es muda — tienes que quitarla antes (🔵)",
-    green:"elegiste 🔴, pero hay vocal corta + consonante sola — esa consonante se dobla (🟢)",
+    blue: "🔴? La -e es muda → quítala (🔵)",
+    green:"🔴? CVC → dobla la final (🟢)",
   },
   blue:{
-    red:  "elegiste 🔵, pero esa -e no es muda — solo añade -ing directamente (🔴)",
-    green:"elegiste 🔵, pero hay vocal corta + consonante sola — dobla esa consonante (🟢)",
+    red:  "🔵? No hay -e muda → +ing directo (🔴)",
+    green:"🔵? CVC → dobla, no quites (🟢)",
   },
   green:{
-    red:  "elegiste 🟢, pero no hay patrón CVC — solo añade -ing (🔴)",
-    blue: "elegiste 🟢, pero la -e final es muda — quítala, no la doblas (🔵)",
+    red:  "🟢? No hay CVC → +ing directo (🔴)",
+    blue: "🟢? La -e es muda → quítala (🔵)",
   },
 };
 
