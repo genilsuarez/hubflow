@@ -25,20 +25,22 @@
       font-family: 'Manrope', sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 3rem 1.25rem 2rem;
+      justify-content: center;
+      padding: 1.25rem;
+      overflow: hidden;
     }
 
     /* HERO */
-    .hero { text-align: center; margin-bottom: 2.75rem; }
+    .hero { text-align: center; margin-bottom: 1.25rem; }
     h1 {
-      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-size: clamp(1.5rem, 4vw, 2rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
       background: linear-gradient(120deg, var(--blue-deep), var(--blue), #5C9DF0);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -46,32 +48,32 @@
     }
     .hero p {
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.82rem;
       font-weight: 600;
       max-width: 480px;
       margin: 0 auto;
-      line-height: 1.55;
+      line-height: 1.45;
     }
 
     /* SECTIONS */
     main { width: 100%; max-width: 880px; }
-    .section { margin-bottom: 2.25rem; }
+    .section { margin-bottom: 1rem; }
     .section-head {
       display: flex;
       align-items: baseline;
       gap: 0.6rem;
-      margin-bottom: 0.9rem;
-      padding-bottom: 0.5rem;
+      margin-bottom: 0.55rem;
+      padding-bottom: 0.35rem;
       border-bottom: 1.5px solid var(--border);
     }
     .section-head h2 {
-      font-size: 1rem;
+      font-size: 0.88rem;
       font-weight: 800;
       letter-spacing: -0.01em;
     }
     .section-head span {
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -79,21 +81,21 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
-      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 0.65rem;
     }
 
     /* CARD */
     .card {
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 1.15rem 1.25rem 1.05rem;
+      border-radius: 14px;
+      padding: 0.75rem 1rem 0.7rem;
       text-decoration: none;
       color: var(--text);
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.35rem;
       position: relative;
       overflow: hidden;
       transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
@@ -122,13 +124,13 @@
       gap: 0.5rem;
     }
     .card-icon {
-      width: 38px; height: 38px;
-      border-radius: 10px;
+      width: 30px; height: 30px;
+      border-radius: 8px;
       background: var(--blue-soft);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       flex-shrink: 0;
     }
     .card-go {
@@ -138,7 +140,7 @@
       transition: transform 0.18s, color 0.18s;
     }
     .card h3 {
-      font-size: 0.98rem;
+      font-size: 0.9rem;
       font-weight: 800;
       letter-spacing: -0.01em;
       line-height: 1.3;
@@ -149,19 +151,19 @@
       font-size: 0.92em;
     }
     .card p {
-      font-size: 0.78rem;
+      font-size: 0.73rem;
       color: var(--muted);
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.45;
       flex: 1;
     }
 
     /* TAGS */
-    .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.25rem; }
     .tag {
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 50px;
       letter-spacing: 0.02em;
     }
@@ -170,10 +172,9 @@
     .tag.amber { background: var(--amber-soft); color: #9A6213; }
 
     footer {
-      margin-top: auto;
-      padding-top: 2.5rem;
+      margin-top: 1rem;
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.06em;
     }
