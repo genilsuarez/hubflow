@@ -286,18 +286,28 @@ h1{
 }
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px;align-items:start;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:min-content;
+  column-gap:4px;
+  row-gap:3px;
+  margin-bottom:6px;
+  align-items:start;
+}
 @media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr);gap:5px;}}
 @media(max-width:360px){.grid{grid-template-columns:repeat(2,1fr);gap:4px;}}
 
 /* BUTTONS */
 .btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px;margin-bottom:6px;}
 
-/* HEART CARD */
+/* HEART CARD — uses subgrid so rows align across all columns */
 .hcard{
   display:grid;
-  align-items:center;justify-items:center;
-  gap:1px;animation:popIn .4s ease both;
+  grid-row:span 5;
+  grid-template-rows:subgrid;
+  align-items:start;justify-items:center;
+  gap:0;animation:popIn .4s ease both;
 }
 .hcard:nth-child(1){animation-delay:.03s}.hcard:nth-child(2){animation-delay:.06s}
 .hcard:nth-child(3){animation-delay:.09s}.hcard:nth-child(4){animation-delay:.12s}
@@ -347,15 +357,27 @@ h1{
 
 /* EXPLANATION TOOLTIP */
 .explanation{
-  font-size:.6rem;font-weight:700;color:var(--muted);text-align:center;
-  width:100%;line-height:1.2;
-  display:none;
-  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:.58rem;font-weight:700;color:var(--muted);text-align:left;
+  width:100%;line-height:1.3;
+  min-height:2.6em;
+  display:flex;align-items:flex-start;justify-content:flex-start;gap:4px;
+  visibility:hidden;opacity:0;
+  padding:3px 5px;
+  border-radius:8px;
+  overflow:hidden;
+  background:transparent;
+  transition:background .3s;
 }
 .heart-wrap:has(.hbtn.done)~.explanation{
-  display:-webkit-box;
+  visibility:visible;opacity:1;
   animation:fadeIn .3s ease;
 }
+.explanation .ex-dot{
+  flex-shrink:0;width:7px;height:7px;border-radius:50%;margin-top:3px;
+}
+.explanation .ex-dot.red  {background:var(--red);}
+.explanation .ex-dot.blue {background:var(--blue);}
+.explanation .ex-dot.green{background:var(--green);}
 
 /* AUDIO BUTTON — floats inside heart-wrap */
 .heart-wrap{position:relative;width:100%;}
@@ -393,8 +415,8 @@ h1{
 /* COLOR PICKER */
 .cpicker{
   display:none;flex-direction:row;align-items:center;justify-content:center;gap:6px;width:100%;
-  background:var(--surface);border:2px solid var(--border);border-radius:50px;padding:2px 8px;
-  justify-self:stretch;
+  background:var(--surface);border:2px solid var(--border);border-radius:50px;padding:3px 8px;
+  justify-self:stretch;min-height:34px;
 }
 .cpicker.show{display:flex;}
 .cpicker-row{display:flex;gap:6px;}
@@ -630,70 +652,70 @@ h1{
    ══════════════════════════════════════════════════════ */
 const LEVELS={
   beginner:[
-    {verb:"run",   ans:"running",  rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"wait",  ans:"waiting",  rule:"red",   why:"Two vowels before consonant → just add -ing"},
-    {verb:"watch", ans:"watching", rule:"red",   why:"Ends in two consonants → just add -ing"},
-    {verb:"sit",   ans:"sitting",  rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"dance", ans:"dancing",  rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"stop",  ans:"stopping", rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"play",  ans:"playing",  rule:"red",   why:"Ends in vowel+y → just add -ing"},
-    {verb:"write", ans:"writing",  rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"cut",   ans:"cutting",  rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"make",  ans:"making",   rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"read",  ans:"reading",  rule:"red",   why:"Two vowels before consonant → just add -ing"},
-    {verb:"study", ans:"studying", rule:"red",   why:"Ends in consonant+y → just add -ing (keep y)"},
-    {verb:"shop",  ans:"shopping", rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"cook",  ans:"cooking",  rule:"red",   why:"Two vowels before consonant → just add -ing"},
-    {verb:"swim",  ans:"swimming", rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"talk",  ans:"talking",  rule:"red",   why:"Ends in two consonants → just add -ing"},
+    {verb:"run",   ans:"running",  rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"wait",  ans:"waiting",  rule:"red",   why:"Two vowels before the last consonant — just add -ing"},
+    {verb:"watch", ans:"watching", rule:"red",   why:"Ends in two consonants — just add -ing"},
+    {verb:"sit",   ans:"sitting",  rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"dance", ans:"dancing",  rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"stop",  ans:"stopping", rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"play",  ans:"playing",  rule:"red",   why:"Vowel before the -y — just add -ing"},
+    {verb:"write", ans:"writing",  rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"cut",   ans:"cutting",  rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"make",  ans:"making",   rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"read",  ans:"reading",  rule:"red",   why:"Two vowels before the last consonant — just add -ing"},
+    {verb:"study", ans:"studying", rule:"red",   why:"Consonant before the -y — keep the y, just add -ing"},
+    {verb:"shop",  ans:"shopping", rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"cook",  ans:"cooking",  rule:"red",   why:"Two vowels before the last consonant — just add -ing"},
+    {verb:"swim",  ans:"swimming", rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"talk",  ans:"talking",  rule:"red",   why:"Ends in two consonants — just add -ing"},
   ],
   intermediate:[
-    {verb:"prefer",  ans:"preferring", rule:"green", why:"Stress on last syllable + CVC → double it"},
-    {verb:"begin",   ans:"beginning",  rule:"green", why:"Stress on last syllable + CVC → double it"},
-    {verb:"forget",  ans:"forgetting", rule:"green", why:"Stress on last syllable + CVC → double it"},
-    {verb:"travel",  ans:"travelling", rule:"green", why:"UK: double 'l' after short vowel"},
-    {verb:"smile",   ans:"smiling",    rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"arrive",  ans:"arriving",   rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"hope",    ans:"hoping",     rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"invite",  ans:"inviting",   rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"listen",  ans:"listening",  rule:"red",   why:"Stress on FIRST syllable → don't double"},
-    {verb:"happen",  ans:"happening",  rule:"red",   why:"Stress on FIRST syllable → don't double"},
-    {verb:"visit",   ans:"visiting",   rule:"red",   why:"Stress on FIRST syllable → don't double"},
-    {verb:"open",    ans:"opening",    rule:"red",   why:"Stress on FIRST syllable → don't double"},
-    {verb:"plan",    ans:"planning",   rule:"green", why:"Short vowel + single consonant → double it"},
-    {verb:"admit",   ans:"admitting",  rule:"green", why:"Stress on last syllable + CVC → double it"},
-    {verb:"escape",  ans:"escaping",   rule:"blue",  why:"Silent 'e' at end → drop it"},
-    {verb:"enjoy",   ans:"enjoying",   rule:"red",   why:"Ends in vowel+y → just add -ing"},
+    {verb:"prefer",  ans:"preferring", rule:"green", why:"Stress on the last syllable + CVC — double the final consonant"},
+    {verb:"begin",   ans:"beginning",  rule:"green", why:"Stress on the last syllable + CVC — double the final consonant"},
+    {verb:"forget",  ans:"forgetting", rule:"green", why:"Stress on the last syllable + CVC — double the final consonant"},
+    {verb:"travel",  ans:"travelling", rule:"green", why:"British English doubles the -l — American usually doesn't"},
+    {verb:"smile",   ans:"smiling",    rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"arrive",  ans:"arriving",   rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"hope",    ans:"hoping",     rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"invite",  ans:"inviting",   rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"listen",  ans:"listening",  rule:"red",   why:"Stress is on the first syllable — no doubling here"},
+    {verb:"happen",  ans:"happening",  rule:"red",   why:"Stress is on the first syllable — no doubling here"},
+    {verb:"visit",   ans:"visiting",   rule:"red",   why:"Stress is on the first syllable — no doubling here"},
+    {verb:"open",    ans:"opening",    rule:"red",   why:"Stress is on the first syllable — no doubling here"},
+    {verb:"plan",    ans:"planning",   rule:"green", why:"Short vowel + one consonant at the end — double that last letter"},
+    {verb:"admit",   ans:"admitting",  rule:"green", why:"Stress on the last syllable + CVC — double the final consonant"},
+    {verb:"escape",  ans:"escaping",   rule:"blue",  why:"Silent -e at the end — drop it"},
+    {verb:"enjoy",   ans:"enjoying",   rule:"red",   why:"Vowel before the -y — just add -ing"},
   ],
   exceptions:[
-    {verb:"fix",     ans:"fixing",     rule:"red",   why:"Exception: 'x' counts as two sounds (ks) → don't double"},
-    {verb:"see",     ans:"seeing",     rule:"red",   why:"Exception: 'ee' is not silent e → just add -ing"},
-    {verb:"agree",   ans:"agreeing",   rule:"red",   why:"Exception: 'ee' is not silent e → just add -ing"},
-    {verb:"dye",     ans:"dyeing",     rule:"red",   why:"Exception: keep 'e' to avoid confusion with 'dying'"},
-    {verb:"lie",     ans:"lying",      rule:"blue",  why:"Exception: 'ie' changes to 'y' before -ing"},
-    {verb:"die",     ans:"dying",      rule:"blue",  why:"Exception: 'ie' changes to 'y' before -ing"},
-    {verb:"tie",     ans:"tying",      rule:"blue",  why:"Exception: 'ie' changes to 'y' before -ing"},
+    {verb:"fix",     ans:"fixing",     rule:"red",   why:"-x sounds like two letters (ks) — never doubled"},
+    {verb:"see",     ans:"seeing",     rule:"red",   why:"-ee is a real vowel sound, not a silent e — just add -ing"},
+    {verb:"agree",   ans:"agreeing",   rule:"red",   why:"-ee is a real vowel sound, not a silent e — just add -ing"},
+    {verb:"dye",     ans:"dyeing",     rule:"red",   why:"Keep the -e — 'dying' already means something else"},
+    {verb:"lie",     ans:"lying",      rule:"blue",  why:"-ie flips to -y before -ing — that's just the rule"},
+    {verb:"die",     ans:"dying",      rule:"blue",  why:"-ie flips to -y before -ing — that's just the rule"},
+    {verb:"tie",     ans:"tying",      rule:"blue",  why:"-ie flips to -y before -ing — that's just the rule"},
     {verb:"snow",    ans:"snowing",    rule:"red",   why:"Ends in 'w' → just add -ing (w is not doubled)"},
     {verb:"box",     ans:"boxing",     rule:"red",   why:"Exception: 'x' counts as two sounds → don't double"},
     {verb:"show",    ans:"showing",    rule:"red",   why:"Ends in 'w' → just add -ing"},
-    {verb:"panic",   ans:"panicking",  rule:"green", why:"Exception: add 'k' before -ing to keep hard 'c' sound"},
-    {verb:"picnic",  ans:"picnicking", rule:"green", why:"Exception: add 'k' before -ing to keep hard 'c' sound"},
-    {verb:"age",     ans:"ageing",     rule:"red",   why:"Exception: keep 'e' (British) to preserve soft 'g'"},
-    {verb:"be",      ans:"being",      rule:"red",   why:"Exception: irregular — just add -ing"},
-    {verb:"canoe",   ans:"canoeing",   rule:"red",   why:"Exception: 'oe' ending → just add -ing"},
-    {verb:"queue",   ans:"queueing",   rule:"red",   why:"Exception: keep 'e' (British spelling)"},
+    {verb:"panic",   ans:"panicking",  rule:"green", why:"Add -k before -ing to keep that hard /k/ sound"},
+    {verb:"picnic",  ans:"picnicking", rule:"green", why:"Add -k before -ing to keep that hard /k/ sound"},
+    {verb:"age",     ans:"ageing",     rule:"red",   why:"British: keep the -e to preserve the soft /g/ sound"},
+    {verb:"be",      ans:"being",      rule:"red",   why:"Irregular — just add -ing, no changes"},
+    {verb:"canoe",   ans:"canoeing",   rule:"red",   why:"-oe at the end — just add -ing"},
+    {verb:"queue",   ans:"queueing",   rule:"red",   why:"British: keep the -e here"},
   ],
   god:[
     // -ie → -ying (die/dye trap pair side by side)
-    {verb:"die",      ans:"dying",       rule:"blue",  why:"-ie → y + ing (contrast: dyeing!)"},
-    {verb:"vie",      ans:"vying",       rule:"blue",  why:"-ie → y + ing (to compete)"},
-    {verb:"untie",    ans:"untying",     rule:"blue",  why:"-ie → y + ing"},
+    {verb:"die",      ans:"dying",       rule:"blue",  why:"-ie flips to -y + ing (don't mix it up with dyeing — that's the color verb)"},
+    {verb:"vie",      ans:"vying",       rule:"blue",  why:"-ie flips to -y + ing (this one means to compete)"},
+    {verb:"untie",    ans:"untying",     rule:"blue",  why:"-ie flips to -y before -ing"},
     // Keep -e (mandatory — ambiguity / soft g)
-    {verb:"dye",      ans:"dyeing",      rule:"red",   why:"Keep -e: 'dying' already exists (die)"},
-    {verb:"singe",    ans:"singeing",    rule:"red",   why:"Keep -e: 'singing' already exists (sing)"},
-    {verb:"tinge",    ans:"tingeing",    rule:"red",   why:"Keep -e: preserves soft g distinction"},
+    {verb:"dye",      ans:"dyeing",      rule:"red",   why:"Keep the -e — 'dying' already means something else (from 'die')"},
+    {verb:"singe",    ans:"singeing",    rule:"red",   why:"Keep the -e — 'singing' already exists (from 'sing')"},
+    {verb:"tinge",    ans:"tingeing",    rule:"red",   why:"Keep the -e — it preserves the soft /g/ sound"},
     // Keep -e (vowel ending, not silent)
-    {verb:"tiptoe",   ans:"tiptoeing",   rule:"red",   why:"-oe is pronounced, not silent → keep -e"},
+    {verb:"tiptoe",   ans:"tiptoeing",   rule:"red",   why:"-oe is a real vowel sound — keep the -e"},
     {verb:"hoe",      ans:"hoeing",      rule:"red",   why:"-oe ending → keep -e + ing"},
     // -ee (not silent, just add)
     {verb:"oversee",  ans:"overseeing",  rule:"red",   why:"-ee is a vowel sound, not silent e"},
@@ -716,9 +738,9 @@ const LEVELS={
     {verb:"regret",   ans:"regretting",  rule:"green", why:"Stress on last syllable + CVC → double"},
     {verb:"equip",    ans:"equipping",   rule:"green", why:"'qu' acts as one sound — CVC stands → double the p"},
     // Stress on FIRST = DON'T double (trap!)
-    {verb:"offer",    ans:"offering",    rule:"red",   why:"Stress on FIRST syllable → don't double"},
-    {verb:"benefit",  ans:"benefiting",  rule:"red",   why:"Stress on FIRST syllable → don't double"},
-    {verb:"gossip",   ans:"gossiping",   rule:"red",   why:"Stress on FIRST syllable → don't double"},
+    {verb:"offer",    ans:"offering",    rule:"red",   why:"Stress is on the first syllable — no doubling here"},
+    {verb:"benefit",  ans:"benefiting",  rule:"red",   why:"Stress is on the first syllable — no doubling here"},
+    {verb:"gossip",   ans:"gossiping",   rule:"red",   why:"Stress is on the first syllable — no doubling here"},
     // Stress on FIRST but DOUBLES anyway (real exceptions!)
     {verb:"kidnap",   ans:"kidnapping",  rule:"green", why:"Exception: doubles despite first-syllable stress"},
     {verb:"format",   ans:"formatting",  rule:"green", why:"Exception: doubles despite first-syllable stress"},
@@ -946,7 +968,7 @@ function build(){
         </button>
         <button class="audio-btn" onclick="speak('${w.verb}, ${w.ans}')" aria-label="Listen to ${w.verb}">🔊</button>
       </div>
-      <span class="explanation" id="ex${i}">${w.why}</span>
+      <span class="explanation" id="ex${i}"><span class="ex-dot ${w.rule}"></span>${w.why}</span>
       <div class="cinput-wrap${isC?" show":""}" id="cw${i}">
         <input class="cinput" id="ci${i}" type="text" placeholder="${mode==="reverse"?"base verb":"…ing"}"
           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -1076,29 +1098,29 @@ function getHint(word, attempts){
 
   // Reverse mode: hints about the base verb (no letter reveals in god)
   if(mode==="reverse"){
-    if(level==="god"||attempts===1) return "💡 Undo the spelling change to recover the base verb";
+    if(level==="god"||attempts===1) return "💡 Work backwards — undo whatever spelling change was made";
     if(attempts===2) return `💡 Starts with '${v[0]}' (${v.length} letters)`;
     return `💡 ${v.slice(0,Math.ceil(v.length/2))}… (${v.length} letters)`;
   }
   // God mode: rule hints only — never reveal letters
   if(level==="god"&&attempts>=3) attempts=2;
-  
+
   // Attempt 1: hint about the rule category
   if(attempts === 1){
-    if(rule==="red") return "💡 No big changes needed here";
-    if(rule==="blue") return "💡 Something needs to be removed or changed";
-    if(rule==="green") return "💡 Something needs to be added/doubled";
+    if(rule==="red") return "💡 This one's clean — no spelling tricks";
+    if(rule==="blue") return "💡 Check the ending — something changes before you add -ing";
+    if(rule==="green") return "💡 Look at that last consonant — does it need to double?";
   }
   // Attempt 2: more specific rule hint
   if(attempts === 2){
     if(ans.includes("icking")) return "💡 Think about keeping the hard /k/ sound";
-    if(v.endsWith("ie") && ans.endsWith("ying")) return "💡 What happens to -ie before -ing?";
-    if(v.endsWith("ee")) return "💡 Is this -e silent? Or is it a vowel sound?";
-    if(v.endsWith("e") && ans.includes("eing")) return "💡 Does this -e need to stay?";
-    if(v.endsWith("e") && !ans.includes("eing")) return "💡 What do you do with a silent -e?";
-    if(rule==="green" && ans.length > v.length+4) return "💡 The last consonant gets doubled";
-    if(why.includes("don't double")) return "💡 This looks like CVC but it's a trap";
-    return `💡 Think: ${why.split("→")[0]}`;
+    if(v.endsWith("ie") && ans.endsWith("ying")) return "💡 What does -ie turn into when you add -ing?";
+    if(v.endsWith("ee")) return "💡 Is that final -e silent, or is it actually pronounced?";
+    if(v.endsWith("e") && ans.includes("eing")) return "💡 Does this -e need to stick around?";
+    if(v.endsWith("e") && !ans.includes("eing")) return "💡 There's a silent -e at the end — what's the rule?";
+    if(rule==="green" && ans.length > v.length+4) return "💡 That last consonant needs to double";
+    if(why.includes("don't double")) return "💡 Looks like CVC — but check where the stress falls";
+    return `💡 Hint: ${(why.split("—")[0]||why.split("→")[0]).trim()}`;
   }
   // Attempt 3: very direct hint — show the tricky transformation
   if(attempts >= 3){
@@ -1190,22 +1212,22 @@ function renderLives(){
 
 /* ══ COLOR PICK ══ */
 const RULE_WHY={
-  red:  "🔴 Solo +ing — no hay cambios en la raíz",
-  blue: "🔵 −e +ing — la -e final es muda, se elimina",
-  green:"🟢 ×2 +ing — vocal corta + consonante final → se dobla",
+  red:  "🔴 Sin cambios — solo añade -ing, la palabra queda igual",
+  blue: "🔵 La -e final es muda — quítala antes de añadir -ing",
+  green:"🟢 Dobla la consonante final — vocal corta + una sola consonante al final",
 };
 const RULE_WHY_WRONG={
   red:{
-    blue: "elegiste solo +ing (🔴), pero la -e final es muda → elimínala (🔵)",
-    green:"elegiste solo +ing (🔴), pero hay vocal corta + consonante → dobla (🟢)",
+    blue: "elegiste 🔴, pero la -e final es muda — tienes que quitarla antes (🔵)",
+    green:"elegiste 🔴, pero hay vocal corta + consonante sola — esa consonante se dobla (🟢)",
   },
   blue:{
-    red:  "elegiste −e+ing (🔵), pero la -e no es muda → solo añade -ing (🔴)",
-    green:"elegiste −e+ing (🔵), pero hay vocal corta + consonante → dobla (🟢)",
+    red:  "elegiste 🔵, pero esa -e no es muda — solo añade -ing directamente (🔴)",
+    green:"elegiste 🔵, pero hay vocal corta + consonante sola — dobla esa consonante (🟢)",
   },
   green:{
-    red:  "elegiste ×2+ing (🟢), pero no hay CVC → solo añade -ing (🔴)",
-    blue: "elegiste ×2+ing (🟢), pero la -e final es muda → elimínala (🔵)",
+    red:  "elegiste 🟢, pero no hay patrón CVC — solo añade -ing (🔴)",
+    blue: "elegiste 🟢, pero la -e final es muda — quítala, no la doblas (🔵)",
   },
 };
 
@@ -1318,8 +1340,8 @@ function showStars(stars,spell,clr,total,pct){
       if(n<=stars) document.getElementById(`star${n}`).classList.add("lit");
     }, n*350);
   });
-  const spellLine=`${spell}/${total} spellings`;
-  const clrLine=`${clr}/${total} colours`;
+  const spellLine=`${spell}/${total} spelled right`;
+  const clrLine=`${clr}/${total} colors`;
   const details=(mode==="timed"||mode==="reverse")?`${spellLine} ⚡ (${pct}%)`:stars===3?`${spellLine} + ${clrLine} (${pct}%)`:`${spellLine} · ${clrLine} (${pct}%)`;
   if(stars===3){
     title.textContent="🏆 Excellent!";
@@ -1331,7 +1353,7 @@ function showStars(stars,spell,clr,total,pct){
     sub.textContent=details;
     vibrate([50,30,50]);
   } else if(stars===1){
-    title.textContent="💪 Keep practising!";
+    title.textContent="💪 Keep at it!";
     sub.textContent=details;
   } else {
     title.textContent=gameOver?"💀 Game over!":"😅 Tough one!";
