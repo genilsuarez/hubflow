@@ -11,3 +11,9 @@ Thumbs.db
 
 # Playwright
 .playwright-mcp/
+test-results/
+playwright-report/
+
+# Node
+node_modules/
+npm-debug.log*
