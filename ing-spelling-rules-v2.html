@@ -289,9 +289,8 @@ h1{
 .grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  grid-auto-rows:min-content;
   column-gap:4px;
-  row-gap:3px;
+  row-gap:6px;
   margin-bottom:6px;
   align-items:start;
 }
@@ -301,13 +300,11 @@ h1{
 /* BUTTONS */
 .btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px;margin-bottom:6px;}
 
-/* HEART CARD — uses subgrid so rows align across all columns */
+/* HEART CARD */
 .hcard{
-  display:grid;
-  grid-row:span 5;
-  grid-template-rows:subgrid;
-  align-items:start;justify-items:center;
-  gap:0;animation:popIn .4s ease both;
+  display:flex;flex-direction:column;
+  align-items:center;justify-items:center;
+  gap:2px;animation:popIn .4s ease both;
 }
 .hcard:nth-child(1){animation-delay:.03s}.hcard:nth-child(2){animation-delay:.06s}
 .hcard:nth-child(3){animation-delay:.09s}.hcard:nth-child(4){animation-delay:.12s}
@@ -355,29 +352,50 @@ h1{
 [data-theme="dark"] .hbtn.done.rule-blue  .ans{color:#7AC7FF;}
 [data-theme="dark"] .hbtn.done.rule-green .ans{color:#6FE8A8;}
 
-/* EXPLANATION TOOLTIP */
+/* FLOATING TOOLTIP */
+.heart-wrap{position:relative;width:100%;}
 .explanation{
-  font-size:.5rem;font-weight:700;color:var(--muted);text-align:center;
-  width:100%;line-height:1.2;
-  min-height:1.8em;
-  display:flex;align-items:flex-start;justify-content:center;gap:3px;
-  visibility:hidden;opacity:0;
-  padding:1px 2px;
-  overflow:hidden;
+  /* floating tooltip — hidden by default */
+  position:absolute;
+  bottom:calc(100% + 6px);
+  left:50%;transform:translateX(-50%) scale(.92);
+  transform-origin:bottom center;
+  background:var(--text);
+  color:var(--bg);
+  font-size:.6rem;font-weight:700;
+  line-height:1.3;
+  white-space:nowrap;
+  padding:4px 8px;
+  border-radius:7px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .18s, transform .18s;
+  z-index:50;
+  display:flex;align-items:center;gap:4px;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
 }
-.heart-wrap:has(.hbtn.done)~.explanation{
-  visibility:visible;opacity:1;
-  animation:fadeIn .3s ease;
+.explanation::after{
+  content:'';
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:var(--text);
 }
 .explanation .ex-dot{
-  flex-shrink:0;width:6px;height:6px;border-radius:50%;margin-top:3px;
+  flex-shrink:0;width:6px;height:6px;border-radius:50%;
 }
 .explanation .ex-dot.red  {background:var(--red);}
 .explanation .ex-dot.blue {background:var(--blue);}
 .explanation .ex-dot.green{background:var(--green);}
 
-/* AUDIO BUTTON — floats inside heart-wrap */
-.heart-wrap{position:relative;width:100%;}
+/* show on hover/focus when done */
+.heart-wrap:has(.hbtn.done):hover .explanation,
+.heart-wrap:has(.hbtn.done):focus-within .explanation{
+  opacity:1;transform:translateX(-50%) scale(1);
+}
+/* on mobile: show on tap (toggle via JS class) */
+.heart-wrap.tip-show .explanation{
+  opacity:1;transform:translateX(-50%) scale(1);
+}
 .audio-btn{
   position:absolute;top:8%;right:8%;
   background:none;border:none;cursor:pointer;font-size:.72rem;
@@ -892,10 +910,28 @@ function updateMenuChips(){
 }
 
 /* ══ AUDIO ══ */
+let _voice=null;
+function _loadVoice(){
+  const vs=speechSynthesis.getVoices();
+  if(!vs.length) return;
+  const en=vs.filter(v=>v.lang==="en-US"||v.lang==="en_US");
+  // Priority: downloaded Enhanced/Neural > macOS newer system voices (parenthetical) > Google > Samantha > default
+  _voice=en.find(v=>/enhanced|neural/i.test(v.name))
+        ||en.find(v=>/\(English \(United States\)\)/.test(v.name)&&/^(Nicky|Flo|Reed|Sandy|Shelley|Eddy)/i.test(v.name))
+        ||en.find(v=>/\(English \(United States\)\)/.test(v.name))
+        ||en.find(v=>/google/i.test(v.name))
+        ||en.find(v=>v.name==="Samantha")
+        ||en.find(v=>v.default)||en[0]||null;
+}
+speechSynthesis.onvoiceschanged=_loadVoice;
+_loadVoice();
+
 function speak(text){
   if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang="en-US"; u.rate=0.85;
+  u.lang="en-US"; u.rate=0.92; u.pitch=1.0;
+  if(_voice) u.voice=_voice;
   speechSynthesis.speak(u);
 }
 
@@ -964,8 +1000,8 @@ function build(){
           </div>
         </button>
         <button class="audio-btn" onclick="speak('${w.verb}, ${w.ans}')" aria-label="Listen to ${w.verb}">🔊</button>
+        <span class="explanation" id="ex${i}"><span class="ex-dot ${w.rule}"></span>${w.why}</span>
       </div>
-      <span class="explanation" id="ex${i}"><span class="ex-dot ${w.rule}"></span>${w.why}</span>
       <div class="cinput-wrap${isC?" show":""}" id="cw${i}">
         <input class="cinput" id="ci${i}" type="text" placeholder="${mode==="reverse"?"base verb":"…ing"}"
           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -1045,7 +1081,18 @@ function heartClick(i){
   if(mode==="challenge"||mode==="timed"){ focusInput(i); return; }
   const hb=document.getElementById(`hb${i}`);
   const hp=document.getElementById(`hp${i}`);
-  if(hb.classList.contains("done")) return;
+  // if already done, toggle tooltip on mobile tap
+  if(hb.classList.contains("done")){
+    const hw=hb.closest(".heart-wrap");
+    if(hw){
+      hw.classList.toggle("tip-show");
+      // auto-hide after 2s
+      clearTimeout(hw._tipTimer);
+      if(hw.classList.contains("tip-show"))
+        hw._tipTimer=setTimeout(()=>hw.classList.remove("tip-show"),2000);
+    }
+    return;
+  }
   hb.classList.add("done","boing");
   hp.setAttribute("fill",RC[words[i].rule].active);
   hp.setAttribute("stroke",RC[words[i].rule].stroke);
