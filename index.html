@@ -22,6 +22,7 @@
       --c-ing:       #2F6FD8;
       --c-ed:        #C8790A;
       --c-noun:      #2FA86B;
+      --c-tutor:     #7C5AF6;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -177,6 +178,7 @@
     .card.c-ing   { --accent: var(--c-ing);  --accent-bg: var(--blue-light);  }
     .card.c-ed    { --accent: var(--c-ed);   --accent-bg: var(--amber-light); }
     .card.c-noun  { --accent: var(--c-noun); --accent-bg: var(--green-light); }
+    .card.c-tutor { --accent: var(--c-tutor); --accent-bg: #EEE9FE; }
 
     .card-top {
       display: flex;
@@ -268,6 +270,7 @@
     .card:nth-child(1) { animation-delay: .22s; }
     .card:nth-child(2) { animation-delay: .32s; }
     .card:nth-child(3) { animation-delay: .42s; }
+    .card:nth-child(4) { animation-delay: .52s; }
 
     @media (max-width: 480px) {
       body { overflow: auto; justify-content: flex-start; padding-top: 3rem; }
@@ -349,6 +352,22 @@
             <span class="tag blue">4 niveles</span>
             <span class="tag green">Study · Challenge</span>
             <span class="tag amber">Timed</span>
+          </div>
+        </a>
+
+        <a class="card c-tutor" href="english-tutor.html">
+          <div class="card-top">
+            <div class="card-icon">🎓</div>
+            <span class="card-go">→</span>
+          </div>
+          <div class="card-body">
+            <h3>English Tutor</h3>
+            <p>Vocabulario en flashcards, reglas de gramática, ejercicios y quiz con seguimiento de progreso.</p>
+          </div>
+          <div class="tags">
+            <span class="tag blue">Nivel intermedio</span>
+            <span class="tag green">Flashcards · Quiz</span>
+            <span class="tag amber">20 palabras</span>
           </div>
         </a>
 
