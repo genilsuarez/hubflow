@@ -26,6 +26,8 @@
       --c-noun-ink:  #156C42;
       --c-tutor:     #7C5AF6;
       --c-tutor-ink: #4A2FB0;
+      --c-opp:       #0E8C8C;
+      --c-opp-ink:   #0A5E5E;
 
       --shadow-sm: 0 1px 2px rgba(30,50,80,.06), 0 3px 8px rgba(30,50,80,.06);
       --shadow-lg: 0 24px 48px -16px rgba(30,50,80,.22), 0 4px 12px rgba(30,50,80,.10);
@@ -189,6 +191,7 @@
     .chapter.c-ed   { --accent: var(--c-ed);   --accent-ink: var(--c-ed-ink); }
     .chapter.c-noun { --accent: var(--c-noun); --accent-ink: var(--c-noun-ink); }
     .chapter.c-tutor{ --accent: var(--c-tutor);--accent-ink: var(--c-tutor-ink); }
+    .chapter.c-opp  { --accent: var(--c-opp);  --accent-ink: var(--c-opp-ink); }
 
     .ch-num {
       font-family: 'DM Serif Display', serif;
@@ -286,6 +289,7 @@
     .chapter:nth-child(2) { animation-delay: .42s; }
     .chapter:nth-child(3) { animation-delay: .50s; }
     .chapter:nth-child(4) { animation-delay: .58s; }
+    .chapter:nth-child(5) { animation-delay: .66s; }
 
     @media (max-width: 680px) {
       .chapters, .refs { grid-template-columns: 1fr; }
@@ -316,7 +320,7 @@
           <span class="idx">I.</span>
           <h2>Práctica activa</h2>
           <span class="rule"></span>
-          <span class="count">04 módulos</span>
+          <span class="count">05 módulos</span>
         </div>
 
         <div class="chapters">
@@ -385,6 +389,22 @@
                 <span class="ch-tag">Flashcards</span>
                 <span class="ch-tag">Quiz</span>
                 <span class="ch-tag">20 palabras</span>
+              </div>
+            </div>
+          </a>
+
+          <a class="chapter c-opp" href="opposites-v1.html">
+            <div class="ch-num">05</div>
+            <div class="ch-main">
+              <div class="ch-head">
+                <h3 class="ch-title">Opposites</h3>
+                <span class="ch-go">→</span>
+              </div>
+              <p class="ch-desc">Pares de antónimos con imágenes: wide/narrow, push/pull, sharp/blunt y más. Flashcards y quiz.</p>
+              <div class="ch-tags">
+                <span class="ch-tag lvl">50 pares</span>
+                <span class="ch-tag">Study</span>
+                <span class="ch-tag">Quiz</span>
               </div>
             </div>
           </a>
