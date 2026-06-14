@@ -3,72 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>-ing Spelling Rules</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<title>-ing Spelling Rules v2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --red:#FF6B6B;    --red-light:#FFECEC;   --red-dark:#CC3333;
-  --blue:#4A90D9;   --blue-light:#E4F0FF;  --blue-dark:#1B5EA8;
+  --blue:#2F6FD8;   --blue-light:#EAF2FC;  --blue-dark:#1A4FA8;
   --green:#3DBE7A;  --green-light:#E2FAF0; --green-dark:#1E7A48;
-  --bg:#FFF6EE; --text:#2E2828; --muted:#AAA;
+  --bg:#FFFFFF; --text:#16202E; --muted:#6E7A8A;
+  --surface:#FFFFFF; --border:#E3E9F2;
+}
+[data-theme="dark"]{
+  --bg:#12141F; --text:#E8E4F0; --muted:#7B7B9D;
+  --surface:#1C1F30; --border:#2E3250;
+  --red-light:#3D1A1A; --blue-light:#162040; --green-light:#122E1E;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 body{
-  background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);
+  background:
+    radial-gradient(900px 480px at 50% -12%, rgba(47,111,216,.16) 0%, rgba(47,111,216,.05) 40%, transparent 66%),
+    radial-gradient(620px 460px at 100% 6%, rgba(92,157,240,.10) 0%, transparent 58%),
+    radial-gradient(640px 520px at 0% 102%, rgba(47,111,216,.09) 0%, transparent 56%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 52%, #E6EFFB 100%);
+  background-attachment:fixed;
+  font-family:'Manrope',sans-serif;color:var(--text);
   display:flex;flex-direction:column;align-items:center;
+  transition:background .3s,color .3s;
+  position:relative;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:radial-gradient(rgba(47,111,216,.07) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 28%, #000 0%, transparent 82%);
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 28%, #000 0%, transparent 82%);
+}
+[data-theme="dark"] body::before{display:none;}
+body::after{
+  content:'';position:fixed;top:-180px;left:50%;transform:translateX(-50%);
+  width:760px;height:440px;pointer-events:none;z-index:-1;
+  background:radial-gradient(ellipse at 50% 0%,rgba(47,111,216,.10) 0%,rgba(47,111,216,.03) 45%,transparent 70%);
+}
+[data-theme="dark"] body::after{
+  background:radial-gradient(ellipse at 50% 0%,rgba(74,144,217,.06) 0%,transparent 65%);
 }
 @media(max-width:480px){
   html,body{overflow:auto;height:auto;min-height:100%;}
   body{min-height:100dvh;}
 }
 
+/* BACK + THEME BAR */
+.top-bar{
+  width:100%;max-width:760px;display:flex;justify-content:space-between;align-items:center;
+  padding:3px 14px 0;flex-shrink:0;
+}
+.back-link{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;
+  color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
+  transition:opacity .2s;
+}
+.back-link:hover{opacity:.7;}
+.theme-toggle{
+  background:var(--surface);border:2px solid var(--border);border-radius:50px;
+  padding:4px 10px;font-size:.75rem;cursor:pointer;color:var(--text);
+  font-family:'Manrope',sans-serif;font-weight:700;transition:all .2s;
+}
+.theme-toggle:hover{border-color:var(--blue);}
+
+/* HAMBURGER MENU — SIDEBAR */
+.menu-toggle{
+  background:none;border:none;cursor:pointer;font-size:1.3rem;
+  color:var(--text);padding:4px;line-height:1;
+  transition:transform .2s;
+}
+.menu-toggle:hover{transform:scale(1.1);}
+
+.menu-overlay{
+  display:none;position:fixed;inset:0;z-index:199;
+  background:rgba(0,0,0,.4);
+  opacity:0;transition:opacity .3s ease;
+}
+.menu-overlay.show{display:block;opacity:1;}
+
+.menu-panel{
+  position:fixed;top:0;left:0;bottom:0;
+  width:260px;max-width:80vw;
+  background:var(--surface);
+  box-shadow:4px 0 30px rgba(0,0,0,.15);
+  z-index:200;
+  display:flex;flex-direction:column;
+  transform:translateX(-100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.menu-panel.show{transform:translateX(0);}
+
+.menu-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 12px 8px;border-bottom:1.5px solid var(--border);
+}
+.menu-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.85rem;
+  color:var(--text);display:flex;align-items:center;gap:5px;
+}
+.menu-close{
+  background:none;border:none;cursor:pointer;
+  font-size:1.2rem;color:var(--muted);padding:4px;
+  border-radius:8px;transition:background .2s,color .2s;line-height:1;
+}
+.menu-close:hover{background:var(--border);color:var(--text);}
+
+.menu-nav{
+  flex:1;overflow-y:auto;display:flex;flex-direction:column;
+  gap:1px;padding:6px 8px;
+}
+.menu-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;border:none;
+  background:transparent;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-size:.76rem;font-weight:700;
+  color:var(--text);transition:background .15s;
+  width:100%;text-align:left;
+}
+.menu-item:hover{background:var(--border);}
+.menu-item.active{background:var(--blue-light);color:var(--blue);}
+[data-theme="dark"] .menu-item.active{color:#7AC7FF;}
+.menu-item.locked{opacity:.45;cursor:not-allowed;}
+.menu-item.locked::after{content:'🔒';margin-left:auto;font-size:.7rem;}
+.menu-item-icon{font-size:.85rem;width:18px;text-align:center;flex-shrink:0;}
+.menu-item .menu-val{margin-left:auto;color:var(--blue);font-weight:800;font-size:.72rem;}
+
+.menu-divider{
+  height:1px;background:var(--border);margin:3px 10px;
+}
+.menu-section-label{
+  font-family:'Manrope',sans-serif;font-size:.55rem;font-weight:800;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
+  padding:3px 10px 1px;
+}
+
+.menu-footer{
+  padding:8px 12px;border-top:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:.6rem;color:var(--muted);font-weight:700;
+}
+
+/* RULES — compact mini in menu */
+.menu-rules-mini{
+  display:flex;gap:3px;padding:2px 10px 4px;
+}
+.mini-rule{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
+  font-size:.55rem;font-weight:700;padding:3px 4px;
+  border-radius:6px;border:1.5px solid transparent;text-align:center;
+}
+.mini-rule.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+.mini-rule.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.mini-rule.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+[data-theme="dark"] .mini-rule.red{color:#FF9F9F;}
+[data-theme="dark"] .mini-rule.blue{color:#7AC7FF;}
+[data-theme="dark"] .mini-rule.green{color:#6FE8A8;}
+
 /* FIXED HEADER */
 .header{
   width:100%;max-width:760px;
-  padding:5px 14px 5px;
+  padding:3px 14px 3px;
   background:var(--bg);
-  border-bottom:2px solid #EDE8E2;
+  border-bottom:2px solid var(--border);
   flex-shrink:0;
   box-shadow:0 2px 12px rgba(0,0,0,.06);
   z-index:10;
+  transition:background .3s;
 }
 @media(max-width:480px){
-  .header{
-    position:sticky;top:0;
-    padding:4px 10px;
-  }
+  .header{position:sticky;top:0;padding:2px 10px;}
+  .top-bar{padding:2px 10px 0;}
 }
 
 /* TITLE */
-h1{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1rem,3.5vw,1.5rem);
-  text-align:center;margin-bottom:0;line-height:1.2;
-  background:linear-gradient(120deg,var(--red),#FF9F6B,var(--blue));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.header-row{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;
 }
-.subtitle{text-align:center;font-size:.7rem;color:var(--muted);margin-bottom:4px;font-weight:700;}
+h1{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:clamp(.85rem,2.8vw,1.2rem);
+  margin-bottom:0;line-height:1.2;color:var(--text);
+  display:flex;align-items:center;gap:6px;
+}
+.h1-suffix{
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  color:var(--blue);letter-spacing:-.02em;
+}
+.h1-label{font-family:'DM Serif Display',serif;font-style:italic;font-weight:400;color:var(--muted);font-size:1em;letter-spacing:.005em;}
+.ver-chip{
+  font-family:'Manrope',sans-serif;font-size:.58em;font-weight:800;
+  background:var(--blue-soft,#EAF1FB);color:var(--blue);
+  border-radius:5px;padding:1px 6px;letter-spacing:.02em;
+  line-height:1.6;flex-shrink:0;
+}
+.header-badge{
+  display:flex;align-items:center;gap:3px;
+  font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:50px;padding:2px 8px;color:var(--muted);
+}
+.badge-icon{font-size:.75rem;}
+.badge-val{color:var(--text);font-weight:800;}
+
+/* STATS — displayed in menu sidebar */
+.stat .val{color:var(--text);}
+
+/* LEVEL — displayed in menu sidebar */
 
 /* MODE TOGGLE */
 .mode-bar{
-  display:flex;background:#fff;border-radius:50px;padding:2px;gap:2px;
-  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:5px;
-  border:2px solid #EDE8E2;
+  display:flex;background:var(--surface);border-radius:50px;padding:2px;gap:2px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:3px;
+  border:2px solid var(--border);
 }
 .mode-btn{
-  flex:1;font-family:'Baloo 2',cursive;font-size:.8rem;font-weight:700;
-  padding:5px;border-radius:50px;border:none;cursor:pointer;
+  flex:1;font-family:'Manrope',sans-serif;font-size:.8rem;font-weight:700;
+  padding:4px;border-radius:50px;border:none;cursor:pointer;
   transition:all .22s;color:var(--muted);background:transparent;
 }
-@media(max-width:480px){
-  .mode-bar{margin-bottom:4px;padding:2px;}
-  .mode-btn{font-size:.72rem;padding:4px;}
-}
-.mode-btn.active.study    {background:var(--blue);color:#fff;box-shadow:0 3px 10px rgba(74,144,217,.4);}
+.mode-btn.active.study    {background:var(--blue);color:#fff;box-shadow:0 3px 12px rgba(47,111,216,.42);}
 .mode-btn.active.challenge{background:linear-gradient(135deg,var(--red),#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(255,107,107,.4);}
+.mode-btn.active.timed    {background:linear-gradient(135deg,#F7C948,#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(247,201,72,.4);}
+.mode-btn.active.reverse  {background:linear-gradient(135deg,#9B59B6,#C97FE8);color:#fff;box-shadow:0 3px 10px rgba(155,89,182,.4);}
+@media(max-width:480px){
+  .mode-bar{margin-bottom:3px;padding:2px;}
+  .mode-btn{font-size:.68rem;padding:3px;}
+  .level-btn{font-size:.62rem;padding:2px;}
+}
+
+/* TIMER */
+.timer-bar{
+  display:none;align-items:center;justify-content:center;gap:8px;margin-bottom:2px;
+}
+.timer-bar.show{display:flex;}
+.timer-display{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:1.1rem;
+  color:var(--red);min-width:50px;text-align:center;
+}
+.timer-display.warn{animation:pulse .5s infinite alternate;}
+@keyframes pulse{from{opacity:1}to{opacity:.4}}
+
+/* STREAK */
+.streak-bar{
+  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.8rem;color:var(--green-dark);
+  animation:popIn .3s ease;
+}
+.streak-bar.show{display:flex;}
+
+/* LIVES (God Mode) */
+.lives-bar{
+  display:none;align-items:center;justify-content:center;gap:4px;margin-bottom:2px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.8rem;color:var(--red-dark);
+}
+.lives-bar.show{display:flex;}
+[data-theme="dark"] .lives-bar{color:#FF9F9F;}
 
 /* RULES */
-.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:5px;}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:3px;}
 @media(max-width:480px){
   .rules{gap:3px;}
   .rule{padding:3px 4px 3px;font-size:.6rem;}
@@ -76,16 +273,19 @@ h1{
   .rule-ex{font-size:.58rem;padding:0 4px;}
 }
 .rule{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:5px 6px 4px;border-radius:10px;border:2px solid transparent;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  padding:3px 6px 3px;border-radius:10px;border:2px solid transparent;
   font-size:.7rem;font-weight:700;text-align:center;
 }
 .rule.red  {background:var(--red-light);  border-color:var(--red);  color:var(--red-dark);}
 .rule.blue {background:var(--blue-light); border-color:var(--blue); color:var(--blue-dark);}
 .rule.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+[data-theme="dark"] .rule.red  {color:#FF9F9F;}
+[data-theme="dark"] .rule.blue {color:#7AC7FF;}
+[data-theme="dark"] .rule.green{color:#6FE8A8;}
 .rule svg{flex-shrink:0;width:16px;height:14px;}
 .rule-ex{
-  font-family:'Baloo 2',cursive;font-weight:800;font-size:.68rem;
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.68rem;
   padding:0px 6px;border-radius:50px;
 }
 .rule.red   .rule-ex{background:rgba(255,107,107,.18);}
@@ -94,34 +294,42 @@ h1{
 
 /* PROGRESS */
 .prog-wrap{margin-bottom:0;}
-.prog-labels{display:flex;justify-content:space-between;font-family:'Baloo 2',cursive;font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
-.prog-track{height:5px;background:#EDE8E2;border-radius:50px;overflow:hidden;}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:50px;transition:width .5s cubic-bezier(.34,1.2,.64,1);width:0%;}
+.prog-labels{display:flex;justify-content:space-between;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:2px;}
+.prog-track{height:5px;background:var(--border);border-radius:50px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue-dark),var(--blue) 55%,#7FB2F2);border-radius:50px;transition:width .5s cubic-bezier(.34,1.2,.64,1);width:0%;box-shadow:0 0 12px rgba(47,111,216,.35);}
 
 /* SCROLLABLE BODY */
 .scroll-body{
   width:100%;max-width:760px;
   flex:1;overflow-y:auto;
-  padding:8px 14px 30px;
+  padding:28px 14px 16px;
   -webkit-overflow-scrolling:touch;
 }
 @media(max-width:480px){
-  .scroll-body{
-    flex:none;overflow-y:visible;
-    padding:8px 10px 40px;
-  }
+  .scroll-body{flex:none;overflow-y:visible;padding:28px 10px 40px;}
 }
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  column-gap:4px;
+  row-gap:6px;
+  margin-bottom:6px;
+  align-items:start;
+}
 @media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr);gap:5px;}}
 @media(max-width:360px){.grid{grid-template-columns:repeat(2,1fr);gap:4px;}}
 
 /* BUTTONS */
-.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px;margin-bottom:6px;}
 
 /* HEART CARD */
-.hcard{display:flex;flex-direction:column;align-items:center;gap:1px;animation:popIn .4s ease both;}
+.hcard{
+  display:flex;flex-direction:column;
+  align-items:center;justify-items:center;
+  gap:2px;animation:popIn .4s ease both;
+}
 .hcard:nth-child(1){animation-delay:.03s}.hcard:nth-child(2){animation-delay:.06s}
 .hcard:nth-child(3){animation-delay:.09s}.hcard:nth-child(4){animation-delay:.12s}
 .hcard:nth-child(5){animation-delay:.15s}.hcard:nth-child(6){animation-delay:.18s}
@@ -143,55 +351,111 @@ h1{
 .hbtn.chal{cursor:text;}
 .hbtn.chal:hover{transform:scale(1.04);}
 .hbtn.done{cursor:default;}
-
 .hsvg{position:absolute;inset:0;width:100%;height:100%;}
 .hpath{transition:fill .35s,stroke .35s;}
-
 .hinner{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:1px;padding:14% 9% 18%;pointer-events:none;
+  gap:1px;padding:13% 9% 15%;pointer-events:none;
 }
 .verb{
-  font-family:'Baloo 2',cursive;font-weight:700;
-  font-size:clamp(.72rem,2.8vw,.92rem);color:#2E2828;line-height:1;white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(.65rem,2.5vw,.88rem);color:var(--text);line-height:1;white-space:nowrap;
 }
+[data-theme="dark"] .verb{color:#fff;}
 .ans{
-  font-family:'Baloo 2',cursive;font-weight:800;
-  font-size:clamp(.65rem,2.2vw,.82rem);
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:clamp(.58rem,2vw,.76rem);
   opacity:0;transition:opacity .35s;white-space:nowrap;margin-top:0px;
 }
 .hbtn.done .ans{opacity:1;}
 .hbtn.done.rule-red   .ans{color:var(--red-dark);}
 .hbtn.done.rule-blue  .ans{color:var(--blue-dark);}
 .hbtn.done.rule-green .ans{color:var(--green-dark);}
+[data-theme="dark"] .hbtn.done.rule-red   .ans{color:#FF9F9F;}
+[data-theme="dark"] .hbtn.done.rule-blue  .ans{color:#7AC7FF;}
+[data-theme="dark"] .hbtn.done.rule-green .ans{color:#6FE8A8;}
 
-/* CHALLENGE INPUT — below heart */
-.cinput-wrap{display:none;flex-direction:column;align-items:center;gap:2px;width:100%;}
+/* FLOATING TOOLTIP */
+.heart-wrap{position:relative;width:100%;}
+.explanation{
+  /* floating tooltip — hidden by default */
+  position:absolute;
+  bottom:calc(100% + 6px);
+  left:50%;transform:translateX(-50%) scale(.92);
+  transform-origin:bottom center;
+  background:var(--text);
+  color:var(--bg);
+  font-size:.6rem;font-weight:700;
+  line-height:1.3;
+  white-space:nowrap;
+  padding:4px 8px;
+  border-radius:7px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .18s, transform .18s;
+  z-index:50;
+  display:flex;align-items:center;gap:4px;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+.explanation::after{
+  content:'';
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:var(--text);
+}
+.explanation .ex-dot{
+  flex-shrink:0;width:6px;height:6px;border-radius:50%;
+}
+.explanation .ex-dot.red  {background:var(--red);}
+.explanation .ex-dot.blue {background:var(--blue);}
+.explanation .ex-dot.green{background:var(--green);}
+
+/* show on hover/focus when done */
+.heart-wrap:has(.hbtn.done):hover .explanation,
+.heart-wrap:has(.hbtn.done):focus-within .explanation{
+  opacity:1;transform:translateX(-50%) scale(1);
+}
+/* on mobile: show on tap (toggle via JS class) */
+.heart-wrap.tip-show .explanation{
+  opacity:1;transform:translateX(-50%) scale(1);
+}
+.audio-btn{
+  position:absolute;top:8%;right:8%;
+  background:none;border:none;cursor:pointer;font-size:.72rem;
+  opacity:.45;transition:opacity .2s,transform .2s;padding:0;line-height:1;
+  pointer-events:auto;
+}
+.audio-btn:hover{opacity:1;transform:scale(1.2);}
+
+/* CHALLENGE INPUT */
+.cinput-wrap{display:none;flex-direction:column;align-items:center;gap:1px;width:100%;justify-self:stretch;}
 .cinput-wrap.show{display:flex;}
 .cinput{
-  width:100%;font-family:'Baloo 2',cursive;font-size:clamp(.8rem,3vw,.95rem);
-  font-weight:700;text-align:center;
-  border:2px solid #D5CCBF;border-radius:12px;
-  padding:3px 5px;background:#fff;color:var(--text);
+  width:100%;font-family:'JetBrains Mono',monospace;font-size:clamp(.72rem,2.6vw,.88rem);
+  font-weight:600;text-align:center;
+  border:2px solid var(--border);border-radius:12px;
+  padding:2px 5px;background:var(--surface);color:var(--text);
   outline:none;transition:border-color .2s,background .2s,box-shadow .2s;
   -webkit-tap-highlight-color:transparent;
   -webkit-appearance:none;appearance:none;
 }
-@media(max-width:480px){
-  .cinput{font-size:.75rem;padding:4px 4px;border-radius:10px;}
-}
-.cinput:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(74,144,217,.2);}
+@media(max-width:480px){.cinput{font-size:.75rem;padding:4px 4px;border-radius:10px;}}
+.cinput:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,216,.18);}
 .cinput.ok   {border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
 .cinput.wrong{border-color:var(--red);  background:var(--red-light);  color:var(--red-dark);animation:shake .32s;}
 .cinput:disabled{opacity:1;cursor:default;}
-.cfeedback{font-size:1rem;min-height:1.1rem;line-height:1;}
-.chint{font-size:.68rem;font-weight:800;color:var(--red-dark);min-height:.7rem;text-align:center;}
+.cinput::placeholder{color:var(--muted);}
+[data-theme="dark"] .cinput.ok{color:#6FE8A8;}
+[data-theme="dark"] .cinput.wrong{color:#FF9F9F;}
+.cfeedback{font-size:1rem;line-height:1;text-align:center;}
+.chint{font-size:.68rem;font-weight:800;color:var(--red-dark);text-align:center;line-height:1.2;}
 
 /* COLOR PICKER */
 .cpicker{
   display:none;flex-direction:row;align-items:center;justify-content:center;gap:6px;width:100%;
-  background:#fff;border:2px solid #EDE8E2;border-radius:50px;padding:3px 8px;
+  background:var(--surface);border:2px solid var(--border);border-radius:50px;padding:3px 8px;
+  justify-self:stretch;min-height:34px;
 }
 .cpicker.show{display:flex;}
 .cpicker-row{display:flex;gap:6px;}
@@ -209,59 +473,55 @@ h1{
 .cb.r{background:var(--red);}
 .cb.b{background:var(--blue);}
 .cb.g{background:var(--green);}
-.cb.picked    {border-color:#2E2828;transform:scale(1.18);box-shadow:0 0 0 2px #fff,0 0 0 4px #2E2828;}
+.cb.picked    {border-color:var(--text);transform:scale(1.18);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--text);}
 .cb.correct-c {border-color:var(--green-dark)!important;box-shadow:0 0 0 2px var(--green)!important;}
 .cb.wrong-c   {border-color:var(--red-dark)  !important;box-shadow:0 0 0 2px var(--red)  !important;}
-.cresult{font-size:.68rem;font-weight:800;color:var(--muted);min-height:.7rem;text-align:center;}
+.cresult{font-size:.68rem;font-weight:800;color:var(--muted);text-align:center;line-height:1.2;}
 
 /* BUTTONS */
-.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
 .btn{
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;
-  padding:10px 22px;border-radius:50px;border:none;cursor:pointer;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.9rem;
+  padding:7px 20px;border-radius:50px;border:none;cursor:pointer;
   transition:transform .15s,box-shadow .15s;
   display:flex;align-items:center;gap:5px;
 }
-@media(max-width:480px){
-  .btn{font-size:.8rem;padding:8px 16px;}
-}
+@media(max-width:480px){.btn{font-size:.8rem;padding:6px 14px;}}
 .btn:hover{transform:translateY(-2px);}
 .btn:active{transform:scale(.97);}
-.btn-blue  {background:linear-gradient(135deg,#4A90D9,#7AC7FF);color:#fff;box-shadow:0 5px 18px rgba(74,144,217,.32);}
+.btn-blue  {background:linear-gradient(135deg,#2F6FD8,#5C9DF0);color:#fff;box-shadow:0 6px 20px rgba(47,111,216,.34);}
 .btn-green {background:linear-gradient(135deg,var(--green),#6FE8A8);color:#fff;box-shadow:0 5px 18px rgba(61,190,122,.32);}
 .btn-red   {background:linear-gradient(135deg,var(--red),#FF9F6B);  color:#fff;box-shadow:0 5px 18px rgba(255,107,107,.32);}
-.btn-ghost {background:#fff;border:2.5px solid #D5CCBF;color:#888;}
-.btn-ghost:hover{background:#F5F0EB;}
+.btn-yellow{background:linear-gradient(135deg,#F7C948,#FFD56B);color:#fff;box-shadow:0 5px 18px rgba(247,201,72,.32);}
+.btn-ghost {background:var(--surface);border:2.5px solid var(--border);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--blue);}
 
 /* SCORE */
 .score{
-  display:none;text-align:center;border-radius:16px;padding:14px 18px;margin-top:12px;
-  font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;
+  display:none;text-align:center;border-radius:16px;padding:10px 18px;margin-top:8px;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.9rem;
   animation:popIn .4s ease;
 }
-.score.great{background:var(--green-light);border:2px solid var(--green);color:var(--green-dark);}
+.score.great{background:var(--blue-light);border:2px solid var(--blue);color:var(--blue-dark);}
 .score.ok   {background:#FFFBEA;border:2px solid #ECC94B;color:#7B621A;}
 .score.try  {background:var(--red-light);  border:2px solid var(--red);  color:var(--red-dark);}
-.score-emoji{font-size:2.2rem;display:block;margin-bottom:6px;}
 
 /* CONFETTI CANVAS */
-#confetti-canvas{
-  position:fixed;inset:0;pointer-events:none;z-index:999;
-}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999;}
 
 /* STARS OVERLAY */
 .stars-overlay{
   display:none;position:fixed;inset:0;z-index:100;
   align-items:center;justify-content:center;
-  background:rgba(0,0,0,.45);
-  animation:fadeIn .3s ease;
+  background:rgba(13,34,72,.5);backdrop-filter:blur(3px);animation:fadeIn .3s ease;
 }
 .stars-overlay.show{display:flex;}
 .stars-box{
-  background:#fff;border-radius:28px;padding:32px 40px;text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  background:radial-gradient(130% 80% at 50% -10%, rgba(47,111,216,.10) 0%, transparent 58%), var(--surface);
+  border-radius:28px;padding:34px 40px 30px;text-align:center;
+  border:1px solid var(--border);border-top:5px solid var(--blue);
+  box-shadow:0 24px 64px rgba(13,34,72,.32),0 0 0 1px rgba(47,111,216,.08);
   animation:popIn .4s cubic-bezier(.34,1.56,.64,1);
-  max-width:340px;width:90%;
+  max-width:380px;width:90%;
 }
 @media(max-width:480px){
   .stars-box{padding:24px 20px;border-radius:20px;max-width:300px;}
@@ -270,15 +530,31 @@ h1{
   .star{font-size:2.2rem;}
 }
 .stars-row{display:flex;justify-content:center;gap:8px;margin:12px 0 6px;}
-.star{font-size:2.8rem;opacity:.25;transition:opacity .3s,transform .3s;}
-.star.lit{opacity:1;transform:scale(1.15);}
-.stars-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.5rem;margin-bottom:4px;}
-.stars-sub{font-size:.9rem;color:#888;font-weight:700;margin-bottom:16px;}
+.star{font-size:2.8rem;opacity:.25;transition:opacity .3s,transform .3s,filter .3s;}
+.star.lit{opacity:1;transform:scale(1.15);filter:drop-shadow(0 5px 12px rgba(47,111,216,.45));}
+.stars-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:4px;color:var(--blue-dark);}
+[data-theme="dark"] .stars-title{color:#7AB0FF;}
+[data-theme="dark"] .score.great{color:#9CC4FF;}
+.stars-sub{font-size:.9rem;color:var(--muted);font-weight:700;margin-bottom:16px;}
 .stars-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* HISTORY — in sidebar */
+.history-list{padding:0 10px 2px;font-family:'Manrope',sans-serif;font-size:.63rem;}
+.history-entry{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border);}
+.history-entry:last-child{border:none;}
+.history-entry .date{color:var(--muted);}
+.history-entry .pct{font-weight:800;}
+.history-entry .pct.great{color:var(--green-dark);}
+.history-entry .pct.ok{color:#7B621A;}
+.history-entry .pct.try{color:var(--red-dark);}
+[data-theme="dark"] .history-entry .pct.great{color:#6FE8A8;}
+[data-theme="dark"] .history-entry .pct.ok{color:#F7C948;}
+[data-theme="dark"] .history-entry .pct.try{color:#FF9F9F;}
+
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes shake {0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
-@keyframes boing {0%,100%{transform:scale(1)}40%{transform:scale(1.15) rotate(-4deg)}70%{transform:scale(.97)}}
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
+@keyframes boing{0%,100%{transform:scale(1)}40%{transform:scale(1.15) rotate(-4deg)}70%{transform:scale(.97)}}
 .boing{animation:boing .38s ease;}
 </style>
 </head>
@@ -287,50 +563,116 @@ h1{
 <canvas id="confetti-canvas"></canvas>
 
 <!-- STARS OVERLAY -->
-<div class="stars-overlay" id="starsOverlay">
+<div class="stars-overlay" id="starsOverlay" role="dialog" aria-label="Results">
   <div class="stars-box">
     <div class="stars-row">
-      <span class="star" id="star1">⭐</span>
-      <span class="star" id="star2">⭐</span>
-      <span class="star" id="star3">⭐</span>
+      <span class="star" id="star1" aria-hidden="true">⭐</span>
+      <span class="star" id="star2" aria-hidden="true">⭐</span>
+      <span class="star" id="star3" aria-hidden="true">⭐</span>
     </div>
     <div class="stars-title" id="starsTitle"></div>
     <div class="stars-sub" id="starsSub"></div>
     <div class="stars-btns">
-      <button class="btn btn-red"   onclick="closeStars();setMode('challenge')">🔄 Try Again</button>
+      <button class="btn btn-red"   onclick="closeStars();setMode(mode)">🔄 Try Again</button>
       <button class="btn btn-ghost" onclick="closeStars();setMode('study')">📖 Study</button>
     </div>
   </div>
 </div>
 
+<!-- TOP BAR -->
+<div class="top-bar">
+  <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+  <a href="index.html" class="back-link" aria-label="Back to home">Home →</a>
+</div>
+
+<!-- SIDEBAR MENU -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<aside class="menu-panel" id="menuPanel">
+  <div class="menu-header">
+    <span class="menu-title">📚 Settings</span>
+    <button class="menu-close" onclick="closeMenu()" aria-label="Close menu">✕</button>
+  </div>
+  <nav class="menu-nav">
+    <span class="menu-section-label">Level</span>
+    <button class="menu-item active" id="ml-beginner" onclick="setLevel('beginner')">
+      <span class="menu-item-icon">🌱</span> Beginner
+    </button>
+    <button class="menu-item" id="ml-intermediate" onclick="setLevel('intermediate')">
+      <span class="menu-item-icon">📗</span> Intermediate
+    </button>
+    <button class="menu-item" id="ml-exceptions" onclick="setLevel('exceptions')">
+      <span class="menu-item-icon">⚡</span> Exceptions
+    </button>
+    <button class="menu-item" id="ml-god" onclick="setLevel('god')">
+      <span class="menu-item-icon">💀</span> God Mode
+    </button>
+
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Stats</span>
+    <div class="menu-item" style="cursor:default;">
+      <span class="menu-item-icon">🏆</span> Best <span class="menu-val" id="bestScore">—</span>
+    </div>
+    <div class="menu-item" style="cursor:default;">
+      <span class="menu-item-icon">📊</span> Played <span class="menu-val" id="timesPlayed">0</span>
+    </div>
+
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Rules</span>
+    <div class="menu-rules-mini">
+      <div class="mini-rule red">🔴 +ing<br><em>play→playing</em></div>
+      <div class="mini-rule blue">🔵 −e +ing<br><em>dance→dancing</em></div>
+      <div class="mini-rule green">🟢 ×2 +ing<br><em>run→running</em></div>
+    </div>
+
+    <div class="menu-divider"></div>
+    <button class="menu-item" id="themeToggle" onclick="toggleTheme()">
+      <span class="menu-item-icon">🌙</span> Dark mode
+    </button>
+    <a class="menu-item" href="noun-adjuncts-guide.html" style="text-decoration:none;color:var(--text);opacity:.45;cursor:not-allowed;pointer-events:none;">
+      <span class="menu-item-icon">📖</span> Full Rules Guide <span style="font-size:.6rem;margin-left:auto">(próximamente)</span>
+    </a>
+
+    <div class="menu-divider"></div>
+    <span class="menu-section-label">Recent</span>
+    <div class="history-list" id="historyList"></div>
+  </nav>
+  <div class="menu-footer">
+    <span>LearnHub</span>
+    <span>v1.0</span>
+  </div>
+</aside>
+
 <!-- ══ FIXED HEADER ══ -->
 <div class="header">
-  <h1>-ing spelling rules</h1>
-  <p class="subtitle">Learn how to add <strong>-ing</strong> to verbs!</p>
+  <div class="header-row">
+    <h1><span class="h1-suffix">-ing</span> <span class="h1-label">Spelling Rules</span></h1>
+    <div class="header-badge" id="headerBadge" style="display:none">
+      <span class="badge-icon">🏆</span>
+      <span class="badge-val" id="headerLastScore">—</span>
+    </div>
+  </div>
 
   <!-- MODE -->
   <div class="mode-bar">
     <button class="mode-btn study active" onclick="setMode('study')">📖 Study</button>
     <button class="mode-btn challenge"    onclick="setMode('challenge')">⚡ Challenge</button>
+    <button class="mode-btn timed"        onclick="setMode('timed')">⏱️ Timed</button>
+    <button class="mode-btn reverse"      onclick="setMode('reverse')">🔁 Reverse</button>
   </div>
 
-  <!-- RULES -->
-  <div class="rules">
-    <div class="rule red">
-      <svg width="20" height="18" viewBox="0 0 100 90"><path d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z" fill="#FF6B6B"/></svg>
-      <span><strong>RED:</strong> just add <em>-ing</em></span>
-      <span class="rule-ex">play → playing</span>
-    </div>
-    <div class="rule blue">
-      <svg width="20" height="18" viewBox="0 0 100 90"><path d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z" fill="#4A90D9"/></svg>
-      <span><strong>BLUE:</strong> drop <em>e</em> + <em>-ing</em></span>
-      <span class="rule-ex">dance → dancing</span>
-    </div>
-    <div class="rule green">
-      <svg width="20" height="18" viewBox="0 0 100 90"><path d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z" fill="#3DBE7A"/></svg>
-      <span><strong>GREEN:</strong> double last letter + <em>-ing</em></span>
-      <span class="rule-ex">run → running</span>
-    </div>
+  <!-- TIMER -->
+  <div class="timer-bar" id="timerBar">
+    <span class="timer-display" id="timerDisplay">1:00</span>
+  </div>
+
+  <!-- STREAK -->
+  <div class="streak-bar" id="streakBar" role="alert" aria-live="polite">
+    🔥 <span id="streakText">0 in a row!</span>
+  </div>
+
+  <!-- LIVES (God Mode) -->
+  <div class="lives-bar" id="livesBar" role="alert" aria-live="polite">
+    💀 <span id="livesText"></span>
   </div>
 
   <!-- PROGRESS -->
@@ -346,120 +688,457 @@ h1{
   <div class="btn-row" id="btnRow"></div>
   <div class="score" id="score"></div>
 </div>
+
 <script>
-const BASE_WORDS=[
-  {verb:"run",   ans:"running",  rule:"green"},
-  {verb:"wait",  ans:"waiting",  rule:"red"  },
-  {verb:"watch", ans:"watching", rule:"red"  },
-  {verb:"sit",   ans:"sitting",  rule:"green"},
-  {verb:"dance", ans:"dancing",  rule:"blue" },
-  {verb:"stop",  ans:"stopping", rule:"green"},
-  {verb:"play",  ans:"playing",  rule:"red"  },
-  {verb:"write", ans:"writing",  rule:"blue" },
-  {verb:"cut",   ans:"cutting",  rule:"green"},
-  {verb:"make",  ans:"making",   rule:"blue" },
-  {verb:"read",  ans:"reading",  rule:"red"  },
-  {verb:"study", ans:"studying", rule:"red"  },
-  {verb:"shop",  ans:"shopping", rule:"green"},
-  {verb:"cook",  ans:"cooking",  rule:"red"  },
-  {verb:"swim",  ans:"swimming", rule:"green"},
-  {verb:"talk",  ans:"talking",  rule:"red"  },
-];
-const RC={
+/* ══════════════════════════════════════════════════════
+   WORD SETS BY LEVEL
+   ══════════════════════════════════════════════════════ */
+const LEVELS={
+  beginner:[
+    {verb:"run",   ans:"running",  rule:"green", why:"CVC → double"},
+    {verb:"wait",  ans:"waiting",  rule:"red",   why:"2 vowels → +ing"},
+    {verb:"watch", ans:"watching", rule:"red",   why:"2 consonants → +ing"},
+    {verb:"sit",   ans:"sitting",  rule:"green", why:"CVC → double"},
+    {verb:"dance", ans:"dancing",  rule:"blue",  why:"silent -e → drop"},
+    {verb:"stop",  ans:"stopping", rule:"green", why:"CVC → double"},
+    {verb:"play",  ans:"playing",  rule:"red",   why:"vowel+y → +ing"},
+    {verb:"write", ans:"writing",  rule:"blue",  why:"silent -e → drop"},
+    {verb:"cut",   ans:"cutting",  rule:"green", why:"CVC → double"},
+    {verb:"make",  ans:"making",   rule:"blue",  why:"silent -e → drop"},
+    {verb:"read",  ans:"reading",  rule:"red",   why:"2 vowels → +ing"},
+    {verb:"study", ans:"studying", rule:"red",   why:"consonant+y → keep y"},
+    {verb:"shop",  ans:"shopping", rule:"green", why:"CVC → double"},
+    {verb:"cook",  ans:"cooking",  rule:"red",   why:"2 vowels → +ing"},
+    {verb:"swim",  ans:"swimming", rule:"green", why:"CVC → double"},
+    {verb:"talk",  ans:"talking",  rule:"red",   why:"2 consonants → +ing"},
+  ],
+  intermediate:[
+    {verb:"prefer",  ans:"preferring", rule:"green", why:"stress last + CVC → double"},
+    {verb:"begin",   ans:"beginning",  rule:"green", why:"stress last + CVC → double"},
+    {verb:"forget",  ans:"forgetting", rule:"green", why:"stress last + CVC → double"},
+    {verb:"travel",  ans:"travelling", rule:"green", why:"British -l → double"},
+    {verb:"smile",   ans:"smiling",    rule:"blue",  why:"silent -e → drop"},
+    {verb:"arrive",  ans:"arriving",   rule:"blue",  why:"silent -e → drop"},
+    {verb:"hope",    ans:"hoping",     rule:"blue",  why:"silent -e → drop"},
+    {verb:"invite",  ans:"inviting",   rule:"blue",  why:"silent -e → drop"},
+    {verb:"listen",  ans:"listening",  rule:"red",   why:"stress 1st → no double"},
+    {verb:"happen",  ans:"happening",  rule:"red",   why:"stress 1st → no double"},
+    {verb:"visit",   ans:"visiting",   rule:"red",   why:"stress 1st → no double"},
+    {verb:"open",    ans:"opening",    rule:"red",   why:"stress 1st → no double"},
+    {verb:"plan",    ans:"planning",   rule:"green", why:"CVC → double"},
+    {verb:"admit",   ans:"admitting",  rule:"green", why:"stress last + CVC → double"},
+    {verb:"escape",  ans:"escaping",   rule:"blue",  why:"silent -e → drop"},
+    {verb:"enjoy",   ans:"enjoying",   rule:"red",   why:"vowel+y → +ing"},
+  ],
+  exceptions:[
+    {verb:"fix",     ans:"fixing",     rule:"red",   why:"-x = 2 sounds, no double"},
+    {verb:"see",     ans:"seeing",     rule:"red",   why:"-ee real vowel → +ing"},
+    {verb:"agree",   ans:"agreeing",   rule:"red",   why:"-ee real vowel → +ing"},
+    {verb:"dye",     ans:"dyeing",     rule:"red",   why:"keep -e (≠ dying)"},
+    {verb:"lie",     ans:"lying",      rule:"blue",  why:"-ie → y+ing"},
+    {verb:"die",     ans:"dying",      rule:"blue",  why:"-ie → y+ing"},
+    {verb:"tie",     ans:"tying",      rule:"blue",  why:"-ie → y+ing"},
+    {verb:"snow",    ans:"snowing",    rule:"red",   why:"-w → no double"},
+    {verb:"box",     ans:"boxing",     rule:"red",   why:"-x = 2 sounds, no double"},
+    {verb:"show",    ans:"showing",    rule:"red",   why:"-w → no double"},
+    {verb:"panic",   ans:"panicking",  rule:"green", why:"-c → add k"},
+    {verb:"picnic",  ans:"picnicking", rule:"green", why:"-c → add k"},
+    {verb:"age",     ans:"ageing",     rule:"red",   why:"keep -e (soft g)"},
+    {verb:"be",      ans:"being",      rule:"red",   why:"irregular → +ing"},
+    {verb:"canoe",   ans:"canoeing",   rule:"red",   why:"-oe → +ing"},
+    {verb:"queue",   ans:"queueing",   rule:"red",   why:"British: keep -e"},
+  ],
+  god:[
+    // -ie → -ying
+    {verb:"die",      ans:"dying",       rule:"blue",  why:"-ie → y+ing (≠ dyeing)"},
+    {verb:"vie",      ans:"vying",       rule:"blue",  why:"-ie → y+ing"},
+    {verb:"untie",    ans:"untying",     rule:"blue",  why:"-ie → y+ing"},
+    // Keep -e
+    {verb:"dye",      ans:"dyeing",      rule:"red",   why:"keep -e (≠ dying)"},
+    {verb:"singe",    ans:"singeing",    rule:"red",   why:"keep -e (≠ singing)"},
+    {verb:"tinge",    ans:"tingeing",    rule:"red",   why:"keep -e (soft g)"},
+    // -oe endings
+    {verb:"tiptoe",   ans:"tiptoeing",   rule:"red",   why:"-oe real vowel → keep -e"},
+    {verb:"hoe",      ans:"hoeing",      rule:"red",   why:"-oe → keep -e"},
+    // -ee endings
+    {verb:"oversee",  ans:"overseeing",  rule:"red",   why:"-ee real vowel → +ing"},
+    {verb:"flee",     ans:"fleeing",     rule:"red",   why:"-ee → +ing"},
+    {verb:"guarantee",ans:"guaranteeing",rule:"red",   why:"-ee → +ing"},
+    // -c → add -k
+    {verb:"frolic",   ans:"frolicking",  rule:"green", why:"-c → add k"},
+    {verb:"mimic",    ans:"mimicking",   rule:"green", why:"-c → add k"},
+    {verb:"traffic",  ans:"trafficking", rule:"green", why:"-c → add k"},
+    // Vowel -i endings
+    {verb:"ski",      ans:"skiing",      rule:"red",   why:"vowel -i → +ing"},
+    {verb:"taxi",     ans:"taxiing",     rule:"red",   why:"vowel -i → +ing (double i)"},
+    // British -l doubling
+    {verb:"label",    ans:"labelling",   rule:"green", why:"British -l → double"},
+    {verb:"cancel",   ans:"cancelling",  rule:"green", why:"British -l → double"},
+    {verb:"fuel",     ans:"fuelling",    rule:"green", why:"British -l → double"},
+    // CVC stress on last
+    {verb:"refer",    ans:"referring",   rule:"green", why:"stress last + CVC → double"},
+    {verb:"occur",    ans:"occurring",   rule:"green", why:"stress last + CVC → double"},
+    {verb:"regret",   ans:"regretting",  rule:"green", why:"stress last + CVC → double"},
+    {verb:"equip",    ans:"equipping",   rule:"green", why:"qu=1 sound, CVC → double p"},
+    // Stress first = no double
+    {verb:"offer",    ans:"offering",    rule:"red",   why:"stress 1st → no double"},
+    {verb:"benefit",  ans:"benefiting",  rule:"red",   why:"stress 1st → no double"},
+    {verb:"gossip",   ans:"gossiping",   rule:"red",   why:"stress 1st → no double"},
+    // Exception: doubles despite first-syllable stress
+    {verb:"kidnap",   ans:"kidnapping",  rule:"green", why:"exception: doubles anyway"},
+    {verb:"format",   ans:"formatting",  rule:"green", why:"exception: doubles anyway"},
+    // -w / -x
+    {verb:"relax",    ans:"relaxing",    rule:"red",   why:"-x = 2 sounds, no double"},
+    {verb:"allow",    ans:"allowing",    rule:"red",   why:"-w → no double"},
+    // queue / argue trap
+    {verb:"queue",    ans:"queueing",    rule:"red",   why:"British: -e pronounced, keep"},
+    {verb:"argue",    ans:"arguing",     rule:"blue",  why:"silent -e → drop"},
+    // Normal drop -e mixed in (to confuse)
+    {verb:"achieve",  ans:"achieving",   rule:"blue",  why:"silent -e → drop"},
+    {verb:"squeeze",  ans:"squeezing",   rule:"blue",  why:"drop final -e (-ee stays)"},
+  ],
+};
+
+const RC_LIGHT={
   red:  {idle:"#FFECEC",stroke:"#FF6B6B",active:"#FFCECE"},
   blue: {idle:"#E4F0FF",stroke:"#4A90D9",active:"#C2DCFF"},
   green:{idle:"#E2FAF0",stroke:"#3DBE7A",active:"#B8F0D6"},
 };
-const NEU={fill:"#F5F2EE",stroke:"#D5CCBF"};
+const RC_DARK={
+  red:  {idle:"#5c2a2a",stroke:"#FF6B6B",active:"#803030"},
+  blue: {idle:"#1e3a5f",stroke:"#4A90D9",active:"#2a4f7a"},
+  green:{idle:"#1e4a35",stroke:"#3DBE7A",active:"#2a5f45"},
+};
+const NEU_LIGHT={fill:"#F5F2EE",stroke:"#D5CCBF"};
+const NEU_DARK={fill:"#2a2a4e",stroke:"#444470"};
 
-let mode="study", st={}, words=[];
+function getRC(){ return document.documentElement.getAttribute("data-theme")==="dark"?RC_DARK:RC_LIGHT; }
+function getNEU(){ return document.documentElement.getAttribute("data-theme")==="dark"?NEU_DARK:NEU_LIGHT; }
+// Keep RC/NEU as getters for compatibility
+let RC=getRC(), NEU=getNEU();
 
-/* ── SHUFFLE ── */
-function shuffle(arr){
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
+let mode="study", level="beginner", st={}, words=[];
+let streak=0, timerInterval=null, timeLeft=60;
+let lives=3, livesEnabled=false, gameOver=false, bonusPts=0;
+
+/* ══ STORAGE ══ */
+const STORE_KEY="learnhub_ing_v2";
+function loadStore(){
+  try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; }
+}
+function saveStore(data){ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+
+function getStats(){
+  const s=loadStore();
+  return {
+    best: s.best||null,
+    bestByLevel: s.bestByLevel||{},
+    played: s.played||0,
+    history: s.history||[],
+    failedWords: s.failedWords||{},
+    theme: s.theme||"light",
+  };
+}
+function recordScore(pct){
+  const s=loadStore();
+  s.played=(s.played||0)+1;
+  if(!s.best||pct>s.best) s.best=pct;
+  if(!s.bestByLevel) s.bestByLevel={};
+  if(!s.bestByLevel[level]||pct>s.bestByLevel[level]) s.bestByLevel[level]=pct;
+  if(!s.history) s.history=[];
+  s.history.unshift({date:new Date().toLocaleDateString(),pct,level,mode});
+  if(s.history.length>10) s.history=s.history.slice(0,10);
+  saveStore(s);
+  renderStats();
+  updateMenuChips();
+}
+function recordFail(verb){
+  const s=loadStore();
+  if(!s.failedWords) s.failedWords={};
+  s.failedWords[verb]=(s.failedWords[verb]||0)+1;
+  saveStore(s);
+}
+function renderStats(){
+  const s=getStats();
+  const lvlBest=s.bestByLevel[level];
+  document.getElementById("bestScore").textContent=lvlBest?lvlBest+"%":"—";
+  document.getElementById("timesPlayed").textContent=s.played;
+  // Header badge — show last score
+  const badge=document.getElementById("headerBadge");
+  if(s.best!==null){
+    badge.style.display="flex";
+    document.getElementById("headerLastScore").textContent=s.best+"%";
   }
-  return a;
+  // History in sidebar
+  const list=document.getElementById("historyList");
+  if(s.history&&s.history.length>0){
+    list.innerHTML=s.history.slice(0,5).map(h=>{
+      const cls=h.pct>=95?"great":h.pct>=75?"ok":"try";
+      return `<div class="history-entry"><span class="date">${h.date} (${h.level||"—"})</span><span class="pct ${cls}">${h.pct}%</span></div>`;
+    }).join("");
+  } else {
+    list.innerHTML='<div style="color:var(--muted);padding:4px 0;font-size:.7rem;">No games yet</div>';
+  }
 }
 
-/* ── BUILD ── */
+/* ══ THEME ══ */
+function toggleTheme(){
+  const s=loadStore();
+  const isDark=document.documentElement.getAttribute("data-theme")==="dark";
+  if(isDark){
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">🌙</span> Dark mode';
+    s.theme="light";
+  } else {
+    document.documentElement.setAttribute("data-theme","dark");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">☀️</span> Light mode';
+    s.theme="dark";
+  }
+  saveStore(s);
+  RC=getRC(); NEU=getNEU();
+  build();
+}
+function applyTheme(){
+  const s=getStats();
+  if(s.theme==="light"){
+    document.documentElement.removeAttribute("data-theme");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">🌙</span> Dark mode';
+  } else {
+    document.documentElement.setAttribute("data-theme","dark");
+    document.getElementById("themeToggle").innerHTML='<span class="menu-item-icon">☀️</span> Light mode';
+  }
+  RC=getRC(); NEU=getNEU();
+}
+
+/* ══ MENU ══ */
+function toggleMenu(){
+  const panel=document.getElementById("menuPanel");
+  const overlay=document.getElementById("menuOverlay");
+  panel.classList.add("show");
+  overlay.classList.add("show");
+}
+function closeMenu(){
+  document.getElementById("menuPanel").classList.remove("show");
+  document.getElementById("menuOverlay").classList.remove("show");
+}
+function isUnlocked(l){
+  const b=(loadStore().bestByLevel)||{};
+  if(l==="exceptions") return (b.intermediate||0)>=75;
+  if(l==="god") return (b.exceptions||0)>=75;
+  return true;
+}
+function updateMenuChips(){
+  const levels=["beginner","intermediate","exceptions","god"];
+  levels.forEach(l=>{
+    const el=document.getElementById("ml-"+l);
+    if(!el) return;
+    el.classList.toggle("active",l===level);
+    el.classList.toggle("locked",!isUnlocked(l));
+  });
+}
+
+/* ══ AUDIO ══ */
+let _voice=null;
+function _loadVoice(){
+  const vs=speechSynthesis.getVoices();
+  if(!vs.length) return;
+  const en=vs.filter(v=>v.lang==="en-US"||v.lang==="en_US");
+  // Known female en-US voices in rough quality order
+  const F=/^(Ava|Allison|Susan|Flo|Sandy|Shelley|Nicky|Samantha|Kathy|Vicki|Victoria|Zira|Jenny|Aria)/i;
+  _voice=en.find(v=>/enhanced|neural/i.test(v.name)&&F.test(v.name))  // downloaded premium female
+        ||en.find(v=>/\(English \(United States\)\)/.test(v.name)&&/^(Flo|Sandy|Shelley|Nicky)/i.test(v.name)) // macOS neural female
+        ||en.find(v=>/google/i.test(v.name))   // Google US English (female by default)
+        ||en.find(v=>F.test(v.name))            // any other known female
+        ||en.find(v=>v.default)||en[0]||null;
+}
+speechSynthesis.onvoiceschanged=_loadVoice;
+_loadVoice();
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US"; u.rate=0.92; u.pitch=1.0;
+  if(_voice) u.voice=_voice;
+  speechSynthesis.speak(u);
+}
+
+/* ══ HAPTIC ══ */
+function vibrate(ms){
+  if(navigator.vibrate) navigator.vibrate(ms);
+}
+
+/* ══ SHUFFLE (spaced repetition aware) ══ */
+function shuffle(arr){
+  const s=loadStore();
+  const fails=s.failedWords||{};
+  // Weight by failures
+  const weighted=[...arr].sort((a,b)=>(fails[b.verb]||0)-(fails[a.verb]||0));
+  // Then shuffle within same-weight groups
+  for(let i=weighted.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    if((fails[weighted[i].verb]||0)===(fails[weighted[j].verb]||0)){
+      [weighted[i],weighted[j]]=[weighted[j],weighted[i]];
+    }
+  }
+  return weighted;
+}
+
+/* ══ LEVEL ══ */
+function setLevel(l){
+  if(!isUnlocked(l)){ vibrate([50,30,50]); return; }
+  level=l;
+  updateMenuChips();
+  renderStats();
+  closeMenu();
+  build();
+}
+
+/* ══ BUILD ══ */
 function build(){
-  words=shuffle(BASE_WORDS);
+  stopTimer();
+  words=shuffle(LEVELS[level]);
   const g=document.getElementById("grid");
-  g.innerHTML=""; st={};
+  g.innerHTML=""; st={}; streak=0;
+  gameOver=false; bonusPts=0;
+  livesEnabled=(level==="god"&&mode!=="study");
+  lives=3; renderLives();
+  updateStreak();
+
   words.forEach((w,i)=>{
     st[i]={done:false,spelledOk:false,colorPicked:null,locked:false,attempts:0};
     const c=document.createElement("div");
     c.className="hcard";
-    const isC=(mode==="challenge");
+    const isC=(mode==="challenge"||mode==="timed"||mode==="reverse");
+    const shown=mode==="reverse"?w.ans:w.verb;
+    const hidden=mode==="reverse"?w.verb:w.ans;
     const fill=isC?NEU.fill:RC[w.rule].idle;
     const stroke=isC?NEU.stroke:RC[w.rule].stroke;
     c.innerHTML=`
-      <button class="hbtn rule-${w.rule}${isC?" chal":""}" id="hb${i}" onclick="heartClick(${i})">
-        <svg class="hsvg" viewBox="0 0 100 90">
-          <path class="hpath" id="hp${i}"
-            d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z"
-            fill="${fill}" stroke="${stroke}" stroke-width="3.5"/>
-        </svg>
-        <div class="hinner">
-          <span class="verb">${w.verb}</span>
-          <span class="ans" id="at${i}">${w.ans}</span>
-        </div>
-      </button>
+      <div class="heart-wrap">
+        <button class="hbtn rule-${w.rule}${isC?" chal":""}" id="hb${i}" onclick="heartClick(${i})" aria-label="${w.verb}">
+          <svg class="hsvg" viewBox="0 0 100 90">
+            <path class="hpath" id="hp${i}"
+              d="M50 85C50 85 5 52 5 27C5 13 16 4 28 4C37 4 46 10 50 18C54 10 63 4 72 4C84 4 95 13 95 27C95 52 50 85 50 85Z"
+              fill="${fill}" stroke="${stroke}" stroke-width="3.5"/>
+          </svg>
+          <div class="hinner">
+            <span class="verb">${shown}</span>
+            <span class="ans" id="at${i}">${hidden}</span>
+          </div>
+        </button>
+        <button class="audio-btn" onclick="speak('${w.verb}, ${w.ans}')" aria-label="Listen to ${w.verb}">🔊</button>
+        <span class="explanation" id="ex${i}"><span class="ex-dot ${w.rule}"></span>${w.why}</span>
+      </div>
       <div class="cinput-wrap${isC?" show":""}" id="cw${i}">
-        <input class="cinput" id="ci${i}" type="text" placeholder="…ing"
+        <input class="cinput" id="ci${i}" type="text" placeholder="${mode==="reverse"?"base verb":"…ing"}"
           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          aria-label="${mode==="reverse"?"Type the base verb of "+w.ans:"Type the -ing form of "+w.verb}"
           oninput="onType(${i})" onkeydown="if(event.key==='Enter'){event.preventDefault();trySpell(${i})}">
-        <span class="cfeedback" id="cf${i}"></span>
+        <span class="cfeedback" id="cf${i}" role="alert" aria-live="polite"></span>
         <span class="chint" id="ch${i}"></span>
       </div>
-      <div class="cpicker" id="cp${i}">
+      <div class="cpicker" id="cp${i}" role="group" aria-label="Pick the rule color for ${w.verb}">
         <div class="cpicker-row">
-          <button class="cb r" onclick="pickColor(${i},'red')"></button>
-          <button class="cb b" onclick="pickColor(${i},'blue')"></button>
-          <button class="cb g" onclick="pickColor(${i},'green')"></button>
+          <button class="cb r" onclick="pickColor(${i},'red')" aria-label="Red: just add -ing"></button>
+          <button class="cb b" onclick="pickColor(${i},'blue')" aria-label="Blue: drop e + -ing"></button>
+          <button class="cb g" onclick="pickColor(${i},'green')" aria-label="Green: double last + -ing"></button>
         </div>
         <span class="cresult" id="cr${i}"></span>
       </div>`;
     g.appendChild(c);
   });
+
   renderButtons();
   updateProgress();
   document.getElementById("score").style.display="none";
+
+  if(mode==="timed") startTimer();
 }
 
-/* ── MODE ── */
+/* ══ MODE ══ */
 function setMode(m){
   mode=m;
   document.querySelector(".mode-btn.study").classList.toggle("active",m==="study");
   document.querySelector(".mode-btn.challenge").classList.toggle("active",m==="challenge");
+  document.querySelector(".mode-btn.timed").classList.toggle("active",m==="timed");
+  document.querySelector(".mode-btn.reverse").classList.toggle("active",m==="reverse");
+  document.getElementById("timerBar").classList.toggle("show",m==="timed");
   build();
 }
 
-/* ── STUDY: tap heart ── */
+/* ══ TIMER ══ */
+function startTimer(){
+  timeLeft=words.length*(level==="god"?4:5);
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft<=10){
+      document.getElementById("timerDisplay").classList.add("warn");
+    }
+    if(timeLeft<=0){
+      stopTimer();
+      checkAll();
+    }
+  },1000);
+}
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  document.getElementById("timerDisplay").classList.remove("warn");
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timeLeft/60);
+  const s=timeLeft%60;
+  document.getElementById("timerDisplay").textContent=`${m}:${s.toString().padStart(2,"0")}`;
+}
+
+/* ══ STREAK ══ */
+function updateStreak(){
+  const bar=document.getElementById("streakBar");
+  if(streak>=2){
+    bar.classList.add("show");
+    document.getElementById("streakText").textContent=`${streak} in a row!`;
+  } else {
+    bar.classList.remove("show");
+  }
+}
+
+/* ══ STUDY: tap heart ══ */
 function heartClick(i){
-  if(mode==="challenge"){ focusInput(i); return; }
+  if(mode==="challenge"||mode==="timed"){ focusInput(i); return; }
   const hb=document.getElementById(`hb${i}`);
   const hp=document.getElementById(`hp${i}`);
-  if(hb.classList.contains("done")) return;
+  // if already done, toggle tooltip on mobile tap
+  if(hb.classList.contains("done")){
+    const hw=hb.closest(".heart-wrap");
+    if(hw){
+      hw.classList.toggle("tip-show");
+      // auto-hide after 2s
+      clearTimeout(hw._tipTimer);
+      if(hw.classList.contains("tip-show"))
+        hw._tipTimer=setTimeout(()=>hw.classList.remove("tip-show"),2000);
+    }
+    return;
+  }
   hb.classList.add("done","boing");
   hp.setAttribute("fill",RC[words[i].rule].active);
   hp.setAttribute("stroke",RC[words[i].rule].stroke);
   setTimeout(()=>hb.classList.remove("boing"),400);
   st[i].done=true;
+  speak(words[i].ans);
+  vibrate(30);
   updateProgress();
 }
 function revealAll(){ words.forEach((_,i)=>{ if(!st[i].done) heartClick(i); }); }
 
-/* ── CHALLENGE: focus ── */
+/* ══ CHALLENGE: focus ══ */
 function focusInput(i){
   const ci=document.getElementById(`ci${i}`);
   if(ci&&!ci.disabled) ci.focus();
 }
 
-/* ── AUTO-ADVANCE: find next unfilled input ── */
+/* ══ AUTO-ADVANCE ══ */
 function advanceToNext(i){
   for(let n=i+1;n<words.length;n++){
     if(!st[n].spelledOk){
@@ -475,7 +1154,7 @@ function advanceToNext(i){
   }
 }
 
-/* ── CHALLENGE: typing ── */
+/* ══ CHALLENGE: typing ══ */
 function onType(i){
   const ci=document.getElementById(`ci${i}`);
   ci.classList.remove("wrong");
@@ -483,74 +1162,193 @@ function onType(i){
   document.getElementById(`ch${i}`).textContent="";
 }
 
-/* ── PROGRESSIVE HINT: reveal one more letter each attempt ── */
-function getHint(ans, attempts){
-  const reveal=Math.min(attempts, ans.length-1);
-  return ans.slice(0,reveal)+"…";
+function getHint(word, attempts){
+  const v = word.verb;
+  const ans = word.ans;
+  const rule = word.rule;
+  const why = word.why;
+
+  // Reverse mode: hints about the base verb (no letter reveals in god)
+  if(mode==="reverse"){
+    if(level==="god"||attempts===1) return "💡 Work backwards — undo whatever spelling change was made";
+    if(attempts===2) return `💡 Starts with '${v[0]}' (${v.length} letters)`;
+    return `💡 ${v.slice(0,Math.ceil(v.length/2))}… (${v.length} letters)`;
+  }
+  // God mode: rule hints only — never reveal letters
+  if(level==="god"&&attempts>=3) attempts=2;
+
+  // Attempt 1: hint about the rule category
+  if(attempts === 1){
+    if(rule==="red") return "💡 This one's clean — no spelling tricks";
+    if(rule==="blue") return "💡 Check the ending — something changes before you add -ing";
+    if(rule==="green") return "💡 Look at that last consonant — does it need to double?";
+  }
+  // Attempt 2: more specific rule hint
+  if(attempts === 2){
+    if(ans.includes("icking")) return "💡 Think about keeping the hard /k/ sound";
+    if(v.endsWith("ie") && ans.endsWith("ying")) return "💡 What does -ie turn into when you add -ing?";
+    if(v.endsWith("ee")) return "💡 Is that final -e silent, or is it actually pronounced?";
+    if(v.endsWith("e") && ans.includes("eing")) return "💡 Does this -e need to stick around?";
+    if(v.endsWith("e") && !ans.includes("eing")) return "💡 There's a silent -e at the end — what's the rule?";
+    if(rule==="green" && ans.length > v.length+4) return "💡 That last consonant needs to double";
+    if(why.includes("don't double")) return "💡 Looks like CVC — but check where the stress falls";
+    return `💡 Hint: ${(why.split("—")[0]||why.split("→")[0]).trim()}`;
+  }
+  // Attempt 3: very direct hint — show the tricky transformation
+  if(attempts >= 3){
+    const len = ans.length;
+    // Show: first half visible + … + last 4 chars
+    const shown = ans.slice(0, Math.floor(len/2)) + "…" + ans.slice(-3);
+    return `💡 ${shown} (${len} letters)`;
+  }
+  return "";
 }
 
 function trySpell(i){
-  if(st[i].spelledOk) return;
+  if(st[i].spelledOk||st[i].locked) return;
   const ci=document.getElementById(`ci${i}`);
   const val=ci.value.trim().toLowerCase();
+  const target=(mode==="reverse"?words[i].verb:words[i].ans);
   ci.classList.remove("ok","wrong");
   void ci.offsetWidth;
-  if(val===words[i].ans){
+  if(val===target){
     ci.classList.add("ok"); ci.disabled=true;
     document.getElementById(`cf${i}`).textContent="✅";
     document.getElementById(`ch${i}`).textContent="";
     st[i].spelledOk=true;
-    const cp=document.getElementById(`cp${i}`);
-    cp.classList.add("show","boing");
-    // shake heart with joy
+    if(st[i].attempts===0){
+      streak++;
+      if(streak>=3) bonusPts=Math.min(10,bonusPts+1);
+      decayFail(words[i].verb);
+    } else {
+      streak=0;
+    }
+    updateStreak();
+    vibrate(30);
+    if(mode!=="timed"&&mode!=="reverse"){
+      const cp=document.getElementById(`cp${i}`);
+      cp.classList.add("show","boing");
+    }
     const hb=document.getElementById(`hb${i}`);
-    hb.classList.add("boing");
+    hb.classList.add("done","boing");
     setTimeout(()=>hb.classList.remove("boing"),400);
+    speak(words[i].ans);
     updateProgress();
     advanceToNext(i);
   } else {
     ci.classList.add("wrong");
     st[i].attempts++;
-    // progressive hint: one more letter per attempt
+    streak=0;
+    updateStreak();
+    vibrate([50,30,50]);
+    recordFail(words[i].verb);
     if(st[i].attempts>=1){
-      document.getElementById(`ch${i}`).textContent=
-        `Hint: ${getHint(words[i].ans, st[i].attempts)}`;
+      document.getElementById(`ch${i}`).textContent=getHint(words[i], st[i].attempts);
     }
-    // shake heart too
     const hb=document.getElementById(`hb${i}`);
     hb.style.animation="none"; void hb.offsetWidth;
     hb.style.animation="";
     ci.select();
+    loseLife();
   }
 }
 
-/* ── CHALLENGE: color pick ── */
+/* ══ FAIL DECAY ══ */
+function decayFail(key){
+  const s=loadStore();
+  if(s.failedWords&&s.failedWords[key]){
+    s.failedWords[key]--;
+    if(s.failedWords[key]<=0) delete s.failedWords[key];
+    saveStore(s);
+  }
+}
+
+/* ══ LIVES (God Mode) ══ */
+function loseLife(){
+  if(!livesEnabled||gameOver) return;
+  lives--;
+  renderLives();
+  if(lives<=0){
+    gameOver=true;
+    setTimeout(()=>checkAll(),500);
+  }
+}
+function renderLives(){
+  const bar=document.getElementById("livesBar");
+  bar.classList.toggle("show",livesEnabled);
+  if(livesEnabled){
+    const n=Math.max(0,lives);
+    document.getElementById("livesText").textContent="❤️".repeat(n)+"🖤".repeat(3-n);
+  }
+}
+
+/* ══ COLOR PICK ══ */
+const RULE_WHY={
+  red:  "🔴 Sin cambios → +ing",
+  blue: "🔵 -e muda → quítala",
+  green:"🟢 CVC → dobla la final",
+};
+const RULE_WHY_WRONG={
+  red:{
+    blue: "🔴? La -e es muda → quítala (🔵)",
+    green:"🔴? CVC → dobla la final (🟢)",
+  },
+  blue:{
+    red:  "🔵? No hay -e muda → +ing directo (🔴)",
+    green:"🔵? CVC → dobla, no quites (🟢)",
+  },
+  green:{
+    red:  "🟢? No hay CVC → +ing directo (🔴)",
+    blue: "🟢? La -e es muda → quítala (🔵)",
+  },
+};
+
 function pickColor(i,color){
   if(!st[i].spelledOk||st[i].locked) return;
   st[i].colorPicked=color;
   const map={r:"red",b:"blue",g:"green"};
+  const w=words[i];
+  const isOk=(color===w.rule);
   document.querySelectorAll(`#cp${i} .cb`).forEach(btn=>{
     btn.classList.remove("picked");
     if(map[btn.classList[1]]===color) btn.classList.add("picked");
   });
-  // Pintar el corazón del color seleccionado inmediatamente
   const hp=document.getElementById(`hp${i}`);
   hp.setAttribute("fill",RC[color].active);
   hp.setAttribute("stroke",RC[color].stroke);
-  // Animación de boing al cambiar color
+  const cr=document.getElementById(`cr${i}`);
+  if(isOk){
+    cr.textContent="✅ "+w.why;
+    cr.style.color="var(--green-dark)";
+  } else {
+    const msg=RULE_WHY_WRONG[color]?.[w.rule];
+    cr.textContent=msg?"✗ "+msg:"✗ → "+w.why;
+    cr.style.color="var(--red-dark)";
+  }
   const hb=document.getElementById(`hb${i}`);
-  hb.classList.remove("boing");
-  void hb.offsetWidth;
+  hb.classList.remove("boing"); void hb.offsetWidth;
   hb.classList.add("boing");
   setTimeout(()=>hb.classList.remove("boing"),400);
+  vibrate(isOk?20:[50,30,50]);
   updateProgress();
 }
 
-/* ── CHECK ALL ── */
+/* ══ CHECK ALL ══ */
+function spellCredit(i){
+  if(!st[i].spelledOk) return 0;
+  const a=st[i].attempts;
+  return a===0?1:a===1?0.6:0.3;
+}
 function checkAll(){
-  let spell=0,clr=0;
+  stopTimer();
+  let spell=0,clr=0,spellPts=0;
   words.forEach((w,i)=>{
-    if(st[i].locked){spell++;clr++;return;}
+    const target=(mode==="reverse"?w.verb:w.ans);
+    if(st[i].locked){
+      if(st[i].spelledOk){spell++;spellPts+=spellCredit(i);}
+      if(mode!=="timed"&&mode!=="reverse"&&st[i].colorPicked===w.rule) clr++;
+      return;
+    }
     const ci=document.getElementById(`ci${i}`);
     const cf=document.getElementById(`cf${i}`);
     const ch=document.getElementById(`ch${i}`);
@@ -559,78 +1357,90 @@ function checkAll(){
     const cr=document.getElementById(`cr${i}`);
     if(!st[i].spelledOk){
       const val=ci.value.trim().toLowerCase();
-      if(val===w.ans){
+      if(val===target){
         ci.classList.add("ok"); ci.disabled=true;
         cf.textContent="✅"; ch.textContent="";
         st[i].spelledOk=true;
-        cp.classList.add("show");
+        if(mode!=="timed"&&mode!=="reverse") cp.classList.add("show");
       } else {
         ci.classList.add("wrong"); ci.disabled=true;
-        cf.textContent="❌"; ch.textContent=`→ ${w.ans}`;
+        cf.textContent="❌"; ch.textContent=`→ ${target}`;
+        recordFail(w.verb);
       }
     }
-    if(st[i].spelledOk) spell++;
-    const picked=st[i].colorPicked;
-    const colorOk=picked===w.rule;
-    const map={r:"red",b:"blue",g:"green"};
-    cp.querySelectorAll(".cb").forEach(btn=>{
-      const bc=map[btn.classList[1]];
-      btn.disabled=true;
-      btn.classList.remove("picked","correct-c","wrong-c");
-      if(bc===w.rule) btn.classList.add("correct-c");
-      if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
-    });
-    if(picked) cr.textContent=colorOk?"✅ Correct!":`❌ → ${w.rule.toUpperCase()}`;
-    else if(st[i].spelledOk) cr.textContent=`→ ${w.rule.toUpperCase()}`;
-    if(colorOk) clr++;
+    if(st[i].spelledOk){spell++;spellPts+=spellCredit(i);}
+    if(mode!=="timed"&&mode!=="reverse"){
+      const picked=st[i].colorPicked;
+      const colorOk=picked===w.rule;
+      const map={r:"red",b:"blue",g:"green"};
+      cp.querySelectorAll(".cb").forEach(btn=>{
+        const bc=map[btn.classList[1]];
+        btn.disabled=true;
+        btn.classList.remove("picked","correct-c","wrong-c");
+        if(bc===w.rule) btn.classList.add("correct-c");
+        if(bc===picked&&!colorOk) btn.classList.add("wrong-c");
+      });
+      if(picked) cr.textContent=colorOk?`✅ ${w.why}`:`❌ → ${w.why}`;
+      else if(st[i].spelledOk) cr.textContent=`→ ${w.why}`;
+      if(colorOk) clr++;
+    }
     hp.setAttribute("fill",RC[w.rule].active);
     hp.setAttribute("stroke",RC[w.rule].stroke);
+    const hb=document.getElementById(`hb${i}`);
+    hb.classList.add("done");
     st[i].locked=st[i].done=true;
   });
   updateProgress();
   renderButtons(true);
 
   const total=words.length;
-  const pct=Math.round(((spell+clr)/(total*2))*100);
-  const stars=pct===100?3:pct>=60?2:1;
+  const pct=(mode==="timed"||mode==="reverse")
+    ?Math.min(100,Math.round((spellPts/total)*100)+bonusPts)
+    :Math.min(100,Math.round(((spellPts+clr)/(total*2))*100)+bonusPts);
+  const stars=pct>=95?3:pct>=75?2:pct>=50?1:0;
 
+  recordScore(pct);
   setTimeout(()=>showStars(stars,spell,clr,total,pct),400);
 }
 
-/* ── STARS + CONFETTI ── */
+/* ══ STARS + CONFETTI ══ */
 function showStars(stars,spell,clr,total,pct){
   const overlay=document.getElementById("starsOverlay");
   const title=document.getElementById("starsTitle");
   const sub=document.getElementById("starsSub");
   overlay.classList.add("show");
-
-  // light up stars one by one
   [1,2,3].forEach(n=>{
     setTimeout(()=>{
       if(n<=stars) document.getElementById(`star${n}`).classList.add("lit");
     }, n*350);
   });
-
+  const spellLine=`${spell}/${total} spelled right`;
+  const clrLine=`${clr}/${total} colors`;
+  const details=(mode==="timed"||mode==="reverse")?`${spellLine} ⚡ (${pct}%)`:stars===3?`${spellLine} + ${clrLine} (${pct}%)`:`${spellLine} · ${clrLine} (${pct}%)`;
   if(stars===3){
-    title.textContent="🏆 Perfect score!";
-    sub.textContent=`${spell}/${total} spellings + ${clr}/${total} colours`;
+    title.textContent="🏆 Excellent!";
+    sub.textContent=details;
     setTimeout(launchConfetti, 400);
+    vibrate([100,50,100,50,200]);
   } else if(stars===2){
     title.textContent="⭐ Great job!";
-    sub.textContent=`${spell}/${total} spellings · ${clr}/${total} colours (${pct}%)`;
+    sub.textContent=details;
+    vibrate([50,30,50]);
+  } else if(stars===1){
+    title.textContent="💪 Keep at it!";
+    sub.textContent=details;
   } else {
-    title.textContent="💪 Keep practising!";
-    sub.textContent=`${spell}/${total} spellings · ${clr}/${total} colours — you can do better!`;
+    title.textContent=gameOver?"💀 Game over!":"😅 Tough one!";
+    sub.textContent=(gameOver?"No lives left — ":"")+details;
   }
 }
-
 function closeStars(){
   document.getElementById("starsOverlay").classList.remove("show");
   [1,2,3].forEach(n=>document.getElementById(`star${n}`).classList.remove("lit"));
   stopConfetti();
 }
 
-/* ── CONFETTI ── */
+/* ══ CONFETTI ══ */
 const canvas=document.getElementById("confetti-canvas");
 const ctx=canvas.getContext("2d");
 let particles=[],animId=null;
@@ -652,7 +1462,6 @@ function launchConfetti(){
   if(animId) cancelAnimationFrame(animId);
   drawConfetti();
 }
-
 function drawConfetti(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach(p=>{
@@ -674,43 +1483,48 @@ function drawConfetti(){
   if(particles.length>0) animId=requestAnimationFrame(drawConfetti);
   else ctx.clearRect(0,0,canvas.width,canvas.height);
 }
-
 function stopConfetti(){
-  if(animId){ cancelAnimationFrame(animId); animId=null; }
+  if(animId){cancelAnimationFrame(animId);animId=null;}
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles=[];
 }
 
-/* ── PROGRESS ── */
+/* ══ PROGRESS ══ */
 function updateProgress(){
   const done=mode==="study"
     ?Object.values(st).filter(x=>x.done).length
-    :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
+    :(mode==="timed"||mode==="reverse")
+      ?Object.values(st).filter(x=>x.spelledOk).length
+      :Object.values(st).filter(x=>x.spelledOk&&x.colorPicked!==null).length;
   const pct=Math.round(done/words.length*100);
   document.getElementById("progTxt").textContent=`${done} / ${words.length}`;
   document.getElementById("progPct").textContent=`${pct}%`;
   document.getElementById("progFill").style.width=pct+"%";
 }
 
-/* ── BUTTONS ── */
+/* ══ BUTTONS ══ */
 function renderButtons(checked=false){
   const row=document.getElementById("btnRow");
   row.innerHTML="";
   if(mode==="study"){
     row.innerHTML=`
       <button class="btn btn-blue"  onclick="revealAll()">✨ Show All</button>
-      <button class="btn btn-ghost" onclick="setMode('study')">🔄 Reset</button>`;
+      <button class="btn btn-ghost" onclick="build()">🔄 Reset</button>`;
   } else if(!checked){
     row.innerHTML=`
       <button class="btn btn-green" onclick="checkAll()">✅ Check Answers</button>
-      <button class="btn btn-ghost" onclick="setMode('challenge')">🔄 Reset</button>`;
+      <button class="btn btn-ghost" onclick="build()">🔄 Reset</button>`;
   } else {
     row.innerHTML=`
-      <button class="btn btn-ghost" onclick="setMode('challenge')">🔄 Try Again</button>
+      <button class="btn btn-red"   onclick="setMode(mode)">🔄 Try Again</button>
       <button class="btn btn-ghost" onclick="setMode('study')">📖 Study</button>`;
   }
 }
 
+/* ══ INIT ══ */
+applyTheme();
+renderStats();
+updateMenuChips();
 build();
 </script>
 </body>
