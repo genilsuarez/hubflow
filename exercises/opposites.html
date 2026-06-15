@@ -44,6 +44,10 @@ body::before{
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 0;}
 .back-link{font-weight:700;font-size:.85rem;color:var(--c-opp);text-decoration:none;transition:opacity .2s;}
 .back-link:hover{opacity:.7;}
+.mute-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .2s;box-shadow:var(--shadow-sm);}
+.mute-btn:hover{border-color:var(--c-opp);}
+.mute-btn.muted{opacity:.5;border-color:var(--red);background:var(--red-light);}
+.top-bar-right{display:flex;align-items:center;gap:10px;}
 .pill{padding:5px 12px;border-radius:50px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s;}
 .pill:hover{border-color:var(--c-opp);}
 .header{padding:18px 0 0;display:flex;align-items:center;gap:12px;}
@@ -136,7 +140,10 @@ body::before{
 <div class="wrap">
   <div class="top-bar">
     <button class="pill" id="resetBtn" title="Reiniciar progreso">↺ Reset</button>
-    <a href="index.html" class="back-link" aria-label="Back to home">Home →</a>
+    <div class="top-bar-right">
+      <button class="mute-btn" id="muteBtn" title="Silenciar pronunciación" aria-label="Toggle sound">🔊</button>
+      <a href="../index.html" class="back-link" aria-label="Back to home">Home →</a>
+    </div>
   </div>
   <div class="header">
     <div class="logo">⚖️</div>
@@ -325,21 +332,24 @@ let navToken=0;
 function gotoCard(delta){
   const card=$("#fcCard");
   const inner=card.querySelector(".fc-inner");
-  const wasFlipped=card.classList.contains("flip");
   cardIdx=(cardIdx+delta+PAIRS.length)%PAIRS.length;
   const p=curPair();
-  const tok=++navToken;
-  if(wasFlipped){
-    // la cara frontal está oculta: actualízala ya y deja girar suave hasta el frente
-    setFace(card,"front",p);
-    card.classList.remove("flip");
-    const done=()=>{ if(tok===navToken)setFace(card,"back",p); };
-    inner.addEventListener("transitionend",done,{once:true});
-  }else{
-    // de frente a frente: micro cross-fade para que no sea un pop seco
-    card.classList.add("swapping");
-    setTimeout(()=>{ if(tok!==navToken)return; setFace(card,"front",p); setFace(card,"back",p); card.classList.remove("swapping"); },140);
-  }
+  ++navToken;
+  // Reset flip state immediately — skip transition to avoid stale faces
+  card.classList.remove("flip");
+  card.classList.add("swapping");
+  // Kill in-flight CSS transition so faces update cleanly
+  inner.style.transition="none";
+  void inner.offsetWidth; // force reflow
+  inner.style.transition="";
+  // Update both faces synchronously
+  setFace(card,"front",p);
+  setFace(card,"back",p);
+  // Brief opacity dip for visual continuity
+  requestAnimationFrame(()=>{
+    card.classList.remove("swapping");
+    speak(p.a, 200);
+  });
   updateStudyMeta();
 }
 function renderStudy(){
@@ -356,7 +366,12 @@ function renderStudy(){
       </div>
     </div>`;
   updateStudyMeta();
-  $("#fcCard").onclick=()=>$("#fcCard").classList.toggle("flip");
+  $("#fcCard").onclick=()=>{
+    const card=$("#fcCard");
+    card.classList.toggle("flip");
+    const p=curPair();
+    if(card.classList.contains("flip")){speak(p.b, 280);}else{speak(p.a, 280);}
+  };
   $("#learnBtn").onclick=e=>{e.stopPropagation();toggleLearned(curPair());updateStudyMeta();renderProgress();};
   $("#prevBtn").onclick=()=>gotoCard(-1);
   $("#nextBtn").onclick=()=>gotoCard(1);
@@ -447,12 +462,36 @@ document.addEventListener("keydown",e=>{
     gotoCard(1);
   }else{
     card.classList.add("flip");
+    speak(curPair().b, 280);
   }
 });
 
+// ─── Sound: pronunciación con Web Speech API ────────────
+let muted = localStorage.getItem("opp_muted") === "1";
+let speakTimer = null;
+function updateMuteBtn(){
+  const btn=$("#muteBtn");
+  btn.textContent=muted?"🔇":"🔊";
+  btn.classList.toggle("muted",muted);
+  btn.title=muted?"Activar pronunciación":"Silenciar pronunciación";
+}
+function speak(word, delay){
+  clearTimeout(speakTimer);
+  if(muted||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const ms = delay != null ? delay : 350;
+  speakTimer = setTimeout(()=>{
+    const u=new SpeechSynthesisUtterance(word);
+    u.lang="en-US";u.rate=0.82;u.pitch=1;
+    speechSynthesis.speak(u);
+  }, ms);
+}
+$("#muteBtn").onclick=()=>{muted=!muted;localStorage.setItem("opp_muted",muted?"1":"0");updateMuteBtn();};
+updateMuteBtn();
+
 // ─── Init ────────────────────────────────────────────────
 $("#resetBtn").onclick=()=>{
-  if(confirm("¿Reiniciar progreso y mejor puntuación?")){
+  if(confirm("Se borrarán tus palabras aprendidas y tu mejor score. ¿Continuar?")){
     store.learned=[];store.best=0;studyOrder=buildStudyOrder();cardIdx=0;startQuiz();render();
   }
 };

@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-const FILE = 'file:///Users/gsuarez/Documents/Code/LearnHub/ing-spelling-rules.html';
+const FILE = 'file:///Users/gsuarez/Documents/Code/LearnHub/exercises/ing-spelling.html';
 
 test.describe('-ing Spelling Rules v2 — tooltip & color picker', () => {
 
