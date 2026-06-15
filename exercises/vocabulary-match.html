@@ -213,6 +213,30 @@ h1{
 .match-slot-text{font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;flex:1;}
 .match-slot-time{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);flex-shrink:0;}
 
+/* ═══ PAIR MATCH (two columns) ═══ */
+.pair-match-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;
+  width:100%;max-width:540px;
+}
+@media(max-width:480px){.pair-match-grid{gap:8px 10px;}}
+.pair-col-label{
+  font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.06em;text-align:center;padding-bottom:4px;
+}
+.pair-item{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.82rem;
+  padding:10px 14px;border-radius:12px;border:2.5px solid var(--border);
+  background:var(--surface);color:var(--text);cursor:pointer;
+  transition:all .2s;text-align:center;user-select:none;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  min-height:44px;
+}
+.pair-item:hover:not(.matched):not(.selected){border-color:var(--purple);background:var(--purple-light);transform:scale(1.02);}
+.pair-item.selected{border-color:var(--purple);background:var(--purple-light);box-shadow:0 0 0 3px rgba(124,90,246,.2);transform:scale(1.03);}
+.pair-item.matched{border-color:var(--green);background:var(--green-light);color:var(--green-dark);cursor:default;opacity:.8;}
+.pair-item.wrong-flash{border-color:var(--red);background:var(--red-light);animation:shake .32s;}
+[data-theme="dark"] .pair-item.matched{color:#6FE8A8;}
+
 /* ═══ SCORE / RESULTS ═══ */
 .result-area{display:none;flex-direction:column;align-items:center;gap:12px;}
 .result-area.show{display:flex;}
@@ -327,10 +351,14 @@ h1{
   <!-- Match/Order -->
   <div class="match-area" id="matchArea">
     <div class="match-instruction" id="matchInstruction">Drag to sort in chronological order (earliest → latest)</div>
+    <!-- Drag sort (timeOfDay) -->
     <div class="match-slots" id="matchSlots"></div>
-    <div style="display:flex;gap:8px;margin-top:8px;">
+    <div id="matchCheckWrap" style="display:flex;gap:8px;margin-top:8px;">
       <button class="btn btn-purple" id="matchCheck" onclick="checkOrder()">✓ Check Order</button>
     </div>
+    <!-- Pair match (weather/seasons) -->
+    <div class="pair-match-grid" id="pairGrid" style="display:none;"></div>
+    <div id="pairScore" style="display:none;font-size:.78rem;font-weight:700;color:var(--muted);text-align:center;margin-top:6px;"></div>
   </div>
 
   <!-- Result -->
@@ -370,32 +398,32 @@ const DATA = {
     { term:"Midnight",  time:"12:00 AM – 4:00 AM", description:"The middle of the night, deepest darkness",           emoji:"🌑", gradient:"#1a237e,#0d0d1a", order:11 },
   ],
   weather: [
-    { term:"Sunny",     description:"Clear sky, bright sunshine",                              emoji:"☀️",  example:"It's sunny today, wear sunscreen!" },
-    { term:"Cloudy",    description:"Sky covered with clouds, no rain",                        emoji:"☁️",  example:"A cloudy afternoon with no sun." },
-    { term:"Overcast",  description:"Completely covered by thick grey clouds",                 emoji:"🌥️", example:"The sky is overcast — looks like rain." },
-    { term:"Foggy",     description:"Low visibility due to thick mist near the ground",        emoji:"🌫️", example:"Be careful driving, it's very foggy." },
-    { term:"Misty",     description:"Light fog, slightly reduced visibility",                  emoji:"🌫️", example:"A misty morning in the mountains." },
-    { term:"Rainy",     description:"Water falling from clouds",                               emoji:"🌧️", example:"It's been rainy all week." },
-    { term:"Drizzle",   description:"Very light, fine rain",                                   emoji:"🌦️", example:"Just a drizzle, you don't need an umbrella." },
-    { term:"Stormy",    description:"Heavy rain with thunder and lightning",                    emoji:"⛈️", example:"A stormy night with loud thunder." },
-    { term:"Windy",     description:"Strong air movement",                                     emoji:"💨",  example:"Hold your hat — it's really windy!" },
-    { term:"Breezy",    description:"Light, pleasant wind",                                    emoji:"🍃",  example:"A breezy afternoon by the coast." },
-    { term:"Snowy",     description:"Snow falling from the sky",                               emoji:"🌨️", example:"It's snowy outside — let's make a snowman!" },
-    { term:"Hail",      description:"Small balls of ice falling from the sky",                 emoji:"🧊",  example:"The hail damaged the car roof." },
-    { term:"Humid",     description:"A lot of moisture in the air, feels sticky",              emoji:"💧",  example:"It's so humid I'm sweating just standing." },
-    { term:"Freezing",  description:"Extremely cold, below 0°C / 32°F",                       emoji:"🥶",  example:"It's freezing — the pond has ice!" },
-    { term:"Scorching", description:"Extremely hot",                                           emoji:"🔥",  example:"A scorching 40°C day in August." },
-    { term:"Sleet",     description:"Mix of rain and snow",                                    emoji:"🌨️", example:"Sleet made the roads very slippery." },
+    { term:"Sunny",     es:"Soleado",    description:"Clear sky, bright sunshine",                              emoji:"☀️",  example:"It's sunny today, wear sunscreen!" },
+    { term:"Cloudy",    es:"Nublado",    description:"Sky covered with clouds, no rain",                        emoji:"☁️",  example:"A cloudy afternoon with no sun." },
+    { term:"Overcast",  es:"Cubierto",   description:"Completely covered by thick grey clouds",                 emoji:"🌥️", example:"The sky is overcast — looks like rain." },
+    { term:"Foggy",     es:"Con niebla", description:"Low visibility due to thick mist near the ground",        emoji:"🌫️", example:"Be careful driving, it's very foggy." },
+    { term:"Misty",     es:"Brumoso",    description:"Light fog, slightly reduced visibility",                  emoji:"🌫️", example:"A misty morning in the mountains." },
+    { term:"Rainy",     es:"Lluvioso",   description:"Water falling from clouds",                               emoji:"🌧️", example:"It's been rainy all week." },
+    { term:"Drizzle",   es:"Llovizna",   description:"Very light, fine rain",                                   emoji:"🌦️", example:"Just a drizzle, you don't need an umbrella." },
+    { term:"Stormy",    es:"Tormentoso", description:"Heavy rain with thunder and lightning",                    emoji:"⛈️", example:"A stormy night with loud thunder." },
+    { term:"Windy",     es:"Ventoso",    description:"Strong air movement",                                     emoji:"💨",  example:"Hold your hat — it's really windy!" },
+    { term:"Breezy",    es:"Con brisa",  description:"Light, pleasant wind",                                    emoji:"🍃",  example:"A breezy afternoon by the coast." },
+    { term:"Snowy",     es:"Nevado",     description:"Snow falling from the sky",                               emoji:"🌨️", example:"It's snowy outside — let's make a snowman!" },
+    { term:"Hail",      es:"Granizo",    description:"Small balls of ice falling from the sky",                 emoji:"🧊",  example:"The hail damaged the car roof." },
+    { term:"Humid",     es:"Húmedo",     description:"A lot of moisture in the air, feels sticky",              emoji:"💧",  example:"It's so humid I'm sweating just standing." },
+    { term:"Freezing",  es:"Helado",     description:"Extremely cold, below 0°C / 32°F",                       emoji:"🥶",  example:"It's freezing — the pond has ice!" },
+    { term:"Scorching", es:"Abrasador",  description:"Extremely hot",                                           emoji:"🔥",  example:"A scorching 40°C day in August." },
+    { term:"Sleet",     es:"Aguanieve",  description:"Mix of rain and snow",                                    emoji:"🌨️", example:"Sleet made the roads very slippery." },
   ],
   seasons: [
-    { term:"Spring",    description:"Season of new growth, flowers bloom",                     emoji:"🌸", months:"March – May (Northern Hemisphere)" },
-    { term:"Summer",    description:"Warmest season, longest days",                            emoji:"☀️", months:"June – August (Northern Hemisphere)" },
-    { term:"Autumn",    description:"Leaves fall, temperatures cool down (also: Fall)",        emoji:"🍂", months:"September – November (Northern Hemisphere)" },
-    { term:"Winter",    description:"Coldest season, shortest days",                           emoji:"❄️", months:"December – February (Northern Hemisphere)" },
-    { term:"Dry season",description:"Period with little to no rainfall (tropical climates)",   emoji:"🏜️", months:"Varies by region" },
-    { term:"Wet season",description:"Period of heavy rainfall (also: monsoon/rainy season)",   emoji:"🌊", months:"Varies by region" },
-    { term:"Solstice",  description:"Longest or shortest day of the year",                     emoji:"🌞", months:"~June 21 / ~Dec 21" },
-    { term:"Equinox",   description:"Day and night are equal length",                          emoji:"⚖️", months:"~March 20 / ~Sep 22" },
+    { term:"Spring",    es:"Primavera",         description:"Season of new growth, flowers bloom",                     emoji:"🌸", months:"March – May (Northern Hemisphere)" },
+    { term:"Summer",    es:"Verano",            description:"Warmest season, longest days",                            emoji:"☀️", months:"June – August (Northern Hemisphere)" },
+    { term:"Autumn",    es:"Otoño",             description:"Leaves fall, temperatures cool down (also: Fall)",        emoji:"🍂", months:"September – November (Northern Hemisphere)" },
+    { term:"Winter",    es:"Invierno",          description:"Coldest season, shortest days",                           emoji:"❄️", months:"December – February (Northern Hemisphere)" },
+    { term:"Dry season",es:"Temporada seca",    description:"Period with little to no rainfall (tropical climates)",   emoji:"🏜️", months:"Varies by region" },
+    { term:"Wet season",es:"Temporada lluviosa",description:"Period of heavy rainfall (also: monsoon/rainy season)",   emoji:"🌊", months:"Varies by region" },
+    { term:"Solstice",  es:"Solsticio",         description:"Longest or shortest day of the year",                     emoji:"🌞", months:"~June 21 / ~Dec 21" },
+    { term:"Equinox",   es:"Equinoccio",        description:"Day and night are equal length",                          emoji:"⚖️", months:"~March 20 / ~Sep 22" },
   ]
 };
 
@@ -458,6 +486,8 @@ function hideAll(){
   ['flashcardArea','quizArea','matchArea','resultArea'].forEach(id => document.getElementById(id).classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
   document.getElementById('progWrap').style.display = '';
+  document.getElementById('pairGrid').style.display = 'none';
+  document.getElementById('pairScore').style.display = 'none';
 }
 
 /* ══════════════════════════════════════════════════════
@@ -633,7 +663,6 @@ function initMatch(){
   const hasOrder = items[0] && items[0].order !== undefined;
 
   if(!hasOrder){
-    // For categories without order, do pair matching
     initPairMatch(items);
     return;
   }
@@ -641,19 +670,125 @@ function initMatch(){
   deck = shuffle([...items]);
   document.getElementById('matchArea').classList.add('show');
   document.getElementById('matchInstruction').textContent = 'Drag to sort in chronological order (earliest → latest)';
-  document.getElementById('matchCheck').style.display = '';
+  document.getElementById('matchCheckWrap').style.display = 'flex';
+  document.getElementById('matchSlots').style.display = '';
+  document.getElementById('pairGrid').style.display = 'none';
+  document.getElementById('pairScore').style.display = 'none';
   document.getElementById('progWrap').style.display = 'none';
   renderMatchSlots();
 }
 
+/* ═══ PAIR MATCH: connect English term ↔ Spanish translation ═══ */
+let pairState = { left: null, right: null, matched: 0, total: 0, errors: 0, pairs: [] };
+
 function initPairMatch(items){
-  // For weather/seasons: match term to description
-  deck = shuffle([...items]).slice(0, 8);
+  const selected = shuffle([...items]).slice(0, 8);
+  pairState = { left: null, right: null, matched: 0, total: selected.length, errors: 0, pairs: selected };
+
   document.getElementById('matchArea').classList.add('show');
-  document.getElementById('matchInstruction').textContent = 'Drag to match terms with their descriptions';
-  document.getElementById('matchCheck').style.display = '';
+  document.getElementById('matchInstruction').textContent = 'Tap one from each column to match English ↔ Español';
+  document.getElementById('matchCheckWrap').style.display = 'none';
+  document.getElementById('matchSlots').style.display = 'none';
+  document.getElementById('pairGrid').style.display = '';
+  document.getElementById('pairScore').style.display = 'block';
   document.getElementById('progWrap').style.display = 'none';
-  renderMatchSlots();
+  updatePairScore();
+  renderPairGrid();
+}
+
+function renderPairGrid(){
+  const grid = document.getElementById('pairGrid');
+  grid.innerHTML = '';
+
+  // Column headers
+  const labelL = document.createElement('div');
+  labelL.className = 'pair-col-label';
+  labelL.textContent = '🇬🇧 English';
+  const labelR = document.createElement('div');
+  labelR.className = 'pair-col-label';
+  labelR.textContent = '🇪🇸 Español';
+  grid.appendChild(labelL);
+  grid.appendChild(labelR);
+
+  // Shuffle each column independently
+  const leftItems = shuffle([...pairState.pairs]);
+  const rightItems = shuffle([...pairState.pairs]);
+
+  // Render left column (English terms)
+  leftItems.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'pair-item pair-left';
+    el.dataset.term = item.term;
+    el.innerHTML = `<span>${item.emoji}</span> ${item.term}`;
+    el.onclick = () => selectPairItem(el, 'left');
+    grid.appendChild(el);
+
+    // Corresponding right placeholder to maintain grid alignment
+    const rightItem = rightItems.shift();
+    const elR = document.createElement('div');
+    elR.className = 'pair-item pair-right';
+    elR.dataset.term = rightItem.term;
+    elR.textContent = rightItem.es;
+    elR.onclick = () => selectPairItem(elR, 'right');
+    grid.appendChild(elR);
+  });
+}
+
+function selectPairItem(el, side){
+  if(el.classList.contains('matched')) return;
+
+  // Deselect previous same-side selection
+  if(side === 'left'){
+    if(pairState.left) pairState.left.classList.remove('selected');
+    pairState.left = el;
+  } else {
+    if(pairState.right) pairState.right.classList.remove('selected');
+    pairState.right = el;
+  }
+  el.classList.add('selected');
+
+  // If both sides selected, check match
+  if(pairState.left && pairState.right){
+    checkPairMatch();
+  }
+}
+
+function checkPairMatch(){
+  const leftTerm = pairState.left.dataset.term;
+  const rightTerm = pairState.right.dataset.term;
+
+  if(leftTerm === rightTerm){
+    // Correct match
+    pairState.left.classList.remove('selected');
+    pairState.right.classList.remove('selected');
+    pairState.left.classList.add('matched');
+    pairState.right.classList.add('matched');
+    pairState.matched++;
+    updatePairScore();
+
+    if(pairState.matched === pairState.total){
+      const score = Math.max(0, pairState.total - pairState.errors);
+      setTimeout(() => showResult(score, pairState.total), 600);
+    }
+  } else {
+    // Wrong match
+    pairState.errors++;
+    updatePairScore();
+    const l = pairState.left;
+    const r = pairState.right;
+    l.classList.remove('selected');
+    r.classList.remove('selected');
+    l.classList.add('wrong-flash');
+    r.classList.add('wrong-flash');
+    setTimeout(() => { l.classList.remove('wrong-flash'); r.classList.remove('wrong-flash'); }, 400);
+  }
+
+  pairState.left = null;
+  pairState.right = null;
+}
+
+function updatePairScore(){
+  document.getElementById('pairScore').textContent = `✓ ${pairState.matched}/${pairState.total}${pairState.errors ? '  ✗ ' + pairState.errors + ' errors' : ''}`;
 }
 
 function renderMatchSlots(){
@@ -740,27 +875,17 @@ function swapSlots(a, b){
 }
 
 function checkOrder(){
-  const hasOrder = deck[0] && deck[0].order !== undefined;
   const slots = document.querySelectorAll('.match-slot');
   let correct = 0;
-
-  if(hasOrder){
-    // Check chronological order
-    let sorted = [...deck].sort((a,b) => a.order - b.order);
-    deck.forEach((item, i) => {
-      if(item.order === sorted[i].order){
-        slots[i].classList.add('correct');
-        correct++;
-      } else {
-        slots[i].classList.add('wrong');
-      }
-    });
-  } else {
-    // For non-ordered categories, all correct (placeholder)
-    correct = deck.length;
-    slots.forEach(s => s.classList.add('correct'));
-  }
-
+  let sorted = [...deck].sort((a,b) => a.order - b.order);
+  deck.forEach((item, i) => {
+    if(item.order === sorted[i].order){
+      slots[i].classList.add('correct');
+      correct++;
+    } else {
+      slots[i].classList.add('wrong');
+    }
+  });
   setTimeout(() => showResult(correct, deck.length), 1200);
 }
 
