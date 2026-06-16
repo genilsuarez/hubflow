@@ -484,6 +484,7 @@ h1{
 @keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
 @keyframes boing{0%,100%{transform:scale(1)}40%{transform:scale(1.15) rotate(-4deg)}70%{transform:scale(.97)}}
 .boing{animation:boing .38s ease;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
