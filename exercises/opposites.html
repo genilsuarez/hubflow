@@ -41,98 +41,137 @@ body::before{
 .wrap{max-width:640px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
 
 /* TOP BAR + HEADER */
-.top-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 0;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 0 0;}
 .back-link{font-weight:700;font-size:.85rem;color:var(--c-opp);text-decoration:none;transition:opacity .2s;}
 .back-link:hover{opacity:.7;}
-.mute-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .2s;box-shadow:var(--shadow-sm);}
+.mute-btn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;box-shadow:var(--shadow-sm);}
 .mute-btn:hover{border-color:var(--c-opp);}
 .mute-btn.muted{opacity:.5;border-color:var(--red);background:var(--red-light);}
-.top-bar-right{display:flex;align-items:center;gap:10px;}
-.pill{padding:5px 12px;border-radius:50px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s;}
+.top-bar-right{display:flex;align-items:center;gap:8px;}
+.pill{padding:4px 10px;border-radius:50px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s;}
 .pill:hover{border-color:var(--c-opp);}
-.header{padding:18px 0 0;display:flex;align-items:center;gap:12px;}
-.logo{width:40px;height:40px;background:var(--c-opp);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--shadow-sm);}
-.brand h1{font-size:28px;font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.015em;line-height:1;}
-.brand .sub{font-family:'Fraunces',serif;font-style:italic;font-size:12.5px;color:var(--muted);margin-top:2px;}
+.header{padding:10px 0 0;display:flex;align-items:center;gap:10px;}
+.logo{width:34px;height:34px;background:var(--c-opp);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:var(--shadow-sm);}
+.brand h1{font-size:22px;font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.015em;line-height:1;}
+.brand .sub{font-family:'Fraunces',serif;font-style:italic;font-size:11px;color:var(--muted);margin-top:1px;}
 
 /* TABS */
-.tabs-bar{padding:18px 0 0;}
-.tabs{display:flex;gap:4px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:4px;box-shadow:var(--shadow-sm);}
-.tab{flex:1;padding:8px 4px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:inherit;}
+.tabs-bar{padding:10px 0 0;}
+.tabs{display:flex;gap:3px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--shadow-sm);}
+.tab{flex:1;padding:6px 4px;border-radius:8px;border:none;background:transparent;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px;font-family:inherit;}
 .tab:hover{color:var(--text-soft);}
-.tab .ti{font-size:15px;}
-.prog-wrap{margin-top:8px;}
-.prog-track{height:5px;background:var(--border);border-radius:4px;overflow:hidden;}
+.tab .ti{font-size:13px;}
+.prog-wrap{margin-top:5px;}
+.prog-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#0A5E5E,#0E8C8C 55%,#4FBFBF);box-shadow:0 0 12px rgba(14,140,140,.35);transition:width .5s ease;}
-.prog-txt{font-size:10px;font-weight:700;color:var(--muted);text-align:right;margin-top:3px;}
+.prog-txt{font-size:10px;font-weight:700;color:var(--muted);text-align:right;margin-top:2px;}
 
-.content{padding:20px 0 48px;}
+.content{padding:12px 0 24px;}
 
 /* BUTTONS */
-.btn{padding:10px 20px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:transform .2s,opacity .2s;color:#fff;background:linear-gradient(135deg,#0A5E5E,#0E8C8C);box-shadow:0 6px 18px rgba(14,140,140,.28);}
+.btn{padding:8px 16px;border-radius:10px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:transform .2s,opacity .2s;color:#fff;background:linear-gradient(135deg,#0A5E5E,#0E8C8C);box-shadow:0 4px 14px rgba(14,140,140,.28);}
 .btn.outline{border:1.5px solid var(--border);background:var(--surface);color:var(--text-soft);box-shadow:none;}
 .btn:hover:not(:disabled){transform:translateY(-1px);opacity:.95;}
 .btn.outline:hover:not(:disabled){border-color:var(--c-opp);color:var(--c-opp);}
 .btn:disabled{opacity:.45;cursor:not-allowed;}
 
 /* FLASHCARD (Study) */
-.fc{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.fc{display:flex;flex-direction:column;align-items:center;gap:12px;}
 .fc-top{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:500px;}
-.fc-count{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
-.fc-learn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.fc-count{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.fc-learn{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
 .fc-learn.on{border-color:var(--green);background:var(--green-light);color:var(--green-ink);}
-.fc-card{width:100%;max-width:500px;height:300px;cursor:pointer;perspective:1200px;position:relative;}
-.fc-inner{position:absolute;inset:0;border-radius:22px;transition:transform .52s cubic-bezier(.45,.05,.2,1),opacity .18s ease;transform-style:preserve-3d;will-change:transform;}
+.fc-card{width:100%;max-width:500px;height:240px;cursor:pointer;perspective:1200px;position:relative;}
+.fc-inner{position:absolute;inset:0;border-radius:18px;transition:transform .52s cubic-bezier(.45,.05,.2,1),opacity .18s ease;transform-style:preserve-3d;will-change:transform;}
 .fc-card.flip .fc-inner{transform:rotateY(180deg);}
 .fc-card.swapping .fc-inner{opacity:.35;transition:transform .52s cubic-bezier(.45,.05,.2,1),opacity .14s ease;}
-.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:10px;text-align:center;background:var(--surface);border:1.5px solid var(--border);box-shadow:var(--shadow-sm);}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:6px;text-align:center;background:var(--surface);border:1.5px solid var(--border);box-shadow:var(--shadow-sm);}
 .fc-back{transform:rotateY(180deg);box-shadow:var(--shadow-lg);}
-.fc-emoji{font-size:64px;line-height:1;}
-.fc-word{font-size:48px;font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.01em;line-height:1;}
+.fc-emoji{font-size:44px;line-height:1;}
+.fc-word{font-size:38px;font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.01em;line-height:1;}
 .fc-word.blue{color:var(--blue);}
 .fc-word.red{color:var(--red);}
-.fc-es{font-size:14px;font-family:'Fraunces',serif;font-style:italic;color:var(--muted);}
-.fc-hint{font-size:12px;color:var(--muted);margin-top:6px;}
+.fc-es{font-size:12px;font-family:'Fraunces',serif;font-style:italic;color:var(--muted);}
+.fc-hint{font-size:11px;color:var(--muted);margin-top:4px;}
 .fc-rule{width:46px;height:3px;background:var(--text);border-radius:3px;opacity:.85;}
-.fc-vs{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--c-opp-ink);background:var(--c-opp-light);border-radius:20px;padding:3px 12px;}
+.fc-vs{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--c-opp-ink);background:var(--c-opp-light);border-radius:20px;padding:2px 10px;}
 .fc-nav{display:flex;gap:10px;width:100%;max-width:500px;justify-content:center;}
 
 /* QUIZ */
-.quiz{display:flex;flex-direction:column;gap:18px;align-items:center;}
-.stats{display:flex;gap:12px;width:100%;}
-.stat{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;box-shadow:var(--shadow-sm);}
-.stat .v{font-size:24px;font-weight:400;font-family:'DM Serif Display',serif;}
-.stat .l{font-size:11px;font-weight:600;color:var(--muted);margin-top:2px;}
-.streak-msg{width:100%;background:var(--amber-light);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);border-radius:12px;padding:10px 16px;text-align:center;font-size:13px;font-weight:700;color:var(--amber);}
-.quiz-card{width:100%;max-width:500px;background:var(--surface);border:1.5px solid var(--border);border-radius:22px;padding:30px;text-align:center;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-lg);}
-.quiz-tag{font-size:11px;font-weight:800;color:var(--c-opp-ink);letter-spacing:3px;text-transform:uppercase;}
-.quiz-emoji{font-size:52px;line-height:1;}
-.quiz-word{font-size:44px;font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.01em;color:var(--blue);}
-.quiz-prompt{font-size:13px;color:var(--text-soft);}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-.opt{padding:14px 12px;border-radius:12px;border:1.5px solid var(--border);background:var(--paper);color:var(--text);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;}
+.quiz{display:flex;flex-direction:column;gap:10px;align-items:center;}
+.stats{display:flex;gap:8px;width:100%;}
+.stat{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:8px 6px;text-align:center;box-shadow:var(--shadow-sm);}
+.stat .v{font-size:18px;font-weight:400;font-family:'DM Serif Display',serif;}
+.stat .l{font-size:10px;font-weight:600;color:var(--muted);margin-top:1px;}
+.streak-msg{width:100%;background:var(--amber-light);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);border-radius:10px;padding:6px 12px;text-align:center;font-size:12px;font-weight:700;color:var(--amber);}
+
+/* TIMER */
+.timer-wrap{width:100%;position:relative;}
+.timer-track{height:6px;background:var(--border);border-radius:4px;overflow:hidden;position:relative;}
+.timer-fill{height:100%;border-radius:4px;transition:width .1s linear;background:linear-gradient(90deg,var(--green),#4FBFBF);}
+.timer-fill.warning{background:linear-gradient(90deg,var(--amber),#E8A838);}
+.timer-fill.danger{background:linear-gradient(90deg,var(--red),#E85555);animation:pulse-danger .4s ease-in-out infinite;}
+@keyframes pulse-danger{0%,100%{opacity:1;}50%{opacity:.6;}}
+.timer-label{display:flex;justify-content:space-between;align-items:center;margin-top:3px;}
+.timer-time{font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;}
+.timer-time.danger{color:var(--red);}
+.timer-bonus{font-size:10px;font-weight:700;color:var(--green-ink);background:var(--green-light);padding:2px 6px;border-radius:6px;opacity:0;transform:translateY(4px);transition:all .25s ease;}
+.timer-bonus.show{opacity:1;transform:translateY(0);}
+.bonus-pop{position:absolute;top:-14px;right:0;font-size:11px;font-weight:800;color:var(--green);animation:bonusPop .6s ease forwards;pointer-events:none;}
+@keyframes bonusPop{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-14px) scale(1.2);}}
+
+/* STREAK INDICATOR */
+.streak-ind{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;transition:all .3s ease;min-height:0;overflow:hidden;}
+.streak-ind.hidden{height:0;padding:0;opacity:0;margin:0;}
+.streak-ind--gold{background:linear-gradient(135deg,#FDF0DC,#FCECC4);border:1.5px solid #E8C55A;color:#8B6914;}
+.streak-ind--fire{background:linear-gradient(135deg,#FBE8EA,#F9D4D8);border:1.5px solid #E07A5F;color:#9A1F2C;}
+.streak-ind--pulse{background:linear-gradient(135deg,#E7F0FD,#D4E5FB);border:1.5px solid #5B9BD5;color:#1A4FA8;animation:pulseGlow 1.2s ease-in-out infinite;}
+.streak-ind--aurora{background:linear-gradient(135deg,#E0F4F4,#C8EDE0,#E7F0FD);border:1.5px solid #0E8C8C;color:#0A5E5E;animation:auroraShimmer 2s ease-in-out infinite;}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(91,155,213,.3);}50%{box-shadow:0 0 12px 2px rgba(91,155,213,.4);}}
+@keyframes auroraShimmer{0%,100%{box-shadow:0 0 8px rgba(14,140,140,.3);}50%{box-shadow:0 0 20px 4px rgba(14,140,140,.5);}}
+.streak-ind .si-icon{font-size:15px;}
+.streak-ind .si-text{font-size:11px;}
+.streak-ind .si-mult{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;}
+
+/* POINTS POP */
+.pts-pop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--c-opp);pointer-events:none;animation:ptsPop .8s ease forwards;z-index:10;}
+@keyframes ptsPop{0%{opacity:1;transform:translate(-50%,-50%) scale(.8);}40%{opacity:1;transform:translate(-50%,-70%) scale(1.1);}100%{opacity:0;transform:translate(-50%,-100%) scale(.9);}}
+
+/* END STATS */
+.end-stats{display:flex;flex-direction:column;gap:6px;width:100%;margin:6px 0;}
+.end-stat-row{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:var(--paper);border:1px solid var(--border);}
+.end-stat-row .es-icon{font-size:15px;width:22px;text-align:center;}
+.end-stat-row .es-label{flex:1;font-size:12px;font-weight:600;color:var(--text-soft);}
+.end-stat-row .es-value{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text);}
+.quiz-card{width:100%;max-width:500px;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:18px 20px;text-align:center;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-lg);}
+.quiz-tag{font-size:10px;font-weight:800;color:var(--c-opp-ink);letter-spacing:2px;text-transform:uppercase;}
+.quiz-emoji{font-size:36px;line-height:1;}
+.quiz-word{font-size:34px;font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.01em;color:var(--blue);}
+.quiz-prompt{font-size:12px;color:var(--text-soft);}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.opt{padding:10px 8px;border-radius:10px;border:1.5px solid var(--border);background:var(--paper);color:var(--text);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;}
 .opt:hover:not(:disabled){border-color:var(--c-opp);background:var(--surface);}
 .opt:disabled{cursor:default;}
 .opt.correct{border-color:var(--green);background:var(--green-light);color:var(--green-ink);}
 .opt.wrong{border-color:var(--red);background:var(--red-light);color:var(--red-ink);}
-.quiz-fb{font-size:14px;font-weight:700;padding:10px 14px;border-radius:10px;}
+.quiz-fb{font-size:12px;font-weight:700;padding:8px 12px;border-radius:8px;}
 .quiz-fb.ok{color:var(--green-ink);background:var(--green-light);}
 .quiz-fb.no{color:var(--red-ink);background:var(--red-light);}
 
 /* STARS OVERLAY */
-.overlay{position:fixed;inset:0;background:rgba(16,32,46,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;animation:fadeIn .25s ease;}
+.overlay{position:fixed;inset:0;background:rgba(16,32,46,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px;animation:fadeIn .25s ease;}
 .overlay.hide{display:none;}
-.over-card{background:var(--surface);border-radius:24px;padding:34px 30px;max-width:380px;width:100%;text-align:center;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:14px;}
-.over-stars{font-size:44px;letter-spacing:6px;}
-.over-score{font-size:52px;font-family:'DM Serif Display',serif;font-weight:400;color:var(--c-opp);}
-.over-msg{font-size:14px;color:var(--text-soft);font-weight:600;}
-.over-row{display:flex;gap:10px;justify-content:center;margin-top:6px;}
+.over-card{background:var(--surface);border-radius:20px;padding:24px 22px;max-width:360px;width:100%;text-align:center;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:8px;}
+.over-stars{font-size:36px;letter-spacing:4px;}
+.over-score{font-size:40px;font-family:'DM Serif Display',serif;font-weight:400;color:var(--c-opp);}
+.over-msg{font-size:13px;color:var(--text-soft);font-weight:600;}
+.over-row{display:flex;gap:8px;justify-content:center;margin-top:4px;}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .35s ease forwards;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-@media (max-width:520px){.opts{grid-template-columns:1fr;}.fc-word,.quiz-word{font-size:38px;}}
+@media (max-width:520px){.opts{grid-template-columns:1fr;}.fc-word,.quiz-word{font-size:30px;}.fc-card{height:200px;}.quiz-emoji{font-size:28px;}.fc-emoji{font-size:36px;}}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 </style>
 </head>
@@ -230,8 +269,8 @@ const TABS=[
 const store={
   get learned(){try{return JSON.parse(localStorage.getItem("opp_learned")||"[]");}catch{return[];}},
   set learned(v){localStorage.setItem("opp_learned",JSON.stringify(v));},
-  get best(){return +(localStorage.getItem("opp_best")||0);},
-  set best(v){localStorage.setItem("opp_best",v);},
+  get best(){return +(localStorage.getItem("opp_best_pts")||0);},
+  set best(v){localStorage.setItem("opp_best_pts",v);},
 };
 let tab="study", cardIdx=0;
 let studyOrder=[];
@@ -377,73 +416,259 @@ function renderStudy(){
   $("#nextBtn").onclick=()=>gotoCard(1);
 }
 
-// ─── Quiz ────────────────────────────────────────────────
+// ─── Quiz — Scoring + Streak system (FlagMaster-inspired) ─────
+const QUIZ_TIME = 8; // seconds per question
+const BASE_POINTS = 100;
+const STREAK_THRESHOLDS = [
+  { count: 12, multiplier: 5.0, tier: 'aurora', icon: '✨', label: 'AURORA' },
+  { count: 8,  multiplier: 3.0, tier: 'pulse',  icon: '💫', label: 'PULSE' },
+  { count: 5,  multiplier: 2.0, tier: 'fire',   icon: '🔥', label: 'FIRE' },
+  { count: 3,  multiplier: 1.5, tier: 'gold',   icon: '⭐', label: 'GOLD' },
+];
+
+let timerRaf = null;
+let timerStart = 0;
+let timerRemaining = 0;
+let timerTotal = 0;
+
 function startQuiz(){
-  quiz={order:shuffle([...Array(PAIRS.length).keys()]),i:0,score:0,answered:false};
+  quiz = {
+    order: shuffle([...Array(PAIRS.length).keys()]),
+    i: 0,
+    score: 0,
+    correct: 0,
+    wrong: 0,
+    streak: 0,
+    maxStreak: 0,
+    tier: 'none',
+    multiplier: 1.0,
+    answered: false,
+    expired: false,
+    opts: null,
+    picked: null,
+    startTime: Date.now(),
+    lastPoints: 0,
+  };
 }
 function quizOptions(pair){
-  const wrong=shuffle(PAIRS.filter(p=>p!==pair)).slice(0,3).map(p=>Math.random()<.5?p.a:p.b);
-  return shuffle([pair.b,...wrong]);
+  const wrong = shuffle(PAIRS.filter(p => p !== pair)).slice(0, 3).map(p => Math.random() < .5 ? p.a : p.b);
+  return shuffle([pair.b, ...wrong]);
 }
+
+// ─── Streak engine ───────────────────────────────────────
+function getStreakInfo(count){
+  for(const t of STREAK_THRESHOLDS){
+    if(count >= t.count) return t;
+  }
+  return { count: 0, multiplier: 1.0, tier: 'none', icon: '', label: '' };
+}
+
+// ─── Scoring engine (FlagMaster formula) ─────────────────
+// points = BASE_POINTS × speedFactor × streakMultiplier
+function calcPoints(timeRemaining, totalTime, streakMultiplier){
+  const speedFactor = totalTime > 0 ? timeRemaining / totalTime : 0;
+  return Math.round(BASE_POINTS * speedFactor * streakMultiplier);
+}
+
+// ─── Timer engine (rAF + Date.now) ───────────────────────
+function startTimer(){
+  timerTotal = QUIZ_TIME * 1000;
+  timerRemaining = timerTotal;
+  timerStart = Date.now();
+  cancelAnimationFrame(timerRaf);
+  tickTimer();
+}
+function stopTimer(){
+  cancelAnimationFrame(timerRaf);
+}
+function getTimerProgress(){
+  const elapsed = Date.now() - timerStart;
+  timerRemaining = Math.max(0, timerTotal - elapsed);
+  return timerRemaining / timerTotal;
+}
+function tickTimer(){
+  if(quiz.answered || quiz.expired) return;
+  const progress = getTimerProgress();
+  const fill = $("#timerFill");
+  const timeLabel = $("#timerTime");
+  if(fill){
+    fill.style.width = (progress * 100) + "%";
+    fill.classList.remove("warning","danger");
+    if(progress <= 0.25) fill.classList.add("danger");
+    else if(progress <= 0.5) fill.classList.add("warning");
+  }
+  if(timeLabel){
+    const secs = (timerRemaining / 1000).toFixed(1);
+    timeLabel.textContent = secs + "s";
+    timeLabel.classList.toggle("danger", progress <= 0.25);
+  }
+  if(timerRemaining <= 0){
+    quiz.expired = true;
+    handleTimeExpired();
+    return;
+  }
+  timerRaf = requestAnimationFrame(tickTimer);
+}
+function handleTimeExpired(){
+  quiz.answered = true;
+  quiz.picked = null;
+  quiz.wrong++;
+  quiz.streak = 0;
+  quiz.tier = 'none';
+  quiz.multiplier = 1.0;
+  quiz.lastPoints = 0;
+  renderQuiz();
+}
+
+// ─── Quiz render ─────────────────────────────────────────
 function renderQuiz(){
-  if(!quiz)startQuiz();
-  if(quiz.i>=quiz.order.length){return renderQuizEnd();}
-  const pair=PAIRS[quiz.order[quiz.i]];
-  if(!quiz.opts)quiz.opts=quizOptions(pair);
-  $("#content").innerHTML=`
+  if(!quiz) startQuiz();
+  if(quiz.i >= quiz.order.length){ return renderQuizEnd(); }
+  const pair = PAIRS[quiz.order[quiz.i]];
+  if(!quiz.opts) quiz.opts = quizOptions(pair);
+
+  const si = getStreakInfo(quiz.streak);
+  const streakVisible = quiz.streak >= 3;
+  const streakClass = streakVisible ? `streak-ind streak-ind--${si.tier}` : 'streak-ind hidden';
+
+  $("#content").innerHTML = `
     <div class="quiz">
       <div class="stats">
-        <div class="stat"><div class="v">${quiz.i+(quiz.answered?1:0)}/${quiz.order.length}</div><div class="l">Pregunta</div></div>
-        <div class="stat"><div class="v">${quiz.score}</div><div class="l">Aciertos</div></div>
-        <div class="stat"><div class="v">${store.best}%</div><div class="l">Mejor</div></div>
+        <div class="stat"><div class="v">${quiz.i + (quiz.answered ? 1 : 0)}/${quiz.order.length}</div><div class="l">Pregunta</div></div>
+        <div class="stat"><div class="v">${quiz.score.toLocaleString()}</div><div class="l">Puntos</div></div>
+        <div class="stat"><div class="v">${store.best.toLocaleString()}</div><div class="l">Récord</div></div>
       </div>
-      <div class="quiz-card">
+      <div class="${streakClass}" id="streakInd" role="status" aria-label="Indicador de racha">
+        ${streakVisible ? `<span class="si-icon">${si.icon}</span><span class="si-text">${quiz.streak} racha</span><span class="si-mult">×${si.multiplier.toFixed(1)}</span>` : ''}
+      </div>
+      <div class="timer-wrap" aria-label="Tiempo restante" role="timer">
+        <div class="timer-track"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+        <div class="timer-label">
+          <span class="timer-time" id="timerTime">${QUIZ_TIME}.0s</span>
+          <span class="timer-bonus" id="timerBonus"></span>
+        </div>
+      </div>
+      <div class="quiz-card" style="position:relative;">
         <div class="quiz-tag">¿Cuál es el opuesto?</div>
         <div class="quiz-emoji">${pair.ea}</div>
         <div class="quiz-word">${esc(pair.a)}</div>
         <div class="opts" id="opts">
-          ${quiz.opts.map(o=>`<button class="opt" data-opt="${esc(o)}">${esc(o)}</button>`).join("")}
+          ${quiz.opts.map(o => `<button class="opt" data-opt="${esc(o)}">${esc(o)}</button>`).join("")}
         </div>
         <div id="qfb"></div>
       </div>
     </div>`;
+
   if(quiz.answered){
-    $("#opts").querySelectorAll(".opt").forEach(b=>{
-      b.disabled=true;
-      if(b.dataset.opt===pair.b)b.classList.add("correct");
-      else if(b.dataset.opt===quiz.picked)b.classList.add("wrong");
+    stopTimer();
+    $("#opts").querySelectorAll(".opt").forEach(b => {
+      b.disabled = true;
+      if(b.dataset.opt === pair.b) b.classList.add("correct");
+      else if(b.dataset.opt === quiz.picked && quiz.picked !== pair.b) b.classList.add("wrong");
     });
-    const ok=quiz.picked===pair.b;
-    $("#qfb").innerHTML=`<div class="quiz-fb ${ok?"ok":"no"}">${ok?"✅ ¡Correcto!":"❌ El opuesto de "+esc(pair.a)+" es "+esc(pair.b)}</div>
-      <button class="btn" style="margin-top:12px" id="nextQ">${quiz.i===quiz.order.length-1?"Ver resultado →":"Siguiente →"}</button>`;
-    $("#nextQ").onclick=()=>{quiz.i++;quiz.answered=false;quiz.picked=null;quiz.opts=null;renderQuiz();};
-  }else{
-    $("#opts").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-      quiz.answered=true;quiz.picked=b.dataset.opt;
-      if(quiz.picked===pair.b)quiz.score++;
+
+    const ok = quiz.picked === pair.b;
+    const expired = quiz.expired;
+    let fbHTML = "";
+
+    if(expired){
+      fbHTML = `<div class="quiz-fb no">⏱️ ¡Tiempo! El opuesto de ${esc(pair.a)} es <b>${esc(pair.b)}</b></div>`;
+    } else if(ok){
+      const pts = quiz.lastPoints;
+      fbHTML = `<div class="quiz-fb ok">✅ ¡Correcto! <b>+${pts} pts</b></div>`;
+    } else {
+      fbHTML = `<div class="quiz-fb no">❌ El opuesto de ${esc(pair.a)} es <b>${esc(pair.b)}</b></div>`;
+    }
+    fbHTML += `<button class="btn" style="margin-top:12px" id="nextQ">${quiz.i === quiz.order.length - 1 ? "Ver resultado →" : "Siguiente →"}</button>`;
+    $("#qfb").innerHTML = fbHTML;
+
+    // Points pop animation on correct
+    if(ok && !expired && quiz.lastPoints > 0){
+      const bonusEl = $("#timerBonus");
+      if(bonusEl){ bonusEl.textContent = "+" + quiz.lastPoints; bonusEl.classList.add("show"); }
+      // Big points pop on the card
+      const card = $(".quiz-card");
+      if(card){
+        const pop = document.createElement("div");
+        pop.className = "pts-pop";
+        pop.textContent = "+" + quiz.lastPoints;
+        card.appendChild(pop);
+        setTimeout(() => pop.remove(), 900);
+      }
+    }
+    // Freeze timer bar
+    const fill = $("#timerFill");
+    if(fill && expired) fill.style.width = "0%";
+
+    $("#nextQ").onclick = () => { quiz.i++; quiz.answered = false; quiz.expired = false; quiz.picked = null; quiz.opts = null; renderQuiz(); };
+  } else {
+    // Start timer
+    startTimer();
+    $("#opts").querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      stopTimer();
+      getTimerProgress(); // sync remaining
+      quiz.answered = true;
+      quiz.picked = b.dataset.opt;
+      const ok = quiz.picked === pair.b;
+      if(ok){
+        quiz.correct++;
+        quiz.streak++;
+        if(quiz.streak > quiz.maxStreak) quiz.maxStreak = quiz.streak;
+        const info = getStreakInfo(quiz.streak);
+        quiz.tier = info.tier;
+        quiz.multiplier = info.multiplier;
+        const pts = calcPoints(timerRemaining / 1000, QUIZ_TIME, quiz.multiplier);
+        quiz.lastPoints = pts;
+        quiz.score += pts;
+      } else {
+        quiz.wrong++;
+        quiz.streak = 0;
+        quiz.tier = 'none';
+        quiz.multiplier = 1.0;
+        quiz.lastPoints = 0;
+      }
       renderQuiz();
     });
   }
 }
+
 function renderQuizEnd(){
-  const pct=Math.round(quiz.score/quiz.order.length*100);
-  const stars=pct===100?"⭐⭐⭐":pct>=60?"⭐⭐":"⭐";
-  const isBest=pct>store.best;
-  if(isBest)store.best=pct;
-  const msg=pct===100?"¡Perfecto! Dominas los opuestos.":pct>=60?"¡Bien hecho! Sigue practicando.":"Repasa en Study y vuelve a intentar.";
-  $("#content").innerHTML="";
+  stopTimer();
+  const elapsed = Math.round((Date.now() - quiz.startTime) / 1000);
+  const isBest = quiz.score > store.best;
+  if(isBest) store.best = quiz.score;
+
+  const pct = Math.round((quiz.correct / quiz.order.length) * 100);
+  const stars = pct === 100 ? "⭐⭐⭐" : pct >= 60 ? "⭐⭐" : "⭐";
+
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const timeStr = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+
+  const msg = pct === 100 ? "¡Perfecto! Dominas los opuestos."
+    : pct >= 80 ? "¡Excelente! Casi perfecto."
+    : pct >= 60 ? "¡Bien hecho! Sigue practicando."
+    : "Repasa en Study y vuelve a intentar.";
+
+  $("#content").innerHTML = "";
   $("#overlay").classList.remove("hide");
-  $("#overCard").innerHTML=`
+  $("#overCard").innerHTML = `
     <div class="over-stars">${stars}</div>
-    <div class="over-score">${pct}%</div>
-    <div class="over-msg">${quiz.score} / ${quiz.order.length} correctos${isBest?" · ¡Nuevo récord!":""}</div>
+    <div class="over-score">${quiz.score.toLocaleString()} pts</div>
+    ${isBest ? '<div class="over-msg" style="color:var(--c-opp);">🏆 ¡Nuevo récord!</div>' : ''}
+    <div class="end-stats">
+      <div class="end-stat-row"><span class="es-icon">✅</span><span class="es-label">Correctas</span><span class="es-value">${quiz.correct}</span></div>
+      <div class="end-stat-row"><span class="es-icon">❌</span><span class="es-label">Incorrectas</span><span class="es-value">${quiz.wrong}</span></div>
+      <div class="end-stat-row"><span class="es-icon">🔥</span><span class="es-label">Mejor racha</span><span class="es-value">${quiz.maxStreak}</span></div>
+      <div class="end-stat-row"><span class="es-icon">⏱️</span><span class="es-label">Tiempo</span><span class="es-value">${timeStr}</span></div>
+    </div>
     <div class="over-msg">${msg}</div>
     <div class="over-row">
       <button class="btn outline" id="ovStudy">Ir a Study</button>
       <button class="btn" id="ovRetry">Reintentar</button>
     </div>`;
-  $("#ovRetry").onclick=()=>{$("#overlay").classList.add("hide");startQuiz();render();};
-  $("#ovStudy").onclick=()=>{$("#overlay").classList.add("hide");tab="study";render();};
+  $("#ovRetry").onclick = () => { $("#overlay").classList.add("hide"); startQuiz(); render(); };
+  $("#ovStudy").onclick = () => { $("#overlay").classList.add("hide"); tab = "study"; render(); };
 }
 
 // ─── Keyboard: Enter = flip, luego siguiente ─────────────
@@ -492,7 +717,7 @@ updateMuteBtn();
 // ─── Init ────────────────────────────────────────────────
 $("#resetBtn").onclick=()=>{
   if(confirm("Se borrarán tus palabras aprendidas y tu mejor score. ¿Continuar?")){
-    store.learned=[];store.best=0;studyOrder=buildStudyOrder();cardIdx=0;startQuiz();render();
+    store.learned=[];store.best=0;localStorage.removeItem("opp_best");studyOrder=buildStudyOrder();cardIdx=0;startQuiz();render();
   }
 };
 studyOrder=buildStudyOrder();
