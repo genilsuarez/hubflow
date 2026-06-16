@@ -62,7 +62,7 @@ body::after{
 .back-link{
   font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;
   color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
-  transition:opacity .2s;
+  transition:opacity .2s;min-height:44px;
 }
 .back-link:hover{opacity:.7;}
 .theme-toggle{
@@ -75,7 +75,8 @@ body::after{
 /* HAMBURGER MENU — SIDEBAR */
 .menu-toggle{
   background:none;border:none;cursor:pointer;font-size:1.3rem;
-  color:var(--text);padding:4px;line-height:1;
+  color:var(--text);padding:4px;line-height:1;min-width:44px;min-height:44px;
+  display:flex;align-items:center;justify-content:center;
   transition:transform .2s;
 }
 .menu-toggle:hover{transform:scale(1.1);}
@@ -111,6 +112,7 @@ body::after{
   background:none;border:none;cursor:pointer;
   font-size:1.2rem;color:var(--muted);padding:4px;
   border-radius:8px;transition:background .2s,color .2s;line-height:1;
+  min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;
 }
 .menu-close:hover{background:var(--border);color:var(--text);}
 
@@ -124,7 +126,7 @@ body::after{
   background:transparent;cursor:pointer;
   font-family:'Manrope',sans-serif;font-size:.76rem;font-weight:700;
   color:var(--text);transition:background .15s;
-  width:100%;text-align:left;
+  width:100%;text-align:left;min-height:44px;
 }
 .menu-item:hover{background:var(--border);}
 .menu-item.active{background:var(--blue-light);color:var(--blue);}
@@ -218,8 +220,8 @@ h1{
 }
 .mode-btn{
   flex:1;font-family:'Manrope',sans-serif;font-size:.8rem;font-weight:700;
-  padding:4px;border-radius:50px;border:none;cursor:pointer;
-  transition:all .22s;color:var(--muted);background:transparent;
+  padding:8px 4px;border-radius:50px;border:none;cursor:pointer;
+  transition:all .22s;color:var(--muted);background:transparent;min-height:44px;
 }
 .mode-btn.active.study    {background:var(--blue);color:#fff;box-shadow:0 3px 12px rgba(47,111,216,.42);}
 .mode-btn.active.challenge{background:linear-gradient(135deg,var(--red),#FF9F6B);color:#fff;box-shadow:0 3px 10px rgba(255,107,107,.4);}
@@ -227,7 +229,7 @@ h1{
 .mode-btn.active.reverse  {background:linear-gradient(135deg,#9B59B6,#C97FE8);color:#fff;box-shadow:0 3px 10px rgba(155,89,182,.4);}
 @media(max-width:480px){
   .mode-bar{margin-bottom:3px;padding:2px;}
-  .mode-btn{font-size:.68rem;padding:3px;}
+  .mode-btn{font-size:.68rem;padding:6px 3px;min-height:44px;}
 }
 
 /* TIMER */
@@ -350,10 +352,10 @@ h1{
 /* AUDIO BUTTON — floats inside heart-wrap */
 .heart-wrap{position:relative;width:100%;}
 .audio-btn{
-  position:absolute;top:8%;right:8%;
-  background:none;border:none;cursor:pointer;font-size:.72rem;
+  position:absolute;top:0;right:0;
+  background:none;border:none;cursor:pointer;font-size:.85rem;
   opacity:.45;transition:opacity .2s,transform .2s;padding:0;line-height:1;
-  pointer-events:auto;
+  pointer-events:auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center;
 }
 .audio-btn:hover{opacity:1;transform:scale(1.2);}
 
@@ -389,14 +391,15 @@ h1{
 .cpicker.show{display:flex;}
 .cpicker-row{display:flex;gap:6px;}
 .cb{
-  width:22px;height:22px;border-radius:50%;border:3px solid transparent;
+  width:32px;height:32px;border-radius:50%;border:3px solid transparent;
   cursor:pointer;transition:transform .18s,box-shadow .18s;
   -webkit-tap-highlight-color:transparent;
+  padding:6px;background-clip:content-box,border-box;
 }
 @media(max-width:480px){
   .cpicker{padding:3px 6px;gap:4px;border-radius:30px;}
   .cpicker-row{gap:5px;}
-  .cb{width:20px;height:20px;border-width:2.5px;}
+  .cb{width:30px;height:30px;border-width:2.5px;}
 }
 .cb:hover{transform:scale(1.22);}
 .cb.r{background:var(--red);}
@@ -410,11 +413,11 @@ h1{
 /* BUTTONS */
 .btn{
   font-family:'Manrope',sans-serif;font-weight:700;font-size:.9rem;
-  padding:7px 20px;border-radius:50px;border:none;cursor:pointer;
+  padding:10px 20px;border-radius:50px;border:none;cursor:pointer;
   transition:transform .15s,box-shadow .15s;
-  display:flex;align-items:center;gap:5px;
+  display:flex;align-items:center;gap:5px;min-height:44px;
 }
-@media(max-width:480px){.btn{font-size:.8rem;padding:6px 14px;}}
+@media(max-width:480px){.btn{font-size:.8rem;padding:8px 14px;min-height:44px;}}
 .btn:hover{transform:translateY(-2px);}
 .btn:active{transform:scale(.97);}
 .btn-blue  {background:linear-gradient(135deg,#2F6FD8,#5C9DF0);color:#fff;box-shadow:0 6px 20px rgba(47,111,216,.34);}
