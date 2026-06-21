@@ -16,4 +16,5 @@ playwright-report/
 
 # Node
 node_modules/
+package.json
 npm-debug.log*
