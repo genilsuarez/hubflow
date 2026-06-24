@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary — LearnHub</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<style>
+  body { min-height: 100vh; overflow-x: hidden; padding: 0 14px 40px; }
+  .header { padding: 6px 0; margin-bottom: 10px; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: clamp(1.1rem,3vw,1.5rem); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  h1 .accent { font-style: italic; font-weight: 400; color: var(--purple); }
+  .back-link { color: var(--purple); }
+  .pill-btn.active { background: var(--purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
+
+  /* Study area */
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  /* Flashcard overrides */
+  .fc-card { max-width: 440px; height: 250px; }
+  .fc-back { background: var(--c-vocab-soft); border-color: var(--purple); }
+  [data-theme="dark"] .fc-back { background: var(--surface); border-color: var(--purple); }
+  .fc-back .fc-term { color: var(--purple); font-size: 1.3rem; }
+  .fc-back .fc-detail { font-size: .72rem; }
+
+  /* Battle card */
+  .battle-card { width: 100%; max-width: 360px; height: 140px; perspective: 1200px; position: relative; margin: 0 auto 8px; }
+  .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: transform .55s var(--ease); transform-style: preserve-3d; }
+  .battle-card.flipped .fc-inner { transform: rotateY(180deg); }
+  .battle-card .fc-face { border-radius: var(--radius-lg); padding: 16px; }
+  .battle-card .fc-emoji { font-size: 2.4rem; }
+  .battle-card .fc-term { font-size: 1.4rem; }
+
+  .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .battle-instruction { font-size: .7rem; font-weight: 700; color: var(--muted); text-align: center; }
+  .battle-round { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--muted); text-align: center; }
+
+  #pairScore { font-size: .78rem; font-weight: 700; color: var(--muted); text-align: center; margin-top: 6px; }
+  .match-instruction { font-size: .78rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 8px; }
+
+  .scroll-body { padding: 12px 0 40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <a href="../index.html" class="back-link">← Home</a>
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+  </div>
+
+  <div class="header">
+    <h1>🧠 Vocabulary <span class="accent">Match</span></h1>
+
+    <!-- Categories -->
+    <div class="pill-bar pill-bar--scroll" id="catBar"></div>
+
+    <!-- Modes -->
+    <div class="pill-bar" style="margin-top:4px;">
+      <button class="pill-btn active purple" data-mode="study">📖 Study</button>
+      <button class="pill-btn" data-mode="quiz">⚡ Quiz</button>
+      <button class="pill-btn" data-mode="match">🔀 Match</button>
+      <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer-bar" id="timerBar">
+      <span class="timer-display" id="timerDisplay">1:00</span>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress" id="progressWrap">
+      <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+      <div class="progress__track"><div class="progress__fill progress__fill--purple" id="progFill"></div></div>
+    </div>
+  </div>
+
+  <div class="scroll-body">
+    <!-- STUDY -->
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 25</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face">
+            <div class="fc-emoji" id="fcEmoji"></div>
+            <div class="fc-term" id="fcWord"></div>
+            <div class="fc-hint">tap to flip</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-emoji" id="fcBackEmoji" style="font-size:2rem;"></div>
+            <div class="fc-term" id="fcBackWord"></div>
+            <div class="fc-detail" id="fcBackMeaning"></div>
+            <div class="fc-detail" id="fcBackExtra" style="font-size:.72rem;margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn--ghost" onclick="engine.shuffleDeck()">🔀</button>
+        <button class="btn btn--ghost" onclick="engine.navCard(-1)">←</button>
+        <button class="btn btn--purple" onclick="engine.navCard(1)">→</button>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div data-area="quiz">
+      <div class="quiz-prompt">
+        <div class="quiz-prompt__emoji" id="quizEmoji"></div>
+        <div class="quiz-prompt__label" id="quizLabel"></div>
+        <div class="quiz-prompt__text" id="quizText"></div>
+      </div>
+      <div class="quiz-options" id="quizOptions"></div>
+    </div>
+
+    <!-- MATCH -->
+    <div data-area="match">
+      <div class="match-instruction">Tap one from each column to match</div>
+      <div class="pair-grid" id="pairGrid"></div>
+      <div id="pairScore"></div>
+    </div>
+
+    <!-- BATTLE -->
+    <div data-area="battle">
+      <div class="battle-scores">
+        <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
+        <span class="vs-badge">vs</span>
+        <div class="player-score p2"><span class="p-label">P2</span><span class="p-points" id="p2Score">0</span></div>
+      </div>
+      <div class="battle-round" id="battleRound">Round 1 / 10</div>
+      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
+
+      <div class="battle-card" id="battleCard">
+        <div class="fc-inner">
+          <div class="fc-face">
+            <div class="fc-emoji" id="battleEmoji"></div>
+            <div class="fc-detail" id="battleHint" style="font-size:.78rem;font-family:'Manrope',sans-serif;text-align:center;color:var(--text);margin-top:4px;"></div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-term" id="battleBackTerm" style="font-size:1.3rem;font-weight:700;color:var(--purple);"></div>
+            <div class="fc-detail" id="battleBackSpanish" style="font-size:.7rem;margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="battle-actions" id="battleClaim">
+        <button class="btn btn--primary" onclick="engine.battleClaim(1)">🙋 P1</button>
+        <button class="btn btn--ghost" onclick="engine.battleSkip()">⏭ Skip</button>
+        <button class="btn btn--red" onclick="engine.battleClaim(2)">🙋 P2</button>
+      </div>
+      <div class="battle-actions" id="battleJudge" style="display:none;">
+        <button class="btn btn--green" onclick="engine.battleJudge(true)">✓ Correct</button>
+        <button class="btn btn--red" onclick="engine.battleJudge(false)">✗ Wrong</button>
+      </div>
+      <div class="battle-actions" id="battleNext" style="display:none;">
+        <button class="btn btn--purple" onclick="engine.battleNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Overlay -->
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/vocabulary.js';
+import { FlashcardEngine } from '../js/flashcard-engine.js';
+
+const engine = new FlashcardEngine({
+  categories: CATEGORIES,
+  storagePrefix: 'vocab',
+  defaultCategory: 'bodyParts',
+});
+
+// Expose for onclick handlers
+window.engine = engine;
+
+// Flip on card click
+document.getElementById('fcCard')?.addEventListener('click', () => engine.flipCard());
+document.getElementById('battleCard')?.addEventListener('click', () => {
+  document.getElementById('battleCard').classList.toggle('flipped');
+});
+</script>
+</body>
+</html>

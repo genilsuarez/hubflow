@@ -3,464 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LearnHub — Reading Room</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <title>LearnHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Manrope:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:          #FFFFFF;
-      --paper:       #F1F5FB;
-      --surface:     #FFFFFF;
-      --border:      #E3E9F2;
-      --ink:         #16202E;
-      --ink-soft:    #46566A;
-      --muted:       #6E7A8A;
-      --rule:        #16202E;
-
-      --c-ing:       #2F6FD8;
-      --c-ing-ink:   #1A4FA8;
-      --c-ed:        #C8790A;
-      --c-ed-ink:    #7E4806;
-      --c-noun:      #2FA86B;
-      --c-noun-ink:  #156C42;
-      --c-tutor:     #7C5AF6;
-      --c-tutor-ink: #4A2FB0;
-      --c-opp:       #0E8C8C;
-      --c-opp-ink:   #0A5E5E;
-
-      --shadow-sm: 0 1px 2px rgba(30,50,80,.06), 0 3px 8px rgba(30,50,80,.06);
-      --shadow-lg: 0 24px 48px -16px rgba(30,50,80,.22), 0 4px 12px rgba(30,50,80,.10);
-      --ease: cubic-bezier(.2,.9,.25,1);
+      --bg: #FAF7F2;
+      --surface: #FFFFFF;
+      --surface-raised: #FFFFFF;
+      --border: #E8E0D4;
+      --ink: #2C2418;
+      --ink-soft: #6B5D4D;
+      --muted: #A89B8A;
+      --warm: #D4764E;
+      --warm-soft: #FDF0EA;
+      --blue: #3D6B9F;
+      --amber: #B8860B;
+      --green: #4A8C5C;
+      --teal: #3D7F7F;
+      --purple: #7B5EA7;
+      --shadow: 0 1px 3px rgba(44,36,24,.06), 0 6px 16px rgba(44,36,24,.05);
+      --shadow-hover: 0 8px 28px rgba(44,36,24,.12), 0 2px 6px rgba(44,36,24,.06);
+      --radius: 6px;
+      --ease: cubic-bezier(.22,.9,.36,1);
     }
-
+    [data-theme="dark"] {
+      --bg: #1A1714;
+      --surface: #242019;
+      --surface-raised: #2E2A22;
+      --border: #3D362C;
+      --ink: #EDE8E0;
+      --ink-soft: #B5ADA2;
+      --muted: #7A7068;
+      --warm-soft: #2E2018;
+      --shadow: 0 1px 3px rgba(0,0,0,.2), 0 6px 16px rgba(0,0,0,.15);
+      --shadow-hover: 0 8px 28px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.12);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
+    html { scroll-behavior: smooth; height: 100%; }
     body {
       font-family: 'Manrope', sans-serif;
-      background:
-        radial-gradient(900px 480px at 50% -10%, rgba(47,111,216,.16) 0%, rgba(47,111,216,.05) 40%, transparent 66%),
-        radial-gradient(640px 480px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
-        radial-gradient(680px 540px at 0% 102%, rgba(47,111,216,.08) 0%, transparent 56%),
-        linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 52%, #E6EFFB 100%);
-      background-attachment: fixed;
-      color: var(--ink);
-      min-height: 100vh;
-      padding: clamp(.85rem, 2.1vw, 1.35rem) clamp(1.1rem, 5vw, 2rem) 1.2rem;
-      position: relative;
-      overflow-x: hidden;
+      background: var(--bg); color: var(--ink);
+      height: 100%; overflow: hidden;
+      padding: 14px clamp(14px, 4vw, 28px) 12px;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* Blueprint dot grid */
+    /* Paper texture */
     body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: radial-gradient(rgba(47,111,216,.07) 1px, transparent 1.5px);
-      background-size: 22px 22px;
-      -webkit-mask-image: radial-gradient(ellipse 78% 66% at 50% 24%, #000 0%, transparent 82%);
-      mask-image: radial-gradient(ellipse 78% 66% at 50% 24%, #000 0%, transparent 82%);
-      pointer-events: none; z-index: 0;
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     }
+    [data-theme="dark"] body::before { opacity: .15; }
 
-    /* Soft blue depth */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background:
-        radial-gradient(100% 60% at 50% 110%, rgba(47,111,216,.07) 0%, transparent 50%);
-      pointer-events: none; z-index: 0;
-    }
+    .wrap { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
 
-    .wrap { position: relative; z-index: 1; max-width: 940px; margin: 0 auto; }
-
-    /* ─────────────── MASTHEAD ─────────────── */
-    .masthead { text-align: center; margin-bottom: clamp(.85rem, 2.1vw, 1.3rem); }
-
-    .wordmark {
-      font-family: 'DM Serif Display', Georgia, serif;
-      font-weight: 400;
-      font-size: clamp(2.6rem, 9.5vw, 5rem);
-      line-height: .9;
-      letter-spacing: -.03em;
-      color: var(--ink);
-      position: relative;
-      display: block;
-      animation: riseIn .9s var(--ease) both;
-    }
-    .wordmark .learn { display: inline-block; }
-    .wordmark .hub {
-      font-style: italic;
-      color: transparent;
-      -webkit-text-stroke: 1.4px var(--ink);
-      position: relative;
-    }
-    /* Hand-inked underline */
-    .underline-svg {
-      display: block; width: clamp(180px, 40vw, 300px);
-      margin: .3rem auto 0; overflow: visible;
-    }
-    .underline-svg path {
-      fill: none; stroke: var(--c-ing); stroke-width: 3.4;
-      stroke-linecap: round;
-      stroke-dasharray: 460; stroke-dashoffset: 460;
-      animation: draw 1.1s .55s var(--ease) forwards;
-    }
-
-    .lede {
-      max-width: 430px; margin: .5rem auto 0;
-      font-family: 'Fraunces', serif;
-      font-optical-sizing: auto;
-      font-size: clamp(.9rem, 2vw, 1rem);
-      font-weight: 400; font-style: italic;
-      line-height: 1.16; color: var(--ink-soft);
-      animation: fadeUp .8s .25s var(--ease) both;
-    }
-
-    /* ─────────────── SECTION LABEL ─────────────── */
-    .section-label {
-      display: flex; align-items: baseline; gap: 1rem;
-      margin: 0 0 .6rem;
-      animation: fadeUp .7s .3s var(--ease) both;
-    }
-    .section-label .idx {
-      font-family: 'Fraunces', serif; font-weight: 600;
-      font-size: .8rem; color: var(--c-ing);
-      font-variant-numeric: tabular-nums;
-    }
-    .section-label h2 {
-      font-size: .68rem; font-weight: 800; letter-spacing: .2em;
-      text-transform: uppercase; color: var(--ink-soft); white-space: nowrap;
-    }
-    .section-label .rule { flex: 1; height: 1px; background: var(--border); }
-    .section-label .count {
-      font-family: 'JetBrains Mono', monospace; font-size: .64rem;
-      font-weight: 700; color: var(--muted); letter-spacing: .05em;
-    }
-
-    /* ─────────────── CHAPTERS GRID ─────────────── */
-    .chapters {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: .65rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .chapter {
-      --accent: var(--c-ing);
-      --accent-ink: var(--c-ing-ink);
-      position: relative;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: .9rem 1.3rem .85rem;
-      text-decoration: none; color: var(--ink);
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-      transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
-      animation: chapterIn .7s var(--ease) both;
-    }
-    /* book-spine */
-    .chapter::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 5px; background: var(--accent);
-      transition: width .4s var(--ease);
-    }
-    /* corner fold tint on hover */
-    .chapter::after {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(120% 100% at 100% 0%, var(--accent), transparent 60%);
-      opacity: 0; transition: opacity .4s var(--ease);
-      pointer-events: none;
-    }
-    .chapter:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--accent);
-    }
-    .chapter:hover::before { width: 9px; }
-    .chapter:hover::after { opacity: .06; }
-    .chapter:hover .ch-num { color: var(--accent); transform: translateY(-2px); }
-    .chapter:hover .ch-go { transform: translateX(4px); opacity: 1; }
-
-    .chapter.c-ed   { --accent: var(--c-ed);   --accent-ink: var(--c-ed-ink); }
-    .chapter.c-noun { --accent: var(--c-noun); --accent-ink: var(--c-noun-ink); }
-    .chapter.c-tutor{ --accent: var(--c-tutor);--accent-ink: var(--c-tutor-ink); }
-    .chapter.c-opp  { --accent: var(--c-opp);  --accent-ink: var(--c-opp-ink); }
-
-    .ch-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.1rem; line-height: 1;
-      color: var(--border);
-      transition: color .4s var(--ease), transform .4s var(--ease);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .ch-main { display: flex; flex-direction: column; min-width: 0; }
-
-    .ch-head {
+    /* ─── HEADER ─── */
+    .header {
       display: flex; align-items: center; justify-content: space-between;
-      gap: .5rem; margin-bottom: .25rem;
+      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1.5px solid var(--border);
     }
-    .ch-title {
-      font-family: 'Fraunces', serif;
-      font-weight: 600;
-      font-size: 1.32rem; line-height: 1.15; letter-spacing: -.01em;
+    .brand { display: flex; align-items: baseline; gap: 8px; }
+    .brand h1 {
+      font-family: 'Newsreader', Georgia, serif; font-weight: 600;
+      font-size: 1.6rem; letter-spacing: -.02em; line-height: 1;
     }
-    .ch-title .mono {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent); font-weight: 700; font-size: .86em;
+    .brand h1 em { font-weight: 400; font-style: italic; color: var(--muted); }
+    .brand .edition {
+      font-family: 'JetBrains Mono', monospace; font-size: .52rem; font-weight: 700;
+      color: var(--muted); letter-spacing: .06em; text-transform: uppercase;
+      border: 1.5px solid var(--border); padding: 2px 6px; border-radius: 3px;
     }
-    .ch-go {
-      font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 1.05rem;
-      color: var(--accent); opacity: .4; flex-shrink: 0;
-      transition: transform .4s var(--ease), opacity .4s var(--ease);
+    .header-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border);
+      background: var(--surface); display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; cursor: pointer; transition: border-color .2s, transform .2s;
     }
-    .ch-desc {
-      font-size: .76rem; font-weight: 500; line-height: 1.45;
-      color: var(--ink-soft); margin-bottom: .5rem;
+    .icon-btn:hover { border-color: var(--warm); transform: scale(1.05); }
+
+    /* ─── STATS ─── */
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 14px;
+    }
+    .stat {
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 7px; text-align: center;
+    }
+    .stat-val { font-family: 'Newsreader', serif; font-size: 1.2rem; font-weight: 600; line-height: 1; color: var(--ink); }
+    .stat-label { font-size: .54rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+
+    /* ─── SECTIONS ─── */
+    .section { margin-bottom: 12px; }
+    .sec-head {
+      font-size: .58rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 6px; padding-left: 2px;
     }
 
-    .ch-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; }
-    .ch-tag {
-      font-size: .6rem; font-weight: 700; letter-spacing: .03em;
-      padding: 3px 9px; border-radius: 50px;
-      background: var(--paper); border: 1px solid var(--border);
-      color: var(--ink-soft);
+    /* ─── MODULE CARDS (book-shelf metaphor) ─── */
+    .shelf { display: flex; flex-direction: column; gap: 4px; }
+    .book {
+      --spine: var(--blue);
+      display: grid; grid-template-columns: 4px 36px 1fr; align-items: center;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 0; text-decoration: none; color: var(--ink); overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .2s;
+      animation: slideIn .5s var(--ease) both;
     }
-    .ch-tag.lvl {
-      background: color-mix(in srgb, var(--accent) 12%, transparent);
-      border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-      color: var(--accent-ink);
+    .book:hover { transform: translateX(4px); box-shadow: var(--shadow-hover); border-color: color-mix(in srgb, var(--spine) 40%, var(--border)); }
+    .book:active { transform: translateX(2px) scale(.995); }
+
+    .book-spine { width: 4px; height: 100%; background: var(--spine); align-self: stretch; }
+    .book-icon {
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; margin: 6px 4px;
+    }
+    .book-body { padding: 7px 10px 7px 6px; min-width: 0; }
+    .book-title {
+      font-weight: 800; font-size: .76rem; line-height: 1.2;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .book-title code {
+      font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .76em;
+      color: var(--spine); background: none; padding: 0;
+    }
+    .book-meta {
+      font-size: .58rem; color: var(--ink-soft); font-weight: 500; margin-top: 1px; line-height: 1.3;
+    }
+    .book-pills { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
+    .pill {
+      font-size: .5rem; font-weight: 700; padding: 2px 6px; border-radius: 3px;
+      background: var(--warm-soft); color: var(--warm); border: 1px solid color-mix(in srgb, var(--warm) 20%, transparent);
+    }
+    .pill.lvl { background: color-mix(in srgb, var(--spine) 8%, var(--surface)); color: var(--spine); border-color: color-mix(in srgb, var(--spine) 20%, transparent); }
+
+    .book.b-ed { --spine: var(--amber); }
+    .book.b-noun { --spine: var(--green); }
+    .book.b-vocab { --spine: var(--purple); }
+    .book.b-opp { --spine: var(--teal); }
+
+    /* Stagger */
+    .book:nth-child(1) { animation-delay: .05s; }
+    .book:nth-child(2) { animation-delay: .1s; }
+    .book:nth-child(3) { animation-delay: .15s; }
+
+    /* ─── GUIDES ─── */
+    .guides { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .guide-link {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 9px; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius); text-decoration: none; color: var(--ink);
+      font-size: .66rem; font-weight: 700; transition: border-color .2s, transform .2s;
+      box-shadow: var(--shadow);
+    }
+    .guide-link:hover { border-color: var(--warm); transform: translateY(-1px); }
+    .guide-link .gl-mark {
+      font-family: 'Newsreader', serif; font-size: 1rem; font-style: italic; color: var(--warm); font-weight: 400;
     }
 
-    /* ─────────────── REFERENCE ─────────────── */
-    .refs { display: grid; grid-template-columns: repeat(2, 1fr); gap: .65rem; }
-    .ref {
-      display: flex; align-items: center; gap: .7rem;
-      padding: .5rem .9rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      box-shadow: var(--shadow-sm);
-      text-decoration: none; color: var(--ink);
-      transition: border-color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease);
-      animation: fadeUp .7s .5s var(--ease) both;
+    /* ─── FOOTER ─── */
+    .foot {
+      margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .ref:hover { border-color: var(--ink-soft); background: var(--paper); transform: translateY(-3px); }
-    .ref-mark {
-      font-family: 'DM Serif Display', serif; font-size: 1.25rem;
-      color: var(--muted); line-height: 1;
-    }
-    .ref-text { display: flex; flex-direction: column; gap: 1px; }
-    .ref-text strong { font-size: .82rem; font-weight: 800; letter-spacing: -.01em; }
-    .ref-text span { font-size: .66rem; font-weight: 600; color: var(--muted); }
+    .foot-sig { font-family: 'Newsreader', serif; font-style: italic; font-size: .72rem; color: var(--ink-soft); }
+    .foot-meta { font-family: 'JetBrains Mono', monospace; font-size: .5rem; font-weight: 700; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 
-    /* ─────────────── COLOPHON ─────────────── */
-    .colophon {
-      margin-top: 1.2rem; padding-top: .85rem;
-      border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: .8rem;
-      animation: fadeUp .7s .6s var(--ease) both;
-    }
-    .colophon .sig {
-      font-family: 'Fraunces', serif; font-style: italic;
-      font-size: .8rem; color: var(--ink-soft);
-    }
-    .colophon .meta {
-      font-family: 'JetBrains Mono', monospace; font-size: .58rem;
-      font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    /* ─────────────── ANIMATIONS ─────────────── */
-    @keyframes riseIn  { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
-    @keyframes fadeUp  { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-    @keyframes fadeDown{ from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
-    @keyframes draw    { to { stroke-dashoffset: 0; } }
-    @keyframes chapterIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-
-    .chapter:nth-child(1) { animation-delay: .34s; }
-    .chapter:nth-child(2) { animation-delay: .42s; }
-    .chapter:nth-child(3) { animation-delay: .50s; }
-    .chapter:nth-child(4) { animation-delay: .58s; }
-    .chapter:nth-child(5) { animation-delay: .66s; }
-
-    @media (max-width: 680px) {
-      .chapters, .refs { grid-template-columns: 1fr; }
-      .chapter { padding: 1.25rem 1.25rem 1.2rem; gap: .9rem; }
-      .ch-num { font-size: 2.2rem; }
-    }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .underline-svg path { stroke-dashoffset: 0; }
+    }
+    @media (max-width: 480px) {
+      .guides { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+<div class="wrap">
 
-    <header class="masthead">
-      <h1 class="wordmark"><span class="learn">Learn</span><span class="hub">Hub</span></h1>
-      <svg class="underline-svg" viewBox="0 0 300 16" aria-hidden="true">
-        <path d="M4,11 C70,4 130,14 180,7 C220,2 270,9 296,5"/>
-      </svg>
-      <p class="lede">Tu sala de lectura para el inglés. Ejercicios interactivos con niveles, repetición espaciada y seguimiento del progreso.</p>
-    </header>
+  <header class="header">
+    <div class="brand">
+      <h1>Learn<em>Hub</em></h1>
+      <span class="edition">v2</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
 
-    <main>
-      <section>
-        <div class="section-label">
-          <span class="idx">I.</span>
-          <h2>Práctica activa</h2>
-          <span class="rule"></span>
-          <span class="count">06 módulos</span>
-        </div>
-
-        <div class="chapters">
-
-          <a class="chapter c-ing" href="exercises/ing-spelling.html">
-            <div class="ch-num">01</div>
-            <div class="ch-main">
-              <div class="ch-head">
-                <h3 class="ch-title">Reglas del <span class="mono">-ing</span></h3>
-                <span class="ch-go">→</span>
-              </div>
-              <p class="ch-desc">Cuándo doblar consonante, quitar la «e» o cambiar «ie» por «y» al formar el gerundio.</p>
-              <div class="ch-tags">
-                <span class="ch-tag lvl">4 niveles</span>
-                <span class="ch-tag">Study</span>
-                <span class="ch-tag">Challenge</span>
-                <span class="ch-tag">Timed</span>
-              </div>
-            </div>
-          </a>
-
-          <a class="chapter c-ed" href="exercises/ed-spelling.html">
-            <div class="ch-num">02</div>
-            <div class="ch-main">
-              <div class="ch-head">
-                <h3 class="ch-title">Reglas del <span class="mono">-ed</span></h3>
-                <span class="ch-go">→</span>
-              </div>
-              <p class="ch-desc">El pasado regular y sus trampas: consonante doble, «e» muda y verbos terminados en «y».</p>
-              <div class="ch-tags">
-                <span class="ch-tag lvl">4 niveles</span>
-                <span class="ch-tag">Study</span>
-                <span class="ch-tag">Challenge</span>
-                <span class="ch-tag">Timed</span>
-              </div>
-            </div>
-          </a>
-
-          <a class="chapter c-noun" href="exercises/noun-adjuncts.html">
-            <div class="ch-num">03</div>
-            <div class="ch-main">
-              <div class="ch-head">
-                <h3 class="ch-title">Noun Adjuncts</h3>
-                <span class="ch-go">→</span>
-              </div>
-              <p class="ch-desc">Sustantivos compuestos: adjunto directo, -ing nominal, genitivo y estructura con «of».</p>
-              <div class="ch-tags">
-                <span class="ch-tag lvl">4 niveles</span>
-                <span class="ch-tag">Study</span>
-                <span class="ch-tag">Challenge</span>
-                <span class="ch-tag">Timed</span>
-              </div>
-            </div>
-          </a>
-
-          <a class="chapter c-tutor" href="tools/lexicon.html">
-            <div class="ch-num">04</div>
-            <div class="ch-main">
-              <div class="ch-head">
-                <h3 class="ch-title">Lexicon</h3>
-                <span class="ch-go">→</span>
-              </div>
-              <p class="ch-desc">Vocabulario en flashcards, reglas de gramática y quiz con seguimiento de progreso.</p>
-              <div class="ch-tags">
-                <span class="ch-tag lvl">Intermedio</span>
-                <span class="ch-tag">Flashcards</span>
-                <span class="ch-tag">Quiz</span>
-                <span class="ch-tag">20 palabras</span>
-              </div>
-            </div>
-          </a>
-
-          <a class="chapter c-opp" href="exercises/opposites.html">
-            <div class="ch-num">05</div>
-            <div class="ch-main">
-              <div class="ch-head">
-                <h3 class="ch-title">Opposites</h3>
-                <span class="ch-go">→</span>
-              </div>
-              <p class="ch-desc">Pares de antónimos con imágenes: wide/narrow, push/pull, sharp/blunt y más. Flashcards y quiz.</p>
-              <div class="ch-tags">
-                <span class="ch-tag lvl">50 pares</span>
-                <span class="ch-tag">Study</span>
-                <span class="ch-tag">Quiz</span>
-              </div>
-            </div>
-          </a>
-
-          <a class="chapter c-tutor" href="exercises/vocabulary-match.html">
-            <div class="ch-num">06</div>
-            <div class="ch-main">
-              <div class="ch-head">
-                <h3 class="ch-title">Vocabulary Match</h3>
-                <span class="ch-go">→</span>
-              </div>
-              <p class="ch-desc">Momentos del día, clima y estaciones. Flashcards, quiz, ordenar y modo contrarreloj.</p>
-              <div class="ch-tags">
-                <span class="ch-tag lvl">3 categorías</span>
-                <span class="ch-tag">Study</span>
-                <span class="ch-tag">Quiz</span>
-                <span class="ch-tag">Order</span>
-                <span class="ch-tag">Timed</span>
-              </div>
-            </div>
-          </a>
-
-        </div>
-
-        <div class="section-label">
-          <span class="idx">II.</span>
-          <h2>Guías de referencia</h2>
-          <span class="rule"></span>
-          <span class="count">02 lecturas</span>
-        </div>
-
-        <div class="refs">
-          <a class="ref" href="guides/ing-rules.html">
-            <span class="ref-mark">§</span>
-            <span class="ref-text">
-              <strong>Guía completa del -ing</strong>
-              <span>Referencia teórica con ejemplos</span>
-            </span>
-          </a>
-          <a class="ref" href="guides/noun-adjuncts.html">
-            <span class="ref-mark">§</span>
-            <span class="ref-text">
-              <strong>Guía de Noun Adjuncts</strong>
-              <span>Patrones y casos de uso</span>
-            </span>
-          </a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="colophon">
-      <span class="sig">Hecho con cuidado por Genil Suárez</span>
-      <span class="meta">LearnHub · Reading Room</span>
-    </footer>
-
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="psTotal">0</div><div class="stat-label">Sesiones</div></div>
+    <div class="stat"><div class="stat-val" id="psBest">—</div><div class="stat-label">Best Score</div></div>
+    <div class="stat"><div class="stat-val" id="psModules">0/5</div><div class="stat-label">Módulos</div></div>
   </div>
+
+  <main style="flex:1;min-height:0">
+    <!-- GRAMMAR -->
+    <section class="section">
+      <div class="sec-head">Spelling & Grammar</div>
+      <div class="shelf">
+        <a class="book" href="exercises/ing-spelling.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">✏️</div>
+          <div class="book-body">
+            <div class="book-title">Reglas del <code>-ing</code></div>
+            <div class="book-meta">Doblar consonante · Quitar -e · Cambiar -ie → y</div>
+            <div class="book-pills"><span class="pill lvl">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
+          </div>
+        </a>
+        <a class="book b-ed" href="exercises/ed-spelling.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">📋</div>
+          <div class="book-body">
+            <div class="book-title">Reglas del <code>-ed</code></div>
+            <div class="book-meta">Pasado regular · Doble consonante · -e muda · Verbos con -y</div>
+            <div class="book-pills"><span class="pill lvl">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
+          </div>
+        </a>
+        <a class="book b-noun" href="exercises/noun-adjuncts.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">🧩</div>
+          <div class="book-body">
+            <div class="book-title">Noun Adjuncts</div>
+            <div class="book-meta">Noun+Noun · -ing nominal · Genitivo 's · Estructura con of</div>
+            <div class="book-pills"><span class="pill lvl">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- VOCABULARY -->
+    <section class="section">
+      <div class="sec-head">Vocabulary & Words</div>
+      <div class="shelf">
+        <a class="book b-vocab" href="exercises/vocabulary.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">🧠</div>
+          <div class="book-body">
+            <div class="book-title">Vocabulary Match</div>
+            <div class="book-meta">Body · Cooking · Idioms · Time · Weather · Seasons — 6 categorías</div>
+            <div class="book-pills"><span class="pill lvl">5 modos</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span></div>
+          </div>
+        </a>
+        <a class="book b-opp" href="exercises/opposites.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">⚖️</div>
+          <div class="book-body">
+            <div class="book-title">Word Relations</div>
+            <div class="book-meta">Opposites (50 pares) · Synonyms (30 pares) · 4 modos</div>
+            <div class="book-pills"><span class="pill lvl">80 pares</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Timed</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- GUIDES -->
+    <section class="section">
+      <div class="sec-head">Guías de referencia</div>
+      <div class="guides">
+        <a class="guide-link" href="guides/ing-rules.html"><span class="gl-mark">§</span> Guía completa del -ing</a>
+        <a class="guide-link" href="guides/noun-adjuncts.html"><span class="gl-mark">§</span> Guía Noun Adjuncts</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="foot-sig">Genil Suárez</span>
+    <span class="foot-meta">LearnHub · 2025</span>
+  </footer>
+</div>
+
+<script>
+(function() {
+  // Theme
+  const saved = localStorage.getItem('lh-theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  const btn = document.getElementById('themeToggle');
+  function upd() { btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  upd();
+  btn.onclick = () => {
+    const d = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', d ? '' : 'dark');
+    localStorage.setItem('lh-theme', d ? '' : 'dark');
+    upd();
+  };
+  // Stats
+  const keys = Object.keys(localStorage).filter(k => /^(ing|ed|noun|vocab|opp)-/.test(k));
+  let total = 0, best = 0; const mods = new Set();
+  keys.forEach(k => {
+    try {
+      const d = JSON.parse(localStorage.getItem(k));
+      if (Array.isArray(d)) { total += d.length; d.forEach(x => { if (x.pct > best) best = x.pct; }); }
+      const prefix = k.split('-')[0];
+      mods.add(prefix);
+    } catch(e){}
+  });
+  document.getElementById('psTotal').textContent = total || '0';
+  document.getElementById('psBest').textContent = best > 0 ? best + '%' : '—';
+  document.getElementById('psModules').textContent = mods.size + '/5';
+})();
+</script>
 </body>
 </html>

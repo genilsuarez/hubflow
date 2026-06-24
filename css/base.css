@@ -1,0 +1,137 @@
+/* ═══════════════════════════════════════════════════════
+   LearnHub — Design System
+   Warm Analog Study Desk: paper textures, editorial serif,
+   restrained warmth, book-spine color accents
+   ═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+/* ─── TOKENS ─── */
+:root {
+  /* Surface & Paper */
+  --bg: #FAF7F2;
+  --paper: #F5F1EB;
+  --surface: #FFFFFF;
+  --border: #E8E0D4;
+  --border-strong: #D4CABB;
+
+  /* Ink */
+  --ink: #2C2418;
+  --ink-soft: #5E5041;
+  --muted: #9C8E7C;
+
+  /* Accent — warm terracotta */
+  --warm: #D4764E;
+  --warm-soft: #FDF0EA;
+  --warm-dark: #A8543A;
+
+  /* Module spines */
+  --c-ing: #3D6B9F;
+  --c-ing-soft: #EBF2FA;
+  --c-ed: #B8860B;
+  --c-ed-soft: #FDF5E0;
+  --c-noun: #4A8C5C;
+  --c-noun-soft: #EAF5ED;
+  --c-vocab: #7B5EA7;
+  --c-vocab-soft: #F3EDF9;
+  --c-opp: #3D7F7F;
+  --c-opp-soft: #E8F4F4;
+
+  /* Semantic feedback */
+  --red: #C0392B;
+  --red-light: #FDEDEB;
+  --red-dark: #922B21;
+  --green: #27865A;
+  --green-light: #E8F6EF;
+  --green-dark: #1B5E3F;
+  --blue: #3D6B9F;
+  --blue-light: #EBF2FA;
+  --blue-dark: #2C4F75;
+  --orange: #C87D0A;
+  --orange-light: #FDF5E0;
+  --purple: #7B5EA7;
+  --purple-light: #F3EDF9;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(44,36,24,.04), 0 4px 10px rgba(44,36,24,.04);
+  --shadow-lg: 0 8px 28px rgba(44,36,24,.1), 0 2px 6px rgba(44,36,24,.05);
+
+  /* Shape */
+  --radius: 6px;
+  --radius-lg: 10px;
+
+  /* Motion */
+  --ease: cubic-bezier(.22,.9,.36,1);
+  --ease-bounce: cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ─── DARK MODE — warm charcoal ─── */
+[data-theme="dark"] {
+  --bg: #1A1714;
+  --paper: #211D18;
+  --surface: #282420;
+  --border: #3D362C;
+  --border-strong: #504839;
+
+  --ink: #EDE8E0;
+  --ink-soft: #B5ADA2;
+  --muted: #7A7068;
+
+  --warm-soft: #2E2018;
+  --c-ing-soft: #1A2A3D;
+  --c-ed-soft: #2D2510;
+  --c-noun-soft: #1A2D20;
+  --c-vocab-soft: #221A30;
+  --c-opp-soft: #1A2D2D;
+
+  --red-light: #3D1A1A;
+  --green-light: #1A2D20;
+  --blue-light: #1A2A3D;
+  --orange-light: #2D2510;
+  --purple-light: #221A30;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  color: var(--ink); background: var(--bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background .3s, color .3s;
+}
+
+/* ─── PAPER GRAIN TEXTURE ─── */
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  opacity: .3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+[data-theme="dark"] body::before { opacity: .12; }
+
+/* ─── TYPOGRAPHY ─── */
+.serif { font-family: 'Newsreader', Georgia, serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ─── LAYOUT ─── */
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 14px; position: relative; z-index: 1; }
+a { color: inherit; text-decoration: none; }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@keyframes pulse { from { opacity: 1; } to { opacity: .4; } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
