@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "learnhub",
+      "name": "hubflow",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-l", "3000", "/Users/gsuarez/Documents/Code/LearnHub"],
+      "runtimeArgs": ["serve", "-l", "3000", "/Users/gsuarez/Documents/Code/Learn/HubFlow"],
       "port": 3000
     }
   ]

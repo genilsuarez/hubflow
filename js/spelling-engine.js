@@ -1,5 +1,5 @@
 /**
- * LearnHub — Spelling Exercise Engine
+ * HubFlow — Spelling Exercise Engine
  * Shared logic for -ing, -ed, and noun-adjuncts exercises.
  * Each exercise imports this and passes its config + data.
  */

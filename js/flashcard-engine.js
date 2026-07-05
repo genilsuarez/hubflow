@@ -1,5 +1,5 @@
 /**
- * LearnHub — Flashcard/Vocabulary Engine
+ * HubFlow — Flashcard/Vocabulary Engine
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
 import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime } from './utils.js';

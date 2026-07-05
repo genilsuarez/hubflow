@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   LearnHub — Shared Utilities
+   HubFlow — Shared Utilities
    ═══════════════════════════════════════════════════════ */
 
 /** Fisher-Yates shuffle (returns new array) */

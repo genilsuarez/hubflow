@@ -1,4 +1,4 @@
-# LearnHub
+# HubFlow
 
 Espacio personal de estudio de inglés: ejercicios interactivos de ortografía y gramática.
 
@@ -21,7 +21,7 @@ Espacio personal de estudio de inglés: ejercicios interactivos de ortografía y
 ## Estructura de carpetas
 
 ```
-LearnHub/
+HubFlow/
 ├── index.html
 ├── ing-spelling-rules.html      # legacy
 ├── ing-spelling-rules-v2.html
