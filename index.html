@@ -9,7 +9,7 @@
     html { height: 100%; }
     body {
       height: 100%; overflow: hidden;
-      padding: 14px clamp(14px, 4vw, 28px) 12px;
+      padding: 24px clamp(14px, 4vw, 28px) 12px;
     }
 
     .wrap { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
@@ -17,24 +17,24 @@
     /* ─── HEADER ─── */
     .header {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1.5px solid var(--lp-border);
+      margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1.5px solid var(--lp-border);
     }
-    .brand { display: flex; align-items: baseline; gap: 8px; }
+    .brand { display: flex; align-items: baseline; gap: 10px; }
     .brand h1 {
       font-family: var(--lp-font-display); font-weight: var(--lp-weight-semibold);
-      font-size: 1.6rem; letter-spacing: -.02em; line-height: 1;
+      font-size: 1.8rem; letter-spacing: -.02em; line-height: 1;
     }
     .brand h1 em { font-weight: var(--lp-weight-normal); font-style: italic; color: var(--lp-muted); }
     .brand .edition {
-      font-family: var(--lp-font-mono); font-size: .52rem; font-weight: var(--lp-weight-bold);
+      font-family: var(--lp-font-mono); font-size: .55rem; font-weight: var(--lp-weight-bold);
       color: var(--lp-muted); letter-spacing: .06em; text-transform: uppercase;
-      border: 1.5px solid var(--lp-border); padding: 2px 6px; border-radius: 3px;
+      border: 1.5px solid var(--lp-border); padding: 2px 7px; border-radius: 3px;
     }
     .header-actions { display: flex; gap: 6px; }
     .icon-btn {
-      width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--lp-border);
+      width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--lp-border);
       background: var(--lp-surface); display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; cursor: pointer; transition: border-color .2s, transform .2s;
+      font-size: .85rem; cursor: pointer; transition: border-color .2s, transform .2s;
     }
     .icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.05); }
 
@@ -120,11 +120,11 @@
 
     /* ─── FOOTER ─── */
     .foot {
-      margin-top: auto; padding-top: 8px; border-top: 1px solid var(--lp-border);
+      margin-top: auto; padding-top: 16px; border-top: 1px solid var(--lp-border);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: .72rem; color: var(--lp-ink-soft); }
-    .foot-meta { font-family: var(--lp-font-mono); font-size: .5rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
+    .foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: .78rem; color: var(--lp-ink-soft); }
+    .foot-meta { font-family: var(--lp-font-mono); font-size: .52rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -139,10 +139,10 @@
 
   <header class="header">
     <div class="brand">
-      <h1>Learn<em>Hub</em></h1>
-      <span class="edition">v2</span>
+      <h1>Hub<em>Flow</em></h1>
     </div>
     <div class="header-actions">
+      <a class="icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
       <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
     </div>
   </header>
@@ -153,7 +153,7 @@
     <div class="stat"><div class="stat-val" id="psModules">0/5</div><div class="stat-label">Módulos</div></div>
   </div>
 
-  <main style="flex:1;min-height:0">
+  <main style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none">
     <!-- GRAMMAR -->
     <section class="section">
       <div class="sec-head">Spelling & Grammar</div>
@@ -257,6 +257,11 @@
   document.getElementById('psTotal').textContent = total || '0';
   document.getElementById('psBest').textContent = best > 0 ? best + '%' : '—';
   document.getElementById('psModules').textContent = mods.size + '/5';
+
+  // Local dev: rewrite portal link
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    document.getElementById('portalLink').href = 'http://localhost:3000/';
+  }
 })();
 </script>
 </body>
