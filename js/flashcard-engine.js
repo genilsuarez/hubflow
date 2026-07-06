@@ -142,7 +142,20 @@ export class FlashcardEngine {
     this.deck = shuffle(this.getItems());
     this.cardIdx = 0;
     this.showArea('study');
+    this.updateStudyProgress();
     this.renderStudyCard();
+  }
+
+  updateStudyProgress() {
+    const total = this.deck.length;
+    const current = this.cardIdx + 1;
+    const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+    const fillEl = document.getElementById('progFill');
+    const txtEl = document.getElementById('progTxt');
+    const pctEl = document.getElementById('progPct');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+    if (txtEl) txtEl.textContent = `${current} / ${total}`;
+    if (pctEl) pctEl.textContent = `${pct}%`;
   }
 
   renderStudyCard() {
@@ -187,12 +200,14 @@ export class FlashcardEngine {
   navCard(delta) {
     this.cardIdx = (this.cardIdx + delta + this.deck.length) % this.deck.length;
     this.renderStudyCard();
+    this.updateStudyProgress();
   }
 
   shuffleDeck() {
     this.deck = shuffle(this.deck);
     this.cardIdx = 0;
     this.renderStudyCard();
+    this.updateStudyProgress();
   }
 
   // ═══ QUIZ ═══

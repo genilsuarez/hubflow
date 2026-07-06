@@ -13,16 +13,24 @@ export function shuffle(arr) {
 }
 
 /** Theme toggle */
-export function initTheme(storageKey = 'lh-theme') {
-  const saved = localStorage.getItem(storageKey);
-  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+export function initTheme(storageKey = 'lp-theme') {
+  const fromUrl = new URLSearchParams(location.search).get('theme');
+  const saved = fromUrl || localStorage.getItem(storageKey);
+  if (fromUrl) localStorage.setItem(storageKey, fromUrl);
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
   updateThemeButton();
 }
 
-export function toggleTheme(storageKey = 'lh-theme') {
+export function toggleTheme(storageKey = 'lp-theme') {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-  localStorage.setItem(storageKey, isDark ? '' : 'dark');
+  const newTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : '');
+  localStorage.setItem(storageKey, newTheme);
+  if (location.search.includes('theme=')) {
+    const u = new URL(location.href); u.searchParams.set('theme', newTheme); history.replaceState(null, '', u);
+  }
   updateThemeButton();
 }
 

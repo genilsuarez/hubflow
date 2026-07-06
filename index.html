@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HubFlow</title>
+  <meta name="description" content="HubFlow — Interactive English exercises: -ing rules, -ed adjectives, noun adjuncts, and more.">
+  <script>var p=new URLSearchParams(location.search).get('theme'),t=p||localStorage.getItem('lp-theme');if(p)localStorage.setItem('lp-theme',p);if(t==='dark')document.documentElement.setAttribute('data-theme','dark')</script>
   <link rel="stylesheet" href="css/base.css">
   <style>
     html { height: 100%; }
@@ -16,8 +18,8 @@
 
     /* ─── HEADER ─── */
     .header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1.5px solid var(--lp-border);
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid var(--lp-border);
     }
     .brand { display: flex; align-items: baseline; gap: 10px; }
     .brand h1 {
@@ -27,25 +29,24 @@
     .brand h1 em { font-weight: var(--lp-weight-normal); font-style: italic; color: var(--lp-accent); }
     .header-actions { display: flex; gap: 10px; }
     .icon-btn {
-      width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--lp-border);
+      width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--lp-border);
       background: var(--lp-surface); display: flex; align-items: center; justify-content: center;
       font-size: 1.05rem; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s;
       box-shadow: var(--lp-shadow-md);
     }
     .icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.1); box-shadow: var(--lp-shadow-lg); }
 
-    /* ─── STATS ─── */
-    .stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 30px;
-    }
-    .stat {
+    /* ─── HEADER STATS (compact pill) ─── */
+    .header-stats {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      height: 36px; padding: 0 0.75rem;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-md);
-      padding: 20px 14px; text-align: center; box-shadow: var(--lp-shadow-md);
-      transition: box-shadow .2s, transform .2s;
+      box-shadow: var(--lp-shadow-sm); font-size: 0.75rem;
     }
-    .stat:hover { box-shadow: var(--lp-shadow-lg); transform: translateY(-3px); }
-    .stat-val { font-family: var(--lp-font-display); font-size: 1.8rem; font-weight: var(--lp-weight-bold); line-height: 1; color: var(--lp-ink); }
-    .stat-label { font-size: .65rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 7px; }
+    .header-stat { display: flex; align-items: baseline; gap: 0.25rem; }
+    .header-stat__val { font-family: var(--lp-font-display); font-weight: var(--lp-weight-bold); font-size: 0.9rem; color: var(--lp-ink); line-height: 1; }
+    .header-stat__label { font-size: 0.6rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .header-stat__divider { width: 1px; height: 18px; background: var(--lp-border); }
 
     /* ─── SECTIONS ─── */
     .section { margin-bottom: 30px; }
@@ -134,9 +135,9 @@
       .guides { grid-template-columns: 1fr; }
       body { padding: 20px 12px 12px; }
       .brand h1 { font-size: 1.7rem; }
-      .stats { gap: 6px; }
-      .stat { padding: 12px 8px; }
-      .stat-val { font-size: 1.3rem; }
+      .header-stats { padding: 0 0.5rem; gap: 0.35rem; height: 32px; }
+      .header-stat__val { font-size: 0.8rem; }
+      .header-stat__label { display: none; }
       .book-body { padding: 10px 10px 9px 6px; }
     }
   </style>
@@ -148,19 +149,45 @@
     <div class="brand">
       <h1>Hub<em>Flow</em></h1>
     </div>
+    <div class="header-stats" role="status" aria-label="Progress summary">
+      <span class="header-stat"><span class="header-stat__val" id="psTotal">0</span><span class="header-stat__label">ses</span></span>
+      <span class="header-stat__divider" aria-hidden="true"></span>
+      <span class="header-stat"><span class="header-stat__val" id="psBest">—</span><span class="header-stat__label">best</span></span>
+      <span class="header-stat__divider" aria-hidden="true"></span>
+      <span class="header-stat"><span class="header-stat__val" id="psModules">0/5</span><span class="header-stat__label">mod</span></span>
+    </div>
     <div class="header-actions">
       <a class="icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
       <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
     </div>
   </header>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-val" id="psTotal">0</div><div class="stat-label">Sesiones</div></div>
-    <div class="stat"><div class="stat-val" id="psBest">—</div><div class="stat-label">Best Score</div></div>
-    <div class="stat"><div class="stat-val" id="psModules">0/5</div><div class="stat-label">Módulos</div></div>
-  </div>
-
   <main style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none">
+    <!-- VOCABULARY -->
+    <section class="section">
+      <div class="sec-head">Vocabulary & Words</div>
+      <div class="shelf">
+        <a class="book b-vocab" href="exercises/vocabulary.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">🧠</div>
+          <div class="book-body">
+            <div class="book-title">Vocabulary Match</div>
+            <div class="book-meta">Body · Cooking · Idioms · Time · Weather · Seasons — 6 categorías</div>
+            <div class="book-pills"><span class="pill lvl">5 modos</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span></div>
+          </div>
+        </a>
+        <a class="book b-opp" href="exercises/opposites.html">
+          <div class="book-spine"></div>
+          <div class="book-icon">⚖️</div>
+          <div class="book-body">
+            <div class="book-title">Word Relations</div>
+            <div class="book-meta">Opposites (50 pares) · Synonyms (30 pares) · 4 modos</div>
+            <div class="book-pills"><span class="pill lvl">80 pares</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Timed</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <!-- GRAMMAR -->
     <section class="section">
       <div class="sec-head">Spelling & Grammar</div>
@@ -195,31 +222,6 @@
       </div>
     </section>
 
-    <!-- VOCABULARY -->
-    <section class="section">
-      <div class="sec-head">Vocabulary & Words</div>
-      <div class="shelf">
-        <a class="book b-vocab" href="exercises/vocabulary.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🧠</div>
-          <div class="book-body">
-            <div class="book-title">Vocabulary Match</div>
-            <div class="book-meta">Body · Cooking · Idioms · Time · Weather · Seasons — 6 categorías</div>
-            <div class="book-pills"><span class="pill lvl">5 modos</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span></div>
-          </div>
-        </a>
-        <a class="book b-opp" href="exercises/opposites.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">⚖️</div>
-          <div class="book-body">
-            <div class="book-title">Word Relations</div>
-            <div class="book-meta">Opposites (50 pares) · Synonyms (30 pares) · 4 modos</div>
-            <div class="book-pills"><span class="pill lvl">80 pares</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-      </div>
-    </section>
-
     <!-- GUIDES -->
     <section class="section">
       <div class="sec-head">Guías de referencia</div>
@@ -239,16 +241,22 @@
 <script>
 (function() {
   // Theme
-  const saved = localStorage.getItem('lh-theme');
+  const saved = localStorage.getItem('lp-theme');
   if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
   const btn = document.getElementById('themeToggle');
   function upd() { btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
   upd();
   btn.onclick = () => {
+    document.documentElement.classList.add('theme-transitioning');
     const d = document.documentElement.getAttribute('data-theme') === 'dark';
-    document.documentElement.setAttribute('data-theme', d ? '' : 'dark');
-    localStorage.setItem('lh-theme', d ? '' : 'dark');
+    const newTheme = d ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : '');
+    localStorage.setItem('lp-theme', newTheme);
+    if (location.search.includes('theme=')) {
+      const u = new URL(location.href); u.searchParams.set('theme', newTheme); history.replaceState(null, '', u);
+    }
     upd();
+    setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 350);
   };
   // Stats
   const keys = Object.keys(localStorage).filter(k => /^(ing|ed|noun|vocab|opp)-/.test(k));
@@ -265,9 +273,18 @@
   document.getElementById('psBest').textContent = best > 0 ? best + '%' : '—';
   document.getElementById('psModules').textContent = mods.size + '/5';
 
-  // Local dev: rewrite portal link
+  // Local dev: rewrite portal link and propagate theme
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     document.getElementById('portalLink').href = 'http://localhost:3000/';
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href*="localhost:"]');
+      if (a) {
+        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const url = new URL(a.href);
+        url.searchParams.set('theme', theme);
+        a.href = url.toString();
+      }
+    });
   }
 })();
 </script>
