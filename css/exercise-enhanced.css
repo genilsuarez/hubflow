@@ -1,0 +1,174 @@
+/* ═══════════════════════════════════════════════════════
+   HubFlow — Exercise Enhanced Styles
+   Elevates exercise pages to match guide-level visual
+   quality: richer backgrounds, stronger elevation,
+   refined spacing and card treatments
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── ENHANCED BACKGROUND ─── */
+html {
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(212, 118, 78, .08) 0%, rgba(212, 118, 78, .03) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(212, 118, 78, .05) 0%, transparent 58%),
+    linear-gradient(180deg, var(--lp-bg) 0%, #F8F4EE 55%, #F0EBE3 100%);
+  background-attachment: fixed;
+  min-height: 100%;
+}
+[data-theme="dark"] html {
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(212, 118, 78, .04) 0%, transparent 64%),
+    linear-gradient(180deg, var(--lp-bg) 0%, #1E1A16 100%);
+  background-attachment: fixed;
+}
+
+/* ─── BODY ENHANCEMENTS ─── */
+body {
+  background: transparent !important;
+  position: relative;
+}
+
+/* Subtle dot pattern overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background-image: radial-gradient(rgba(212, 118, 78, .04) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 22%, #000 0%, transparent 80%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 22%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::after { display: none; }
+
+/* ─── TOP BAR REFINEMENT ─── */
+.top-bar {
+  padding: 10px 0;
+  margin-bottom: 14px;
+}
+.back-link {
+  font-size: .82rem;
+  letter-spacing: -.01em;
+}
+.theme-toggle {
+  width: 38px; height: 38px;
+  box-shadow: var(--lp-shadow-sm);
+}
+.theme-toggle:hover {
+  box-shadow: var(--lp-shadow-md);
+  transform: scale(1.08);
+}
+
+/* ─── HEADER SECTION ─── */
+.header {
+  padding: 12px 0 !important;
+  margin-bottom: 14px !important;
+}
+h1 {
+  font-size: clamp(1.1rem, 3.2vw, 1.5rem) !important;
+  margin-bottom: 12px !important;
+}
+
+/* ─── PILL BAR ENHANCED ─── */
+.pill-bar {
+  box-shadow: var(--lp-shadow-sm);
+  margin-bottom: 10px;
+}
+.pill-btn.active {
+  box-shadow: 0 3px 12px rgba(44, 36, 24, .15);
+}
+[data-theme="dark"] .pill-btn.active {
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .3);
+}
+
+/* ─── LEVEL BAR ENHANCED ─── */
+.level-bar {
+  margin-bottom: 12px;
+}
+.level-pill {
+  box-shadow: var(--lp-shadow-xs);
+  transition: all .2s var(--lp-ease);
+}
+.level-pill:hover:not(.locked) {
+  transform: translateY(-1px);
+  box-shadow: var(--lp-shadow-sm);
+}
+.level-pill.active {
+  box-shadow: 0 3px 14px rgba(var(--active-r, 212), var(--active-g, 118), var(--active-b, 78), .3);
+}
+
+/* ─── PROGRESS BAR ENHANCED ─── */
+.progress {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background: var(--lp-surface);
+  border-radius: var(--lp-radius-sm);
+  border: 1px solid var(--lp-border-subtle);
+  box-shadow: var(--lp-shadow-xs);
+}
+.progress__track {
+  height: 5px;
+  border-radius: 3px;
+}
+
+/* ─── CARD GRID ENHANCED ─── */
+.card-grid {
+  gap: 8px;
+}
+
+/* ─── WORD CARDS ENHANCED ─── */
+.word-card {
+  box-shadow: var(--lp-shadow-sm);
+  transition: border-color .2s, background .2s, transform .2s var(--lp-ease), box-shadow .2s;
+  border-radius: var(--lp-radius-md);
+}
+.word-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--lp-shadow-md);
+}
+.word-card__verb {
+  font-size: .92rem;
+  margin-bottom: 6px;
+}
+.word-card__input,
+.word-card__select {
+  border-radius: var(--lp-radius-xs);
+}
+
+/* ─── BUTTON ENHANCED ─── */
+.check-area {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--lp-border-subtle);
+}
+.check-area .btn {
+  padding: 11px 20px;
+  font-size: .82rem;
+  border-radius: var(--lp-radius-md);
+}
+
+/* ─── RESULT OVERLAY ENHANCED ─── */
+.result-box {
+  border-radius: var(--lp-radius-xl);
+  padding: 32px;
+  box-shadow: var(--lp-shadow-hover);
+}
+
+/* ─── SCROLL BODY SPACING ─── */
+.scroll-body {
+  padding: 14px 0 48px;
+}
+
+/* ─── LEGEND ENHANCED ─── */
+.legend {
+  padding: 6px 10px;
+  background: var(--lp-bg-paper);
+  border-radius: var(--lp-radius-sm);
+  border: 1px solid var(--lp-border-subtle);
+}
+
+/* ─── TIMER ENHANCED ─── */
+.timer-bar.show {
+  padding: 6px 12px;
+  background: var(--lp-surface);
+  border-radius: var(--lp-radius-sm);
+  border: 1px solid var(--lp-border-subtle);
+  margin-bottom: 10px;
+}

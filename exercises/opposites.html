@@ -6,6 +6,7 @@
 <title>Word Relations — HubFlow</title>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
 <style>
   body { min-height: 100vh; padding: 0 14px 40px; }
   .header { padding: 6px 0; }
@@ -192,23 +193,37 @@ function renderCard() {
 }
 
 document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
-document.getElementById('nextBtn').addEventListener('click', (e) => { e.target.blur(); cardIdx = (cardIdx + 1) % deck.length; renderCard(); });
-document.getElementById('prevBtn').addEventListener('click', (e) => { e.target.blur(); cardIdx = (cardIdx - 1 + deck.length) % deck.length; renderCard(); });
+document.getElementById('nextBtn').addEventListener('click', (e) => { e.target.blur(); advanceCard(1); });
+document.getElementById('prevBtn').addEventListener('click', (e) => { e.target.blur(); advanceCard(-1); });
 document.getElementById('shuffleBtn').addEventListener('click', (e) => { e.target.blur(); deck = shuffle(deck); cardIdx = 0; renderCard(); });
+
+function advanceCard(dir) {
+  const card = document.getElementById('fcCard');
+  const inner = card.querySelector('.fc-inner');
+  // If flipped, skip the unflip animation so the answer isn't briefly visible
+  if (card.classList.contains('flip')) {
+    inner.style.transition = 'none';
+    card.classList.remove('flip');
+    // Force reflow so the instant unflip takes effect
+    void inner.offsetHeight;
+    inner.style.transition = '';
+  }
+  cardIdx = (cardIdx + dir + deck.length) % deck.length;
+  renderCard();
+}
 
 document.addEventListener('keydown', e => {
   if (mode !== 'study') return;
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
-    // Blur any focused button to prevent double-fire
     if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
       document.activeElement.blur();
     }
     const card = document.getElementById('fcCard');
-    if (card.classList.contains('flip')) { cardIdx = (cardIdx + 1) % deck.length; renderCard(); }
+    if (card.classList.contains('flip')) { advanceCard(1); }
     else { card.classList.add('flip'); }
-  } else if (e.key === 'ArrowRight') { e.preventDefault(); cardIdx = (cardIdx + 1) % deck.length; renderCard(); }
-  else if (e.key === 'ArrowLeft') { e.preventDefault(); cardIdx = (cardIdx - 1 + deck.length) % deck.length; renderCard(); }
+  } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
 });
 
 // ─── QUIZ / TIMED ───
