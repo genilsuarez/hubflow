@@ -38,6 +38,28 @@
 
   #pairScore { font-size: .7rem; font-weight: 700; color: var(--muted); text-align: center; }
   .scroll-body { padding: 8px 0 30px; }
+
+  /* Battle */
+  .battle-scores { display: flex; gap: 12px; justify-content: center; align-items: center; width: 100%; }
+  .player-score { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 16px; border-radius: var(--radius); background: var(--surface); border: 1.5px solid var(--border); min-width: 80px; }
+  .player-score.p1 { border-color: var(--blue, #4a9eff); }
+  .player-score.p2 { border-color: var(--red, #e85d5d); }
+  .player-score .p-label { font-size: .5rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .player-score .p-points { font-family: 'Newsreader', serif; font-size: 1.4rem; font-weight: 600; }
+  .player-score.p1 .p-points { color: var(--blue, #4a9eff); }
+  .player-score.p2 .p-points { color: var(--red, #e85d5d); }
+  .vs-badge { font-family: 'Newsreader', serif; font-size: .8rem; font-style: italic; color: var(--muted); }
+  .battle-card { max-width: 360px; height: 140px; }
+  .battle-card .fc-emoji { font-size: 2.2rem; }
+  .battle-card .fc-term { font-size: 1.4rem; }
+  .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .battle-instruction { font-size: .7rem; font-weight: 700; color: var(--muted); text-align: center; }
+  .battle-round { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--muted); text-align: center; }
+  .btn--sm { font-size: .7rem; padding: 8px 14px; }
+  .btn--blue { background: var(--blue, #4a9eff); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; }
+  .btn--orange { background: var(--red, #e85d5d); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; }
+  .btn--red { background: var(--red, #e85d5d); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; }
+  .btn--green { background: var(--green, #4caf50); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; }
 </style>
 </head>
 <body>
@@ -61,6 +83,7 @@
       <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">🎯 Quiz</button>
       <button class="pill-btn" data-mode="match">🔀 Match</button>
+      <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
@@ -76,6 +99,7 @@
     <!-- STUDY -->
     <div data-area="study">
       <div class="fc-count" id="fcCounter">1 / 50</div>
+      <button class="listen-btn" id="speakBtn" aria-label="Listen to pronunciation" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--c-opp);background:rgba(61,127,127,.08);font-size:1.2rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;margin-bottom:6px;">🔊</button>
       <div class="fc-card" id="fcCard">
         <div class="fc-inner">
           <div class="fc-face opp-front">
@@ -112,6 +136,42 @@
       <div class="pair-grid" id="pairGrid"></div>
       <div id="pairScore"></div>
     </div>
+
+    <!-- BATTLE -->
+    <div data-area="battle">
+      <div class="battle-scores">
+        <div class="player-score p1"><span class="p-label">Player 1</span><span class="p-points" id="bp1">0</span></div>
+        <span class="vs-badge">vs</span>
+        <div class="player-score p2"><span class="p-label">Player 2</span><span class="p-points" id="bp2">0</span></div>
+      </div>
+      <div class="battle-round" id="battleRound">Round 1 / 10</div>
+      <div class="fc-card battle-card" id="battleCard">
+        <div class="fc-inner">
+          <div class="fc-face opp-front">
+            <div class="fc-emoji" id="battleEmoji"></div>
+            <div class="fc-term" id="battleTerm"></div>
+            <div class="fc-hint">claim to answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-emoji" id="battleBackEmoji"></div>
+            <div class="fc-term" id="battleBackTerm"></div>
+          </div>
+        </div>
+      </div>
+      <div class="battle-instruction" id="battleInstruction">Press 1 or 2 to claim · S to skip</div>
+      <div class="battle-actions" id="battleActions">
+        <button class="btn btn--blue btn--sm" id="bClaim1">1️⃣ P1</button>
+        <button class="btn btn--ghost btn--sm" id="bSkip">⏭️ Skip</button>
+        <button class="btn btn--orange btn--sm" id="bClaim2">2️⃣ P2</button>
+      </div>
+      <div class="battle-actions" id="battleJudge" style="display:none;">
+        <button class="btn btn--green btn--sm" id="bCorrect">✓ Correct (Y)</button>
+        <button class="btn btn--red btn--sm" id="bWrong">✗ Wrong (N)</button>
+      </div>
+      <div class="battle-actions" id="battleNext" style="display:none;">
+        <button class="btn btn--green btn--sm" id="bNext">→ Next (Space)</button>
+      </div>
+    </div>
   </div>
 
   <div class="result-overlay" id="resultOverlay"></div>
@@ -119,10 +179,17 @@
 
 <script type="module">
 import { PAIRS, SYNONYMS } from '../data/opposites.js';
-import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime } from '../js/utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable } from '../js/utils.js';
 
 initTheme();
 document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+// TTS: bind speak button
+let currentTerm = '';
+const speakBtn = document.getElementById('speakBtn');
+if (speakBtn && isSpeechAvailable()) {
+  speakBtn.addEventListener('click', () => { if (currentTerm) speak(currentTerm); });
+} else if (speakBtn) { speakBtn.style.display = 'none'; }
 
 let currentCat = 'opposites';
 let mode = 'study';
@@ -158,6 +225,7 @@ function startMode() {
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'match') initMatch();
+  else if (mode === 'battle') initBattle();
   else if (mode === 'timed') initQuiz(true);
 }
 
@@ -184,6 +252,7 @@ function renderCard() {
   document.getElementById('fcEmoji').textContent = emoji;
   document.getElementById('fcWord').textContent = word;
   document.getElementById('fcWord').className = 'fc-term ' + (item.swap ? 'red' : 'blue');
+  currentTerm = word;
 
   document.getElementById('fcBackEmoji').textContent = oppEmoji;
   document.getElementById('fcBackWord').textContent = opp;
@@ -214,6 +283,19 @@ function advanceCard(dir) {
 }
 
 document.addEventListener('keydown', e => {
+  if (mode === 'battle') {
+    if (battle.phase === 'claim') {
+      if (e.key === '1') { e.preventDefault(); battleClaim(1); }
+      else if (e.key === '2') { e.preventDefault(); battleClaim(2); }
+      else if (e.key === 's' || e.key === 'S') { e.preventDefault(); battleSkip(); }
+    } else if (battle.phase === 'judge') {
+      if (e.key === 'y' || e.key === 'Y' || e.key === 'Enter') { e.preventDefault(); battleJudge(true); }
+      else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); battleJudge(false); }
+    } else if (battle.phase === 'next') {
+      if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); battleNext(); }
+    }
+    return;
+  }
   if (mode !== 'study') return;
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
@@ -361,6 +443,97 @@ function showResult() {
   overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); startMode(); });
   overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode==='study')); startMode(); });
 }
+
+// ─── BATTLE ───
+let battle = { p1: 0, p2: 0, round: 0, total: 10, claimer: null, deck: [], phase: 'claim' };
+
+function initBattle() {
+  battle = { p1: 0, p2: 0, round: 0, total: Math.min(10, data.length), claimer: null, deck: shuffle([...data]), phase: 'claim' };
+  document.querySelector('[data-area="battle"]').classList.add('show');
+  updateBattleScores();
+  showBattleCard();
+}
+
+function showBattleCard() {
+  if (battle.round >= battle.total) { showBattleResult(); return; }
+  const pair = battle.deck[battle.round];
+  const askA = Math.random() < 0.5;
+  battle.currentWord = askA ? pair.a : pair.b;
+  battle.currentAnswer = askA ? pair.b : pair.a;
+  battle.currentEmoji = askA ? pair.ea : pair.eb;
+  battle.answerEmoji = askA ? pair.eb : pair.ea;
+
+  const card = document.getElementById('battleCard');
+  card.classList.remove('flipped');
+  document.getElementById('battleEmoji').textContent = battle.currentEmoji;
+  document.getElementById('battleTerm').textContent = battle.currentWord;
+  document.getElementById('battleBackEmoji').textContent = battle.answerEmoji;
+  document.getElementById('battleBackTerm').textContent = battle.currentAnswer;
+
+  document.getElementById('battleRound').textContent = `Round ${battle.round + 1} / ${battle.total}`;
+  setBattlePhase('claim');
+}
+
+function setBattlePhase(phase) {
+  battle.phase = phase;
+  document.getElementById('battleActions').style.display = phase === 'claim' ? 'flex' : 'none';
+  document.getElementById('battleJudge').style.display = phase === 'judge' ? 'flex' : 'none';
+  document.getElementById('battleNext').style.display = phase === 'next' ? 'flex' : 'none';
+
+  const instructions = { claim: 'Press 1 or 2 to claim · S to skip', judge: `Player ${battle.claimer} answers — was it correct?`, next: 'Press Space or → to continue' };
+  document.getElementById('battleInstruction').textContent = instructions[phase] || '';
+}
+
+function battleClaim(player) {
+  battle.claimer = player;
+  document.getElementById('battleCard').classList.add('flipped');
+  setBattlePhase('judge');
+}
+
+function battleSkip() {
+  battle.round++;
+  showBattleCard();
+}
+
+function battleJudge(correct) {
+  if (correct) {
+    battle[`p${battle.claimer}`]++;
+  }
+  updateBattleScores();
+  setBattlePhase('next');
+}
+
+function battleNext() {
+  battle.round++;
+  showBattleCard();
+}
+
+function updateBattleScores() {
+  document.getElementById('bp1').textContent = battle.p1;
+  document.getElementById('bp2').textContent = battle.p2;
+}
+
+function showBattleResult() {
+  const winner = battle.p1 > battle.p2 ? 'Player 1 wins! 🎉' : battle.p2 > battle.p1 ? 'Player 2 wins! 🎉' : "It's a tie! 🤝";
+  const overlay = document.getElementById('resultOverlay');
+  overlay.innerHTML = `<div class="result-box">
+    <div class="result-title">${winner}</div>
+    <div class="result-sub" style="font-size:1.2rem;margin:8px 0;">🔵 ${battle.p1} — ${battle.p2} 🔴</div>
+    <div class="result-sub">${battle.total} rounds</div>
+    <div class="result-btns"><button class="btn btn--green" id="rr">🔄 Rematch</button><button class="btn btn--ghost" id="rs">📖 Study</button></div>
+  </div>`;
+  overlay.classList.add('show');
+  overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); initBattle(); });
+  overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode==='study')); startMode(); });
+}
+
+// Battle button handlers
+document.getElementById('bClaim1').addEventListener('click', () => battleClaim(1));
+document.getElementById('bClaim2').addEventListener('click', () => battleClaim(2));
+document.getElementById('bSkip').addEventListener('click', () => battleSkip());
+document.getElementById('bCorrect').addEventListener('click', () => battleJudge(true));
+document.getElementById('bWrong').addEventListener('click', () => battleJudge(false));
+document.getElementById('bNext').addEventListener('click', () => battleNext());
 
 // Init
 startMode();

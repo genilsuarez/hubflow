@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spelling by Ear — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-blue); }
+  .pill-btn.active { background: var(--lp-cat-blue); color: #fff; box-shadow: 0 2px 10px rgba(59,130,246,.25); }
+  .progress__fill { background: var(--lp-cat-blue); }
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-btn { font-size: .68rem; font-weight: 700; padding: 6px 12px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted); cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  [data-area].show { display: flex; }
+  .listen-btn { width: 80px; height: 80px; border-radius: 50%; border: 2.5px solid var(--lp-cat-blue); background: rgba(59,130,246,.08); display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: all .2s; }
+  .listen-btn:hover { background: rgba(59,130,246,.15); transform: scale(1.08); }
+  .listen-btn:active { transform: scale(.95); }
+  .form-label { font-size: .75rem; font-weight: 800; color: var(--lp-cat-blue); background: rgba(59,130,246,.08); padding: 5px 12px; border-radius: var(--lp-radius-sm); border: 1.5px solid rgba(59,130,246,.3); text-transform: uppercase; letter-spacing: .05em; }
+  .sc-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); }
+  .answer-input { width: 100%; max-width: 260px; padding: 14px 16px; font-size: 1.1rem; text-align: center; border-radius: .5rem; border: 2px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-ink); outline: none; transition: border-color .2s; font-family: var(--lp-font-body); font-weight: 600; }
+  .answer-input:focus { border-color: var(--lp-cat-blue); }
+  .answer-input.correct { border-color: var(--lp-success); }
+  .answer-input.wrong { border-color: var(--lp-error); }
+  .explain-box { width: 100%; max-width: 440px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft); background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm); padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5; }
+  .no-tts { max-width: 440px; font-size: .8rem; color: var(--lp-error-dark); background: var(--lp-error-soft); border: 1px solid var(--lp-error); border-radius: var(--lp-radius-sm); padding: 12px 16px; text-align: center; display: none; }
+  .no-tts.show { display: block; }
+  .scroll-body { padding: 8px 0 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar"><a href="../index.html" class="back-link">← Home</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  <div class="header">
+    <h1>👂 Spelling by Ear</h1>
+    <div class="cat-bar" id="catBar"></div>
+    <div class="pill-bar"><button class="pill-btn active" data-mode="practice">🎯 Practice</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
+    <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
+    <div class="progress"><div class="progress__labels"><span id="progTxt">0 / 15</span><span id="progPct">0%</span></div><div class="progress__track"><div class="progress__fill" id="progFill"></div></div></div>
+  </div>
+  <div class="scroll-body">
+    <div class="no-tts" id="noTts">🔇 Tu navegador no soporta síntesis de voz. Prueba en Chrome o Safari.</div>
+    <div data-area="practice">
+      <button class="listen-btn" id="listenBtn" aria-label="Listen to base verb">🔊</button>
+      <div class="form-label" id="formLabel">Write the -ing form</div>
+      <div class="sc-counter" id="scCounter"></div>
+      <input class="answer-input" id="answerInput" type="text" placeholder="Type the form…" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="explain-box" id="explainBox"></div>
+    </div>
+  </div>
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+<script type="module">
+import { CATEGORIES } from '../data/spelling-by-ear.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable } from '../js/utils.js';
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
+const catKeys = Object.keys(CATEGORIES);
+let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
+function renderCatBar() { const bar = document.getElementById('catBar'); bar.innerHTML = catKeys.map(k => `<button class="cat-btn ${k===currentCat?'active':''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`).join(''); bar.querySelectorAll('[data-cat]').forEach(btn => btn.addEventListener('click', () => { currentCat = btn.dataset.cat; bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat)); startMode(); })); }
+renderCatBar();
+document.querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => { mode = btn.dataset.mode; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode)); startMode(); }));
+function startMode() { stopTimer(); document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show')); document.getElementById('timerBar').classList.remove('show'); initPractice(mode === 'timed'); }
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+function getData() { return CATEGORIES[currentCat].items; }
+function updProgress(c, t) { const p = Math.round((c/t)*100); document.getElementById('progFill').style.width = p+'%'; document.getElementById('progTxt').textContent = `${c} / ${t}`; document.getElementById('progPct').textContent = p+'%'; }
+function playBase() { const item = deck[idx]; if (item) speak(item.base, { rate: 0.8 }); }
+document.getElementById('listenBtn').addEventListener('click', playBase);
+function initPractice(timed) { deck = shuffle(getData()); idx = 0; score = 0; answered = false; total = Math.min(timed ? 10 : deck.length, deck.length); document.querySelector('[data-area="practice"]').classList.add('show'); if (timed) { document.getElementById('timerBar').classList.add('show'); timer = new Timer(total*8, r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r<=10); }, () => finishPractice()); timer.start(); } renderItem(); }
+function renderItem() { if (idx >= total) { stopTimer(); finishPractice(); return; } answered = false; const item = deck[idx]; document.getElementById('formLabel').textContent = `Write the ${item.form} form`; document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; const input = document.getElementById('answerInput'); input.value = ''; input.className = 'answer-input'; input.disabled = false; input.focus(); updProgress(idx, total); setTimeout(playBase, 300); }
+function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); input.value = `${val} → ${item.correct}`; } document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); setTimeout(renderItem, 1600); }
+document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+function finishPractice() { const pct = showResult({ correct: score, total, containerEl: document.getElementById('resultOverlay'), onRestart: () => startMode(), onStudy: null }); recordScore(`sbe-${currentCat}`, pct); }
+startMode();
+</script>
+</body>
+</html>

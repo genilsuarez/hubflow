@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Irregular Verbs — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-amber); }
+  .pill-btn.active { background: var(--lp-cat-amber); color: #fff; box-shadow: 0 2px 10px rgba(180,130,40,.25); }
+  .progress__fill { background: var(--lp-cat-amber); }
+
+  /* Category pills */
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; }
+  .cat-btn {
+    font-size: .7rem; font-weight: 700; padding: 6px 14px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted);
+    cursor: pointer; transition: all .2s;
+  }
+  .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
+
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  /* Flashcard face customization */
+  .fc-card { max-width: 460px; height: 220px; }
+  .verb-front .fc-term { font-size: 1.8rem; color: var(--lp-cat-amber); }
+  .fc-back { background: var(--lp-accent-soft); border-color: var(--lp-cat-amber); }
+  .verb-forms { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .verb-forms .vf-row { display: flex; gap: 8px; align-items: baseline; }
+  .verb-forms .vf-label { font-size: .6rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase; width: 70px; text-align: right; }
+  .verb-forms .vf-val { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 600; color: var(--lp-ink); }
+
+  /* Quiz styles */
+  .quiz-card { width: 100%; max-width: 440px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 18px; text-align: center; box-shadow: var(--lp-shadow-sm); }
+  .quiz-card .q-base { font-family: var(--lp-font-display); font-size: 1.5rem; font-weight: 600; color: var(--lp-cat-amber); }
+  .quiz-card .q-label { font-size: .62rem; color: var(--lp-muted); font-weight: 700; margin-top: 4px; text-transform: uppercase; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 440px; }
+
+  /* Write mode */
+  .write-card { width: 100%; max-width: 440px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 20px; text-align: center; box-shadow: var(--lp-shadow-sm); }
+  .write-card .w-base { font-family: var(--lp-font-display); font-size: 1.4rem; font-weight: 600; color: var(--lp-cat-amber); margin-bottom: 4px; }
+  .write-card .w-label { font-size: .62rem; color: var(--lp-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+  .write-inputs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .write-field { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .write-field label { font-size: .6rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase; }
+  .write-field input {
+    width: 130px; font-family: var(--lp-font-mono); font-size: .82rem; font-weight: 600;
+    text-align: center; padding: 8px 10px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-bg-paper); color: var(--lp-ink);
+    outline: none; transition: border-color .2s;
+  }
+  .write-field input:focus { border-color: var(--lp-cat-amber); }
+  .write-field input.correct { border-color: var(--lp-success); background: var(--lp-success-soft); }
+  .write-field input.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); }
+  .write-feedback { font-size: .72rem; font-weight: 600; margin-top: 8px; min-height: 1.2em; }
+  .write-feedback.ok { color: var(--lp-success); }
+  .write-feedback.err { color: var(--lp-error); }
+
+  .scroll-body { padding: 8px 0 30px; }
+
+  /* Battle */
+  .battle-scores { display: flex; gap: 12px; justify-content: center; align-items: center; width: 100%; }
+  .player-score { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 16px; border-radius: var(--lp-radius-sm); background: var(--lp-surface); border: 1.5px solid var(--lp-border); min-width: 80px; }
+  .player-score.p1 { border-color: var(--lp-cat-blue, #4a9eff); }
+  .player-score.p2 { border-color: var(--lp-warning, #e85d5d); }
+  .player-score .p-label { font-size: .5rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--lp-muted); }
+  .player-score .p-points { font-family: var(--lp-font-display); font-size: 1.4rem; font-weight: 600; }
+  .player-score.p1 .p-points { color: var(--lp-cat-blue, #4a9eff); }
+  .player-score.p2 .p-points { color: var(--lp-warning, #e85d5d); }
+  .vs-badge { font-family: var(--lp-font-display); font-size: .8rem; font-style: italic; color: var(--lp-muted); }
+  .battle-card { max-width: 360px; height: 180px; }
+  .battle-card .fc-term { font-size: 1.5rem; }
+  .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .battle-instruction { font-size: .7rem; font-weight: 700; color: var(--lp-muted); text-align: center; }
+  .battle-round { font-family: var(--lp-font-mono); font-size: .62rem; color: var(--lp-muted); text-align: center; }
+  .btn--sm { font-size: .7rem; padding: 8px 14px; }
+  .btn--blue { background: var(--lp-cat-blue, #4a9eff); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
+  .btn--orange { background: var(--lp-warning, #e85d5d); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
+  .btn--red { background: var(--lp-error, #e85d5d); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
+
+  @media (max-width: 480px) {
+    .write-inputs { flex-direction: column; align-items: center; }
+    .write-field input { width: 180px; }
+    .quiz-opts { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <a href="../index.html" class="back-link">← Home</a>
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+  </div>
+
+  <div class="header">
+    <h1>📝 Irregular Verbs</h1>
+
+    <!-- Category filter -->
+    <div class="cat-bar">
+      <button class="cat-btn active" data-cat="all">All</button>
+      <button class="cat-btn" data-cat="common">Common</button>
+      <button class="cat-btn" data-cat="intermediate">Intermediate</button>
+      <button class="cat-btn" data-cat="advanced">Advanced</button>
+    </div>
+
+    <!-- Modes -->
+    <div class="pill-bar">
+      <button class="pill-btn active" data-mode="study">📖 Study</button>
+      <button class="pill-btn" data-mode="quiz">🎯 Quiz</button>
+      <button class="pill-btn" data-mode="write">✍️ Write</button>
+      <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
+    </div>
+
+    <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
+
+    <div class="progress">
+      <div class="progress__labels"><span id="progTxt">0 / 90</span><span id="progPct">0%</span></div>
+      <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+    </div>
+  </div>
+
+  <div class="scroll-body">
+    <!-- STUDY -->
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 90</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face verb-front">
+            <div class="fc-emoji" id="fcEmoji">📝</div>
+            <div class="fc-term" id="fcBase"></div>
+            <div class="fc-hint">tap to see forms</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="verb-forms">
+              <div class="vf-row"><span class="vf-label">Base</span><span class="vf-val" id="fcBackBase"></span></div>
+              <div class="vf-row"><span class="vf-label">Past</span><span class="vf-val" id="fcBackPast"></span></div>
+              <div class="vf-row"><span class="vf-label">P. Part.</span><span class="vf-val" id="fcBackPP"></span></div>
+              <div class="vf-row"><span class="vf-label">🇪🇸</span><span class="vf-val" id="fcBackEs"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="btn btn--ghost" id="prevBtn">←</button>
+        <button class="btn btn--green" id="nextBtn">→</button>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div data-area="quiz">
+      <div class="quiz-card">
+        <div class="q-base" id="quizBase"></div>
+        <div class="q-label" id="quizLabel">What is the past simple?</div>
+      </div>
+      <div class="quiz-opts" id="quizOptions"></div>
+    </div>
+
+    <!-- WRITE -->
+    <div data-area="write">
+      <div class="write-card">
+        <div class="w-base" id="writeBase"></div>
+        <div class="w-label" id="writeLabel">Write the past simple & past participle</div>
+        <div class="write-inputs">
+          <div class="write-field">
+            <label>Past Simple</label>
+            <input type="text" id="writePast" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="write-field">
+            <label>Past Participle</label>
+            <input type="text" id="writePP" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+        <div class="write-feedback" id="writeFeedback"></div>
+      </div>
+      <button class="btn btn--primary" id="writeCheck">Check ✓</button>
+      <button class="btn btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+    </div>
+
+    <!-- BATTLE -->
+    <div data-area="battle">
+      <div class="battle-scores">
+        <div class="player-score p1"><span class="p-label">Player 1</span><span class="p-points" id="bp1">0</span></div>
+        <span class="vs-badge">vs</span>
+        <div class="player-score p2"><span class="p-label">Player 2</span><span class="p-points" id="bp2">0</span></div>
+      </div>
+      <div class="battle-round" id="battleRound">Round 1 / 10</div>
+      <div class="fc-card battle-card" id="battleCard">
+        <div class="fc-inner">
+          <div class="fc-face verb-front">
+            <div class="fc-emoji">📝</div>
+            <div class="fc-term" id="battleBase"></div>
+            <div class="fc-hint">claim to answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="verb-forms">
+              <div class="vf-row"><span class="vf-label">Base</span><span class="vf-val" id="bBackBase"></span></div>
+              <div class="vf-row"><span class="vf-label">Past</span><span class="vf-val" id="bBackPast"></span></div>
+              <div class="vf-row"><span class="vf-label">P. Part.</span><span class="vf-val" id="bBackPP"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="battle-instruction" id="battleInstruction">Press 1 or 2 to claim · S to skip</div>
+      <div class="battle-actions" id="battleActions">
+        <button class="btn btn--blue btn--sm" id="bClaim1">1️⃣ P1</button>
+        <button class="btn btn--ghost btn--sm" id="bSkip">⏭️ Skip</button>
+        <button class="btn btn--orange btn--sm" id="bClaim2">2️⃣ P2</button>
+      </div>
+      <div class="battle-actions" id="battleJudge" style="display:none;">
+        <button class="btn btn--green btn--sm" id="bCorrect">✓ Correct (Y)</button>
+        <button class="btn btn--red btn--sm" id="bWrong">✗ Wrong (N)</button>
+      </div>
+      <div class="battle-actions" id="battleNext" style="display:none;">
+        <button class="btn btn--green btn--sm" id="bNext">→ Next (Space)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { VERBS } from '../data/irregular-verbs.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+let currentCat = 'all';
+let mode = 'study';
+let data = VERBS;
+let deck = [], cardIdx = 0;
+let quizDeck = [], quizIdx = 0, quizScore = 0, quizTotal = 15;
+let writeDeck = [], writeIdx = 0, writeScore = 0, writeTotal = 10;
+let timer = null;
+
+function filteredData() {
+  return currentCat === 'all' ? VERBS : VERBS.filter(v => v.cat === currentCat);
+}
+
+// ─── Category ───
+document.querySelectorAll('[data-cat]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentCat = btn.dataset.cat;
+    data = filteredData();
+    document.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+    startMode();
+  });
+});
+
+// ─── Mode ───
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    startMode();
+  });
+});
+
+function startMode() {
+  stopTimer();
+  document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
+  document.getElementById('timerBar').classList.remove('show');
+  if (mode === 'study') initStudy();
+  else if (mode === 'quiz') initQuiz(false);
+  else if (mode === 'write') initWrite();
+  else if (mode === 'battle') initBattle();
+  else if (mode === 'timed') initQuiz(true);
+}
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+
+function updProgress(current, total) {
+  const pct = Math.round((current / total) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = `${current} / ${total}`;
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+// ═══ STUDY ═══
+function initStudy() {
+  deck = shuffle(filteredData());
+  cardIdx = 0;
+  document.querySelector('[data-area="study"]').classList.add('show');
+  renderCard();
+}
+
+function renderCard() {
+  const v = deck[cardIdx];
+  const card = document.getElementById('fcCard');
+  card.classList.remove('flip');
+  document.getElementById('fcBase').textContent = v.base;
+  document.getElementById('fcBackBase').textContent = v.base;
+  document.getElementById('fcBackPast').textContent = v.past;
+  document.getElementById('fcBackPP').textContent = v.pp;
+  document.getElementById('fcBackEs').textContent = v.es;
+  document.getElementById('fcCounter').textContent = `${cardIdx + 1} / ${deck.length}`;
+  updProgress(cardIdx + 1, deck.length);
+}
+
+document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
+document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
+document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
+document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); cardIdx = 0; renderCard(); });
+
+function advanceCard(dir) {
+  const card = document.getElementById('fcCard');
+  const inner = card.querySelector('.fc-inner');
+  if (card.classList.contains('flip')) {
+    inner.style.transition = 'none';
+    card.classList.remove('flip');
+    void inner.offsetHeight;
+    inner.style.transition = '';
+  }
+  cardIdx = (cardIdx + dir + deck.length) % deck.length;
+  renderCard();
+}
+
+document.addEventListener('keydown', e => {
+  if (mode === 'battle') {
+    if (battle.phase === 'claim') {
+      if (e.key === '1') { e.preventDefault(); battleClaim(1); }
+      else if (e.key === '2') { e.preventDefault(); battleClaim(2); }
+      else if (e.key === 's' || e.key === 'S') { e.preventDefault(); battleSkip(); }
+    } else if (battle.phase === 'judge') {
+      if (e.key === 'y' || e.key === 'Y' || e.key === 'Enter') { e.preventDefault(); battleJudge(true); }
+      else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); battleJudge(false); }
+    } else if (battle.phase === 'next') {
+      if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); battleNext(); }
+    }
+    return;
+  }
+  if (mode !== 'study') return;
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    const card = document.getElementById('fcCard');
+    if (card.classList.contains('flip')) advanceCard(1);
+    else card.classList.add('flip');
+  } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
+});
+
+// ═══ QUIZ / TIMED ═══
+function initQuiz(timed) {
+  quizDeck = shuffle(filteredData());
+  quizIdx = 0; quizScore = 0;
+  quizTotal = Math.min(timed ? 12 : 15, quizDeck.length);
+  document.querySelector('[data-area="quiz"]').classList.add('show');
+
+  if (timed) {
+    document.getElementById('timerBar').classList.add('show');
+    timer = new Timer(quizTotal * 6,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
+      () => finishQuiz()
+    );
+    timer.start();
+  }
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (quizIdx >= quizTotal) { stopTimer(); finishQuiz(); return; }
+  const verb = quizDeck[quizIdx];
+  // Randomly ask for past or pp
+  const askPast = Math.random() < 0.5;
+  const question = askPast ? 'Past Simple' : 'Past Participle';
+  const correct = askPast ? verb.past : verb.pp;
+
+  document.getElementById('quizBase').textContent = verb.base;
+  document.getElementById('quizLabel').textContent = `What is the ${question}?`;
+
+  // Build distractors from same category preferring
+  const pool = filteredData().filter(v => v !== verb);
+  const distractors = shuffle(pool).slice(0, 3).map(v => askPast ? v.past : v.pp);
+  const options = shuffle([correct, ...distractors]);
+
+  const optsEl = document.getElementById('quizOptions');
+  optsEl.innerHTML = options.map(o => `<button class="quiz-opt">${o}</button>`).join('');
+  optsEl.querySelectorAll('.quiz-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      optsEl.querySelectorAll('.quiz-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
+      if (btn.textContent === correct) { btn.classList.add('correct'); quizScore++; }
+      else { btn.classList.add('wrong'); optsEl.querySelectorAll('.quiz-opt').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); }); }
+      quizIdx++;
+      updProgress(quizIdx, quizTotal);
+      setTimeout(renderQuiz, 700);
+    });
+  });
+  updProgress(quizIdx, quizTotal);
+}
+
+function finishQuiz() {
+  const pct = showResult({
+    correct: quizScore, total: quizTotal,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+  });
+  recordScore(`irr-${currentCat}-quiz`, pct);
+}
+
+// ═══ WRITE ═══
+function initWrite() {
+  writeDeck = shuffle(filteredData());
+  writeIdx = 0; writeScore = 0;
+  writeTotal = Math.min(10, writeDeck.length);
+  document.querySelector('[data-area="write"]').classList.add('show');
+  renderWrite();
+}
+
+function renderWrite() {
+  if (writeIdx >= writeTotal) { finishWrite(); return; }
+  const verb = writeDeck[writeIdx];
+  document.getElementById('writeBase').textContent = verb.base;
+  document.getElementById('writePast').value = '';
+  document.getElementById('writePP').value = '';
+  document.getElementById('writePast').className = '';
+  document.getElementById('writePP').className = '';
+  document.getElementById('writeFeedback').textContent = '';
+  document.getElementById('writeFeedback').className = 'write-feedback';
+  document.getElementById('writePast').focus();
+  updProgress(writeIdx, writeTotal);
+}
+
+function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g, ' '); }
+
+function checkAnswer(input, correct) {
+  const norm = normalize(input);
+  // Handle slash-separated acceptable answers (e.g. "was/were", "got/gotten")
+  const acceptables = correct.split('/').map(s => s.trim().toLowerCase());
+  return acceptables.includes(norm) || norm === normalize(correct);
+}
+
+document.getElementById('writeCheck').addEventListener('click', doWriteCheck);
+document.getElementById('writeSkip').addEventListener('click', () => { writeIdx++; renderWrite(); });
+
+// Submit on Enter in last field
+document.getElementById('writePP').addEventListener('keydown', e => { if (e.key === 'Enter') doWriteCheck(); });
+document.getElementById('writePast').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('writePP').focus(); });
+
+function doWriteCheck() {
+  const verb = writeDeck[writeIdx];
+  const pastInput = document.getElementById('writePast');
+  const ppInput = document.getElementById('writePP');
+  const fb = document.getElementById('writeFeedback');
+
+  const pastOk = checkAnswer(pastInput.value, verb.past);
+  const ppOk = checkAnswer(ppInput.value, verb.pp);
+
+  pastInput.classList.add(pastOk ? 'correct' : 'wrong');
+  ppInput.classList.add(ppOk ? 'correct' : 'wrong');
+
+  if (pastOk && ppOk) {
+    writeScore++;
+    fb.textContent = '✓ Correct!';
+    fb.className = 'write-feedback ok';
+  } else {
+    fb.textContent = `✗ ${verb.base} → ${verb.past} → ${verb.pp}`;
+    fb.className = 'write-feedback err';
+  }
+
+  writeIdx++;
+  updProgress(writeIdx, writeTotal);
+  setTimeout(renderWrite, 1200);
+}
+
+function finishWrite() {
+  const pct = showResult({
+    correct: writeScore, total: writeTotal,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+  });
+  recordScore(`irr-${currentCat}-write`, pct);
+}
+
+// ═══ BATTLE ═══
+let battle = { p1: 0, p2: 0, round: 0, total: 10, claimer: null, deck: [], phase: 'claim' };
+
+function initBattle() {
+  const items = shuffle(filteredData());
+  battle = { p1: 0, p2: 0, round: 0, total: Math.min(10, items.length), claimer: null, deck: items, phase: 'claim' };
+  document.querySelector('[data-area="battle"]').classList.add('show');
+  updateBattleScores();
+  showBattleCard();
+}
+
+function showBattleCard() {
+  if (battle.round >= battle.total) { showBattleResult(); return; }
+  const verb = battle.deck[battle.round];
+
+  const card = document.getElementById('battleCard');
+  card.classList.remove('flipped');
+  document.getElementById('battleBase').textContent = verb.base;
+  document.getElementById('bBackBase').textContent = verb.base;
+  document.getElementById('bBackPast').textContent = verb.past;
+  document.getElementById('bBackPP').textContent = verb.pp;
+
+  document.getElementById('battleRound').textContent = `Round ${battle.round + 1} / ${battle.total}`;
+  setBattlePhase('claim');
+}
+
+function setBattlePhase(phase) {
+  battle.phase = phase;
+  document.getElementById('battleActions').style.display = phase === 'claim' ? 'flex' : 'none';
+  document.getElementById('battleJudge').style.display = phase === 'judge' ? 'flex' : 'none';
+  document.getElementById('battleNext').style.display = phase === 'next' ? 'flex' : 'none';
+
+  const instructions = { claim: 'Press 1 or 2 to claim · S to skip', judge: `Player ${battle.claimer} says past & participle — correct?`, next: 'Press Space or → to continue' };
+  document.getElementById('battleInstruction').textContent = instructions[phase] || '';
+}
+
+function battleClaim(player) {
+  battle.claimer = player;
+  document.getElementById('battleCard').classList.add('flipped');
+  setBattlePhase('judge');
+}
+
+function battleSkip() { battle.round++; showBattleCard(); }
+
+function battleJudge(correct) {
+  if (correct) battle[`p${battle.claimer}`]++;
+  updateBattleScores();
+  setBattlePhase('next');
+}
+
+function battleNext() { battle.round++; showBattleCard(); }
+
+function updateBattleScores() {
+  document.getElementById('bp1').textContent = battle.p1;
+  document.getElementById('bp2').textContent = battle.p2;
+}
+
+function showBattleResult() {
+  const winner = battle.p1 > battle.p2 ? 'Player 1 wins! 🎉' : battle.p2 > battle.p1 ? 'Player 2 wins! 🎉' : "It's a tie! 🤝";
+  const overlay = document.getElementById('resultOverlay');
+  overlay.innerHTML = `<div class="result-box">
+    <div class="result-title">${winner}</div>
+    <div class="result-sub" style="font-size:1.2rem;margin:8px 0;">🔵 ${battle.p1} — ${battle.p2} 🔴</div>
+    <div class="result-sub">${battle.total} rounds</div>
+    <div class="result-btns"><button class="btn btn--green" id="rr">🔄 Rematch</button><button class="btn btn--ghost" id="rs">📖 Study</button></div>
+  </div>`;
+  overlay.classList.add('show');
+  overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); initBattle(); });
+  overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode==='study')); startMode(); });
+}
+
+// Battle button handlers
+document.getElementById('bClaim1').addEventListener('click', () => battleClaim(1));
+document.getElementById('bClaim2').addEventListener('click', () => battleClaim(2));
+document.getElementById('bSkip').addEventListener('click', () => battleSkip());
+document.getElementById('bCorrect').addEventListener('click', () => battleJudge(true));
+document.getElementById('bWrong').addEventListener('click', () => battleJudge(false));
+document.getElementById('bNext').addEventListener('click', () => battleNext());
+
+// ─── Init ───
+startMode();
+</script>
+</body>
+</html>

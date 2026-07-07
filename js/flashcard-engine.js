@@ -2,7 +2,7 @@
  * HubFlow — Flashcard/Vocabulary Engine
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
-import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable } from './utils.js';
 
 export class FlashcardEngine {
   constructor(config) {
@@ -40,6 +40,17 @@ export class FlashcardEngine {
 
   bindGlobal() {
     document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
+
+    // TTS speak button
+    const speakBtn = document.getElementById('speakBtn');
+    if (speakBtn && isSpeechAvailable()) {
+      speakBtn.style.display = '';
+      speakBtn.addEventListener('click', () => {
+        if (this._currentTerm) speak(this._currentTerm);
+      });
+    } else if (speakBtn) {
+      speakBtn.style.display = 'none';
+    }
 
     document.querySelectorAll('[data-mode]').forEach(btn => {
       btn.addEventListener('click', () => this.setMode(btn.dataset.mode));
@@ -191,6 +202,9 @@ export class FlashcardEngine {
     // Counter
     const counter = document.getElementById('fcCounter');
     if (counter) counter.textContent = `${this.cardIdx + 1} / ${this.deck.length}`;
+
+    // TTS: update current term for speak button
+    this._currentTerm = item.term;
   }
 
   flipCard() {
@@ -473,8 +487,15 @@ export class FlashcardEngine {
     }
     this.battle.phase = 'next';
     this.updateBattleUI();
+    // Show correct answer
+    const item = this.battle.deck[this.battle.round];
+    const answer = item ? (item.meaning || item.es || item.description || '') : '';
     const instruction = document.getElementById('battleInstruction');
-    if (instruction) instruction.textContent = correct ? '✓ Correct!' : '✗ Wrong — point to other player!';
+    if (instruction) {
+      instruction.textContent = correct
+        ? `✓ Correct! — ${answer}`
+        : `✗ Wrong — Answer: ${answer}`;
+    }
     this.showBattleActions('next');
   }
 
