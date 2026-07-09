@@ -14,12 +14,14 @@
  *   1 = errores encontrados
  */
 
-import { readdirSync } from 'fs';
+import { readdirSync, existsSync } from 'fs';
 import { fileURLToPath, pathToFileURL } from 'url';
 import path from 'path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const ROOT_DIR = path.join(__dirname, '..');
+const DATA_DIR = path.join(ROOT_DIR, 'data');
+const EXERCISES_DIR = path.join(ROOT_DIR, 'exercises');
 
 const errors = [];
 const warnings = [];
@@ -102,6 +104,48 @@ const SPECIAL = {
   'odd-one-out.js': validateOddOneOut,
 };
 
+/**
+ * Catálogo central (data/catalog.js, Fase 0 del plan de recategorización).
+ * Valida integridad de rutas, unicidad de ids, y que los 34 ejercicios en
+ * exercises/*.html tengan una entrada — sin huérfanos en ningún sentido.
+ */
+async function validateCatalog() {
+  const catalogPath = path.join(DATA_DIR, 'catalog.js');
+  if (!existsSync(catalogPath)) return;
+
+  const { MODULES, TAGS, SUBCATEGORIES } = await import(pathToFileURL(catalogPath).href);
+  const allTags = new Set([...TAGS.skill, ...TAGS.cefr, ...TAGS.mechanic, ...TAGS.theme]);
+
+  const seenIds = new Set();
+  for (const m of MODULES) {
+    if (seenIds.has(m.id)) err('CAT-DUPID', `catalog.js: duplicate module id "${m.id}"`);
+    seenIds.add(m.id);
+
+    for (const [field, p] of [['exercise', m.exercise], ['guide', m.guide], ['dataFile', m.dataFile]]) {
+      if (p && !existsSync(path.join(ROOT_DIR, p))) {
+        err('CAT-PATH', `catalog.js[${m.id}].${field}: file not found "${p}"`);
+      }
+    }
+
+    if (!Array.isArray(m.tags) || m.tags.length < 3 || m.tags.length > 6) {
+      err('CAT-TAGCOUNT', `catalog.js[${m.id}]: expected 3-6 tags, got ${m.tags?.length ?? 0}`);
+    }
+    for (const t of m.tags || []) {
+      if (!allTags.has(t)) err('CAT-TAG', `catalog.js[${m.id}]: tag "${t}" not in closed vocabulary`);
+    }
+    if (m.subcategory && !SUBCATEGORIES[m.subcategory]) {
+      err('CAT-SUBCAT', `catalog.js[${m.id}]: unknown subcategory "${m.subcategory}"`);
+    }
+  }
+
+  // Every exercises/*.html must have a catalog entry (no orphans in either direction).
+  const exerciseFiles = readdirSync(EXERCISES_DIR).filter((f) => f.endsWith('.html'));
+  const catalogedExercises = new Set(MODULES.map((m) => path.basename(m.exercise)));
+  for (const f of exerciseFiles) {
+    if (!catalogedExercises.has(f)) err('CAT-ORPHAN', `exercises/${f}: not registered in catalog.js`);
+  }
+}
+
 async function run() {
   const files = readdirSync(DATA_DIR).filter((f) => f.endsWith('.js'));
 
@@ -110,6 +154,8 @@ async function run() {
     validateDuplicates(mod, file);
     if (SPECIAL[file]) SPECIAL[file](mod, file);
   }
+
+  await validateCatalog();
 
   console.log('============================================================');
   console.log('📊 HubFlow — CONTENT VALIDATION REPORT');

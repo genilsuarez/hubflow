@@ -51,18 +51,18 @@ export const CATEGORIES = {
     label: 'Mixed',
     icon: '🔀',
     items: [
-      { base: 'run', correct: 'running', form: '-ing', rule: 'double', explain: 'run → running (CVC, double n)' },
-      { base: 'stop', correct: 'stopped', form: '-ed', rule: 'double', explain: 'stop → stopped (CVC, double p)' },
-      { base: 'write', correct: 'writing', form: '-ing', rule: 'drop-e', explain: 'write → writing (drop silent e)' },
-      { base: 'live', correct: 'lived', form: '-ed', rule: 'drop-e', explain: 'live → lived (add -d to silent e)' },
-      { base: 'die', correct: 'dying', form: '-ing', rule: 'ie-to-y', explain: 'die → dying (ie → y + ing)' },
-      { base: 'carry', correct: 'carried', form: '-ed', rule: 'y-to-i', explain: 'carry → carried (consonant+y → i+ed)' },
-      { base: 'swim', correct: 'swimming', form: '-ing', rule: 'double', explain: 'swim → swimming (CVC, double m)' },
-      { base: 'plan', correct: 'planned', form: '-ed', rule: 'double', explain: 'plan → planned (CVC, double n)' },
-      { base: 'come', correct: 'coming', form: '-ing', rule: 'drop-e', explain: 'come → coming (drop silent e)' },
-      { base: 'try', correct: 'tried', form: '-ed', rule: 'y-to-i', explain: 'try → tried (consonant+y → i+ed)' },
-      { base: 'begin', correct: 'beginning', form: '-ing', rule: 'double', explain: 'begin → beginning (stress on last CVC)' },
-      { base: 'prefer', correct: 'preferred', form: '-ed', rule: 'double', explain: 'prefer → preferred (stress on last CVC)' }
+      { base: 'grab', correct: 'grabbing', form: '-ing', rule: 'double', explain: 'grab → grabbing (CVC, double b)' },
+      { base: 'wrap', correct: 'wrapped', form: '-ed', rule: 'double', explain: 'wrap → wrapped (CVC, double p)' },
+      { base: 'bake', correct: 'baking', form: '-ing', rule: 'drop-e', explain: 'bake → baking (drop silent e)' },
+      { base: 'phone', correct: 'phoned', form: '-ed', rule: 'drop-e', explain: 'phone → phoned (add -d to silent e)' },
+      { base: 'cry', correct: 'crying', form: '-ing', rule: 'add', explain: 'cry → crying (keep the y before -ing)' },
+      { base: 'marry', correct: 'married', form: '-ed', rule: 'y-to-i', explain: 'marry → married (consonant+y → i+ed)' },
+      { base: 'rob', correct: 'robbing', form: '-ing', rule: 'double', explain: 'rob → robbing (CVC, double b)' },
+      { base: 'beg', correct: 'begged', form: '-ed', rule: 'double', explain: 'beg → begged (CVC, double g)' },
+      { base: 'close', correct: 'closing', form: '-ing', rule: 'drop-e', explain: 'close → closing (drop silent e)' },
+      { base: 'smoke', correct: 'smoked', form: '-ed', rule: 'drop-e', explain: 'smoke → smoked (add -d to silent e)' },
+      { base: 'fly', correct: 'flying', form: '-ing', rule: 'add', explain: 'fly → flying (keep the y before -ing)' },
+      { base: 'copy', correct: 'copied', form: '-ed', rule: 'y-to-i', explain: 'copy → copied (consonant+y → i+ed)' }
     ]
   }
 };

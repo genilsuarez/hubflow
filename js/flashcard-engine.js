@@ -105,9 +105,15 @@ export class FlashcardEngine {
   renderCatBar() {
     const bar = document.getElementById('catBar');
     if (!bar) return;
-    bar.innerHTML = Object.entries(this.categories).map(([key, cat]) =>
+    // Preserve the expand button (last child)
+    const expandBtn = bar.querySelector('.cat-expand-btn');
+    const pills = Object.entries(this.categories).map(([key, cat]) =>
       `<button class="pill-btn ${key === this.currentCat ? 'active purple' : ''}" data-cat="${key}">${cat.label}</button>`
     ).join('');
+    // Remove old pills, keep expand btn
+    bar.querySelectorAll('.pill-btn').forEach(el => el.remove());
+    if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
+    else bar.innerHTML = pills;
     bar.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.currentCat = btn.dataset.cat;
@@ -115,6 +121,9 @@ export class FlashcardEngine {
         this.setMode(this.currentMode);
       });
     });
+    // Scroll active pill into view
+    const active = bar.querySelector('.pill-btn.active');
+    if (active) active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
   }
 
   // ═══ MODE MANAGEMENT ═══
@@ -212,6 +221,16 @@ export class FlashcardEngine {
   }
 
   navCard(delta) {
+    const card = document.getElementById('fcCard');
+    if (card && card.classList.contains('flip')) {
+      const inner = card.querySelector('.fc-inner');
+      if (inner) {
+        inner.style.transition = 'none';
+        card.classList.remove('flip');
+        void inner.offsetHeight; // reflow: instant unflip without animation
+        inner.style.transition = '';
+      }
+    }
     this.cardIdx = (this.cardIdx + delta + this.deck.length) % this.deck.length;
     this.renderStudyCard();
     this.updateStudyProgress();

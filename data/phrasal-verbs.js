@@ -10,7 +10,7 @@ export const CATEGORIES = {
     icon: '🏠',
     items: [
       { verb: "wake up",     particle: "up",    base: "wake",    es: "despertarse",         example: "I wake up at 7 every morning.",            gap: "I ___ ___ at 7 every morning." },
-      { verb: "get up",      particle: "up",    base: "get",     es: "levantarse",          example: "She gets up early on weekdays.",           gap: "She ___ ___ early on weekdays." },
+      { verb: "clean up",    particle: "up",    base: "clean",   es: "limpiar",             example: "She cleans up her room every weekend.",    gap: "She ___ ___ her room every weekend." },
       { verb: "turn on",     particle: "on",    base: "turn",    es: "encender",            example: "Can you turn on the lights?",              gap: "Can you ___ ___ the lights?" },
       { verb: "turn off",    particle: "off",   base: "turn",    es: "apagar",              example: "Turn off the TV before bed.",              gap: "___ ___ the TV before bed." },
       { verb: "pick up",     particle: "up",    base: "pick",    es: "recoger / levantar",  example: "I'll pick up the kids from school.",       gap: "I'll ___ ___ the kids from school." },

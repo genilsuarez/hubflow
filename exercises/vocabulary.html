@@ -18,9 +18,98 @@
   .back-link { color: var(--purple); font-size: .75rem; }
   .pill-btn.active { background: var(--purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
 
-  /* Compact pill bars */
-  .header .pill-bar { padding: 2px; gap: 1px; margin-bottom: 2px; }
-  .header .pill-btn { padding: 3px 8px; font-size: .65rem; min-height: unset; }
+  /* Category selector — compact scroll with fade */
+  .cat-scroll-wrapper {
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .cat-scroll-wrapper::before,
+  .cat-scroll-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; width: 28px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .cat-scroll-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, var(--lp-bg-paper), transparent);
+    border-radius: var(--lp-radius-sm) 0 0 var(--lp-radius-sm);
+  }
+  .cat-scroll-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, var(--lp-bg-paper), transparent);
+    border-radius: 0 var(--lp-radius-sm) var(--lp-radius-sm) 0;
+  }
+  .cat-scroll-wrapper.fade-left::before { opacity: 1; }
+  .cat-scroll-wrapper.fade-right::after { opacity: 1; }
+
+  #catBar {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 4px;
+    padding: 6px 4px;
+    scroll-behavior: smooth;
+    background: var(--lp-bg-paper);
+    border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-sm);
+    transition: flex-wrap 0s;
+  }
+  #catBar::-webkit-scrollbar { display: none; }
+  #catBar .pill-btn {
+    flex: 0 0 auto;
+    padding: 5px 11px;
+    font-size: .64rem;
+    min-height: unset;
+    white-space: nowrap;
+  }
+
+  /* Expand toggle button — inside catBar, sticky right */
+  .cat-expand-btn {
+    flex: 0 0 auto;
+    position: sticky;
+    right: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--lp-border);
+    background: var(--lp-bg-paper);
+    color: var(--lp-muted);
+    font-size: .6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s, background .2s, color .2s;
+    z-index: 3;
+  }
+  .cat-expand-btn:hover { background: var(--lp-surface); color: var(--lp-ink); }
+  .cat-expand-btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+  .cat-expand-btn[aria-expanded="true"] { transform: rotate(180deg); }
+
+  /* Expanded state */
+  .cat-scroll-wrapper.expanded #catBar {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 5px;
+    padding: 8px 6px;
+  }
+  .cat-scroll-wrapper.expanded .cat-expand-btn {
+    position: sticky;
+    right: 0;
+    bottom: 0;
+    margin-left: auto;
+  }
+  .cat-scroll-wrapper.expanded::before,
+  .cat-scroll-wrapper.expanded::after { opacity: 0 !important; }
+
+  /* Mode bar */
+  .header .pill-bar:not(.pill-bar--scroll) { padding: 2px; gap: 1px; margin-bottom: 2px; }
+  .header .pill-bar:not(.pill-bar--scroll) .pill-btn { padding: 3px 8px; font-size: .65rem; min-height: unset; }
 
   /* Compact progress */
   #progressWrap { margin-bottom: 0; }
@@ -69,7 +158,11 @@
     <h1>🧠 Vocabulary <span class="accent">Match</span></h1>
 
     <!-- Categories -->
-    <div class="pill-bar pill-bar--scroll" id="catBar"></div>
+    <div class="cat-scroll-wrapper" id="catWrapper">
+      <div id="catBar">
+        <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas">▼</button>
+      </div>
+    </div>
 
     <!-- Modes -->
     <div class="pill-bar">
@@ -190,6 +283,33 @@ const engine = new FlashcardEngine({
 
 // Expose for onclick handlers
 window.engine = engine;
+
+// ─── Category scroll fade indicators ───
+const catBar = document.getElementById('catBar');
+const catWrapper = document.getElementById('catWrapper');
+const catExpandBtn = document.getElementById('catExpandBtn');
+
+function updateFades() {
+  if (!catBar || !catWrapper || catWrapper.classList.contains('expanded')) return;
+  const { scrollLeft, scrollWidth, clientWidth } = catBar;
+  catWrapper.classList.toggle('fade-left', scrollLeft > 8);
+  catWrapper.classList.toggle('fade-right', scrollLeft + clientWidth < scrollWidth - 8);
+}
+catBar.addEventListener('scroll', updateFades);
+new MutationObserver(updateFades).observe(catBar, { childList: true });
+updateFades();
+
+// ─── Expand/collapse toggle ───
+catExpandBtn.addEventListener('click', () => {
+  const expanded = catWrapper.classList.toggle('expanded');
+  catExpandBtn.setAttribute('aria-expanded', expanded);
+  if (!expanded) {
+    // Collapse: scroll active into view
+    const active = catBar.querySelector('.pill-btn.active');
+    if (active) requestAnimationFrame(() => active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }));
+    updateFades();
+  }
+});
 
 // Flip on card click
 document.getElementById('fcCard')?.addEventListener('click', () => engine.flipCard());

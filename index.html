@@ -92,7 +92,7 @@
     .content { flex: 1; min-height: 0; overflow-y: auto; padding: 18px clamp(16px, 3vw, 34px) 18px; scrollbar-width: none; }
 
     .no-results { text-align: center; padding: 24px; color: var(--lp-muted); font-size: .8rem; font-weight: var(--lp-weight-medium); display: none; }
-    .book.hidden, .guide-link.hidden { display: none !important; }
+    .book.hidden, .guide-link.hidden, .subsec.hidden { display: none !important; }
 
     /* ─── SECTION VISIBILITY (SPA panels) ─── */
     .section { display: none; margin-bottom: 20px; }
@@ -101,6 +101,31 @@
       font-size: .66rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase;
       color: var(--lp-muted); margin-bottom: 10px; padding-left: 2px;
     }
+    .subsec { margin-bottom: 22px; }
+    .subsec:last-child { margin-bottom: 0; }
+    .sec-head--sub { font-size: .62rem; opacity: .85; }
+
+    /* ─── TAG FILTER BAR (Fase 2 — catálogo + tags) ─── */
+    .tagbar {
+      display: none; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .tagbar.visible { display: flex; }
+    .tagbar .lp-pill {
+      flex-shrink: 0; border: 1.5px solid var(--lp-border); background: var(--lp-surface);
+      color: var(--lp-ink-soft); box-shadow: var(--lp-shadow-xs);
+      transition: all 0.25s var(--lp-ease);
+    }
+    .tagbar .lp-pill:hover:not(.active) {
+      border-color: var(--lp-border-strong); color: var(--lp-ink);
+      transform: translateY(-1px); box-shadow: var(--lp-shadow-sm);
+    }
+    .tagbar .lp-pill.active {
+      border-color: var(--lp-ink); background: var(--lp-ink); color: var(--lp-bg);
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-ink) 30%, transparent);
+      transform: scale(1.05);
+    }
+    .tagbar .tagbar-sep { width: 1px; flex-shrink: 0; background: var(--lp-border); margin: 4px 2px; }
 
     /* ─── RESUMEN (dashboard) ─── */
     .resumen-hero {
@@ -319,8 +344,6 @@
     </div>
 
     <main class="content">
-      <div class="no-results" id="noResults">No modules match your search.</div>
-
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen">
         <div class="resumen-hero">
@@ -343,347 +366,51 @@
         </div>
 
         <div class="sec-head">Agregado recientemente</div>
-        <div class="new-row">
-          <a class="new-chip" href="exercises/conditionals.html"><span class="nc-icon">🔀</span><span><span class="nc-badge">Nuevo</span><br>Conditionals</span></a>
-          <a class="new-chip" href="exercises/modals.html"><span class="nc-icon">🧭</span><span><span class="nc-badge">Nuevo</span><br>Modal Verbs</span></a>
-          <a class="new-chip" href="exercises/made-of.html"><span class="nc-icon">🧱</span><span><span class="nc-badge">Nuevo</span><br>Made Of / From / With</span></a>
-          <a class="new-chip" href="exercises/plural-endings.html"><span class="nc-icon">🔊</span><span><span class="nc-badge">Nuevo</span><br>Plural Endings</span></a>
+        <div class="new-row" id="newRow">
           <a class="new-chip" href="guides/vocabulary.html"><span class="nc-icon">📚</span><span><span class="nc-badge">Nuevo</span><br>Vocabulary Reference</span></a>
         </div>
       </section>
 
+      <!-- TAG FILTER BAR (solo visible en secciones de módulos) -->
+      <div class="tagbar" id="tagBar"></div>
+      <div class="no-results" id="noResults">No modules match your search.</div>
+
       <!-- VOCABULARY -->
       <section class="section" data-key="vocab">
         <div class="sec-head">Vocabulary & Words</div>
-        <div class="shelf">
-          <a class="book b-vocab" href="exercises/vocabulary.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧠</div>
-            <div class="book-body">
-              <div class="book-title">Vocabulary Match</div>
-              <div class="book-meta">Body · Cooking · Idioms · Hobbies · Food & Drink (C1) · Telephone English · Sounding Natural · Daily Routine — 28 categorías</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">5 modos</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span></div>
-            </div>
-          </a>
-          <a class="book b-opp" href="exercises/opposites.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">⚖️</div>
-            <div class="book-body">
-              <div class="book-title">Word Relations</div>
-              <div class="book-meta">Opposites (62 pares, incl. B1-C1) · Synonyms (30 pares) · 5 modos</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">80 pares</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-vocab" href="exercises/confusing-words.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔀</div>
-            <div class="book-body">
-              <div class="book-title">Confusing Words</div>
-              <div class="book-meta">make/do · say/tell · homófonos (there/their, your/you're, its/it's) · principal/principle · desert/dessert · weather/whether</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">18 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-opp" href="exercises/phrasal-verbs.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🚀</div>
-            <div class="book-body">
-              <div class="book-title">Phrasal Verbs</div>
-              <div class="book-meta">Everyday · Work · Relationships · Travel · Get · Food · Turn · Advanced — 106 phrasal verbs</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">8 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Write</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-        </div>
+        <div class="shelf" id="shelf-vocab"></div>
       </section>
 
       <!-- PRONUNCIATION -->
       <section class="section" data-key="pronunciation">
         <div class="sec-head">Pronunciation</div>
-        <div class="shelf">
-          <a class="book" href="exercises/phonics.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔊</div>
-            <div class="book-body">
-              <div class="book-title">Pronunciation & Phonics</div>
-              <div class="book-meta">Minimal Pairs (vocales + consonantes) · Word Stress · Silent Letters</div>
-              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book" href="exercises/plural-endings.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔊</div>
-            <div class="book-body">
-              <div class="book-title">Plural Endings</div>
-              <div class="book-meta">/s/ vs /z/ vs /ɪz/ — la pronunciación del plural</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/word-stress-quiz.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🗣️</div>
-            <div class="book-body">
-              <div class="book-title">Word Stress</div>
-              <div class="book-meta">Palabras que los hispanohablantes acentúan mal (comfortable, especially...)</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/listening.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🎧</div>
-            <div class="book-body">
-              <div class="book-title">Listening</div>
-              <div class="book-meta">Escucha (TTS) y elige la palabra · Everyday · Travel & Work · Tricky Pairs</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">3 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
-            </div>
-          </a>
-          <a class="book" href="exercises/spelling-by-ear.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">👂</div>
-            <div class="book-body">
-              <div class="book-title">Spelling by Ear</div>
-              <div class="book-meta">Hear the verb (TTS) → write the -ing or -ed form</div>
-              <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">3 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
-            </div>
-          </a>
-        </div>
+        <div class="shelf" id="shelf-pronunciation"></div>
       </section>
 
-      <!-- GRAMMAR -->
+      <!-- GRAMMAR (4 subcategorías — Fase 1/2 del plan de recategorización) -->
       <section class="section" data-key="grammar">
-        <div class="sec-head">Spelling & Grammar</div>
-        <div class="shelf">
-          <a class="book" href="exercises/ing-spelling.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">✏️</div>
-            <div class="book-body">
-              <div class="book-title">Reglas del <code>-ing</code></div>
-              <div class="book-meta">Doblar consonante · Quitar -e · Cambiar -ie → y</div>
-              <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/ed-spelling.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">📋</div>
-            <div class="book-body">
-              <div class="book-title">Reglas del <code>-ed</code></div>
-              <div class="book-meta">Pasado regular · Doble consonante · -e muda · Verbos con -y</div>
-              <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-noun" href="exercises/noun-adjuncts.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧩</div>
-            <div class="book-body">
-              <div class="book-title">Noun Adjuncts</div>
-              <div class="book-meta">Noun+Noun · -ing nominal · Genitivo 's · Estructura con of</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/irregular-verbs.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">📝</div>
-            <div class="book-body">
-              <div class="book-title">Irregular Verbs</div>
-              <div class="book-meta">90 verbos · Base → Past → P. Participle · 3 niveles</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">3 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Write</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-noun" href="exercises/prepositions.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">📐</div>
-            <div class="book-body">
-              <div class="book-title">Prepositions</div>
-              <div class="book-meta">Time · Place · Movement · Dependent · Duration (for/since/during/by/until)</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">5 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-vocab" href="exercises/verb-chunks.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔗</div>
-            <div class="book-body">
-              <div class="book-title">Verb + Prep Chunks</div>
-              <div class="book-meta">listen to · wait for · talk to — Wh-questions con prep al final</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Write</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book" href="exercises/articles.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">📝</div>
-            <div class="book-body">
-              <div class="book-title">Articles (a/an/the/∅)</div>
-              <div class="book-meta">Basics · Geographic names · Fixed expressions · In context · Never use "the"</div>
-              <div class="book-pills"><span class="pill lvl">A1–A2</span><span class="pill">5 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-noun" href="exercises/made-of.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧱</div>
-            <div class="book-body">
-              <div class="book-title">Made Of / From / With</div>
-              <div class="book-meta">Material visible vs transformado vs ingrediente vs improvisado</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book" href="exercises/used-to.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🕰️</div>
-            <div class="book-body">
-              <div class="book-title">Used To & Would</div>
-              <div class="book-meta">Used to vs would (states) · used to / be used to / get used to</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-opp" href="exercises/modals.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧭</div>
-            <div class="book-body">
-              <div class="book-title">Modal Verbs</div>
-              <div class="book-meta">Meaning in context · Obligation & rules · Be supposed to</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">3 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-noun" href="exercises/clauses.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧩</div>
-            <div class="book-body">
-              <div class="book-title">Relative Clauses</div>
-              <div class="book-meta">who/which/whose/where/when</div>
-              <div class="book-pills"><span class="pill lvl">B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book" href="exercises/reported-speech.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">⏪</div>
-            <div class="book-body">
-              <div class="book-title">Reported Speech</div>
-              <div class="book-meta">Tense backshift · Time & place word changes</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/gerunds-infinitives.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔁</div>
-            <div class="book-body">
-              <div class="book-title">Gerunds & Infinitives</div>
-              <div class="book-meta">Verb + -ing vs verb + to-infinitive: enjoy/avoid vs want/decide</div>
-              <div class="book-pills"><span class="pill lvl">B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book" href="exercises/parts-of-speech.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔤</div>
-            <div class="book-body">
-              <div class="book-title">8 Parts of Speech</div>
-              <div class="book-meta">Noun · Verb · Adjective · Adverb · Pronoun · Preposition · Conjunction · Interjection</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-vocab" href="exercises/comparisons.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">⚖️</div>
-            <div class="book-body">
-              <div class="book-title">Comparisons</div>
-              <div class="book-meta">than/as/the · Irregular: good→better→best, bad→worse→worst</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-noun" href="exercises/causative-verbs.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🛠️</div>
-            <div class="book-body">
-              <div class="book-title">Causative Verbs</div>
-              <div class="book-meta">Have/get/make/let/help · Passive causative (had it fixed)</div>
-              <div class="book-pills"><span class="pill lvl">B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/conditionals.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔀</div>
-            <div class="book-body">
-              <div class="book-title">Conditionals</div>
-              <div class="book-meta">Zero · First · Second · Third · if/unless/provided that/as long as</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-vocab" href="exercises/preferences.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">💭</div>
-            <div class="book-body">
-              <div class="book-title">Prefer / Would Rather</div>
-              <div class="book-meta">Prefer vs would prefer vs would rather · to/than/that/∅</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-vocab" href="exercises/quantifiers.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">📊</div>
-            <div class="book-body">
-              <div class="book-title">Quantifiers</div>
-              <div class="book-meta">some/any · much/many · few/little · a lot of/enough</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-opp" href="exercises/collocations.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔗</div>
-            <div class="book-body">
-              <div class="book-title">Collocations</div>
-              <div class="book-meta">make/do · have/take · get/give · pay/keep/save</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-noun" href="exercises/tenses.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">⏱️</div>
-            <div class="book-body">
-              <div class="book-title">Verb Tenses</div>
-              <div class="book-meta">Present · Past · Future · Perfect · Perfect Simple vs Continuous · Have/Has/Had</div>
-              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">6 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/word-formation.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧩</div>
-            <div class="book-body">
-              <div class="book-title">Word Formation</div>
-              <div class="book-meta">Nouns · Adjectives · Negatives · Mixed — build the correct derived form</div>
-              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
+        <div class="subsec" data-subcat="morphology">
+          <div class="sec-head sec-head--sub">Morfología y ortografía</div>
+          <div class="shelf" id="shelf-grammar-morphology"></div>
+        </div>
+        <div class="subsec" data-subcat="tense">
+          <div class="sec-head sec-head--sub">Tiempo y aspecto</div>
+          <div class="shelf" id="shelf-grammar-tense"></div>
+        </div>
+        <div class="subsec" data-subcat="structure">
+          <div class="sec-head sec-head--sub">Estructura y palabras función</div>
+          <div class="shelf" id="shelf-grammar-structure"></div>
+        </div>
+        <div class="subsec" data-subcat="nuance">
+          <div class="sec-head sec-head--sub">Matices de uso</div>
+          <div class="shelf" id="shelf-grammar-nuance"></div>
         </div>
       </section>
 
       <!-- ANALYSIS & PRODUCTION -->
       <section class="section" data-key="analysis">
         <div class="sec-head">Analysis & Production</div>
-        <div class="shelf">
-          <a class="book b-vocab" href="exercises/error-hunt.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🔍</div>
-            <div class="book-body">
-              <div class="book-title">Error Hunt</div>
-              <div class="book-meta">Find & correct errors in texts — Grammar · Tenses · Vocabulary · Prepositions</div>
-              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Hunt</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-opp" href="exercises/odd-one-out.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🧠</div>
-            <div class="book-body">
-              <div class="book-title">Odd One Out</div>
-              <div class="book-meta">Identify the word that doesn't belong — Grammar · Vocabulary · Collocations · Pronunciation</div>
-              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Quiz</span><span class="pill">Timed</span></div>
-            </div>
-          </a>
-          <a class="book b-ed" href="exercises/dictation-sprint.html">
-            <div class="book-spine"></div>
-            <div class="book-icon">🎙️</div>
-            <div class="book-body">
-              <div class="book-title">Dictation Sprint</div>
-              <div class="book-meta">Listen to full sentences (TTS) → write them down · Partial credit scoring</div>
-              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
-            </div>
-          </a>
-        </div>
+        <div class="shelf" id="shelf-analysis"></div>
       </section>
 
       <!-- GUIDES -->
@@ -851,7 +578,9 @@
   <button class="bn-item r" data-target="guides"><span class="bn-icon">📚</span><span class="bn-label">Guías</span></button>
 </nav>
 
-<script>
+<script type="module">
+import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
+
 (function() {
   // Theme
   const saved = localStorage.getItem('lp-theme');
@@ -873,8 +602,97 @@
   };
   themeBtns.forEach(b => b.onclick = toggleTheme);
 
-  // Stats
-  const keys = Object.keys(localStorage).filter(k => /^(ing|ed|noun|vocab|wr|irr|conf|prep|phrasal|phonics|art|quant|coll|listen|tense|wf|sbe|vchunks|errhunt|odd|dict)-/.test(k));
+  // ─── RENDER MODULE CARDS FROM CATALOG (Fase 2) ───
+  const SPINE_CYCLE = ['', 'b-ed', 'b-noun', 'b-vocab', 'b-opp'];
+  const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
+  const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
+
+  function pillsHTML(mod) {
+    const pills = [`<span class="pill lvl">${mod.cefr.toUpperCase()}</span>`];
+    const mechanics = mod.tags.filter(t => MECHANIC_PRIORITY.includes(t))
+      .sort((a, b) => MECHANIC_PRIORITY.indexOf(a) - MECHANIC_PRIORITY.indexOf(b))
+      .slice(0, 2);
+    mechanics.forEach(t => pills.push(`<span class="pill">${MECHANIC_LABEL[t]}</span>`));
+    return pills.join('');
+  }
+
+  function titleHTML(mod) {
+    return mod.title.replace(/(-ing|-ed)\b/, '<code>$1</code>');
+  }
+
+  function bookCardHTML(mod, spineClass) {
+    return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}">
+      <div class="book-spine"></div>
+      <div class="book-icon">${mod.icon}</div>
+      <div class="book-body">
+        <div class="book-title">${titleHTML(mod)}</div>
+        <div class="book-meta">${mod.meta}</div>
+        <div class="book-pills">${pillsHTML(mod)}</div>
+      </div>
+    </a>`;
+  }
+
+  function renderShelf(containerId, modules) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = modules.map((mod, i) => bookCardHTML(mod, SPINE_CYCLE[i % SPINE_CYCLE.length])).join('');
+  }
+
+  renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'));
+  renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'));
+  renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'));
+  Object.keys(SUBCATEGORIES).forEach(sub => {
+    renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub));
+  });
+
+  // "Agregado recientemente" — chips generados desde catalog.js (isNew), la guía queda estática en el HTML
+  const newRow = document.getElementById('newRow');
+  if (newRow) {
+    const newChips = MODULES.filter(m => m.isNew).map(m =>
+      `<a class="new-chip" href="${m.exercise}"><span class="nc-icon">${m.icon}</span><span><span class="nc-badge">Nuevo</span><br>${m.title}</span></a>`
+    ).join('');
+    newRow.insertAdjacentHTML('afterbegin', newChips);
+  }
+
+  // ─── TAG FILTER BAR ───
+  const tagBar = document.getElementById('tagBar');
+  const activeTags = new Set((new URLSearchParams(location.search).get('tag') || '').split(',').filter(Boolean));
+
+  function usedTags(list) {
+    const used = new Set();
+    MODULES.forEach(m => m.tags.forEach(t => { if (list.includes(t)) used.add(t); }));
+    return list.filter(t => used.has(t));
+  }
+
+  function tagChipHTML(t) {
+    const isActive = activeTags.has(t) ? ' active' : '';
+    return `<button class="lp-pill${isActive}" data-tag="${t}">${t.length <= 2 ? t.toUpperCase() : t.charAt(0).toUpperCase() + t.slice(1)}</button>`;
+  }
+
+  if (tagBar) {
+    const cefrChips = usedTags(TAGS.cefr).map(tagChipHTML).join('');
+    const skillChips = usedTags(TAGS.skill).map(tagChipHTML).join('');
+    tagBar.innerHTML = cefrChips + '<span class="tagbar-sep"></span>' + skillChips;
+    tagBar.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-tag]');
+      if (!btn) return;
+      const t = btn.dataset.tag;
+      if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+      btn.classList.toggle('active');
+      applyFilters();
+      const u = new URL(location.href);
+      if (activeTags.size) u.searchParams.set('tag', [...activeTags].join(',')); else u.searchParams.delete('tag');
+      history.replaceState(null, '', u);
+    });
+  }
+
+  // Stats — prefijos derivados del catálogo, no hardcodeados (bug encontrado en Fase 0:
+  // el regex viejo no cubría 13 de los 34 scoreKey reales, sus sesiones nunca se contaban)
+  const scoreKeySet = new Set(MODULES.map(m => m.scoreKey));
+  const keys = Object.keys(localStorage).filter(k => {
+    const m = k.match(/^[a-z]+/);
+    return m && scoreKeySet.has(m[0]);
+  });
   let total = 0, best = 0; const modBest = {};
   keys.forEach(k => {
     try {
@@ -931,6 +749,7 @@
   const content = document.querySelector('.content');
   const topbarSearch = document.querySelector('.search-bar');
   const topbarStats = document.querySelector('.header-stats');
+  const MODULE_SECTIONS = new Set(['vocab', 'pronunciation', 'grammar', 'analysis']);
 
   function setActive(target) {
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
@@ -939,8 +758,10 @@
     const isResumen = target === 'resumen';
     topbarSearch.style.display = isResumen ? 'none' : '';
     topbarStats.style.display = isResumen ? 'none' : '';
+    if (tagBar) tagBar.classList.toggle('visible', MODULE_SECTIONS.has(target));
     content.scrollTop = 0;
-    if (searchInput.value) { searchInput.value = ''; filterModules(); }
+    if (searchInput.value) { searchInput.value = ''; }
+    applyFilters();
   }
 
   navButtons.forEach(b => {
@@ -948,43 +769,67 @@
     b.addEventListener('click', () => setActive(b.dataset.target));
   });
 
-  // ─── SEARCH ───
+  // ─── SEARCH + TAG FILTER (combinados: AND entre texto y tags activos) ───
   const searchInput = document.getElementById('searchInput');
   const clearBtn = document.getElementById('clearSearch');
   const noResults = document.getElementById('noResults');
-  const books = document.querySelectorAll('.book');
 
-  function filterModules() {
+  function applyFilters() {
     const q = searchInput.value.trim().toLowerCase();
     clearBtn.classList.toggle('visible', q.length > 0);
+    const filtering = q.length > 0 || activeTags.size > 0;
+    // Cross-section search only when there is a text query — tag-only filtering
+    // stays within the current active section to avoid breaking category context.
+    const crossSection = q.length > 0;
     let anyVisible = false;
 
     sections.forEach(sec => {
       if (sec.dataset.key === 'resumen') { sec.classList.toggle('search-visible', false); return; }
-      const shelfOrGuides = sec.querySelector('.shelf, .guides');
-      if (!shelfOrGuides) return;
+      const isActive = sec.classList.contains('active-section');
+      const shelfOrGuides = sec.querySelectorAll('.shelf, .guides');
+      if (!shelfOrGuides.length) return;
       let sectionVisible = false;
-      shelfOrGuides.querySelectorAll('.book, .guide-link').forEach(card => {
-        const text = card.textContent.toLowerCase();
-        const match = !q || text.includes(q);
-        card.classList.toggle('hidden', !match);
-        if (match && q) sectionVisible = true;
+      shelfOrGuides.forEach(container => {
+        let containerVisible = false;
+        container.querySelectorAll('.book, .guide-link').forEach(card => {
+          // When not cross-section and this section isn't active, skip filtering
+          // (cards stay in their default hidden/visible state via active-section CSS)
+          if (!crossSection && !isActive) return;
+          const text = card.textContent.toLowerCase();
+          const textMatch = !q || text.includes(q);
+          const cardTags = card.dataset.tags ? card.dataset.tags.split(',') : [];
+          const tagMatch = activeTags.size === 0 || [...activeTags].every(t => cardTags.includes(t));
+          const match = textMatch && tagMatch;
+          card.classList.toggle('hidden', !match);
+          if (match && filtering) { containerVisible = true; sectionVisible = true; }
+        });
+        // Oculta la subsección entera (ej. "Morfología y ortografía") si ninguna de
+        // sus tarjetas pasa el filtro — evita encabezados huérfanos sin tarjetas debajo.
+        const subsec = container.closest('.subsec');
+        if (subsec && (crossSection || isActive)) subsec.classList.toggle('hidden', filtering && !containerVisible);
       });
-      sec.classList.toggle('search-visible', q.length > 0 && sectionVisible);
-      if (sectionVisible) anyVisible = true;
+      // Only promote non-active sections to visible during cross-section (text) search
+      if (crossSection) {
+        sec.classList.toggle('search-visible', filtering && sectionVisible);
+        if (sectionVisible) anyVisible = true;
+      } else {
+        sec.classList.remove('search-visible');
+        if (isActive && sectionVisible) anyVisible = true;
+      }
     });
 
-    noResults.style.display = (q.length > 0 && !anyVisible) ? 'block' : 'none';
+    noResults.style.display = (filtering && !anyVisible) ? 'block' : 'none';
   }
 
-  searchInput.addEventListener('input', filterModules);
-  clearBtn.addEventListener('click', () => { searchInput.value = ''; filterModules(); searchInput.focus(); });
+  searchInput.addEventListener('input', applyFilters);
+  clearBtn.addEventListener('click', () => { searchInput.value = ''; applyFilters(); searchInput.focus(); });
   document.addEventListener('keydown', (e) => {
     if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
-    if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; filterModules(); searchInput.blur(); }
+    if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; applyFilters(); searchInput.blur(); }
   });
 
   setActive('resumen');
+  if (activeTags.size) applyFilters();
 })();
 </script>
 </body>

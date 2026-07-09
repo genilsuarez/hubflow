@@ -88,7 +88,10 @@
   width: 100%;
   height: 100%;
 }
-.lp-pill.active { background: var(--lp-ink); color: var(--lp-bg); }
+.lp-pill.active {
+  background: var(--lp-ink); color: var(--lp-bg);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-ink) 25%, transparent);
+}
 
 /* Estados comunes — SIEMPRE presentes */
 .lp-btn:focus-visible, .lp-icon-btn:focus-visible, .lp-pill:focus-visible {

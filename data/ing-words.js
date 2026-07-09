@@ -54,10 +54,10 @@ export const LEVELS = {
     { verb: "queue",   ans: "queueing",   rule: "red",   why: "British: keep -e" },
   ],
   god: [
-    { verb: "die",       ans: "dying",       rule: "blue",  why: "-ie → y+ing (≠ dyeing)" },
+    { verb: "ski",       ans: "skiing",      rule: "red",   why: "-i ending → just add -ing (double i is correct)" },
     { verb: "vie",       ans: "vying",       rule: "blue",  why: "-ie → y+ing" },
     { verb: "untie",     ans: "untying",     rule: "blue",  why: "-ie → y+ing" },
-    { verb: "dye",       ans: "dyeing",      rule: "red",   why: "keep -e (≠ dying)" },
+    { verb: "referee",   ans: "refereeing",  rule: "red",   why: "-ee real vowel → +ing" },
     { verb: "singe",     ans: "singeing",    rule: "red",   why: "keep -e (≠ singing)" },
     { verb: "tinge",     ans: "tingeing",    rule: "red",   why: "keep -e (soft g)" },
     { verb: "tiptoe",    ans: "tiptoeing",   rule: "red",   why: "-oe real vowel → keep -e" },
