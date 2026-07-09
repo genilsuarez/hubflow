@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preferences Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237B5EA7'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#7C5AF6;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EEE9FE;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#5A3BC4;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#2a1a3d;--green-light:#1a3d2a;--yellow-light:#3d3510;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 480px at 50% -8%, rgba(124,90,246,.15) 0%, rgba(124,90,246,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(124,90,246,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F8F6FE 55%, #EDE7FB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(124,90,246,.08) 1px, transparent 1.5px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+.cmp-pair{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0;}
+.cmp-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;}
+.cmp-card.a{border-top:4px solid var(--blue);}
+.cmp-card.b{border-top:4px solid var(--green);}
+.cmp-card.c{border-top:4px solid var(--yellow);}
+.cmp-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+.cmp-word{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;color:var(--blue-dark);margin-bottom:4px;}
+[data-theme="dark"] .cmp-word{color:#C9B6FF;}
+.cmp-meaning{font-size:.72rem;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.cmp-ex{font-size:.68rem;color:var(--muted);font-style:italic;line-height:1.4;}
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#C9B6FF;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+@media(max-width:480px){.page{padding:14px 12px 50px;}.cmp-pair{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/preferences.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Prefer <span class="accent">& Would Rather</span></h1>
+<p class="intro">Three ways to talk about preferences — each with its own grammar and its own level of formality.</p>
+
+<h2>&#128173; Which Expression?</h2>
+<div class="cmp-pair">
+  <div class="cmp-card a">
+    <div class="cmp-label">General habit</div>
+    <div class="cmp-word">prefer</div>
+    <div class="cmp-meaning">An ongoing, general preference</div>
+    <div class="cmp-ex">I prefer tea to coffee.</div>
+  </div>
+  <div class="cmp-card b">
+    <div class="cmp-label">Specific occasion</div>
+    <div class="cmp-word">would prefer</div>
+    <div class="cmp-meaning">A choice for right now, more formal</div>
+    <div class="cmp-ex">I'd prefer pizza tonight.</div>
+  </div>
+  <div class="cmp-card c">
+    <div class="cmp-label">Specific, informal</div>
+    <div class="cmp-word">would rather</div>
+    <div class="cmp-meaning">A specific choice, casual tone</div>
+    <div class="cmp-ex">I'd rather stay in.</div>
+  </div>
+</div>
+
+<h2>&#129513; Structure</h2>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; What comes after each one</div>
+  <div class="rule-desc">
+    <strong>prefer</strong> + noun/-ing + <strong>to</strong> + noun/-ing<br>
+    <strong>would prefer</strong> + noun/to-infinitive<br>
+    <strong>would rather</strong> + base verb (no "to"!) + <strong>than</strong> + base verb
+  </div>
+  <div class="examples">
+    <span class="ex">I prefer dogs to cats.</span>
+    <span class="ex">I'd prefer to stay in tonight.</span>
+    <span class="ex">I'd rather walk than drive.</span>
+  </div>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#9888;&#65039; Formal alternatives</div>
+  <div class="rule-desc"><strong>Prefer that</strong> + clause is a formal way to express a preference about what someone else should do.</div>
+  <div class="examples">
+    <span class="ex">We prefer that guests remove their shoes.</span>
+  </div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/preferences.html">&larr; Practice preferences</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -89,5 +89,30 @@ export const CATEGORIES = {
       { sentence: 'I want to be ___ actor.', correct: 'an', explain: 'Professions + vowel sound → "an actor".' },
       { sentence: '___ rich should help ___ poor.', correct: 'the', explain: '"The" + adjective = group of people (the rich, the poor).' }
     ]
+  },
+  noThe: {
+    label: 'Never Use "The"',
+    icon: '🚫',
+    options: ['the', '∅'],
+    items: [
+      { sentence: '___ Sarah is my best friend.', correct: '∅', explain: 'Personal names never take "the".' },
+      { sentence: 'She has traveled across ___ Africa.', correct: '∅', explain: 'Continents take no article.' },
+      { sentence: 'They moved to ___ Germany.', correct: '∅', explain: 'Most country names take no article.' },
+      { sentence: '___ Tokyo is my favourite city.', correct: '∅', explain: 'Towns and cities take no article.' },
+      { sentence: 'He lives on ___ Baker Street.', correct: '∅', explain: 'Streets take no article.' },
+      { sentence: '___ Lake Como is in Italy.', correct: '∅', explain: 'Individual lakes take no article.' },
+      { sentence: 'Climbing ___ Mount Kilimanjaro is a bucket-list dream.', correct: '∅', explain: 'Individual mountains take no article.' },
+      { sentence: 'She loves playing ___ tennis.', correct: '∅', explain: 'Sports and games take no article.' },
+      { sentence: '___ Mandarin is spoken by over a billion people.', correct: '∅', explain: 'Language names take no article.' },
+      { sentence: 'We\'re having ___ Christmas dinner at my parents\'.', correct: '∅', explain: 'Meal names, even festive ones, take no article.' },
+      { sentence: 'He has ___ flu again.', correct: '∅', explain: 'Most illnesses take no article (has flu, has cancer) — a few take "a": a cold, a headache.' },
+      { sentence: '___ Maths is my favourite subject.', correct: '∅', explain: 'Academic subjects take no article.' },
+      { sentence: 'We\'re meeting on ___ Monday.', correct: '∅', explain: 'Days, months, and holidays take no article.' },
+      { sentence: '___ President Biden gave a speech.', correct: '∅', explain: 'Title + name never takes "the" ("President Biden", not "the President Biden").' },
+      { sentence: 'He\'s from ___ Texas.', correct: '∅', explain: 'US states and UK counties take no article.' },
+      { sentence: 'We invited ___ Hammonds to the party.', correct: 'the', explain: 'Exception: plural family surnames DO take "the" ("the Hammonds" = the Hammond family).' },
+      { sentence: 'She works in ___ Hague.', correct: 'the', explain: 'Exception: "The Hague" keeps "the" even though city names normally don\'t.' },
+      { sentence: 'Do you mean ___ Andy who lives down the road?', correct: 'the', explain: 'Exception: "the" + name distinguishes one specific person from others sharing that name.' }
+    ]
   }
 };

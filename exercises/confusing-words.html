@@ -112,8 +112,8 @@
 
     <!-- Modes -->
     <div class="pill-bar">
-      <button class="pill-btn active" data-mode="practice">🎯 Practice</button>
-      <button class="pill-btn" data-mode="study">📖 Study</button>
+      <button class="pill-btn active" data-mode="study">📖 Study</button>
+      <button class="pill-btn" data-mode="practice">🎯 Practice</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
@@ -175,7 +175,7 @@ document.getElementById('themeToggle').addEventListener('click', () => toggleThe
 
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0];
-let mode = 'practice';
+let mode = 'study';
 let deck = [], idx = 0, score = 0, total = 0;
 let timer = null;
 

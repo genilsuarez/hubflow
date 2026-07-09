@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confusing Words Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+
+/* PAIR SECTION */
+.pair-section{margin-bottom:28px;}
+.pair-header{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;margin-bottom:10px;
+}
+.pair-header .ph-words{font-family:'DM Serif Display',serif;font-size:1.4rem;font-style:italic;color:var(--blue);}
+.pair-header .ph-vs{font-size:.7rem;font-weight:800;color:var(--muted);padding:2px 6px;background:var(--border);border-radius:4px;}
+
+/* COMPARISON LAYOUT */
+.cmp-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.cmp-side{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;
+}
+.cmp-side.left{border-top:4px solid var(--blue);}
+.cmp-side.right{border-top:4px solid var(--green);}
+.cs-word{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;margin-bottom:4px;}
+.cs-word.blue{color:var(--blue-dark);}
+.cs-word.green{color:var(--green-dark);}
+[data-theme="dark"] .cs-word.blue{color:#7AC7FF;}
+[data-theme="dark"] .cs-word.green{color:#6FE8A8;}
+.cs-meaning{font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.cs-detail{font-size:.72rem;color:var(--muted);line-height:1.5;margin-bottom:6px;}
+.cs-examples{font-size:.72rem;color:var(--text);line-height:1.7;font-style:italic;}
+
+/* TRICK BOX */
+.trick-box{
+  background:var(--yellow-light);border:1.5px solid color-mix(in srgb, var(--yellow) 40%, transparent);
+  border-radius:12px;padding:12px 14px;margin:8px 0;
+}
+.trick-box .tb-title{font-weight:800;font-size:.74rem;margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+.trick-box .tb-body{font-size:.72rem;line-height:1.5;color:var(--text);}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .cmp-pair{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/confusing-words.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Confusing Words <span class="accent">Clarified</span></h1>
+<p class="intro">Side-by-side comparisons of the most commonly confused verb pairs, with clear rules and memory tricks.</p>
+
+<!-- MAKE vs DO -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">make</span><span class="ph-vs">vs</span><span class="ph-words">do</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">make</div>
+      <div class="cs-meaning">Create, produce, cause a result</div>
+      <div class="cs-detail">Something new exists after the action</div>
+      <div class="cs-examples">make a cake &bull; make a decision &bull; make money &bull; make a mistake &bull; make noise &bull; make friends</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">do</div>
+      <div class="cs-meaning">Perform, complete a task or activity</div>
+      <div class="cs-detail">Focus on the process, not a tangible result</div>
+      <div class="cs-examples">do homework &bull; do the dishes &bull; do exercise &bull; do research &bull; do your best &bull; do a favor</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>MAKE</strong> = you can often touch/see the result. <strong>DO</strong> = it's an activity or task.</div></div>
+</section>
+
+<!-- SAY vs TELL -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">say</span><span class="ph-vs">vs</span><span class="ph-words">tell</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">say</div>
+      <div class="cs-meaning">Report words (no person required after it)</div>
+      <div class="cs-detail">say + (that) + clause / say + "words"</div>
+      <div class="cs-examples">She said she was tired. &bull; He said "hello." &bull; What did you say? &bull; Say it again.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">tell</div>
+      <div class="cs-meaning">Inform someone (person required after it)</div>
+      <div class="cs-detail">tell + person + (that) + clause</div>
+      <div class="cs-examples">She told me she was tired. &bull; Tell him the truth. &bull; He told us a story. &bull; Don't tell anyone.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>SAY</strong> something. <strong>TELL</strong> someone something. Fixed: tell a lie, tell a joke, tell the truth, tell the time.</div></div>
+</section>
+
+<!-- BRING vs TAKE -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">bring</span><span class="ph-vs">vs</span><span class="ph-words">take</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">bring</div>
+      <div class="cs-meaning">Move toward the speaker / here</div>
+      <div class="cs-detail">Direction: &rarr; HERE (toward you or the listener)</div>
+      <div class="cs-examples">Bring me some water. &bull; Can you bring a friend to the party? &bull; I'll bring dessert.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">take</div>
+      <div class="cs-meaning">Move away from the speaker / there</div>
+      <div class="cs-detail">Direction: THERE &larr; (away from you)</div>
+      <div class="cs-examples">Take your umbrella (when you leave). &bull; Take this to the office. &bull; I took the book to school.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>BRING</strong> = come + carry (toward). <strong>TAKE</strong> = go + carry (away). Think of direction!</div></div>
+</section>
+
+<!-- BORROW vs LEND -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">borrow</span><span class="ph-vs">vs</span><span class="ph-words">lend</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">borrow</div>
+      <div class="cs-meaning">Take temporarily (you receive)</div>
+      <div class="cs-detail">borrow + thing + from + person</div>
+      <div class="cs-examples">Can I borrow your pen? &bull; I borrowed $20 from him. &bull; She borrows books from the library.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">lend</div>
+      <div class="cs-meaning">Give temporarily (you provide)</div>
+      <div class="cs-detail">lend + thing + to + person / lend + person + thing</div>
+      <div class="cs-examples">Can you lend me your pen? &bull; I lent him $20. &bull; The bank lends money.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>BORROW</strong> = receive (arrow pointing &rarr; toward you). <strong>LEND</strong> = give (arrow pointing &larr; away). Spanish: prestar = lend, pedir prestado = borrow.</div></div>
+</section>
+
+<!-- WATCH vs LOOK vs SEE -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">watch / look / see</span></div>
+  <div class="cmp-pair" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="cmp-side left" style="border-top-color:var(--blue)">
+      <div class="cs-word blue">see</div>
+      <div class="cs-meaning">Perceive with eyes (passive, no effort)</div>
+      <div class="cs-examples">I see a bird. &bull; Did you see that? &bull; I can't see without glasses.</div>
+    </div>
+    <div class="cmp-side" style="border-top:4px solid var(--orange)">
+      <div class="cs-word" style="color:var(--orange)">look (at)</div>
+      <div class="cs-meaning">Direct eyes intentionally (active, brief)</div>
+      <div class="cs-examples">Look at this photo! &bull; She looked at him. &bull; Look both ways.</div>
+    </div>
+    <div class="cmp-side right" style="border-top-color:var(--green)">
+      <div class="cs-word green">watch</div>
+      <div class="cs-meaning">Observe for a period (active, sustained)</div>
+      <div class="cs-examples">Watch TV. &bull; Watch the game. &bull; Watch the kids (care).</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Scale of attention</div><div class="tb-body"><strong>see</strong> (happens naturally) &rarr; <strong>look</strong> (brief intentional glance) &rarr; <strong>watch</strong> (sustained observation over time).</div></div>
+</section>
+
+<!-- HEAR vs LISTEN -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">hear</span><span class="ph-vs">vs</span><span class="ph-words">listen</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">hear</div>
+      <div class="cs-meaning">Perceive sound passively (no effort)</div>
+      <div class="cs-detail">It just happens &mdash; like "see" for ears</div>
+      <div class="cs-examples">I can hear music. &bull; Did you hear that noise? &bull; I heard the news.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">listen (to)</div>
+      <div class="cs-meaning">Pay attention to sound actively</div>
+      <div class="cs-detail">Intentional effort &mdash; like "watch" for ears</div>
+      <div class="cs-examples">Listen to me! &bull; She listens to podcasts. &bull; I'm listening to music.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Pattern</div><div class="tb-body">Same logic: <strong>see/hear</strong> = passive perception. <strong>look/listen</strong> = active attention. Note: <strong>listen TO</strong> (always with preposition).</div></div>
+</section>
+
+<!-- LESS vs FEWER -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">less</span><span class="ph-vs">vs</span><span class="ph-words">fewer</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">less</div>
+      <div class="cs-meaning">Uncountable nouns</div>
+      <div class="cs-detail">less money, less time, less sugar</div>
+      <div class="cs-examples">I have less money than you. &bull; She eats less sugar now.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">fewer</div>
+      <div class="cs-meaning">Countable nouns (plural)</div>
+      <div class="cs-detail">fewer people, fewer cars, fewer mistakes</div>
+      <div class="cs-examples">There are fewer people here today. &bull; Fewer students signed up.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body">If you can count it (one car, two cars) &rarr; <strong>fewer</strong>. If you can't (money, time, sugar) &rarr; <strong>less</strong>.</div></div>
+</section>
+
+<!-- ME vs I -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">me</span><span class="ph-vs">vs</span><span class="ph-words">I</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">I</div>
+      <div class="cs-meaning">Subject of the sentence</div>
+      <div class="cs-detail">The one doing the action</div>
+      <div class="cs-examples">My friend and I went out. &bull; He and I are best friends.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">me</div>
+      <div class="cs-meaning">Object (after a verb or preposition)</div>
+      <div class="cs-detail">The one receiving the action</div>
+      <div class="cs-examples">She gave it to my friend and me. &bull; Between you and me...</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Test it alone</div><div class="tb-body">Remove the other person: "Me went out" sounds wrong &rarr; use <strong>I</strong>. "It's for I" sounds wrong &rarr; use <strong>me</strong>.</div></div>
+</section>
+
+<!-- WHO vs WHOM -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">who</span><span class="ph-vs">vs</span><span class="ph-words">whom</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">who</div>
+      <div class="cs-meaning">Subject of the verb</div>
+      <div class="cs-detail">Does the action</div>
+      <div class="cs-examples">Who is coming? &bull; The man who called earlier.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">whom</div>
+      <div class="cs-meaning">Object of a verb or preposition</div>
+      <div class="cs-detail">Receives the action</div>
+      <div class="cs-examples">To whom should I address this? &bull; Whom did you invite?</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; He/him test</div><div class="tb-body">If you can answer with <strong>he</strong> &rarr; use <strong>who</strong>. If you can answer with <strong>him</strong> &rarr; use <strong>whom</strong>. (he called &rarr; who; I saw him &rarr; whom)</div></div>
+</section>
+
+<!-- IS vs ARE -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">is</span><span class="ph-vs">vs</span><span class="ph-words">are</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">is</div>
+      <div class="cs-meaning">Singular subjects — and some tricky ones</div>
+      <div class="cs-detail">news, everybody, money amounts</div>
+      <div class="cs-examples">The news is worrying. &bull; Everybody is welcome. &bull; Ten dollars is too much.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">are</div>
+      <div class="cs-meaning">Plural subjects — and words that look singular</div>
+      <div class="cs-detail">glasses, police, scissors</div>
+      <div class="cs-examples">My glasses are on the table. &bull; The police are investigating.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#9888;&#65039; Watch for false friends</div><div class="tb-body"><strong>News</strong> ends in -s but is singular (is). <strong>Police</strong> looks singular but is always plural (are).</div></div>
+</section>
+
+<!-- THERE / THEIR / THEY'RE -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">there / their / they're</span></div>
+  <div class="cmp-pair" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="cmp-side left" style="border-top-color:var(--blue)">
+      <div class="cs-word blue">there</div>
+      <div class="cs-meaning">Place / existence</div>
+      <div class="cs-examples">Put it over there. &bull; There is a problem.</div>
+    </div>
+    <div class="cmp-side" style="border-top:4px solid var(--orange)">
+      <div class="cs-word" style="color:var(--orange)">their</div>
+      <div class="cs-meaning">Possessive (belongs to them)</div>
+      <div class="cs-examples">Their house is huge. &bull; I saw their car.</div>
+    </div>
+    <div class="cmp-side right" style="border-top-color:var(--green)">
+      <div class="cs-word green">they're</div>
+      <div class="cs-meaning">Contraction of "they are"</div>
+      <div class="cs-examples">They're coming tonight. &bull; They're always late.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Expand the contraction</div><div class="tb-body">If you can replace it with "they are" and it still makes sense &rarr; <strong>they're</strong>. If it shows possession &rarr; <strong>their</strong>. Otherwise &rarr; <strong>there</strong>.</div></div>
+</section>
+
+<!-- YOUR vs YOU'RE -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">your</span><span class="ph-vs">vs</span><span class="ph-words">you're</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">your</div>
+      <div class="cs-meaning">Possessive (belongs to you)</div>
+      <div class="cs-examples">Is this your bag? &bull; Don't forget your passport.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">you're</div>
+      <div class="cs-meaning">Contraction of "you are"</div>
+      <div class="cs-examples">You're going to love this. &bull; You're right.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Expand the contraction</div><div class="tb-body">Say "you are" instead — if it still makes sense, write <strong>you're</strong>. Otherwise, it's <strong>your</strong>.</div></div>
+</section>
+
+<!-- ITS vs IT'S -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">its</span><span class="ph-vs">vs</span><span class="ph-words">it's</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">its</div>
+      <div class="cs-meaning">Possessive — no apostrophe</div>
+      <div class="cs-examples">The dog wagged its tail. &bull; The company changed its policy.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">it's</div>
+      <div class="cs-meaning">Contraction of "it is" or "it has"</div>
+      <div class="cs-examples">It's raining. &bull; It's been a long day.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Expand the contraction</div><div class="tb-body">Say "it is" or "it has" — if it still makes sense, write <strong>it's</strong>. Otherwise (possession), it's <strong>its</strong> — no possessive pronoun in English ever uses an apostrophe (his, hers, its, ours, theirs).</div></div>
+</section>
+
+<!-- PRINCIPAL vs PRINCIPLE -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">principal</span><span class="ph-vs">vs</span><span class="ph-words">principle</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">principal</div>
+      <div class="cs-meaning">Noun: head of a school. Adjective: main/most important</div>
+      <div class="cs-examples">The school principal. &bull; The principal reason.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">principle</div>
+      <div class="cs-meaning">A fundamental rule, value, or truth</div>
+      <div class="cs-examples">Honesty is her principle. &bull; The basic principle of physics.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body">The <strong>principal</strong> is your pal (both end in -pal). A <strong>principle</strong> is a rule (both end in -le, like "rule").</div></div>
+</section>
+
+<!-- COMPLEMENT vs COMPLIMENT -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">complement</span><span class="ph-vs">vs</span><span class="ph-words">compliment</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">complement</div>
+      <div class="cs-meaning">Something that completes or goes well with</div>
+      <div class="cs-examples">This wine complements the meal. &bull; The colours complement each other.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">compliment</div>
+      <div class="cs-meaning">A nice thing you say (praise)</div>
+      <div class="cs-examples">She gave me a compliment. &bull; He paid her a compliment.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body">A comp<strong>li</strong>ment makes you feel good (like "I like it"). Comp<strong>le</strong>ment completes something else.</div></div>
+</section>
+
+<!-- DESERT vs DESSERT -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">desert</span><span class="ph-vs">vs</span><span class="ph-words">dessert</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">desert</div>
+      <div class="cs-meaning">A dry, arid area (noun). Or: to abandon (verb)</div>
+      <div class="cs-examples">The Sahara Desert. &bull; Don't desert your friends.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">dessert</div>
+      <div class="cs-meaning">The sweet course after a meal</div>
+      <div class="cs-examples">What's for dessert? &bull; Chocolate cake for dessert.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>Dessert</strong> has 2 S's because you always want a "Second Serving"! <strong>Desert</strong> (1 S) is dry, just like the Sahara.</div></div>
+</section>
+
+<!-- WEATHER vs WHETHER -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">weather</span><span class="ph-vs">vs</span><span class="ph-words">whether</span></div>
+  <div class="cmp-pair">
+    <div class="cmp-side left">
+      <div class="cs-word blue">weather</div>
+      <div class="cs-meaning">Rain, sun, wind, temperature...</div>
+      <div class="cs-examples">The weather is lovely today. &bull; Check the weather forecast.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">whether</div>
+      <div class="cs-meaning">Introduces a choice/doubt (= "if")</div>
+      <div class="cs-examples">I don't know whether to go. &bull; She asked whether I was coming.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>Weather</strong> has "eat" hidden in it — think of sunny days for a picnic. <strong>Whether</strong> is about a choice, like "which."</div></div>
+</section>
+
+<!-- STILL / ALREADY / JUST / YET -->
+<section class="pair-section">
+  <div class="pair-header"><span class="ph-words">still / already / just / yet</span></div>
+  <div class="cmp-pair" style="grid-template-columns:1fr 1fr;">
+    <div class="cmp-side left">
+      <div class="cs-word blue">still</div>
+      <div class="cs-meaning">A situation continues, unchanged</div>
+      <div class="cs-examples">Is she still working here? &bull; He's still asleep.</div>
+    </div>
+    <div class="cmp-side right">
+      <div class="cs-word green">already</div>
+      <div class="cs-meaning">Sooner than expected (affirmative)</div>
+      <div class="cs-examples">I've already eaten. &bull; You've already finished?!</div>
+    </div>
+    <div class="cmp-side left" style="margin-top:10px;">
+      <div class="cs-word blue">just</div>
+      <div class="cs-meaning">Very recently</div>
+      <div class="cs-examples">I've just arrived. &bull; She's just left.</div>
+    </div>
+    <div class="cmp-side right" style="margin-top:10px;">
+      <div class="cs-word green">yet</div>
+      <div class="cs-meaning">Up to now (questions and negatives)</div>
+      <div class="cs-examples">Have you finished yet? &bull; We haven't decided yet.</div>
+    </div>
+  </div>
+  <div class="trick-box"><div class="tb-title">&#128161; Quick rule</div><div class="tb-body"><strong>Yet</strong> = questions/negatives only. <strong>Already</strong> = affirmative, surprise. <strong>Just</strong> = a moment ago. <strong>Still</strong> = ongoing, no change.</div></div>
+</section>
+
+<footer class="guide-footer">
+  <a href="../exercises/confusing-words.html">&larr; Practice confusing words</a>
+</footer>
+
+</div>
+</body>
+</html>

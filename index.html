@@ -9,90 +9,190 @@
   <script>var p=new URLSearchParams(location.search).get('theme'),t=p||localStorage.getItem('lp-theme');if(p)localStorage.setItem('lp-theme',p);if(t==='dark')document.documentElement.setAttribute('data-theme','dark')</script>
   <link rel="stylesheet" href="css/base.css">
   <style>
-    html { height: 100%; }
-    body {
-      height: 100%; overflow: hidden;
-      padding: 32px clamp(18px, 5vw, 40px) 18px;
-    }
+    html, body { height: 100%; }
+    body { overflow: hidden; }
 
-    .wrap { max-width: 660px; margin: 0 auto; position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+    /* ═══ APP SHELL ═══ */
+    .shell { display: grid; grid-template-columns: 232px 1fr; height: 100%; }
 
-    /* ─── HEADER ─── */
-    .header {
-      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
-      margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid var(--lp-border);
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      display: flex; flex-direction: column; height: 100%; min-height: 0;
+      background: var(--lp-bg-paper); border-right: 1.5px solid var(--lp-border);
+      padding: 22px 14px 16px;
     }
-    .brand { display: flex; align-items: baseline; gap: 10px; }
-    .brand h1 {
+    .sb-brand { padding: 0 8px 20px; }
+    .sb-brand h1 {
       font-family: var(--lp-font-display); font-weight: var(--lp-weight-semibold);
-      font-size: 2.4rem; letter-spacing: -.02em; line-height: 1;
+      font-size: 1.7rem; letter-spacing: -.02em; line-height: 1;
     }
-    .brand h1 em { font-weight: var(--lp-weight-normal); font-style: italic; color: var(--lp-accent); }
-    .header-actions { display: flex; gap: 10px; }
-    .icon-btn {
-      width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--lp-border);
-      background: var(--lp-surface); display: flex; align-items: center; justify-content: center;
-      font-size: 1.05rem; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s;
-      box-shadow: var(--lp-shadow-md);
-    }
-    .icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.1); box-shadow: var(--lp-shadow-lg); }
+    .sb-brand h1 em { font-weight: var(--lp-weight-normal); font-style: italic; color: var(--lp-accent); }
+    .sb-brand .sb-tag { font-size: .64rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); letter-spacing: .04em; margin-top: 2px; }
 
-    /* ─── HEADER STATS (compact pill) ─── */
-    .header-stats {
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      height: 36px; padding: 0 0.75rem;
+    .sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+    .sb-item {
+      --spine: var(--lp-accent);
+      display: grid; grid-template-columns: 4px 30px 1fr; align-items: center;
+      width: 100%; text-align: left; border: none; background: transparent; cursor: pointer;
+      border-radius: var(--lp-radius-md); padding: 0; min-height: 44px; overflow: hidden;
+      font-family: var(--lp-font-body); color: var(--lp-ink-soft);
+      transition: background .18s var(--lp-ease);
+    }
+    .sb-item:hover { background: var(--lp-surface); }
+    .sb-item .sb-spine { height: 100%; background: transparent; border-radius: 4px; transition: background .18s; }
+    .sb-item .sb-icon { font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+    .sb-item .sb-label { font-size: .8rem; font-weight: var(--lp-weight-bold); padding: 10px 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-item.active { background: var(--lp-surface); color: var(--lp-ink); box-shadow: var(--lp-shadow-sm); }
+    .sb-item.active .sb-spine { background: var(--spine); }
+    .sb-item.v { --spine: var(--lp-cat-purple); }
+    .sb-item.p { --spine: var(--lp-cat-blue); }
+    .sb-item.g { --spine: var(--lp-cat-amber); }
+    .sb-item.a { --spine: var(--lp-cat-teal); }
+    .sb-item.r { --spine: var(--lp-cat-green); }
+
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--lp-border);
+      background: var(--lp-surface); display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s;
+      box-shadow: var(--lp-shadow-sm); text-decoration: none;
+    }
+    .icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.08); box-shadow: var(--lp-shadow-md); }
+
+    /* ─── MAIN COLUMN ─── */
+    .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; }
+    .topbar {
+      display: flex; align-items: center; gap: 12px; padding: 16px clamp(16px, 3vw, 34px) 12px;
+      border-bottom: 1.5px solid var(--lp-border); flex-shrink: 0;
+    }
+    .mobile-brand { display: none; font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); flex-shrink: 0; }
+    .mobile-brand em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
+
+    .search-bar { position: relative; flex: 1; min-width: 0; max-width: 380px; }
+    .search-bar input {
+      width: 100%; padding: 10px 14px 10px 34px;
+      font-size: .78rem; font-family: var(--lp-font-body); font-weight: var(--lp-weight-medium);
       background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-md);
-      box-shadow: var(--lp-shadow-sm); font-size: 0.75rem;
+      color: var(--lp-ink); box-shadow: var(--lp-shadow-sm);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .search-bar input:focus { outline: none; border-color: var(--lp-accent); box-shadow: var(--lp-shadow-md); }
+    .search-bar input::placeholder { color: var(--lp-muted); }
+    .search-bar::before { content: '🔍'; position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: .76rem; pointer-events: none; }
+    .search-bar .clear-btn {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; font-size: .85rem; cursor: pointer; color: var(--lp-muted);
+      display: none; padding: 4px;
+    }
+    .search-bar .clear-btn.visible { display: block; }
+
+    .header-stats {
+      display: flex; align-items: center; gap: 0.5rem; height: 36px; padding: 0 0.75rem;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-md);
+      box-shadow: var(--lp-shadow-sm); font-size: 0.75rem; flex-shrink: 0;
     }
     .header-stat { display: flex; align-items: baseline; gap: 0.25rem; }
     .header-stat__val { font-family: var(--lp-font-display); font-weight: var(--lp-weight-bold); font-size: 0.9rem; color: var(--lp-ink); line-height: 1; }
     .header-stat__label { font-size: 0.6rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
     .header-stat__divider { width: 1px; height: 18px; background: var(--lp-border); }
 
-    /* ─── SECTIONS ─── */
-    .section { margin-bottom: 30px; }
+    .content { flex: 1; min-height: 0; overflow-y: auto; padding: 18px clamp(16px, 3vw, 34px) 18px; scrollbar-width: none; }
+
+    .no-results { text-align: center; padding: 24px; color: var(--lp-muted); font-size: .8rem; font-weight: var(--lp-weight-medium); display: none; }
+    .book.hidden, .guide-link.hidden { display: none !important; }
+
+    /* ─── SECTION VISIBILITY (SPA panels) ─── */
+    .section { display: none; margin-bottom: 20px; }
+    .section.active-section, .section.search-visible { display: block; }
     .sec-head {
       font-size: .66rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase;
-      color: var(--lp-muted); margin-bottom: 14px; padding-left: 2px;
+      color: var(--lp-muted); margin-bottom: 10px; padding-left: 2px;
     }
 
-    /* ─── MODULE CARDS (book-shelf metaphor) ─── */
-    .shelf { display: flex; flex-direction: column; gap: 12px; }
+    /* ─── RESUMEN (dashboard) ─── */
+    .resumen-hero {
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-xl);
+      padding: 24px clamp(18px, 4vw, 30px); margin-bottom: 20px; box-shadow: var(--lp-shadow-md);
+      position: relative; overflow: hidden;
+    }
+    .resumen-hero::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(420px 220px at 100% -10%, color-mix(in srgb, var(--lp-accent) 12%, transparent), transparent 70%);
+    }
+    .hero-actions { position: absolute; top: 18px; right: 18px; display: flex; gap: 8px; z-index: 1; }
+    .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; padding-right: 100px; }
+    .resumen-greeting em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
+    .resumen-sub { font-size: .82rem; color: var(--lp-ink-soft); margin-bottom: 18px; position: relative; }
+    .resumen-stats { display: flex; gap: 10px; flex-wrap: wrap; position: relative; }
+    .rs-card { background: var(--lp-bg-paper); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 12px 18px; min-width: 100px; }
+    .rs-card .rs-val { font-family: var(--lp-font-display); font-size: 1.5rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink); line-height: 1; }
+    .rs-card .rs-label { font-size: .62rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
+    .tile {
+      --spine: var(--lp-accent);
+      display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg);
+      padding: 16px; cursor: pointer; text-align: left; font-family: inherit; color: var(--lp-ink);
+      box-shadow: var(--lp-shadow-sm); transition: transform .2s var(--lp-ease), box-shadow .2s var(--lp-ease), border-color .2s;
+      border-top: 4px solid var(--spine);
+    }
+    .tile:hover { transform: translateY(-3px); box-shadow: var(--lp-shadow-hover); }
+    .tile .tile-icon { font-size: 1.4rem; }
+    .tile .tile-title { font-size: .82rem; font-weight: var(--lp-weight-extrabold); }
+    .tile .tile-count { font-size: .66rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); }
+    .tile.v { --spine: var(--lp-cat-purple); }
+    .tile.p { --spine: var(--lp-cat-blue); }
+    .tile.g { --spine: var(--lp-cat-amber); }
+    .tile.a { --spine: var(--lp-cat-teal); }
+    .tile.r { --spine: var(--lp-cat-green); }
+
+    .new-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+    .new-chip {
+      flex-shrink: 0; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--lp-ink);
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: 50px;
+      padding: 8px 14px 8px 8px; font-size: .74rem; font-weight: var(--lp-weight-bold);
+      box-shadow: var(--lp-shadow-sm); transition: border-color .2s, transform .2s;
+    }
+    .new-chip:hover { border-color: var(--lp-accent); transform: translateY(-2px); }
+    .new-chip .nc-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--lp-accent-soft); display: flex; align-items: center; justify-content: center; font-size: .82rem; }
+    .new-chip .nc-badge { font-size: .58rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-accent); text-transform: uppercase; letter-spacing: .04em; }
+
+    /* ─── MODULE CARDS (compact grid) ─── */
+    .shelf { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    @media (min-width: 720px) { .shelf { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1150px) { .shelf { grid-template-columns: repeat(3, 1fr); } }
     .book {
       --spine: var(--lp-cat-blue);
-      display: grid; grid-template-columns: 8px 52px 1fr; align-items: center;
+      display: grid; grid-template-columns: 6px 40px 1fr; align-items: center;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg);
       padding: 0; text-decoration: none; color: var(--lp-ink); overflow: hidden;
-      box-shadow: var(--lp-shadow-lg);
+      box-shadow: var(--lp-shadow-md);
       transition: transform .25s var(--lp-ease), box-shadow .25s var(--lp-ease), border-color .2s;
-      animation: slideIn .5s var(--lp-ease) both;
     }
-    .book:hover { transform: translateX(6px); box-shadow: var(--lp-shadow-hover); border-color: color-mix(in srgb, var(--spine) 50%, var(--lp-border)); }
-    .book:active { transform: translateX(3px) scale(.995); }
+    .book:hover { transform: translateY(-2px); box-shadow: var(--lp-shadow-hover); border-color: color-mix(in srgb, var(--spine) 50%, var(--lp-border)); }
+    .book:active { transform: translateY(0) scale(.98); }
 
-    .book-spine { width: 8px; height: 100%; background: var(--spine); align-self: stretch; border-radius: 6px 0 0 6px; }
+    .book-spine { width: 6px; height: 100%; background: var(--spine); align-self: stretch; border-radius: 6px 0 0 6px; }
     .book-icon {
-      width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin: 12px 6px;
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; margin: 8px 4px;
       background: color-mix(in srgb, var(--spine) 10%, transparent); border-radius: var(--lp-radius-md);
     }
-    .book-body { padding: 18px 18px 16px 12px; min-width: 0; }
-    .book-title {
-      font-weight: var(--lp-weight-extrabold); font-size: .95rem; line-height: 1.25;
-      display: flex; align-items: center; gap: 8px;
-    }
+    .book-body { padding: 10px 12px 10px 8px; min-width: 0; }
+    .book-title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; line-height: 1.25; display: flex; align-items: center; gap: 6px; }
     .book-title code {
       font-family: var(--lp-font-mono); font-weight: var(--lp-weight-bold); font-size: .8em;
-      color: var(--spine); background: color-mix(in srgb, var(--spine) 14%, transparent); padding: 4px 9px; border-radius: 5px;
+      color: var(--spine); background: color-mix(in srgb, var(--spine) 14%, transparent); padding: 3px 7px; border-radius: 5px;
     }
     .book-meta {
-      font-size: .72rem; color: var(--lp-ink-soft); font-weight: var(--lp-weight-medium); margin-top: 6px; line-height: 1.45;
+      font-size: .65rem; color: var(--lp-ink-soft); font-weight: var(--lp-weight-medium); margin-top: 4px; line-height: 1.35;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
-    .book-pills { display: flex; gap: 7px; margin-top: 10px; flex-wrap: wrap; }
+    .book-pills { display: flex; gap: 5px; flex-wrap: wrap; opacity: 0; max-height: 0; overflow: hidden; transition: opacity .3s ease, max-height .4s cubic-bezier(0.4, 0, 0.2, 1), margin-top .3s ease; margin-top: 0; }
+    .book:hover .book-pills, .book:focus-within .book-pills { opacity: 1; max-height: 60px; margin-top: 6px; }
     .pill {
-      font-size: .62rem; font-weight: var(--lp-weight-extrabold); padding: 5px 11px; border-radius: 6px;
-      background: var(--lp-bg-paper); color: var(--lp-ink-soft); border: 1px solid var(--lp-border);
-      letter-spacing: .02em;
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold); padding: 3px 8px; border-radius: 5px;
+      background: var(--lp-bg-paper); color: var(--lp-ink-soft); border: 1px solid var(--lp-border); letter-spacing: .02em;
     }
     .pill.lvl { background: color-mix(in srgb, var(--spine) 14%, var(--lp-surface)); color: var(--spine); border-color: color-mix(in srgb, var(--spine) 35%, transparent); font-weight: var(--lp-weight-extrabold); }
 
@@ -101,279 +201,677 @@
     .book.b-vocab { --spine: var(--lp-cat-purple); }
     .book.b-opp { --spine: var(--lp-cat-teal); }
 
-    /* Stagger */
-    .book:nth-child(1) { animation-delay: .05s; }
-    .book:nth-child(2) { animation-delay: .1s; }
-    .book:nth-child(3) { animation-delay: .15s; }
-
     /* ─── GUIDES ─── */
-    .guides { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .guides { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 640px) { .guides { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1150px) { .guides { grid-template-columns: repeat(3, 1fr); } }
     .guide-link {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 18px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      --guide-color: var(--lp-accent);
+      display: flex; align-items: center; gap: 0; padding: 0; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
       border-radius: var(--lp-radius-md); text-decoration: none; color: var(--lp-ink);
-      font-size: .76rem; font-weight: var(--lp-weight-bold); transition: border-color .2s, transform .2s, box-shadow .2s;
-      box-shadow: var(--lp-shadow-md);
+      font-size: .76rem; font-weight: var(--lp-weight-bold);
+      transition: border-color .2s, transform .2s, box-shadow .2s; box-shadow: var(--lp-shadow-sm); overflow: hidden;
     }
-    .guide-link:hover { border-color: var(--lp-accent); transform: translateY(-3px); box-shadow: var(--lp-shadow-lg); }
-    .guide-link .gl-mark {
-      font-family: var(--lp-font-display); font-size: 1.4rem; font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal);
-    }
+    .guide-link:hover { border-color: color-mix(in srgb, var(--guide-color) 60%, var(--lp-border)); transform: translateY(-2px); box-shadow: var(--lp-shadow-md); }
+    .guide-spine { width: 5px; align-self: stretch; background: var(--guide-color); border-radius: 6px 0 0 6px; flex-shrink: 0; }
+    .guide-icon { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin: 0 2px 0 10px; flex-shrink: 0; background: color-mix(in srgb, var(--guide-color) 10%, transparent); border-radius: var(--lp-radius-sm); }
+    .guide-body { padding: 12px 14px 12px 10px; min-width: 0; }
+    .guide-title { font-weight: var(--lp-weight-bold); font-size: .76rem; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .guide-tag { font-size: .58rem; font-weight: var(--lp-weight-extrabold); color: var(--guide-color); text-transform: uppercase; letter-spacing: .04em; margin-top: 3px; opacity: .85; }
+    .guide-link.g-grammar { --guide-color: var(--lp-accent); }
+    .guide-link.g-vocab { --guide-color: var(--lp-cat-purple); }
+    .guide-link.g-verbs { --guide-color: var(--lp-cat-amber); }
+    .guide-link.g-structure { --guide-color: var(--lp-cat-green); }
+    .guide-link.g-sound { --guide-color: var(--lp-cat-blue); }
+    .guide-link.g-words { --guide-color: var(--lp-cat-teal); }
 
-    /* ─── FOOTER ─── */
     .foot {
-      margin-top: auto; padding-top: 16px; border-top: 1.5px solid var(--lp-border);
-      display: flex; justify-content: space-between; align-items: center;
-      padding-bottom: 4px;
+      flex-shrink: 0; padding: 12px clamp(16px, 3vw, 34px); border-top: 1.5px solid var(--lp-border);
+      display: flex; justify-content: space-between; align-items: center; background: var(--lp-bg);
     }
     .foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: .82rem; color: var(--lp-ink-soft); }
     .foot-meta { font-family: var(--lp-font-mono); font-size: .56rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+    /* ─── TOPBAR ACTIONS (home + theme, always visible, right-aligned) ─── */
+    .topbar-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: auto; }
+
+    /* ─── MOBILE BOTTOM NAV ─── */
+    .bottom-nav { display: none; }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+    /* Desktop: the topbar is redundant on Resumen (sidebar has the brand, hero has its own actions) */
+    @media (min-width: 861px) {
+      body[data-active="resumen"] .topbar { display: none; }
+    }
+
+    @media (max-width: 860px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .mobile-brand { display: block; }
+      .hero-actions { display: none; }
+      .content { padding-bottom: 8px; }
+      .foot { padding-bottom: calc(12px + 62px + env(safe-area-inset-bottom, 0px)); }
+
+      .bottom-nav {
+        display: flex; justify-content: space-around; align-items: stretch;
+        position: fixed; left: 0; right: 0; bottom: 0; height: 62px;
+        background: var(--lp-surface); border-top: 1.5px solid var(--lp-border);
+        box-shadow: 0 -4px 16px rgba(0,0,0,.06); z-index: 20;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+      }
+      .bn-item {
+        --spine: var(--lp-accent);
+        flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+        border: none; background: none; color: var(--lp-muted); font-family: var(--lp-font-body);
+        cursor: pointer; min-height: 44px; position: relative;
+      }
+      .bn-item .bn-icon { font-size: 1.15rem; }
+      .bn-item .bn-label { font-size: .58rem; font-weight: var(--lp-weight-bold); }
+      .bn-item.active { color: var(--spine); }
+      .bn-item.active::before { content: ''; position: absolute; top: 0; left: 30%; right: 30%; height: 2.5px; background: var(--spine); border-radius: 0 0 4px 4px; }
+      .bn-item.v { --spine: var(--lp-cat-purple); }
+      .bn-item.p { --spine: var(--lp-cat-blue); }
+      .bn-item.g { --spine: var(--lp-cat-amber); }
+      .bn-item.a { --spine: var(--lp-cat-teal); }
+      .bn-item.r { --spine: var(--lp-cat-green); }
     }
     @media (max-width: 480px) {
-      .guides { grid-template-columns: 1fr; }
-      body { padding: 20px 12px 12px; }
-      .brand h1 { font-size: 1.7rem; }
+      .topbar { padding: 12px 12px 10px; flex-wrap: wrap; }
       .header-stats { padding: 0 0.5rem; gap: 0.35rem; height: 32px; }
       .header-stat__val { font-size: 0.8rem; }
       .header-stat__label { display: none; }
-      .book-body { padding: 10px 10px 9px 6px; }
+      .resumen-hero { padding: 18px 16px; }
+      .content { padding: 14px 12px 10px; }
     }
   </style>
 </head>
 <body>
-<div class="wrap">
+<div class="shell">
 
-  <header class="header">
-    <div class="brand">
+  <!-- SIDEBAR (desktop) -->
+  <aside class="sidebar">
+    <div class="sb-brand">
       <h1>Hub<em>Flow</em></h1>
+      <div class="sb-tag">Practica inglés todos los días</div>
     </div>
-    <div class="header-stats" role="status" aria-label="Progress summary">
-      <span class="header-stat"><span class="header-stat__val" id="psTotal">0</span><span class="header-stat__label">ses</span></span>
-      <span class="header-stat__divider" aria-hidden="true"></span>
-      <span class="header-stat"><span class="header-stat__val" id="psBest">—</span><span class="header-stat__label">best</span></span>
-      <span class="header-stat__divider" aria-hidden="true"></span>
-      <span class="header-stat"><span class="header-stat__val" id="psModules">0/17</span><span class="header-stat__label">mod</span></span>
+    <nav class="sb-nav" id="sbNav">
+      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">🏠</span><span class="sb-label">Resumen</span></button>
+      <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">🧠</span><span class="sb-label">Vocabulary &amp; Words</span></button>
+      <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">🔊</span><span class="sb-label">Pronunciation</span></button>
+      <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">✏️</span><span class="sb-label">Grammar &amp; Spelling</span></button>
+      <button class="sb-item a" data-target="analysis"><span class="sb-spine"></span><span class="sb-icon">🔍</span><span class="sb-label">Analysis &amp; Production</span></button>
+      <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">📚</span><span class="sb-label">Guías de referencia</span></button>
+    </nav>
+  </aside>
+
+  <!-- MAIN COLUMN -->
+  <div class="main-col">
+    <div class="topbar">
+      <span class="mobile-brand">Hub<em>Flow</em></span>
+      <div class="search-bar">
+        <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
+        <button class="clear-btn" id="clearSearch" aria-label="Clear search">✕</button>
+      </div>
+      <div class="header-stats" role="status" aria-label="Progress summary">
+        <span class="header-stat"><span class="header-stat__val" id="psTotal">0</span><span class="header-stat__label">ses</span></span>
+        <span class="header-stat__divider" aria-hidden="true"></span>
+        <span class="header-stat"><span class="header-stat__val" id="psBest">—</span><span class="header-stat__label">best</span></span>
+        <span class="header-stat__divider" aria-hidden="true"></span>
+        <span class="header-stat"><span class="header-stat__val" id="psMastered">0/34</span><span class="header-stat__label">★</span></span>
+      </div>
+      <div class="topbar-actions">
+        <a class="icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+      </div>
     </div>
-    <div class="header-actions">
-      <a class="icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
-      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
-    </div>
-  </header>
 
-  <main style="flex:1;min-height:0;overflow-y:auto;scrollbar-width:none">
-    <!-- VOCABULARY -->
-    <section class="section">
-      <div class="sec-head">Vocabulary & Words</div>
-      <div class="shelf">
-        <a class="book b-vocab" href="exercises/vocabulary.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🧠</div>
-          <div class="book-body">
-            <div class="book-title">Vocabulary Match</div>
-            <div class="book-meta">Body · Cooking · Idioms · Time · Weather · Seasons — 6 categorías</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">5 modos</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span></div>
-          </div>
-        </a>
-        <a class="book b-opp" href="exercises/opposites.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">⚖️</div>
-          <div class="book-body">
-            <div class="book-title">Word Relations</div>
-            <div class="book-meta">Opposites (50 pares) · Synonyms (30 pares) · 5 modos</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">80 pares</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-vocab" href="exercises/confusing-words.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🔀</div>
-          <div class="book-body">
-            <div class="book-title">Confusing Words</div>
-            <div class="book-meta">make/do · say/tell · bring/take · borrow/lend · watch/look/see</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">5 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-opp" href="exercises/phrasal-verbs.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🚀</div>
-          <div class="book-body">
-            <div class="book-title">Phrasal Verbs</div>
-            <div class="book-meta">Everyday · Work & Study · Relationships · Travel — 62 phrasal verbs</div>
-            <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Write</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-      </div>
-    </section>
+    <main class="content">
+      <div class="no-results" id="noResults">No modules match your search.</div>
 
-    <!-- PRONUNCIATION -->
-    <section class="section">
-      <div class="sec-head">Pronunciation</div>
-      <div class="shelf">
-        <a class="book" href="exercises/phonics.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🔊</div>
-          <div class="book-body">
-            <div class="book-title">Pronunciation & Phonics</div>
-            <div class="book-meta">Minimal Pairs (vocales + consonantes) · Word Stress · Silent Letters</div>
-            <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Timed</span></div>
+      <!-- RESUMEN -->
+      <section class="section active-section" data-key="resumen">
+        <div class="resumen-hero">
+          <div class="hero-actions">
+            <a class="icon-btn" id="portalLinkR" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
+            <button class="icon-btn" id="themeToggleR" aria-label="Toggle theme">🌙</button>
           </div>
-        </a>
-        <a class="book b-ed" href="exercises/listening.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🎧</div>
-          <div class="book-body">
-            <div class="book-title">Listening</div>
-            <div class="book-meta">Escucha (TTS) y elige la palabra · Everyday · Travel & Work · Tricky Pairs</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">3 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
+          <div class="resumen-greeting">Bienvenido a Hub<em>Flow</em></div>
+          <p class="resumen-sub"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia — elige una categoría para empezar.</p>
+          <div class="resumen-stats">
+            <div class="rs-card"><div class="rs-val" id="rsSessions">0</div><div class="rs-label">Sesiones</div></div>
+            <div class="rs-card"><div class="rs-val" id="rsBest">—</div><div class="rs-label">Mejor puntaje</div></div>
+            <div class="rs-card"><div class="rs-val" id="rsMastered">0/34</div><div class="rs-label">Dominados</div></div>
           </div>
-        </a>
-        <a class="book" href="exercises/spelling-by-ear.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">👂</div>
-          <div class="book-body">
-            <div class="book-title">Spelling by Ear</div>
-            <div class="book-meta">Hear the verb (TTS) → write the -ing or -ed form</div>
-            <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">3 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
-          </div>
-        </a>
-      </div>
-    </section>
+        </div>
 
-    <!-- GRAMMAR -->
-    <section class="section">
-      <div class="sec-head">Spelling & Grammar</div>
-      <div class="shelf">
-        <a class="book" href="exercises/ing-spelling.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">✏️</div>
-          <div class="book-body">
-            <div class="book-title">Reglas del <code>-ing</code></div>
-            <div class="book-meta">Doblar consonante · Quitar -e · Cambiar -ie → y</div>
-            <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-ed" href="exercises/ed-spelling.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">📋</div>
-          <div class="book-body">
-            <div class="book-title">Reglas del <code>-ed</code></div>
-            <div class="book-meta">Pasado regular · Doble consonante · -e muda · Verbos con -y</div>
-            <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-noun" href="exercises/noun-adjuncts.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🧩</div>
-          <div class="book-body">
-            <div class="book-title">Noun Adjuncts</div>
-            <div class="book-meta">Noun+Noun · -ing nominal · Genitivo 's · Estructura con of</div>
-            <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-ed" href="exercises/irregular-verbs.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">📝</div>
-          <div class="book-body">
-            <div class="book-title">Irregular Verbs</div>
-            <div class="book-meta">90 verbos · Base → Past → P. Participle · 3 niveles</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">3 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Write</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-noun" href="exercises/prepositions.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">📐</div>
-          <div class="book-body">
-            <div class="book-title">Prepositions</div>
-            <div class="book-meta">Time · Place · Movement · Dependent (adj/verb + prep)</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book" href="exercises/articles.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">📝</div>
-          <div class="book-body">
-            <div class="book-title">Articles (a/an/the/∅)</div>
-            <div class="book-meta">Basics · Geographic names · Fixed expressions · In context</div>
-            <div class="book-pills"><span class="pill lvl">A1–A2</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-vocab" href="exercises/quantifiers.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">📊</div>
-          <div class="book-body">
-            <div class="book-title">Quantifiers</div>
-            <div class="book-meta">some/any · much/many · few/little · a lot of/enough</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-opp" href="exercises/collocations.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🔗</div>
-          <div class="book-body">
-            <div class="book-title">Collocations</div>
-            <div class="book-meta">make/do · have/take · get/give · pay/keep/save</div>
-            <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-noun" href="exercises/tenses.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">⏱️</div>
-          <div class="book-body">
-            <div class="book-title">Verb Tenses</div>
-            <div class="book-meta">Present · Past · Future · Perfect — choose the correct verb form</div>
-            <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-        <a class="book b-ed" href="exercises/word-formation.html">
-          <div class="book-spine"></div>
-          <div class="book-icon">🧩</div>
-          <div class="book-body">
-            <div class="book-title">Word Formation</div>
-            <div class="book-meta">Nouns · Adjectives · Negatives · Mixed — build the correct derived form</div>
-            <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Study</span><span class="pill">Timed</span></div>
-          </div>
-        </a>
-      </div>
-    </section>
+        <div class="sec-head">Categorías</div>
+        <div class="tiles">
+          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 módulos</span></button>
+          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 módulos</span></button>
+          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 módulos</span></button>
+          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 módulos</span></button>
+          <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
+        </div>
 
-    <!-- GUIDES -->
-    <section class="section">
-      <div class="sec-head">Guías de referencia</div>
-      <div class="guides">
-        <a class="guide-link" href="guides/ing-rules.html"><span class="gl-mark">§</span> Guía completa del -ing</a>
-        <a class="guide-link" href="guides/noun-adjuncts.html"><span class="gl-mark">§</span> Guía Noun Adjuncts</a>
-      </div>
-    </section>
+        <div class="sec-head">Agregado recientemente</div>
+        <div class="new-row">
+          <a class="new-chip" href="exercises/conditionals.html"><span class="nc-icon">🔀</span><span><span class="nc-badge">Nuevo</span><br>Conditionals</span></a>
+          <a class="new-chip" href="exercises/modals.html"><span class="nc-icon">🧭</span><span><span class="nc-badge">Nuevo</span><br>Modal Verbs</span></a>
+          <a class="new-chip" href="exercises/made-of.html"><span class="nc-icon">🧱</span><span><span class="nc-badge">Nuevo</span><br>Made Of / From / With</span></a>
+          <a class="new-chip" href="exercises/plural-endings.html"><span class="nc-icon">🔊</span><span><span class="nc-badge">Nuevo</span><br>Plural Endings</span></a>
+          <a class="new-chip" href="guides/vocabulary.html"><span class="nc-icon">📚</span><span><span class="nc-badge">Nuevo</span><br>Vocabulary Reference</span></a>
+        </div>
+      </section>
 
-    <!-- CROSS-LINKS (R5) -->
-    <section class="section">
-      <div class="sec-head">Profundizar en FluentFlow</div>
-      <div class="guides">
-        <a class="guide-link" id="ffArticles" href="https://genilsuarez.github.io/fluentflow/#/module/completion-articles-basics-a1"><span class="gl-mark">→</span> Articles A1–A2</a>
-        <a class="guide-link" id="ffIrregular" href="https://genilsuarez.github.io/fluentflow/#/module/sorting-verb-tenses-a1"><span class="gl-mark">→</span> Verb Tenses A1</a>
-        <a class="guide-link" id="ffPhrasal" href="https://genilsuarez.github.io/fluentflow/#/module/reading-phrasal-verbs-a1"><span class="gl-mark">→</span> Phrasal Verbs A1</a>
-        <a class="guide-link" id="ffPrepositions" href="https://genilsuarez.github.io/fluentflow/#/module/completion-basic-sentences-a1"><span class="gl-mark">→</span> Basic Grammar A1</a>
-      </div>
-    </section>
-  </main>
+      <!-- VOCABULARY -->
+      <section class="section" data-key="vocab">
+        <div class="sec-head">Vocabulary & Words</div>
+        <div class="shelf">
+          <a class="book b-vocab" href="exercises/vocabulary.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧠</div>
+            <div class="book-body">
+              <div class="book-title">Vocabulary Match</div>
+              <div class="book-meta">Body · Cooking · Idioms · Hobbies · Food & Drink (C1) · Telephone English · Sounding Natural · Daily Routine — 28 categorías</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">5 modos</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span></div>
+            </div>
+          </a>
+          <a class="book b-opp" href="exercises/opposites.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">⚖️</div>
+            <div class="book-body">
+              <div class="book-title">Word Relations</div>
+              <div class="book-meta">Opposites (62 pares, incl. B1-C1) · Synonyms (30 pares) · 5 modos</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">80 pares</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Match</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-vocab" href="exercises/confusing-words.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔀</div>
+            <div class="book-body">
+              <div class="book-title">Confusing Words</div>
+              <div class="book-meta">make/do · say/tell · homófonos (there/their, your/you're, its/it's) · principal/principle · desert/dessert · weather/whether</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">18 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-opp" href="exercises/phrasal-verbs.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🚀</div>
+            <div class="book-body">
+              <div class="book-title">Phrasal Verbs</div>
+              <div class="book-meta">Everyday · Work · Relationships · Travel · Get · Food · Turn · Advanced — 106 phrasal verbs</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">8 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Write</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+        </div>
+      </section>
 
-  <footer class="foot">
-    <span class="foot-sig">Genil Suárez</span>
-    <span class="foot-meta">HubFlow · 2026</span>
-  </footer>
+      <!-- PRONUNCIATION -->
+      <section class="section" data-key="pronunciation">
+        <div class="sec-head">Pronunciation</div>
+        <div class="shelf">
+          <a class="book" href="exercises/phonics.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔊</div>
+            <div class="book-body">
+              <div class="book-title">Pronunciation & Phonics</div>
+              <div class="book-meta">Minimal Pairs (vocales + consonantes) · Word Stress · Silent Letters</div>
+              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book" href="exercises/plural-endings.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔊</div>
+            <div class="book-body">
+              <div class="book-title">Plural Endings</div>
+              <div class="book-meta">/s/ vs /z/ vs /ɪz/ — la pronunciación del plural</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/word-stress-quiz.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🗣️</div>
+            <div class="book-body">
+              <div class="book-title">Word Stress</div>
+              <div class="book-meta">Palabras que los hispanohablantes acentúan mal (comfortable, especially...)</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/listening.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🎧</div>
+            <div class="book-body">
+              <div class="book-title">Listening</div>
+              <div class="book-meta">Escucha (TTS) y elige la palabra · Everyday · Travel & Work · Tricky Pairs</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">3 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
+            </div>
+          </a>
+          <a class="book" href="exercises/spelling-by-ear.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">👂</div>
+            <div class="book-body">
+              <div class="book-title">Spelling by Ear</div>
+              <div class="book-meta">Hear the verb (TTS) → write the -ing or -ed form</div>
+              <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">3 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- GRAMMAR -->
+      <section class="section" data-key="grammar">
+        <div class="sec-head">Spelling & Grammar</div>
+        <div class="shelf">
+          <a class="book" href="exercises/ing-spelling.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">✏️</div>
+            <div class="book-body">
+              <div class="book-title">Reglas del <code>-ing</code></div>
+              <div class="book-meta">Doblar consonante · Quitar -e · Cambiar -ie → y</div>
+              <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/ed-spelling.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">📋</div>
+            <div class="book-body">
+              <div class="book-title">Reglas del <code>-ed</code></div>
+              <div class="book-meta">Pasado regular · Doble consonante · -e muda · Verbos con -y</div>
+              <div class="book-pills"><span class="pill lvl">A2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-noun" href="exercises/noun-adjuncts.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧩</div>
+            <div class="book-body">
+              <div class="book-title">Noun Adjuncts</div>
+              <div class="book-meta">Noun+Noun · -ing nominal · Genitivo 's · Estructura con of</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 niveles</span><span class="pill">Study</span><span class="pill">Challenge</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/irregular-verbs.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">📝</div>
+            <div class="book-body">
+              <div class="book-title">Irregular Verbs</div>
+              <div class="book-meta">90 verbos · Base → Past → P. Participle · 3 niveles</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">3 categorías</span><span class="pill">Study</span><span class="pill">Quiz</span><span class="pill">Write</span><span class="pill">Battle</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-noun" href="exercises/prepositions.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">📐</div>
+            <div class="book-body">
+              <div class="book-title">Prepositions</div>
+              <div class="book-meta">Time · Place · Movement · Dependent · Duration (for/since/during/by/until)</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">5 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-vocab" href="exercises/verb-chunks.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔗</div>
+            <div class="book-body">
+              <div class="book-title">Verb + Prep Chunks</div>
+              <div class="book-meta">listen to · wait for · talk to — Wh-questions con prep al final</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Write</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book" href="exercises/articles.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">📝</div>
+            <div class="book-body">
+              <div class="book-title">Articles (a/an/the/∅)</div>
+              <div class="book-meta">Basics · Geographic names · Fixed expressions · In context · Never use "the"</div>
+              <div class="book-pills"><span class="pill lvl">A1–A2</span><span class="pill">5 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-noun" href="exercises/made-of.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧱</div>
+            <div class="book-body">
+              <div class="book-title">Made Of / From / With</div>
+              <div class="book-meta">Material visible vs transformado vs ingrediente vs improvisado</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book" href="exercises/used-to.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🕰️</div>
+            <div class="book-body">
+              <div class="book-title">Used To & Would</div>
+              <div class="book-meta">Used to vs would (states) · used to / be used to / get used to</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-opp" href="exercises/modals.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧭</div>
+            <div class="book-body">
+              <div class="book-title">Modal Verbs</div>
+              <div class="book-meta">Meaning in context · Obligation & rules · Be supposed to</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">3 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-noun" href="exercises/clauses.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧩</div>
+            <div class="book-body">
+              <div class="book-title">Relative Clauses</div>
+              <div class="book-meta">who/which/whose/where/when</div>
+              <div class="book-pills"><span class="pill lvl">B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book" href="exercises/reported-speech.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">⏪</div>
+            <div class="book-body">
+              <div class="book-title">Reported Speech</div>
+              <div class="book-meta">Tense backshift · Time & place word changes</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/gerunds-infinitives.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔁</div>
+            <div class="book-body">
+              <div class="book-title">Gerunds & Infinitives</div>
+              <div class="book-meta">Verb + -ing vs verb + to-infinitive: enjoy/avoid vs want/decide</div>
+              <div class="book-pills"><span class="pill lvl">B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book" href="exercises/parts-of-speech.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔤</div>
+            <div class="book-body">
+              <div class="book-title">8 Parts of Speech</div>
+              <div class="book-meta">Noun · Verb · Adjective · Adverb · Pronoun · Preposition · Conjunction · Interjection</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">1 categoría</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-vocab" href="exercises/comparisons.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">⚖️</div>
+            <div class="book-body">
+              <div class="book-title">Comparisons</div>
+              <div class="book-meta">than/as/the · Irregular: good→better→best, bad→worse→worst</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-noun" href="exercises/causative-verbs.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🛠️</div>
+            <div class="book-body">
+              <div class="book-title">Causative Verbs</div>
+              <div class="book-meta">Have/get/make/let/help · Passive causative (had it fixed)</div>
+              <div class="book-pills"><span class="pill lvl">B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/conditionals.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔀</div>
+            <div class="book-body">
+              <div class="book-title">Conditionals</div>
+              <div class="book-meta">Zero · First · Second · Third · if/unless/provided that/as long as</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-vocab" href="exercises/preferences.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">💭</div>
+            <div class="book-body">
+              <div class="book-title">Prefer / Would Rather</div>
+              <div class="book-meta">Prefer vs would prefer vs would rather · to/than/that/∅</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">2 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-vocab" href="exercises/quantifiers.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">📊</div>
+            <div class="book-body">
+              <div class="book-title">Quantifiers</div>
+              <div class="book-meta">some/any · much/many · few/little · a lot of/enough</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-opp" href="exercises/collocations.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔗</div>
+            <div class="book-body">
+              <div class="book-title">Collocations</div>
+              <div class="book-meta">make/do · have/take · get/give · pay/keep/save</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-noun" href="exercises/tenses.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">⏱️</div>
+            <div class="book-body">
+              <div class="book-title">Verb Tenses</div>
+              <div class="book-meta">Present · Past · Future · Perfect · Perfect Simple vs Continuous · Have/Has/Had</div>
+              <div class="book-pills"><span class="pill lvl">A2–B1</span><span class="pill">6 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/word-formation.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧩</div>
+            <div class="book-body">
+              <div class="book-title">Word Formation</div>
+              <div class="book-meta">Nouns · Adjectives · Negatives · Mixed — build the correct derived form</div>
+              <div class="book-pills"><span class="pill lvl">B1–B2</span><span class="pill">4 categorías</span><span class="pill">Study</span><span class="pill">Practice</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ANALYSIS & PRODUCTION -->
+      <section class="section" data-key="analysis">
+        <div class="sec-head">Analysis & Production</div>
+        <div class="shelf">
+          <a class="book b-vocab" href="exercises/error-hunt.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🔍</div>
+            <div class="book-body">
+              <div class="book-title">Error Hunt</div>
+              <div class="book-meta">Find & correct errors in texts — Grammar · Tenses · Vocabulary · Prepositions</div>
+              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Hunt</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-opp" href="exercises/odd-one-out.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🧠</div>
+            <div class="book-body">
+              <div class="book-title">Odd One Out</div>
+              <div class="book-meta">Identify the word that doesn't belong — Grammar · Vocabulary · Collocations · Pronunciation</div>
+              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Quiz</span><span class="pill">Timed</span></div>
+            </div>
+          </a>
+          <a class="book b-ed" href="exercises/dictation-sprint.html">
+            <div class="book-spine"></div>
+            <div class="book-icon">🎙️</div>
+            <div class="book-body">
+              <div class="book-title">Dictation Sprint</div>
+              <div class="book-meta">Listen to full sentences (TTS) → write them down · Partial credit scoring</div>
+              <div class="book-pills"><span class="pill lvl">A2–B2</span><span class="pill">4 categorías</span><span class="pill">Practice</span><span class="pill">Timed</span><span class="pill">🔊 Audio</span></div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- GUIDES -->
+      <section class="section" data-key="guides">
+        <div class="sec-head">Guías de referencia</div>
+        <div class="guides">
+          <a class="guide-link g-grammar" href="guides/ing-rules.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">✏️</div>
+            <div class="guide-body"><div class="guide-title">Guía completa del -ing</div><div class="guide-tag">Spelling</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/ed-rules.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">📋</div>
+            <div class="guide-body"><div class="guide-title">Guía completa del -ed</div><div class="guide-tag">Spelling</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/noun-adjuncts.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧩</div>
+            <div class="guide-body"><div class="guide-title">Guía Noun Adjuncts</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/irregular-verbs.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">📝</div>
+            <div class="guide-body"><div class="guide-title">Irregular Verbs by Pattern</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/prepositions.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">📐</div>
+            <div class="guide-body"><div class="guide-title">Prepositions Visual Map</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/articles.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">📖</div>
+            <div class="guide-body"><div class="guide-title">Articles (a/an/the/∅)</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/quantifiers.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">⚖️</div>
+            <div class="guide-body"><div class="guide-title">Quantifiers Guide</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-vocab" href="guides/collocations.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔗</div>
+            <div class="guide-body"><div class="guide-title">Collocations Reference</div><div class="guide-tag">Vocabulary</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/verb-tenses.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">⏳</div>
+            <div class="guide-body"><div class="guide-title">Verb Tenses Timeline</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-vocab" href="guides/word-formation.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧠</div>
+            <div class="guide-body"><div class="guide-title">Word Formation</div><div class="guide-tag">Vocabulary</div></div>
+          </a>
+          <a class="guide-link g-words" href="guides/phrasal-verbs.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🚀</div>
+            <div class="guide-body"><div class="guide-title">Phrasal Verbs by Category</div><div class="guide-tag">Expressions</div></div>
+          </a>
+          <a class="guide-link g-words" href="guides/confusing-words.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔀</div>
+            <div class="guide-body"><div class="guide-title">Confusing Words Clarified</div><div class="guide-tag">Expressions</div></div>
+          </a>
+          <a class="guide-link g-sound" href="guides/phonics.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔊</div>
+            <div class="guide-body"><div class="guide-title">Pronunciation & Phonics</div><div class="guide-tag">Sound</div></div>
+          </a>
+          <a class="guide-link g-words" href="guides/opposites-synonyms.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔄</div>
+            <div class="guide-body"><div class="guide-title">Opposites & Synonyms</div><div class="guide-tag">Expressions</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/modals.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧭</div>
+            <div class="guide-body"><div class="guide-title">Modal Verbs Untangled</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/conditionals.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔀</div>
+            <div class="guide-body"><div class="guide-title">Conditionals Made Clear</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/used-to.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🕰️</div>
+            <div class="guide-body"><div class="guide-title">Used To & Would</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/causative-verbs.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🛠️</div>
+            <div class="guide-body"><div class="guide-title">Causative Verbs</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-vocab" href="guides/comparisons.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">⚖️</div>
+            <div class="guide-body"><div class="guide-title">Comparisons Simplified</div><div class="guide-tag">Vocabulary</div></div>
+          </a>
+          <a class="guide-link g-vocab" href="guides/preferences.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">💭</div>
+            <div class="guide-body"><div class="guide-title">Prefer &amp; Would Rather</div><div class="guide-tag">Vocabulary</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/parts-of-speech.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔤</div>
+            <div class="guide-body"><div class="guide-title">8 Parts of Speech</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/gerunds-infinitives.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔁</div>
+            <div class="guide-body"><div class="guide-title">Gerunds &amp; Infinitives</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/reported-speech.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">⏪</div>
+            <div class="guide-body"><div class="guide-title">Reported Speech</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/clauses.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧩</div>
+            <div class="guide-body"><div class="guide-title">Relative Clauses</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-sound" href="guides/plural-endings.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔊</div>
+            <div class="guide-body"><div class="guide-title">Plural Endings</div><div class="guide-tag">Sound</div></div>
+          </a>
+          <a class="guide-link g-sound" href="guides/word-stress-quiz.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🗣️</div>
+            <div class="guide-body"><div class="guide-title">Word Stress</div><div class="guide-tag">Sound</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/made-of.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧱</div>
+            <div class="guide-body"><div class="guide-title">Made Of / From / With</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-vocab" href="guides/vocabulary.html">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧠</div>
+            <div class="guide-body"><div class="guide-title">Vocabulary Reference</div><div class="guide-tag">Vocabulary</div></div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span class="foot-sig">Genil Suárez</span>
+      <span class="foot-meta">HubFlow · 2026</span>
+    </footer>
+  </div>
 </div>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bn-item active" data-target="resumen"><span class="bn-icon">🏠</span><span class="bn-label">Resumen</span></button>
+  <button class="bn-item v" data-target="vocab"><span class="bn-icon">🧠</span><span class="bn-label">Vocab</span></button>
+  <button class="bn-item p" data-target="pronunciation"><span class="bn-icon">🔊</span><span class="bn-label">Sonido</span></button>
+  <button class="bn-item g" data-target="grammar"><span class="bn-icon">✏️</span><span class="bn-label">Gramática</span></button>
+  <button class="bn-item a" data-target="analysis"><span class="bn-icon">🔍</span><span class="bn-label">Análisis</span></button>
+  <button class="bn-item r" data-target="guides"><span class="bn-icon">📚</span><span class="bn-label">Guías</span></button>
+</nav>
 
 <script>
 (function() {
   // Theme
   const saved = localStorage.getItem('lp-theme');
   if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-  const btn = document.getElementById('themeToggle');
-  function upd() { btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  const themeBtns = [document.getElementById('themeToggle'), document.getElementById('themeToggleR')];
+  function upd() { themeBtns.forEach(b => b.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'); }
   upd();
-  btn.onclick = () => {
+  const toggleTheme = () => {
     document.documentElement.classList.add('theme-transitioning');
     const d = document.documentElement.getAttribute('data-theme') === 'dark';
     const newTheme = d ? 'light' : 'dark';
@@ -385,30 +883,50 @@
     upd();
     setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 350);
   };
+  themeBtns.forEach(b => b.onclick = toggleTheme);
+
   // Stats
-  const keys = Object.keys(localStorage).filter(k => /^(ing|ed|noun|vocab|opp|irr|conf|prep|phrasal|phonics|art|quant|coll|listen|tense|wf|sbe)-/.test(k));
-  let total = 0, best = 0; const mods = new Set();
+  const keys = Object.keys(localStorage).filter(k => /^(ing|ed|noun|vocab|wr|irr|conf|prep|phrasal|phonics|art|quant|coll|listen|tense|wf|sbe|vchunks|errhunt|odd|dict)-/.test(k));
+  let total = 0, best = 0; const modBest = {};
   keys.forEach(k => {
     try {
       const d = JSON.parse(localStorage.getItem(k));
-      if (Array.isArray(d)) { total += d.length; d.forEach(x => { if (x.pct > best) best = x.pct; }); }
-      const prefix = k.split('-')[0];
-      mods.add(prefix);
+      if (Array.isArray(d)) {
+        total += d.length;
+        d.forEach(x => { if (x.pct > best) best = x.pct; });
+        const prefix = k.match(/^[a-z]+/)[0];
+        const pMax = d.reduce((m, x) => Math.max(m, x.pct || 0), 0);
+        modBest[prefix] = Math.max(modBest[prefix] || 0, pMax);
+      }
     } catch(e){}
   });
+  const mastered = Object.values(modBest).filter(v => v >= 90).length;
+  const totalModules = document.querySelectorAll('.book[href]').length;
   document.getElementById('psTotal').textContent = total || '0';
   document.getElementById('psBest').textContent = best > 0 ? best + '%' : '—';
-  document.getElementById('psModules').textContent = mods.size + '/17';
+  document.getElementById('psMastered').textContent = mastered + '/' + totalModules;
+  document.getElementById('rsSessions').textContent = total || '0';
+  document.getElementById('rsBest').textContent = best > 0 ? best + '%' : '—';
+  document.getElementById('rsMastered').textContent = mastered + '/' + totalModules;
+
+  // Dynamic module/guide counts (never hardcode — always read from the DOM)
+  const guideCount = document.querySelectorAll('.guide-link[href]').length;
+  document.getElementById('totalExCount').textContent = totalModules;
+  document.getElementById('totalGuideCount').textContent = guideCount;
+  document.querySelectorAll('.tile-count[data-count-for]').forEach(el => {
+    const key = el.dataset.countFor;
+    if (key === 'guides') {
+      el.textContent = guideCount + (guideCount === 1 ? ' guía' : ' guías');
+    } else {
+      const n = document.querySelectorAll(`.section[data-key="${key}"] .book[href]`).length;
+      el.textContent = n + (n === 1 ? ' módulo' : ' módulos');
+    }
+  });
 
   // Local dev: rewrite portal link and propagate theme
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     document.getElementById('portalLink').href = 'http://localhost:3000/';
-    // R5: rewrite FluentFlow cross-links to local
-    const ffLinks = { ffArticles: '#/module/completion-articles-basics-a1', ffIrregular: '#/module/sorting-verb-tenses-a1', ffPhrasal: '#/module/reading-phrasal-verbs-a1', ffPrepositions: '#/module/completion-basic-sentences-a1' };
-    Object.entries(ffLinks).forEach(([id, hash]) => {
-      const el = document.getElementById(id);
-      if (el) el.href = 'http://localhost:3001/' + hash;
-    });
+    document.getElementById('portalLinkR').href = 'http://localhost:3000/';
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href*="localhost:"]');
       if (a) {
@@ -419,6 +937,67 @@
       }
     });
   }
+
+  // ─── SECTION SWITCHING (SPA nav) ───
+  const sections = document.querySelectorAll('.section');
+  const navButtons = document.querySelectorAll('.sb-item, .bn-item, .tile');
+  const content = document.querySelector('.content');
+  const topbarSearch = document.querySelector('.search-bar');
+  const topbarStats = document.querySelector('.header-stats');
+
+  function setActive(target) {
+    navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
+    sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
+    document.body.dataset.active = target;
+    const isResumen = target === 'resumen';
+    topbarSearch.style.display = isResumen ? 'none' : '';
+    topbarStats.style.display = isResumen ? 'none' : '';
+    content.scrollTop = 0;
+    if (searchInput.value) { searchInput.value = ''; filterModules(); }
+  }
+
+  navButtons.forEach(b => {
+    if (!b.dataset.target) return;
+    b.addEventListener('click', () => setActive(b.dataset.target));
+  });
+
+  // ─── SEARCH ───
+  const searchInput = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearSearch');
+  const noResults = document.getElementById('noResults');
+  const books = document.querySelectorAll('.book');
+
+  function filterModules() {
+    const q = searchInput.value.trim().toLowerCase();
+    clearBtn.classList.toggle('visible', q.length > 0);
+    let anyVisible = false;
+
+    sections.forEach(sec => {
+      if (sec.dataset.key === 'resumen') { sec.classList.toggle('search-visible', false); return; }
+      const shelfOrGuides = sec.querySelector('.shelf, .guides');
+      if (!shelfOrGuides) return;
+      let sectionVisible = false;
+      shelfOrGuides.querySelectorAll('.book, .guide-link').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const match = !q || text.includes(q);
+        card.classList.toggle('hidden', !match);
+        if (match && q) sectionVisible = true;
+      });
+      sec.classList.toggle('search-visible', q.length > 0 && sectionVisible);
+      if (sectionVisible) anyVisible = true;
+    });
+
+    noResults.style.display = (q.length > 0 && !anyVisible) ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', filterModules);
+  clearBtn.addEventListener('click', () => { searchInput.value = ''; filterModules(); searchInput.focus(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
+    if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; filterModules(); searchInput.blur(); }
+  });
+
+  setActive('resumen');
 })();
 </script>
 </body>

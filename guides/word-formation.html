@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Formation Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* WORD ANATOMY */
+.anatomy-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:16px 0;text-align:center;
+}
+.anatomy-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.anatomy-word{
+  display:inline-flex;align-items:center;gap:0;font-size:1.3rem;font-weight:700;margin:8px 0;
+}
+.anatomy-word .part{
+  padding:6px 12px;border:2px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+}
+.anatomy-word .part.prefix{background:var(--red-light);border-color:var(--red);border-radius:8px 0 0 8px;color:var(--red-dark);}
+.anatomy-word .part.root{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.anatomy-word .part.suffix{background:var(--green-light);border-color:var(--green);border-radius:0 8px 8px 0;color:var(--green-dark);}
+[data-theme="dark"] .anatomy-word .part.prefix{color:#FF9F9F;}
+[data-theme="dark"] .anatomy-word .part.root{color:#7AC7FF;}
+[data-theme="dark"] .anatomy-word .part.suffix{color:#6FE8A8;}
+.anatomy-labels{display:flex;justify-content:center;gap:20px;font-size:.68rem;font-weight:700;margin-top:6px;}
+.anatomy-labels span{display:flex;align-items:center;gap:4px;}
+.anatomy-labels .dot{width:8px;height:8px;border-radius:50%;}
+.anatomy-labels .dot.r{background:var(--red);}
+.anatomy-labels .dot.b{background:var(--blue);}
+.anatomy-labels .dot.g{background:var(--green);}
+
+/* SUFFIX CARDS */
+.suffix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:12px 0;}
+.suffix-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:12px 14px;transition:border-color .2s;
+}
+.suffix-card:hover{border-color:var(--blue);}
+.suffix-card.noun{border-top:3px solid var(--blue);}
+.suffix-card.adj{border-top:3px solid var(--green);}
+.suffix-card.verb{border-top:3px solid var(--orange);}
+.suffix-card.neg{border-top:3px solid var(--red);}
+.sc-suffix{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;color:var(--blue-dark);margin-bottom:3px;}
+[data-theme="dark"] .sc-suffix{color:#7AC7FF;}
+.sc-meaning{font-size:.68rem;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.sc-examples{font-size:.72rem;line-height:1.6;color:var(--text);}
+.sc-examples strong{font-family:'JetBrains Mono',monospace;font-size:.68rem;}
+
+/* PREFIX SECTION */
+.prefix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:12px 0;}
+.prefix-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:12px 14px;
+}
+.prefix-card.neg{border-left:4px solid var(--red);}
+.prefix-card.other{border-left:4px solid var(--teal);}
+.pc-prefix{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;color:var(--red-dark);margin-bottom:3px;}
+[data-theme="dark"] .pc-prefix{color:#FF9F9F;}
+.pc-meaning{font-size:.68rem;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.pc-examples{font-size:.72rem;line-height:1.6;color:var(--text);}
+
+/* TRANSFORMATION TABLE */
+.transform-table{
+  width:100%;border-collapse:collapse;font-size:.74rem;margin:14px 0;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.transform-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 10px;border-bottom:2px solid var(--border);text-align:left;}
+.transform-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.transform-table tr:last-child td{border-bottom:none;}
+.transform-table .base-w{font-weight:700;}
+.transform-table .derived{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--blue-dark);}
+[data-theme="dark"] .transform-table .derived{color:#7AC7FF;}
+.transform-table .arrow{color:var(--muted);text-align:center;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .suffix-grid,.prefix-grid{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/word-formation.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Word Formation <span class="accent">Reference</span></h1>
+<p class="intro">How English builds new words: prefixes change meaning, suffixes change word class.</p>
+
+<!-- ANATOMY -->
+<div class="anatomy-box">
+  <div class="anatomy-title">Anatomy of a word</div>
+  <div class="anatomy-word">
+    <span class="part prefix">un</span>
+    <span class="part root">help</span>
+    <span class="part suffix">ful</span>
+  </div>
+  <div class="anatomy-labels">
+    <span><span class="dot r"></span> Prefix (meaning)</span>
+    <span><span class="dot b"></span> Root (base)</span>
+    <span><span class="dot g"></span> Suffix (word class)</span>
+  </div>
+</div>
+
+<!-- NOUN SUFFIXES -->
+<h2>&#128309; Noun Suffixes</h2>
+<div class="suffix-grid">
+  <div class="suffix-card noun">
+    <div class="sc-suffix">-tion / -sion</div>
+    <div class="sc-meaning">Action or result</div>
+    <div class="sc-examples"><strong>educate</strong> &rarr; education<br><strong>decide</strong> &rarr; decision<br><strong>inform</strong> &rarr; information</div>
+  </div>
+  <div class="suffix-card noun">
+    <div class="sc-suffix">-ment</div>
+    <div class="sc-meaning">Action or result</div>
+    <div class="sc-examples"><strong>develop</strong> &rarr; development<br><strong>agree</strong> &rarr; agreement<br><strong>achieve</strong> &rarr; achievement</div>
+  </div>
+  <div class="suffix-card noun">
+    <div class="sc-suffix">-ness</div>
+    <div class="sc-meaning">State or quality (from adj)</div>
+    <div class="sc-examples"><strong>happy</strong> &rarr; happiness<br><strong>dark</strong> &rarr; darkness<br><strong>kind</strong> &rarr; kindness</div>
+  </div>
+  <div class="suffix-card noun">
+    <div class="sc-suffix">-er / -or</div>
+    <div class="sc-meaning">Person who does</div>
+    <div class="sc-examples"><strong>teach</strong> &rarr; teacher<br><strong>act</strong> &rarr; actor<br><strong>drive</strong> &rarr; driver</div>
+  </div>
+  <div class="suffix-card noun">
+    <div class="sc-suffix">-ity / -ty</div>
+    <div class="sc-meaning">Quality (from adj)</div>
+    <div class="sc-examples"><strong>creative</strong> &rarr; creativity<br><strong>able</strong> &rarr; ability<br><strong>real</strong> &rarr; reality</div>
+  </div>
+  <div class="suffix-card noun">
+    <div class="sc-suffix">-ance / -ence</div>
+    <div class="sc-meaning">State or action</div>
+    <div class="sc-examples"><strong>perform</strong> &rarr; performance<br><strong>differ</strong> &rarr; difference<br><strong>exist</strong> &rarr; existence</div>
+  </div>
+</div>
+
+<!-- ADJECTIVE SUFFIXES -->
+<h2>&#128994; Adjective Suffixes</h2>
+<div class="suffix-grid">
+  <div class="suffix-card adj">
+    <div class="sc-suffix">-ful</div>
+    <div class="sc-meaning">Full of / having</div>
+    <div class="sc-examples"><strong>care</strong> &rarr; careful<br><strong>beauty</strong> &rarr; beautiful<br><strong>help</strong> &rarr; helpful</div>
+  </div>
+  <div class="suffix-card adj">
+    <div class="sc-suffix">-less</div>
+    <div class="sc-meaning">Without</div>
+    <div class="sc-examples"><strong>care</strong> &rarr; careless<br><strong>home</strong> &rarr; homeless<br><strong>use</strong> &rarr; useless</div>
+  </div>
+  <div class="suffix-card adj">
+    <div class="sc-suffix">-ous / -ious</div>
+    <div class="sc-meaning">Having quality of</div>
+    <div class="sc-examples"><strong>danger</strong> &rarr; dangerous<br><strong>ambition</strong> &rarr; ambitious<br><strong>fame</strong> &rarr; famous</div>
+  </div>
+  <div class="suffix-card adj">
+    <div class="sc-suffix">-able / -ible</div>
+    <div class="sc-meaning">Can be done</div>
+    <div class="sc-examples"><strong>comfort</strong> &rarr; comfortable<br><strong>flex</strong> &rarr; flexible<br><strong>rely</strong> &rarr; reliable</div>
+  </div>
+  <div class="suffix-card adj">
+    <div class="sc-suffix">-ive</div>
+    <div class="sc-meaning">Tendency to</div>
+    <div class="sc-examples"><strong>create</strong> &rarr; creative<br><strong>act</strong> &rarr; active<br><strong>attract</strong> &rarr; attractive</div>
+  </div>
+  <div class="suffix-card adj">
+    <div class="sc-suffix">-al / -ial</div>
+    <div class="sc-meaning">Related to</div>
+    <div class="sc-examples"><strong>nation</strong> &rarr; national<br><strong>finance</strong> &rarr; financial<br><strong>culture</strong> &rarr; cultural</div>
+  </div>
+</div>
+
+<!-- NEGATIVE PREFIXES -->
+<h2>&#128308; Negative Prefixes</h2>
+<div class="prefix-grid">
+  <div class="prefix-card neg">
+    <div class="pc-prefix">un-</div>
+    <div class="pc-meaning">Not / opposite (most common)</div>
+    <div class="pc-examples">happy &rarr; <strong>un</strong>happy<br>able &rarr; <strong>un</strong>able<br>fair &rarr; <strong>un</strong>fair</div>
+  </div>
+  <div class="prefix-card neg">
+    <div class="pc-prefix">in- / im- / il- / ir-</div>
+    <div class="pc-meaning">Not (before specific letters)</div>
+    <div class="pc-examples"><strong>in</strong>correct (c,d,f)<br><strong>im</strong>possible (m,p)<br><strong>il</strong>legal (l)<br><strong>ir</strong>regular (r)</div>
+  </div>
+  <div class="prefix-card neg">
+    <div class="pc-prefix">dis-</div>
+    <div class="pc-meaning">Opposite / reversal</div>
+    <div class="pc-examples"><strong>dis</strong>agree<br><strong>dis</strong>appear<br><strong>dis</strong>honest</div>
+  </div>
+  <div class="prefix-card neg">
+    <div class="pc-prefix">mis-</div>
+    <div class="pc-meaning">Wrongly / badly</div>
+    <div class="pc-examples"><strong>mis</strong>understand<br><strong>mis</strong>lead<br><strong>mis</strong>behave</div>
+  </div>
+</div>
+
+<!-- OTHER PREFIXES -->
+<h2>&#128312; Other Useful Prefixes</h2>
+<div class="prefix-grid">
+  <div class="prefix-card other">
+    <div class="pc-prefix">re-</div>
+    <div class="pc-meaning">Again</div>
+    <div class="pc-examples">write &rarr; <strong>re</strong>write<br>do &rarr; <strong>re</strong>do<br>build &rarr; <strong>re</strong>build</div>
+  </div>
+  <div class="prefix-card other">
+    <div class="pc-prefix">over-</div>
+    <div class="pc-meaning">Too much</div>
+    <div class="pc-examples"><strong>over</strong>work<br><strong>over</strong>eat<br><strong>over</strong>sleep</div>
+  </div>
+  <div class="prefix-card other">
+    <div class="pc-prefix">under-</div>
+    <div class="pc-meaning">Too little / below</div>
+    <div class="pc-examples"><strong>under</strong>estimate<br><strong>under</strong>paid<br><strong>under</strong>cooked</div>
+  </div>
+  <div class="prefix-card other">
+    <div class="pc-prefix">pre- / post-</div>
+    <div class="pc-meaning">Before / After</div>
+    <div class="pc-examples"><strong>pre</strong>view<br><strong>post</strong>pone<br><strong>pre</strong>-war</div>
+  </div>
+</div>
+
+<!-- TRANSFORMATION EXAMPLES -->
+<h2>&#128260; Word Family Examples</h2>
+<table class="transform-table">
+  <thead><tr><th>Verb</th><th></th><th>Noun</th><th></th><th>Adjective</th><th></th><th>Adverb</th></tr></thead>
+  <tbody>
+    <tr><td class="base-w">create</td><td class="arrow">&rarr;</td><td class="derived">creation</td><td class="arrow">&rarr;</td><td class="derived">creative</td><td class="arrow">&rarr;</td><td class="derived">creatively</td></tr>
+    <tr><td class="base-w">educate</td><td class="arrow">&rarr;</td><td class="derived">education</td><td class="arrow">&rarr;</td><td class="derived">educational</td><td class="arrow">&rarr;</td><td class="derived">educationally</td></tr>
+    <tr><td class="base-w">succeed</td><td class="arrow">&rarr;</td><td class="derived">success</td><td class="arrow">&rarr;</td><td class="derived">successful</td><td class="arrow">&rarr;</td><td class="derived">successfully</td></tr>
+    <tr><td class="base-w">imagine</td><td class="arrow">&rarr;</td><td class="derived">imagination</td><td class="arrow">&rarr;</td><td class="derived">imaginative</td><td class="arrow">&rarr;</td><td class="derived">imaginatively</td></tr>
+    <tr><td class="base-w">develop</td><td class="arrow">&rarr;</td><td class="derived">development</td><td class="arrow">&rarr;</td><td class="derived">developing</td><td class="arrow">&rarr;</td><td class="derived">&mdash;</td></tr>
+    <tr><td class="base-w">compete</td><td class="arrow">&rarr;</td><td class="derived">competition</td><td class="arrow">&rarr;</td><td class="derived">competitive</td><td class="arrow">&rarr;</td><td class="derived">competitively</td></tr>
+    <tr><td class="base-w">decide</td><td class="arrow">&rarr;</td><td class="derived">decision</td><td class="arrow">&rarr;</td><td class="derived">decisive</td><td class="arrow">&rarr;</td><td class="derived">decisively</td></tr>
+    <tr><td class="base-w">attract</td><td class="arrow">&rarr;</td><td class="derived">attraction</td><td class="arrow">&rarr;</td><td class="derived">attractive</td><td class="arrow">&rarr;</td><td class="derived">attractively</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/word-formation.html">&larr; Practice word formation</a>
+</footer>
+
+</div>
+</body>
+</html>

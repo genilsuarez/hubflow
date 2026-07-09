@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verb + Prep Chunks — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-purple); }
+  .pill-btn.active { background: var(--lp-cat-purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
+  .progress__fill { background: var(--lp-cat-purple); }
+
+  /* Category pills */
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    font-size: .68rem; font-weight: 700; padding: 6px 12px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted);
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
+
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  /* Sentence card */
+  .sentence-card {
+    width: 100%; max-width: 480px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center;
+    box-shadow: var(--lp-shadow-sm);
+  }
+  .sentence-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .sentence-card .sc-text {
+    font-family: var(--lp-font-display); font-size: 1.15rem; font-weight: 500;
+    color: var(--lp-ink); line-height: 1.5;
+  }
+  .sentence-card .sc-text .blank {
+    display: inline-block; min-width: 60px; border-bottom: 2.5px dashed var(--lp-cat-purple);
+    color: var(--lp-cat-purple); font-weight: 700; padding: 0 4px;
+  }
+  .sentence-card .sc-hint {
+    font-size: .68rem; font-weight: 700; color: var(--lp-muted); margin-top: 6px;
+  }
+  .sentence-card .sc-counter {
+    font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 8px;
+  }
+
+  /* Options */
+  .word-options { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 480px; }
+  .word-opt {
+    font-family: var(--lp-font-body); font-weight: 700; font-size: .88rem;
+    padding: 12px 20px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
+    background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
+    transition: all .2s var(--lp-ease); min-width: 70px; text-align: center;
+  }
+  .word-opt:hover:not(.disabled) { border-color: var(--lp-cat-purple); background: rgba(123,94,167,.08); transform: translateY(-2px); }
+  .word-opt.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
+  .word-opt.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
+  .word-opt.disabled { cursor: default; opacity: .7; }
+  [data-theme="dark"] .word-opt.correct { color: #6FE8A8; }
+  [data-theme="dark"] .word-opt.wrong { color: #FF9F9F; }
+
+  /* Explanation */
+  .explain-box {
+    width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
+    background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5;
+  }
+
+  /* Study flashcard */
+  .fc-card { max-width: 460px; height: 220px; }
+  .chunk-front .fc-term { font-size: 1.4rem; color: var(--lp-cat-purple); line-height: 1.4; }
+  .chunk-front .fc-detail { font-size: .72rem; color: var(--lp-muted); margin-top: 4px; }
+  .fc-back { background: rgba(123,94,167,.08); border-color: var(--lp-cat-purple); }
+  .fc-back .chunk-meaning { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 600; color: var(--lp-ink); margin-bottom: 6px; }
+  .fc-back .chunk-example { font-size: .75rem; color: var(--lp-ink-soft); font-style: italic; }
+
+  /* Write mode */
+  .write-card {
+    width: 100%; max-width: 480px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center;
+    box-shadow: var(--lp-shadow-sm);
+  }
+  .write-card .w-verb { font-family: var(--lp-font-display); font-size: 1.2rem; font-weight: 600; color: var(--lp-cat-purple); margin-bottom: 4px; }
+  .write-card .w-hint { font-size: .65rem; color: var(--lp-muted); font-weight: 600; margin-bottom: 10px; }
+  .write-card .w-gap { font-size: 1rem; font-weight: 500; color: var(--lp-ink); line-height: 1.6; margin-bottom: 12px; }
+  .write-card .w-gap .blank { border-bottom: 2px dashed var(--lp-cat-purple); min-width: 50px; display: inline-block; }
+  .write-input {
+    width: 120px; font-family: var(--lp-font-mono); font-size: .85rem; font-weight: 600;
+    text-align: center; padding: 9px 12px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-bg-paper); color: var(--lp-ink);
+    outline: none; transition: border-color .2s; margin: 0 auto; display: block;
+  }
+  .write-input:focus { border-color: var(--lp-cat-purple); }
+  .write-input.correct { border-color: var(--lp-success); background: var(--lp-success-soft); }
+  .write-input.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); }
+  .write-feedback { font-size: .72rem; font-weight: 600; margin-top: 8px; min-height: 1.2em; }
+  .write-feedback.ok { color: var(--lp-success); }
+  .write-feedback.err { color: var(--lp-error); }
+
+  .scroll-body { padding: 8px 0 30px; }
+
+  @media (max-width: 480px) {
+    .word-opt { min-width: 60px; padding: 10px 14px; font-size: .8rem; }
+    .write-input { width: 100px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <a href="../index.html" class="back-link">← Home</a>
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+  </div>
+
+  <div class="header">
+    <h1>🔗 Verb + Prep Chunks</h1>
+
+    <!-- Category -->
+    <div class="cat-bar" id="catBar"></div>
+
+    <!-- Modes -->
+    <div class="pill-bar">
+      <button class="pill-btn active" data-mode="study">📖 Study</button>
+      <button class="pill-btn" data-mode="practice">🎯 Practice</button>
+      <button class="pill-btn" data-mode="write">✍️ Write</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
+    </div>
+
+    <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
+
+    <div class="progress">
+      <div class="progress__labels"><span id="progTxt">0 / 24</span><span id="progPct">0%</span></div>
+      <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+    </div>
+  </div>
+
+  <div class="scroll-body">
+    <!-- PRACTICE / TIMED -->
+    <div data-area="practice">
+      <div class="sentence-card">
+        <div class="sc-icon" id="scIcon"></div>
+        <div class="sc-text" id="scText"></div>
+        <div class="sc-hint" id="scHint"></div>
+        <div class="sc-counter" id="scCounter"></div>
+      </div>
+      <div class="word-options" id="wordOptions"></div>
+      <div class="explain-box" id="explainBox"></div>
+    </div>
+
+    <!-- STUDY -->
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 24</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face chunk-front">
+            <div class="fc-emoji" id="fcEmoji">🔗</div>
+            <div class="fc-term" id="fcTerm"></div>
+            <div class="fc-detail" id="fcEs"></div>
+            <div class="fc-hint">tap to see example</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="chunk-meaning" id="fcMeaning"></div>
+            <div class="chunk-example" id="fcExample"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="btn btn--ghost" id="prevBtn">←</button>
+        <button class="btn btn--purple" id="nextBtn">→</button>
+      </div>
+    </div>
+
+    <!-- WRITE -->
+    <div data-area="write">
+      <div class="write-card">
+        <div class="w-verb" id="writeVerb"></div>
+        <div class="w-hint" id="writeHint">Type the missing preposition</div>
+        <div class="w-gap" id="writeGap"></div>
+        <input class="write-input" id="writeInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="prep…">
+        <div class="write-feedback" id="writeFeedback"></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button class="btn btn--primary" id="writeCheck">Check ✓</button>
+        <button class="btn btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/verb-chunks.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+const ALL_PREPS = ['to', 'at', 'for', 'from', 'with', 'about', 'on', 'of', 'in', 'after'];
+const catKeys = Object.keys(CATEGORIES);
+let currentCat = catKeys[0];
+let mode = 'study';
+let deck = [], idx = 0, score = 0, total = 0;
+let timer = null;
+
+// ─── Category bar ───
+function renderCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = catKeys.map(k =>
+    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
+  ).join('');
+  bar.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      startMode();
+    });
+  });
+}
+renderCatBar();
+
+// ─── Mode switching ───
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    startMode();
+  });
+});
+
+function startMode() {
+  stopTimer();
+  document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
+  document.getElementById('timerBar').classList.remove('show');
+  if (mode === 'practice') initPractice(false);
+  else if (mode === 'timed') initPractice(true);
+  else if (mode === 'study') initStudy();
+  else if (mode === 'write') initWrite();
+}
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+
+function getData() { return CATEGORIES[currentCat].items; }
+
+function getPrep(item) { return item.prep; }
+
+function getLabel(item) {
+  return currentCat === 'prepositional'
+    ? `${item.verb} ___`
+    : item.pattern;
+}
+
+function getHint(item) {
+  return currentCat === 'prepositional'
+    ? item.es
+    : item.es;
+}
+
+function updProgress(current, t) {
+  const pct = Math.round((current / t) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = `${current} / ${t}`;
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+function buildOptions(correct) {
+  const distractors = ALL_PREPS.filter(p => p !== correct);
+  const picked = shuffle(distractors).slice(0, 4);
+  if (!picked.includes(correct)) picked[Math.floor(Math.random() * picked.length)] = correct;
+  else picked.push(correct);
+  return shuffle([...new Set([correct, ...picked])]).slice(0, 5);
+}
+
+// ═══ PRACTICE / TIMED ═══
+function initPractice(timed) {
+  deck = shuffle(getData());
+  idx = 0; score = 0;
+  total = Math.min(timed ? 12 : deck.length, deck.length);
+  document.querySelector('[data-area="practice"]').classList.add('show');
+
+  if (timed) {
+    document.getElementById('timerBar').classList.add('show');
+    timer = new Timer(total * 7,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
+      () => finishPractice()
+    );
+    timer.start();
+  }
+  renderPractice();
+}
+
+function renderPractice() {
+  if (idx >= total) { stopTimer(); finishPractice(); return; }
+  const item = deck[idx];
+  const cat = CATEGORIES[currentCat];
+
+  document.getElementById('scIcon').textContent = cat.icon;
+  document.getElementById('scText').innerHTML = item.gap.replace('___', '<span class="blank">?</span>');
+  document.getElementById('scHint').textContent = item.es;
+  document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('explainBox').textContent = '';
+
+  const opts = buildOptions(item.prep);
+  const optsEl = document.getElementById('wordOptions');
+  optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join('');
+  optsEl.querySelectorAll('.word-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
+
+      const chosen = btn.dataset.val;
+      if (chosen === item.prep) { btn.classList.add('correct'); score++; }
+      else {
+        btn.classList.add('wrong');
+        optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.prep) b.classList.add('correct'); });
+      }
+
+      document.getElementById('scText').innerHTML = item.gap.replace('___', `<span class="blank">${item.prep}</span>`);
+      document.getElementById('explainBox').textContent = item.example;
+
+      idx++;
+      updProgress(idx, total);
+      setTimeout(renderPractice, 1400);
+    });
+  });
+  updProgress(idx, total);
+}
+
+function finishPractice() {
+  const pct = showResult({
+    correct: score, total,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+  });
+  recordScore(`vchunks-${currentCat}`, pct);
+}
+
+// ═══ STUDY ═══
+function initStudy() {
+  deck = shuffle(getData());
+  idx = 0;
+  document.querySelector('[data-area="study"]').classList.add('show');
+  renderStudyCard();
+}
+
+function renderStudyCard() {
+  const item = deck[idx];
+  const card = document.getElementById('fcCard');
+  card.classList.remove('flip');
+
+  document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon;
+
+  if (currentCat === 'prepositional') {
+    document.getElementById('fcTerm').textContent = `${item.verb} ${item.prep}`;
+  } else {
+    document.getElementById('fcTerm').textContent = item.pattern;
+  }
+  document.getElementById('fcEs').textContent = item.es;
+  document.getElementById('fcMeaning').textContent = item.prep;
+  document.getElementById('fcExample').textContent = item.example;
+  document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
+  updProgress(idx + 1, deck.length);
+}
+
+document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
+document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
+document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
+document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
+
+function advanceCard(dir) {
+  const card = document.getElementById('fcCard');
+  const inner = card.querySelector('.fc-inner');
+  if (card.classList.contains('flip')) {
+    inner.style.transition = 'none';
+    card.classList.remove('flip');
+    void inner.offsetHeight;
+    inner.style.transition = '';
+  }
+  idx = (idx + dir + deck.length) % deck.length;
+  renderStudyCard();
+}
+
+// ═══ WRITE ═══
+function initWrite() {
+  deck = shuffle(getData());
+  idx = 0; score = 0; total = deck.length;
+  document.querySelector('[data-area="write"]').classList.add('show');
+  renderWrite();
+}
+
+function renderWrite() {
+  if (idx >= total) { finishWrite(); return; }
+  const item = deck[idx];
+
+  if (currentCat === 'prepositional') {
+    document.getElementById('writeVerb').textContent = `${item.verb} ___`;
+  } else {
+    document.getElementById('writeVerb').textContent = item.pattern;
+  }
+  document.getElementById('writeHint').textContent = item.es;
+  document.getElementById('writeGap').innerHTML = item.gap.replace('___', '<span class="blank"></span>');
+
+  const input = document.getElementById('writeInput');
+  input.value = '';
+  input.className = 'write-input';
+  input.focus();
+  document.getElementById('writeFeedback').textContent = '';
+  document.getElementById('writeFeedback').className = 'write-feedback';
+  updProgress(idx, total);
+}
+
+function checkWrite() {
+  const item = deck[idx];
+  const input = document.getElementById('writeInput');
+  const fb = document.getElementById('writeFeedback');
+  const answer = input.value.trim().toLowerCase();
+
+  if (!answer) { input.focus(); return; }
+
+  if (answer === item.prep) {
+    input.classList.add('correct');
+    fb.textContent = '✓ Correct!';
+    fb.className = 'write-feedback ok';
+    score++;
+  } else {
+    input.classList.add('wrong');
+    fb.textContent = `✗ "${item.prep}" — ${item.example}`;
+    fb.className = 'write-feedback err';
+  }
+
+  idx++;
+  updProgress(idx, total);
+  setTimeout(renderWrite, 1600);
+}
+
+function skipWrite() {
+  idx++;
+  updProgress(idx, total);
+  renderWrite();
+}
+
+function finishWrite() {
+  const pct = showResult({
+    correct: score, total,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+  });
+  recordScore(`vchunks-${currentCat}-write`, pct);
+}
+
+document.getElementById('writeCheck').addEventListener('click', checkWrite);
+document.getElementById('writeSkip').addEventListener('click', skipWrite);
+document.getElementById('writeInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); checkWrite(); }
+});
+
+// ─── Keyboard shortcuts ───
+document.addEventListener('keydown', e => {
+  if (mode !== 'study') return;
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    const card = document.getElementById('fcCard');
+    if (card.classList.contains('flip')) advanceCard(1);
+    else card.classList.add('flip');
+  } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
+});
+
+// ─── Init ───
+startMode();
+</script>
+</body>
+</html>

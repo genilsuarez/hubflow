@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opposites &amp; Synonyms Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+.cat-badge{font-size:.6rem;padding:3px 10px;border-radius:50px;font-weight:700;}
+.cat-badge.opp{background:var(--red-light);color:var(--red-dark);}
+.cat-badge.syn{background:var(--green-light);color:var(--green-dark);}
+
+/* PAIR ROWS */
+.pair-table{
+  width:100%;border-collapse:collapse;font-size:.76rem;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
+  margin:10px 0;
+}
+.pair-table th{
+  font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;
+}
+.pair-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.pair-table tr:last-child td{border-bottom:none;}
+.pair-table .w-left{font-weight:700;color:var(--blue-dark);}
+.pair-table .w-right{font-weight:700;color:var(--red-dark);}
+.pair-table .w-syn{font-weight:700;color:var(--green-dark);}
+[data-theme="dark"] .pair-table .w-left{color:#7AC7FF;}
+[data-theme="dark"] .pair-table .w-right{color:#FF9F9F;}
+[data-theme="dark"] .pair-table .w-syn{color:#6FE8A8;}
+.pair-table .meaning{font-size:.68rem;color:var(--muted);font-style:italic;}
+.pair-table .connector{text-align:center;color:var(--muted);font-weight:800;font-size:.7rem;}
+
+/* VISUAL GRID (alternative display) */
+.opp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:12px 0;}
+.opp-chip{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:8px 10px;font-size:.72rem;
+}
+.opp-chip .oc-left{font-weight:700;color:var(--blue-dark);}
+.opp-chip .oc-arrow{color:var(--muted);font-size:.6rem;}
+.opp-chip .oc-right{font-weight:700;color:var(--red-dark);}
+[data-theme="dark"] .opp-chip .oc-left{color:#7AC7FF;}
+[data-theme="dark"] .opp-chip .oc-right{color:#FF9F9F;}
+
+.syn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:12px 0;}
+.syn-chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:8px 10px;font-size:.72rem;
+}
+.syn-chip .sc-base{font-weight:700;color:var(--green-dark);}
+[data-theme="dark"] .syn-chip .sc-base{color:#6FE8A8;}
+.syn-chip .sc-eq{color:var(--muted);font-size:.6rem;font-weight:800;}
+.syn-chip .sc-syn{color:var(--text);font-weight:600;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .opp-grid,.syn-grid{grid-template-columns:1fr 1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/opposites.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Opposites <span class="accent">&amp; Synonyms</span></h1>
+<p class="intro">Quick reference for 50 opposite pairs and 30 synonym pairs used in the exercises.</p>
+
+<!-- OPPOSITES: ADJECTIVES -->
+<h2><span class="cat-badge opp">OPPOSITES</span> Adjectives</h2>
+<div class="opp-grid">
+  <div class="opp-chip"><span class="oc-left">big</span><span class="oc-arrow">&harr;</span><span class="oc-right">small</span></div>
+  <div class="opp-chip"><span class="oc-left">hot</span><span class="oc-arrow">&harr;</span><span class="oc-right">cold</span></div>
+  <div class="opp-chip"><span class="oc-left">fast</span><span class="oc-arrow">&harr;</span><span class="oc-right">slow</span></div>
+  <div class="opp-chip"><span class="oc-left">happy</span><span class="oc-arrow">&harr;</span><span class="oc-right">sad</span></div>
+  <div class="opp-chip"><span class="oc-left">long</span><span class="oc-arrow">&harr;</span><span class="oc-right">short</span></div>
+  <div class="opp-chip"><span class="oc-left">young</span><span class="oc-arrow">&harr;</span><span class="oc-right">old</span></div>
+  <div class="opp-chip"><span class="oc-left">easy</span><span class="oc-arrow">&harr;</span><span class="oc-right">difficult</span></div>
+  <div class="opp-chip"><span class="oc-left">cheap</span><span class="oc-arrow">&harr;</span><span class="oc-right">expensive</span></div>
+  <div class="opp-chip"><span class="oc-left">clean</span><span class="oc-arrow">&harr;</span><span class="oc-right">dirty</span></div>
+  <div class="opp-chip"><span class="oc-left">heavy</span><span class="oc-arrow">&harr;</span><span class="oc-right">light</span></div>
+  <div class="opp-chip"><span class="oc-left">thick</span><span class="oc-arrow">&harr;</span><span class="oc-right">thin</span></div>
+  <div class="opp-chip"><span class="oc-left">wide</span><span class="oc-arrow">&harr;</span><span class="oc-right">narrow</span></div>
+  <div class="opp-chip"><span class="oc-left">deep</span><span class="oc-arrow">&harr;</span><span class="oc-right">shallow</span></div>
+  <div class="opp-chip"><span class="oc-left">empty</span><span class="oc-arrow">&harr;</span><span class="oc-right">full</span></div>
+  <div class="opp-chip"><span class="oc-left">loud</span><span class="oc-arrow">&harr;</span><span class="oc-right">quiet</span></div>
+  <div class="opp-chip"><span class="oc-left">bright</span><span class="oc-arrow">&harr;</span><span class="oc-right">dark</span></div>
+  <div class="opp-chip"><span class="oc-left">strong</span><span class="oc-arrow">&harr;</span><span class="oc-right">weak</span></div>
+  <div class="opp-chip"><span class="oc-left">safe</span><span class="oc-arrow">&harr;</span><span class="oc-right">dangerous</span></div>
+  <div class="opp-chip"><span class="oc-left">rich</span><span class="oc-arrow">&harr;</span><span class="oc-right">poor</span></div>
+  <div class="opp-chip"><span class="oc-left">polite</span><span class="oc-arrow">&harr;</span><span class="oc-right">rude</span></div>
+  <div class="opp-chip"><span class="oc-left">tight</span><span class="oc-arrow">&harr;</span><span class="oc-right">loose</span></div>
+  <div class="opp-chip"><span class="oc-left">smooth</span><span class="oc-arrow">&harr;</span><span class="oc-right">rough</span></div>
+  <div class="opp-chip"><span class="oc-left">brave</span><span class="oc-arrow">&harr;</span><span class="oc-right">cowardly</span></div>
+  <div class="opp-chip"><span class="oc-left">ancient</span><span class="oc-arrow">&harr;</span><span class="oc-right">modern</span></div>
+  <div class="opp-chip"><span class="oc-left">boring</span><span class="oc-arrow">&harr;</span><span class="oc-right">exciting</span></div>
+</div>
+
+<!-- OPPOSITES: VERBS -->
+<h2><span class="cat-badge opp">OPPOSITES</span> Verbs</h2>
+<div class="opp-grid">
+  <div class="opp-chip"><span class="oc-left">open</span><span class="oc-arrow">&harr;</span><span class="oc-right">close</span></div>
+  <div class="opp-chip"><span class="oc-left">start</span><span class="oc-arrow">&harr;</span><span class="oc-right">finish</span></div>
+  <div class="opp-chip"><span class="oc-left">buy</span><span class="oc-arrow">&harr;</span><span class="oc-right">sell</span></div>
+  <div class="opp-chip"><span class="oc-left">push</span><span class="oc-arrow">&harr;</span><span class="oc-right">pull</span></div>
+  <div class="opp-chip"><span class="oc-left">arrive</span><span class="oc-arrow">&harr;</span><span class="oc-right">leave</span></div>
+  <div class="opp-chip"><span class="oc-left">win</span><span class="oc-arrow">&harr;</span><span class="oc-right">lose</span></div>
+  <div class="opp-chip"><span class="oc-left">lend</span><span class="oc-arrow">&harr;</span><span class="oc-right">borrow</span></div>
+  <div class="opp-chip"><span class="oc-left">remember</span><span class="oc-arrow">&harr;</span><span class="oc-right">forget</span></div>
+  <div class="opp-chip"><span class="oc-left">love</span><span class="oc-arrow">&harr;</span><span class="oc-right">hate</span></div>
+  <div class="opp-chip"><span class="oc-left">laugh</span><span class="oc-arrow">&harr;</span><span class="oc-right">cry</span></div>
+  <div class="opp-chip"><span class="oc-left">accept</span><span class="oc-arrow">&harr;</span><span class="oc-right">refuse</span></div>
+  <div class="opp-chip"><span class="oc-left">include</span><span class="oc-arrow">&harr;</span><span class="oc-right">exclude</span></div>
+  <div class="opp-chip"><span class="oc-left">appear</span><span class="oc-arrow">&harr;</span><span class="oc-right">disappear</span></div>
+  <div class="opp-chip"><span class="oc-left">agree</span><span class="oc-arrow">&harr;</span><span class="oc-right">disagree</span></div>
+  <div class="opp-chip"><span class="oc-left">rise</span><span class="oc-arrow">&harr;</span><span class="oc-right">fall</span></div>
+  <div class="opp-chip"><span class="oc-left">succeed</span><span class="oc-arrow">&harr;</span><span class="oc-right">fail</span></div>
+  <div class="opp-chip"><span class="oc-left">attack</span><span class="oc-arrow">&harr;</span><span class="oc-right">defend</span></div>
+  <div class="opp-chip"><span class="oc-left">allow</span><span class="oc-arrow">&harr;</span><span class="oc-right">forbid</span></div>
+  <div class="opp-chip"><span class="oc-left">reward</span><span class="oc-arrow">&harr;</span><span class="oc-right">punish</span></div>
+  <div class="opp-chip"><span class="oc-left">increase</span><span class="oc-arrow">&harr;</span><span class="oc-right">decrease</span></div>
+</div>
+
+<!-- OPPOSITES: OTHER -->
+<h2><span class="cat-badge opp">OPPOSITES</span> Nouns &amp; Adverbs</h2>
+<div class="opp-grid">
+  <div class="opp-chip"><span class="oc-left">always</span><span class="oc-arrow">&harr;</span><span class="oc-right">never</span></div>
+  <div class="opp-chip"><span class="oc-left">here</span><span class="oc-arrow">&harr;</span><span class="oc-right">there</span></div>
+  <div class="opp-chip"><span class="oc-left">inside</span><span class="oc-arrow">&harr;</span><span class="oc-right">outside</span></div>
+  <div class="opp-chip"><span class="oc-left">above</span><span class="oc-arrow">&harr;</span><span class="oc-right">below</span></div>
+  <div class="opp-chip"><span class="oc-left">success</span><span class="oc-arrow">&harr;</span><span class="oc-right">failure</span></div>
+</div>
+
+<!-- OPPOSITES: B1-C1 -->
+<h2><span class="cat-badge opp">OPPOSITES</span> B1&ndash;C1 Level</h2>
+<div class="opp-grid">
+  <div class="opp-chip"><span class="oc-left">generous</span><span class="oc-arrow">&harr;</span><span class="oc-right">stingy</span></div>
+  <div class="opp-chip"><span class="oc-left">humble</span><span class="oc-arrow">&harr;</span><span class="oc-right">arrogant</span></div>
+  <div class="opp-chip"><span class="oc-left">transparent</span><span class="oc-arrow">&harr;</span><span class="oc-right">opaque</span></div>
+  <div class="opp-chip"><span class="oc-left">abundant</span><span class="oc-arrow">&harr;</span><span class="oc-right">scarce</span></div>
+  <div class="opp-chip"><span class="oc-left">reliable</span><span class="oc-arrow">&harr;</span><span class="oc-right">unpredictable</span></div>
+  <div class="opp-chip"><span class="oc-left">optimistic</span><span class="oc-arrow">&harr;</span><span class="oc-right">pessimistic</span></div>
+  <div class="opp-chip"><span class="oc-left">flexible</span><span class="oc-arrow">&harr;</span><span class="oc-right">rigid</span></div>
+  <div class="opp-chip"><span class="oc-left">genuine</span><span class="oc-arrow">&harr;</span><span class="oc-right">fake</span></div>
+  <div class="opp-chip"><span class="oc-left">cautious</span><span class="oc-arrow">&harr;</span><span class="oc-right">reckless</span></div>
+  <div class="opp-chip"><span class="oc-left">concise</span><span class="oc-arrow">&harr;</span><span class="oc-right">verbose</span></div>
+  <div class="opp-chip"><span class="oc-left">voluntary</span><span class="oc-arrow">&harr;</span><span class="oc-right">compulsory</span></div>
+  <div class="opp-chip"><span class="oc-left">superficial</span><span class="oc-arrow">&harr;</span><span class="oc-right">profound</span></div>
+</div>
+
+<!-- SYNONYMS -->
+<h2><span class="cat-badge syn">SYNONYMS</span> Common Pairs</h2>
+<div class="syn-grid">
+  <div class="syn-chip"><span class="sc-base">big</span><span class="sc-eq">=</span><span class="sc-syn">large, huge</span></div>
+  <div class="syn-chip"><span class="sc-base">small</span><span class="sc-eq">=</span><span class="sc-syn">tiny, little</span></div>
+  <div class="syn-chip"><span class="sc-base">happy</span><span class="sc-eq">=</span><span class="sc-syn">glad, pleased</span></div>
+  <div class="syn-chip"><span class="sc-base">sad</span><span class="sc-eq">=</span><span class="sc-syn">unhappy, upset</span></div>
+  <div class="syn-chip"><span class="sc-base">angry</span><span class="sc-eq">=</span><span class="sc-syn">furious, mad</span></div>
+  <div class="syn-chip"><span class="sc-base">scared</span><span class="sc-eq">=</span><span class="sc-syn">afraid, frightened</span></div>
+  <div class="syn-chip"><span class="sc-base">fast</span><span class="sc-eq">=</span><span class="sc-syn">quick, rapid</span></div>
+  <div class="syn-chip"><span class="sc-base">start</span><span class="sc-eq">=</span><span class="sc-syn">begin, commence</span></div>
+  <div class="syn-chip"><span class="sc-base">end</span><span class="sc-eq">=</span><span class="sc-syn">finish, complete</span></div>
+  <div class="syn-chip"><span class="sc-base">help</span><span class="sc-eq">=</span><span class="sc-syn">assist, aid</span></div>
+  <div class="syn-chip"><span class="sc-base">want</span><span class="sc-eq">=</span><span class="sc-syn">desire, wish</span></div>
+  <div class="syn-chip"><span class="sc-base">choose</span><span class="sc-eq">=</span><span class="sc-syn">select, pick</span></div>
+  <div class="syn-chip"><span class="sc-base">important</span><span class="sc-eq">=</span><span class="sc-syn">essential, crucial</span></div>
+  <div class="syn-chip"><span class="sc-base">beautiful</span><span class="sc-eq">=</span><span class="sc-syn">gorgeous, stunning</span></div>
+  <div class="syn-chip"><span class="sc-base">difficult</span><span class="sc-eq">=</span><span class="sc-syn">hard, challenging</span></div>
+  <div class="syn-chip"><span class="sc-base">easy</span><span class="sc-eq">=</span><span class="sc-syn">simple, straightforward</span></div>
+  <div class="syn-chip"><span class="sc-base">strange</span><span class="sc-eq">=</span><span class="sc-syn">odd, weird</span></div>
+  <div class="syn-chip"><span class="sc-base">clever</span><span class="sc-eq">=</span><span class="sc-syn">smart, intelligent</span></div>
+  <div class="syn-chip"><span class="sc-base">tired</span><span class="sc-eq">=</span><span class="sc-syn">exhausted, weary</span></div>
+  <div class="syn-chip"><span class="sc-base">rich</span><span class="sc-eq">=</span><span class="sc-syn">wealthy, affluent</span></div>
+  <div class="syn-chip"><span class="sc-base">fix</span><span class="sc-eq">=</span><span class="sc-syn">repair, mend</span></div>
+  <div class="syn-chip"><span class="sc-base">mistake</span><span class="sc-eq">=</span><span class="sc-syn">error, blunder</span></div>
+  <div class="syn-chip"><span class="sc-base">answer</span><span class="sc-eq">=</span><span class="sc-syn">reply, respond</span></div>
+  <div class="syn-chip"><span class="sc-base">keep</span><span class="sc-eq">=</span><span class="sc-syn">retain, hold</span></div>
+  <div class="syn-chip"><span class="sc-base">trip</span><span class="sc-eq">=</span><span class="sc-syn">journey, voyage</span></div>
+  <div class="syn-chip"><span class="sc-base">get</span><span class="sc-eq">=</span><span class="sc-syn">obtain, receive</span></div>
+  <div class="syn-chip"><span class="sc-base">nice</span><span class="sc-eq">=</span><span class="sc-syn">kind, pleasant</span></div>
+  <div class="syn-chip"><span class="sc-base">rude</span><span class="sc-eq">=</span><span class="sc-syn">impolite, offensive</span></div>
+  <div class="syn-chip"><span class="sc-base">quiet</span><span class="sc-eq">=</span><span class="sc-syn">silent, calm</span></div>
+  <div class="syn-chip"><span class="sc-base">whole</span><span class="sc-eq">=</span><span class="sc-syn">entire, complete</span></div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/opposites.html">&larr; Practice word relations</a>
+</footer>
+
+</div>
+</body>
+</html>

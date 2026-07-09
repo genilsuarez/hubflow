@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error Hunt — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-purple); }
+  .pill-btn.active { background: var(--lp-cat-purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
+  .progress__fill { background: var(--lp-cat-purple); }
+
+  /* Category pills */
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    font-size: .68rem; font-weight: 700; padding: 6px 12px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted);
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
+
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  /* Text display */
+  .hunt-card {
+    width: 100%; max-width: 560px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 24px; box-shadow: var(--lp-shadow-md);
+  }
+  .hunt-card__counter {
+    font-size: .65rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: 12px;
+  }
+  .hunt-text {
+    font-size: 1.05rem; line-height: 2; font-family: var(--lp-font-body); color: var(--lp-ink);
+  }
+  .hunt-word {
+    display: inline; padding: 2px 4px; border-radius: 4px; cursor: pointer;
+    transition: background .2s, color .2s, box-shadow .2s;
+    border-bottom: 2px solid transparent;
+  }
+  .hunt-word:hover { background: rgba(123,94,167,.08); }
+  .hunt-word.selected {
+    background: rgba(123,94,167,.12); border-bottom-color: var(--lp-cat-purple);
+    color: var(--lp-cat-purple); font-weight: 600;
+  }
+  .hunt-word.correct {
+    background: var(--lp-success-soft); border-bottom-color: var(--lp-success);
+    color: var(--lp-success-dark); font-weight: 600;
+  }
+  .hunt-word.missed {
+    background: var(--lp-error-soft); border-bottom-color: var(--lp-error);
+    color: var(--lp-error-dark); font-weight: 600; text-decoration: line-through;
+  }
+  .hunt-word.false-positive {
+    background: var(--lp-warning-soft); border-bottom-color: var(--lp-warning);
+    color: var(--lp-warning); font-weight: 600;
+  }
+
+  /* Errors found counter */
+  .hunt-status {
+    font-size: .75rem; font-weight: 700; color: var(--lp-muted); text-align: center;
+  }
+  .hunt-status em { color: var(--lp-cat-purple); font-style: normal; }
+
+  /* Correction input */
+  .correction-panel {
+    width: 100%; max-width: 560px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-md); padding: 14px 18px; box-shadow: var(--lp-shadow-sm);
+    display: none; gap: 8px; flex-direction: column;
+  }
+  .correction-panel.show { display: flex; }
+  .correction-panel__label {
+    font-size: .7rem; font-weight: 700; color: var(--lp-muted);
+  }
+  .correction-panel__word {
+    font-family: var(--lp-font-display); font-size: 1.1rem; color: var(--lp-cat-purple); font-weight: 600;
+  }
+  .correction-panel__input {
+    font-family: var(--lp-font-mono); font-size: .9rem; padding: 8px 12px;
+    border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    background: var(--lp-bg-paper); color: var(--lp-ink); outline: none;
+    transition: border-color .2s;
+  }
+  .correction-panel__input:focus { border-color: var(--lp-cat-purple); }
+
+  /* Explanations after check */
+  .hunt-explanations {
+    width: 100%; max-width: 560px; display: none; flex-direction: column; gap: 8px;
+  }
+  .hunt-explanations.show { display: flex; }
+  .hunt-exp-item {
+    background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    padding: 10px 14px; font-size: .75rem; line-height: 1.5;
+  }
+  .hunt-exp-item strong { color: var(--lp-error); }
+  .hunt-exp-item em { color: var(--lp-success); font-style: normal; font-weight: 700; }
+
+  .scroll-body { padding: 8px 0 30px; }
+
+  /* Modes */
+  .mode-desc {
+    font-size: .68rem; color: var(--lp-muted); font-weight: 600; text-align: center; margin-top: -6px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <a href="../index.html" class="back-link">← HubFlow</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </div>
+
+  <header class="header">
+    <h1>🔍 Error Hunt</h1>
+    <div class="pill-bar pill-bar--scroll" role="tablist">
+      <button class="pill-btn active" data-mode="hunt" role="tab">🎯 Hunt</button>
+      <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
+    </div>
+  </header>
+
+  <div class="cat-bar" id="catBar"></div>
+  <p class="mode-desc" id="modeDesc">Tap the incorrect words, then type the correction</p>
+
+  <div class="progress">
+    <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+    <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+  </div>
+
+  <div class="timer-bar" id="timerBar">
+    <span class="timer-display" id="timerDisplay">2:00</span>
+  </div>
+
+  <div class="scroll-body">
+    <div data-area="hunt" class="show">
+      <div class="hunt-card">
+        <div class="hunt-card__counter" id="huntCounter">Text 1 / 10</div>
+        <div class="hunt-text" id="huntText"></div>
+      </div>
+
+      <div class="hunt-status" id="huntStatus">Found: <em>0</em> / ? errors</div>
+
+      <div class="correction-panel" id="correctionPanel">
+        <div class="correction-panel__label">Correct this word:</div>
+        <div class="correction-panel__word" id="corrWord"></div>
+        <input class="correction-panel__input" id="corrInput" placeholder="Type correction..." autocomplete="off" autocapitalize="off" spellcheck="false">
+        <button class="btn btn--purple btn--sm" id="corrSubmit">Submit ✓</button>
+      </div>
+
+      <div class="hunt-explanations" id="huntExplanations"></div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn--primary" id="checkBtn">Check All ✓</button>
+        <button class="btn btn--ghost" id="nextBtn" style="display:none">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/error-hunt.js';
+import { shuffle, initTheme, toggleTheme, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
+
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+const catKeys = Object.keys(CATEGORIES);
+let currentCat = catKeys[0];
+let mode = 'hunt';
+let deck = [], idx = 0, score = 0, totalErrors = 0;
+let selectedWords = new Set();
+let corrections = {};
+let currentSelectedIdx = null;
+let checked = false;
+let timer = null;
+
+// ─── Category bar ───
+function renderCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = catKeys.map(k =>
+    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label} <span style="font-size:.6rem;opacity:.7">${CATEGORIES[k].level}</span></button>`
+  ).join('');
+  bar.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      startMode();
+    });
+  });
+}
+renderCatBar();
+
+// ─── Mode switching ───
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    startMode();
+  });
+});
+
+function startMode() {
+  stopTimer();
+  deck = shuffle(CATEGORIES[currentCat].items);
+  idx = 0; score = 0; totalErrors = 0;
+  document.getElementById('timerBar').classList.toggle('show', mode === 'timed');
+  document.getElementById('modeDesc').textContent = mode === 'timed'
+    ? 'Find errors before time runs out!'
+    : 'Tap the incorrect words, then type the correction';
+
+  if (mode === 'timed') {
+    timer = new Timer(120,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 15); },
+      () => finishAll()
+    );
+    timer.start();
+  }
+  loadText();
+}
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+
+function loadText() {
+  if (idx >= deck.length) { finishAll(); return; }
+  const item = deck[idx];
+  selectedWords = new Set();
+  corrections = {};
+  currentSelectedIdx = null;
+  checked = false;
+
+  document.getElementById('huntCounter').textContent = `Text ${idx + 1} / ${deck.length}`;
+  document.getElementById('checkBtn').style.display = '';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('huntExplanations').classList.remove('show');
+  document.getElementById('correctionPanel').classList.remove('show');
+
+  renderText(item);
+  updateStatus(item);
+  updateProgress();
+}
+
+function renderText(item) {
+  const words = item.text.split(' ');
+  const container = document.getElementById('huntText');
+  container.innerHTML = words.map((w, i) =>
+    `<span class="hunt-word" data-idx="${i}">${w}</span> `
+  ).join('');
+
+  container.querySelectorAll('.hunt-word').forEach(el => {
+    el.addEventListener('click', () => {
+      if (checked) return;
+      const wi = parseInt(el.dataset.idx);
+      if (selectedWords.has(wi)) {
+        selectedWords.delete(wi);
+        delete corrections[wi];
+        el.classList.remove('selected');
+        if (currentSelectedIdx === wi) hideCorrection();
+      } else {
+        selectedWords.add(wi);
+        el.classList.add('selected');
+        showCorrection(wi, words[wi]);
+      }
+      updateStatus(item);
+    });
+  });
+}
+
+function showCorrection(wordIdx, word) {
+  currentSelectedIdx = wordIdx;
+  const panel = document.getElementById('correctionPanel');
+  panel.classList.add('show');
+  document.getElementById('corrWord').textContent = `"${word}"`;
+  const input = document.getElementById('corrInput');
+  input.value = corrections[wordIdx] || '';
+  input.focus();
+}
+
+function hideCorrection() {
+  currentSelectedIdx = null;
+  document.getElementById('correctionPanel').classList.remove('show');
+}
+
+// Correction submit
+document.getElementById('corrSubmit').addEventListener('click', submitCorrection);
+document.getElementById('corrInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitCorrection();
+});
+
+function submitCorrection() {
+  if (currentSelectedIdx === null) return;
+  const val = document.getElementById('corrInput').value.trim();
+  if (val) corrections[currentSelectedIdx] = val;
+  hideCorrection();
+}
+
+function updateStatus(item) {
+  const found = selectedWords.size;
+  const total = item.errors.length;
+  document.getElementById('huntStatus').innerHTML = `Found: <em>${found}</em> / ${total} errors`;
+}
+
+function updateProgress() {
+  const pct = deck.length > 0 ? Math.round(((idx) / deck.length) * 100) : 0;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = `${idx} / ${deck.length}`;
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+// ─── Check ───
+document.getElementById('checkBtn').addEventListener('click', checkText);
+
+function checkText() {
+  if (checked) return;
+  checked = true;
+  hideCorrection();
+
+  const item = deck[idx];
+  const errorIndices = new Set(item.errors.map(e => e.index));
+  let correct = 0;
+
+  // Mark words
+  document.querySelectorAll('.hunt-word').forEach(el => {
+    const wi = parseInt(el.dataset.idx);
+    const isError = errorIndices.has(wi);
+    const wasSelected = selectedWords.has(wi);
+
+    if (isError && wasSelected) {
+      // Check correction
+      const err = item.errors.find(e => e.index === wi);
+      const userCorr = (corrections[wi] || '').toLowerCase().trim();
+      const expected = err.correction.toLowerCase().trim();
+      if (expected === '' || userCorr === expected || expected.includes(userCorr) || userCorr.includes(expected)) {
+        el.classList.add('correct');
+        correct++;
+      } else {
+        el.classList.add('correct'); // still found it
+        correct += 0.5; // partial credit
+      }
+    } else if (isError && !wasSelected) {
+      el.classList.add('missed');
+    } else if (!isError && wasSelected) {
+      el.classList.add('false-positive');
+    }
+    el.style.cursor = 'default';
+  });
+
+  score += correct;
+  totalErrors += item.errors.length;
+
+  // Show explanations
+  const expContainer = document.getElementById('huntExplanations');
+  expContainer.innerHTML = item.errors.map(err => {
+    const words = item.text.split(' ');
+    return `<div class="hunt-exp-item">
+      <strong>${words[err.index]}</strong> → <em>${err.correction || '(remove)'}</em> — ${err.rule}
+    </div>`;
+  }).join('');
+  expContainer.classList.add('show');
+
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+}
+
+// ─── Next ───
+document.getElementById('nextBtn').addEventListener('click', () => {
+  idx++;
+  loadText();
+});
+
+// ─── Finish ───
+function finishAll() {
+  stopTimer();
+  const pct = totalErrors > 0 ? Math.round((score / totalErrors) * 100) : 0;
+  showResult({
+    correct: Math.round(score),
+    total: totalErrors,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: null
+  });
+  recordScore(`errhunt-${currentCat}`, pct);
+  // Update progress to 100
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;
+  document.getElementById('progPct').textContent = '100%';
+}
+
+// ─── Keyboard: Enter to check ───
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && !checked && currentSelectedIdx === null) {
+    e.preventDefault();
+    checkText();
+  }
+});
+
+// Start
+startMode();
+</script>
+</body>
+</html>

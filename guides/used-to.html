@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Used To & Would Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233D6B9F'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+.cmp-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.cmp-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;}
+.cmp-card.count{border-top:4px solid var(--blue);}
+.cmp-card.uncount{border-top:4px solid var(--red);}
+.cmp-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+.cmp-word{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;color:var(--blue-dark);margin-bottom:4px;}
+[data-theme="dark"] .cmp-word{color:#7AC7FF;}
+.cmp-meaning{font-size:.74rem;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.cmp-ex{font-size:.7rem;color:var(--muted);font-style:italic;line-height:1.4;}
+
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-card.neg{border-left:4px solid var(--red);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.neg-ex{background:var(--red-light);color:var(--red-dark);}
+[data-theme="dark"] .ex.neg-ex{color:#FF9F9F;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){.page{padding:14px 12px 50px;}.cmp-pair{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/used-to.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Used To <span class="accent">&amp; Would</span></h1>
+<p class="intro">Talking about the past isn't just past simple — these forms show habits, states, and how comfortable you've become with something.</p>
+
+<h2>&#9200; Used To vs Would — Past Habits</h2>
+<div class="cmp-pair">
+  <div class="cmp-card count">
+    <div class="cmp-label">Works for states AND actions</div>
+    <div class="cmp-word">used to</div>
+    <div class="cmp-meaning">Any past habit or state that no longer exists.</div>
+    <div class="cmp-ex">I used to live in Rome. (state)<br>I used to play tennis. (action)</div>
+  </div>
+  <div class="cmp-card uncount">
+    <div class="cmp-label">Only works for repeated actions</div>
+    <div class="cmp-word">would</div>
+    <div class="cmp-meaning">Repeated past actions — never states like be/have/like/know.</div>
+    <div class="cmp-ex">Every summer, we would visit our grandparents.</div>
+  </div>
+</div>
+<div class="rule-card neg">
+  <div class="rule-title">&#10060; The exception that trips everyone up</div>
+  <div class="rule-desc">For STATES (be, have, like, know, own, believe) only <strong>used to</strong> works. You can never say "would be" or "would have" to describe a past state.</div>
+  <div class="examples">
+    <span class="ex">I used to be shy. &#10003;</span>
+    <span class="ex neg-ex">I would be shy. &#10007;</span>
+    <span class="ex">She used to own a bakery. &#10003;</span>
+  </div>
+</div>
+
+<h2>&#128260; Used To / Be Used To / Get Used To</h2>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; Three different structures, three different meanings</div>
+  <div class="rule-desc">
+    <strong>used to</strong> + base verb = a past habit (no longer true).<br>
+    <strong>be used to</strong> + noun/-ing = accustomed to something now (a settled state).<br>
+    <strong>get used to</strong> + noun/-ing = the process of becoming accustomed (still adjusting).
+  </div>
+  <div class="examples">
+    <span class="ex">I used to stay up late. (past habit)</span>
+    <span class="ex">I'm used to the cold now. (accustomed)</span>
+    <span class="ex">I'm getting used to waking up early. (adjusting)</span>
+  </div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/used-to.html">&larr; Practice used to &amp; would</a>
+</footer>
+
+</div>
+</body>
+</html>

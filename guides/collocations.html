@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collocations Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* VERB HEADER */
+.verb-head{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;margin-bottom:10px;
+}
+.verb-head .vh-word{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--blue);}
+.verb-head .vh-meaning{font-size:.78rem;color:var(--muted);font-weight:600;}
+
+/* COLLOCATION GRID */
+.coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin:10px 0 20px;}
+.coll-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 12px;font-size:.76rem;transition:border-color .2s;
+}
+.coll-chip:hover{border-color:var(--blue);}
+.coll-chip .cc-verb{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue-dark);white-space:nowrap;}
+[data-theme="dark"] .coll-chip .cc-verb{color:#7AC7FF;}
+.coll-chip .cc-noun{font-weight:600;color:var(--text);}
+.coll-chip .cc-es{font-size:.66rem;color:var(--muted);font-style:italic;}
+
+/* CONTRAST TABLE */
+.contrast-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:16px;margin:14px 0;overflow:hidden;
+}
+.contrast-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.contrast-row{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;
+  padding:8px 0;border-bottom:1px solid var(--border);
+}
+.contrast-row:last-child{border-bottom:none;}
+.contrast-row .cr-left,.contrast-row .cr-right{font-size:.76rem;font-weight:600;}
+.contrast-row .cr-left{text-align:right;}
+.contrast-row .cr-vs{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;
+  color:var(--muted);padding:2px 6px;background:var(--border);border-radius:4px;
+}
+.contrast-row .cr-left strong,.contrast-row .cr-right strong{
+  font-family:'JetBrains Mono',monospace;color:var(--blue-dark);
+}
+[data-theme="dark"] .contrast-row strong{color:#7AC7FF;}
+
+/* WRONG EXAMPLES */
+.wrong-box{
+  background:var(--red-light);border:1.5px solid color-mix(in srgb, var(--red) 30%, transparent);
+  border-radius:12px;padding:12px 14px;margin:10px 0;
+}
+.wrong-box .wb-title{font-weight:800;font-size:.76rem;color:var(--red-dark);margin-bottom:6px;}
+[data-theme="dark"] .wrong-box .wb-title{color:#FF9F9F;}
+.wrong-box .wb-list{font-size:.74rem;line-height:1.7;color:var(--text);}
+.wrong-box .wb-list del{color:var(--red-dark);font-weight:600;}
+.wrong-box .wb-list ins{text-decoration:none;color:var(--green-dark);font-weight:600;}
+[data-theme="dark"] .wrong-box .wb-list del{color:#FF9F9F;}
+[data-theme="dark"] .wrong-box .wb-list ins{color:#6FE8A8;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .coll-grid{grid-template-columns:1fr;}
+  .contrast-row{grid-template-columns:1fr;gap:4px;text-align:left!important;}
+  .contrast-row .cr-left{text-align:left;}
+  .contrast-row .cr-vs{display:none;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/collocations.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Collocations <span class="accent">Reference</span></h1>
+<p class="intro">Words that naturally go together. You don't "do a mistake" &mdash; you "make a mistake." Learn the right combinations.</p>
+
+<!-- MAKE vs DO -->
+<h2>&#128308; make vs do</h2>
+
+<div class="contrast-box">
+  <div class="contrast-title">Key difference</div>
+  <div class="contrast-row"><span class="cr-left"><strong>make</strong> = create / produce</span><span class="cr-vs">vs</span><span class="cr-right"><strong>do</strong> = perform / complete</span></div>
+  <div class="contrast-row"><span class="cr-left">Results / new things</span><span class="cr-vs">vs</span><span class="cr-right">Tasks / obligations</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">make</span><span class="vh-meaning">Creating, producing, causing</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">a mistake</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">a decision</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">money</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">progress</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">a plan</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">an effort</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">noise</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">a promise</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">a suggestion</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">sure</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">friends</span></div>
+  <div class="coll-chip"><span class="cc-verb">make</span><span class="cc-noun">a phone call</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">do</span><span class="vh-meaning">Tasks, work, completing activities</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">homework</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">the dishes</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">a favor</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">business</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">exercise</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">research</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">your best</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">damage</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">the laundry</span></div>
+  <div class="coll-chip"><span class="cc-verb">do</span><span class="cc-noun">well / badly</span></div>
+</div>
+
+<!-- HAVE vs TAKE -->
+<h2>&#128994; have vs take</h2>
+
+<div class="verb-head"><span class="vh-word">have</span><span class="vh-meaning">Experiences, food/drink, situations</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">breakfast/lunch</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a shower (BrE)</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a good time</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a problem</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">an idea</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a conversation</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a look</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">fun</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">take</span><span class="vh-meaning">Actions, transport, time</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a photo</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a shower (AmE)</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a break</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a risk</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">notes</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a bus/taxi</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">time</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">turns</span></div>
+</div>
+
+<!-- GET vs GIVE -->
+<h2>&#128995; get vs give</h2>
+
+<div class="verb-head"><span class="vh-word">get</span><span class="vh-meaning">Receive, become, obtain</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">a job</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">ready</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">lost</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">angry/tired</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">married</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">better/worse</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">give</span><span class="vh-meaning">Transfer, provide</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">advice</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">permission</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">a speech</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">sb a hand</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">an answer</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">priority</span></div>
+</div>
+
+<!-- PAY / KEEP / SAVE -->
+<h2>&#128312; pay / keep / save</h2>
+
+<div class="verb-head"><span class="vh-word">pay</span><span class="vh-meaning">Money, attention, consequences</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">attention</span></div>
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">a compliment</span></div>
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">a visit</span></div>
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">the price</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">keep</span><span class="vh-meaning">Continue, maintain a state</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">a promise</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">calm</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">a secret</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">in touch</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">a record</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">save</span><span class="vh-meaning">Rescue, preserve, accumulate</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">time</span></div>
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">money</span></div>
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">energy</span></div>
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">someone's life</span></div>
+</div>
+
+<!-- COMMON MISTAKES -->
+<div class="wrong-box">
+  <div class="wb-title">&#10060; Common mistakes</div>
+  <div class="wb-list">
+    <del>do a mistake</del> &rarr; <ins>make a mistake</ins><br>
+    <del>make homework</del> &rarr; <ins>do homework</ins><br>
+    <del>do a decision</del> &rarr; <ins>make a decision</ins><br>
+    <del>make exercise</del> &rarr; <ins>do exercise</ins><br>
+    <del>take breakfast</del> &rarr; <ins>have breakfast</ins><br>
+    <del>do a photo</del> &rarr; <ins>take a photo</ins>
+  </div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/collocations.html">&larr; Practice collocations</a>
+</footer>
+
+</div>
+</body>
+</html>

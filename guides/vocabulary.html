@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary Reference Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237B5EA7'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#7C5AF6;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EEE9FE;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#5A3BC4;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#2a1a3d;--green-light:#1a3d2a;--yellow-light:#3d3510;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 480px at 50% -8%, rgba(124,90,246,.15) 0%, rgba(124,90,246,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(124,90,246,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F8F6FE 55%, #EDE7FB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(124,90,246,.08) 1px, transparent 1.5px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:24px;line-height:1.6;}
+
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;margin:26px 0 4px;display:flex;align-items:center;gap:8px;}
+.h2-sub{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:10px;}
+
+.coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:10px 0 18px;}
+.coll-chip{
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 12px;font-size:.76rem;transition:border-color .2s;
+}
+.coll-chip:hover{border-color:var(--blue);}
+.coll-chip .cc-term{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue-dark);}
+[data-theme="dark"] .coll-chip .cc-term{color:#C9B6FF;}
+.coll-chip .cc-es{font-size:.68rem;color:var(--muted);font-style:italic;}
+.coll-chip .cc-meaning{font-size:.68rem;color:var(--text);flex-basis:100%;}
+
+.jump-nav{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 8px;}
+.jump-link{font-size:.66rem;font-weight:700;padding:5px 10px;border-radius:50px;background:var(--blue-light);color:var(--blue-dark);text-decoration:none;}
+[data-theme="dark"] .jump-link{color:#C9B6FF;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){.page{padding:14px 12px 50px;}.coll-grid{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/vocabulary.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Vocabulary <span class="accent">Reference</span></h1>
+<p class="intro">A curated tour through the 22 vocabulary sets in Vocabulary Match — body, food, idioms, advanced words, and everyday expressions.</p>
+
+<div class="jump-nav">
+  <a class="jump-link" href="#body-food">Body &amp; Food</a>
+  <a class="jump-link" href="#time-seasons">Time &amp; Seasons</a>
+  <a class="jump-link" href="#idioms">Idioms</a>
+  <a class="jump-link" href="#advanced">Advanced Words</a>
+  <a class="jump-link" href="#social">Social &amp; Everyday</a>
+</div>
+
+<h2 id="body-food">&#129384; Body, Health &amp; Food</h2>
+<div class="h2-sub">Body Parts &bull; Cooking &bull; Food &amp; Drink (C1) &bull; Health Idioms</div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-term">stubble</span><span class="cc-es">barba incipiente</span></div>
+  <div class="coll-chip"><span class="cc-term">complexion</span><span class="cc-es">tez / cutis</span></div>
+  <div class="coll-chip"><span class="cc-term">savoury</span><span class="cc-es">salado</span></div>
+  <div class="coll-chip"><span class="cc-term">succulent</span><span class="cc-es">jugoso</span></div>
+  <div class="coll-chip"><span class="cc-term">to marinate</span><span class="cc-es">marinar</span></div>
+  <div class="coll-chip"><span class="cc-term">mouth-watering</span><span class="cc-es">que hace agua la boca</span></div>
+  <div class="coll-chip"><span class="cc-term">on the mend</span><span class="cc-es">mejorando</span></div>
+  <div class="coll-chip"><span class="cc-term">fit as a fiddle</span><span class="cc-es">en excelente forma</span></div>
+  <div class="coll-chip"><span class="cc-term">a bitter pill to swallow</span><span class="cc-es">difícil de aceptar</span></div>
+</div>
+
+<h2 id="time-seasons">&#9200; Time, Seasons &amp; Routine</h2>
+<div class="h2-sub">Time of Day &bull; Weather &bull; Seasons &bull; Daily Routine (C1)</div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-term">dawn / dusk</span><span class="cc-es">amanecer / anochecer</span></div>
+  <div class="coll-chip"><span class="cc-term">equinox</span><span class="cc-es">equinoccio</span></div>
+  <div class="coll-chip"><span class="cc-term">hit the snooze button</span><span class="cc-es">posponer la alarma</span></div>
+  <div class="coll-chip"><span class="cc-term">commute</span><span class="cc-es">trayecto al trabajo</span></div>
+  <div class="coll-chip"><span class="cc-term">unwind</span><span class="cc-es">relajarse</span></div>
+  <div class="coll-chip"><span class="cc-term">power nap</span><span class="cc-es">siesta corta</span></div>
+  <div class="coll-chip"><span class="cc-term">night owl</span><span class="cc-es">ave nocturna</span></div>
+  <div class="coll-chip"><span class="cc-term">on autopilot</span><span class="cc-es">en piloto automático</span></div>
+</div>
+
+<h2 id="idioms">&#128173; Idioms</h2>
+<div class="h2-sub">General Idioms &bull; Body Idioms &bull; Nature &amp; Spring &bull; Sound Native</div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-term">break the ice</span><span class="cc-es">romper el hielo</span></div>
+  <div class="coll-chip"><span class="cc-term">spill the beans</span><span class="cc-es">soltar la sopa</span></div>
+  <div class="coll-chip"><span class="cc-term">keep an eye on</span><span class="cc-es">vigilar</span></div>
+  <div class="coll-chip"><span class="cc-term">get cold feet</span><span class="cc-es">acobardarse</span></div>
+  <div class="coll-chip"><span class="cc-term">see eye to eye</span><span class="cc-es">estar de acuerdo</span></div>
+  <div class="coll-chip"><span class="cc-term">fresh as a daisy</span><span class="cc-es">fresco/descansado</span></div>
+  <div class="coll-chip"><span class="cc-term">no spring chicken</span><span class="cc-es">no ser joven</span></div>
+  <div class="coll-chip"><span class="cc-term">the ball is in your court</span><span class="cc-es">la decisión es tuya</span></div>
+  <div class="coll-chip"><span class="cc-term">on cloud nine</span><span class="cc-es">muy feliz</span></div>
+  <div class="coll-chip"><span class="cc-term">a blessing in disguise</span><span class="cc-es">una bendición disfrazada</span></div>
+  <div class="coll-chip"><span class="cc-term">once in a blue moon</span><span class="cc-es">muy raramente</span></div>
+</div>
+
+<h2 id="advanced">&#128640; Advanced Words &amp; Phrases</h2>
+<div class="h2-sub">Because Alternatives &bull; Advanced Verbs &amp; Phrases &bull; Personality &bull; Same Word/Different Meaning &bull; Clothing</div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-term">due to / owing to</span><span class="cc-es">debido a</span></div>
+  <div class="coll-chip"><span class="cc-term">seeing as</span><span class="cc-es">visto que</span></div>
+  <div class="coll-chip"><span class="cc-term">alleviate</span><span class="cc-es">aliviar</span></div>
+  <div class="coll-chip"><span class="cc-term">exacerbate</span><span class="cc-es">agravar</span></div>
+  <div class="coll-chip"><span class="cc-term">at the end of the day</span><span class="cc-es">al fin y al cabo</span></div>
+  <div class="coll-chip"><span class="cc-term">by and large</span><span class="cc-es">en general</span></div>
+  <div class="coll-chip"><span class="cc-term">meticulous</span><span class="cc-es">meticuloso</span></div>
+  <div class="coll-chip"><span class="cc-term">resilient</span><span class="cc-es">resiliente</span></div>
+  <div class="coll-chip"><span class="cc-term">bank</span><span class="cc-meaning">bank (money) / bank (river)</span></div>
+  <div class="coll-chip"><span class="cc-term">match</span><span class="cc-meaning">fire stick / game / go well with</span></div>
+  <div class="coll-chip"><span class="cc-term">silhouette</span><span class="cc-es">silueta</span></div>
+  <div class="coll-chip"><span class="cc-term">impeccable</span><span class="cc-es">impecable</span></div>
+</div>
+
+<h2 id="social">&#127881; Social &amp; Everyday</h2>
+<div class="h2-sub">"Said" Alternatives &bull; Never Use "Very" &bull; Social Expressions &bull; Telephone English &bull; Sounding Natural &bull; Hobbies &bull; Rhyming Reduplication &bull; Eggcorns</div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-term">whispered</span><span class="cc-es">susurró</span></div>
+  <div class="coll-chip"><span class="cc-term">exclaimed</span><span class="cc-es">exclamó</span></div>
+  <div class="coll-chip"><span class="cc-term">exhausted</span><span class="cc-meaning">= very tired</span></div>
+  <div class="coll-chip"><span class="cc-term">furious</span><span class="cc-meaning">= very angry</span></div>
+  <div class="coll-chip"><span class="cc-term">snowed under</span><span class="cc-es">agobiado de trabajo</span></div>
+  <div class="coll-chip"><span class="cc-term">I'll put you through</span><span class="cc-es">le paso la llamada</span></div>
+  <div class="coll-chip"><span class="cc-term">bear with me</span><span class="cc-es">un momento, por favor</span></div>
+  <div class="coll-chip"><span class="cc-term">no worries</span><span class="cc-es">no hay problema</span></div>
+  <div class="coll-chip"><span class="cc-term">not my cup of tea</span><span class="cc-es">no es lo mío</span></div>
+  <div class="coll-chip"><span class="cc-term">to dabble in</span><span class="cc-es">practicar sin profundidad</span></div>
+  <div class="coll-chip"><span class="cc-term">chit-chat</span><span class="cc-es">charla informal</span></div>
+  <div class="coll-chip"><span class="cc-term">couldn't care less</span><span class="cc-meaning">correct (not "could care less")</span></div>
+  <div class="coll-chip"><span class="cc-term">moot point</span><span class="cc-meaning">correct (not "mute point")</span></div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/vocabulary.html">&larr; Practice vocabulary</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -115,5 +115,188 @@ export const CATEGORIES = {
       { sentence: "We're going to ___ the football match.", correct: "watch", explain: "Eventos deportivos con atención prolongada → watch." },
       { sentence: "I ___ something strange in the garden.", correct: "saw", explain: "Percepción espontánea (no buscada) → see/saw." },
     ]
+  },
+  'less-fewer': {
+    label: 'Less / Fewer',
+    icon: '📉',
+    pairs: ['less', 'fewer'],
+    items: [
+      { sentence: "There are ___ people here today than yesterday.", correct: "fewer", explain: "'Fewer' con sustantivos contables: fewer people, fewer cars." },
+      { sentence: "I have ___ money than I thought.", correct: "less", explain: "'Less' con sustantivos incontables: less money, less time." },
+      { sentence: "She eats ___ sugar now.", correct: "less", explain: "'Sugar' es incontable → less." },
+      { sentence: "We need ___ cars on the road.", correct: "fewer", explain: "'Cars' es contable → fewer." },
+      { sentence: "He has ___ patience than his brother.", correct: "less", explain: "'Patience' es incontable → less." },
+      { sentence: "There were ___ mistakes in this essay.", correct: "fewer", explain: "'Mistakes' es contable → fewer." },
+      { sentence: "I drink ___ coffee these days.", correct: "less", explain: "'Coffee' es incontable → less." },
+      { sentence: "This year, ___ students signed up.", correct: "fewer", explain: "'Students' es contable → fewer." }
+    ]
+  },
+  'me-i': {
+    label: 'Me / I',
+    icon: '🙋',
+    pairs: ['me', 'I'],
+    items: [
+      { sentence: "My friend and ___ went to the cinema.", correct: "I", explain: "Sujeto de la oración → 'I' (nunca 'me and my friend' como sujeto formal)." },
+      { sentence: "She gave the book to my friend and ___.", correct: "me", explain: "Objeto (después de 'to') → 'me'." },
+      { sentence: "He and ___ are best friends.", correct: "I", explain: "Sujeto de la oración → 'I'." },
+      { sentence: "Between you and ___, I think she's right.", correct: "me", explain: "Después de preposición ('between') → 'me'." },
+      { sentence: "My sister and ___ love to travel.", correct: "I", explain: "Sujeto de la oración → 'I'." },
+      { sentence: "Can you help my brother and ___?", correct: "me", explain: "Objeto del verbo 'help' → 'me'." },
+      { sentence: "It was my colleague and ___ who finished the project.", correct: "I", explain: "Sujeto → 'I'." },
+      { sentence: "This gift is for you and ___.", correct: "me", explain: "Después de preposición ('for') → 'me'." }
+    ]
+  },
+  'who-whom': {
+    label: 'Who / Whom',
+    icon: '❓',
+    pairs: ['who', 'whom'],
+    items: [
+      { sentence: "Do you know ___ is coming to the party?", correct: "who", explain: "'Who' = sujeto del verbo 'is coming'." },
+      { sentence: "To ___ should I address this letter?", correct: "whom", explain: "'Whom' = objeto de preposición ('to')." },
+      { sentence: "Tell me ___ you invited.", correct: "whom", explain: "'Whom' = objeto del verbo 'invited'." },
+      { sentence: "The man ___ called earlier left a message.", correct: "who", explain: "'Who' = sujeto de 'called'." },
+      { sentence: "For ___ are these flowers?", correct: "whom", explain: "'Whom' = objeto de preposición ('for')." },
+      { sentence: "I wonder ___ won the race.", correct: "who", explain: "'Who' = sujeto de 'won'." },
+      { sentence: "With ___ are you going?", correct: "whom", explain: "'Whom' = objeto de preposición ('with')." },
+      { sentence: "She's the one ___ helped me.", correct: "who", explain: "'Who' = sujeto de 'helped'." }
+    ]
+  },
+  'affect-effect': {
+    label: 'Affect / Effect',
+    icon: '🔄',
+    pairs: ['affect', 'effect'],
+    items: [
+      { sentence: "The weather can ___ your mood.", correct: "affect", explain: "'Affect' es normalmente verbo: influir en algo." },
+      { sentence: "The new policy had a big ___ on sales.", correct: "effect", explain: "'Effect' es normalmente sustantivo: el resultado." },
+      { sentence: "Loud noise can ___ your hearing.", correct: "affect", explain: "'Affect' (verbo) = afectar/influir." },
+      { sentence: "The medicine had no ___ at all.", correct: "effect", explain: "'Effect' (sustantivo) = efecto/resultado." },
+      { sentence: "Stress can ___ your health.", correct: "affect", explain: "'Affect' (verbo) = afectar." },
+      { sentence: "What ___ did the storm have on the city?", correct: "effect", explain: "'Effect' (sustantivo) = efecto." }
+    ]
+  },
+  'still-already-just-yet': {
+    label: 'Still / Already / Just / Yet',
+    icon: '⏱️',
+    pairs: ['still', 'already', 'just', 'yet'],
+    items: [
+      { sentence: "Have you finished ___?", correct: "yet", explain: "'Yet' en preguntas y negativas = todavía/ya (¿ya terminaste?)." },
+      { sentence: "I've ___ eaten, thanks.", correct: "already", explain: "'Already' = ya, antes de lo esperado." },
+      { sentence: "Is she ___ working here?", correct: "still", explain: "'Still' = todavía, una situación que continúa." },
+      { sentence: "I've ___ arrived — give me a minute.", correct: "just", explain: "'Just' = hace muy poco tiempo." },
+      { sentence: "We haven't decided ___.", correct: "yet", explain: "'Yet' en negativas = todavía no." },
+      { sentence: "He's ___ asleep — don't wake him.", correct: "still", explain: "'Still' = una situación que continúa sin cambios." },
+      { sentence: "I can't believe you've ___ finished the whole book!", correct: "already", explain: "'Already' = sorpresa, antes de lo esperado." },
+      { sentence: "She's ___ left the office.", correct: "just", explain: "'Just' = hace un momento." },
+      { sentence: "Don't leave ___ — I need to talk to you.", correct: "yet", explain: "'Yet' = todavía no (ahora mismo)." },
+      { sentence: "Are you ___ here? I thought you'd gone.", correct: "still", explain: "'Still' = continúa la misma situación." }
+    ]
+  },
+  'is-are': {
+    label: 'Is / Are',
+    icon: '🔢',
+    pairs: ['is', 'are'],
+    items: [
+      { sentence: "There ___ a lot of traffic today.", correct: "is", explain: "'Traffic' es incontable/singular → is." },
+      { sentence: "My glasses ___ on the table.", correct: "are", explain: "'Glasses' se trata como plural → are." },
+      { sentence: "The news ___ very worrying.", correct: "is", explain: "'News' parece plural pero es singular → is." },
+      { sentence: "Everybody ___ welcome to join.", correct: "is", explain: "'Everybody/everyone' es singular → is." },
+      { sentence: "The team ___ playing really well this season.", correct: "is", explain: "'Team' como grupo unido → is (inglés británico también acepta 'are')." },
+      { sentence: "Ten dollars ___ too much for this.", correct: "is", explain: "Cantidades de dinero como suma total → is." },
+      { sentence: "The police ___ investigating the case.", correct: "are", explain: "'Police' siempre se trata como plural → are." },
+      { sentence: "Neither of the answers ___ correct.", correct: "is", explain: "'Neither of' + sustantivo plural → verbo singular is." }
+    ]
+  },
+  'there-their-theyre': {
+    label: "There / Their / They're",
+    icon: '🏠',
+    pairs: ['there', 'their', "they're"],
+    items: [
+      { sentence: "Put the box over ___.", correct: "there", explain: "'There' = lugar (adverbio de lugar)." },
+      { sentence: "___ house is on the corner.", correct: "their", explain: "'Their' = posesivo (de ellos)." },
+      { sentence: "___ coming to the party tonight.", correct: "they're", explain: "'They're' = contracción de 'they are'." },
+      { sentence: "___ isn't much time left.", correct: "there", explain: "'There' + is/are/isn't = existencia." },
+      { sentence: "I saw ___ new car yesterday.", correct: "their", explain: "'Their' = posesivo antes de un sustantivo." },
+      { sentence: "___ always late to meetings.", correct: "they're", explain: "'They're' = 'they are' + adjetivo." },
+      { sentence: "We left the keys over ___.", correct: "there", explain: "'There' = lugar." },
+      { sentence: "___ dog barks all night.", correct: "their", explain: "'Their' = posesivo." }
+    ]
+  },
+  'your-youre': {
+    label: "Your / You're",
+    icon: '👤',
+    pairs: ['your', "you're"],
+    items: [
+      { sentence: "Is this ___ bag?", correct: "your", explain: "'Your' = posesivo (de ti)." },
+      { sentence: "___ going to love this movie.", correct: "you're", explain: "'You're' = contracción de 'you are'." },
+      { sentence: "Don't forget ___ passport.", correct: "your", explain: "'Your' + sustantivo = posesivo." },
+      { sentence: "___ right, I made a mistake.", correct: "you're", explain: "'You're' = 'you are' + adjetivo." },
+      { sentence: "What's ___ favourite colour?", correct: "your", explain: "'Your' = posesivo." },
+      { sentence: "___ doing a great job.", correct: "you're", explain: "'You're' = 'you are' + gerundio." }
+    ]
+  },
+  'its-its': {
+    label: "Its / It's",
+    icon: '🐾',
+    pairs: ['its', "it's"],
+    items: [
+      { sentence: "The dog wagged ___ tail.", correct: "its", explain: "'Its' (sin apóstrofe) = posesivo." },
+      { sentence: "___ raining again.", correct: "it's", explain: "'It's' = contracción de 'it is'." },
+      { sentence: "The company changed ___ policy.", correct: "its", explain: "'Its' = posesivo." },
+      { sentence: "___ been a long day.", correct: "it's", explain: "'It's' = 'it has' (contracción)." },
+      { sentence: "Every dog has ___ day.", correct: "its", explain: "'Its' = posesivo (refrán)." },
+      { sentence: "___ too late to cancel now.", correct: "it's", explain: "'It's' = 'it is'." }
+    ]
+  },
+  'principal-principle': {
+    label: 'Principal / Principle',
+    icon: '🏫',
+    pairs: ['principal', 'principle'],
+    items: [
+      { sentence: "The school ___ gave a speech.", correct: "principal", explain: "'Principal' (sustantivo) = director de un colegio." },
+      { sentence: "Honesty is her guiding ___.", correct: "principle", explain: "'Principle' = un valor o regla fundamental." },
+      { sentence: "That's my ___ concern about the plan.", correct: "principal", explain: "'Principal' (adjetivo) = principal, más importante." },
+      { sentence: "He refused on ___ .", correct: "principle", explain: "'On principle' = por una cuestión de valores." },
+      { sentence: "She was called to the ___'s office.", correct: "principal", explain: "'Principal' = director/a de la escuela." },
+      { sentence: "The basic ___ of physics is simple.", correct: "principle", explain: "'Principle' = una regla o ley fundamental." }
+    ]
+  },
+  'complement-compliment': {
+    label: 'Complement / Compliment',
+    icon: '💬',
+    pairs: ['complement', 'compliment'],
+    items: [
+      { sentence: "She gave me a nice ___ on my work.", correct: "compliment", explain: "'Compliment' = un elogio, algo bonito que se dice." },
+      { sentence: "This wine will ___ the meal perfectly.", correct: "complement", explain: "'Complement' (verbo) = complementar, combinar bien con algo." },
+      { sentence: "Thank you for the ___, that's very kind.", correct: "compliment", explain: "'Compliment' = un cumplido." },
+      { sentence: "The two colours ___ each other beautifully.", correct: "complement", explain: "'Complement' = complementarse mutuamente." },
+      { sentence: "He paid her a genuine ___.", correct: "compliment", explain: "'Compliment' = un halago." },
+      { sentence: "These skills ___ the rest of the team.", correct: "complement", explain: "'Complement' = añadir algo que hace mejor el conjunto." }
+    ]
+  },
+  'desert-dessert': {
+    label: 'Desert / Dessert',
+    icon: '🍰',
+    pairs: ['desert', 'dessert'],
+    items: [
+      { sentence: "The Sahara is a huge ___.", correct: "desert", explain: "'Desert' (una 'S') = desierto." },
+      { sentence: "What's for ___ tonight?", correct: "dessert", explain: "'Dessert' (dos 'S') = postre." },
+      { sentence: "Camels are well adapted to the ___.", correct: "desert", explain: "'Desert' = zona árida y seca." },
+      { sentence: "She ordered chocolate cake for ___.", correct: "dessert", explain: "'Dessert' = el postre después de comer." },
+      { sentence: "Don't ___ your friends when they need you.", correct: "desert", explain: "'Desert' (verbo) = abandonar." },
+      { sentence: "This restaurant has an amazing ___ menu.", correct: "dessert", explain: "'Dessert' = postre." }
+    ]
+  },
+  'weather-whether': {
+    label: 'Weather / Whether',
+    icon: '🌦️',
+    pairs: ['weather', 'whether'],
+    items: [
+      { sentence: "The ___ is lovely today.", correct: "weather", explain: "'Weather' = el clima." },
+      { sentence: "I don't know ___ to go or stay.", correct: "whether", explain: "'Whether' = si (para expresar una alternativa)." },
+      { sentence: "We'll go for a walk if the ___ is nice.", correct: "weather", explain: "'Weather' = el estado del tiempo." },
+      { sentence: "She asked ___ I was coming to the party.", correct: "whether", explain: "'Whether' = si (introduce una duda)." },
+      { sentence: "Check the ___ forecast before you leave.", correct: "weather", explain: "'Weather' = el clima." },
+      { sentence: "It doesn't matter ___ we win or lose.", correct: "whether", explain: "'Whether...or' = ya sea que...o." }
+    ]
   }
 };

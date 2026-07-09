@@ -159,8 +159,8 @@
 .quiz-opt.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
 .quiz-opt.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
 .quiz-opt.disabled { cursor: default; opacity: .65; }
-[data-theme="dark"] .quiz-opt.correct { color: #6FE8A8; }
-[data-theme="dark"] .quiz-opt.wrong { color: #FF9F9F; }
+[data-theme="dark"] .quiz-opt.correct { background: rgba(39, 134, 90, 0.35); border-color: #6FE8A8; color: #6FE8A8; box-shadow: 0 0 0 1px rgba(111, 232, 168, 0.3); }
+[data-theme="dark"] .quiz-opt.wrong { background: rgba(192, 57, 43, 0.35); border-color: #FF9F9F; color: #FF9F9F; box-shadow: 0 0 0 1px rgba(255, 159, 159, 0.3); }
 
 /* ─── PAIR MATCH ─── */
 .pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; width: 100%; max-width: 500px; }

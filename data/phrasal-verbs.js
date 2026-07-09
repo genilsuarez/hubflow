@@ -90,5 +90,73 @@ export const CATEGORIES = {
       { verb: "head off",    particle: "off",   base: "head",    es: "irse / dirigirse",    example: "We should head off before dark.",           gap: "We should ___ ___ before dark." },
       { verb: "stop over",   particle: "over",  base: "stop",    es: "hacer escala",        example: "We stopped over in Dubai.",                gap: "We ___ ___ in Dubai." },
     ]
+  },
+  getVerbs: {
+    label: "'Get' Verbs",
+    icon: '🎯',
+    items: [
+      { verb: "get up",      particle: "up",     base: "get", es: "levantarse",              example: "I get up at 6 every day.",              gap: "I ___ ___ at 6 every day." },
+      { verb: "get on",      particle: "on",     base: "get", es: "llevarse bien / subirse",  example: "We get on really well.",                gap: "We ___ ___ really well." },
+      { verb: "get by",      particle: "by",     base: "get", es: "arreglárselas",            example: "We get by on a small budget.",          gap: "We ___ ___ on a small budget." },
+      { verb: "get over",    particle: "over",   base: "get", es: "superar (algo)",           example: "It took months to get over the flu.",   gap: "It took months to ___ ___ the flu." },
+      { verb: "get through", particle: "through",base: "get", es: "lograr terminar / superar", example: "I don't know how I'll get through this week.", gap: "I don't know how I'll ___ ___ this week." },
+      { verb: "get away",    particle: "away",   base: "get", es: "escaparse",                example: "We need to get away for the weekend.",  gap: "We need to ___ ___ for the weekend." },
+      { verb: "get around",  particle: "around", base: "get", es: "moverse / evitar (un problema)", example: "It's easy to get around the city by bike.", gap: "It's easy to ___ ___ the city by bike." },
+      { verb: "get back",    particle: "back",   base: "get", es: "regresar",                 example: "What time did you get back?",           gap: "What time did you ___ ___?" },
+      { verb: "get down to", particle: "down to",base: "get", es: "ponerse en serio con algo", example: "Let's get down to business.",           gap: "Let's ___ ___ ___ business." },
+      { verb: "get out of",  particle: "out of", base: "get", es: "librarse de (una obligación)", example: "He got out of doing the dishes.",     gap: "He ___ ___ ___ doing the dishes." },
+      { verb: "get across",  particle: "across", base: "get", es: "hacer entender (una idea)", example: "I couldn't get my point across.",       gap: "I couldn't ___ my point ___." },
+      { verb: "get together",particle: "together",base: "get",es: "reunirse",                 example: "Let's get together this weekend.",      gap: "Let's ___ ___ this weekend." },
+    ]
+  },
+  food: {
+    label: 'Food',
+    icon: '🍽️',
+    items: [
+      { verb: "eat out",     particle: "out",   base: "eat",     es: "comer fuera",              example: "We eat out every Friday.",              gap: "We ___ ___ every Friday." },
+      { verb: "dish up",     particle: "up",    base: "dish",    es: "servir (comida)",           example: "She dished up dinner for everyone.",    gap: "She ___ ___ dinner for everyone." },
+      { verb: "warm up",     particle: "up",    base: "warm",    es: "calentar (comida)",         example: "Can you warm up the soup?",             gap: "Can you ___ ___ the soup?" },
+      { verb: "eat up",      particle: "up",    base: "eat",     es: "comer todo",                example: "Eat up, it's getting cold!",            gap: "___ ___, it's getting cold!" },
+      { verb: "wolf down",   particle: "down",  base: "wolf",    es: "devorar (comer rápido)",    example: "He wolfed down his lunch in five minutes.", gap: "He ___ ___ his lunch in five minutes." },
+      { verb: "cut down on", particle: "down on",base: "cut",    es: "reducir (consumo)",         example: "I'm cutting down on sugar.",            gap: "I'm ___ ___ ___ sugar." },
+      { verb: "fill up",     particle: "up",    base: "fill",    es: "llenarse (de comida)",      example: "That meal really filled me up.",        gap: "That meal really ___ me ___." },
+      { verb: "polish off",  particle: "off",   base: "polish",  es: "terminarse (comida) rápido", example: "They polished off the whole pizza.",   gap: "They ___ ___ the whole pizza." },
+      { verb: "live on",     particle: "on",    base: "live",    es: "alimentarse principalmente de", example: "Students often live on instant noodles.", gap: "Students often ___ ___ instant noodles." },
+      { verb: "whip up",     particle: "up",    base: "whip",    es: "preparar algo rápido",      example: "She whipped up a quick dinner.",        gap: "She ___ ___ a quick dinner." },
+    ]
+  },
+  turn: {
+    label: "'Turn' Verbs",
+    icon: '🔄',
+    items: [
+      { verb: "turn up",     particle: "up",   base: "turn", es: "aparecer / subir volumen",     example: "Turn up the music!",                 gap: "___ ___ the music!" },
+      { verb: "turn down",   particle: "down", base: "turn", es: "rechazar / bajar volumen",     example: "Turn down the TV, please.",          gap: "___ ___ the TV, please." },
+      { verb: "turn into",   particle: "into", base: "turn", es: "convertirse en",               example: "The caterpillar turned into a butterfly.", gap: "The caterpillar ___ ___ a butterfly." },
+      { verb: "turn out",    particle: "out",  base: "turn", es: "resultar (ser)",               example: "The party turned out great.",        gap: "The party ___ ___ great." },
+      { verb: "turn back",   particle: "back", base: "turn", es: "regresar / dar la vuelta",     example: "It's too dangerous, let's turn back.", gap: "It's too dangerous, let's ___ ___." },
+      { verb: "turn over",   particle: "over", base: "turn", es: "voltear",                      example: "Turn over the pancake now.",         gap: "___ ___ the pancake now." },
+      { verb: "turn away",   particle: "away", base: "turn", es: "rechazar la entrada a alguien", example: "They turned him away at the door.", gap: "They ___ him ___ at the door." },
+      { verb: "turn against", particle: "against", base: "turn", es: "ponerse en contra de",   example: "His friends turned against him.",    gap: "His friends ___ ___ him." },
+      { verb: "turn off",    particle: "off",  base: "turn", es: "apagar / desagradar",          example: "That comment really turned me off.", gap: "That comment really ___ me ___." },
+      { verb: "turn to",     particle: "to",   base: "turn", es: "recurrir a",                   example: "She turned to her sister for advice.", gap: "She ___ ___ her sister for advice." },
+    ]
+  },
+  advanced: {
+    label: 'Advanced',
+    icon: '🚀',
+    items: [
+      { verb: "boil down to",  particle: "down to", base: "boil",  es: "reducirse a (la esencia)",  example: "It all boils down to trust.",         gap: "It all ___ ___ ___ trust." },
+      { verb: "chip in",       particle: "in",      base: "chip",  es: "contribuir (dinero/ayuda)",  example: "We all chipped in for the gift.",     gap: "We all ___ ___ for the gift." },
+      { verb: "iron out",      particle: "out",     base: "iron",  es: "resolver (detalles/problemas)", example: "We ironed out the details.",       gap: "We ___ ___ the details." },
+      { verb: "hold off",      particle: "off",     base: "hold",  es: "posponer / esperar",         example: "Let's hold off on the decision.",     gap: "Let's ___ ___ on the decision." },
+      { verb: "own up to",     particle: "up to",   base: "own",   es: "admitir (una culpa)",         example: "He finally owned up to his mistake.", gap: "He finally ___ ___ ___ his mistake." },
+      { verb: "brush up on",   particle: "up on",   base: "brush", es: "repasar / refrescar (una habilidad)", example: "I need to brush up on my French.", gap: "I need to ___ ___ ___ my French." },
+      { verb: "stem from",     particle: "from",    base: "stem",  es: "originarse de",               example: "Her fear stems from a childhood accident.", gap: "Her fear ___ ___ a childhood accident." },
+      { verb: "single out",    particle: "out",     base: "single",es: "señalar / destacar a alguien", example: "The teacher singled her out for praise.", gap: "The teacher ___ her ___ for praise." },
+      { verb: "weigh up",      particle: "up",      base: "weigh", es: "sopesar (opciones)",          example: "We need to weigh up our options.",    gap: "We need to ___ ___ our options." },
+      { verb: "branch out",    particle: "out",     base: "branch",es: "diversificarse / expandirse", example: "The company is branching out into new markets.", gap: "The company is ___ ___ into new markets." },
+      { verb: "hold back",     particle: "back",    base: "hold",  es: "contenerse / reprimir",       example: "She held back her tears.",            gap: "She ___ ___ her tears." },
+      { verb: "live up to",    particle: "up to",   base: "live",  es: "estar a la altura de",        example: "The film lived up to the hype.",      gap: "The film ___ ___ ___ the hype." },
+    ]
   }
 };

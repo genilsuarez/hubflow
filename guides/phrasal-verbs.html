@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phrasal Verbs Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* TYPE BADGES */
+.type-badge{font-size:.58rem;padding:2px 8px;border-radius:50px;font-weight:700;}
+.type-badge.sep{background:var(--green-light);color:var(--green-dark);}
+.type-badge.insep{background:var(--red-light);color:var(--red-dark);}
+.type-badge.intrans{background:var(--purple-light);color:var(--purple);}
+
+/* CATEGORY HEADER */
+.cat-head{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;margin-bottom:10px;
+}
+.cat-head .ch-icon{font-size:1.3rem;}
+.cat-head .ch-name{font-weight:800;font-size:.9rem;}
+.cat-head .ch-count{font-size:.68rem;color:var(--muted);font-weight:600;}
+
+/* PV CARDS */
+.pv-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:24px;}
+.pv-card{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  padding:12px 14px;transition:border-color .2s;
+}
+.pv-card:hover{border-color:var(--blue);}
+.pv-verb{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--blue-dark);white-space:nowrap;}
+[data-theme="dark"] .pv-verb{color:#7AC7FF;}
+.pv-meaning{font-size:.76rem;color:var(--text);}
+.pv-meaning .es{font-size:.68rem;color:var(--muted);font-style:italic;display:block;margin-top:1px;}
+.pv-example{font-size:.68rem;color:var(--ink-soft);font-style:italic;margin-top:2px;}
+
+/* PARTICLE MEANINGS */
+.particle-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:16px 0;
+}
+.particle-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.particle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+.particle-chip{
+  text-align:center;padding:10px;border-radius:10px;border:1.5px solid var(--border);
+}
+.particle-chip .pp-word{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;color:var(--blue-dark);margin-bottom:3px;}
+[data-theme="dark"] .particle-chip .pp-word{color:#7AC7FF;}
+.particle-chip .pp-meaning{font-size:.66rem;color:var(--muted);font-weight:600;line-height:1.4;}
+
+/* SEPARABLE RULE */
+.rule-box{
+  background:var(--yellow-light);border:1.5px solid color-mix(in srgb, var(--yellow) 40%, transparent);
+  border-radius:12px;padding:14px 16px;margin:14px 0;
+}
+.rule-box .rb-title{font-weight:800;font-size:.78rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-box .rb-body{font-size:.76rem;line-height:1.6;color:var(--text);}
+.rule-box .rb-body strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-box .rb-body strong{color:#7AC7FF;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .pv-card{grid-template-columns:1fr;gap:4px;}
+  .particle-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/phrasal-verbs.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Phrasal Verbs <span class="accent">by Category</span></h1>
+<p class="intro">62 essential phrasal verbs organized by topic, with type indicators and meanings.</p>
+
+<!-- PARTICLE MEANINGS -->
+<div class="particle-box">
+  <div class="particle-title">Particle Core Meanings &mdash; The pattern behind phrasal verbs</div>
+  <div class="particle-grid">
+    <div class="particle-chip"><div class="pp-word">up</div><div class="pp-meaning">complete, increase, improve</div></div>
+    <div class="particle-chip"><div class="pp-word">down</div><div class="pp-meaning">decrease, stop, record</div></div>
+    <div class="particle-chip"><div class="pp-word">out</div><div class="pp-meaning">completely, discover, disappear</div></div>
+    <div class="particle-chip"><div class="pp-word">off</div><div class="pp-meaning">disconnect, leave, cancel</div></div>
+    <div class="particle-chip"><div class="pp-word">on</div><div class="pp-meaning">continue, connect</div></div>
+    <div class="particle-chip"><div class="pp-word">in</div><div class="pp-meaning">enter, include</div></div>
+    <div class="particle-chip"><div class="pp-word">back</div><div class="pp-meaning">return, repeat</div></div>
+    <div class="particle-chip"><div class="pp-word">over</div><div class="pp-meaning">review, across, end</div></div>
+  </div>
+</div>
+
+<!-- SEPARABLE RULE -->
+<div class="rule-box">
+  <div class="rb-title">&#128161; Separable vs Inseparable</div>
+  <div class="rb-body">
+    <strong>Separable</strong>: Object can go between verb &amp; particle &mdash; "turn <em>it</em> off" or "turn off the light"<br>
+    <strong>Inseparable</strong>: Object MUST go after the particle &mdash; "look after <em>the kids</em>" (NOT "look the kids after")<br>
+    <strong>Rule</strong>: When the object is a pronoun (it, them, him, her), separable verbs MUST split &mdash; "pick <em>it</em> up" (NOT "pick up it")
+  </div>
+</div>
+
+<!-- EVERYDAY -->
+<div class="cat-head"><span class="ch-icon">&#127968;</span><div><span class="ch-name">Everyday Life</span><span class="ch-count"> &mdash; 18 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">wake up</span><div class="pv-meaning">stop sleeping<span class="es">despertarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">get up</span><div class="pv-meaning">rise from bed<span class="es">levantarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">turn on/off</span><div class="pv-meaning">activate/deactivate<span class="es">encender/apagar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">pick up</span><div class="pv-meaning">lift / collect someone<span class="es">recoger</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">put on</span><div class="pv-meaning">wear clothing<span class="es">ponerse (ropa)</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">take off</span><div class="pv-meaning">remove clothing / depart<span class="es">quitarse / despegar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">throw away</span><div class="pv-meaning">discard<span class="es">tirar/botar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">clean up</span><div class="pv-meaning">tidy<span class="es">limpiar/ordenar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">look for</span><div class="pv-meaning">search<span class="es">buscar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">find out</span><div class="pv-meaning">discover information<span class="es">descubrir/enterarse</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">run out of</span><div class="pv-meaning">have no more left<span class="es">quedarse sin</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">go on</span><div class="pv-meaning">continue<span class="es">continuar</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">come back</span><div class="pv-meaning">return<span class="es">volver</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">sit down</span><div class="pv-meaning">take a seat<span class="es">sentarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">lie down</span><div class="pv-meaning">recline<span class="es">acostarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">set up</span><div class="pv-meaning">arrange / install<span class="es">instalar/configurar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">fill in/out</span><div class="pv-meaning">complete a form<span class="es">rellenar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">look after</span><div class="pv-meaning">take care of<span class="es">cuidar</span></div><span class="type-badge insep">inseparable</span></div>
+</div>
+
+<!-- WORK & STUDY -->
+<div class="cat-head"><span class="ch-icon">&#128188;</span><div><span class="ch-name">Work &amp; Study</span><span class="ch-count"> &mdash; 16 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">give up</span><div class="pv-meaning">stop trying / quit<span class="es">rendirse</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">carry on</span><div class="pv-meaning">continue<span class="es">seguir/continuar</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">hand in</span><div class="pv-meaning">submit work<span class="es">entregar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">work out</span><div class="pv-meaning">solve / exercise<span class="es">resolver / ejercitarse</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">figure out</span><div class="pv-meaning">understand after thinking<span class="es">descifrar/entender</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">put off</span><div class="pv-meaning">postpone<span class="es">posponer</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">go over</span><div class="pv-meaning">review<span class="es">repasar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">look up</span><div class="pv-meaning">search in reference<span class="es">buscar (en diccionario)</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">write down</span><div class="pv-meaning">note on paper<span class="es">apuntar/anotar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">point out</span><div class="pv-meaning">indicate / mention<span class="es">señalar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">take on</span><div class="pv-meaning">accept responsibility<span class="es">asumir</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">bring up</span><div class="pv-meaning">mention a topic<span class="es">mencionar/sacar tema</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">come up with</span><div class="pv-meaning">think of an idea<span class="es">idear/inventar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">keep up with</span><div class="pv-meaning">maintain same pace<span class="es">mantenerse al día</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">deal with</span><div class="pv-meaning">handle a situation<span class="es">lidiar con</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">cut down on</span><div class="pv-meaning">reduce<span class="es">reducir</span></div><span class="type-badge insep">inseparable</span></div>
+</div>
+
+<!-- RELATIONSHIPS -->
+<div class="cat-head"><span class="ch-icon">&#129309;</span><div><span class="ch-name">Relationships</span><span class="ch-count"> &mdash; 14 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">get along</span><div class="pv-meaning">have a good relationship<span class="es">llevarse bien</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">break up</span><div class="pv-meaning">end a relationship<span class="es">terminar (relación)</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">make up</span><div class="pv-meaning">reconcile after a fight<span class="es">reconciliarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">ask out</span><div class="pv-meaning">invite on a date<span class="es">invitar a salir</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">let down</span><div class="pv-meaning">disappoint<span class="es">decepcionar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">cheer up</span><div class="pv-meaning">make happier<span class="es">animar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">calm down</span><div class="pv-meaning">become less upset<span class="es">calmarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">fall out</span><div class="pv-meaning">have an argument<span class="es">pelearse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">grow up</span><div class="pv-meaning">become an adult<span class="es">crecer</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">hang out</span><div class="pv-meaning">spend time casually<span class="es">pasar el rato</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">look up to</span><div class="pv-meaning">admire / respect<span class="es">admirar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">put up with</span><div class="pv-meaning">tolerate<span class="es">tolerar/aguantar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">tell off</span><div class="pv-meaning">scold / reprimand<span class="es">regañar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">stand up for</span><div class="pv-meaning">defend<span class="es">defender</span></div><span class="type-badge insep">inseparable</span></div>
+</div>
+
+<!-- TRAVEL -->
+<div class="cat-head"><span class="ch-icon">&#9992;&#65039;</span><div><span class="ch-name">Travel</span><span class="ch-count"> &mdash; 14 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">set off</span><div class="pv-meaning">begin a journey<span class="es">partir/salir de viaje</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">check in</span><div class="pv-meaning">register at hotel/airport<span class="es">registrarse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">check out</span><div class="pv-meaning">leave hotel / examine<span class="es">salir del hotel / revisar</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">get on/off</span><div class="pv-meaning">board / exit transport<span class="es">subir/bajar (transporte)</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">drop off</span><div class="pv-meaning">deliver someone somewhere<span class="es">dejar (en un lugar)</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">see off</span><div class="pv-meaning">say goodbye at departure<span class="es">despedir</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">get in/out</span><div class="pv-meaning">enter/exit car or taxi<span class="es">subir/bajar (carro)</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">speed up</span><div class="pv-meaning">go faster<span class="es">acelerar</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">slow down</span><div class="pv-meaning">go slower<span class="es">reducir velocidad</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">look around</span><div class="pv-meaning">explore a place<span class="es">explorar/recorrer</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">stop over</span><div class="pv-meaning">stay briefly mid-journey<span class="es">hacer escala</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">turn around</span><div class="pv-meaning">go in opposite direction<span class="es">dar la vuelta</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">hold up</span><div class="pv-meaning">delay / cause a wait<span class="es">retrasar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">call off</span><div class="pv-meaning">cancel<span class="es">cancelar</span></div><span class="type-badge sep">separable</span></div>
+</div>
+
+<div class="cat-head"><span class="ch-icon">&#127919;</span><div><span class="ch-name">'Get' Verbs</span><span class="ch-count"> &mdash; 12 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">get by</span><div class="pv-meaning">manage with what you have<span class="es">arreglárselas</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">get over</span><div class="pv-meaning">recover from<span class="es">superar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">get through</span><div class="pv-meaning">manage to finish/survive<span class="es">lograr terminar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">get away</span><div class="pv-meaning">escape, have a break<span class="es">escaparse</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">get around</span><div class="pv-meaning">move about / avoid a problem<span class="es">moverse / evitar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">get down to</span><div class="pv-meaning">start focusing on<span class="es">ponerse en serio con</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">get out of</span><div class="pv-meaning">avoid an obligation<span class="es">librarse de</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">get across</span><div class="pv-meaning">make an idea understood<span class="es">hacer entender</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">get together</span><div class="pv-meaning">meet socially<span class="es">reunirse</span></div><span class="type-badge insep">intrans</span></div>
+</div>
+
+<div class="cat-head"><span class="ch-icon">&#128293;</span><div><span class="ch-name">Food</span><span class="ch-count"> &mdash; 10 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">eat out</span><div class="pv-meaning">have a meal at a restaurant<span class="es">comer fuera</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">warm up</span><div class="pv-meaning">heat food again<span class="es">calentar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">wolf down</span><div class="pv-meaning">eat quickly<span class="es">devorar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">cut down on</span><div class="pv-meaning">reduce consumption<span class="es">reducir</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">polish off</span><div class="pv-meaning">finish food completely<span class="es">terminarse todo</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">live on</span><div class="pv-meaning">survive mainly on (food)<span class="es">alimentarse de</span></div><span class="type-badge insep">inseparable</span></div>
+</div>
+
+<div class="cat-head"><span class="ch-icon">&#128640;</span><div><span class="ch-name">Advanced</span><span class="ch-count"> &mdash; 12 phrasal verbs</span></div></div>
+<div class="pv-grid">
+  <div class="pv-card"><span class="pv-verb">boil down to</span><div class="pv-meaning">be reducible to the essence<span class="es">reducirse a</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">chip in</span><div class="pv-meaning">contribute money/help<span class="es">contribuir</span></div><span class="type-badge insep">intrans</span></div>
+  <div class="pv-card"><span class="pv-verb">iron out</span><div class="pv-meaning">resolve details/problems<span class="es">resolver</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">own up to</span><div class="pv-meaning">admit fault<span class="es">admitir</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">brush up on</span><div class="pv-meaning">refresh a skill<span class="es">repasar</span></div><span class="type-badge insep">inseparable</span></div>
+  <div class="pv-card"><span class="pv-verb">weigh up</span><div class="pv-meaning">consider options carefully<span class="es">sopesar</span></div><span class="type-badge sep">separable</span></div>
+  <div class="pv-card"><span class="pv-verb">live up to</span><div class="pv-meaning">meet expectations<span class="es">estar a la altura de</span></div><span class="type-badge insep">inseparable</span></div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/phrasal-verbs.html">&larr; Practice phrasal verbs</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Irregular Verbs Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);
+  min-height:100vh;padding:0;transition:color .3s;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);
+}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+
+/* PATTERN SECTIONS */
+.pattern-section{margin-bottom:28px;}
+.pattern-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  padding:10px 14px;border-radius:12px;
+}
+.pattern-header .pat-icon{font-size:1.2rem;}
+.pattern-header .pat-name{font-weight:800;font-size:.9rem;}
+.pattern-header .pat-desc{font-size:.72rem;color:var(--muted);font-weight:600;}
+.pattern-header.p-same{background:var(--blue-light);border:1.5px solid color-mix(in srgb, var(--blue) 30%, transparent);}
+.pattern-header.p-vowel{background:var(--red-light);border:1.5px solid color-mix(in srgb, var(--red) 30%, transparent);}
+.pattern-header.p-mixed{background:var(--purple-light);border:1.5px solid color-mix(in srgb, var(--purple) 30%, transparent);}
+.pattern-header.p-en{background:var(--green-light);border:1.5px solid color-mix(in srgb, var(--green) 30%, transparent);}
+.pattern-header.p-ght{background:var(--orange-light);border:1.5px solid color-mix(in srgb, var(--orange) 30%, transparent);}
+.pattern-header.p-unique{background:var(--yellow-light);border:1.5px solid color-mix(in srgb, var(--yellow) 30%, transparent);}
+.pattern-header.p-teal{background:var(--teal-light);border:1.5px solid color-mix(in srgb, var(--teal) 30%, transparent);}
+
+/* VERB TABLE */
+.verb-table{
+  width:100%;border-collapse:collapse;font-size:.78rem;font-family:'Manrope',sans-serif;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.verb-table th{
+  font-weight:800;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);
+  background:var(--bg);
+}
+.verb-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.verb-table tr:last-child td{border-bottom:none;}
+.verb-table .base{font-weight:700;color:var(--text);}
+.verb-table .past{font-weight:600;color:var(--blue-dark);}
+.verb-table .pp{font-weight:600;color:var(--green-dark);}
+[data-theme="dark"] .verb-table .past{color:#7AC7FF;}
+[data-theme="dark"] .verb-table .pp{color:#6FE8A8;}
+.verb-table .meaning{font-size:.7rem;color:var(--muted);font-style:italic;}
+
+/* MNEMONIC BOX */
+.mnemonic{
+  background:var(--yellow-light);border:1.5px solid color-mix(in srgb, var(--yellow) 40%, transparent);
+  border-radius:12px;padding:14px 16px;margin:12px 0;
+}
+.mnemonic .mn-title{font-weight:800;font-size:.78rem;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.mnemonic .mn-body{font-size:.76rem;color:var(--text);line-height:1.5;}
+
+.guide-footer{
+  margin-top:32px;padding-top:16px;border-top:2px solid var(--border);
+  text-align:center;font-size:.75rem;color:var(--muted);
+}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .verb-table{font-size:.72rem;}
+  .verb-table td,.verb-table th{padding:6px 8px;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/irregular-verbs.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Irregular Verbs <span class="accent">by Pattern</span></h1>
+<p class="intro">90 essential irregular verbs grouped by how they change. Learn the pattern, not individual words.</p>
+
+<!-- PATTERN 1: All same -->
+<section class="pattern-section">
+  <div class="pattern-header p-same">
+    <span class="pat-icon">&#128308;</span>
+    <div><div class="pat-name">A-A-A &mdash; All forms identical</div><div class="pat-desc">No change at all</div></div>
+  </div>
+  <table class="verb-table">
+    <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="base">cut</td><td class="past">cut</td><td class="pp">cut</td><td class="meaning">cortar</td></tr>
+      <tr><td class="base">put</td><td class="past">put</td><td class="pp">put</td><td class="meaning">poner</td></tr>
+      <tr><td class="base">let</td><td class="past">let</td><td class="pp">let</td><td class="meaning">dejar</td></tr>
+      <tr><td class="base">set</td><td class="past">set</td><td class="pp">set</td><td class="meaning">colocar</td></tr>
+      <tr><td class="base">shut</td><td class="past">shut</td><td class="pp">shut</td><td class="meaning">cerrar</td></tr>
+      <tr><td class="base">hit</td><td class="past">hit</td><td class="pp">hit</td><td class="meaning">golpear</td></tr>
+      <tr><td class="base">hurt</td><td class="past">hurt</td><td class="pp">hurt</td><td class="meaning">herir</td></tr>
+      <tr><td class="base">cost</td><td class="past">cost</td><td class="pp">cost</td><td class="meaning">costar</td></tr>
+      <tr><td class="base">quit</td><td class="past">quit</td><td class="pp">quit</td><td class="meaning">dejar/renunciar</td></tr>
+      <tr><td class="base">spread</td><td class="past">spread</td><td class="pp">spread</td><td class="meaning">esparcir</td></tr>
+    </tbody>
+  </table>
+  <div class="mnemonic"><div class="mn-title">&#128161; Mnemonic</div><div class="mn-body">Most A-A-A verbs end in <strong>-t</strong> or <strong>-d</strong>. Think: "already ends in past sound."</div></div>
+</section>
+
+<!-- PATTERN 2: A-B-B (vowel change, past = pp) -->
+<section class="pattern-section">
+  <div class="pattern-header p-vowel">
+    <span class="pat-icon">&#128309;</span>
+    <div><div class="pat-name">A-B-B &mdash; Past = Past Participle</div><div class="pat-desc">Change once, keep it</div></div>
+  </div>
+  <table class="verb-table">
+    <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="base">bring</td><td class="past">brought</td><td class="pp">brought</td><td class="meaning">traer</td></tr>
+      <tr><td class="base">buy</td><td class="past">bought</td><td class="pp">bought</td><td class="meaning">comprar</td></tr>
+      <tr><td class="base">think</td><td class="past">thought</td><td class="pp">thought</td><td class="meaning">pensar</td></tr>
+      <tr><td class="base">teach</td><td class="past">taught</td><td class="pp">taught</td><td class="meaning">enseñar</td></tr>
+      <tr><td class="base">catch</td><td class="past">caught</td><td class="pp">caught</td><td class="meaning">atrapar</td></tr>
+      <tr><td class="base">feel</td><td class="past">felt</td><td class="pp">felt</td><td class="meaning">sentir</td></tr>
+      <tr><td class="base">keep</td><td class="past">kept</td><td class="pp">kept</td><td class="meaning">mantener</td></tr>
+      <tr><td class="base">sleep</td><td class="past">slept</td><td class="pp">slept</td><td class="meaning">dormir</td></tr>
+      <tr><td class="base">leave</td><td class="past">left</td><td class="pp">left</td><td class="meaning">salir/dejar</td></tr>
+      <tr><td class="base">meet</td><td class="past">met</td><td class="pp">met</td><td class="meaning">conocer</td></tr>
+      <tr><td class="base">find</td><td class="past">found</td><td class="pp">found</td><td class="meaning">encontrar</td></tr>
+      <tr><td class="base">have</td><td class="past">had</td><td class="pp">had</td><td class="meaning">tener</td></tr>
+      <tr><td class="base">hear</td><td class="past">heard</td><td class="pp">heard</td><td class="meaning">oír</td></tr>
+      <tr><td class="base">hold</td><td class="past">held</td><td class="pp">held</td><td class="meaning">sostener</td></tr>
+      <tr><td class="base">lose</td><td class="past">lost</td><td class="pp">lost</td><td class="meaning">perder</td></tr>
+      <tr><td class="base">make</td><td class="past">made</td><td class="pp">made</td><td class="meaning">hacer</td></tr>
+      <tr><td class="base">pay</td><td class="past">paid</td><td class="pp">paid</td><td class="meaning">pagar</td></tr>
+      <tr><td class="base">say</td><td class="past">said</td><td class="pp">said</td><td class="meaning">decir</td></tr>
+      <tr><td class="base">sell</td><td class="past">sold</td><td class="pp">sold</td><td class="meaning">vender</td></tr>
+      <tr><td class="base">send</td><td class="past">sent</td><td class="pp">sent</td><td class="meaning">enviar</td></tr>
+      <tr><td class="base">sit</td><td class="past">sat</td><td class="pp">sat</td><td class="meaning">sentarse</td></tr>
+      <tr><td class="base">spend</td><td class="past">spent</td><td class="pp">spent</td><td class="meaning">gastar</td></tr>
+      <tr><td class="base">stand</td><td class="past">stood</td><td class="pp">stood</td><td class="meaning">estar de pie</td></tr>
+      <tr><td class="base">tell</td><td class="past">told</td><td class="pp">told</td><td class="meaning">decir/contar</td></tr>
+      <tr><td class="base">understand</td><td class="past">understood</td><td class="pp">understood</td><td class="meaning">entender</td></tr>
+      <tr><td class="base">win</td><td class="past">won</td><td class="pp">won</td><td class="meaning">ganar</td></tr>
+      <tr><td class="base">get</td><td class="past">got</td><td class="pp">got/gotten</td><td class="meaning">obtener</td></tr>
+      <tr><td class="base">read</td><td class="past">read</td><td class="pp">read</td><td class="meaning">leer (pron. /red/)</td></tr>
+    </tbody>
+  </table>
+  <div class="mnemonic"><div class="mn-title">&#128161; Tip</div><div class="mn-body">This is the <strong>largest group</strong>. Sub-patterns: "-ought" family (bring/buy/think/teach/catch), "-ept/-eft" family (keep/sleep/leave/feel), and vowel shortening (meet&rarr;met, sit&rarr;sat).</div></div>
+</section>
+
+<!-- PATTERN 3: A-B-C (all different) -->
+<section class="pattern-section">
+  <div class="pattern-header p-mixed">
+    <span class="pat-icon">&#128995;</span>
+    <div><div class="pat-name">A-B-C &mdash; All forms different</div><div class="pat-desc">Three distinct forms to learn</div></div>
+  </div>
+  <table class="verb-table">
+    <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="base">be</td><td class="past">was/were</td><td class="pp">been</td><td class="meaning">ser/estar</td></tr>
+      <tr><td class="base">begin</td><td class="past">began</td><td class="pp">begun</td><td class="meaning">empezar</td></tr>
+      <tr><td class="base">break</td><td class="past">broke</td><td class="pp">broken</td><td class="meaning">romper</td></tr>
+      <tr><td class="base">choose</td><td class="past">chose</td><td class="pp">chosen</td><td class="meaning">elegir</td></tr>
+      <tr><td class="base">do</td><td class="past">did</td><td class="pp">done</td><td class="meaning">hacer</td></tr>
+      <tr><td class="base">draw</td><td class="past">drew</td><td class="pp">drawn</td><td class="meaning">dibujar</td></tr>
+      <tr><td class="base">drink</td><td class="past">drank</td><td class="pp">drunk</td><td class="meaning">beber</td></tr>
+      <tr><td class="base">drive</td><td class="past">drove</td><td class="pp">driven</td><td class="meaning">conducir</td></tr>
+      <tr><td class="base">eat</td><td class="past">ate</td><td class="pp">eaten</td><td class="meaning">comer</td></tr>
+      <tr><td class="base">fall</td><td class="past">fell</td><td class="pp">fallen</td><td class="meaning">caer</td></tr>
+      <tr><td class="base">fly</td><td class="past">flew</td><td class="pp">flown</td><td class="meaning">volar</td></tr>
+      <tr><td class="base">forget</td><td class="past">forgot</td><td class="pp">forgotten</td><td class="meaning">olvidar</td></tr>
+      <tr><td class="base">give</td><td class="past">gave</td><td class="pp">given</td><td class="meaning">dar</td></tr>
+      <tr><td class="base">go</td><td class="past">went</td><td class="pp">gone</td><td class="meaning">ir</td></tr>
+      <tr><td class="base">grow</td><td class="past">grew</td><td class="pp">grown</td><td class="meaning">crecer</td></tr>
+      <tr><td class="base">hide</td><td class="past">hid</td><td class="pp">hidden</td><td class="meaning">esconder</td></tr>
+      <tr><td class="base">know</td><td class="past">knew</td><td class="pp">known</td><td class="meaning">saber</td></tr>
+      <tr><td class="base">lie</td><td class="past">lay</td><td class="pp">lain</td><td class="meaning">yacer/acostarse</td></tr>
+      <tr><td class="base">ride</td><td class="past">rode</td><td class="pp">ridden</td><td class="meaning">montar</td></tr>
+      <tr><td class="base">ring</td><td class="past">rang</td><td class="pp">rung</td><td class="meaning">sonar</td></tr>
+      <tr><td class="base">rise</td><td class="past">rose</td><td class="pp">risen</td><td class="meaning">subir</td></tr>
+      <tr><td class="base">run</td><td class="past">ran</td><td class="pp">run</td><td class="meaning">correr</td></tr>
+      <tr><td class="base">see</td><td class="past">saw</td><td class="pp">seen</td><td class="meaning">ver</td></tr>
+      <tr><td class="base">show</td><td class="past">showed</td><td class="pp">shown</td><td class="meaning">mostrar</td></tr>
+      <tr><td class="base">sing</td><td class="past">sang</td><td class="pp">sung</td><td class="meaning">cantar</td></tr>
+      <tr><td class="base">speak</td><td class="past">spoke</td><td class="pp">spoken</td><td class="meaning">hablar</td></tr>
+      <tr><td class="base">steal</td><td class="past">stole</td><td class="pp">stolen</td><td class="meaning">robar</td></tr>
+      <tr><td class="base">swim</td><td class="past">swam</td><td class="pp">swum</td><td class="meaning">nadar</td></tr>
+      <tr><td class="base">take</td><td class="past">took</td><td class="pp">taken</td><td class="meaning">tomar</td></tr>
+      <tr><td class="base">throw</td><td class="past">threw</td><td class="pp">thrown</td><td class="meaning">lanzar</td></tr>
+      <tr><td class="base">wake</td><td class="past">woke</td><td class="pp">woken</td><td class="meaning">despertar</td></tr>
+      <tr><td class="base">wear</td><td class="past">wore</td><td class="pp">worn</td><td class="meaning">llevar puesto</td></tr>
+      <tr><td class="base">write</td><td class="past">wrote</td><td class="pp">written</td><td class="meaning">escribir</td></tr>
+    </tbody>
+  </table>
+  <div class="mnemonic"><div class="mn-title">&#128161; Sub-patterns in A-B-C</div><div class="mn-body"><strong>i-a-u</strong> (drink/ring/sing/swim/begin) &bull; <strong>-ew/-own</strong> (grow/know/fly/throw/draw) &bull; <strong>-oke/-oken</strong> (break/choose/speak/steal/wake) &bull; <strong>-ove/-iven</strong> (drive/ride/write)</div></div>
+</section>
+
+<!-- PATTERN 4: A-B-A -->
+<section class="pattern-section">
+  <div class="pattern-header p-teal">
+    <span class="pat-icon">&#128312;</span>
+    <div><div class="pat-name">A-B-A &mdash; PP same as Base</div><div class="pat-desc">Comes back to the start</div></div>
+  </div>
+  <table class="verb-table">
+    <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="base">become</td><td class="past">became</td><td class="pp">become</td><td class="meaning">convertirse</td></tr>
+      <tr><td class="base">come</td><td class="past">came</td><td class="pp">come</td><td class="meaning">venir</td></tr>
+      <tr><td class="base">run</td><td class="past">ran</td><td class="pp">run</td><td class="meaning">correr</td></tr>
+      <tr><td class="base">overcome</td><td class="past">overcame</td><td class="pp">overcome</td><td class="meaning">superar</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="guide-footer">
+  <a href="../exercises/irregular-verbs.html">&larr; Practice irregular verbs</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -101,5 +101,20 @@ export const CATEGORIES = {
       { sentence: "I'm satisfied ___ the results.", correct: "with", explain: "'Satisfied with' = satisfecho con. Adj + prep." },
       { sentence: "She belongs ___ this club.", correct: "to", explain: "'Belong to' = pertenecer a. Verbo + prep fija." },
     ]
+  },
+  duration: {
+    label: 'Duration',
+    icon: '⏳',
+    options: ['for', 'since', 'during', 'by', 'until'],
+    items: [
+      { sentence: "I've lived here ___ five years.", correct: "for", explain: "'For' + a length of time: for five years, for two hours." },
+      { sentence: "She's been studying ___ 9am.", correct: "since", explain: "'Since' + a starting point in time: since 9am, since Monday." },
+      { sentence: "He fell asleep ___ the movie.", correct: "during", explain: "'During' + a noun/event that names a period: during the movie." },
+      { sentence: "Please finish the report ___ Friday.", correct: "by", explain: "'By' = no later than a deadline." },
+      { sentence: "We'll wait ___ you get back.", correct: "until", explain: "'Until' = up to the point when something happens." },
+      { sentence: "I haven't seen him ___ last Christmas.", correct: "since", explain: "'Since' + a starting point in time." },
+      { sentence: "They travelled ___ two weeks.", correct: "for", explain: "'For' + a length of time." },
+      { sentence: "The shop is closed ___ renovations.", correct: "during", explain: "'During' + a noun naming the period/event." }
+    ]
   }
 };

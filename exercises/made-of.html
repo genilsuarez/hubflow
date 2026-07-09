@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Made Of / From / With — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%234A8C5C'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-green); }
+  .pill-btn.active { background: var(--lp-cat-green); color: #fff; box-shadow: 0 2px 10px rgba(74,140,92,.25); }
+  .progress__fill { background: var(--lp-cat-green); }
+
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    font-size: .68rem; font-weight: 700; padding: 6px 12px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted);
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
+
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  .sentence-card {
+    width: 100%; max-width: 480px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center;
+    box-shadow: var(--lp-shadow-sm);
+  }
+  .sentence-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .sentence-card .sc-text {
+    font-family: var(--lp-font-display); font-size: 1.15rem; font-weight: 500;
+    color: var(--lp-ink); line-height: 1.5;
+  }
+  .sentence-card .sc-text .blank {
+    display: inline-block; min-width: 50px; border-bottom: 2.5px dashed var(--lp-cat-green);
+    color: var(--lp-cat-green); font-weight: 700; padding: 0 4px;
+  }
+  .sentence-card .sc-counter {
+    font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 8px;
+  }
+
+  .word-options { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 480px; }
+  .word-opt {
+    font-family: var(--lp-font-body); font-weight: 700; font-size: .88rem;
+    padding: 12px 20px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
+    background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
+    transition: all .2s var(--lp-ease); min-width: 60px; text-align: center;
+  }
+  .word-opt:hover:not(.disabled) { border-color: var(--lp-cat-green); background: rgba(74,140,92,.08); transform: translateY(-2px); }
+  .word-opt.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
+  .word-opt.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
+  .word-opt.disabled { cursor: default; opacity: .7; }
+  [data-theme="dark"] .word-opt.correct { color: #6FE8A8; }
+  [data-theme="dark"] .word-opt.wrong { color: #FF9F9F; }
+
+  .explain-box {
+    width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
+    background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5;
+  }
+
+  .fc-card { max-width: 460px; height: 200px; }
+  .art-front .fc-term { font-size: 1.3rem; color: var(--lp-cat-green); line-height: 1.4; }
+  .fc-back { background: color-mix(in srgb, var(--lp-cat-green) 10%, var(--lp-surface)); border-color: var(--lp-cat-green); }
+
+  .scroll-body { padding: 8px 0 30px; }
+
+  @media (max-width: 480px) {
+    .word-opt { min-width: 50px; padding: 10px 14px; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <a href="../index.html" class="back-link">← Home</a>
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+  </div>
+
+  <div class="header">
+    <h1>🧱 Made Of / From / With</h1>
+
+    <div class="cat-bar" id="catBar"></div>
+
+    <div class="pill-bar">
+      <button class="pill-btn active" data-mode="study">📖 Study</button>
+      <button class="pill-btn" data-mode="practice">🎯 Practice</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
+    </div>
+
+    <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
+
+    <div class="progress">
+      <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+      <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+    </div>
+  </div>
+
+  <div class="scroll-body">
+    <div data-area="practice">
+      <div class="sentence-card">
+        <div class="sc-icon" id="scIcon"></div>
+        <div class="sc-text" id="scText"></div>
+        <div class="sc-counter" id="scCounter"></div>
+      </div>
+      <div class="word-options" id="wordOptions"></div>
+      <div class="explain-box" id="explainBox"></div>
+    </div>
+
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 10</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face art-front">
+            <div class="fc-emoji" id="fcEmoji">🧱</div>
+            <div class="fc-term" id="fcSentence"></div>
+            <div class="fc-hint">tap to see answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-term" id="fcAnswer" style="font-size:1.4rem;color:var(--lp-success)"></div>
+            <div class="fc-detail" id="fcExplain"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="btn btn--ghost" id="prevBtn">←</button>
+        <button class="btn btn--green" id="nextBtn">→</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/made-of.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+const catKeys = Object.keys(CATEGORIES);
+let currentCat = catKeys[0];
+let mode = 'study';
+let deck = [], idx = 0, score = 0, total = 0;
+let timer = null;
+
+function renderCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = catKeys.map(k =>
+    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
+  ).join('');
+  bar.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      startMode();
+    });
+  });
+}
+renderCatBar();
+
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    startMode();
+  });
+});
+
+function startMode() {
+  stopTimer();
+  document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
+  document.getElementById('timerBar').classList.remove('show');
+  if (mode === 'practice') initPractice(false);
+  else if (mode === 'timed') initPractice(true);
+  else if (mode === 'study') initStudy();
+}
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+
+function getData() { return CATEGORIES[currentCat].items; }
+
+function updProgress(current, t) {
+  const pct = Math.round((current / t) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = `${current} / ${t}`;
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+function initPractice(timed) {
+  deck = shuffle(getData());
+  idx = 0; score = 0;
+  total = Math.min(timed ? 10 : deck.length, deck.length);
+  document.querySelector('[data-area="practice"]').classList.add('show');
+
+  if (timed) {
+    document.getElementById('timerBar').classList.add('show');
+    timer = new Timer(total * 7,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
+      () => finishPractice()
+    );
+    timer.start();
+  }
+  renderPractice();
+}
+
+function renderPractice() {
+  if (idx >= total) { stopTimer(); finishPractice(); return; }
+  const item = deck[idx];
+  const cat = CATEGORIES[currentCat];
+
+  document.getElementById('scIcon').textContent = cat.icon;
+  document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
+  document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('explainBox').textContent = '';
+
+  const opts = [...cat.options];
+  const optsEl = document.getElementById('wordOptions');
+  optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join('');
+  optsEl.querySelectorAll('.word-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
+
+      const chosen = btn.dataset.val;
+      if (chosen === item.correct) { btn.classList.add('correct'); score++; }
+      else {
+        btn.classList.add('wrong');
+        optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); });
+      }
+
+      document.getElementById('scText').innerHTML = item.sentence.replace('___', `<span class="blank">${item.correct}</span>`);
+      document.getElementById('explainBox').textContent = item.explain;
+
+      idx++;
+      updProgress(idx, total);
+      setTimeout(renderPractice, 1400);
+    });
+  });
+  updProgress(idx, total);
+}
+
+function finishPractice() {
+  const pct = showResult({
+    correct: score, total,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+  });
+  recordScore(`madeof-${currentCat}`, pct);
+}
+
+function initStudy() {
+  deck = shuffle(getData());
+  idx = 0;
+  document.querySelector('[data-area="study"]').classList.add('show');
+  renderStudyCard();
+}
+
+function renderStudyCard() {
+  const item = deck[idx];
+  const card = document.getElementById('fcCard');
+  card.classList.remove('flip');
+  document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon;
+  document.getElementById('fcSentence').textContent = item.sentence;
+  document.getElementById('fcAnswer').textContent = item.correct;
+  document.getElementById('fcExplain').textContent = item.explain;
+  document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
+  updProgress(idx + 1, deck.length);
+}
+
+document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
+document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
+document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
+document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
+
+function advanceCard(dir) {
+  const card = document.getElementById('fcCard');
+  const inner = card.querySelector('.fc-inner');
+  if (card.classList.contains('flip')) {
+    inner.style.transition = 'none';
+    card.classList.remove('flip');
+    void inner.offsetHeight;
+    inner.style.transition = '';
+  }
+  idx = (idx + dir + deck.length) % deck.length;
+  renderStudyCard();
+}
+
+startMode();
+</script>
+</body>
+</html>

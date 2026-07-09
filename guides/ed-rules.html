@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>-ed Rules Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);
+  min-height:100vh;padding:0;transition:color .3s;
+  position:relative;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:680px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+/* NAV */
+.nav-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);
+}
+.nav-back{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;
+  color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;
+  min-height:44px;
+}
+.nav-back:hover{opacity:.7;}
+.nav-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.66rem;color:var(--muted);
+  letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;
+}
+
+/* HEADINGS */
+h1{
+  font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);
+  margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;color:var(--text);
+}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+
+h2{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;letter-spacing:-.01em;
+  margin:30px 0 12px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+h2 .tag{
+  font-size:.6rem;padding:2px 8px;border-radius:50px;font-weight:700;
+}
+h2 .tag.base{background:var(--blue-light);color:var(--blue-dark);}
+h2 .tag.exc{background:var(--red-light);color:var(--red-dark);}
+h2 .tag.tip{background:var(--green-light);color:var(--green-dark);}
+
+/* RULE CARDS */
+.rule-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin-bottom:12px;transition:background .3s,border-color .3s;
+}
+.rule-card.highlight{border-left:4px solid var(--blue);}
+.rule-card.exception{border-left:4px solid var(--red);}
+.rule-card.sub-exc{border-left:4px solid var(--yellow);margin-left:16px;}
+.rule-card.tip-card{border-left:4px solid var(--green);}
+
+.rule-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.88rem;letter-spacing:-.01em;
+  margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.rule-title .emoji{font-size:1rem;}
+
+.rule-desc{font-size:.82rem;line-height:1.5;color:var(--text);margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
+
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{
+  font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.72rem;
+  padding:3px 10px;border-radius:50px;
+  background:var(--green-light);color:var(--green-dark);
+}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.wrong{background:var(--red-light);color:var(--red-dark);text-decoration:line-through;}
+[data-theme="dark"] .ex.wrong{color:#FF9F9F;}
+.ex.alt{background:var(--yellow-light);color:#7B621A;}
+[data-theme="dark"] .ex.alt{color:#F7C948;}
+
+.why{
+  font-size:.72rem;color:var(--muted);font-style:italic;margin-top:6px;
+  padding-left:10px;border-left:2px solid var(--border);
+}
+
+/* FLOW DIAGRAM */
+.flow-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:20px 0;
+}
+.flow-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.flow-steps{display:flex;flex-direction:column;gap:8px;}
+.flow-step{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);
+}
+.flow-step .step-q{font-size:.82rem;font-weight:700;flex:1;}
+.flow-step .step-q em{font-style:normal;color:var(--muted);font-size:.76rem;display:block;margin-top:2px;}
+.flow-arrow{text-align:center;font-size:.7rem;color:var(--muted);font-weight:700;padding-left:20px;}
+.flow-badge{
+  font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:50px;flex-shrink:0;
+}
+.flow-badge.blue{background:var(--blue-light);color:var(--blue-dark);}
+.flow-badge.red{background:var(--red-light);color:var(--red-dark);}
+.flow-badge.green{background:var(--green-light);color:var(--green-dark);}
+.flow-badge.orange{background:var(--orange-light);color:var(--orange);}
+.flow-badge.purple{background:var(--purple-light);color:var(--purple);}
+
+/* PRONUNCIATION SECTION */
+.pron-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;
+}
+.pron-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:12px;
+  padding:12px;text-align:center;
+}
+.pron-sound{
+  font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;
+  margin-bottom:4px;
+}
+.pron-rule{font-size:.68rem;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.pron-examples{font-size:.7rem;color:var(--text);line-height:1.5;}
+
+/* SUMMARY TABLE */
+.summary-table{
+  width:100%;border-collapse:collapse;margin:16px 0;font-size:.78rem;
+  font-family:'Manrope',sans-serif;
+}
+.summary-table th{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:.62rem;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
+  text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);
+}
+.summary-table td{
+  padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;
+}
+.summary-table tr:last-child td{border-bottom:none;}
+.summary-table .action{font-weight:700;color:var(--blue-dark);}
+[data-theme="dark"] .summary-table .action{color:#7AC7FF;}
+
+/* FOOTER */
+.guide-footer{
+  margin-top:32px;padding-top:16px;border-top:2px solid var(--border);
+  text-align:center;font-size:.75rem;color:var(--muted);
+}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .rule-card.sub-exc{margin-left:8px;}
+  .pron-grid{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/ed-spelling.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Spelling Rules for <span class="accent">-ed</span></h1>
+<p class="intro">Master the spelling patterns for regular past tense and past participles. Know when to double, when to drop, and when to just add.</p>
+
+<!-- DECISION FLOW -->
+<div class="flow-box">
+  <div class="flow-title">Decision Flow &mdash; How to add -ed</div>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <span class="step-q">Does the verb end in <strong>-e</strong>?<em>like, hope, dance</em></span>
+      <span class="flow-badge blue">Just add -d</span>
+    </div>
+    <div class="flow-arrow">&#8595; NO</div>
+    <div class="flow-step">
+      <span class="step-q">Does it end in <strong>consonant + y</strong>?<em>study, carry, try</em></span>
+      <span class="flow-badge green">Change y &rarr; ied</span>
+    </div>
+    <div class="flow-arrow">&#8595; NO</div>
+    <div class="flow-step">
+      <span class="step-q">Is it <strong>CVC</strong> (1 syllable) or stressed final syllable?<em>stop, plan, prefer</em></span>
+      <span class="flow-badge red">Double + ed</span>
+    </div>
+    <div class="flow-arrow">&#8595; NO</div>
+    <div class="flow-step">
+      <span class="step-q">Everything else<em>play, open, visit</em></span>
+      <span class="flow-badge purple">Just add -ed</span>
+    </div>
+  </div>
+</div>
+
+<!-- RULE 1: Just add -ed -->
+<h2><span class="tag base">BASE</span> Just add -ed</h2>
+<div class="rule-card highlight">
+  <div class="rule-title"><span class="emoji">&#10004;</span> Most verbs: simply append -ed</div>
+  <div class="rule-desc">The default rule. If no special ending applies, just add <strong>-ed</strong> to the base form.</div>
+  <div class="examples">
+    <span class="ex">play &rarr; played</span>
+    <span class="ex">open &rarr; opened</span>
+    <span class="ex">walk &rarr; walked</span>
+    <span class="ex">rain &rarr; rained</span>
+    <span class="ex">cook &rarr; cooked</span>
+  </div>
+</div>
+
+<!-- RULE 2: Ends in -e -->
+<h2><span class="tag base">BASE</span> Verb ends in -e</h2>
+<div class="rule-card highlight">
+  <div class="rule-title"><span class="emoji">&#9986;</span> Drop nothing &mdash; just add -d</div>
+  <div class="rule-desc">When the verb already ends in <strong>-e</strong>, you only need to add <strong>-d</strong>.</div>
+  <div class="examples">
+    <span class="ex">like &rarr; liked</span>
+    <span class="ex">hope &rarr; hoped</span>
+    <span class="ex">dance &rarr; danced</span>
+    <span class="ex">arrive &rarr; arrived</span>
+    <span class="ex">use &rarr; used</span>
+  </div>
+  <div class="why">Never write "likeed" or "hopeed" &mdash; the -e is already there.</div>
+</div>
+
+<!-- RULE 3: Consonant + y -->
+<h2><span class="tag base">BASE</span> Consonant + y</h2>
+<div class="rule-card highlight">
+  <div class="rule-title"><span class="emoji">&#128260;</span> Change -y to -ied</div>
+  <div class="rule-desc">When a verb ends in a <strong>consonant + y</strong>, change the <strong>y</strong> to <strong>i</strong> and add <strong>-ed</strong>.</div>
+  <div class="examples">
+    <span class="ex">study &rarr; studied</span>
+    <span class="ex">carry &rarr; carried</span>
+    <span class="ex">try &rarr; tried</span>
+    <span class="ex">worry &rarr; worried</span>
+    <span class="ex">copy &rarr; copied</span>
+  </div>
+</div>
+
+<div class="rule-card sub-exc">
+  <div class="rule-title"><span class="emoji">&#9888;&#65039;</span> Exception: vowel + y &rarr; just add -ed</div>
+  <div class="rule-desc">If a <strong>vowel</strong> comes before the -y, keep the y and just add -ed.</div>
+  <div class="examples">
+    <span class="ex">play &rarr; played</span>
+    <span class="ex">enjoy &rarr; enjoyed</span>
+    <span class="ex">stay &rarr; stayed</span>
+    <span class="ex">delay &rarr; delayed</span>
+  </div>
+  <div class="why">Vowel + y is stable &mdash; no change needed.</div>
+</div>
+
+<!-- RULE 4: Double consonant -->
+<h2><span class="tag exc">IMPORTANT</span> Double the final consonant</h2>
+<div class="rule-card exception">
+  <div class="rule-title"><span class="emoji">&#10006;</span> CVC pattern (1 syllable)</div>
+  <div class="rule-desc">If a <strong>one-syllable</strong> verb ends in <strong>consonant-vowel-consonant</strong> (CVC), double the final consonant before adding -ed.</div>
+  <div class="examples">
+    <span class="ex">stop &rarr; stopped</span>
+    <span class="ex">plan &rarr; planned</span>
+    <span class="ex">drop &rarr; dropped</span>
+    <span class="ex">chat &rarr; chatted</span>
+    <span class="ex">rob &rarr; robbed</span>
+  </div>
+</div>
+
+<div class="rule-card exception">
+  <div class="rule-title"><span class="emoji">&#128200;</span> Multi-syllable: stress on LAST syllable</div>
+  <div class="rule-desc">For verbs with 2+ syllables, double the final consonant only if the <strong>stress falls on the last syllable</strong>.</div>
+  <div class="examples">
+    <span class="ex">preFER &rarr; preferred</span>
+    <span class="ex">adMIT &rarr; admitted</span>
+    <span class="ex">ocCUR &rarr; occurred</span>
+    <span class="ex">reGRET &rarr; regretted</span>
+  </div>
+</div>
+
+<div class="rule-card sub-exc">
+  <div class="rule-title"><span class="emoji">&#128161;</span> No doubling if stress is NOT on last syllable</div>
+  <div class="rule-desc">When the stress is on an earlier syllable, do NOT double.</div>
+  <div class="examples">
+    <span class="ex">VIsit &rarr; visited</span>
+    <span class="ex">OPen &rarr; opened</span>
+    <span class="ex">LISten &rarr; listened</span>
+    <span class="ex">HAPpen &rarr; happened</span>
+  </div>
+  <div class="why">The stressed syllable is NOT at the end, so no doubling.</div>
+</div>
+
+<div class="rule-card sub-exc">
+  <div class="rule-title"><span class="emoji">&#128683;</span> Never double: w, x, y</div>
+  <div class="rule-desc">Even in CVC pattern, never double <strong>w</strong>, <strong>x</strong>, or <strong>y</strong>.</div>
+  <div class="examples">
+    <span class="ex">show &rarr; showed</span>
+    <span class="ex">fix &rarr; fixed</span>
+    <span class="ex">play &rarr; played</span>
+    <span class="ex">snow &rarr; snowed</span>
+  </div>
+</div>
+
+<!-- PRONUNCIATION -->
+<h2><span class="tag tip">PRONUNCIATION</span> Three sounds of -ed</h2>
+<div class="pron-grid">
+  <div class="pron-card" style="border-color:var(--blue)">
+    <div class="pron-sound" style="color:var(--blue)">/t/</div>
+    <div class="pron-rule">After voiceless sounds<br>p, k, f, s, sh, ch</div>
+    <div class="pron-examples">walked, stopped,<br>laughed, washed</div>
+  </div>
+  <div class="pron-card" style="border-color:var(--green)">
+    <div class="pron-sound" style="color:var(--green)">/d/</div>
+    <div class="pron-rule">After voiced sounds<br>b, g, v, z, m, n, l, r + vowels</div>
+    <div class="pron-examples">played, opened,<br>called, loved</div>
+  </div>
+  <div class="pron-card" style="border-color:var(--red)">
+    <div class="pron-sound" style="color:var(--red)">/&#618;d/</div>
+    <div class="pron-rule">After t or d sounds</div>
+    <div class="pron-examples">wanted, needed,<br>started, decided</div>
+  </div>
+</div>
+
+<div class="rule-card tip-card">
+  <div class="rule-title"><span class="emoji">&#127911;</span> Quick trick for pronunciation</div>
+  <div class="rule-desc">Only pronounce -ed as a separate syllable (/&#618;d/) when the verb base ends in <strong>t</strong> or <strong>d</strong>. In all other cases, it blends with the last sound.</div>
+</div>
+
+<!-- SUMMARY TABLE -->
+<h2>Quick Reference</h2>
+<table class="summary-table">
+  <thead>
+    <tr><th>Ending</th><th>Action</th><th>Example</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>-e</td><td class="action">Add -d</td><td>hope &rarr; hoped</td></tr>
+    <tr><td>consonant + y</td><td class="action">y &rarr; ied</td><td>study &rarr; studied</td></tr>
+    <tr><td>vowel + y</td><td class="action">Add -ed</td><td>play &rarr; played</td></tr>
+    <tr><td>CVC (1 syllable)</td><td class="action">Double + ed</td><td>stop &rarr; stopped</td></tr>
+    <tr><td>CVC (stress last)</td><td class="action">Double + ed</td><td>prefer &rarr; preferred</td></tr>
+    <tr><td>CVC (stress early)</td><td class="action">Add -ed</td><td>visit &rarr; visited</td></tr>
+    <tr><td>ends in w, x, y</td><td class="action">Add -ed</td><td>fix &rarr; fixed</td></tr>
+    <tr><td>everything else</td><td class="action">Add -ed</td><td>walk &rarr; walked</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/ed-spelling.html">&larr; Practice -ed spelling</a>
+</footer>
+
+</div>
+</body>
+</html>

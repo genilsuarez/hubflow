@@ -49,6 +49,18 @@ export const PAIRS = [
   { a: "Healthy",   b: "Sick",      ea: "💪",  eb: "🤒",  es: "sano / enfermo" },
   { a: "Alive",     b: "Dead",      ea: "🌱",  eb: "💀",  es: "vivo / muerto" },
   { a: "Sweet",     b: "Bitter",    ea: "🍬",  eb: "🍋",  es: "dulce / amargo" },
+  { a: "Generous",  b: "Stingy",    ea: "🎁",  eb: "🪙",  es: "generoso / tacaño" },
+  { a: "Humble",    b: "Arrogant",  ea: "🙇",  eb: "😤",  es: "humilde / arrogante" },
+  { a: "Transparent", b: "Opaque",  ea: "🪟",  eb: "🧱",  es: "transparente / opaco" },
+  { a: "Abundant",  b: "Scarce",    ea: "🌾",  eb: "🏜️", es: "abundante / escaso" },
+  { a: "Reliable",  b: "Unpredictable", ea: "⚓", eb: "🎲", es: "confiable / impredecible" },
+  { a: "Optimistic", b: "Pessimistic", ea: "🌞", eb: "🌧️", es: "optimista / pesimista" },
+  { a: "Flexible",  b: "Rigid",     ea: "🤸",  eb: "📏",  es: "flexible / rígido" },
+  { a: "Genuine",   b: "Fake",      ea: "💎",  eb: "🎭",  es: "auténtico / falso" },
+  { a: "Cautious",  b: "Reckless",  ea: "🦺",  eb: "🏎️", es: "cauteloso / imprudente" },
+  { a: "Concise",   b: "Verbose",   ea: "✂️",  eb: "📜",  es: "conciso / verboso" },
+  { a: "Voluntary", b: "Compulsory", ea: "🙋",  eb: "⚖️",  es: "voluntario / obligatorio" },
+  { a: "Superficial", b: "Profound", ea: "🌊", eb: "🕳️", es: "superficial / profundo" },
 ];
 
 export const SYNONYMS = [

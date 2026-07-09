@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dictation Sprint — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-amber); }
+  .pill-btn.active { background: var(--lp-cat-amber); color: #fff; box-shadow: 0 2px 10px rgba(184,134,11,.25); }
+  .progress__fill { background: var(--lp-cat-amber); }
+
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    font-size: .68rem; font-weight: 700; padding: 6px 12px; border-radius: var(--lp-radius-sm);
+    border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted);
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
+
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  /* Dictation card */
+  .dict-card {
+    width: 100%; max-width: 540px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 24px; box-shadow: var(--lp-shadow-md); text-align: center;
+  }
+  .dict-card__counter {
+    font-size: .65rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: 8px;
+  }
+  .dict-card__hint {
+    font-size: .72rem; color: var(--lp-cat-amber); font-weight: 700; margin-bottom: 12px;
+    background: var(--lp-cat-amber-soft); padding: 4px 12px; border-radius: var(--lp-radius-sm);
+    display: inline-block;
+  }
+  .dict-card__controls {
+    display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 16px;
+  }
+  .play-btn {
+    width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--lp-cat-amber);
+    background: var(--lp-cat-amber-soft); display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; cursor: pointer; transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 3px 12px rgba(184,134,11,.2);
+  }
+  .play-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(184,134,11,.3); }
+  .play-btn:active { transform: scale(.95); }
+  .play-btn.slow { width: 42px; height: 42px; font-size: 1.1rem; border-width: 1.5px; }
+
+  .dict-card__plays {
+    font-size: .65rem; color: var(--lp-muted); font-weight: 600;
+  }
+
+  /* Input area */
+  .dict-input {
+    width: 100%; max-width: 540px;
+  }
+  .dict-input textarea {
+    width: 100%; min-height: 80px; padding: 14px; font-family: var(--lp-font-body);
+    font-size: .92rem; line-height: 1.6; border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-md); background: var(--lp-bg-paper); color: var(--lp-ink);
+    resize: vertical; outline: none; transition: border-color .2s;
+  }
+  .dict-input textarea:focus { border-color: var(--lp-cat-amber); }
+  .dict-input textarea::placeholder { color: var(--lp-muted); font-style: italic; }
+
+  /* Feedback */
+  .dict-feedback {
+    width: 100%; max-width: 540px; display: none; flex-direction: column; gap: 8px;
+    background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md);
+    padding: 16px; text-align: left;
+  }
+  .dict-feedback.show { display: flex; }
+  .dict-feedback__score {
+    font-family: var(--lp-font-display); font-size: 1.2rem; font-weight: 600;
+    text-align: center; margin-bottom: 4px;
+  }
+  .dict-feedback__score.perfect { color: var(--lp-success); }
+  .dict-feedback__score.good { color: var(--lp-cat-amber); }
+  .dict-feedback__score.low { color: var(--lp-error); }
+
+  .dict-diff { font-size: .82rem; line-height: 1.8; }
+  .dict-diff .match { color: var(--lp-success-dark); }
+  .dict-diff .miss { color: var(--lp-error); text-decoration: underline; font-weight: 700; }
+  .dict-diff .extra { color: var(--lp-muted); text-decoration: line-through; }
+
+  .dict-correct {
+    font-size: .78rem; color: var(--lp-ink-soft); font-style: italic;
+    border-top: 1px solid var(--lp-border); padding-top: 8px; margin-top: 4px;
+  }
+
+  .scroll-body { padding: 8px 0 30px; }
+
+  /* No TTS warning */
+  .no-tts-warning {
+    background: var(--lp-error-soft); border: 1.5px solid var(--lp-error);
+    border-radius: var(--lp-radius-md); padding: 14px 18px; text-align: center;
+    font-size: .8rem; font-weight: 600; color: var(--lp-error-dark); display: none;
+  }
+  .no-tts-warning.show { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <a href="../index.html" class="back-link">← HubFlow</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </div>
+
+  <header class="header">
+    <h1>🎙️ Dictation Sprint</h1>
+    <div class="pill-bar pill-bar--scroll" role="tablist">
+      <button class="pill-btn active" data-mode="practice" role="tab">📝 Practice</button>
+      <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
+    </div>
+  </header>
+
+  <div class="cat-bar" id="catBar"></div>
+
+  <div class="no-tts-warning" id="noTtsWarning">
+    ⚠️ Your browser doesn't support Text-to-Speech. This exercise requires audio playback.
+  </div>
+
+  <div class="progress">
+    <div class="progress__labels"><span id="progTxt">0 / 15</span><span id="progPct">0%</span></div>
+    <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+  </div>
+
+  <div class="timer-bar" id="timerBar">
+    <span class="timer-display" id="timerDisplay">3:00</span>
+  </div>
+
+  <div class="scroll-body">
+    <div data-area="dictation">
+      <div class="dict-card">
+        <div class="dict-card__counter" id="dCounter">1 / 15</div>
+        <div class="dict-card__hint" id="dHint">Daily routine</div>
+        <div class="dict-card__controls">
+          <button class="play-btn slow" id="playSlow" aria-label="Play slow" title="Slow">🐢</button>
+          <button class="play-btn" id="playBtn" aria-label="Play audio" title="Play">🔊</button>
+        </div>
+        <div class="dict-card__plays" id="dPlays">Plays: 0 / 3</div>
+      </div>
+
+      <div class="dict-input">
+        <textarea id="dInput" placeholder="Type what you hear..." rows="3" autocomplete="off" autocapitalize="sentences" spellcheck="false"></textarea>
+      </div>
+
+      <div class="dict-feedback" id="dFeedback">
+        <div class="dict-feedback__score" id="dScore"></div>
+        <div class="dict-diff" id="dDiff"></div>
+        <div class="dict-correct" id="dCorrect"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn--primary" id="checkBtn">Check ✓</button>
+        <button class="btn btn--ghost" id="nextBtn" style="display:none">Next →</button>
+        <button class="btn btn--ghost" id="skipBtn">Skip →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/dictation-sprint.js';
+import { shuffle, initTheme, toggleTheme, isSpeechAvailable, speak, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
+
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+// Check TTS
+if (!isSpeechAvailable()) {
+  document.getElementById('noTtsWarning').classList.add('show');
+}
+
+const catKeys = Object.keys(CATEGORIES);
+let currentCat = catKeys[0];
+let mode = 'practice';
+let deck = [], idx = 0, totalScore = 0, totalWords = 0;
+let plays = 0;
+let maxPlays = 3;
+let checked = false;
+let timer = null;
+
+// ─── Category bar ───
+function renderCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = catKeys.map(k =>
+    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label} <span style="font-size:.6rem;opacity:.7">${CATEGORIES[k].level}</span></button>`
+  ).join('');
+  bar.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      startMode();
+    });
+  });
+}
+renderCatBar();
+
+// ─── Mode switching ───
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    startMode();
+  });
+});
+
+function startMode() {
+  stopTimer();
+  const cat = CATEGORIES[currentCat];
+  deck = shuffle(cat.items);
+  idx = 0; totalScore = 0; totalWords = 0;
+  document.getElementById('timerBar').classList.toggle('show', mode === 'timed');
+  document.querySelector('[data-area="dictation"]').classList.add('show');
+
+  if (mode === 'timed') {
+    maxPlays = 2;
+    timer = new Timer(180,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 15); },
+      () => finish()
+    );
+    timer.start();
+  } else {
+    maxPlays = 3;
+  }
+  loadSentence();
+}
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+
+function loadSentence() {
+  if (idx >= deck.length) { finish(); return; }
+  const item = deck[idx];
+  plays = 0;
+  checked = false;
+
+  document.getElementById('dCounter').textContent = `${idx + 1} / ${deck.length}`;
+  document.getElementById('dHint').textContent = item.hint || '';
+  document.getElementById('dPlays').textContent = `Plays: 0 / ${maxPlays}`;
+  document.getElementById('dInput').value = '';
+  document.getElementById('dInput').disabled = false;
+  document.getElementById('dFeedback').classList.remove('show');
+  document.getElementById('checkBtn').style.display = '';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('skipBtn').style.display = '';
+  document.getElementById('dInput').focus();
+
+  updateProgress();
+}
+
+function playSentence(rate) {
+  if (plays >= maxPlays && rate !== 'slow') return;
+  const item = deck[idx];
+  const cat = CATEGORIES[currentCat];
+  const baseRate = cat.rate || 0.85;
+  const finalRate = rate === 'slow' ? baseRate * 0.65 : baseRate;
+
+  speak(item.sentence, { rate: finalRate, lang: 'en-GB' });
+
+  if (rate !== 'slow') {
+    plays++;
+    document.getElementById('dPlays').textContent = `Plays: ${plays} / ${maxPlays}`;
+  }
+
+  if (plays >= maxPlays) {
+    document.getElementById('playBtn').style.opacity = '0.4';
+    document.getElementById('playBtn').style.cursor = 'not-allowed';
+  }
+}
+
+document.getElementById('playBtn').addEventListener('click', () => playSentence('normal'));
+document.getElementById('playSlow').addEventListener('click', () => playSentence('slow'));
+
+// ─── Check ───
+document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+
+function checkAnswer() {
+  if (checked) return;
+  checked = true;
+
+  const item = deck[idx];
+  const userText = document.getElementById('dInput').value.trim();
+  document.getElementById('dInput').disabled = true;
+
+  // Score: word-by-word comparison
+  const correctWords = normalize(item.sentence).split(/\s+/);
+  const userWords = normalize(userText).split(/\s+/).filter(w => w);
+
+  let matched = 0;
+  const diffHtml = [];
+
+  // Simple LCS-like word matching
+  const correctUsed = new Array(correctWords.length).fill(false);
+  const userMatched = new Array(userWords.length).fill(false);
+
+  // First pass: exact position matches
+  for (let i = 0; i < Math.min(correctWords.length, userWords.length); i++) {
+    if (correctWords[i] === userWords[i]) {
+      correctUsed[i] = true;
+      userMatched[i] = true;
+      matched++;
+    }
+  }
+
+  // Second pass: out-of-order matches
+  for (let i = 0; i < userWords.length; i++) {
+    if (userMatched[i]) continue;
+    for (let j = 0; j < correctWords.length; j++) {
+      if (correctUsed[j]) continue;
+      if (userWords[i] === correctWords[j]) {
+        correctUsed[j] = true;
+        userMatched[i] = true;
+        matched++;
+        break;
+      }
+    }
+  }
+
+  // Build diff display
+  const diffWords = correctWords.map((w, i) => {
+    if (correctUsed[i]) return `<span class="match">${item.sentence.split(/\s+/)[i]}</span>`;
+    return `<span class="miss">${item.sentence.split(/\s+/)[i]}</span>`;
+  });
+
+  const wordCount = correctWords.length;
+  const pct = Math.round((matched / wordCount) * 100);
+  totalScore += matched;
+  totalWords += wordCount;
+
+  // Display
+  const scoreEl = document.getElementById('dScore');
+  scoreEl.textContent = `${matched}/${wordCount} words (${pct}%)`;
+  scoreEl.className = 'dict-feedback__score ' + (pct === 100 ? 'perfect' : pct >= 60 ? 'good' : 'low');
+
+  document.getElementById('dDiff').innerHTML = diffWords.join(' ');
+  document.getElementById('dCorrect').textContent = `✓ ${item.sentence}`;
+  document.getElementById('dFeedback').classList.add('show');
+
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+  document.getElementById('skipBtn').style.display = 'none';
+
+  // Reset play button opacity
+  document.getElementById('playBtn').style.opacity = '';
+  document.getElementById('playBtn').style.cursor = '';
+}
+
+function normalize(text) {
+  return text.toLowerCase()
+    .replace(/['']/g, "'")
+    .replace(/[^a-z0-9'\s-]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// ─── Next / Skip ───
+document.getElementById('nextBtn').addEventListener('click', () => { idx++; loadSentence(); });
+document.getElementById('skipBtn').addEventListener('click', () => {
+  const item = deck[idx];
+  const wordCount = normalize(item.sentence).split(/\s+/).length;
+  totalWords += wordCount; // counts as 0 correct
+  idx++;
+  loadSentence();
+});
+
+function updateProgress() {
+  const pct = deck.length > 0 ? Math.round((idx / deck.length) * 100) : 0;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = `${idx} / ${deck.length}`;
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+function finish() {
+  stopTimer();
+  const pct = totalWords > 0 ? Math.round((totalScore / totalWords) * 100) : 0;
+  showResult({
+    correct: totalScore,
+    total: totalWords,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: null
+  });
+  recordScore(`dict-${currentCat}`, pct);
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;
+  document.getElementById('progPct').textContent = '100%';
+}
+
+// ─── Keyboard shortcuts ───
+document.addEventListener('keydown', e => {
+  // Ctrl+Enter to check
+  if (e.key === 'Enter' && e.ctrlKey && !checked) {
+    e.preventDefault();
+    checkAnswer();
+  }
+  // Ctrl+P to play
+  if (e.key === 'p' && e.ctrlKey) {
+    e.preventDefault();
+    playSentence('normal');
+  }
+});
+
+// Auto-play on load
+startMode();
+setTimeout(() => playSentence('normal'), 500);
+</script>
+</body>
+</html>

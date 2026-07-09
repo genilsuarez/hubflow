@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:700px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+
+/* DECISION TREE */
+.dt-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:20px 0;
+}
+.dt-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.dt-flow{display:flex;flex-direction:column;gap:6px;}
+.dt-step{
+  border-radius:10px;border:1.5px solid var(--border);background:var(--bg);overflow:hidden;
+}
+.dt-question{padding:10px 12px 5px;font-size:.82rem;font-weight:700;color:var(--text);line-height:1.3;}
+.dt-question em{display:block;font-style:normal;font-size:.74rem;color:var(--muted);margin-top:2px;}
+.dt-yes{display:flex;align-items:center;gap:8px;padding:5px 12px 10px;}
+.dt-yes-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:900;color:var(--green-dark);}
+.dt-no{display:flex;align-items:center;gap:5px;padding:4px 16px;}
+.dt-no-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:900;color:var(--muted);}
+.dt-badge{font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:50px;border:1.5px solid transparent;}
+.dt-badge.blue{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark);}
+.dt-badge.green{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+.dt-badge.purple{background:var(--purple-light);border-color:var(--purple);color:var(--purple);}
+.dt-badge.red{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+[data-theme="dark"] .dt-badge.blue{color:#7AC7FF;}
+[data-theme="dark"] .dt-badge.green{color:#6FE8A8;}
+[data-theme="dark"] .dt-badge.purple{color:#C4A5FF;}
+[data-theme="dark"] .dt-badge.red{color:#FF9F9F;}
+
+/* ARTICLE CARDS */
+.art-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0;}
+.art-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px;text-align:center;transition:border-color .2s;
+}
+.art-card:hover{border-color:var(--blue);}
+.art-symbol{font-family:'DM Serif Display',serif;font-size:2rem;font-style:italic;margin-bottom:6px;}
+.art-symbol.blue{color:var(--blue);}
+.art-symbol.green{color:var(--green);}
+.art-symbol.purple{color:var(--purple);}
+.art-symbol.red{color:var(--red);}
+.art-name{font-weight:800;font-size:.8rem;margin-bottom:4px;}
+.art-use{font-size:.7rem;color:var(--muted);line-height:1.4;}
+
+/* SECTION CARDS */
+h2{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;letter-spacing:-.01em;
+  margin:28px 0 12px;color:var(--text);display:flex;align-items:center;gap:8px;
+}
+.rule-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin-bottom:10px;
+}
+.rule-card.a-card{border-left:4px solid var(--blue);}
+.rule-card.the-card{border-left:4px solid var(--green);}
+.rule-card.zero-card{border-left:4px solid var(--purple);}
+.rule-card.warn-card{border-left:4px solid var(--red);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;color:var(--text);margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.wrong{background:var(--red-light);color:var(--red-dark);text-decoration:line-through;}
+[data-theme="dark"] .ex.wrong{color:#FF9F9F;}
+
+/* GEO TABLE */
+.geo-table{
+  width:100%;border-collapse:collapse;font-size:.76rem;margin:12px 0;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.geo-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
+.geo-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.geo-table tr:last-child td{border-bottom:none;}
+.geo-table .art{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue-dark);}
+[data-theme="dark"] .geo-table .art{color:#7AC7FF;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .art-grid{grid-template-columns:1fr 1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/articles.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Articles <span class="accent">a / an / the / &empty;</span></h1>
+<p class="intro">When to use which article &mdash; a visual decision system.</p>
+
+<!-- Overview cards -->
+<div class="art-grid">
+  <div class="art-card"><div class="art-symbol blue">a/an</div><div class="art-name">Indefinite</div><div class="art-use">One of many. First mention. Not specific.</div></div>
+  <div class="art-card"><div class="art-symbol green">the</div><div class="art-name">Definite</div><div class="art-use">We both know which one. Already mentioned.</div></div>
+  <div class="art-card"><div class="art-symbol purple">&empty;</div><div class="art-name">Zero Article</div><div class="art-use">Uncountable/plural general. Abstract ideas.</div></div>
+  <div class="art-card"><div class="art-symbol red">a vs an</div><div class="art-name">Sound Rule</div><div class="art-use">Use "an" before vowel SOUNDS, not letters.</div></div>
+</div>
+
+<!-- DECISION TREE -->
+<div class="dt-box">
+  <div class="dt-title">Decision Tree &mdash; Which article?</div>
+  <div class="dt-flow">
+    <div class="dt-step">
+      <div class="dt-question">Is the noun countable AND singular?<em>book, idea, car, hour</em></div>
+      <div class="dt-no"><span class="dt-no-label">NO &darr;</span></div>
+    </div>
+    <div class="dt-step">
+      <div class="dt-question">Is it plural or uncountable + general meaning?<em>books (in general), water, love</em></div>
+      <div class="dt-yes"><span class="dt-yes-label">YES &rarr;</span><span class="dt-badge purple">Zero article &empty;</span></div>
+      <div class="dt-no"><span class="dt-no-label">SPECIFIC? &darr;</span></div>
+    </div>
+    <div class="dt-step">
+      <div class="dt-question">Do speaker AND listener know which specific one?<em>already mentioned, only one exists, defined by context</em></div>
+      <div class="dt-yes"><span class="dt-yes-label">YES &rarr;</span><span class="dt-badge green">the</span></div>
+      <div class="dt-no"><span class="dt-no-label">NO &darr;</span></div>
+    </div>
+    <div class="dt-step">
+      <div class="dt-question">First mention, one of many?</div>
+      <div class="dt-yes"><span class="dt-yes-label">YES &rarr;</span><span class="dt-badge blue">a / an</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- A / AN -->
+<h2>&#128309; a / an &mdash; Indefinite</h2>
+<div class="rule-card a-card">
+  <div class="rule-title">&#9989; Use a/an when...</div>
+  <div class="rule-desc">First mention, one of many, jobs, describing what something is.</div>
+  <div class="examples">
+    <span class="ex">I saw a dog.</span>
+    <span class="ex">She's an engineer.</span>
+    <span class="ex">It's a beautiful day.</span>
+    <span class="ex">Once a week.</span>
+  </div>
+</div>
+<div class="rule-card a-card">
+  <div class="rule-title">&#128264; a vs an = SOUND, not spelling</div>
+  <div class="rule-desc">Use <strong>an</strong> before vowel sounds. Use <strong>a</strong> before consonant sounds.</div>
+  <div class="examples">
+    <span class="ex">an hour (/aʊər/)</span>
+    <span class="ex">a university (/juːnɪ/)</span>
+    <span class="ex">an MBA</span>
+    <span class="ex">a European</span>
+    <span class="ex">an honest person</span>
+  </div>
+</div>
+
+<!-- THE -->
+<h2>&#128994; the &mdash; Definite</h2>
+<div class="rule-card the-card">
+  <div class="rule-title">&#9989; Use "the" when...</div>
+  <div class="rule-desc">Both speaker and listener know which one: already mentioned, only one exists, defined by context or clause.</div>
+  <div class="examples">
+    <span class="ex">I saw a dog. The dog was big.</span>
+    <span class="ex">the sun / the moon</span>
+    <span class="ex">the book you gave me</span>
+    <span class="ex">the best restaurant</span>
+  </div>
+</div>
+<div class="rule-card the-card">
+  <div class="rule-title">&#127758; Geographic rules for "the"</div>
+  <div class="rule-desc">Some place names use "the" &mdash; follow these patterns:</div>
+</div>
+<table class="geo-table">
+  <thead><tr><th>Use THE</th><th>No article &empty;</th></tr></thead>
+  <tbody>
+    <tr><td><span class="art">the</span> United States, <span class="art">the</span> UK</td><td>France, Japan, Spain</td></tr>
+    <tr><td><span class="art">the</span> Amazon, <span class="art">the</span> Thames</td><td>Lake Titicaca, Mount Everest</td></tr>
+    <tr><td><span class="art">the</span> Pacific Ocean, <span class="art">the</span> Sahara</td><td>Europe, Asia, Africa</td></tr>
+    <tr><td><span class="art">the</span> Alps, <span class="art">the</span> Andes</td><td>Broadway, Oxford Street</td></tr>
+    <tr><td><span class="art">the</span> Hilton, <span class="art">the</span> White House</td><td>Heathrow Airport, Harvard</td></tr>
+  </tbody>
+</table>
+
+<!-- ZERO ARTICLE -->
+<h2>&#128995; Zero Article &empty;</h2>
+<div class="rule-card zero-card">
+  <div class="rule-title">&#9989; No article when...</div>
+  <div class="rule-desc">General plural, uncountable abstracts, meals, sports, languages, most countries.</div>
+  <div class="examples">
+    <span class="ex">&empty; Dogs are loyal.</span>
+    <span class="ex">&empty; Love is blind.</span>
+    <span class="ex">&empty; Breakfast is ready.</span>
+    <span class="ex">She plays &empty; tennis.</span>
+    <span class="ex">He speaks &empty; Spanish.</span>
+  </div>
+</div>
+
+<!-- COMMON MISTAKES -->
+<h2>&#128680; Common Mistakes</h2>
+<div class="rule-card warn-card">
+  <div class="rule-title">&#10060; Don't use "the" with...</div>
+  <div class="examples">
+    <span class="ex wrong">the life is short</span>
+    <span class="ex">Life is short. &check;</span>
+  </div>
+  <div class="examples" style="margin-top:6px">
+    <span class="ex wrong">I go to the school</span>
+    <span class="ex">I go to school. &check;</span>
+  </div>
+  <div class="examples" style="margin-top:6px">
+    <span class="ex wrong">the people are kind</span>
+    <span class="ex">People are kind. &check;</span>
+  </div>
+</div>
+<div class="rule-card warn-card">
+  <div class="rule-title">&#9888;&#65039; Fixed expressions (memorize!)</div>
+  <div class="examples">
+    <span class="ex">at home / at work / at school</span>
+    <span class="ex">by bus / by car / on foot</span>
+    <span class="ex">go to bed / go to prison</span>
+    <span class="ex">in hospital (BrE) / in the hospital (AmE)</span>
+  </div>
+</div>
+
+<!-- NEVER USE THE -->
+<h2>&#128683; Never Use "The"</h2>
+<div class="rule-card zero-card">
+  <div class="rule-title">&#9989; Categories that always take &empty; (no article)</div>
+  <div class="rule-desc">Names &bull; continents &bull; most countries &bull; towns/cities &bull; streets &bull; individual lakes/mountains &bull; sports &bull; languages &bull; meals &bull; illnesses &bull; academic subjects &bull; days/holidays &bull; title + name &bull; US states/UK counties</div>
+  <div class="examples">
+    <span class="ex">&empty; Sarah is my best friend.</span>
+    <span class="ex">She has travelled across &empty; Africa.</span>
+    <span class="ex">&empty; Tokyo is my favourite city.</span>
+    <span class="ex">He lives on &empty; Baker Street.</span>
+    <span class="ex">&empty; Lake Como is in Italy.</span>
+    <span class="ex">&empty; President Biden gave a speech.</span>
+    <span class="ex">He's from &empty; Texas.</span>
+  </div>
+</div>
+<div class="rule-card warn-card">
+  <div class="rule-title">&#9888;&#65039; The exceptions that DO take "the"</div>
+  <div class="rule-desc">Plural family surnames, a few special place names, and using "the" for emphasis before a name.</div>
+  <div class="examples">
+    <span class="ex">We invited the Hammonds to the party. (= the Hammond family)</span>
+    <span class="ex">She works in The Hague. (special exception)</span>
+    <span class="ex">Do you mean THE Andy who lives down the road? (emphasis/distinguishing)</span>
+  </div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/articles.html">&larr; Practice articles</a>
+</footer>
+
+</div>
+</body>
+</html>

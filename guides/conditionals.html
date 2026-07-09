@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conditionals Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#B8860B;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(184,134,11,.15) 0%, rgba(184,134,11,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(184,134,11,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #FBF8F2 55%, #F5EBDC 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(184,134,11,.08) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--yellow);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--yellow);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+.type-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;}
+.type-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--yellow);color:#fff;font-weight:800;font-size:.8rem;margin-right:8px;}
+.type-name{font-weight:800;font-size:.95rem;}
+.type-formula{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--yellow-light);color:var(--text);padding:8px 12px;border-radius:8px;margin:8px 0;}
+.type-meaning{font-size:.8rem;color:var(--ink-soft);margin-bottom:6px;}
+.type-ex{font-size:.76rem;font-style:italic;color:var(--muted);}
+
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:#8a6508;}
+[data-theme="dark"] .rule-desc strong{color:#E8C468;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+
+.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
+.sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.sum-table tr:last-child td{border-bottom:none;}
+.sum-table .q{font-family:'JetBrains Mono',monospace;font-weight:700;color:#8a6508;}
+[data-theme="dark"] .sum-table .q{color:#E8C468;}
+.sum-table .usage{font-size:.7rem;color:var(--muted);}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--yellow);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){.page{padding:14px 12px 50px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/conditionals.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Conditionals <span class="accent">Made Clear</span></h1>
+<p class="intro">Four structures, four levels of reality — from scientific facts to impossible pasts. Here's how to tell them apart.</p>
+
+<h2>&#128260; The 4 Main Types</h2>
+
+<div class="type-card">
+  <div><span class="type-num">0</span><span class="type-name">Zero Conditional</span></div>
+  <div class="type-formula">If + present simple &rarr; present simple</div>
+  <div class="type-meaning">General truths, facts, things that always happen.</div>
+  <div class="type-ex">If you heat ice, it melts. &bull; Water boils if you heat it to 100&deg;C.</div>
+</div>
+
+<div class="type-card">
+  <div><span class="type-num">1</span><span class="type-name">First Conditional</span></div>
+  <div class="type-formula">If + present simple &rarr; will + base verb</div>
+  <div class="type-meaning">Real, possible situations in the future.</div>
+  <div class="type-ex">If it rains tomorrow, we will cancel the picnic.</div>
+</div>
+
+<div class="type-card">
+  <div><span class="type-num">2</span><span class="type-name">Second Conditional</span></div>
+  <div class="type-formula">If + past simple &rarr; would + base verb</div>
+  <div class="type-meaning">Unlikely or hypothetical situations, now or in the future.</div>
+  <div class="type-ex">If I won the lottery, I would travel the world. &bull; If I were you, I'd apologise.</div>
+</div>
+
+<div class="type-card">
+  <div><span class="type-num">3</span><span class="type-name">Third Conditional</span></div>
+  <div class="type-formula">If + past perfect &rarr; would have + past participle</div>
+  <div class="type-meaning">Impossible pasts — imagining a different outcome that didn't happen.</div>
+  <div class="type-ex">If she had studied harder, she would have passed the exam.</div>
+</div>
+
+<h2>&#128279; Connectors</h2>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; Beyond "if"</div>
+  <div class="rule-desc"><strong>Unless</strong> = "if...not". <strong>Provided that</strong> / <strong>as long as</strong> = a formal/strict condition.</div>
+  <div class="examples">
+    <span class="ex">You'll miss the bus unless you hurry.</span>
+    <span class="ex">You can borrow it as long as you return it.</span>
+    <span class="ex">We'll sign provided that all terms are met.</span>
+  </div>
+</div>
+
+<h2>Quick Reference</h2>
+<table class="sum-table">
+  <thead><tr><th>Type</th><th>If-clause</th><th>Main clause</th></tr></thead>
+  <tbody>
+    <tr><td class="q">Zero</td><td>present simple</td><td class="usage">present simple</td></tr>
+    <tr><td class="q">First</td><td>present simple</td><td class="usage">will + base verb</td></tr>
+    <tr><td class="q">Second</td><td>past simple</td><td class="usage">would + base verb</td></tr>
+    <tr><td class="q">Third</td><td>past perfect</td><td class="usage">would have + past participle</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/conditionals.html">&larr; Practice conditionals</a>
+</footer>
+
+</div>
+</body>
+</html>

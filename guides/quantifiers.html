@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantifiers Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* SCALE VISUALIZATION */
+.scale-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:16px 0;
+}
+.scale-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.scale-bar{
+  display:flex;align-items:stretch;border-radius:8px;overflow:hidden;height:40px;margin-bottom:10px;
+}
+.scale-seg{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;font-weight:800;color:#fff;padding:4px;text-align:center;
+}
+.scale-labels{display:flex;justify-content:space-between;font-size:.65rem;font-weight:700;color:var(--muted);}
+
+/* COMPARISON CARDS */
+.cmp-pair{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;
+}
+.cmp-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;
+}
+.cmp-card.count{border-top:4px solid var(--blue);}
+.cmp-card.uncount{border-top:4px solid var(--green);}
+.cmp-card.both{border-top:4px solid var(--purple);}
+.cmp-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+.cmp-word{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;color:var(--blue-dark);margin-bottom:4px;}
+[data-theme="dark"] .cmp-word{color:#7AC7FF;}
+.cmp-meaning{font-size:.74rem;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.cmp-ex{font-size:.7rem;color:var(--muted);font-style:italic;line-height:1.4;}
+
+/* RULE CARDS */
+.rule-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin-bottom:10px;
+}
+.rule-card.pos{border-left:4px solid var(--green);}
+.rule-card.neg{border-left:4px solid var(--red);}
+.rule-card.both-card{border-left:4px solid var(--purple);}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.neg-ex{background:var(--red-light);color:var(--red-dark);}
+[data-theme="dark"] .ex.neg-ex{color:#FF9F9F;}
+
+/* SUMMARY TABLE */
+.sum-table{
+  width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
+.sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.sum-table tr:last-child td{border-bottom:none;}
+.sum-table .q{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue-dark);}
+[data-theme="dark"] .sum-table .q{color:#7AC7FF;}
+.sum-table .usage{font-size:.7rem;color:var(--muted);}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .cmp-pair{grid-template-columns:1fr;}
+  .scale-seg{font-size:.6rem;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/quantifiers.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Quantifiers <span class="accent">Visual Guide</span></h1>
+<p class="intro">How much? How many? Choose the right quantifier based on countability, polarity, and amount.</p>
+
+<!-- QUANTITY SCALE -->
+<div class="scale-box">
+  <div class="scale-title">The Quantity Scale</div>
+  <div class="scale-bar">
+    <div class="scale-seg" style="background:var(--red);">no / none</div>
+    <div class="scale-seg" style="background:var(--orange);">few / little</div>
+    <div class="scale-seg" style="background:var(--yellow);color:var(--text);">some</div>
+    <div class="scale-seg" style="background:var(--green);">many / much</div>
+    <div class="scale-seg" style="background:var(--blue);">all / every</div>
+  </div>
+  <div class="scale-labels"><span>0%</span><span>a small amount</span><span>moderate</span><span>large amount</span><span>100%</span></div>
+</div>
+
+<!-- SOME vs ANY -->
+<h2>&#128308; some vs any</h2>
+<div class="cmp-pair">
+  <div class="cmp-card count">
+    <div class="cmp-label">Affirmative &amp; Offers</div>
+    <div class="cmp-word">some</div>
+    <div class="cmp-meaning">An unspecified amount, used in positive statements and offers/requests.</div>
+    <div class="cmp-ex">I have some questions.<br>Would you like some tea?</div>
+  </div>
+  <div class="cmp-card uncount">
+    <div class="cmp-label">Negative &amp; Questions</div>
+    <div class="cmp-word">any</div>
+    <div class="cmp-meaning">Used in negatives and yes/no questions.</div>
+    <div class="cmp-ex">I don't have any money.<br>Are there any problems?</div>
+  </div>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#9888;&#65039; Exceptions</div>
+  <div class="rule-desc"><strong>any</strong> in affirmative = "it doesn't matter which" &bull; <strong>some</strong> in questions = expecting "yes" (offers/requests)</div>
+  <div class="examples">
+    <span class="ex">Any doctor can help. (= whichever)</span>
+    <span class="ex">Can I have some water? (offer)</span>
+  </div>
+</div>
+
+<!-- MUCH vs MANY -->
+<h2>&#128994; much vs many</h2>
+<div class="cmp-pair">
+  <div class="cmp-card count">
+    <div class="cmp-label">Countable (plural)</div>
+    <div class="cmp-word">many</div>
+    <div class="cmp-meaning">A large number of things you can count.</div>
+    <div class="cmp-ex">How many books?<br>Not many students came.</div>
+  </div>
+  <div class="cmp-card uncount">
+    <div class="cmp-label">Uncountable</div>
+    <div class="cmp-word">much</div>
+    <div class="cmp-meaning">A large amount of something you can't count.</div>
+    <div class="cmp-ex">How much water?<br>I don't have much time.</div>
+  </div>
+</div>
+<div class="rule-card both-card">
+  <div class="rule-title">&#128161; "a lot of" &mdash; works for both</div>
+  <div class="rule-desc"><strong>a lot of</strong> replaces much/many in affirmative sentences (more natural in speech).</div>
+  <div class="examples">
+    <span class="ex">a lot of books (countable)</span>
+    <span class="ex">a lot of water (uncountable)</span>
+    <span class="ex">lots of fun (informal)</span>
+  </div>
+</div>
+
+<!-- FEW vs LITTLE -->
+<h2>&#128992; few vs little</h2>
+<div class="cmp-pair">
+  <div class="cmp-card count">
+    <div class="cmp-label">Countable</div>
+    <div class="cmp-word">few / a few</div>
+    <div class="cmp-meaning"><strong>few</strong> = almost none (negative)<br><strong>a few</strong> = some (positive)</div>
+    <div class="cmp-ex">Few people came. (negative)<br>A few friends helped. (positive)</div>
+  </div>
+  <div class="cmp-card uncount">
+    <div class="cmp-label">Uncountable</div>
+    <div class="cmp-word">little / a little</div>
+    <div class="cmp-meaning"><strong>little</strong> = almost none (negative)<br><strong>a little</strong> = some (positive)</div>
+    <div class="cmp-ex">There's little hope. (negative)<br>Add a little salt. (positive)</div>
+  </div>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; The "a" makes it positive!</div>
+  <div class="rule-desc"><strong>few/little</strong> (without "a") = negative feeling, almost nothing. <strong>A few / a little</strong> (with "a") = positive, enough.</div>
+</div>
+
+<!-- ENOUGH vs TOO -->
+<h2>&#128312; enough / too</h2>
+<div class="rule-card pos">
+  <div class="rule-title">&#9989; enough &mdash; the right amount</div>
+  <div class="rule-desc"><strong>enough</strong> goes AFTER adjectives but BEFORE nouns.</div>
+  <div class="examples">
+    <span class="ex">old enough (adj + enough)</span>
+    <span class="ex">enough money (enough + noun)</span>
+    <span class="ex">fast enough to win</span>
+    <span class="ex">enough time to finish</span>
+  </div>
+</div>
+<div class="rule-card neg">
+  <div class="rule-title">&#10060; too &mdash; more than needed</div>
+  <div class="rule-desc"><strong>too</strong> always goes BEFORE adjectives/adverbs. <strong>too much/many</strong> before nouns.</div>
+  <div class="examples">
+    <span class="ex neg-ex">too expensive</span>
+    <span class="ex neg-ex">too many people</span>
+    <span class="ex neg-ex">too much noise</span>
+    <span class="ex neg-ex">too fast to control</span>
+  </div>
+</div>
+
+<!-- SUMMARY TABLE -->
+<h2>Quick Reference</h2>
+<table class="sum-table">
+  <thead><tr><th>Quantifier</th><th>Countable?</th><th>Polarity</th><th>Amount</th></tr></thead>
+  <tbody>
+    <tr><td class="q">some</td><td>Both</td><td>Affirmative / offers</td><td class="usage">Moderate, unspecified</td></tr>
+    <tr><td class="q">any</td><td>Both</td><td>Negative / questions</td><td class="usage">Zero or unspecified</td></tr>
+    <tr><td class="q">many</td><td>Countable</td><td>Neg / questions / formal</td><td class="usage">Large number</td></tr>
+    <tr><td class="q">much</td><td>Uncountable</td><td>Neg / questions / formal</td><td class="usage">Large amount</td></tr>
+    <tr><td class="q">a lot of</td><td>Both</td><td>Affirmative</td><td class="usage">Large (informal)</td></tr>
+    <tr><td class="q">few</td><td>Countable</td><td>Negative tone</td><td class="usage">Almost none</td></tr>
+    <tr><td class="q">a few</td><td>Countable</td><td>Positive tone</td><td class="usage">Some, enough</td></tr>
+    <tr><td class="q">little</td><td>Uncountable</td><td>Negative tone</td><td class="usage">Almost none</td></tr>
+    <tr><td class="q">a little</td><td>Uncountable</td><td>Positive tone</td><td class="usage">Some, enough</td></tr>
+    <tr><td class="q">enough</td><td>Both</td><td>Neutral</td><td class="usage">Sufficient</td></tr>
+    <tr><td class="q">too much/many</td><td>Both</td><td>Negative</td><td class="usage">Excessive</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/quantifiers.html">&larr; Practice quantifiers</a>
+</footer>
+
+</div>
+</body>
+</html>

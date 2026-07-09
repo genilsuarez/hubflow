@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phonics &amp; Pronunciation Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* MINIMAL PAIRS */
+.mp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:12px 0;}
+.mp-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px;text-align:center;transition:border-color .2s;
+}
+.mp-card:hover{border-color:var(--blue);}
+.mp-sounds{
+  display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;
+}
+.mp-sound{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;
+  padding:4px 10px;border-radius:8px;
+}
+.mp-sound.a{background:var(--blue-light);color:var(--blue-dark);}
+.mp-sound.b{background:var(--red-light);color:var(--red-dark);}
+[data-theme="dark"] .mp-sound.a{color:#7AC7FF;}
+[data-theme="dark"] .mp-sound.b{color:#FF9F9F;}
+.mp-vs{font-size:.6rem;font-weight:800;color:var(--muted);}
+.mp-pairs{font-size:.74rem;line-height:1.7;color:var(--text);}
+.mp-pairs strong{font-weight:700;}
+
+/* STRESS PATTERNS */
+.stress-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:14px 0;
+}
+.stress-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.stress-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stress-card{
+  padding:12px;border-radius:12px;border:1.5px solid var(--border);
+}
+.stress-card .sc-pattern{
+  font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:700;
+  margin-bottom:4px;color:var(--blue-dark);
+}
+[data-theme="dark"] .stress-card .sc-pattern{color:#7AC7FF;}
+.stress-card .sc-rule{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.stress-card .sc-words{font-size:.72rem;line-height:1.6;color:var(--text);}
+.stress-dots{display:flex;gap:3px;margin-bottom:6px;}
+.stress-dots .dot{width:10px;height:10px;border-radius:50%;background:var(--border);}
+.stress-dots .dot.big{width:14px;height:14px;background:var(--blue);}
+
+/* SILENT LETTERS */
+.silent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:12px 0;}
+.silent-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:12px 14px;
+}
+.silent-card .sl-letter{
+  font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--red);
+  opacity:.5;margin-bottom:4px;text-decoration:line-through;
+}
+.silent-card .sl-rule{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.silent-card .sl-words{font-size:.72rem;line-height:1.6;color:var(--text);}
+.silent-card .sl-words em{font-style:normal;color:var(--red);font-weight:700;text-decoration:line-through;}
+
+/* TIP BOX */
+.tip-box{
+  background:var(--green-light);border:1.5px solid color-mix(in srgb, var(--green) 30%, transparent);
+  border-radius:12px;padding:14px 16px;margin:14px 0;
+}
+.tip-box .tp-title{font-weight:800;font-size:.76rem;color:var(--green-dark);margin-bottom:4px;}
+[data-theme="dark"] .tip-box .tp-title{color:#6FE8A8;}
+.tip-box .tp-body{font-size:.74rem;line-height:1.5;color:var(--text);}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .mp-grid{grid-template-columns:1fr 1fr;}
+  .stress-grid{grid-template-columns:1fr;}
+  .silent-grid{grid-template-columns:1fr 1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/phonics.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Pronunciation <span class="accent">&amp; Phonics</span></h1>
+<p class="intro">Minimal pairs, word stress rules, and silent letters &mdash; the three pillars of clear English pronunciation.</p>
+
+<!-- MINIMAL PAIRS: VOWELS -->
+<h2>&#128264; Minimal Pairs &mdash; Vowels</h2>
+<div class="mp-grid">
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&#618;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/i&#720;/</span></div>
+    <div class="mp-pairs"><strong>ship</strong> / <strong>sheep</strong><br><strong>sit</strong> / <strong>seat</strong><br><strong>hit</strong> / <strong>heat</strong><br><strong>fill</strong> / <strong>feel</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&aelig;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/e/</span></div>
+    <div class="mp-pairs"><strong>bad</strong> / <strong>bed</strong><br><strong>man</strong> / <strong>men</strong><br><strong>sad</strong> / <strong>said</strong><br><strong>had</strong> / <strong>head</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&#652;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/&#593;&#720;/</span></div>
+    <div class="mp-pairs"><strong>cut</strong> / <strong>cart</strong><br><strong>hut</strong> / <strong>heart</strong><br><strong>luck</strong> / <strong>lark</strong><br><strong>cup</strong> / <strong>carp</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&#594;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/&#596;&#720;/</span></div>
+    <div class="mp-pairs"><strong>not</strong> / <strong>nought</strong><br><strong>cot</strong> / <strong>caught</strong><br><strong>fox</strong> / <strong>forks</strong><br><strong>pot</strong> / <strong>port</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&#650;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/u&#720;/</span></div>
+    <div class="mp-pairs"><strong>full</strong> / <strong>fool</strong><br><strong>pull</strong> / <strong>pool</strong><br><strong>look</strong> / <strong>Luke</strong><br><strong>could</strong> / <strong>cooed</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/e&#618;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/a&#618;/</span></div>
+    <div class="mp-pairs"><strong>late</strong> / <strong>light</strong><br><strong>main</strong> / <strong>mine</strong><br><strong>wait</strong> / <strong>white</strong><br><strong>fail</strong> / <strong>file</strong></div>
+  </div>
+</div>
+
+<!-- MINIMAL PAIRS: CONSONANTS -->
+<h2>&#128264; Minimal Pairs &mdash; Consonants</h2>
+<div class="mp-grid">
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/b/</span><span class="mp-vs">vs</span><span class="mp-sound b">/v/</span></div>
+    <div class="mp-pairs"><strong>bet</strong> / <strong>vet</strong><br><strong>berry</strong> / <strong>very</strong><br><strong>boat</strong> / <strong>vote</strong><br><strong>ban</strong> / <strong>van</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/s/</span><span class="mp-vs">vs</span><span class="mp-sound b">/z/</span></div>
+    <div class="mp-pairs"><strong>sip</strong> / <strong>zip</strong><br><strong>price</strong> / <strong>prize</strong><br><strong>ice</strong> / <strong>eyes</strong><br><strong>place</strong> / <strong>plays</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&#952;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/&eth;/</span></div>
+    <div class="mp-pairs"><strong>think</strong> / <strong>this</strong><br><strong>math</strong> / <strong>bathe</strong><br><strong>thin</strong> / <strong>then</strong><br><strong>breath</strong> / <strong>breathe</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/l/</span><span class="mp-vs">vs</span><span class="mp-sound b">/r/</span></div>
+    <div class="mp-pairs"><strong>light</strong> / <strong>right</strong><br><strong>led</strong> / <strong>red</strong><br><strong>long</strong> / <strong>wrong</strong><br><strong>fly</strong> / <strong>fry</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/&#643;/</span><span class="mp-vs">vs</span><span class="mp-sound b">/t&#643;/</span></div>
+    <div class="mp-pairs"><strong>ship</strong> / <strong>chip</strong><br><strong>share</strong> / <strong>chair</strong><br><strong>wash</strong> / <strong>watch</strong><br><strong>shop</strong> / <strong>chop</strong></div>
+  </div>
+  <div class="mp-card">
+    <div class="mp-sounds"><span class="mp-sound a">/n/</span><span class="mp-vs">vs</span><span class="mp-sound b">/&#331;/</span></div>
+    <div class="mp-pairs"><strong>thin</strong> / <strong>thing</strong><br><strong>sin</strong> / <strong>sing</strong><br><strong>win</strong> / <strong>wing</strong><br><strong>ban</strong> / <strong>bang</strong></div>
+  </div>
+</div>
+
+<!-- WORD STRESS -->
+<h2>&#128200; Word Stress Rules</h2>
+<div class="stress-box">
+  <div class="stress-title">Common Stress Patterns</div>
+  <div class="stress-grid">
+    <div class="stress-card">
+      <div class="stress-dots"><span class="dot big"></span><span class="dot"></span></div>
+      <div class="sc-pattern">Oo (1st syllable)</div>
+      <div class="sc-rule">Most 2-syllable NOUNS &amp; ADJECTIVES</div>
+      <div class="sc-words"><strong>TA</strong>ble &bull; <strong>HAP</strong>py &bull; <strong>WA</strong>ter &bull; <strong>YEL</strong>low &bull; <strong>DOC</strong>tor &bull; <strong>NE</strong>ver</div>
+    </div>
+    <div class="stress-card">
+      <div class="stress-dots"><span class="dot"></span><span class="dot big"></span></div>
+      <div class="sc-pattern">oO (2nd syllable)</div>
+      <div class="sc-rule">Most 2-syllable VERBS</div>
+      <div class="sc-words">be<strong>GIN</strong> &bull; de<strong>CIDE</strong> &bull; for<strong>GET</strong> &bull; ar<strong>RIVE</strong> &bull; re<strong>PEAT</strong> &bull; al<strong>LOW</strong></div>
+    </div>
+    <div class="stress-card">
+      <div class="stress-dots"><span class="dot big"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="sc-pattern">Ooo (1st syllable)</div>
+      <div class="sc-rule">Words ending in -ly, -ful, -ness</div>
+      <div class="sc-words"><strong>BEAU</strong>tiful &bull; <strong>WON</strong>derful &bull; <strong>HAP</strong>piness &bull; <strong>U</strong>sually</div>
+    </div>
+    <div class="stress-card">
+      <div class="stress-dots"><span class="dot"></span><span class="dot big"></span><span class="dot"></span></div>
+      <div class="sc-pattern">oOo (2nd syllable)</div>
+      <div class="sc-rule">Words ending in -tion, -sion, -ic</div>
+      <div class="sc-words">e<strong>DU</strong>cation &bull; fan<strong>TAS</strong>tic &bull; de<strong>CI</strong>sion &bull; i<strong>MA</strong>gine</div>
+    </div>
+  </div>
+</div>
+
+<div class="tip-box">
+  <div class="tp-title">&#128161; Noun vs Verb stress shift</div>
+  <div class="tp-body">Same spelling, different stress: <strong>RE</strong>cord (noun) vs re<strong>CORD</strong> (verb) &bull; <strong>PRE</strong>sent (noun) vs pre<strong>SENT</strong> (verb) &bull; <strong>OB</strong>ject (noun) vs ob<strong>JECT</strong> (verb)</div>
+</div>
+
+<!-- SILENT LETTERS -->
+<h2>&#129296; Silent Letters</h2>
+<div class="silent-grid">
+  <div class="silent-card">
+    <div class="sl-letter">k</div>
+    <div class="sl-rule">Silent before N</div>
+    <div class="sl-words"><em>k</em>now &bull; <em>k</em>nife &bull; <em>k</em>nee &bull; <em>k</em>nock &bull; <em>k</em>night</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">w</div>
+    <div class="sl-rule">Silent before R</div>
+    <div class="sl-words"><em>w</em>rite &bull; <em>w</em>rong &bull; <em>w</em>rap &bull; <em>w</em>rist &bull; <em>w</em>reck</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">b</div>
+    <div class="sl-rule">Silent after M / before T</div>
+    <div class="sl-words">clim<em>b</em> &bull; lam<em>b</em> &bull; bom<em>b</em> &bull; dou<em>b</em>t &bull; de<em>b</em>t</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">h</div>
+    <div class="sl-rule">Silent at start (common words)</div>
+    <div class="sl-words"><em>h</em>our &bull; <em>h</em>onest &bull; <em>h</em>onor &bull; <em>h</em>eir</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">g</div>
+    <div class="sl-rule">Silent before N</div>
+    <div class="sl-words"><em>g</em>nat &bull; si<em>g</em>n &bull; forei<em>g</em>n &bull; desi<em>g</em>n &bull; <em>g</em>nome</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">l</div>
+    <div class="sl-rule">Silent in common words</div>
+    <div class="sl-words">wa<em>l</em>k &bull; ta<em>l</em>k &bull; ha<em>l</em>f &bull; ca<em>l</em>m &bull; cou<em>l</em>d &bull; shou<em>l</em>d</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">t</div>
+    <div class="sl-rule">Silent in -sten, -stle</div>
+    <div class="sl-words">lis<em>t</em>en &bull; fas<em>t</em>en &bull; cas<em>t</em>le &bull; whis<em>t</em>le &bull; Chris<em>t</em>mas</div>
+  </div>
+  <div class="silent-card">
+    <div class="sl-letter">p</div>
+    <div class="sl-rule">Silent before S, N (Greek origin)</div>
+    <div class="sl-words"><em>p</em>sychology &bull; <em>p</em>neumonia &bull; recei<em>p</em>t</div>
+  </div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/phonics.html">&larr; Practice pronunciation</a>
+</footer>
+
+</div>
+</body>
+</html>

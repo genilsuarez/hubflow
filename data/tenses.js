@@ -79,5 +79,35 @@ export const CATEGORIES = {
       { sentence: 'After he ___ eaten, he went for a walk.', correct: 'had', options: ['had', 'has', 'have', 'was'], explain: 'Past perfect: action completed before another past action.' },
       { sentence: 'I ___ been waiting for an hour!', correct: 'have', options: ['have', 'has', 'had', 'am'], explain: 'Present perfect continuous: have been + -ing (frustration/duration up to now).' }
     ]
+  },
+  perfectContrast: {
+    label: 'Perfect Simple vs Continuous',
+    icon: '🟤',
+    options: ['have done', 'have been doing'],
+    items: [
+      { sentence: "I ___ (read) the book — I know how it ends.", correct: 'have read', options: ['have read', 'have been reading'], explain: 'Present perfect SIMPLE: focus on the completed result (the book is finished).' },
+      { sentence: "I ___ (read) this book for three hours — my eyes hurt.", correct: 'have been reading', options: ['have read', 'have been reading'], explain: 'Present perfect CONTINUOUS: focus on the duration/ongoing activity, with visible evidence.' },
+      { sentence: "She ___ (write) five emails this morning.", correct: 'has written', options: ['has written', 'has been writing'], explain: 'Present perfect SIMPLE: a specific, countable result (five emails).' },
+      { sentence: "She ___ (write) emails all morning — she's exhausted.", correct: 'has been writing', options: ['has written', 'has been writing'], explain: 'Present perfect CONTINUOUS: emphasis on the ongoing activity and its effect.' },
+      { sentence: "He ___ (paint) the fence — look, it's done!", correct: 'has painted', options: ['has painted', 'has been painting'], explain: 'Present perfect SIMPLE: the action is complete, with a visible result.' },
+      { sentence: "He ___ (paint) the fence all day — that's why he's covered in paint.", correct: 'has been painting', options: ['has painted', 'has been painting'], explain: 'Present perfect CONTINUOUS: duration + visible evidence of the activity itself.' },
+      { sentence: "We ___ (wait) for two hours!", correct: 'have been waiting', options: ['have waited', 'have been waiting'], explain: 'Present perfect CONTINUOUS: emphasizes duration, often with frustration.' },
+      { sentence: "We ___ (finish) the project already.", correct: 'have finished', options: ['have finished', 'have been finishing'], explain: 'Present perfect SIMPLE: a completed action/result ("already" signals completion).' }
+    ]
+  },
+  haveHasHad: {
+    label: 'Have / Has / Had',
+    icon: '🔺',
+    options: ['have', 'has', 'had'],
+    items: [
+      { sentence: 'I ___ been waiting here since noon.', correct: 'have', explain: '"I" + present perfect → have been.' },
+      { sentence: 'She ___ been living in Rome for a decade.', correct: 'has', explain: '3rd person singular + present perfect → has been.' },
+      { sentence: 'By the time we arrived, the film ___ already started.', correct: 'had', explain: 'Past perfect: an event before another past event → had started.' },
+      { sentence: 'They ___ never been so happy before.', correct: 'have', explain: '"They" (plural) + present perfect → have been.' },
+      { sentence: 'He ___ just left when the phone rang.', correct: 'had', explain: 'Past perfect: "just left" happened before "the phone rang" → had left.' },
+      { sentence: 'My sister ___ finish her degree last year.', correct: 'did', options: ['have', 'has', 'had', 'did'], explain: '"Last year" is a finished time reference → past simple "did", not a perfect form.' },
+      { sentence: 'We ___ been friends since childhood.', correct: 'have', explain: '"We" (plural) + present perfect → have been.' },
+      { sentence: 'By 2020, she ___ already retired.', correct: 'had', explain: 'Past perfect: an action completed before a specific past point ("by 2020") → had retired.' }
+    ]
   }
 };

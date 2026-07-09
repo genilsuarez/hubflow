@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modal Verbs Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233D7F7F'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#0D9488;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#E0F7F5;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#0D6E64;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a3d3a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(13,148,136,.15) 0%, rgba(13,148,136,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(13,148,136,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4FBFA 55%, #E6F5F1 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(13,148,136,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-card.pos{border-left:4px solid var(--green);}
+.rule-card.neg{border-left:4px solid var(--red);}
+.rule-card.both-card{border-left:4px solid var(--purple);}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#5CE0D0;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.neg-ex{background:var(--red-light);color:var(--red-dark);}
+[data-theme="dark"] .ex.neg-ex{color:#FF9F9F;}
+
+.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
+.sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.sum-table tr:last-child td{border-bottom:none;}
+.sum-table .q{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue-dark);}
+[data-theme="dark"] .sum-table .q{color:#5CE0D0;}
+.sum-table .usage{font-size:.7rem;color:var(--muted);}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){.page{padding:14px 12px 50px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/modals.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Modal Verbs <span class="accent">Untangled</span></h1>
+<p class="intro">Can, could, must, might, should, shall, will — nine small words that carry huge shades of meaning. Here's how to pick the right one.</p>
+
+<h2>&#127919; Ability, Permission &amp; Possibility</h2>
+<div class="rule-card pos">
+  <div class="rule-title">&#9989; can / could</div>
+  <div class="rule-desc"><strong>Can</strong> = present ability/permission. <strong>Could</strong> = past ability, OR a polite/possible version of "can".</div>
+  <div class="examples">
+    <span class="ex">She can speak French.</span>
+    <span class="ex">Could you pass the salt?</span>
+    <span class="ex">I could swim at age five.</span>
+  </div>
+</div>
+<div class="rule-card both-card">
+  <div class="rule-title">&#129300; may / might</div>
+  <div class="rule-desc"><strong>May</strong> = formal permission or possibility. <strong>Might</strong> = weaker, more uncertain possibility.</div>
+  <div class="examples">
+    <span class="ex">You may leave now.</span>
+    <span class="ex">It might rain later.</span>
+  </div>
+</div>
+
+<h2>&#9878;&#65039; Obligation &amp; Rules</h2>
+<div class="rule-card pos">
+  <div class="rule-title">&#9989; must — strong obligation</div>
+  <div class="rule-desc">A rule or an obligation the speaker feels personally (internal), or a confident deduction.</div>
+  <div class="examples">
+    <span class="ex">You must wear a seatbelt.</span>
+    <span class="ex">She must be tired. (deduction)</span>
+  </div>
+</div>
+<div class="rule-card neg">
+  <div class="rule-title">&#10060; mustn't vs don't have to</div>
+  <div class="rule-desc"><strong>Mustn't</strong> = forbidden. <strong>Don't have to</strong> = no obligation, but allowed. These are opposites, not synonyms!</div>
+  <div class="examples">
+    <span class="ex neg-ex">You mustn't smoke here. (forbidden)</span>
+    <span class="ex">You don't have to come. (optional)</span>
+  </div>
+</div>
+<div class="rule-card both-card">
+  <div class="rule-title">&#128100; have to — external obligation</div>
+  <div class="rule-desc">An obligation imposed by someone/something else (a rule, a boss, a law) — not the speaker's own feeling.</div>
+  <div class="examples">
+    <span class="ex">I have to finish this by 5pm. (my boss said so)</span>
+  </div>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; should — advice, not obligation</div>
+  <div class="rule-desc">Weaker than must/have to. A recommendation, not a rule.</div>
+  <div class="examples">
+    <span class="ex">You should see a dentist.</span>
+  </div>
+</div>
+
+<h2>&#128172; Offers, Suggestions &amp; Future</h2>
+<div class="rule-card both-card">
+  <div class="rule-title">&#129309; shall — offers &amp; suggestions</div>
+  <div class="rule-desc">Used with I/we to offer or suggest something. Rare with other subjects.</div>
+  <div class="examples">
+    <span class="ex">Shall we order dessert?</span>
+    <span class="ex">Shall I open the window?</span>
+  </div>
+</div>
+<div class="rule-card pos">
+  <div class="rule-title">&#9989; will — certainty, promises</div>
+  <div class="rule-desc">Future facts, promises, and spontaneous decisions.</div>
+  <div class="examples">
+    <span class="ex">I will call you tonight.</span>
+    <span class="ex">It'll be fine, I promise.</span>
+  </div>
+</div>
+
+<h2>&#128203; Be Supposed To</h2>
+<div class="rule-card both-card">
+  <div class="rule-title">Expectation vs reality</div>
+  <div class="rule-desc"><strong>Be supposed to</strong> describes what's expected/planned — often used when reality doesn't match the plan.</div>
+  <div class="examples">
+    <span class="ex">The meeting was supposed to start at 9. (but it didn't)</span>
+    <span class="ex">You're not supposed to eat here. (against the rules)</span>
+  </div>
+</div>
+
+<h2>Quick Reference</h2>
+<table class="sum-table">
+  <thead><tr><th>Modal</th><th>Main use</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td class="q">can</td><td>Ability / informal permission</td><td class="usage">She can swim.</td></tr>
+    <tr><td class="q">could</td><td>Past ability / polite request</td><td class="usage">Could you help me?</td></tr>
+    <tr><td class="q">may</td><td>Formal permission / possibility</td><td class="usage">You may go.</td></tr>
+    <tr><td class="q">might</td><td>Weak possibility</td><td class="usage">It might rain.</td></tr>
+    <tr><td class="q">must</td><td>Strong obligation / deduction</td><td class="usage">You must be joking.</td></tr>
+    <tr><td class="q">have to</td><td>External obligation</td><td class="usage">I have to work today.</td></tr>
+    <tr><td class="q">should</td><td>Advice</td><td class="usage">You should rest.</td></tr>
+    <tr><td class="q">shall</td><td>Offer / suggestion (I/we)</td><td class="usage">Shall we go?</td></tr>
+    <tr><td class="q">will</td><td>Future fact / promise</td><td class="usage">I will help.</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/modals.html">&larr; Practice modal verbs</a>
+</footer>
+
+</div>
+</body>
+</html>

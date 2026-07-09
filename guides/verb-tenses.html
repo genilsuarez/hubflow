@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verb Tenses Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
+  --ink-soft:#46566A;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
+  --red-light:#4a2020;--blue-light:#1a2d4a;--green-light:#1a3d2a;
+  --yellow-light:#3d3510;--purple-light:#2a1a3d;--orange-light:#3d2a10;--teal-light:#1a3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
+    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
+  background-attachment:fixed;
+}
+[data-theme="dark"] body{background:var(--bg);}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
+}
+[data-theme="dark"] body::before{display:none;}
+.page{max-width:740px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+
+/* TIMELINE */
+.timeline-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:20px 0;position:relative;overflow-x:auto;
+}
+.timeline-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;}
+.timeline{
+  display:flex;align-items:center;justify-content:center;position:relative;
+  padding:30px 0 10px;min-width:500px;
+}
+.timeline::before{
+  content:'';position:absolute;top:50%;left:5%;right:5%;height:3px;
+  background:linear-gradient(90deg,var(--red),var(--blue),var(--green));
+  border-radius:2px;transform:translateY(-50%);
+}
+.tl-zone{
+  position:relative;z-index:1;text-align:center;flex:1;
+}
+.tl-dot{
+  width:16px;height:16px;border-radius:50%;margin:0 auto 8px;
+  border:3px solid var(--surface);box-shadow:0 0 0 2px var(--border);
+}
+.tl-dot.past{background:var(--red);}
+.tl-dot.now{background:var(--blue);}
+.tl-dot.future{background:var(--green);}
+.tl-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
+.tl-label.past{color:var(--red);}
+.tl-label.now{color:var(--blue);}
+.tl-label.future{color:var(--green);}
+
+/* TENSE CARDS */
+h2{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;letter-spacing:-.01em;
+  margin:30px 0 14px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.time-badge{font-size:.6rem;padding:3px 10px;border-radius:50px;font-weight:700;}
+.time-badge.past{background:var(--red-light);color:var(--red-dark);}
+.time-badge.present{background:var(--blue-light);color:var(--blue-dark);}
+.time-badge.future{background:var(--green-light);color:var(--green-dark);}
+.time-badge.perfect{background:var(--purple-light);color:var(--purple);}
+
+.tense-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:16px;margin-bottom:12px;transition:border-color .2s;
+}
+.tense-card:hover{border-color:var(--blue);}
+.tense-card.t-present{border-left:4px solid var(--blue);}
+.tense-card.t-past{border-left:4px solid var(--red);}
+.tense-card.t-future{border-left:4px solid var(--green);}
+.tense-card.t-perfect{border-left:4px solid var(--purple);}
+
+.tc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
+.tc-name{font-weight:800;font-size:.92rem;}
+.tc-form{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;
+  padding:3px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--border);
+  color:var(--blue-dark);
+}
+[data-theme="dark"] .tc-form{color:#7AC7FF;}
+
+.tc-uses{margin:8px 0;padding:0;list-style:none;}
+.tc-uses li{
+  font-size:.78rem;line-height:1.5;padding:3px 0 3px 16px;
+  position:relative;color:var(--text);
+}
+.tc-uses li::before{
+  content:'';position:absolute;left:0;top:10px;
+  width:6px;height:6px;border-radius:50%;background:var(--border);
+}
+
+.tc-signals{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.signal{
+  font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:50px;
+  background:var(--yellow-light);color:var(--yellow);
+}
+
+.tc-example{
+  font-size:.76rem;font-style:italic;color:var(--ink-soft);
+  margin-top:8px;padding-left:12px;border-left:2px solid var(--border);line-height:1.5;
+}
+
+/* COMPARISON TABLE */
+.cmp-table{
+  width:100%;border-collapse:collapse;font-size:.74rem;margin:16px 0;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.cmp-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 10px;border-bottom:2px solid var(--border);text-align:left;}
+.cmp-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table .tname{font-weight:700;}
+
+.guide-footer{margin-top:32px;padding-top:16px;border-top:2px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+.guide-footer a{color:var(--blue);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .timeline{min-width:auto;flex-wrap:wrap;gap:12px;}
+  .timeline::before{display:none;}
+  .tc-header{flex-direction:column;align-items:flex-start;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="nav-bar">
+  <a href="../exercises/tenses.html" class="nav-back">&larr; Back to practice</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Verb Tenses <span class="accent">Timeline</span></h1>
+<p class="intro">All English tenses mapped on a timeline with their structure, uses, and signal words.</p>
+
+<!-- TIMELINE VISUAL -->
+<div class="timeline-box">
+  <div class="timeline-title">The English Timeline</div>
+  <div class="timeline">
+    <div class="tl-zone"><div class="tl-dot past"></div><div class="tl-label past">Past</div></div>
+    <div class="tl-zone"><div class="tl-dot past"></div><div class="tl-label past">Past Perfect</div></div>
+    <div class="tl-zone"><div class="tl-dot now"></div><div class="tl-label now">Present</div></div>
+    <div class="tl-zone"><div class="tl-dot now"></div><div class="tl-label now">Pres. Perfect</div></div>
+    <div class="tl-zone"><div class="tl-dot future"></div><div class="tl-label future">Future</div></div>
+  </div>
+</div>
+
+<!-- PRESENT TENSES -->
+<h2><span class="time-badge present">PRESENT</span> Present Tenses</h2>
+
+<div class="tense-card t-present">
+  <div class="tc-header">
+    <span class="tc-name">Present Simple</span>
+    <span class="tc-form">S + V(s/es)</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Facts, habits, routines</li>
+    <li>General truths</li>
+    <li>Timetables &amp; schedules</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">always</span><span class="signal">usually</span><span class="signal">often</span>
+    <span class="signal">every day</span><span class="signal">never</span><span class="signal">sometimes</span>
+  </div>
+  <div class="tc-example">She <strong>works</strong> at a hospital. / Water <strong>boils</strong> at 100&deg;C.</div>
+</div>
+
+<div class="tense-card t-present">
+  <div class="tc-header">
+    <span class="tc-name">Present Continuous</span>
+    <span class="tc-form">S + am/is/are + V-ing</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Actions happening right now</li>
+    <li>Temporary situations</li>
+    <li>Future arrangements</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">now</span><span class="signal">right now</span><span class="signal">at the moment</span>
+    <span class="signal">currently</span><span class="signal">today</span><span class="signal">this week</span>
+  </div>
+  <div class="tc-example">She <strong>is working</strong> from home today. / I <strong>'m meeting</strong> John tomorrow.</div>
+</div>
+
+<!-- PAST TENSES -->
+<h2><span class="time-badge past">PAST</span> Past Tenses</h2>
+
+<div class="tense-card t-past">
+  <div class="tc-header">
+    <span class="tc-name">Past Simple</span>
+    <span class="tc-form">S + V-ed / V2</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Completed actions at a specific past time</li>
+    <li>Sequences of past events</li>
+    <li>Past habits (used to)</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">yesterday</span><span class="signal">last week</span><span class="signal">in 2020</span>
+    <span class="signal">ago</span><span class="signal">when I was...</span>
+  </div>
+  <div class="tc-example">She <strong>worked</strong> there for 5 years. / I <strong>saw</strong> him yesterday.</div>
+</div>
+
+<div class="tense-card t-past">
+  <div class="tc-header">
+    <span class="tc-name">Past Continuous</span>
+    <span class="tc-form">S + was/were + V-ing</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Action in progress at a past moment</li>
+    <li>Background action interrupted by another</li>
+    <li>Two parallel past actions</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">while</span><span class="signal">when</span><span class="signal">at that time</span>
+    <span class="signal">as</span>
+  </div>
+  <div class="tc-example">I <strong>was sleeping</strong> when the phone rang. / While she <strong>was cooking</strong>, he was reading.</div>
+</div>
+
+<!-- FUTURE TENSES -->
+<h2><span class="time-badge future">FUTURE</span> Future Tenses</h2>
+
+<div class="tense-card t-future">
+  <div class="tc-header">
+    <span class="tc-name">Future Simple (will)</span>
+    <span class="tc-form">S + will + V</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Spontaneous decisions</li>
+    <li>Predictions (opinion-based)</li>
+    <li>Promises, offers, requests</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">tomorrow</span><span class="signal">I think...</span><span class="signal">probably</span>
+    <span class="signal">next year</span><span class="signal">in the future</span>
+  </div>
+  <div class="tc-example">I <strong>will help</strong> you. / It <strong>will rain</strong> tomorrow, I think.</div>
+</div>
+
+<div class="tense-card t-future">
+  <div class="tc-header">
+    <span class="tc-name">Going to</span>
+    <span class="tc-form">S + am/is/are + going to + V</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Plans &amp; intentions (decided before)</li>
+    <li>Predictions based on evidence</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">tonight</span><span class="signal">this weekend</span><span class="signal">soon</span>
+    <span class="signal">Look! (evidence)</span>
+  </div>
+  <div class="tc-example">I <strong>'m going to study</strong> medicine. / Look at those clouds &mdash; it <strong>'s going to rain</strong>.</div>
+</div>
+
+<!-- PERFECT TENSES -->
+<h2><span class="time-badge perfect">PERFECT</span> Perfect Tenses</h2>
+
+<div class="tense-card t-perfect">
+  <div class="tc-header">
+    <span class="tc-name">Present Perfect</span>
+    <span class="tc-form">S + have/has + V3 (past participle)</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Past action with present relevance</li>
+    <li>Life experience (ever/never)</li>
+    <li>Unfinished time (today, this week)</li>
+    <li>Duration with for/since</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">ever</span><span class="signal">never</span><span class="signal">already</span>
+    <span class="signal">yet</span><span class="signal">just</span><span class="signal">since</span>
+    <span class="signal">for</span><span class="signal">so far</span>
+  </div>
+  <div class="tc-example">I <strong>have visited</strong> Paris twice. / She <strong>has lived</strong> here since 2019.</div>
+</div>
+
+<div class="tense-card t-perfect">
+  <div class="tc-header">
+    <span class="tc-name">Past Perfect</span>
+    <span class="tc-form">S + had + V3</span>
+  </div>
+  <ul class="tc-uses">
+    <li>Action completed BEFORE another past action</li>
+    <li>"The past of the past"</li>
+  </ul>
+  <div class="tc-signals">
+    <span class="signal">before</span><span class="signal">after</span><span class="signal">by the time</span>
+    <span class="signal">already</span><span class="signal">when (+ past simple)</span>
+  </div>
+  <div class="tc-example">When I arrived, she <strong>had already left</strong>. / I <strong>had never seen</strong> snow before that trip.</div>
+</div>
+
+<!-- KEY COMPARISONS -->
+<h2>&#9889; Key Comparisons</h2>
+<table class="cmp-table">
+  <thead><tr><th>Situation</th><th>Tense</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>I live in Madrid. (permanent)</td><td class="tname">Present Simple</td><td>Fact / state</td></tr>
+    <tr><td>I'm living in Madrid. (temporary)</td><td class="tname">Present Continuous</td><td>Temporary now</td></tr>
+    <tr><td>I visited Paris last year.</td><td class="tname">Past Simple</td><td>Specific time</td></tr>
+    <tr><td>I've visited Paris (in my life).</td><td class="tname">Present Perfect</td><td>Experience, no time</td></tr>
+    <tr><td>I'll help you! (just decided)</td><td class="tname">will</td><td>Spontaneous</td></tr>
+    <tr><td>I'm going to help you. (planned)</td><td class="tname">going to</td><td>Prior intention</td></tr>
+    <tr><td>When I arrived, she had left.</td><td class="tname">Past Perfect</td><td>Earlier past action</td></tr>
+    <tr><td>I've read the book. (finished)</td><td class="tname">Present Perfect Simple</td><td>Completed result</td></tr>
+    <tr><td>I've been reading for 3 hours.</td><td class="tname">Present Perfect Continuous</td><td>Duration / ongoing activity</td></tr>
+  </tbody>
+</table>
+
+<h2>&#9878;&#65039; Have / Has / Had — Which One?</h2>
+<table class="cmp-table">
+  <thead><tr><th>Subject</th><th>Auxiliary</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td>I / you / we / they</td><td class="tname">have</td><td>I have been waiting since noon.</td></tr>
+    <tr><td>he / she / it</td><td class="tname">has</td><td>She has been living in Rome.</td></tr>
+    <tr><td>any subject, past perfect</td><td class="tname">had</td><td>By the time we arrived, the film had started.</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/tenses.html">&larr; Practice verb tenses</a>
+</footer>
+
+</div>
+</body>
+</html>

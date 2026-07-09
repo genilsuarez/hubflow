@@ -48,7 +48,7 @@
   <div class="header">
     <h1>⏱️ Verb Tenses</h1>
     <div class="cat-bar" id="catBar"></div>
-    <div class="pill-bar"><button class="pill-btn active" data-mode="practice">🎯 Practice</button><button class="pill-btn" data-mode="study">📖 Study</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
+    <div class="pill-bar"><button class="pill-btn active" data-mode="study">📖 Study</button><button class="pill-btn" data-mode="practice">🎯 Practice</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
     <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
     <div class="progress"><div class="progress__labels"><span id="progTxt">0 / 12</span><span id="progPct">0%</span></div><div class="progress__track"><div class="progress__fill" id="progFill"></div></div></div>
   </div>
@@ -64,7 +64,7 @@ import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showRe
 initTheme();
 document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
 const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null;
+let currentCat = catKeys[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null;
 function renderCatBar() { const bar = document.getElementById('catBar'); bar.innerHTML = catKeys.map(k => `<button class="cat-btn ${k===currentCat?'active':''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`).join(''); bar.querySelectorAll('[data-cat]').forEach(btn => btn.addEventListener('click', () => { currentCat = btn.dataset.cat; bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat)); startMode(); })); }
 renderCatBar();
 document.querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => { mode = btn.dataset.mode; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode)); startMode(); }));
