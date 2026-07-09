@@ -22,7 +22,7 @@ export const CATEGORIES = {
       { words: ["he's", "she's", "it's", "his"], odd: 3, reason: "'His' is a possessive pronoun. The others are contractions (is/has)", group: "Contractions with 's" },
       { words: ["quickly", "slowly", "friendly", "carefully"], odd: 2, reason: "'Friendly' is an adjective (not an adverb despite -ly)", group: "Adverbs of manner" },
       { words: ["since", "for", "during", "ago"], odd: 3, reason: "'Ago' goes after the time period. The others go before", group: "Time prepositions before a period" },
-      { words: ["few", "little", "many", "much"], odd: 0, reason: "'Few' is for countable nouns + negative meaning. But 'many' is also countable. Actually: 'little' and 'much' are uncountable; 'few' and 'many' are countable. Odd = 'few' has negative connotation unlike 'many'", group: "Large quantity words" },
+      { words: ["few", "many", "several", "little"], odd: 3, reason: "'Little' is used with uncountable nouns. 'Few', 'many', and 'several' are all used with countable nouns", group: "Countable-noun quantifiers" },
       { words: ["am", "is", "are", "be"], odd: 3, reason: "'Be' is the infinitive/base form. The others are conjugated forms", group: "Conjugated forms of 'be'" },
       { words: ["will", "going to", "shall", "yesterday"], odd: 3, reason: "'Yesterday' refers to the past. The others express future", group: "Future markers" },
       { words: ["the", "a", "an", "some"], odd: 3, reason: "'Some' is a quantifier. The others are articles", group: "Articles" },
@@ -51,7 +51,7 @@ export const CATEGORIES = {
       { words: ["huge", "enormous", "tiny", "massive"], odd: 2, reason: "'Tiny' means very small. The others mean very big", group: "Extremely large" },
       { words: ["relieved", "anxious", "nervous", "tense"], odd: 0, reason: "'Relieved' is a positive feeling. The others express worry/stress", group: "Feelings of anxiety" },
       { words: ["bake", "fry", "boil", "chop"], odd: 3, reason: "'Chop' is cutting. The others are cooking methods using heat", group: "Heat-based cooking methods" },
-      { words: ["elbow", "wrist", "ankle", "knee"], odd: 0, reason: "'Elbow' is in the arm. Wrist is borderline, but ankle and knee are leg joints. Actually: elbow and wrist are arm; ankle and knee are leg. Odd = 'elbow' is the only one that bends backward", group: "Joints that flex forward" }
+      { words: ["elbow", "ankle", "knee", "hip"], odd: 0, reason: "'Elbow' is an arm joint. 'Ankle', 'knee', and 'hip' are all leg joints", group: "Leg joints" }
     ]
   },
   collocations: {

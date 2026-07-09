@@ -13,6 +13,13 @@ WARNINGS=()
 
 echo "📦 HubFlow"
 
+# ─── Content validation (blocking) ─────────────────────────────────────────────
+
+if ! node "$(dirname "$0")/scripts/validate-content.js"; then
+  echo "❌ HubFlow — content validation failed, aborting deploy"
+  exit 1
+fi
+
 # ─── Commit & Push ──────────────────────────────────────────────────────────────
 
 if [ -n "$(git status --porcelain)" ]; then

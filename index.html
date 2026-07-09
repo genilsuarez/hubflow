@@ -8,6 +8,7 @@
   <meta name="description" content="HubFlow — Interactive English exercises: -ing rules, -ed adjectives, noun adjuncts, and more.">
   <script>var p=new URLSearchParams(location.search).get('theme'),t=p||localStorage.getItem('lp-theme');if(p)localStorage.setItem('lp-theme',p);if(t==='dark')document.documentElement.setAttribute('data-theme','dark')</script>
   <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/buttons.css">
   <style>
     html, body { height: 100%; }
     body { overflow: hidden; }
@@ -50,13 +51,6 @@
     .sb-item.a { --spine: var(--lp-cat-teal); }
     .sb-item.r { --spine: var(--lp-cat-green); }
 
-    .icon-btn {
-      width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--lp-border);
-      background: var(--lp-surface); display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s;
-      box-shadow: var(--lp-shadow-sm); text-decoration: none;
-    }
-    .icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.08); box-shadow: var(--lp-shadow-md); }
 
     /* ─── MAIN COLUMN ─── */
     .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; }
@@ -81,9 +75,9 @@
     .search-bar .clear-btn {
       position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
       background: none; border: none; font-size: .85rem; cursor: pointer; color: var(--lp-muted);
-      display: none; padding: 4px;
+      display: none; width: 44px; height: 44px; line-height: 1; padding: 0;
     }
-    .search-bar .clear-btn.visible { display: block; }
+    .search-bar .clear-btn.visible { display: flex; align-items: center; justify-content: center; }
 
     .header-stats {
       display: flex; align-items: center; gap: 0.5rem; height: 36px; padding: 0 0.75rem;
@@ -119,7 +113,7 @@
       background: radial-gradient(420px 220px at 100% -10%, color-mix(in srgb, var(--lp-accent) 12%, transparent), transparent 70%);
     }
     .hero-actions { position: absolute; top: 18px; right: 18px; display: flex; gap: 8px; z-index: 1; }
-    .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; padding-right: 100px; }
+    .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; }
     .resumen-greeting em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
     .resumen-sub { font-size: .82rem; color: var(--lp-ink-soft); margin-bottom: 18px; position: relative; }
     .resumen-stats { display: flex; gap: 10px; flex-wrap: wrap; position: relative; }
@@ -240,10 +234,8 @@
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-    /* Desktop: the topbar is redundant on Resumen (sidebar has the brand, hero has its own actions) */
-    @media (min-width: 861px) {
-      body[data-active="resumen"] .topbar { display: none; }
-    }
+    /* Header unificado: la topbar (buscador + acciones portal/tema) es visible
+       en todas las secciones, incluida Resumen (INFORME-BOTONES Fase E, H2). */
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; }
@@ -296,7 +288,7 @@
       <div class="sb-tag">Practica inglés todos los días</div>
     </div>
     <nav class="sb-nav" id="sbNav">
-      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">🏠</span><span class="sb-label">Resumen</span></button>
+      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">📋</span><span class="sb-label">Resumen</span></button>
       <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">🧠</span><span class="sb-label">Vocabulary &amp; Words</span></button>
       <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">🔊</span><span class="sb-label">Pronunciation</span></button>
       <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">✏️</span><span class="sb-label">Grammar &amp; Spelling</span></button>
@@ -321,8 +313,8 @@
         <span class="header-stat"><span class="header-stat__val" id="psMastered">0/34</span><span class="header-stat__label">★</span></span>
       </div>
       <div class="topbar-actions">
-        <a class="icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
-        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        <a class="lp-icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Ir al portal DeskFlow" title="Portal">🏠</a>
+        <button class="lp-icon-btn" id="themeToggle" aria-label="Cambiar tema">🌙</button>
       </div>
     </div>
 
@@ -332,10 +324,6 @@
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen">
         <div class="resumen-hero">
-          <div class="hero-actions">
-            <a class="icon-btn" id="portalLinkR" href="https://genilsuarez.github.io/deskflow/" aria-label="Back to Portal" title="Back to Portal">🏠</a>
-            <button class="icon-btn" id="themeToggleR" aria-label="Toggle theme">🌙</button>
-          </div>
           <div class="resumen-greeting">Bienvenido a Hub<em>Flow</em></div>
           <p class="resumen-sub"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia — elige una categoría para empezar.</p>
           <div class="resumen-stats">
@@ -855,7 +843,7 @@
 
 <!-- BOTTOM NAV (mobile) -->
 <nav class="bottom-nav" id="bottomNav">
-  <button class="bn-item active" data-target="resumen"><span class="bn-icon">🏠</span><span class="bn-label">Resumen</span></button>
+  <button class="bn-item active" data-target="resumen"><span class="bn-icon">📋</span><span class="bn-label">Resumen</span></button>
   <button class="bn-item v" data-target="vocab"><span class="bn-icon">🧠</span><span class="bn-label">Vocab</span></button>
   <button class="bn-item p" data-target="pronunciation"><span class="bn-icon">🔊</span><span class="bn-label">Sonido</span></button>
   <button class="bn-item g" data-target="grammar"><span class="bn-icon">✏️</span><span class="bn-label">Gramática</span></button>
@@ -868,7 +856,7 @@
   // Theme
   const saved = localStorage.getItem('lp-theme');
   if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-  const themeBtns = [document.getElementById('themeToggle'), document.getElementById('themeToggleR')];
+  const themeBtns = [document.getElementById('themeToggle')].filter(Boolean);
   function upd() { themeBtns.forEach(b => b.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'); }
   upd();
   const toggleTheme = () => {
@@ -926,7 +914,6 @@
   // Local dev: rewrite portal link and propagate theme
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     document.getElementById('portalLink').href = 'http://localhost:3000/';
-    document.getElementById('portalLinkR').href = 'http://localhost:3000/';
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href*="localhost:"]');
       if (a) {

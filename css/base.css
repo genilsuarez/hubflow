@@ -250,3 +250,11 @@ a { color: inherit; text-decoration: none; }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--lp-border); border-radius: 3px; }
+
+/* Foco accesible global — todo control interactivo muestra anillo de foco */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 2px;
+}

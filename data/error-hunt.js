@@ -21,8 +21,9 @@ export const CATEGORIES = {
         text: "She don't like coffee. Every morning she drink tea with milk and eat a toast.",
         errors: [
           { word: "don't", index: 1, correction: "doesn't", rule: "Third person singular uses 'doesn't'" },
-          { word: "drink", index: 5, correction: "drinks", rule: "Third person singular: verb + s" },
-          { word: "a", index: 11, correction: "some", rule: "'Toast' is uncountable — use 'some toast'" }
+          { word: "drink", index: 7, correction: "drinks", rule: "Third person singular: verb + s" },
+          { word: "eat", index: 12, correction: "eats", rule: "Third person singular: verb + s" },
+          { word: "a", index: 13, correction: "some", rule: "'Toast' is uncountable — use 'some toast'" }
         ]
       },
       {
@@ -39,7 +40,7 @@ export const CATEGORIES = {
           { word: "swims", index: 6, correction: "swim", rule: "After modal 'can', use base form" },
           { word: "good", index: 8, correction: "well", rule: "Adverb needed to modify a verb: 'well'" },
           { word: "believed", index: 11, correction: "believe", rule: "After 'don't', use base form" },
-          { word: "go", index: 15, correction: "goes", rule: "Third person singular: 'he never goes'" }
+          { word: "go", index: 16, correction: "goes", rule: "Third person singular: 'he never goes'" }
         ]
       },
       {
@@ -54,16 +55,16 @@ export const CATEGORIES = {
         text: "I have been to Paris last year. It were amazing. I visited the Eiffel Tower and taked many photos.",
         errors: [
           { word: "have", index: 1, correction: "went", rule: "'Last year' = past simple, not present perfect" },
-          { word: "were", index: 7, correction: "was", rule: "'It' takes 'was', not 'were'" },
-          { word: "taked", index: 15, correction: "took", rule: "'Take' is irregular: take → took → taken" }
+          { word: "were", index: 8, correction: "was", rule: "'It' takes 'was', not 'were'" },
+          { word: "taked", index: 16, correction: "took", rule: "'Take' is irregular: take → took → taken" }
         ]
       },
       {
         text: "If I will have time tomorrow, I will going to the gym. I need to do more exercise for stay fit.",
         errors: [
           { word: "will", index: 2, correction: "", rule: "First conditional: 'If + present simple' — no 'will' in the if-clause" },
-          { word: "going", index: 10, correction: "go", rule: "After 'will', use base form" },
-          { word: "for", index: 16, correction: "to", rule: "Infinitive of purpose: 'to stay fit'" }
+          { word: "going", index: 8, correction: "go", rule: "After 'will', use base form" },
+          { word: "for", index: 18, correction: "to", rule: "Infinitive of purpose: 'to stay fit'" }
         ]
       },
       {
@@ -79,15 +80,15 @@ export const CATEGORIES = {
         text: "She suggested me to go to the doctor. I agreed going there next week.",
         errors: [
           { word: "me", index: 2, correction: "", rule: "'Suggest' doesn't take indirect object + to-infinitive. Use: 'suggested that I go' or 'suggested going'" },
-          { word: "going", index: 11, correction: "to go", rule: "'Agree' takes to + infinitive: 'agreed to go'" }
+          { word: "going", index: 10, correction: "to go", rule: "'Agree' takes to + infinitive: 'agreed to go'" }
         ]
       },
       {
         text: "He is knowing the answer but he doesn't wants to tell nobody.",
         errors: [
           { word: "knowing", index: 2, correction: "knows", rule: "'Know' is a state verb — not used in continuous" },
-          { word: "wants", index: 6, correction: "want", rule: "After 'doesn't', use base form" },
-          { word: "nobody", index: 9, correction: "anybody", rule: "Double negative: 'doesn't' + 'nobody'. Use 'anybody'" }
+          { word: "wants", index: 8, correction: "want", rule: "After 'doesn't', use base form" },
+          { word: "nobody", index: 11, correction: "anybody", rule: "Double negative: 'doesn't' + 'nobody'. Use 'anybody'" }
         ]
       },
       {
@@ -149,20 +150,20 @@ export const CATEGORIES = {
         text: "When I arrived, she already left. The house was empty and nobody was waited for me.",
         errors: [
           { word: "left", index: 5, correction: "had already left", rule: "Earlier past action needs past perfect: 'had already left'" },
-          { word: "waited", index: 14, correction: "waiting", rule: "Past continuous: 'was waiting', not 'was waited'" }
+          { word: "waited", index: 13, correction: "waiting", rule: "Past continuous: 'was waiting', not 'was waited'" }
         ]
       },
       {
         text: "By next year, I will finished my degree. Then I am going to looked for a job abroad.",
         errors: [
           { word: "finished", index: 5, correction: "have finished", rule: "Future perfect: 'will have finished'" },
-          { word: "looked", index: 14, correction: "look", rule: "'Going to' + base form: 'going to look'" }
+          { word: "looked", index: 13, correction: "look", rule: "'Going to' + base form: 'going to look'" }
         ]
       },
       {
         text: "She is studying English for three years. She started when she has been in school.",
         errors: [
-          { word: "is", index: 0, correction: "has been", rule: "'For three years' = present perfect continuous: 'has been studying'" },
+          { word: "is", index: 1, correction: "has been", rule: "'For three years' = present perfect continuous: 'has been studying'" },
           { word: "has", index: 11, correction: "was", rule: "Past reference: 'when she was in school'" }
         ]
       },
@@ -171,7 +172,7 @@ export const CATEGORIES = {
         errors: [
           { word: "has", index: 7, correction: "", rule: "Narrative sequence = past simple: 'it started raining'" },
           { word: "had", index: 12, correction: "have", rule: "After 'didn't', use base form: 'didn't have'" },
-          { word: "runned", index: 16, correction: "ran", rule: "'Run' is irregular: run → ran → run" }
+          { word: "runned", index: 17, correction: "ran", rule: "'Run' is irregular: run → ran → run" }
         ]
       },
       {
@@ -179,15 +180,15 @@ export const CATEGORIES = {
         errors: [
           { word: "will", index: 4, correction: "", rule: "Time clauses use present simple: 'By the time he arrives'" },
           { word: "eating", index: 9, correction: "be eating", rule: "Future continuous: 'will already be eating'" },
-          { word: "lately", index: 13, correction: "late", rule: "'Late' = not on time. 'Lately' = recently" }
+          { word: "lately", index: 14, correction: "late", rule: "'Late' = not on time. 'Lately' = recently" }
         ]
       },
       {
         text: "I wish I didn't said that yesterday. If only I would think before speaking.",
         errors: [
           { word: "said", index: 4, correction: "say", rule: "After 'didn't', use base form" },
-          { word: "would", index: 9, correction: "had", rule: "'If only' + past perfect for past regret: 'If only I had thought'" },
-          { word: "think", index: 10, correction: "thought", rule: "Past participle needed after 'had': 'had thought'" }
+          { word: "would", index: 10, correction: "had", rule: "'If only' + past perfect for past regret: 'If only I had thought'" },
+          { word: "think", index: 11, correction: "thought", rule: "Past participle needed after 'had': 'had thought'" }
         ]
       },
       {
@@ -210,7 +211,7 @@ export const CATEGORIES = {
         errors: [
           { word: "seeming", index: 4, correction: "seems", rule: "'Seem' is a state verb — use simple present" },
           { word: "worked", index: 9, correction: "working", rule: "Present perfect continuous: 'has been working'" },
-          { word: "ate", index: 14, correction: "eat", rule: "After 'didn't', use base form: 'didn't eat'" }
+          { word: "ate", index: 15, correction: "eat", rule: "After 'didn't', use base form: 'didn't eat'" }
         ]
       }
     ]
@@ -224,45 +225,45 @@ export const CATEGORIES = {
         text: "The economic situation is getting worst every day. Many people are loosing their works and can't afford basic necessities.",
         errors: [
           { word: "worst", index: 5, correction: "worse", rule: "Comparative form: 'worse'. 'Worst' is superlative" },
-          { word: "loosing", index: 10, correction: "losing", rule: "'Lose' → 'losing'. 'Loose' means not tight" },
-          { word: "works", index: 12, correction: "jobs", rule: "'Job' is countable (specific position). 'Work' is uncountable" }
+          { word: "loosing", index: 11, correction: "losing", rule: "'Lose' → 'losing'. 'Loose' means not tight" },
+          { word: "works", index: 13, correction: "jobs", rule: "'Job' is countable (specific position). 'Work' is uncountable" }
         ]
       },
       {
         text: "I'm very interesting in this course. The professor's advices are always practical and he makes us to think critically.",
         errors: [
           { word: "interesting", index: 2, correction: "interested", rule: "-ed adjective for feelings: 'I am interested'" },
-          { word: "advices", index: 7, correction: "advice", rule: "'Advice' is uncountable — no plural form" },
-          { word: "to", index: 14, correction: "", rule: "'Make' + object + bare infinitive: 'makes us think'" }
+          { word: "advices", index: 8, correction: "advice", rule: "'Advice' is uncountable — no plural form" },
+          { word: "to", index: 16, correction: "", rule: "'Make' + object + bare infinitive: 'makes us think'" }
         ]
       },
       {
         text: "She did a big fault in her presentation. Her colleagues were very disappointing and the manager said it was unacceptable.",
         errors: [
           { word: "fault", index: 4, correction: "mistake", rule: "'Mistake' = error you make. 'Fault' = responsibility/blame" },
-          { word: "disappointing", index: 10, correction: "disappointed", rule: "-ed for people's feelings: 'they were disappointed'" }
+          { word: "disappointing", index: 12, correction: "disappointed", rule: "-ed for people's feelings: 'they were disappointed'" }
         ]
       },
       {
         text: "Could you borrow me your pen? I forgot mines at home and I need to make my homework before class.",
         errors: [
           { word: "borrow", index: 2, correction: "lend", rule: "'Lend' = give temporarily. 'Borrow' = take temporarily" },
-          { word: "mines", index: 7, correction: "mine", rule: "Possessive pronoun: 'mine' (no 's')" },
-          { word: "make", index: 13, correction: "do", rule: "Collocation: 'do homework', not 'make homework'" }
+          { word: "mines", index: 8, correction: "mine", rule: "Possessive pronoun: 'mine' (no 's')" },
+          { word: "make", index: 15, correction: "do", rule: "Collocation: 'do homework', not 'make homework'" }
         ]
       },
       {
         text: "The travel from London to Paris takes about two hours by train. It's a very comfortble journey with beautiful countryside.",
         errors: [
           { word: "travel", index: 1, correction: "journey", rule: "'Journey/trip' = specific instance. 'Travel' = general activity (uncountable)" },
-          { word: "comfortble", index: 14, correction: "comfortable", rule: "Spelling: 'comfortable' (don't skip the 'a')" },
-          { word: "countryside", index: 17, correction: "scenery", rule: "'Scenery' = views from a vehicle. 'Countryside' = rural area (less natural here)" }
+          { word: "comfortble", index: 15, correction: "comfortable", rule: "Spelling: 'comfortable' (don't skip the 'a')" },
+          { word: "countryside", index: 19, correction: "scenery", rule: "'Scenery' = views from a vehicle. 'Countryside' = rural area (less natural here)" }
         ]
       },
       {
         text: "I'm looking forward to see you at the meeting. Please remember me to bring the documents.",
         errors: [
-          { word: "see", index: 5, correction: "seeing", rule: "'Look forward to' + gerund: 'to seeing'" },
+          { word: "see", index: 4, correction: "seeing", rule: "'Look forward to' + gerund: 'to seeing'" },
           { word: "remember", index: 10, correction: "remind", rule: "'Remind' someone to do something. 'Remember' = recall" }
         ]
       },
@@ -276,7 +277,7 @@ export const CATEGORIES = {
         text: "He said me that the exam was really hard. He couldn't respond all the questions and he thinks he will not pass it.",
         errors: [
           { word: "said", index: 1, correction: "told", rule: "'Tell' + indirect object: 'told me'. 'Say' doesn't take indirect object directly" },
-          { word: "respond", index: 10, correction: "answer", rule: "'Answer' a question. 'Respond' to a situation/letter" }
+          { word: "respond", index: 11, correction: "answer", rule: "'Answer' a question. 'Respond' to a situation/letter" }
         ]
       },
       {
@@ -290,9 +291,9 @@ export const CATEGORIES = {
       {
         text: "The assistant explained us the process very good. At the end we received a comprehensive inform about our options.",
         errors: [
-          { word: "us", index: 2, correction: "to us", rule: "'Explain' + to + indirect object: 'explained to us'" },
-          { word: "good", index: 6, correction: "well", rule: "Adverb needed: 'explained well', not 'good'" },
-          { word: "inform", index: 14, correction: "report", rule: "'Report/document' = noun. 'Inform' is only a verb in English" }
+          { word: "us", index: 3, correction: "to us", rule: "'Explain' + to + indirect object: 'explained to us'" },
+          { word: "good", index: 7, correction: "well", rule: "Adverb needed: 'explained well', not 'good'" },
+          { word: "inform", index: 15, correction: "report", rule: "'Report/document' = noun. 'Inform' is only a verb in English" }
         ]
       }
     ]
@@ -307,21 +308,21 @@ export const CATEGORIES = {
         errors: [
           { word: "to", index: 2, correction: "at", rule: "'Arrive at' a building/place (not 'to')" },
           { word: "in", index: 5, correction: "on", rule: "Days use 'on': 'on Monday'" },
-          { word: "since", index: 13, correction: "for", rule: "'An hour' is a duration — use 'for'" }
+          { word: "since", index: 14, correction: "for", rule: "'An hour' is a duration — use 'for'" }
         ]
       },
       {
         text: "She's afraid from spiders. She depends of her brother to remove them from the house.",
         errors: [
           { word: "from", index: 2, correction: "of", rule: "'Afraid of' (not 'from')" },
-          { word: "of", index: 5, correction: "on", rule: "'Depend on' (not 'of')" }
+          { word: "of", index: 6, correction: "on", rule: "'Depend on' (not 'of')" }
         ]
       },
       {
         text: "We are going in holiday in August. We will stay in a hotel at the beach for two weeks.",
         errors: [
           { word: "in", index: 3, correction: "on", rule: "'Go on holiday' (not 'in')" },
-          { word: "at", index: 14, correction: "on/near", rule: "'On the beach' or 'near the beach' (not 'at')" }
+          { word: "at", index: 13, correction: "on/near", rule: "'On the beach' or 'near the beach' (not 'at')" }
         ]
       },
       {
@@ -335,15 +336,15 @@ export const CATEGORIES = {
         text: "I usually go to work with car but today I went by foot because the weather was nice.",
         errors: [
           { word: "with", index: 5, correction: "by", rule: "'By car' (mode of transport)" },
-          { word: "by", index: 10, correction: "on", rule: "'On foot' (not 'by foot')" }
+          { word: "by", index: 11, correction: "on", rule: "'On foot' (not 'by foot')" }
         ]
       },
       {
         text: "The meeting starts in 9 o'clock. Please sit down on your chair and look on the screen.",
         errors: [
           { word: "in", index: 3, correction: "at", rule: "Specific times use 'at': 'at 9 o'clock'" },
-          { word: "on", index: 8, correction: "in/on", rule: "'Sit in a chair' (armchair) or 'sit on a chair' — not 'down on'" },
-          { word: "on", index: 12, correction: "at", rule: "'Look at' (not 'look on')" }
+          { word: "on", index: 9, correction: "in/on", rule: "'Sit in a chair' (armchair) or 'sit on a chair' — not 'down on'" },
+          { word: "on", index: 14, correction: "at", rule: "'Look at' (not 'look on')" }
         ]
       },
       {
@@ -351,7 +352,7 @@ export const CATEGORIES = {
         errors: [
           { word: "with", index: 2, correction: "", rule: "'Marry' someone directly (no preposition): 'married a man'" },
           { word: "at", index: 7, correction: "on", rule: "'On the Internet' (not 'at')" },
-          { word: "since", index: 12, correction: "for", rule: "'Five years' is a duration — use 'for'" }
+          { word: "since", index: 13, correction: "for", rule: "'Five years' is a duration — use 'for'" }
         ]
       },
       {
@@ -365,15 +366,15 @@ export const CATEGORIES = {
         text: "He apologized for arrive late. He explained that he was stuck on traffic during rush hour.",
         errors: [
           { word: "arrive", index: 3, correction: "arriving", rule: "'Apologize for' + gerund: 'for arriving'" },
-          { word: "on", index: 10, correction: "in", rule: "'Stuck in traffic' (not 'on')" }
+          { word: "on", index: 11, correction: "in", rule: "'Stuck in traffic' (not 'on')" }
         ]
       },
       {
         text: "We discussed about the problem in the meeting. Everyone agreed in the solution except my boss who insisted in changing the plan.",
         errors: [
           { word: "about", index: 2, correction: "", rule: "'Discuss' is transitive — no preposition: 'discussed the problem'" },
-          { word: "in", index: 9, correction: "on", rule: "'Agree on' a solution (not 'in')" },
-          { word: "in", index: 15, correction: "on", rule: "'Insist on' (not 'in')" }
+          { word: "in", index: 10, correction: "on", rule: "'Agree on' a solution (not 'in')" },
+          { word: "in", index: 18, correction: "on", rule: "'Insist on' (not 'in')" }
         ]
       }
     ]
