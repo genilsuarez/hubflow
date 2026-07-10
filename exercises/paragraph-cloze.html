@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paragraph Cloze — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237B5EA7'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<style>
+  body { min-height: 100vh; padding: 0 14px 40px; }
+  .header { padding: 6px 0; }
+  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+  .back-link { color: var(--lp-cat-purple); }
+  .pill-btn.active { background: var(--lp-cat-purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
+  .progress__fill { background: var(--lp-cat-purple); }
+
+  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+
+  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  [data-area].show { display: flex; }
+
+  .pc-card {
+    width: 100%; max-width: 580px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 22px; box-shadow: var(--lp-shadow-md);
+  }
+  .pc-title {
+    font-family: var(--lp-font-display); font-weight: 700; font-size: 1.05rem; color: var(--lp-cat-purple);
+    margin-bottom: 4px; text-align: center;
+  }
+  .pc-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); text-align: center; margin-bottom: 14px; }
+  .pc-text { font-size: .92rem; line-height: 2.3; color: var(--lp-ink); }
+  .pc-blank {
+    display: inline-block; width: 92px; padding: 4px 6px; margin: 0 2px; text-align: center;
+    font-family: var(--lp-font-mono); font-size: .82rem; border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-sm); background: var(--lp-bg-paper); color: var(--lp-ink);
+    outline: none; transition: border-color .2s;
+  }
+  .pc-blank:focus { border-color: var(--lp-cat-purple); }
+  .pc-blank.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
+  .pc-blank.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
+  @media (max-width: 480px) { .pc-blank { width: 72px; font-size: .76rem; } }
+
+  .pc-status { font-size: .75rem; font-weight: 700; color: var(--lp-muted); text-align: center; }
+  .pc-status em { color: var(--lp-cat-purple); font-style: normal; }
+
+  .pc-explanations { width: 100%; max-width: 580px; display: none; flex-direction: column; gap: 6px; }
+  .pc-explanations.show { display: flex; }
+  .pc-exp-item {
+    background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    padding: 8px 12px; font-size: .74rem; line-height: 1.5;
+  }
+  .pc-exp-item strong { color: var(--lp-cat-purple); }
+  .pc-exp-item em { color: var(--lp-success); font-style: normal; font-weight: 700; }
+
+  .pc-explain-final {
+    width: 100%; max-width: 580px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
+    background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    padding: 10px 14px; text-align: center; line-height: 1.5;
+  }
+
+  .scroll-body { padding: 8px 0 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
+    <div class="tb-actions">
+      <a class="lp-icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Ir al portal DeskFlow" title="Portal">🏠</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+    </div>
+  </div>
+
+  <header class="header">
+    <h1>📄 Paragraph Cloze</h1>
+    <div class="pill-bar pill-bar--scroll" role="tablist">
+      <button class="pill-btn active" data-mode="practice" role="tab">📝 Practice</button>
+      <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
+    </div>
+  </header>
+
+  <div class="cat-bar" id="catBar"></div>
+
+  <div class="progress">
+    <div class="progress__labels"><span id="progTxt">0 / 4</span><span id="progPct">0%</span></div>
+    <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+  </div>
+
+  <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">3:00</span></div>
+
+  <div class="scroll-body">
+    <div data-area="practice" class="show">
+      <div class="pc-card">
+        <div class="pc-title" id="pcTitleText"></div>
+        <div class="pc-counter" id="pcCounter"></div>
+        <div class="pc-text" id="pcText"></div>
+      </div>
+
+      <div class="pc-status" id="pcStatus"></div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn--primary" id="checkBtn">Check All ✓</button>
+        <button class="btn btn--ghost" id="nextBtn" style="display:none">Next →</button>
+      </div>
+
+      <div class="pc-explanations" id="pcExplanations"></div>
+      <div class="pc-explain-final" id="pcExplainFinal" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/paragraph-cloze.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+
+initTheme();
+document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+
+function normalize(s) {
+  return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');
+}
+function isMatch(userAnswer, correctArray) {
+  const n = normalize(userAnswer);
+  return n.length > 0 && correctArray.some(c => normalize(c) === n);
+}
+
+const catKeys = Object.keys(CATEGORIES);
+let currentCat = catKeys[0];
+let mode = 'practice';
+let deck = [], idx = 0, blanksCorrect = 0, blanksTotal = 0, total = 0;
+let checked = false;
+let timer = null;
+
+function renderCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = catKeys.map(k =>
+    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
+  ).join('');
+  bar.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      startMode();
+    });
+  });
+}
+renderCatBar();
+
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    startMode();
+  });
+});
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+
+function startMode() {
+  stopTimer();
+  deck = shuffle(CATEGORIES[currentCat].items);
+  idx = 0; blanksCorrect = 0; blanksTotal = 0;
+  total = deck.length;
+  document.getElementById('timerBar').classList.toggle('show', mode === 'timed');
+
+  if (mode === 'timed') {
+    timer = new Timer(total * 45,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 20); },
+      () => finish()
+    );
+    timer.start();
+  }
+  renderPassage();
+}
+
+function updProgress() {
+  const pct = total > 0 ? Math.round((idx / total) * 100) : 0;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTxt').textContent = `${idx} / ${total}`;
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+function renderPassage() {
+  if (idx >= total) { stopTimer(); finish(); return; }
+  checked = false;
+  const item = deck[idx];
+
+  document.getElementById('pcTitleText').textContent = item.title;
+  document.getElementById('pcCounter').textContent = `${idx + 1} / ${total}`;
+
+  const html = item.text.replace(/___(\d+)___/g, (m, n) =>
+    `<input class="pc-blank" data-n="${n}" autocomplete="off" autocapitalize="off" spellcheck="false">`
+  );
+  document.getElementById('pcText').innerHTML = html;
+  document.getElementById('pcExplanations').classList.remove('show');
+  document.getElementById('pcExplanations').innerHTML = '';
+  document.getElementById('pcExplainFinal').style.display = 'none';
+
+  updateStatus(item);
+
+  document.getElementById('checkBtn').style.display = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const firstBlank = document.querySelector('.pc-blank[data-n="1"]');
+  if (firstBlank) firstBlank.focus();
+
+  document.querySelectorAll('.pc-blank').forEach((el, i, all) => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const next = all[i + 1];
+        if (next) next.focus(); else checkAll();
+      }
+    });
+  });
+
+  updProgress();
+}
+
+function updateStatus(item) {
+  document.getElementById('pcStatus').innerHTML = `<em>${item.blanks.length}</em> blanks in this passage`;
+}
+
+function checkAll() {
+  if (checked) return;
+  checked = true;
+  const item = deck[idx];
+  let correctCount = 0;
+
+  item.blanks.forEach(b => {
+    const el = document.querySelector(`.pc-blank[data-n="${b.n}"]`);
+    if (!el) return;
+    el.disabled = true;
+    const ok = isMatch(el.value, b.correct);
+    el.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) correctCount++;
+  });
+
+  blanksCorrect += correctCount;
+  blanksTotal += item.blanks.length;
+
+  document.getElementById('pcStatus').innerHTML = `<em>${correctCount}</em> / ${item.blanks.length} correct`;
+
+  const expEl = document.getElementById('pcExplanations');
+  expEl.innerHTML = item.blanks.map(b =>
+    `<div class="pc-exp-item"><strong>#${b.n}</strong> → <em>${b.correct[0]}</em> — ${b.hint}</div>`
+  ).join('');
+  expEl.classList.add('show');
+
+  const finalEl = document.getElementById('pcExplainFinal');
+  finalEl.textContent = item.explain;
+  finalEl.style.display = 'block';
+
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+}
+
+document.getElementById('checkBtn').addEventListener('click', checkAll);
+document.getElementById('nextBtn').addEventListener('click', () => { idx++; renderPassage(); });
+
+function finish() {
+  stopTimer();
+  const pct = blanksTotal > 0 ? Math.round((blanksCorrect / blanksTotal) * 100) : 0;
+  showResult({
+    correct: blanksCorrect, total: blanksTotal,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: null,
+  });
+  recordScore(`paracloze-${currentCat}`, pct);
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progTxt').textContent = `${total} / ${total}`;
+  document.getElementById('progPct').textContent = '100%';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && checked) { e.preventDefault(); document.getElementById('nextBtn').click(); }
+});
+
+startMode();
+</script>
+
+<script>
+if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+  const pl = document.getElementById('portalLink');
+  if (pl) pl.href = 'http://localhost:3000/';
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href*="localhost:"]');
+    if (a) {
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const url = new URL(a.href);
+      url.searchParams.set('theme', theme);
+      a.href = url.toString();
+    }
+  });
+}
+</script>
+</body>
+</html>

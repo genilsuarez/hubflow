@@ -52,6 +52,56 @@ function validateErrorHunt(mod, file) {
   }
 }
 
+function validateRegisterSwitch(mod, file) {
+  const groups = flattenCategories(mod);
+  if (!groups) return;
+  for (const { cat, items } of groups) {
+    items.forEach((item, ii) => {
+      if (typeof item.source !== 'string' || !item.source.trim()) {
+        err('RS-FIELD', `${file}[${cat}#${ii}]: missing or empty "source"`);
+      }
+      if (!Array.isArray(item.correct) || item.correct.length === 0 || item.correct.some((c) => !c || typeof c !== 'string')) {
+        err('RS-CORRECT', `${file}[${cat}#${ii}]: "correct" must be a non-empty array of non-empty strings`);
+      }
+    });
+  }
+}
+
+function validateSentenceCombining(mod, file) {
+  const groups = flattenCategories(mod);
+  if (!groups) return;
+  for (const { cat, items } of groups) {
+    items.forEach((item, ii) => {
+      if (!Array.isArray(item.sentences) || item.sentences.length !== 2 || item.sentences.some((s) => !s || typeof s !== 'string')) {
+        err('SC-SENTENCES', `${file}[${cat}#${ii}]: "sentences" must be an array of exactly 2 non-empty strings`);
+      }
+      if (!Array.isArray(item.correct) || item.correct.length === 0 || item.correct.some((c) => !c || typeof c !== 'string')) {
+        err('SC-CORRECT', `${file}[${cat}#${ii}]: "correct" must be a non-empty array of non-empty strings`);
+      }
+    });
+  }
+}
+
+function validateParagraphCloze(mod, file) {
+  const groups = flattenCategories(mod);
+  if (!groups) return;
+  for (const { cat, items } of groups) {
+    items.forEach((item, ii) => {
+      const text = item.text || '';
+      const markersInText = [...text.matchAll(/___(\d+)___/g)].map((m) => Number(m[1])).sort((a, b) => a - b);
+      const blankNumbers = (item.blanks || []).map((b) => b.n).sort((a, b) => a - b);
+      if (JSON.stringify(markersInText) !== JSON.stringify(blankNumbers)) {
+        err('PC-MISMATCH', `${file}[${cat}#${ii}]: text markers ${JSON.stringify(markersInText)} don't match blanks ${JSON.stringify(blankNumbers)}`);
+      }
+      (item.blanks || []).forEach((b) => {
+        if (!Array.isArray(b.correct) || b.correct.length === 0 || b.correct.some((c) => !c || typeof c !== 'string')) {
+          err('PC-BLANK', `${file}[${cat}#${ii}] blank #${b.n}: "correct" must be a non-empty array of non-empty strings`);
+        }
+      });
+    });
+  }
+}
+
 function validateOddOneOut(mod, file) {
   const groups = flattenCategories(mod);
   if (!groups) return;
@@ -102,6 +152,9 @@ function validateDuplicates(mod, file) {
 const SPECIAL = {
   'error-hunt.js': validateErrorHunt,
   'odd-one-out.js': validateOddOneOut,
+  'register-switch.js': validateRegisterSwitch,
+  'sentence-combining.js': validateSentenceCombining,
+  'paragraph-cloze.js': validateParagraphCloze,
 };
 
 /**
@@ -122,7 +175,8 @@ async function validateCatalog() {
     seenIds.add(m.id);
 
     for (const [field, p] of [['exercise', m.exercise], ['guide', m.guide], ['dataFile', m.dataFile]]) {
-      if (p && !existsSync(path.join(ROOT_DIR, p))) {
+      const pathOnly = p ? p.split('#')[0].split('?')[0] : p;
+      if (pathOnly && !existsSync(path.join(ROOT_DIR, pathOnly))) {
         err('CAT-PATH', `catalog.js[${m.id}].${field}: file not found "${p}"`);
       }
     }
@@ -140,7 +194,7 @@ async function validateCatalog() {
 
   // Every exercises/*.html must have a catalog entry (no orphans in either direction).
   const exerciseFiles = readdirSync(EXERCISES_DIR).filter((f) => f.endsWith('.html'));
-  const catalogedExercises = new Set(MODULES.map((m) => path.basename(m.exercise)));
+  const catalogedExercises = new Set(MODULES.map((m) => path.basename(m.exercise.split('#')[0].split('?')[0])));
   for (const f of exerciseFiles) {
     if (!catalogedExercises.has(f)) err('CAT-ORPHAN', `exercises/${f}: not registered in catalog.js`);
   }

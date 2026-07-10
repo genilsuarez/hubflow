@@ -275,10 +275,34 @@
 import { CATEGORIES } from '../data/vocabulary.js';
 import { FlashcardEngine } from '../js/flashcard-engine.js';
 
+// Vocabulary packs (Fase 4 del plan de recategorización): agrupan las 26
+// subcategorías de vocabulary.js en paquetes temáticos accesibles vía
+// exercises/vocabulary.html#pack=<name> — sin tocar flashcard-engine.js.
+// Se usa hash (no query string) porque serve.json tiene cleanUrls:true, cuyo
+// redirect .html→sin-extensión descarta el query string; el hash nunca viaja al servidor.
+const PACKS = {
+  idioms: { label: 'Idioms Pack', keys: ['idioms', 'bodyIdioms', 'healthIdioms', 'natureIdioms'] },
+  soundNatural: { label: 'Sound Natural', keys: ['soundNative', 'saidAlternatives', 'neverUseVery', 'soundingNatural', 'becauseAlternatives'] },
+  c1: { label: 'C1 Vocabulary', keys: ['dailyRoutineC1', 'foodDrinkC1', 'advancedVerbs', 'advancedPhrases'] },
+  everyday: { label: 'Everyday Basics', keys: ['bodyParts', 'cooking', 'timeOfDay', 'weather', 'seasons', 'socialExpressions', 'personalityAdjectives', 'rhymingReduplication', 'sameWordDifferentMeaning', 'clothingAppearance', 'eggcorns', 'hobbies', 'telephoneEnglish'] },
+};
+
+const packParam = new URLSearchParams(location.hash.slice(1)).get('pack');
+const pack = packParam && PACKS[packParam];
+const activeCategories = pack
+  ? Object.fromEntries(pack.keys.filter((k) => CATEGORIES[k]).map((k) => [k, CATEGORIES[k]]))
+  : CATEGORIES;
+
+if (pack) {
+  const h1 = document.querySelector('h1');
+  if (h1) h1.textContent = `🧠 ${pack.label}`;
+  document.title = `${pack.label} — HubFlow`;
+}
+
 const engine = new FlashcardEngine({
-  categories: CATEGORIES,
+  categories: activeCategories,
   storagePrefix: 'vocab',
-  defaultCategory: 'bodyParts',
+  defaultCategory: Object.keys(activeCategories)[0],
 });
 
 // Expose for onclick handlers
