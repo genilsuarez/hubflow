@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="../css/base.css">
 <style>
 :root{
-  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
-  --ink-soft:#46566A;
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
   --red:#FF6B6B;--blue:#7C5AF6;--green:#2FA86B;
   --red-light:#FFECEC;--blue-light:#EEE9FE;--green-light:#E4F5EC;
   --red-dark:#CC3333;--blue-dark:#5A3BC4;--green-dark:#156C42;
@@ -26,21 +26,8 @@
 body{
   font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(900px 480px at 50% -8%, rgba(124,90,246,.15) 0%, rgba(124,90,246,.05) 40%, transparent 64%),
-    radial-gradient(620px 460px at 100% 4%, rgba(124,90,246,.10) 0%, transparent 58%),
-    linear-gradient(180deg, #FFFFFF 0%, #F8F6FE 55%, #EDE7FB 100%);
-  background-attachment:fixed;
+  background:var(--bg);
 }
-[data-theme="dark"] body{background:var(--bg);}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(rgba(124,90,246,.08) 1px, transparent 1.5px);
-  background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
-  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
-}
-[data-theme="dark"] body::before{display:none;}
 .page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
 
 .nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
@@ -64,7 +51,8 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 .ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
 [data-theme="dark"] .ex{color:#6FE8A8;}
 
-.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;}
+.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
 .sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
 .sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
 .sum-table tr:last-child td{border-bottom:none;}
@@ -121,7 +109,7 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </div>
 
 <h2>&#128260; Irregular Forms</h2>
-<table class="sum-table">
+<div class="table-scroll"><table class="sum-table">
   <thead><tr><th>Adjective</th><th>Comparative</th><th>Superlative</th></tr></thead>
   <tbody>
     <tr><td class="q">good</td><td>better</td><td class="usage">best</td></tr>
@@ -129,7 +117,7 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
     <tr><td class="q">far (distance)</td><td>further / farther</td><td class="usage">furthest / farthest</td></tr>
     <tr><td class="q">far (extra/additional)</td><td>further</td><td class="usage">furthest</td></tr>
   </tbody>
-</table>
+</table></div>
 <div class="rule-card pos">
   <div class="rule-title">&#128161; Further vs Farther</div>
   <div class="rule-desc">Use <strong>further</strong> for additional/extra ("I need further information"). Either <strong>further</strong> or <strong>farther</strong> works for physical distance.</div>

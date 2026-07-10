@@ -241,6 +241,7 @@ export class SpellingEngine {
   startTimer() {
     const seconds = this.words.length * 5; // 5 seconds per word
     this.timeLeft = seconds;
+    this.timedTotal = seconds;
     const display = document.getElementById('timerDisplay');
     if (display) display.textContent = formatTime(this.timeLeft);
 
@@ -348,6 +349,13 @@ export class SpellingEngine {
 
     const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
 
+    // Calculate elapsed time for timed mode
+    let timeHtml = '';
+    if (this.mode === 'timed' && this.timedTotal) {
+      const elapsed = this.timedTotal - (this.timeLeft || 0);
+      timeHtml = `<div class="result-time">⏱ ${formatTime(elapsed)}</div>`;
+    }
+
     overlay.innerHTML = `
       <div class="result-box">
         <div class="result-stars">
@@ -361,6 +369,7 @@ export class SpellingEngine {
           ${this.config.hasColorPicker ? `· Colors: ${colorOk}/${total}` : ''}
           · Score: ${pct}%
         </div>
+        ${timeHtml}
         <div class="result-btns">
           <button class="btn btn--primary" id="resultRestart">🔄 Try Again</button>
           <button class="btn btn--ghost" id="resultClose">✕ Close</button>

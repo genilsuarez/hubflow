@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="../css/base.css">
 <style>
 :root{
-  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
-  --ink-soft:#46566A;
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
   --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
   --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
   --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
@@ -27,21 +27,8 @@ body{
   font-family:'Manrope',sans-serif;color:var(--text);
   min-height:100vh;padding:0;transition:color .3s;
   -webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
-    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
-    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
-  background-attachment:fixed;
+  background:var(--bg);
 }
-[data-theme="dark"] body{background:var(--bg);}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
-  background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
-  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
-}
-[data-theme="dark"] body::before{display:none;}
 .page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
 
 .nav-bar{
@@ -74,6 +61,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
 .pattern-header.p-teal{background:var(--teal-light);border:1.5px solid color-mix(in srgb, var(--teal) 30%, transparent);}
 
 /* VERB TABLE */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .verb-table{
   width:100%;border-collapse:collapse;font-size:.78rem;font-family:'Manrope',sans-serif;
   background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;
@@ -143,7 +131,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
     <span class="pat-icon">&#128308;</span>
     <div><div class="pat-name">A-A-A &mdash; All forms identical</div><div class="pat-desc">No change at all</div></div>
   </div>
-  <table class="verb-table">
+  <div class="table-scroll"><table class="verb-table">
     <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
     <tbody>
       <tr><td class="base">cut</td><td class="past">cut</td><td class="pp">cut</td><td class="meaning">cortar</td></tr>
@@ -157,7 +145,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
       <tr><td class="base">quit</td><td class="past">quit</td><td class="pp">quit</td><td class="meaning">dejar/renunciar</td></tr>
       <tr><td class="base">spread</td><td class="past">spread</td><td class="pp">spread</td><td class="meaning">esparcir</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <div class="mnemonic"><div class="mn-title">&#128161; Mnemonic</div><div class="mn-body">Most A-A-A verbs end in <strong>-t</strong> or <strong>-d</strong>. Think: "already ends in past sound."</div></div>
 </section>
 
@@ -167,7 +155,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
     <span class="pat-icon">&#128309;</span>
     <div><div class="pat-name">A-B-B &mdash; Past = Past Participle</div><div class="pat-desc">Change once, keep it</div></div>
   </div>
-  <table class="verb-table">
+  <div class="table-scroll"><table class="verb-table">
     <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
     <tbody>
       <tr><td class="base">bring</td><td class="past">brought</td><td class="pp">brought</td><td class="meaning">traer</td></tr>
@@ -199,7 +187,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
       <tr><td class="base">get</td><td class="past">got</td><td class="pp">got/gotten</td><td class="meaning">obtener</td></tr>
       <tr><td class="base">read</td><td class="past">read</td><td class="pp">read</td><td class="meaning">leer (pron. /red/)</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <div class="mnemonic"><div class="mn-title">&#128161; Tip</div><div class="mn-body">This is the <strong>largest group</strong>. Sub-patterns: "-ought" family (bring/buy/think/teach/catch), "-ept/-eft" family (keep/sleep/leave/feel), and vowel shortening (meet&rarr;met, sit&rarr;sat).</div></div>
 </section>
 
@@ -209,7 +197,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
     <span class="pat-icon">&#128995;</span>
     <div><div class="pat-name">A-B-C &mdash; All forms different</div><div class="pat-desc">Three distinct forms to learn</div></div>
   </div>
-  <table class="verb-table">
+  <div class="table-scroll"><table class="verb-table">
     <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
     <tbody>
       <tr><td class="base">be</td><td class="past">was/were</td><td class="pp">been</td><td class="meaning">ser/estar</td></tr>
@@ -246,7 +234,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
       <tr><td class="base">wear</td><td class="past">wore</td><td class="pp">worn</td><td class="meaning">llevar puesto</td></tr>
       <tr><td class="base">write</td><td class="past">wrote</td><td class="pp">written</td><td class="meaning">escribir</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <div class="mnemonic"><div class="mn-title">&#128161; Sub-patterns in A-B-C</div><div class="mn-body"><strong>i-a-u</strong> (drink/ring/sing/swim/begin) &bull; <strong>-ew/-own</strong> (grow/know/fly/throw/draw) &bull; <strong>-oke/-oken</strong> (break/choose/speak/steal/wake) &bull; <strong>-ove/-iven</strong> (drive/ride/write)</div></div>
 </section>
 
@@ -256,7 +244,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
     <span class="pat-icon">&#128312;</span>
     <div><div class="pat-name">A-B-A &mdash; PP same as Base</div><div class="pat-desc">Comes back to the start</div></div>
   </div>
-  <table class="verb-table">
+  <div class="table-scroll"><table class="verb-table">
     <thead><tr><th>Base</th><th>Past</th><th>Past Participle</th><th>Meaning</th></tr></thead>
     <tbody>
       <tr><td class="base">become</td><td class="past">became</td><td class="pp">become</td><td class="meaning">convertirse</td></tr>
@@ -264,7 +252,7 @@ h1 .accent{font-style:italic;color:var(--blue);}
       <tr><td class="base">run</td><td class="past">ran</td><td class="pp">run</td><td class="meaning">correr</td></tr>
       <tr><td class="base">overcome</td><td class="past">overcame</td><td class="pp">overcome</td><td class="meaning">superar</td></tr>
     </tbody>
-  </table>
+  </table></div>
 </section>
 
 <footer class="guide-footer">

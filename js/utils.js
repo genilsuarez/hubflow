@@ -106,10 +106,14 @@ export function formatTime(seconds) {
 }
 
 /** Show result overlay */
-export function showResult({ correct, total, containerEl, onRestart, onStudy }) {
+export function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSeconds }) {
   const pct = Math.round((correct / total) * 100);
   const stars = getStars(pct);
   const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
+
+  const timeHtml = elapsedSeconds != null
+    ? `<div class="result-time">⏱ ${formatTime(elapsedSeconds)}</div>`
+    : '';
 
   containerEl.innerHTML = `
     <div class="result-box">
@@ -120,6 +124,7 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy }) 
       </div>
       <div class="result-title">${titles[stars]}</div>
       <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
+      ${timeHtml}
       <div class="result-btns">
         <button class="btn btn--primary" id="resultRestart">🔄 Try Again</button>
         ${onStudy ? '<button class="btn btn--ghost" id="resultStudy">📖 Study</button>' : ''}

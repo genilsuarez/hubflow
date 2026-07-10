@@ -56,6 +56,7 @@
   transition: border-color 0.2s, transform 0.2s, background 0.2s, box-shadow 0.2s, color 0.2s;
 }
 .lp-icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.06); box-shadow: var(--lp-shadow-md); }
+[data-theme="dark"] .lp-icon-btn { color: var(--lp-ink); }
 .lp-icon-btn.active {
   background: var(--lp-accent-soft);
   border-color: color-mix(in srgb, var(--lp-accent) 35%, transparent);

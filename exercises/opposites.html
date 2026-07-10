@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Word Relations — HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script>var p=new URLSearchParams(location.search).get('theme'),t=p||localStorage.getItem('lp-theme');if(p)localStorage.setItem('lp-theme',p);if(t==='dark')document.documentElement.setAttribute('data-theme','dark')</script>
+<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#1A1714;color:#EDE8E0}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/buttons.css">
@@ -48,7 +50,10 @@
   .player-score.p1 .p-points { color: var(--blue, #4a9eff); }
   .player-score.p2 .p-points { color: var(--red, #e85d5d); }
   .vs-badge { font-family: 'Newsreader', serif; font-size: .8rem; font-style: italic; color: var(--muted); }
-  .battle-card { max-width: 360px; height: 140px; }
+  .battle-card { max-width: 360px; height: 140px; perspective: 1200px; position: relative; }
+  .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg, 12px); transition: transform .55s ease; transform-style: preserve-3d; }
+  .battle-card.flipped .fc-inner { transform: rotateY(180deg); }
+  .battle-card .fc-face { border-radius: var(--radius-lg, 12px); }
   .battle-card .fc-emoji { font-size: 2.2rem; }
   .battle-card .fc-term { font-size: 1.4rem; }
   .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -200,6 +205,7 @@ let deck = [], cardIdx = 0;
 let quizDeck = [], quizIdx = 0, quizScore = 0, quizTotal = 12;
 let pairState = {};
 let timer = null;
+let timedSeconds = 0;
 
 // ─── Category switching ───
 document.querySelectorAll('[data-cat]').forEach(btn => {
@@ -231,7 +237,7 @@ function startMode() {
   else if (mode === 'timed') initQuiz(true);
 }
 
-function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
 
 // ─── STUDY ───
 function initStudy() {
@@ -320,7 +326,9 @@ function initQuiz(timed) {
 
   if (timed) {
     document.getElementById('timerBar').classList.add('show');
-    timer = new Timer(quizTotal * 7,
+    timedSeconds = quizTotal * 7;
+
+    timer = new Timer(timedSeconds,
       r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
       () => showResult()
     );
@@ -473,10 +481,9 @@ function showBattleCard() {
   document.getElementById('battleBackTerm').textContent = battle.currentAnswer;
 
   document.getElementById('battleRound').textContent = `Round ${battle.round + 1} / ${battle.total}`;
+  updProgress(battle.round + 1, battle.total);
   setBattlePhase('claim');
-}
-
-function setBattlePhase(phase) {
+}function setBattlePhase(phase) {
   battle.phase = phase;
   document.getElementById('battleActions').style.display = phase === 'claim' ? 'flex' : 'none';
   document.getElementById('battleJudge').style.display = phase === 'judge' ? 'flex' : 'none';
@@ -498,9 +505,9 @@ function battleSkip() {
 }
 
 function battleJudge(correct) {
-  if (correct) {
-    battle[`p${battle.claimer}`]++;
-  }
+function battleJudge(correct) {
+  if (correct) battle[`p${battle.claimer}`]++;
+  else battle[`p${battle.claimer === 1 ? 2 : 1}`]++;
   updateBattleScores();
   setBattlePhase('next');
 }

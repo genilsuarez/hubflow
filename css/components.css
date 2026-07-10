@@ -49,10 +49,15 @@
 .btn:disabled { opacity: .4; cursor: not-allowed; transform: none !important; }
 
 /* ─── PILL TABS ─── */
+/* Scroll horizontal por defecto: en pantallas angostas (≤375px) las bars de 4-5
+   modos desbordaban la página entera (31 ejercicios sin --scroll). El modificador
+   --scroll se conserva por compatibilidad pero ya es redundante. */
 .pill-bar {
   display: flex; background: var(--lp-bg-paper); border-radius: var(--lp-radius-sm);
   padding: 3px; gap: 2px; border: 1.5px solid var(--lp-border);
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
+.pill-bar::-webkit-scrollbar { display: none; }
 .pill-bar--scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .pill-bar--scroll::-webkit-scrollbar { display: none; }
 
@@ -206,6 +211,7 @@
 .result-star.lit { opacity: 1; transform: scale(1.1); }
 .result-title { font-family: var(--lp-font-display); font-weight: var(--lp-weight-semibold); font-size: 1.4rem; color: var(--lp-ink); margin-bottom: 4px; }
 .result-sub { font-size: .8rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); margin-bottom: 14px; }
+.result-time { font-size: .85rem; color: var(--lp-accent); font-weight: var(--lp-weight-semibold); margin-bottom: 14px; margin-top: -8px; }
 .result-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 
 /* ─── BATTLE ─── */
@@ -309,8 +315,11 @@
 .cat-btn:hover { border-color: var(--lp-accent); color: var(--lp-accent); }
 .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
 
-/* Cat-bar: indicador de scroll (fade en el borde derecho) + scroll-snap */
+/* Cat-bar: indicador de scroll (fade en el borde derecho) + scroll-snap.
+   overflow-x centralizado: la mayoría de ejercicios lo duplican inline, pero
+   los que lo omiten (irregular-verbs) desbordaban la página en ≤320px. */
 .cat-bar {
+  overflow-x: auto; scrollbar-width: none;
   scroll-snap-type: x proximity;
   -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
   mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);

@@ -458,6 +458,9 @@ export class FlashcardEngine {
     const card = document.getElementById('battleCard');
     if (card) card.classList.remove('flipped');
 
+    // Update progress bar
+    this.updateBattleProgress();
+
     const emoji = document.getElementById('battleEmoji');
     const hint = document.getElementById('battleHint');
     const backTerm = document.getElementById('battleBackTerm');
@@ -536,6 +539,18 @@ export class FlashcardEngine {
     if (p2) p2.textContent = this.battle.p2;
   }
 
+  updateBattleProgress() {
+    const current = this.battle.round + 1;
+    const total = this.battle.total;
+    const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+    const fillEl = document.getElementById('progFill');
+    const txtEl = document.getElementById('progTxt');
+    const pctEl = document.getElementById('progPct');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+    if (txtEl) txtEl.textContent = `${current} / ${total}`;
+    if (pctEl) pctEl.textContent = `${pct}%`;
+  }
+
   showBattleResult() {
     let title, trophy;
     if (this.battle.p1 > this.battle.p2) { trophy = '🏆'; title = 'Player 1 wins!'; }
@@ -571,6 +586,7 @@ export class FlashcardEngine {
     this.updateQuizProgress();
 
     const seconds = this.quizTotal * 8;
+    this.timedTotal = seconds;
     this.timer = new Timer(seconds,
       (remaining) => {
         const display = document.getElementById('timerDisplay');
@@ -596,6 +612,14 @@ export class FlashcardEngine {
     const stars = getStars(pct);
     const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
 
+    // Calculate elapsed time for timed mode
+    let timeHtml = '';
+    if (this.currentMode === 'timed' && this.timedTotal) {
+      const remaining = this.timer ? this.timer.remaining : 0;
+      const elapsed = this.timedTotal - remaining;
+      timeHtml = `<div class="result-time">⏱ ${formatTime(elapsed)}</div>`;
+    }
+
     const overlay = document.getElementById('resultOverlay');
     if (!overlay) return;
 
@@ -608,6 +632,7 @@ export class FlashcardEngine {
         </div>
         <div class="result-title">${titles[stars]}</div>
         <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
+        ${timeHtml}
         <div class="result-btns">
           <button class="btn btn--purple" id="resultRestart">🔄 Try Again</button>
           <button class="btn btn--ghost" id="resultStudy">📖 Study</button>

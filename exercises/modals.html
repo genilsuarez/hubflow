@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Modal Verbs — HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233D7F7F'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script>var p=new URLSearchParams(location.search).get('theme'),t=p||localStorage.getItem('lp-theme');if(p)localStorage.setItem('lp-theme',p);if(t==='dark')document.documentElement.setAttribute('data-theme','dark')</script>
+<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#1A1714;color:#EDE8E0}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/buttons.css">
@@ -136,6 +138,7 @@ let currentCat = catKeys[0];
 let mode = 'study';
 let deck = [], idx = 0, score = 0, total = 0;
 let timer = null;
+let timedSeconds = 0;
 
 function renderCatBar() {
   const bar = document.getElementById('catBar');
@@ -169,7 +172,7 @@ function startMode() {
   else if (mode === 'study') initStudy();
 }
 
-function stopTimer() { if (timer) { timer.stop(); timer = null; } }
+function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
 
 function getData() { return CATEGORIES[currentCat].items; }
 
@@ -188,7 +191,9 @@ function initPractice(timed) {
 
   if (timed) {
     document.getElementById('timerBar').classList.add('show');
-    timer = new Timer(total * 7,
+    timedSeconds = total * 7;
+
+    timer = new Timer(timedSeconds,
       r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
       () => finishPractice()
     );
@@ -198,7 +203,7 @@ function initPractice(timed) {
 }
 
 function renderPractice() {
-  if (idx >= total) { stopTimer(); finishPractice(); return; }
+  if (idx >= total) { finishPractice(); return; }
   const item = deck[idx];
   const cat = CATEGORIES[currentCat];
 
@@ -233,11 +238,14 @@ function renderPractice() {
 }
 
 function finishPractice() {
+  const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
+  stopTimer();
   const pct = showResult({
     correct: score, total,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
+    elapsedSeconds: elapsed
   });
   recordScore(`modals-${currentCat}`, pct);
 }

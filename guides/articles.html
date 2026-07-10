@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="../css/base.css">
 <style>
 :root{
-  --bg:#FFFFFF;--text:#16202E;--muted:#6E7A8A;--surface:#FFFFFF;--border:#E3E9F2;
-  --ink-soft:#46566A;
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
   --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
   --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
   --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
@@ -26,21 +26,8 @@
 body{
   font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(900px 480px at 50% -8%, rgba(47,111,216,.15) 0%, rgba(47,111,216,.05) 40%, transparent 64%),
-    radial-gradient(620px 460px at 100% 4%, rgba(92,157,240,.10) 0%, transparent 58%),
-    linear-gradient(180deg, #FFFFFF 0%, #F4F8FF 55%, #E6EFFB 100%);
-  background-attachment:fixed;
+  background:var(--bg);
 }
-[data-theme="dark"] body{background:var(--bg);}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(rgba(47,111,216,.06) 1px, transparent 1.5px);
-  background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
-  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%, #000 0%, transparent 80%);
-}
-[data-theme="dark"] body::before{display:none;}
 .page{max-width:700px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
 
 .nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
