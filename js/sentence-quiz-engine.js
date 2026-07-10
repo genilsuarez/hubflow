@@ -10,7 +10,7 @@
 
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from './utils.js';
 
-export function initSentenceQuiz({ categories, scoreKeyPrefix }) {
+export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = false, studyBlankPlaceholder = null }) {
   initTheme();
   document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
 
@@ -93,7 +93,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix }) {
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
 
-    const opts = [...cat.options];
+    const opts = shuffleOptions ? shuffle([...cat.options]) : [...cat.options];
     const optsEl = document.getElementById('wordOptions');
     optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join('');
     optsEl.querySelectorAll('.word-opt').forEach(btn => {
@@ -143,7 +143,9 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix }) {
     const card = document.getElementById('fcCard');
     card.classList.remove('flip');
     document.getElementById('fcEmoji').textContent = categories[currentCat].icon;
-    document.getElementById('fcSentence').textContent = item.sentence;
+    document.getElementById('fcSentence').textContent = studyBlankPlaceholder
+      ? item.sentence.replace('___', studyBlankPlaceholder)
+      : item.sentence;
     document.getElementById('fcAnswer').textContent = item.correct;
     document.getElementById('fcExplain').textContent = item.explain;
     document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
