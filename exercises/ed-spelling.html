@@ -11,32 +11,10 @@
 <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/buttons.css">
 <link rel="stylesheet" href="../css/exercise-enhanced.css">
-<style>
-  body { overflow-x: hidden; min-height: 100vh; padding: 0 14px 40px; }
-  .header { padding: 6px 0; margin-bottom: 8px; }
-  h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: clamp(1rem,3vw,1.4rem); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--c-ed); }
-  .h1-label { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: var(--muted); font-size: .9em; }
-  .level-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
-  .level-pill { font-family: 'Manrope', sans-serif; font-size: .68rem; font-weight: 700; padding: 6px 12px; border-radius: var(--radius); border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all .2s; min-height: 36px; display: flex; align-items: center; gap: 4px; }
-  .level-pill.active { background: var(--c-ed); color: #fff; border-color: var(--c-ed); box-shadow: 0 2px 10px rgba(184,134,11,.25); }
-  .level-pill.locked { opacity: .4; cursor: not-allowed; }
-  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; font-size: .62rem; font-weight: 700; color: var(--muted); }
-  .legend span { display: flex; align-items: center; gap: 4px; }
-  .legend .dot { width: 9px; height: 9px; border-radius: 50%; }
-  .legend .dot.red { background: var(--red); }
-  .legend .dot.blue { background: var(--blue); }
-  .legend .dot.green { background: var(--green); }
-  .check-area { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
-  #livesBar { display: none; text-align: center; font-size: 1.1rem; margin-bottom: 4px; }
-  #livesBar.show { display: block; }
-  #streakBar { display: none; text-align: center; font-size: .72rem; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
-  #streakBar.show { display: block; }
-  .scroll-body { padding: 10px 0 40px; }
-</style>
+<link rel="stylesheet" href="../css/spelling-shell.css">
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" data-color="amber">
   <div class="top-bar">
     <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
     <div class="tb-actions">
