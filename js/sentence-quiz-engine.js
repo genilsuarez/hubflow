@@ -10,7 +10,7 @@
 
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from './utils.js';
 
-export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = false, studyBlankPlaceholder = null }) {
+export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   initTheme();
   document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
 
@@ -67,7 +67,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = 
   function initPractice(timed) {
     deck = shuffle(getData());
     idx = 0; score = 0;
-    total = Math.min(timed ? 10 : deck.length, deck.length);
+    total = Math.min(timed ? timedQuestionCount : deck.length, deck.length);
     document.querySelector('[data-area="practice"]').classList.add('show');
 
     if (timed) {

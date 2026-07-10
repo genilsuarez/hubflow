@@ -80,6 +80,17 @@ h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; marg
 [data-color="blue"] .art-front .fc-term { color: var(--lp-cat-blue); }
 [data-color="blue"] .fc-back { background: color-mix(in srgb, var(--lp-cat-blue) 10%, var(--lp-surface)); border-color: var(--lp-cat-blue); }
 
+/* "azure" reuses the --lp-cat-blue variable (same as "blue") but keeps its
+   own box-shadow tint — articles.html used a brighter rgba than the other
+   blue-token pages before this file existed; preserved as-is rather than
+   silently normalized. */
+[data-color="azure"] .back-link { color: var(--lp-cat-blue); }
+[data-color="azure"] .pill-btn.active { background: var(--lp-cat-blue); color: #fff; box-shadow: 0 2px 10px rgba(59,130,246,.25); }
+[data-color="azure"] .progress__fill { background: var(--lp-cat-blue); }
+[data-color="azure"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-blue); color: var(--lp-cat-blue); }
+[data-color="azure"] .art-front .fc-term { color: var(--lp-cat-blue); }
+[data-color="azure"] .fc-back { background: color-mix(in srgb, var(--lp-cat-blue) 10%, var(--lp-surface)); border-color: var(--lp-cat-blue); }
+
 [data-color="green"] .back-link { color: var(--lp-cat-green); }
 [data-color="green"] .pill-btn.active { background: var(--lp-cat-green); color: #fff; box-shadow: 0 2px 10px rgba(74,140,92,.25); }
 [data-color="green"] .progress__fill { background: var(--lp-cat-green); }
