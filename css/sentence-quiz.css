@@ -1,0 +1,88 @@
+/* ═══════════════════════════════════════════════════════
+   HubFlow — Sentence Quiz shell styles
+   Shared by the 13 multiple-choice sentence-quiz exercises (modals,
+   conditionals, clauses, comparisons, gerunds-infinitives, made-of,
+   parts-of-speech, plural-endings, preferences, reported-speech,
+   used-to, word-stress-quiz, causative-verbs). Extracted 2026-07-10
+   from identical inline <style> blocks in each exercises/*.html file.
+   Category color varies via [data-color] on the page's .wrap element.
+   ═══════════════════════════════════════════════════════ */
+
+body { min-height: 100vh; padding: 0 14px 40px; }
+.header { padding: 6px 0; }
+h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+
+.cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+.cat-bar::-webkit-scrollbar { display: none; }
+
+[data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+[data-area].show { display: flex; }
+
+.sentence-card {
+  width: 100%; max-width: 480px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center;
+  box-shadow: var(--lp-shadow-sm);
+}
+.sentence-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+.sentence-card .sc-text {
+  font-family: var(--lp-font-display); font-size: 1.15rem; font-weight: 500;
+  color: var(--lp-ink); line-height: 1.5;
+}
+.sentence-card .sc-text .blank {
+  display: inline-block; min-width: 50px; border-bottom: 2.5px dashed transparent;
+  font-weight: 700; padding: 0 4px;
+}
+.sentence-card .sc-counter {
+  font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 8px;
+}
+
+.explain-box {
+  width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
+  background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+  padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5;
+}
+
+.fc-card { max-width: 460px; height: 200px; }
+.art-front .fc-term { font-size: 1.3rem; line-height: 1.4; }
+
+.scroll-body { padding: 8px 0 30px; }
+
+@media (max-width: 480px) {
+}
+
+/* ─── Category color variants ─────────────────────────────────────────── */
+
+[data-color="teal"] .back-link { color: var(--lp-cat-teal); }
+[data-color="teal"] .pill-btn.active { background: var(--lp-cat-teal); color: #fff; box-shadow: 0 2px 10px rgba(61,127,127,.25); }
+[data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
+[data-color="teal"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-teal); color: var(--lp-cat-teal); }
+[data-color="teal"] .art-front .fc-term { color: var(--lp-cat-teal); }
+[data-color="teal"] .fc-back { background: color-mix(in srgb, var(--lp-cat-teal) 10%, var(--lp-surface)); border-color: var(--lp-cat-teal); }
+
+[data-color="amber"] .back-link { color: var(--lp-cat-amber); }
+[data-color="amber"] .pill-btn.active { background: var(--lp-cat-amber); color: #fff; box-shadow: 0 2px 10px rgba(184,134,11,.25); }
+[data-color="amber"] .progress__fill { background: var(--lp-cat-amber); }
+[data-color="amber"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-amber); color: var(--lp-cat-amber); }
+[data-color="amber"] .art-front .fc-term { color: var(--lp-cat-amber); }
+[data-color="amber"] .fc-back { background: color-mix(in srgb, var(--lp-cat-amber) 10%, var(--lp-surface)); border-color: var(--lp-cat-amber); }
+
+[data-color="purple"] .back-link { color: var(--lp-cat-purple); }
+[data-color="purple"] .pill-btn.active { background: var(--lp-cat-purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
+[data-color="purple"] .progress__fill { background: var(--lp-cat-purple); }
+[data-color="purple"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-purple); color: var(--lp-cat-purple); }
+[data-color="purple"] .art-front .fc-term { color: var(--lp-cat-purple); }
+[data-color="purple"] .fc-back { background: color-mix(in srgb, var(--lp-cat-purple) 10%, var(--lp-surface)); border-color: var(--lp-cat-purple); }
+
+[data-color="blue"] .back-link { color: var(--lp-cat-blue); }
+[data-color="blue"] .pill-btn.active { background: var(--lp-cat-blue); color: #fff; box-shadow: 0 2px 10px rgba(61,107,159,.25); }
+[data-color="blue"] .progress__fill { background: var(--lp-cat-blue); }
+[data-color="blue"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-blue); color: var(--lp-cat-blue); }
+[data-color="blue"] .art-front .fc-term { color: var(--lp-cat-blue); }
+[data-color="blue"] .fc-back { background: color-mix(in srgb, var(--lp-cat-blue) 10%, var(--lp-surface)); border-color: var(--lp-cat-blue); }
+
+[data-color="green"] .back-link { color: var(--lp-cat-green); }
+[data-color="green"] .pill-btn.active { background: var(--lp-cat-green); color: #fff; box-shadow: 0 2px 10px rgba(74,140,92,.25); }
+[data-color="green"] .progress__fill { background: var(--lp-cat-green); }
+[data-color="green"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-green); color: var(--lp-cat-green); }
+[data-color="green"] .art-front .fc-term { color: var(--lp-cat-green); }
+[data-color="green"] .fc-back { background: color-mix(in srgb, var(--lp-cat-green) 10%, var(--lp-surface)); border-color: var(--lp-cat-green); }
