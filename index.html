@@ -293,11 +293,14 @@
       .bn-item.a { --spine: var(--lp-cat-teal); }
       .bn-item.r { --spine: var(--lp-cat-green); }
     }
+    /* Topbar angosta: el buscador manda — las stats se sacrifican (siguen en las
+       cards del Resumen). min-width evita que flex lo aplaste a un ancho inusable. */
+    @media (max-width: 640px) {
+      .header-stats { display: none; }
+      .search-bar { min-width: 130px; }
+    }
     @media (max-width: 480px) {
       .topbar { padding: 12px 12px 10px; flex-wrap: wrap; }
-      .header-stats { padding: 0 0.5rem; gap: 0.35rem; height: 32px; }
-      .header-stat__val { font-size: 0.8rem; }
-      .header-stat__label { display: none; }
       .resumen-hero { padding: 18px 16px; }
       .content { padding: 14px 12px 10px; }
     }

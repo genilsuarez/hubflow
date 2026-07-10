@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Verb + Prep Chunks Guide | HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script>var p=new URLSearchParams(location.search).get('theme'),t=p||localStorage.getItem('lp-theme');if(p)localStorage.setItem('lp-theme',p);if(t==='dark')document.documentElement.setAttribute('data-theme','dark')</script>
 <link rel="stylesheet" href="../css/base.css">
 <style>
 :root{
@@ -15,9 +16,9 @@
   --teal:#0D9488;--teal-light:#E0F7F5;
 }
 [data-theme="dark"]{
-  --bg:#1a1a2e;--text:#eaeaea;--muted:#888;--surface:#16213e;--border:#2a2a4e;
-  --blue-light:#1a2d4a;--purple-light:#2a1a3d;--teal-light:#1a3d3a;
-}
+  --bg:#1A1714;--text:#EDE8E0;--muted:#998E84;--surface:#282420;--border:#3D362C;
+  --blue-light:#1A2A3D;--purple-light:#221A30;--teal-light:#1A2D2D;
+--ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--teal:#5ED4CC;--purple:#C4A5FF;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
   font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
@@ -93,6 +94,17 @@ h2{
   .qc-table{font-size:.7rem;}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+
+/* THEME TOGGLE */
+.guide-theme-toggle{
+  width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);
+  background:var(--surface);cursor:pointer;font-size:1rem;display:flex;
+  align-items:center;justify-content:center;transition:transform .2s,border-color .2s;
+  min-width:44px;min-height:44px;
+}
+.guide-theme-toggle:hover{transform:scale(1.08);border-color:var(--blue,var(--yellow));}
+.guide-theme-toggle:focus-visible{outline:2px solid var(--blue,#2F6FD8);outline-offset:2px;}
+.nav-bar{gap:8px;}
 </style>
 </head>
 <body>
@@ -101,6 +113,7 @@ h2{
 <nav class="nav-bar">
   <a href="../index.html" class="nav-back">&larr; Back to HubFlow</a>
   <span class="nav-title">Reference Guide</span>
+  <button class="guide-theme-toggle" id="guideThemeToggle" aria-label="Toggle theme">🌙</button>
 </nav>
 
 <h1>Verb + Prep <span class="accent">Chunks</span></h1>
@@ -212,5 +225,21 @@ h2{
 </footer>
 
 </div>
+<script>
+(function(){
+  var btn=document.getElementById('guideThemeToggle');
+  if(!btn)return;
+  function upd(){var d=document.documentElement.getAttribute('data-theme')==='dark';btn.textContent=d?'☀️':'🌙';}
+  upd();
+  btn.addEventListener('click',function(){
+    var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+    var next=isDark?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next==='dark'?'dark':'');
+    localStorage.setItem('lp-theme',next);
+    if(location.search.includes('theme=')){var u=new URL(location.href);u.searchParams.set('theme',next);history.replaceState(null,'',u);}
+    upd();
+  });
+})();
+</script>
 </body>
 </html>
