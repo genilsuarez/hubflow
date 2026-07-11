@@ -164,7 +164,7 @@
       content: ''; position: absolute; inset: 0; pointer-events: none;
       background: radial-gradient(420px 220px at 100% -10%, color-mix(in srgb, var(--lp-accent) 12%, transparent), transparent 70%);
     }
-    .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; }
+    .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.6rem, 3.2vw, 2.1rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; }
     .resumen-greeting em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
     .resumen-sub { font-size: .82rem; color: var(--lp-ink-soft); position: relative; }
 
@@ -177,8 +177,16 @@
       box-shadow: var(--lp-shadow-sm); transition: transform .2s var(--lp-ease), box-shadow .2s var(--lp-ease), border-color .2s;
       border-top: 4px solid var(--spine);
     }
-    .tile:hover { transform: translateY(-3px); box-shadow: var(--lp-shadow-hover); }
-    .tile .tile-icon { font-size: 1.4rem; }
+    .tile:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--lp-shadow-hover), 0 14px 32px -10px color-mix(in srgb, var(--spine) 35%, transparent);
+    }
+    .tile .tile-icon {
+      font-size: 1.3rem; width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--lp-radius-md);
+      background: color-mix(in srgb, var(--spine) 12%, transparent);
+    }
     .tile .tile-title { font-size: .82rem; font-weight: var(--lp-weight-extrabold); }
     .tile .tile-count { font-size: .66rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); }
     .tile.v { --spine: var(--lp-cat-purple); }
