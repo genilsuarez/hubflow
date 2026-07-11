@@ -29,7 +29,7 @@
     <!-- Categories -->
     <div class="cat-scroll-wrapper" id="catWrapper">
       <div id="catBar">
-        <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas">▼</button>
+        <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas"><span class="expand-count"></span><span class="expand-icon">▼</span></button>
       </div>
     </div>
 
@@ -198,26 +198,78 @@ document.getElementById('battleNextBtn').addEventListener('click', () => engine.
 const catBar = document.getElementById('catBar');
 const catWrapper = document.getElementById('catWrapper');
 const catExpandBtn = document.getElementById('catExpandBtn');
+const expandCount = catExpandBtn.querySelector('.expand-count');
+
+function countHiddenPills() {
+  if (!catBar || !expandCount) return;
+  const pills = catBar.querySelectorAll('.pill-btn');
+  const barRect = catBar.getBoundingClientRect();
+  let hidden = 0;
+  pills.forEach(pill => {
+    const r = pill.getBoundingClientRect();
+    // Consider hidden if more than half is outside the visible area (excluding expand btn width)
+    if (r.right < barRect.left + 4 || r.left > barRect.right - 36) hidden++;
+  });
+  const hasOverflow = catBar.scrollWidth > catBar.clientWidth + 20;
+  expandCount.textContent = hidden > 0 ? `+${hidden}` : '';
+  catExpandBtn.title = hidden > 0 ? `${hidden} más` : 'Ver todas';
+  catExpandBtn.disabled = !hasOverflow && hidden === 0;
+}
 
 function updateFades() {
   if (!catBar || !catWrapper || catWrapper.classList.contains('expanded')) return;
   const { scrollLeft, scrollWidth, clientWidth } = catBar;
   catWrapper.classList.toggle('fade-left', scrollLeft > 8);
   catWrapper.classList.toggle('fade-right', scrollLeft + clientWidth < scrollWidth - 8);
+  countHiddenPills();
 }
 catBar.addEventListener('scroll', updateFades);
-new MutationObserver(updateFades).observe(catBar, { childList: true });
-updateFades();
+new MutationObserver(() => { updateFades(); countHiddenPills(); }).observe(catBar, { childList: true });
+requestAnimationFrame(() => { updateFades(); countHiddenPills(); });
+
+// ─── Scroll-hint on first load (peek + badge nudge) ───
+(function scrollHint() {
+  if (!catBar || !catExpandBtn) return;
+  const run = () => {
+    const { scrollWidth, clientWidth } = catBar;
+    if (scrollWidth <= clientWidth + 20) return; // no overflow, skip
+
+    // 1. Badge nudge pulse
+    catExpandBtn.classList.add('nudge');
+    catExpandBtn.addEventListener('animationend', () => catExpandBtn.classList.remove('nudge'), { once: true });
+
+    // 2. Peek scroll: quick scroll right then back
+    const peekDist = Math.min(60, scrollWidth - clientWidth);
+    catBar.style.scrollBehavior = 'smooth';
+    catBar.scrollLeft = peekDist;
+    setTimeout(() => { catBar.scrollLeft = 0; }, 500);
+
+    // 3. Thin bar flash under catBar
+    let hintBar = catWrapper.querySelector('.scroll-hint-bar');
+    if (!hintBar) {
+      hintBar = document.createElement('div');
+      hintBar.className = 'scroll-hint-bar';
+      catWrapper.appendChild(hintBar);
+    }
+    setTimeout(() => hintBar.classList.add('flash'), 100);
+    setTimeout(() => hintBar.classList.remove('flash'), 1200);
+  };
+  // Small delay so pills are already rendered
+  setTimeout(run, 400);
+})();
 
 // ─── Expand/collapse toggle ───
 catExpandBtn.addEventListener('click', () => {
   const expanded = catWrapper.classList.toggle('expanded');
   catExpandBtn.setAttribute('aria-expanded', expanded);
-  if (!expanded) {
+  if (expanded) {
+    expandCount.textContent = '';
+    catExpandBtn.title = 'Colapsar';
+  } else {
     // Collapse: scroll active into view
     const active = catBar.querySelector('.pill-btn.active');
     if (active) requestAnimationFrame(() => active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }));
-    updateFades();
+    requestAnimationFrame(updateFades);
   }
 });
 
