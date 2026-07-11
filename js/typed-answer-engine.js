@@ -2,10 +2,13 @@
    HubFlow — Typed Answer Practice Engine
    Shared study/timed logic for exercises where the user types a free-form
    answer that's checked against one or more accepted strings (paraphrasing,
-   word-order). Extracted 2026-07-10 — the two pages this covers were
-   byte-identical except for the prompt-specific rendering (a static
-   sentence+keyword vs. a shuffled row of word pills), a timer duration,
-   and a scoreKey prefix.
+   word-order, register-switch, sentence-combining). Extracted 2026-07-10 —
+   the two original pages this covers were byte-identical except for the
+   prompt-specific rendering (a static sentence+keyword vs. a shuffled row
+   of word pills), a timer duration, and a scoreKey prefix. Extended
+   2026-07-11 to also cover register-switch/sentence-combining, which
+   additionally differed in the timer "warning" threshold and needed the
+   current category passed to renderPrompt (for a category badge).
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from './utils.js';
@@ -19,7 +22,7 @@ function isMatch(userAnswer, correctArray) {
   return n.length > 0 && correctArray.some(c => normalize(c) === n);
 }
 
-export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPerQuestion, renderPrompt }) {
+export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   initTheme();
   document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
 
@@ -67,7 +70,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
       timedSeconds = total * secondsPerQuestion;
 
       timer = new Timer(timedSeconds,
-        r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 20); },
+        r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= warnThreshold); },
         () => finish()
       );
       timer.start();
@@ -87,7 +90,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
     answered = false;
     const item = deck[idx];
 
-    renderPrompt(item);
+    renderPrompt(item, currentCat);
     document.getElementById('itemCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('hintBox').classList.remove('show');
     document.getElementById('hintBox').textContent = item.hint || '';

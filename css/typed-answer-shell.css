@@ -1,17 +1,16 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Typed Answer Practice shell styles
-   Shared by the typed-answer exercises (paraphrasing, word-order) built on
-   js/typed-answer-engine.js. Extracted 2026-07-10 from identical inline
-   <style> blocks — only the prompt-display area (kw-* / wo-*) stays
-   page-specific, since that's genuinely different per exercise.
+   Shared by the typed-answer exercises (paraphrasing, word-order,
+   register-switch, sentence-combining) built on js/typed-answer-engine.js.
+   Extracted 2026-07-10 from identical inline <style> blocks — only the
+   prompt-display area (kw-* / wo-* / rs-* / sc-*) stays page-specific,
+   since that's genuinely different per exercise.
+   Category color varies via [data-color] on the page's .wrap element.
    ═══════════════════════════════════════════════════════ */
 
 body { min-height: 100vh; padding: 0 14px 40px; }
 .header { padding: 6px 0; }
 h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
-.back-link { color: var(--lp-cat-teal); }
-.pill-btn.active { background: var(--lp-cat-teal); color: #fff; box-shadow: 0 2px 10px rgba(0,150,136,.25); }
-.progress__fill { background: var(--lp-cat-teal); }
 
 .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
 .cat-bar::-webkit-scrollbar { display: none; }
@@ -26,7 +25,6 @@ h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; marg
   border-radius: var(--lp-radius-md); border: 2px solid var(--lp-border); background: var(--lp-surface);
   color: var(--lp-ink); outline: none; transition: border-color .2s; font-family: var(--lp-font-body);
 }
-.answer-input:focus { border-color: var(--lp-cat-teal); }
 .answer-input.correct { border-color: var(--lp-success); }
 .answer-input.wrong { border-color: var(--lp-error); }
 
@@ -46,3 +44,23 @@ h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; marg
 }
 
 .scroll-body { padding: 8px 0 30px; }
+
+/* ─── Category color variants ─────────────────────────────────────────── */
+
+[data-color="teal"] .back-link { color: var(--lp-cat-teal); }
+[data-color="teal"] .pill-btn.active { background: var(--lp-cat-teal); color: #fff; box-shadow: 0 2px 10px rgba(0,150,136,.25); }
+[data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
+[data-color="teal"] .answer-input:focus { border-color: var(--lp-cat-teal); }
+
+[data-color="green"] .back-link { color: var(--lp-cat-green); }
+[data-color="green"] .pill-btn.active { background: var(--lp-cat-green); color: #fff; box-shadow: 0 2px 10px rgba(74,140,92,.25); }
+[data-color="green"] .progress__fill { background: var(--lp-cat-green); }
+[data-color="green"] .answer-input:focus { border-color: var(--lp-cat-green); }
+
+/* This page's blue rgba tint (53,122,189) doesn't match either of the
+   existing "blue"/"azure" tints in sentence-quiz.css — preserved exactly
+   as found rather than silently normalized to one of those. */
+[data-color="blue"] .back-link { color: var(--lp-cat-blue); }
+[data-color="blue"] .pill-btn.active { background: var(--lp-cat-blue); color: #fff; box-shadow: 0 2px 10px rgba(53,122,189,.25); }
+[data-color="blue"] .progress__fill { background: var(--lp-cat-blue); }
+[data-color="blue"] .answer-input:focus { border-color: var(--lp-cat-blue); }
