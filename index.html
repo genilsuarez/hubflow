@@ -8,7 +8,20 @@
   <meta name="description" content="HubFlow — Interactive English exercises: -ing rules, -ed adjectives, noun adjuncts, and more.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <script src="js/theme-init.js"></script>
+  <script>
+    // Early section detection: prevent flash of resumen when returning from exercise
+    (function() {
+      var vs = ['resumen','vocab','grammar','pronunciation','analysis','guides'];
+      var p = new URLSearchParams(location.search).get('section');
+      var s = sessionStorage.getItem('hf-back-section');
+      var target = p || s;
+      if (target && vs.indexOf(target) > 0) {
+        document.documentElement.dataset.initSection = target;
+      }
+    })();
+  </script>
   <style>
     /* Critical: prevent flash while external CSS loads */
     body { background: #FAF7F2; color: #2C2418; }
@@ -104,6 +117,13 @@
     /* ─── SECTION VISIBILITY (SPA panels) ─── */
     .section { display: none; margin-bottom: 20px; }
     .section.active-section, .section.search-visible { display: block; }
+    /* Prevent flash: hide resumen and show target section before JS runs */
+    html[data-init-section] .section.active-section[data-key="resumen"] { display: none; }
+    html[data-init-section="vocab"] .section[data-key="vocab"],
+    html[data-init-section="grammar"] .section[data-key="grammar"],
+    html[data-init-section="pronunciation"] .section[data-key="pronunciation"],
+    html[data-init-section="analysis"] .section[data-key="analysis"],
+    html[data-init-section="guides"] .section[data-key="guides"] { display: block; }
     .sec-head {
       font-size: .66rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase;
       color: var(--lp-muted); margin-bottom: 10px; padding-left: 2px;
@@ -144,14 +164,9 @@
       content: ''; position: absolute; inset: 0; pointer-events: none;
       background: radial-gradient(420px 220px at 100% -10%, color-mix(in srgb, var(--lp-accent) 12%, transparent), transparent 70%);
     }
-    .hero-actions { position: absolute; top: 18px; right: 18px; display: flex; gap: 8px; z-index: 1; }
     .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; }
     .resumen-greeting em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
-    .resumen-sub { font-size: .82rem; color: var(--lp-ink-soft); margin-bottom: 18px; position: relative; }
-    .resumen-stats { display: flex; gap: 10px; flex-wrap: wrap; position: relative; }
-    .rs-card { background: var(--lp-bg-paper); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 12px 18px; min-width: 100px; }
-    .rs-card .rs-val { font-family: var(--lp-font-display); font-size: 1.5rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink); line-height: 1; }
-    .rs-card .rs-label { font-size: .62rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+    .resumen-sub { font-size: .82rem; color: var(--lp-ink-soft); position: relative; }
 
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
     .tile {
@@ -273,7 +288,6 @@
       .shell { grid-template-columns: 1fr; }
       .sidebar { display: none; }
       .mobile-brand { display: block; }
-      .hero-actions { display: none; }
       /* El footer fijo + bottom nav comían ~163px permanentes de alto (201px de
          contenido en landscape). En mobile el footer se oculta y el contenido
          compensa la bottom nav fija con su propio padding. */
@@ -303,8 +317,8 @@
       .bn-item.a { --spine: var(--lp-cat-teal); }
       .bn-item.r { --spine: var(--lp-cat-green); }
     }
-    /* Topbar angosta: el buscador manda — las stats se sacrifican (siguen en las
-       cards del Resumen). min-width evita que flex lo aplaste a un ancho inusable. */
+    /* Topbar angosta: el buscador manda — las stats se ocultan en pantallas chicas.
+       min-width evita que flex lo aplaste a un ancho inusable. */
     @media (max-width: 640px) {
       .header-stats { display: none; }
       .search-bar { min-width: 130px; }
@@ -328,8 +342,8 @@
     <nav class="sb-nav" id="sbNav">
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">📋</span><span class="sb-label">Resumen</span></button>
       <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">🧠</span><span class="sb-label">Vocabulary &amp; Words</span></button>
-      <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">🔊</span><span class="sb-label">Pronunciation</span></button>
       <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">✏️</span><span class="sb-label">Grammar &amp; Spelling</span></button>
+      <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">🔊</span><span class="sb-label">Pronunciation</span></button>
       <button class="sb-item a" data-target="analysis"><span class="sb-spine"></span><span class="sb-icon">🔍</span><span class="sb-label">Analysis &amp; Production</span></button>
       <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">📚</span><span class="sb-label">Guías de referencia</span></button>
     </nav>
@@ -362,18 +376,13 @@
         <div class="resumen-hero">
           <div class="resumen-greeting">Bienvenido a Hub<em>Flow</em></div>
           <p class="resumen-sub"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia — elige una categoría para empezar.</p>
-          <div class="resumen-stats">
-            <div class="rs-card"><div class="rs-val" id="rsSessions">0</div><div class="rs-label">Sesiones</div></div>
-            <div class="rs-card"><div class="rs-val" id="rsBest">—</div><div class="rs-label">Mejor puntaje</div></div>
-            <div class="rs-card"><div class="rs-val" id="rsMastered">0/34</div><div class="rs-label">Dominados</div></div>
-          </div>
         </div>
 
         <div class="sec-head">Categorías</div>
         <div class="tiles">
           <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 módulos</span></button>
-          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 módulos</span></button>
           <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 módulos</span></button>
+          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 módulos</span></button>
           <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 módulos</span></button>
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
         </div>
@@ -394,12 +403,6 @@
         <div class="shelf" id="shelf-vocab"></div>
       </section>
 
-      <!-- PRONUNCIATION -->
-      <section class="section" data-key="pronunciation">
-        <div class="sec-head">Pronunciation</div>
-        <div class="shelf" id="shelf-pronunciation"></div>
-      </section>
-
       <!-- GRAMMAR (4 subcategorías — Fase 1/2 del plan de recategorización) -->
       <section class="section" data-key="grammar">
         <div class="subsec" data-subcat="morphology">
@@ -418,6 +421,12 @@
           <div class="sec-head sec-head--sub">Matices de uso</div>
           <div class="shelf" id="shelf-grammar-nuance"></div>
         </div>
+      </section>
+
+      <!-- PRONUNCIATION -->
+      <section class="section" data-key="pronunciation">
+        <div class="sec-head">Pronunciation</div>
+        <div class="shelf" id="shelf-pronunciation"></div>
       </section>
 
       <!-- ANALYSIS & PRODUCTION -->
@@ -590,8 +599,8 @@
 <nav class="bottom-nav" id="bottomNav">
   <button class="bn-item active" data-target="resumen"><span class="bn-icon">📋</span><span class="bn-label">Resumen</span></button>
   <button class="bn-item v" data-target="vocab"><span class="bn-icon">🧠</span><span class="bn-label">Vocab</span></button>
-  <button class="bn-item p" data-target="pronunciation"><span class="bn-icon">🔊</span><span class="bn-label">Sonido</span></button>
   <button class="bn-item g" data-target="grammar"><span class="bn-icon">✏️</span><span class="bn-label">Gramática</span></button>
+  <button class="bn-item p" data-target="pronunciation"><span class="bn-icon">🔊</span><span class="bn-label">Sonido</span></button>
   <button class="bn-item a" data-target="analysis"><span class="bn-icon">🔍</span><span class="bn-label">Análisis</span></button>
   <button class="bn-item r" data-target="guides"><span class="bn-icon">📚</span><span class="bn-label">Guías</span></button>
 </nav>
@@ -729,9 +738,6 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
   document.getElementById('psTotal').textContent = total || '0';
   document.getElementById('psBest').textContent = best > 0 ? best + '%' : '—';
   document.getElementById('psMastered').textContent = mastered + '/' + totalModules;
-  document.getElementById('rsSessions').textContent = total || '0';
-  document.getElementById('rsBest').textContent = best > 0 ? best + '%' : '—';
-  document.getElementById('rsMastered').textContent = mastered + '/' + totalModules;
 
   // Dynamic module/guide counts (never hardcode — always read from the DOM)
   const guideCount = document.querySelectorAll('.guide-link[href]').length;
@@ -846,8 +852,25 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; applyFilters(); searchInput.blur(); }
   });
 
-  setActive('resumen');
+  const VALID_SECTIONS = new Set(['resumen', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+  const paramSection = new URLSearchParams(location.search).get('section');
+  const storedSection = sessionStorage.getItem('hf-back-section');
+  const initSection = paramSection || storedSection;
+  if (storedSection) sessionStorage.removeItem('hf-back-section');
+  setActive(VALID_SECTIONS.has(initSection) ? initSection : 'resumen');
+  delete document.documentElement.dataset.initSection;
   if (activeTags.size) applyFilters();
+
+  // Handle bfcache restore (history.back from exercise)
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+      var s = sessionStorage.getItem('hf-back-section');
+      if (s && VALID_SECTIONS.has(s)) {
+        sessionStorage.removeItem('hf-back-section');
+        setActive(s);
+      }
+    }
+  });
 })();
 </script>
 </body>
