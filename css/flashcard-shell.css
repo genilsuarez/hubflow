@@ -1,0 +1,151 @@
+/* ═══════════════════════════════════════════════════════
+   HubFlow — Flashcard Engine shell styles
+   Shared by the two js/flashcard-engine.js pages (vocabulary,
+   pronunciation-study): compact header/mode-bar, the scrollable
+   category selector with fade+expand, and the battle/match mode
+   layouts. Extracted 2026-07-10 from an inline <style> block that
+   pronunciation-study.html had copied byte-for-byte from
+   vocabulary.html (reformatted, with color swapped).
+   Color varies via [data-color] on the page's .wrap element.
+   ═══════════════════════════════════════════════════════ */
+
+body { min-height: 100vh; overflow-x: hidden; padding: 0 14px 40px; }
+.top-bar { margin-bottom: 2px; }
+.header { padding: 0; margin-bottom: 2px; }
+h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: .95rem; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+
+/* Category selector — compact scroll with fade */
+.cat-scroll-wrapper {
+  position: relative;
+  margin-bottom: 6px;
+}
+.cat-scroll-wrapper::before,
+.cat-scroll-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; width: 28px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.cat-scroll-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--lp-bg-paper), transparent);
+  border-radius: var(--lp-radius-sm) 0 0 var(--lp-radius-sm);
+}
+.cat-scroll-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--lp-bg-paper), transparent);
+  border-radius: 0 var(--lp-radius-sm) var(--lp-radius-sm) 0;
+}
+.cat-scroll-wrapper.fade-left::before { opacity: 1; }
+.cat-scroll-wrapper.fade-right::after { opacity: 1; }
+
+#catBar {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 4px;
+  padding: 6px 4px;
+  scroll-behavior: smooth;
+  background: var(--lp-bg-paper);
+  border: 1.5px solid var(--lp-border);
+  border-radius: var(--lp-radius-sm);
+  transition: flex-wrap 0s;
+}
+#catBar::-webkit-scrollbar { display: none; }
+#catBar .pill-btn {
+  flex: 0 0 auto;
+  padding: 5px 11px;
+  font-size: .64rem;
+  min-height: unset;
+  white-space: nowrap;
+}
+
+/* Expand toggle button — inside catBar, sticky right */
+.cat-expand-btn {
+  flex: 0 0 auto;
+  position: sticky;
+  right: 0;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--lp-border);
+  background: var(--lp-bg-paper);
+  color: var(--lp-muted);
+  font-size: .6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s, background .2s, color .2s;
+  z-index: 3;
+}
+.cat-expand-btn:hover { background: var(--lp-surface); color: var(--lp-ink); }
+.cat-expand-btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+.cat-expand-btn[aria-expanded="true"] { transform: rotate(180deg); }
+
+/* Expanded state */
+.cat-scroll-wrapper.expanded #catBar {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  gap: 5px;
+  padding: 8px 6px;
+}
+.cat-scroll-wrapper.expanded .cat-expand-btn {
+  position: sticky;
+  right: 0;
+  bottom: 0;
+  margin-left: auto;
+}
+.cat-scroll-wrapper.expanded::before,
+.cat-scroll-wrapper.expanded::after { opacity: 0 !important; }
+
+/* Mode bar */
+.header .pill-bar:not(.pill-bar--scroll) { padding: 2px; gap: 1px; margin-bottom: 2px; }
+.header .pill-bar:not(.pill-bar--scroll) .pill-btn { padding: 3px 8px; font-size: .65rem; min-height: unset; }
+
+/* Compact progress */
+#progressWrap { margin-bottom: 0; }
+#progressWrap .progress__labels { margin-bottom: 2px; font-size: .6rem; }
+
+/* Study area */
+[data-area] { display: none; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+[data-area].show { display: flex; }
+
+/* Flashcard overrides */
+.fc-card { max-width: 440px; height: 250px; }
+.fc-back .fc-detail { font-size: .72rem; }
+
+/* Battle card */
+.battle-card { width: 100%; max-width: 360px; height: 140px; perspective: 1200px; position: relative; margin: 0 auto 8px; }
+.battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: transform .55s var(--ease); transform-style: preserve-3d; }
+.battle-card.flipped .fc-inner { transform: rotateY(180deg); }
+.battle-card .fc-face { border-radius: var(--radius-lg); padding: 16px; }
+.battle-card .fc-emoji { font-size: 2.4rem; }
+.battle-card .fc-term { font-size: 1.4rem; }
+
+.battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.battle-instruction { font-size: .7rem; font-weight: 700; color: var(--muted); text-align: center; }
+.battle-round { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--muted); text-align: center; }
+
+#pairScore { font-size: .78rem; font-weight: 700; color: var(--muted); text-align: center; margin-top: 6px; }
+.match-instruction { font-size: .78rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 8px; }
+
+.scroll-body { padding: 0 0 40px; }
+
+/* ─── Accent color variants ───────────────────────────────────────────── */
+
+[data-color="purple"] h1 .accent { font-style: italic; font-weight: 400; color: var(--purple); }
+[data-color="purple"] .pill-btn.active { background: var(--purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
+[data-color="purple"] .fc-back { background: var(--c-vocab-soft); border-color: var(--purple); }
+[data-theme="dark"] [data-color="purple"] .fc-back { background: var(--surface); border-color: var(--purple); }
+[data-color="purple"] .fc-back .fc-term { color: var(--purple); font-size: 1.3rem; }
+
+[data-color="blue"] h1 .accent { font-style: italic; font-weight: 400; color: var(--lp-cat-blue); }
+[data-color="blue"] .pill-btn.active { background: var(--lp-cat-blue); color: #fff; box-shadow: 0 2px 10px rgba(59,130,246,.25); }
+[data-color="blue"] .fc-back { background: rgba(59,130,246,.06); border-color: var(--lp-cat-blue); }
+[data-theme="dark"] [data-color="blue"] .fc-back { background: var(--surface); border-color: var(--lp-cat-blue); }
+[data-color="blue"] .fc-back .fc-term { color: var(--lp-cat-blue); font-size: 1.3rem; }

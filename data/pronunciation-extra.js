@@ -1,0 +1,196 @@
+/**
+ * HubFlow — Extended Pronunciation Data
+ * Uses FlashcardEngine-compatible format (term/es/meaning/emoji/example)
+ * Covers: Connected Speech, Intonation, Common Mispronunciations, Vowel Sounds,
+ * Schwa, Consonant Clusters, Sentence Stress, and Rhythm.
+ */
+
+export const CATEGORIES = {
+  connectedSpeech: {
+    label: "🔗 Connected Speech",
+    items: [
+      { term: "Wanna",          es: "Want to",               meaning: "Linking: 'want to' → /wɒnə/",                    emoji: "🗣️", example: "I wanna go home. = I want to go home." },
+      { term: "Gonna",          es: "Going to",              meaning: "Reduction: 'going to' → /ɡʌnə/",                 emoji: "🏃", example: "I'm gonna call her. = I'm going to call her." },
+      { term: "Gotta",          es: "Got to / Have to",      meaning: "Reduction: 'got to' → /ɡɒtə/",                   emoji: "💪", example: "I gotta leave. = I've got to leave." },
+      { term: "Shoulda",        es: "Should have",           meaning: "Reduction: 'should have' → /ʃʊdə/",              emoji: "🤔", example: "I shoulda known. = I should have known." },
+      { term: "Coulda",         es: "Could have",            meaning: "Reduction: 'could have' → /kʊdə/",               emoji: "💭", example: "You coulda told me. = You could have told me." },
+      { term: "Woulda",         es: "Would have",            meaning: "Reduction: 'would have' → /wʊdə/",               emoji: "🔮", example: "I woulda helped. = I would have helped." },
+      { term: "Kinda",          es: "Kind of",               meaning: "Reduction: 'kind of' → /kaɪndə/",                emoji: "🤷", example: "It's kinda cold. = It's kind of cold." },
+      { term: "Lemme",          es: "Let me",                meaning: "Linking: 'let me' → /lemi/",                      emoji: "✋", example: "Lemme think. = Let me think." },
+      { term: "Gimme",          es: "Give me",               meaning: "Linking: 'give me' → /ɡɪmi/",                     emoji: "🤲", example: "Gimme a sec. = Give me a second." },
+      { term: "Dunno",          es: "Don't know",            meaning: "Reduction: 'don't know' → /dʌnəʊ/",              emoji: "🤷", example: "I dunno. = I don't know." },
+      { term: "Whatcha",        es: "What are you",          meaning: "Linking: 'what are you' → /wɒtʃə/",              emoji: "👀", example: "Whatcha doing? = What are you doing?" },
+      { term: "Gotcha",         es: "Got you / I understand", meaning: "Reduction: 'got you' → /ɡɒtʃə/",               emoji: "👌", example: "Gotcha! = I understand / I caught you." },
+    ]
+  },
+  linking: {
+    label: "⛓️ Linking & Elision",
+    items: [
+      { term: "Turn_off",       es: "Apagar (linked)",       meaning: "Consonant-vowel link: /tɜːnɒf/ sounds like 'tur-noff'", emoji: "💡", example: "Turn‿off the light → /tɜː.nɒf/" },
+      { term: "An_apple",       es: "Una manzana (linked)",  meaning: "N links to vowel: /ənæpəl/ sounds like 'a-napple'", emoji: "🍎", example: "An‿apple → /ə.næ.pəl/" },
+      { term: "Go_away",        es: "Vete (linked)",         meaning: "Vowel-vowel link adds /w/: 'go-waway'",           emoji: "👋", example: "Go‿away → /ɡəʊ.wə.weɪ/" },
+      { term: "She_is",         es: "Ella es (linked)",      meaning: "Vowel-vowel link adds /j/: 'she-yiz'",            emoji: "👩", example: "She‿is → /ʃiː.jɪz/" },
+      { term: "Last_night",     es: "Anoche (elision)",      meaning: "Elision: /t/ drops between consonants",           emoji: "🌙", example: "Las(t) night → /lɑːs.naɪt/" },
+      { term: "Next_day",       es: "Al día siguiente",      meaning: "Elision: /t/ drops before /d/",                   emoji: "📅", example: "Nex(t) day → /neks.deɪ/" },
+      { term: "Hand_bag",       es: "Bolso (elision)",       meaning: "Elision: /d/ drops between consonants",           emoji: "👜", example: "Han(d)bag → /hæn.bæɡ/" },
+      { term: "Sandwich",       es: "Sándwich",              meaning: "Elision: /d/ often disappears: /sænwɪtʃ/",        emoji: "🥪", example: "San(d)wich → /sæn.wɪdʒ/" },
+      { term: "Don't_be",       es: "No seas (assimilation)", meaning: "Assimilation: /t/ → /p/ before /b/",             emoji: "🚫", example: "Don'(t) be → /dəʊm.biː/" },
+      { term: "Ten_minutes",    es: "Diez minutos",          meaning: "Assimilation: /n/ → /m/ before /m/",              emoji: "⏰", example: "Te(n) minutes → /tem.mɪnɪts/" },
+      { term: "Good_boy",       es: "Buen chico",            meaning: "Assimilation: /d/ → /b/ before /b/",              emoji: "🐕", example: "Goo(d) boy → /ɡʊb.bɔɪ/" },
+      { term: "In_Paris",       es: "En París",              meaning: "Assimilation: /n/ → /m/ before /p/",              emoji: "🇫🇷", example: "I(n) Paris → /ɪm.pærɪs/" },
+    ]
+  },
+  intonation: {
+    label: "📈 Intonation Patterns",
+    items: [
+      { term: "Falling (statement)",  es: "Descendente (afirmación)", meaning: "Pitch goes DOWN at the end — statements, wh-questions", emoji: "⬇️", example: "I'm going HOME. ↘ / WHERE do you live? ↘" },
+      { term: "Rising (yes/no)",      es: "Ascendente (sí/no)",       meaning: "Pitch goes UP at the end — yes/no questions",           emoji: "⬆️", example: "Are you COMING? ↗ / Is this YOURS? ↗" },
+      { term: "Fall-rise (but...)",   es: "Descendente-ascendente",   meaning: "Pitch falls then rises — uncertainty, 'but' implied",   emoji: "↩️", example: "I LIKE it... ↘↗ (but I'm not sure)" },
+      { term: "Rise-fall (surprise)", es: "Ascendente-descendente",   meaning: "Pitch rises then drops — surprise or strong feeling",   emoji: "😮", example: "Really?! ↗↘ / That's AMAZING! ↗↘" },
+      { term: "List intonation",      es: "Enumeración",              meaning: "Each item rises ↗ except the last which falls ↘",       emoji: "📝", example: "I need eggs↗, milk↗, bread↗, and butter↘." },
+      { term: "Tag questions (sure)", es: "Tag confirmando",          meaning: "Falling tag = you expect agreement",                    emoji: "✅", example: "Nice day, ISN'T it? ↘ (I'm sure)" },
+      { term: "Tag questions (unsure)", es: "Tag dudando",            meaning: "Rising tag = genuinely asking",                         emoji: "❓", example: "You're coming, AREN'T you? ↗ (not sure)" },
+      { term: "Echo question",        es: "Pregunta eco",             meaning: "Repeating with rising pitch = surprise/disbelief",      emoji: "🔁", example: "He did WHAT? ↗ / She's HOW old? ↗" },
+      { term: "Polite requests",      es: "Peticiones corteses",      meaning: "Rising intonation makes requests sound polite",         emoji: "🙏", example: "Could you help me? ↗ (polite) vs ↘ (demand)" },
+      { term: "Sarcasm pattern",      es: "Patrón sarcástico",        meaning: "Exaggerated rise-fall signals irony or sarcasm",        emoji: "😏", example: "Oh, that's GREAT. ↗↘ (meaning: terrible)" },
+    ]
+  },
+  mispronunciations: {
+    label: "⚠️ Common Mispronunciations",
+    items: [
+      { term: "Comfortable",    es: "/ˈkʌmftəbəl/",         meaning: "3 syllables, NOT 4 — 'CUMF-tuh-bul'",            emoji: "🛋️", example: "Wrong: com-FOR-ta-ble. Right: COMF-tuh-bul." },
+      { term: "Vegetable",      es: "/ˈvedʒtəbəl/",         meaning: "3 syllables — 'VEJ-tuh-bul'",                     emoji: "🥦", example: "Wrong: ve-ge-TA-ble. Right: VEJ-tuh-bul." },
+      { term: "Wednesday",      es: "/ˈwenzdeɪ/",           meaning: "2 syllables — the first D is silent",             emoji: "📅", example: "Wrong: Wed-NES-day. Right: WENZ-day." },
+      { term: "February",       es: "/ˈfebruəri/",          meaning: "The first R is often dropped: 'FEB-yoo-ree'",     emoji: "❄️", example: "Wrong: feb-ROO-a-ry. Right: FEB-roo-ree." },
+      { term: "Colleague",      es: "/ˈkɒliːɡ/",           meaning: "2 syllables — 'KOL-eeg', NOT 'ko-LEE-gue'",       emoji: "🤝", example: "Wrong: ko-lee-GUE. Right: KOL-eeg." },
+      { term: "Recipe",         es: "/ˈresɪpi/",            meaning: "3 syllables — 'RES-uh-pee', the E is pronounced", emoji: "📖", example: "Wrong: re-SIPE. Right: RES-uh-pee." },
+      { term: "Entrepreneur",   es: "/ˌɒntrəprəˈnɜːr/",    meaning: "Stress on last syllable — French origin",          emoji: "💼", example: "Wrong: en-tre-pre-NOR. Right: on-truh-pruh-NUR." },
+      { term: "Queue",          es: "/kjuː/",               meaning: "Sounds like 'cue' — one syllable, silent UEUE",   emoji: "🧍", example: "Wrong: kway-way. Right: kyoo." },
+      { term: "Colonel",        es: "/ˈkɜːnəl/",           meaning: "Sounds like 'kernel' — the L is NOT pronounced",   emoji: "🎖️", example: "Wrong: ko-LO-nel. Right: KER-nul." },
+      { term: "Suite",          es: "/swiːt/",              meaning: "Sounds like 'sweet' — NOT 'suit'",                 emoji: "🏨", example: "Wrong: soot. Right: sweet." },
+      { term: "Chaos",          es: "/ˈkeɪɒs/",            meaning: "Starts with /k/ — 'KAY-oss', NOT 'chay-oss'",      emoji: "🌪️", example: "Wrong: CHA-os. Right: KAY-oss." },
+      { term: "Debut",          es: "/ˈdeɪbjuː/",          meaning: "French: 'DAY-byoo' — the T is silent",             emoji: "🎭", example: "Wrong: de-BUT. Right: DAY-byoo." },
+      { term: "Hierarchy",      es: "/ˈhaɪərɑːki/",        meaning: "4 syllables — 'HY-uh-rar-kee'",                    emoji: "📊", example: "Wrong: hi-AR-ky. Right: HY-uh-rar-kee." },
+      { term: "Specific",       es: "/spəˈsɪfɪk/",         meaning: "Starts with /sp/ — NOT 'pacific'",                 emoji: "🎯", example: "Wrong: pa-SIF-ic. Right: spuh-SIF-ik." },
+      { term: "Determine",      es: "/dɪˈtɜːmɪn/",         meaning: "3 syllables — 'dih-TUR-min', NOT '-mine'",         emoji: "🔍", example: "Wrong: de-ter-MINE. Right: dih-TUR-min." },
+    ]
+  },
+  vowelSounds: {
+    label: "🔊 12 English Vowels",
+    items: [
+      { term: "/iː/ — fleece",   es: "Vocal larga cerrada",    meaning: "Long, tense — tongue high and front, lips spread",  emoji: "🐑", example: "see, tea, machine, believe" },
+      { term: "/ɪ/ — kit",       es: "Vocal corta cerrada",    meaning: "Short, relaxed — slightly lower than /iː/",          emoji: "🧰", example: "sit, gym, busy, women" },
+      { term: "/e/ — dress",     es: "Vocal media",            meaning: "Mid-front — jaw slightly open",                       emoji: "👗", example: "bed, head, said, friend" },
+      { term: "/æ/ — trap",      es: "Vocal abierta frontal",  meaning: "Low-front — jaw drops more than /e/",                emoji: "🪤", example: "cat, bad, laugh, have" },
+      { term: "/ɑː/ — palm",    es: "Vocal larga abierta",    meaning: "Long, open — back of tongue, jaw fully open",         emoji: "🌴", example: "car, father, heart, calm" },
+      { term: "/ɒ/ — lot",       es: "Vocal corta redondeada", meaning: "Short — back of tongue, lips slightly rounded",       emoji: "🎰", example: "hot, dog, what, because" },
+      { term: "/ɔː/ — thought",  es: "Vocal larga redondeada", meaning: "Long — back, lips well rounded",                     emoji: "💭", example: "law, door, more, talk" },
+      { term: "/ʊ/ — foot",      es: "Vocal corta posterior",  meaning: "Short — tongue back and high, lips slightly rounded", emoji: "🦶", example: "put, book, could, woman" },
+      { term: "/uː/ — goose",    es: "Vocal larga posterior",  meaning: "Long — tongue high and back, lips very rounded",     emoji: "🪿", example: "food, blue, shoe, through" },
+      { term: "/ʌ/ — strut",     es: "Vocal central corta",    meaning: "Short — central, relaxed jaw",                       emoji: "🏗️", example: "cup, love, blood, enough" },
+      { term: "/ɜː/ — nurse",    es: "Vocal central larga",    meaning: "Long — central, lips neutral (not rounded)",         emoji: "👩‍⚕️", example: "bird, word, learn, journey" },
+      { term: "/ə/ — schwa",     es: "Vocal neutra (átona)",   meaning: "The most common English sound — weak, unstressed",   emoji: "😐", example: "about, banana, problem, doctor" },
+    ]
+  },
+  schwa: {
+    label: "😐 The Schwa /ə/",
+    items: [
+      { term: "About",          es: "/əˈbaʊt/",             meaning: "The 'a' is a schwa — not 'ah' but a quick /ə/",   emoji: "📖", example: "a-BOUT: the 'a' is barely there." },
+      { term: "Banana",         es: "/bəˈnɑːnə/",          meaning: "TWO schwas — first 'a' and last 'a'",              emoji: "🍌", example: "buh-NAH-nuh: only the middle vowel is full." },
+      { term: "Problem",        es: "/ˈprɒbləm/",           meaning: "The 'e' is a schwa — 'PROB-luhm'",                emoji: "❓", example: "The 'e' in problem disappears to /ə/." },
+      { term: "Doctor",         es: "/ˈdɒktə/",             meaning: "The 'or' becomes schwa — 'DOK-tuh'",              emoji: "👨‍⚕️", example: "Not 'dock-TOR' — it's 'DOK-tuh'." },
+      { term: "Photograph vs Photography", es: "Schwa shifts", meaning: "PHO-tuh-graph → phuh-TOG-ruh-fee (schwa moves!)", emoji: "📷", example: "Stress shifts, schwas follow." },
+      { term: "Comfortable",    es: "/ˈkʌmftəbəl/",         meaning: "Two schwas — 'CUMF-tuh-bul'",                     emoji: "🛋️", example: "3 syllables, schwas in 2nd and 3rd." },
+      { term: "Family",         es: "/ˈfæmli/",             meaning: "The 'i' disappears — 'FAM-lee'",                  emoji: "👪", example: "2 syllables in natural speech, not 3." },
+      { term: "Different",      es: "/ˈdɪfrənt/",           meaning: "The middle 'e' is schwa — 'DIF-ruhnt'",           emoji: "🔀", example: "2 syllables in fast speech." },
+      { term: "Chocolate",      es: "/ˈtʃɒklət/",           meaning: "2 syllables — 'CHOK-lit', the 'o' vanishes",      emoji: "🍫", example: "Not 'cho-co-LATE' — just 'CHOK-lit'." },
+      { term: "Interesting",    es: "/ˈɪntrəstɪŋ/",         meaning: "3 syllables — 'IN-truh-sting'",                   emoji: "🤔", example: "Not 'in-ter-ES-ting' — the 'e' is schwa." },
+      { term: "Temperature",    es: "/ˈtemprətʃə/",          meaning: "3 syllables — 'TEM-pruh-chuh'",                  emoji: "🌡️", example: "Not 'tem-pe-ra-TURE' — collapsed to 3." },
+      { term: "Separate (adj)", es: "/ˈseprət/",             meaning: "The 'a' is schwa — 'SEP-ruht'",                  emoji: "✂️", example: "Adjective: SEP-ruht. Verb: SEP-uh-rate." },
+    ]
+  },
+  consonantClusters: {
+    label: "🔤 Consonant Clusters",
+    items: [
+      { term: "/str/ — street",  es: "Grupo consonántico inicial", meaning: "3 consonants before a vowel — tongue stays up",  emoji: "🛣️", example: "street, strong, strange, struggle" },
+      { term: "/spr/ — spring",  es: "Grupo consonántico inicial", meaning: "Lips go from /s/ position to rounded /r/",       emoji: "🌸", example: "spring, spray, spread, sprout" },
+      { term: "/skr/ — scream",  es: "Grupo consonántico inicial", meaning: "Back of tongue for /k/ then forward for /r/",    emoji: "😱", example: "scream, screen, scratch, script" },
+      { term: "/θr/ — three",    es: "Grupo difícil",              meaning: "Tongue between teeth → retroflex /r/ quickly",    emoji: "3️⃣", example: "three, throw, through, threat" },
+      { term: "/sts/ — costs",   es: "Grupo consonántico final",   meaning: "3 consonants at the end — don't add a vowel",    emoji: "💰", example: "costs, lists, tests, guests" },
+      { term: "/sks/ — asks",    es: "Grupo consonántico final",   meaning: "Keep tongue behind teeth — no extra syllable",   emoji: "❓", example: "asks, desks, risks, masks" },
+      { term: "/lz/ — calls",    es: "Grupo final sonoro",         meaning: "Voice the /z/ — don't devoice to /s/",           emoji: "📞", example: "calls, walls, tells, falls" },
+      { term: "/ndz/ — hands",   es: "Grupo nasal + /dz/",         meaning: "Keep the /d/ — don't skip it to just /nz/",      emoji: "🙌", example: "hands, friends, lands, trends" },
+      { term: "/kts/ — facts",   es: "Grupo plosivo + /s/",        meaning: "Release the /k/ lightly before /ts/",            emoji: "📋", example: "facts, acts, products, contacts" },
+      { term: "/twelfths/",      es: "Uno de los más difíciles",   meaning: "5 consonants: /l/ + /f/ + /θ/ + /s/ — practice slowly", emoji: "🏆", example: "twelfths — /twelfθs/" },
+      { term: "/ŋk/ — think",    es: "Nasal velar + plosiva",     meaning: "The 'n' is actually /ŋ/ (back of tongue on soft palate)", emoji: "🧠", example: "think, bank, drink, thank" },
+      { term: "/spl/ — split",   es: "Grupo consonántico inicial", meaning: "Move quickly from /s/ to plosive /p/ to /l/",    emoji: "✂️", example: "split, splash, splendid, explain" },
+    ]
+  },
+  sentenceStress: {
+    label: "💪 Sentence Stress",
+    items: [
+      { term: "Content words stressed",   es: "Palabras de contenido = fuertes", meaning: "Nouns, main verbs, adjectives, adverbs get stress", emoji: "🔊", example: "I BOUGHT a NEW CAR yesToday." },
+      { term: "Function words weak",      es: "Palabras función = débiles",      meaning: "Articles, prepositions, pronouns are weak/fast",   emoji: "🔈", example: "I went to the SHOP for some BREAD." },
+      { term: "Stress for contrast",      es: "Estrés contrastivo",              meaning: "Move stress to show what's new/important info",    emoji: "⚡", example: "I said BLUE, not GREEN." },
+      { term: "De-stress 'the'",          es: "Debilitar 'the'",                 meaning: "'The' is /ðə/ before consonants, /ði/ before vowels", emoji: "📰", example: "the /ðə/ book vs the /ði/ apple" },
+      { term: "Weak 'to'",               es: "Debilitar 'to'",                  meaning: "'To' reduces to /tə/ in connected speech",          emoji: "➡️", example: "I want to go = I want /tə/ go" },
+      { term: "Weak 'for'",              es: "Debilitar 'for'",                 meaning: "'For' reduces to /fə/ in fast speech",              emoji: "🎁", example: "A gift for you = A gift /fə/ you" },
+      { term: "Weak 'have'",             es: "Debilitar 'have'",                meaning: "'Have' → /əv/ in perfect tenses",                    emoji: "✅", example: "I could have = I could /əv/" },
+      { term: "Stress-timed rhythm",      es: "Ritmo acentual",                  meaning: "English squeezes unstressed syllables between stresses", emoji: "🥁", example: "DOGS chase CATS (2 beats) = The DOGS will be CHASing the CATS (still 2 beats)" },
+      { term: "Focus shift",             es: "Cambio de foco",                  meaning: "Stress the MOST important word in context",          emoji: "🔦", example: "HE broke it (not someone else) vs He BROKE it (not fixed it)" },
+      { term: "Compound noun stress",     es: "Estrés en sustantivos compuestos", meaning: "First word stressed: BLACKboard, not black BOARD",  emoji: "📦", example: "WHITE house (a house) vs WHITEhouse (the building)" },
+    ]
+  },
+  rhythm: {
+    label: "🥁 English Rhythm",
+    items: [
+      { term: "Stress-timed",        es: "Ritmo acentual (inglés)",   meaning: "Time between stresses is roughly equal — unstressed syllables compressed", emoji: "🇬🇧", example: "CATS CHASE MICE = caTERpillars are EATing the LEAVES (same rhythm)" },
+      { term: "Syllable-timed",      es: "Ritmo silábico (español)",  meaning: "Each syllable gets equal time — Spanish rhythm, NOT English",              emoji: "🇪🇸", example: "Spanish: ca-da-sí-la-ba-i-gual. English: NOT like this." },
+      { term: "Weak forms",          es: "Formas débiles",            meaning: "Common words have a 'weak' version in natural speech",                     emoji: "🔉", example: "was→/wəz/, can→/kən/, are→/ə/, have→/əv/" },
+      { term: "Strong forms",        es: "Formas fuertes",            meaning: "Used at sentence end, in contrast, or emphasis",                           emoji: "🔊", example: "Yes I CAN /kæn/. I WAS /wɒz/ there." },
+      { term: "Thought groups",      es: "Grupos de significado",     meaning: "We pause between meaningful chunks, not random words",                     emoji: "💬", example: "The man / who called yesterday / is my boss." },
+      { term: "Linking R",           es: "R de enlace",               meaning: "A silent R is pronounced when next word starts with a vowel",              emoji: "🔗", example: "far away → /fɑːr əˈweɪ/, water and → /wɔːtər ænd/" },
+      { term: "Intrusive R",         es: "R intrusiva",               meaning: "An /r/ appears between two vowels even with no R in spelling",             emoji: "👻", example: "law and order → /lɔːr ənd ɔːdə/" },
+      { term: "Glottal stop",        es: "Parada glotal /ʔ/",         meaning: "A catch in the throat replacing /t/ in casual speech",                     emoji: "⛔", example: "butter → /bʌʔə/, bottle → /bɒʔl/" },
+      { term: "Syllable reduction",  es: "Reducción de sílabas",      meaning: "Long words lose syllables in natural speech",                              emoji: "✂️", example: "interesting→3 syls, comfortable→3 syls, every→2 syls" },
+      { term: "Contrastive stress",  es: "Estrés contrastivo",        meaning: "The meaning changes based on WHICH word you stress",                       emoji: "🎯", example: "I didn't say HE stole it (someone else said it)" },
+    ]
+  },
+  edPronunciation: {
+    label: "📢 -ED Pronunciation",
+    items: [
+      { term: "/t/ after voiceless",   es: "Terminación sorda",       meaning: "After /p, k, f, s, ʃ, tʃ/ → -ed sounds like /t/",   emoji: "🤫", example: "walked /wɔːkt/, helped /helpt/, washed /wɒʃt/" },
+      { term: "/d/ after voiced",      es: "Terminación sonora",      meaning: "After vowels and voiced consonants → -ed sounds /d/", emoji: "🔊", example: "played /pleɪd/, called /kɔːld/, lived /lɪvd/" },
+      { term: "/ɪd/ after t/d",        es: "Sílaba extra",            meaning: "After /t/ or /d/ → adds a syllable: /ɪd/",           emoji: "➕", example: "wanted /wɒntɪd/, needed /niːdɪd/, started /stɑːtɪd/" },
+      { term: "Stopped",               es: "/stɒpt/",                 meaning: "Voiceless /p/ → /t/ ending, NOT 'stop-ped'",          emoji: "🛑", example: "1 syllable: /stɒpt/" },
+      { term: "Loved",                 es: "/lʌvd/",                  meaning: "Voiced /v/ → /d/ ending, NOT 'lov-ed'",               emoji: "❤️", example: "1 syllable: /lʌvd/" },
+      { term: "Decided",               es: "/dɪˈsaɪdɪd/",            meaning: "Ends in /d/ → adds /ɪd/ extra syllable",              emoji: "🤔", example: "3 syllables: de-CI-did" },
+      { term: "Cooked",                es: "/kʊkt/",                  meaning: "Voiceless /k/ → /t/ ending",                          emoji: "👨‍🍳", example: "1 syllable: /kʊkt/" },
+      { term: "Opened",                es: "/ˈəʊpənd/",              meaning: "Voiced /n/ → /d/ ending",                             emoji: "🚪", example: "2 syllables: O-pened /ˈəʊ.pənd/" },
+      { term: "Created",               es: "/kriˈeɪtɪd/",            meaning: "Ends in /t/ → adds /ɪd/ = 3 syllables",              emoji: "🎨", example: "cre-A-tid" },
+      { term: "Fixed",                 es: "/fɪkst/",                 meaning: "Voiceless /ks/ → /t/ ending",                        emoji: "🔧", example: "1 syllable: /fɪkst/" },
+      { term: "Amazed",                es: "/əˈmeɪzd/",              meaning: "Voiced /z/ → /d/ ending",                             emoji: "😮", example: "2 syllables: a-MAZED /ə.meɪzd/" },
+      { term: "Invited",               es: "/ɪnˈvaɪtɪd/",           meaning: "Ends in /t/ → adds /ɪd/ = 3 syllables",              emoji: "💌", example: "in-VY-tid" },
+    ]
+  },
+  tricky50: {
+    label: "🎯 50 Tricky Words",
+    items: [
+      { term: "Clothes",       es: "/kləʊðz/",        meaning: "1 syllable — sounds like 'cloze', NOT 'clo-THES'",      emoji: "👔" },
+      { term: "World",         es: "/wɜːld/",         meaning: "The 'or' is /ɜː/ — don't add a syllable",               emoji: "🌍" },
+      { term: "Squirrel",      es: "/ˈskwɪrəl/",     meaning: "2 syllables — 'SKWIR-ul', not 3",                        emoji: "🐿️" },
+      { term: "Sixth",         es: "/sɪksθ/",         meaning: "Ends /ksθ/ — practise the cluster slowly",               emoji: "6️⃣" },
+      { term: "Months",        es: "/mʌnθs/",         meaning: "Ends /nθs/ — tongue between teeth then /s/",             emoji: "📅" },
+      { term: "Murderer",      es: "/ˈmɜːdərə/",     meaning: "3 syllables — all Rs are the same sound",                emoji: "🔪" },
+      { term: "Rural",         es: "/ˈrʊərəl/",      meaning: "2 syllables — both Rs, tongue never touches roof",       emoji: "🌾" },
+      { term: "Iron",          es: "/ˈaɪən/",         meaning: "2 syllables — 'EYE-un', the R is silent",                emoji: "🔨" },
+      { term: "Onion",         es: "/ˈʌnjən/",        meaning: "2 syllables — 'UN-yun'",                                 emoji: "🧅" },
+      { term: "Bury",          es: "/ˈberi/",         meaning: "Sounds like 'berry' — NOT 'boo-ry'",                     emoji: "⚰️" },
+      { term: "Choir",         es: "/kwaɪə/",         meaning: "Sounds like 'KWIRE' — nothing like 'cho-ir'",            emoji: "🎶" },
+      { term: "Leicester",     es: "/ˈlestə/",        meaning: "2 syllables — 'LES-tuh'",                                emoji: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+      { term: "Subtle",        es: "/ˈsʌtəl/",       meaning: "The B is silent — 'SUT-ul'",                             emoji: "🤫" },
+      { term: "Debt",          es: "/det/",            meaning: "The B is silent — just 'det'",                           emoji: "💳" },
+      { term: "Stomach",       es: "/ˈstʌmək/",      meaning: "The 'ch' is /k/ — 'STUM-uk'",                            emoji: "🤢" },
+    ]
+  },
+};

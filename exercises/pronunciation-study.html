@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vocabulary — HubFlow</title>
+<title>Pronunciation Study — HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/theme-init.js"></script>
 <style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#1A1714;color:#EDE8E0}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/buttons.css">
 <link rel="stylesheet" href="../css/exercise-enhanced.css">
 <link rel="stylesheet" href="../css/flashcard-shell.css">
 </head>
 <body>
-<div class="wrap" data-color="purple">
+<div class="wrap" data-color="blue">
   <div class="top-bar">
     <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
     <div class="tb-actions">
@@ -22,43 +22,32 @@
     <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
   </div>
   </div>
-
   <div class="header">
-    <h1>🧠 Vocabulary <span class="accent">Match</span></h1>
-
-    <!-- Categories -->
+    <h1>🔊 Pronunciation <span class="accent">Study</span></h1>
     <div class="cat-scroll-wrapper" id="catWrapper">
       <div id="catBar">
         <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas">▼</button>
       </div>
     </div>
-
-    <!-- Modes -->
     <div class="pill-bar">
-      <button class="pill-btn active purple" data-mode="study">📖 Study</button>
+      <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">⚡ Quiz</button>
       <button class="pill-btn" data-mode="match">🔀 Match</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
-
-    <!-- Timer -->
     <div class="timer-bar" id="timerBar">
       <span class="timer-display" id="timerDisplay">1:00</span>
     </div>
-
-    <!-- Progress -->
     <div class="progress" id="progressWrap">
       <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
-      <div class="progress__track"><div class="progress__fill progress__fill--purple" id="progFill"></div></div>
+      <div class="progress__track"><div class="progress__fill" id="progFill" style="background:var(--lp-cat-blue);"></div></div>
     </div>
   </div>
-
   <div class="scroll-body">
-    <!-- STUDY -->
     <div data-area="study">
       <div class="fc-count" id="fcCounter">1 / 25</div>
-      <button class="listen-btn" id="speakBtn" aria-label="Listen to pronunciation" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--purple);background:rgba(147,51,234,.08);font-size:1.2rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;">🔊</button>
+      <button class="listen-btn" id="speakBtn" aria-label="Listen to pronunciation" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--lp-cat-blue);background:rgba(59,130,246,.08);font-size:1.2rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;">🔊</button>
       <div class="fc-card" id="fcCard">
         <div class="fc-inner">
           <div class="fc-face">
@@ -77,11 +66,9 @@
       <div class="fc-nav">
         <button class="btn btn--ghost" id="shuffleBtn">🔀</button>
         <button class="btn btn--ghost" id="prevBtn">←</button>
-        <button class="btn btn--purple" id="nextBtn">→</button>
+        <button class="btn btn--primary" id="nextBtn">→</button>
       </div>
     </div>
-
-    <!-- QUIZ -->
     <div data-area="quiz">
       <div class="quiz-prompt">
         <div class="quiz-prompt__emoji" id="quizEmoji"></div>
@@ -90,15 +77,11 @@
       </div>
       <div class="quiz-options" id="quizOptions"></div>
     </div>
-
-    <!-- MATCH -->
     <div data-area="match">
       <div class="match-instruction">Tap one from each column to match</div>
       <div class="pair-grid" id="pairGrid"></div>
       <div id="pairScore"></div>
     </div>
-
-    <!-- BATTLE -->
     <div data-area="battle">
       <div class="battle-scores">
         <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
@@ -107,7 +90,6 @@
       </div>
       <div class="battle-round" id="battleRound">Round 1 / 10</div>
       <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
-
       <div class="battle-card" id="battleCard">
         <div class="fc-inner">
           <div class="fc-face">
@@ -115,12 +97,11 @@
             <div class="fc-detail" id="battleHint" style="font-size:.78rem;font-family:'Manrope',sans-serif;text-align:center;color:var(--text);margin-top:4px;"></div>
           </div>
           <div class="fc-face fc-back">
-            <div class="fc-term" id="battleBackTerm" style="font-size:1.3rem;font-weight:700;color:var(--purple);"></div>
+            <div class="fc-term" id="battleBackTerm" style="font-size:1.3rem;font-weight:700;color:var(--lp-cat-blue);"></div>
             <div class="fc-detail" id="battleBackSpanish" style="font-size:.7rem;margin-top:4px;"></div>
           </div>
         </div>
       </div>
-
       <div class="battle-actions" id="battleClaim">
         <button class="btn btn--primary" id="battleClaimP1">🙋 P1</button>
         <button class="btn btn--ghost" id="battleSkipBtn">⏭ Skip</button>
@@ -131,29 +112,23 @@
         <button class="btn btn--red" id="battleJudgeWrong">✗ Wrong</button>
       </div>
       <div class="battle-actions" id="battleNext" style="display:none;">
-        <button class="btn btn--purple" id="battleNextBtn">Next →</button>
+        <button class="btn btn--primary" id="battleNextBtn">Next →</button>
       </div>
     </div>
   </div>
-
-  <!-- Result Overlay -->
   <div class="result-overlay" id="resultOverlay"></div>
 </div>
 
 <script type="module">
-import { CATEGORIES } from '../data/vocabulary.js';
+import { CATEGORIES } from '../data/pronunciation-extra.js';
 import { FlashcardEngine } from '../js/flashcard-engine.js';
 
-// Vocabulary packs (Fase 4 del plan de recategorización): agrupan las 26
-// subcategorías de vocabulary.js en paquetes temáticos accesibles vía
-// exercises/vocabulary.html#pack=<name> — sin tocar flashcard-engine.js.
-// Se usa hash (no query string) porque serve.json tiene cleanUrls:true, cuyo
-// redirect .html→sin-extensión descarta el query string; el hash nunca viaja al servidor.
 const PACKS = {
-  idioms: { label: 'Idioms Pack', keys: ['idioms', 'bodyIdioms', 'healthIdioms', 'natureIdioms'] },
-  soundNatural: { label: 'Sound Natural', keys: ['soundNative', 'saidAlternatives', 'neverUseVery', 'soundingNatural', 'becauseAlternatives'] },
-  c1: { label: 'C1 Vocabulary', keys: ['dailyRoutineC1', 'foodDrinkC1', 'advancedVerbs', 'advancedPhrases'] },
-  everyday: { label: 'Everyday Basics', keys: ['bodyParts', 'cooking', 'timeOfDay', 'weather', 'seasons', 'socialExpressions', 'personalityAdjectives', 'rhymingReduplication', 'sameWordDifferentMeaning', 'clothingAppearance', 'eggcorns', 'hobbies', 'telephoneEnglish'] },
+  connected: { label: 'Connected Speech', keys: ['connectedSpeech', 'linking'] },
+  intonation: { label: 'Intonation & Stress', keys: ['intonation', 'sentenceStress', 'rhythm'] },
+  mispronunciations: { label: 'Mispronunciations', keys: ['mispronunciations', 'tricky50'] },
+  vowels: { label: 'Vowel Sounds & Schwa', keys: ['vowelSounds', 'schwa'] },
+  consonants: { label: 'Consonant Clusters & -ED', keys: ['consonantClusters', 'edPronunciation'] },
 };
 
 const packParam = new URLSearchParams(location.hash.slice(1)).get('pack');
@@ -164,13 +139,13 @@ const activeCategories = pack
 
 if (pack) {
   const h1 = document.querySelector('h1');
-  if (h1) h1.textContent = `🧠 ${pack.label}`;
+  if (h1) h1.textContent = `🔊 ${pack.label}`;
   document.title = `${pack.label} — HubFlow`;
 }
 
 const engine = new FlashcardEngine({
   categories: activeCategories,
-  storagePrefix: 'vocab',
+  storagePrefix: 'pron-study',
   defaultCategory: Object.keys(activeCategories)[0],
 });
 
@@ -184,7 +159,6 @@ document.getElementById('battleJudgeCorrect').addEventListener('click', () => en
 document.getElementById('battleJudgeWrong').addEventListener('click', () => engine.battleJudge(false));
 document.getElementById('battleNextBtn').addEventListener('click', () => engine.battleNext());
 
-// ─── Category scroll fade indicators ───
 const catBar = document.getElementById('catBar');
 const catWrapper = document.getElementById('catWrapper');
 const catExpandBtn = document.getElementById('catExpandBtn');
@@ -193,29 +167,18 @@ function updateFades() {
   if (!catBar || !catWrapper || catWrapper.classList.contains('expanded')) return;
   const { scrollLeft, scrollWidth, clientWidth } = catBar;
   catWrapper.classList.toggle('fade-left', scrollLeft > 8);
-  catWrapper.classList.toggle('fade-right', scrollLeft + clientWidth < scrollWidth - 8);
+  catWrapper.classList.toggle('fade-right', scrollLeft < scrollWidth - clientWidth - 8);
 }
-catBar.addEventListener('scroll', updateFades);
-new MutationObserver(updateFades).observe(catBar, { childList: true });
-updateFades();
-
-// ─── Expand/collapse toggle ───
-catExpandBtn.addEventListener('click', () => {
-  const expanded = catWrapper.classList.toggle('expanded');
-  catExpandBtn.setAttribute('aria-expanded', expanded);
-  if (!expanded) {
-    // Collapse: scroll active into view
-    const active = catBar.querySelector('.pill-btn.active');
-    if (active) requestAnimationFrame(() => active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }));
-    updateFades();
-  }
-});
-
-// Flip on card click
-document.getElementById('fcCard')?.addEventListener('click', () => engine.flipCard());
-document.getElementById('battleCard')?.addEventListener('click', () => {
-  document.getElementById('battleCard').classList.toggle('flipped');
-});
+if (catBar) {
+  catBar.addEventListener('scroll', updateFades);
+  setTimeout(updateFades, 100);
+}
+if (catExpandBtn) {
+  catExpandBtn.addEventListener('click', () => {
+    const expanded = catWrapper.classList.toggle('expanded');
+    catExpandBtn.setAttribute('aria-expanded', expanded);
+  });
+}
 </script>
 
 <script type="module" src="../js/portal-link.js"></script>
