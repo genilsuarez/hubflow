@@ -161,9 +161,9 @@ h1 {
 
 /* ─── TIMER ENHANCED ─── */
 .timer-bar.show {
-  padding: 6px 12px;
+  padding: 4px 12px;
   background: var(--lp-surface);
   border-radius: var(--lp-radius-sm);
   border: 1px solid var(--lp-border-subtle);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }

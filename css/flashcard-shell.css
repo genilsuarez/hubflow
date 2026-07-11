@@ -9,7 +9,7 @@
    Color varies via [data-color] on the page's .wrap element.
    ═══════════════════════════════════════════════════════ */
 
-body { min-height: 100vh; overflow-x: hidden; padding: 0 14px 40px; }
+body { min-height: 100vh; overflow-x: hidden; padding: 0 14px; }
 .top-bar { margin-bottom: 2px; }
 .header { padding: 0; margin-bottom: 2px; }
 h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: .95rem; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }

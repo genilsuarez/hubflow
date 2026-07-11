@@ -292,7 +292,7 @@
          contenido en landscape). En mobile el footer se oculta y el contenido
          compensa la bottom nav fija con su propio padding. */
       .foot { display: none; }
-      .content { padding-bottom: calc(14px + 62px + env(safe-area-inset-bottom, 0px)); }
+      .content { padding-bottom: calc(14px + 62px + 24px + env(safe-area-inset-bottom, 0px)); }
 
       .bottom-nav {
         display: flex; justify-content: space-around; align-items: stretch;
@@ -326,7 +326,7 @@
     @media (max-width: 480px) {
       .topbar { padding: 12px 12px 10px; flex-wrap: wrap; }
       .resumen-hero { padding: 18px 16px; }
-      .content { padding: 14px 12px calc(14px + 62px + env(safe-area-inset-bottom, 0px)); }
+      .content { padding: 14px 12px calc(14px + 62px + 24px + env(safe-area-inset-bottom, 0px)); }
     }
   </style>
 </head>
