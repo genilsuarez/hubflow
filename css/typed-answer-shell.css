@@ -1,0 +1,48 @@
+/* ═══════════════════════════════════════════════════════
+   HubFlow — Typed Answer Practice shell styles
+   Shared by the typed-answer exercises (paraphrasing, word-order) built on
+   js/typed-answer-engine.js. Extracted 2026-07-10 from identical inline
+   <style> blocks — only the prompt-display area (kw-* / wo-*) stays
+   page-specific, since that's genuinely different per exercise.
+   ═══════════════════════════════════════════════════════ */
+
+body { min-height: 100vh; padding: 0 14px 40px; }
+.header { padding: 6px 0; }
+h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 6px; }
+.back-link { color: var(--lp-cat-teal); }
+.pill-btn.active { background: var(--lp-cat-teal); color: #fff; box-shadow: 0 2px 10px rgba(0,150,136,.25); }
+.progress__fill { background: var(--lp-cat-teal); }
+
+.cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+.cat-bar::-webkit-scrollbar { display: none; }
+
+[data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+[data-area].show { display: flex; }
+
+.item-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); text-align: center; margin-top: 4px; }
+
+.answer-input {
+  width: 100%; max-width: 480px; padding: 12px 16px; font-size: .95rem; text-align: center;
+  border-radius: var(--lp-radius-md); border: 2px solid var(--lp-border); background: var(--lp-surface);
+  color: var(--lp-ink); outline: none; transition: border-color .2s; font-family: var(--lp-font-body);
+}
+.answer-input:focus { border-color: var(--lp-cat-teal); }
+.answer-input.correct { border-color: var(--lp-success); }
+.answer-input.wrong { border-color: var(--lp-error); }
+
+.hint-box, .explain-box {
+  width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
+  background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+  padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5;
+}
+.hint-box { display: none; }
+.hint-box.show { display: block; }
+
+.answers-list { width: 100%; max-width: 480px; display: none; flex-direction: column; gap: 6px; }
+.answers-list.show { display: flex; }
+.answer-item {
+  background: var(--lp-success-soft); border: 1px solid var(--lp-success); border-radius: var(--lp-radius-sm);
+  padding: 8px 12px; font-size: .8rem; color: var(--lp-success-dark); text-align: center;
+}
+
+.scroll-body { padding: 8px 0 30px; }
