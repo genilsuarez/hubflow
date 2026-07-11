@@ -138,21 +138,6 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </footer>
 
 </div>
-<script>
-(function(){
-  var btn=document.getElementById('guideThemeToggle');
-  if(!btn)return;
-  function upd(){var d=document.documentElement.getAttribute('data-theme')==='dark';btn.textContent=d?'☀️':'🌙';}
-  upd();
-  btn.addEventListener('click',function(){
-    var isDark=document.documentElement.getAttribute('data-theme')==='dark';
-    var next=isDark?'light':'dark';
-    document.documentElement.setAttribute('data-theme',next==='dark'?'dark':'');
-    localStorage.setItem('lp-theme',next);
-    if(location.search.includes('theme=')){var u=new URL(location.href);u.searchParams.set('theme',next);history.replaceState(null,'',u);}
-    upd();
-  });
-})();
-</script>
+<script src="../js/guide-theme-toggle.js"></script>
 </body>
 </html>
