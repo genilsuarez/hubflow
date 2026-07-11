@@ -315,12 +315,56 @@
 .cat-btn:hover { border-color: var(--lp-accent); color: var(--lp-accent); }
 .cat-btn.active { background: var(--lp-ink); color: var(--lp-bg); border-color: var(--lp-ink); }
 
-/* Cat-bar: indicador de scroll (fade en el borde derecho) + scroll-snap.
-   overflow-x centralizado: la mayoría de ejercicios lo duplican inline, pero
-   los que lo omiten (irregular-verbs) desbordaban la página en ≤320px. */
+/* Cat-bar: scroll horizontal + flechas de navegación.
+   Wrapper (.cat-bar-wrap) posiciona flechas a los lados;
+   las flechas aparecen/desaparecen según posición de scroll. */
+.cat-bar-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.cat-bar-wrap .cat-bar { margin-bottom: 0; }
+
+.cat-bar-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid var(--lp-border);
+  background: var(--lp-surface); color: var(--lp-ink);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 2; opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s, box-shadow .2s;
+  box-shadow: var(--lp-shadow-sm);
+  font-size: .7rem; font-weight: 700; line-height: 1;
+}
+.cat-bar-arrow--left { left: -4px; }
+.cat-bar-arrow--right { right: -4px; }
+.cat-bar-arrow.visible { opacity: 1; pointer-events: auto; }
+.cat-bar-arrow:hover { border-color: var(--lp-accent); color: var(--lp-accent); transform: translateY(-50%) scale(1.08); box-shadow: var(--lp-shadow-md); }
+.cat-bar-arrow:active { transform: translateY(-50%) scale(0.95); }
+
+/* Masks dinámicos: ambos lados cuando se puede scrollear en ambas direcciones */
+.cat-bar-wrap--fade-right .cat-bar {
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+}
+.cat-bar-wrap--fade-left .cat-bar {
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to left, black calc(100% - 28px), transparent 100%);
+}
+.cat-bar-wrap--fade-both .cat-bar {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 28px, black calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 28px, black calc(100% - 28px), transparent 100%);
+}
+
 .cat-bar {
   overflow-x: auto; scrollbar-width: none;
   scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+}
+.cat-bar::-webkit-scrollbar { display: none; }
+
+/* Fallback: ejercicios que no usan el wrapper conservan el fade original */
+:not(.cat-bar-wrap) > .cat-bar {
   -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
   mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
 }

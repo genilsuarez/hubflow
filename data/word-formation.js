@@ -36,7 +36,7 @@ export const CATEGORIES = {
       { root: 'hope', sentence: 'The situation looks ___.', correct: 'hopeless', explain: 'hope → hopeless (suffix -less = without)' },
       { root: 'nature', sentence: 'It looks completely ___.', correct: 'natural', explain: 'nature → natural (suffix -al)' },
       { root: 'child', sentence: 'His behaviour was very ___.', correct: 'childish', explain: 'child → childish (suffix -ish = like a child, negative)' },
-      { root: 'rely', sentence: 'She is a very ___ person.', correct: 'reliable', explain: 'rely → reliable (suffix -able, y → i)' },
+      { root: 'rely', sentence: 'He has always been ___ — never late once.', correct: 'reliable', explain: 'rely → reliable (suffix -able, y → i)' },
       { root: 'expense', sentence: 'That restaurant is too ___.', correct: 'expensive', explain: 'expense → expensive (suffix -ive)' },
       { root: 'tradition', sentence: 'It is a ___ dish in this region.', correct: 'traditional', explain: 'tradition → traditional (suffix -al)' }
     ]

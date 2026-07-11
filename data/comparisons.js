@@ -29,7 +29,9 @@ export const CATEGORIES = {
       { sentence: 'I need ___ information before I can decide.', correct: 'further', explain: '"Far" → "further" for additional/extra (not physical distance).' },
       { sentence: "That was the ___ meal I've ever had — incredible!", correct: 'best', explain: '"Good" → superlative "best" (irregular).' },
       { sentence: "This is the ___ film I've seen all year — a total waste of time.", correct: 'worst', explain: '"Bad" → superlative "worst" (irregular).' },
-      { sentence: 'How much ___ is the station from here?', correct: 'further', explain: '"Far" → "further"/"farther" for physical distance.' }
+      { sentence: 'How much ___ is the station from here?', correct: 'further', explain: '"Far" → "further"/"farther" for physical distance.' },
+      { sentence: "That's the ___ I've ever run — a full marathon!", correct: 'furthest', explain: '"Far" → superlative "furthest" for maximum distance or degree.' },
+      { sentence: 'The ___ point from the entrance is the emergency exit at the back.', correct: 'furthest', explain: '"Far" → superlative "furthest" for the greatest physical distance.' }
     ]
   }
 };

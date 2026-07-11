@@ -137,7 +137,9 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
   }
 
   document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-  document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+  document.getElementById('answerInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); e.stopPropagation(); }
+  });
   document.getElementById('nextBtn').addEventListener('click', () => { idx++; renderItem(); });
 
   function finish() {

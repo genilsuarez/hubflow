@@ -19,8 +19,8 @@
   .pill-btn.active { background: var(--lp-cat-purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
   .progress__fill { background: var(--lp-cat-purple); }
 
-  /* Category pills — scrollable */
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  /* Category pills — scrollable (handled by .cat-bar-wrap in components.css) */
+  .cat-bar { display: flex; gap: 4px; padding-bottom: 2px; }
   .cat-bar::-webkit-scrollbar { display: none; }
 
   [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
@@ -108,7 +108,11 @@
     <h1>🔀 Confusing Words</h1>
 
     <!-- Category -->
-    <div class="cat-bar" id="catBar"></div>
+    <div class="cat-bar-wrap" id="catBarWrap">
+      <button class="cat-bar-arrow cat-bar-arrow--left" id="catArrowL" aria-label="Scroll left">‹</button>
+      <div class="cat-bar" id="catBar"></div>
+      <button class="cat-bar-arrow cat-bar-arrow--right" id="catArrowR" aria-label="Scroll right">›</button>
+    </div>
 
     <!-- Modes -->
     <div class="pill-bar">
@@ -195,6 +199,31 @@ function renderCatBar() {
   });
 }
 renderCatBar();
+
+// ─── Cat-bar scroll arrows ───
+(function initCatArrows() {
+  const wrap = document.getElementById('catBarWrap');
+  const bar = document.getElementById('catBar');
+  const arrowL = document.getElementById('catArrowL');
+  const arrowR = document.getElementById('catArrowR');
+  const SCROLL_STEP = 140;
+
+  function updateArrows() {
+    const canLeft = bar.scrollLeft > 4;
+    const canRight = bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4;
+    arrowL.classList.toggle('visible', canLeft);
+    arrowR.classList.toggle('visible', canRight);
+    wrap.classList.toggle('cat-bar-wrap--fade-left', canLeft && !canRight);
+    wrap.classList.toggle('cat-bar-wrap--fade-right', !canLeft && canRight);
+    wrap.classList.toggle('cat-bar-wrap--fade-both', canLeft && canRight);
+  }
+
+  arrowL.addEventListener('click', () => { bar.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' }); });
+  arrowR.addEventListener('click', () => { bar.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' }); });
+  bar.addEventListener('scroll', updateArrows, { passive: true });
+  new ResizeObserver(updateArrows).observe(bar);
+  setTimeout(updateArrows, 50);
+})();
 
 // ─── Mode switching ───
 document.querySelectorAll('[data-mode]').forEach(btn => {

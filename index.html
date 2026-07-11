@@ -195,7 +195,7 @@
     .tile.a { --spine: var(--lp-cat-teal); }
     .tile.r { --spine: var(--lp-cat-green); }
 
-    .new-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+    .new-row { display: flex; gap: 10px; overflow-x: auto; overflow-y: clip; padding: 4px 0 6px; margin: -4px 0 0; scrollbar-width: none; }
     .new-chip {
       flex-shrink: 0; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--lp-ink);
       background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: 50px;
@@ -237,8 +237,8 @@
       font-size: .65rem; color: var(--lp-ink-soft); font-weight: var(--lp-weight-medium); margin-top: 4px; line-height: 1.35;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
-    .book-pills { display: flex; gap: 5px; flex-wrap: wrap; opacity: 0; max-height: 0; overflow: hidden; transition: opacity .3s ease, max-height .4s cubic-bezier(0.4, 0, 0.2, 1), margin-top .3s ease; margin-top: 0; }
-    .book:hover .book-pills, .book:focus-within .book-pills { opacity: 1; max-height: 60px; margin-top: 6px; }
+    .book-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; opacity: 0; transition: opacity .2s ease; }
+    .book:hover .book-pills, .book:focus-within .book-pills { opacity: 1; }
     .pill {
       font-size: .58rem; font-weight: var(--lp-weight-extrabold); padding: 3px 8px; border-radius: 5px;
       background: var(--lp-bg-paper); color: var(--lp-ink-soft); border: 1px solid var(--lp-border); letter-spacing: .02em;
@@ -367,8 +367,6 @@
       </div>
       <div class="header-stats" role="status" aria-label="Progress summary">
         <span class="header-stat"><span class="header-stat__val" id="psTotal">0</span><span class="header-stat__label">ses</span></span>
-        <span class="header-stat__divider" aria-hidden="true"></span>
-        <span class="header-stat"><span class="header-stat__val" id="psBest">—</span><span class="header-stat__label">best</span></span>
         <span class="header-stat__divider" aria-hidden="true"></span>
         <span class="header-stat"><span class="header-stat__val" id="psMastered">0/34</span><span class="header-stat__label">★</span></span>
       </div>
@@ -728,13 +726,12 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     const m = k.match(/^[a-z]+/);
     return m && scoreKeySet.has(m[0]);
   });
-  let total = 0, best = 0; const modBest = {};
+  let total = 0; const modBest = {};
   keys.forEach(k => {
     try {
       const d = JSON.parse(localStorage.getItem(k));
       if (Array.isArray(d)) {
         total += d.length;
-        d.forEach(x => { if (x.pct > best) best = x.pct; });
         const prefix = k.match(/^[a-z]+/)[0];
         const pMax = d.reduce((m, x) => Math.max(m, x.pct || 0), 0);
         modBest[prefix] = Math.max(modBest[prefix] || 0, pMax);
@@ -744,7 +741,6 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
   const mastered = Object.values(modBest).filter(v => v >= 90).length;
   const totalModules = document.querySelectorAll('.book[href]').length;
   document.getElementById('psTotal').textContent = total || '0';
-  document.getElementById('psBest').textContent = best > 0 ? best + '%' : '—';
   document.getElementById('psMastered').textContent = mastered + '/' + totalModules;
 
   // Dynamic module/guide counts (never hardcode — always read from the DOM)

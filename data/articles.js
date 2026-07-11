@@ -26,7 +26,10 @@ export const CATEGORIES = {
       { sentence: '___ moon looks beautiful tonight.', correct: 'the', explain: 'Unique things (only one moon) → "the".' },
       { sentence: 'I want ___ apple.', correct: 'an', explain: '"Apple" starts with /æ/ (vowel sound) → "an".' },
       { sentence: 'He is ___ European.', correct: 'a', explain: '"European" starts with /jʊ/ (consonant sound) → "a".' },
-      { sentence: 'She is ___ first person to arrive.', correct: 'the', explain: 'Ordinal numbers use "the".' }
+      { sentence: 'She is ___ first person to arrive.', correct: 'the', explain: 'Ordinal numbers use "the".' },
+      { sentence: 'I love ___ chocolate.', correct: '∅', explain: 'General uncountable nouns (likes/dislikes) take no article.' },
+      { sentence: 'She speaks ___ French fluently.', correct: '∅', explain: 'Language names never take an article.' },
+      { sentence: '___ life is short.', correct: '∅', explain: 'Abstract nouns used in a general sense take no article.' }
     ]
   },
   geographic: {

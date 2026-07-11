@@ -38,8 +38,8 @@ body::after {
 
 /* ─── TOP BAR REFINEMENT ─── */
 .top-bar {
-  padding: 10px 0;
-  margin-bottom: 14px;
+  padding: 8px 0;
+  margin-bottom: 8px;
 }
 .back-link {
   font-size: .82rem;
@@ -56,12 +56,12 @@ body::after {
 
 /* ─── HEADER SECTION ─── */
 .header {
-  padding: 12px 0 !important;
-  margin-bottom: 14px !important;
+  padding: 6px 0 !important;
+  margin-bottom: 8px !important;
 }
 h1 {
   font-size: clamp(1.1rem, 3.2vw, 1.5rem) !important;
-  margin-bottom: 12px !important;
+  margin-bottom: 6px !important;
 }
 
 /* ─── PILL BAR ENHANCED ─── */
@@ -94,8 +94,8 @@ h1 {
 
 /* ─── PROGRESS BAR ENHANCED ─── */
 .progress {
-  margin-bottom: 10px;
-  padding: 8px 12px;
+  margin-bottom: 6px;
+  padding: 6px 12px;
   background: var(--lp-surface);
   border-radius: var(--lp-radius-sm);
   border: 1px solid var(--lp-border-subtle);
@@ -148,7 +148,7 @@ h1 {
 
 /* ─── SCROLL BODY SPACING ─── */
 .scroll-body {
-  padding: 14px 0 48px;
+  padding: 6px 0 48px;
 }
 
 /* ─── LEGEND ENHANCED ─── */
