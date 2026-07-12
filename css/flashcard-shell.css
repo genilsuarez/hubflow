@@ -9,7 +9,7 @@
    Color varies via [data-color] on the page's .wrap element.
    ═══════════════════════════════════════════════════════ */
 
-body { min-height: 100vh; overflow-x: hidden; padding: 0 14px; }
+body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; padding: 0 14px; }
 .top-bar { margin-bottom: 2px; }
 .header { padding: 0; margin-bottom: 2px; }
 h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: .95rem; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
@@ -210,3 +210,20 @@ h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: .95rem; disp
 [data-theme="dark"] [data-color="teal"] .fc-back { background: var(--surface); border-color: var(--lp-cat-teal); }
 [data-color="teal"] .fc-back .fc-term { color: var(--lp-cat-teal); font-size: 1.3rem; }
 [data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
+
+/* ─── MOBILE: eliminate unnecessary scroll ─── */
+@media (max-width: 480px) {
+  body { min-height: auto; padding: 0 10px; }
+  .top-bar { margin-bottom: 0; }
+  .header { margin-bottom: 0; padding: 0; }
+  h1 { font-size: .82rem; margin-bottom: 0; }
+  .cat-scroll-wrapper { margin-bottom: 2px; }
+  .header .pill-bar:not(.pill-bar--scroll) { margin-bottom: 0; }
+  #progressWrap { margin-bottom: 0; }
+  .fc-card { height: 180px; max-width: 100%; }
+  .fc-count { font-size: .7rem; margin-bottom: 0; }
+  .listen-btn { width: 38px !important; height: 38px !important; font-size: 1rem !important; }
+  .scroll-body { padding-bottom: 8px; }
+  [data-area] { gap: 2px; }
+  .fc-nav { margin-top: 4px; gap: 8px; }
+}

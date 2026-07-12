@@ -260,3 +260,9 @@ a:focus-visible,
   outline: 2px solid var(--lp-accent);
   outline-offset: 2px;
 }
+
+/* ─── MOBILE: remove forced min-height to avoid empty scroll ─── */
+@media (max-width: 480px) {
+  body { min-height: auto; }
+  .wrap { padding: 0 10px; }
+}
