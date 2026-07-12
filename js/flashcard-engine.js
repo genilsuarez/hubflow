@@ -3,6 +3,7 @@
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
 import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable } from './utils.js';
+import { initSwipe } from './swipe.js';
 
 export class FlashcardEngine {
   constructor(config) {
@@ -165,8 +166,19 @@ export class FlashcardEngine {
     this.deck = shuffle(this.getItems());
     this.cardIdx = 0;
     this.showArea('study');
+    this.initSwipe();
     this.updateStudyProgress();
     this.renderStudyCard();
+  }
+
+  initSwipe() {
+    if (this._swipeCleanup) this._swipeCleanup();
+    const el = document.querySelector('[data-area="study"]');
+    if (!el) return;
+    this._swipeCleanup = initSwipe(el, {
+      onNext: () => this.navCard(1),
+      onPrev: () => this.navCard(-1),
+    });
   }
 
   updateStudyProgress() {

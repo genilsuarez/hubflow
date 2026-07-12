@@ -39,12 +39,14 @@ import { MODULES } from '../data/catalog.js';
   });
 })();
 
-// Local dev: rewrite portal link to localhost
-if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+// Local dev: rewrite portal link to local host/IP
+const _h = location.hostname;
+const _isLocal = _h === 'localhost' || _h === '127.0.0.1' || _h.startsWith('192.168.');
+if (_isLocal) {
   const pl = document.getElementById('portalLink');
-  if (pl) pl.href = 'http://localhost:3000/';
+  if (pl) pl.href = 'http://' + _h + ':3000/';
   document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href*="localhost:"]');
+    const a = e.target.closest('a[href*="' + _h + ':"]');
     if (a) {
       const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       const url = new URL(a.href);

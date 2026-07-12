@@ -57,6 +57,7 @@
 <script type="module">
 import { CATEGORIES } from '../data/tenses.js';
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { initSwipe } from '../js/swipe.js';
 initTheme();
 document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
 const catKeys = Object.keys(CATEGORIES);
@@ -77,6 +78,7 @@ document.getElementById('fcCard').addEventListener('click', () => document.getEl
 document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
 document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
 document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
+initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
 function advanceCard(dir) {
   const card = document.getElementById('fcCard');
