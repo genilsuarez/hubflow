@@ -150,6 +150,14 @@ h1 {
 .scroll-body {
   padding: 6px 0 48px;
 }
+@media (max-width: 480px) {
+  .scroll-body { padding: 0; }
+  .top-bar { padding: 4px 0; margin-bottom: 0; }
+  .header { padding: 0 !important; margin-bottom: 0 !important; }
+  h1 { margin-bottom: 2px !important; }
+  .pill-bar { margin-bottom: 4px; }
+  .progress { margin-bottom: 2px; padding: 4px 8px; }
+}
 
 /* ─── LEGEND ENHANCED ─── */
 .legend {

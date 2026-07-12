@@ -56,6 +56,9 @@ export class FlashcardEngine {
       btn.addEventListener('click', () => this.setMode(btn.dataset.mode));
     });
 
+    // Flashcard flip on click/tap
+    document.getElementById('fcCard')?.addEventListener('click', () => this.flipCard());
+
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       if (e.key === ' ' || e.key === 'Enter') {
@@ -294,6 +297,7 @@ export class FlashcardEngine {
     }
 
     if (optsEl) {
+      optsEl.style.pointerEvents = 'none';
       optsEl.innerHTML = options.map(opt =>
         `<button class="quiz-opt">${opt.text}</button>`
       ).join('');
@@ -301,6 +305,9 @@ export class FlashcardEngine {
       optsEl.querySelectorAll('.quiz-opt').forEach((btn, idx) => {
         btn.addEventListener('click', () => this.handleQuizAnswer(btn, options[idx].correct, optsEl));
       });
+
+      // Prevent ghost clicks from previous touch on mobile
+      setTimeout(() => { optsEl.style.pointerEvents = ''; }, 50);
     }
   }
 

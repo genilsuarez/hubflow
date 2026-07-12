@@ -166,7 +166,9 @@
   background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
   transition: all .2s var(--lp-ease); text-align: center;
 }
-.quiz-opt:hover:not(.disabled) { border-color: var(--lp-accent); background: var(--lp-accent-soft); transform: translateY(-1px); }
+@media (hover: hover) {
+  .quiz-opt:hover:not(.disabled) { border-color: var(--lp-accent); background: var(--lp-accent-soft); transform: translateY(-1px); }
+}
 .quiz-opt.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
 .quiz-opt.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
 .quiz-opt.disabled { cursor: default; opacity: .65; }
