@@ -8,7 +8,7 @@
   <meta name="description" content="HubFlow — Interactive English exercises: -ing rules, -ed adjectives, noun adjuncts, and more.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
   <script src="js/theme-init.js"></script>
   <script>
     // Early section detection: prevent flash of resumen when returning from exercise
@@ -289,8 +289,10 @@
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-    /* Header unificado: la topbar (buscador + acciones portal/tema) es visible
-       en todas las secciones, incluida Resumen (INFORME-BOTONES Fase E, H2). */
+    /* Hide search bar & stats on resumen to prevent flash on first load.
+       Once JS sets body[data-active], the display is controlled imperatively. */
+    body:not([data-active]) .search-bar,
+    body:not([data-active]) .header-stats { display: none; }
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
@@ -650,7 +652,7 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
   }
 
   function titleHTML(mod) {
-    return mod.title.replace(/(-ing|-ed)\b/, '<code>$1</code>');
+    return mod.title;
   }
 
   function bookCardHTML(mod, spineClass) {
