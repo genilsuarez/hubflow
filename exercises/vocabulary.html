@@ -202,6 +202,13 @@ const expandCount = catExpandBtn.querySelector('.expand-count');
 
 function countHiddenPills() {
   if (!catBar || !expandCount) return;
+  // Never disable the button while expanded — user needs it to collapse
+  if (catWrapper.classList.contains('expanded')) {
+    catExpandBtn.disabled = false;
+    expandCount.textContent = '';
+    catExpandBtn.title = 'Colapsar';
+    return;
+  }
   const pills = catBar.querySelectorAll('.pill-btn');
   const barRect = catBar.getBoundingClientRect();
   let hidden = 0;
