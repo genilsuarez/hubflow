@@ -293,12 +293,12 @@
        en todas las secciones, incluida Resumen (INFORME-BOTONES Fase E, H2). */
 
     @media (max-width: 860px) {
-      .shell { grid-template-columns: 1fr; height: calc(100% - 62px - env(safe-area-inset-bottom, 0px)); }
+      .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
       .sidebar { display: none; }
       .mobile-brand { display: block; }
-      /* El footer fijo + bottom nav comían ~163px permanentes de alto (201px de
-         contenido en landscape). En mobile el footer se oculta y el shell se
-         achica para no quedar detrás de la bottom-nav fija. */
+      /* En mobile el footer se oculta. El shell usa 100dvh (viewport dinámico)
+         menos la altura de la bottom-nav para que el contenido nunca quede
+         detrás de la barra de navegación fija. */
       .foot { display: none; }
       .content { padding-bottom: 14px; }
 
