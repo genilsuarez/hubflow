@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Confusing Words Guide | HubFlow</title>
+<title>Confusing Words & Collocations Guide | HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/theme-init.js"></script>
 <link rel="stylesheet" href="../css/base.css">
@@ -38,6 +38,36 @@ body{
 h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
 h1 .accent{font-style:italic;color:var(--blue);}
 .intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* COLLOCATIONS: VERB HEADER + GRID */
+.verb-head{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;margin-bottom:10px;
+}
+.verb-head .vh-word{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--blue);}
+.verb-head .vh-meaning{font-size:.78rem;color:var(--muted);font-weight:600;}
+.coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin:10px 0 20px;}
+.coll-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 12px;font-size:.76rem;transition:border-color .2s;
+}
+.coll-chip:hover{border-color:var(--blue);}
+.coll-chip .cc-verb{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue-dark);white-space:nowrap;}
+[data-theme="dark"] .coll-chip .cc-verb{color:#7AC7FF;}
+.coll-chip .cc-noun{font-weight:600;color:var(--text);}
+.wrong-box{
+  background:var(--red-light);border:1.5px solid color-mix(in srgb, var(--red) 30%, transparent);
+  border-radius:12px;padding:12px 14px;margin:10px 0;
+}
+.wrong-box .wb-title{font-weight:800;font-size:.76rem;color:var(--red-dark);margin-bottom:6px;}
+[data-theme="dark"] .wrong-box .wb-title{color:#FF9F9F;}
+.wrong-box .wb-list{font-size:.74rem;line-height:1.7;color:var(--text);}
+.wrong-box .wb-list del{color:var(--red-dark);font-weight:600;}
+.wrong-box .wb-list ins{text-decoration:none;color:var(--green-dark);font-weight:600;}
+[data-theme="dark"] .wrong-box .wb-list del{color:#FF9F9F;}
+[data-theme="dark"] .wrong-box .wb-list ins{color:#6FE8A8;}
 
 /* PAIR SECTION */
 .pair-section{margin-bottom:28px;}
@@ -103,8 +133,8 @@ h1 .accent{font-style:italic;color:var(--blue);}
   <button class="guide-theme-toggle" id="guideThemeToggle" aria-label="Toggle theme">🌙</button>
 </nav>
 
-<h1>Confusing Words <span class="accent">Clarified</span></h1>
-<p class="intro">Side-by-side comparisons of the most commonly confused verb pairs, with clear rules and memory tricks.</p>
+<h1>Confusing Words <span class="accent">& Collocations</span></h1>
+<p class="intro">Side-by-side comparisons of the most commonly confused verb pairs, plus the collocations that naturally go together — with clear rules and memory tricks.</p>
 
 <!-- MAKE vs DO -->
 <section class="pair-section">
@@ -125,6 +155,97 @@ h1 .accent{font-style:italic;color:var(--blue);}
   </div>
   <div class="trick-box"><div class="tb-title">&#128161; Memory trick</div><div class="tb-body"><strong>MAKE</strong> = you can often touch/see the result. <strong>DO</strong> = it's an activity or task.</div></div>
 </section>
+
+<!-- COLLOCATIONS -->
+<h2 id="collocations">&#128280; Collocations Reference</h2>
+<p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;">Words that naturally go together. You don't "do a mistake" &mdash; you "make a mistake." Learn the right combinations.</p>
+
+<h2 style="margin-top:20px;">&#128994; have vs take</h2>
+
+<div class="verb-head"><span class="vh-word">have</span><span class="vh-meaning">Experiences, food/drink, situations</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">breakfast/lunch</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a shower (BrE)</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a good time</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a problem</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">an idea</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a conversation</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">a look</span></div>
+  <div class="coll-chip"><span class="cc-verb">have</span><span class="cc-noun">fun</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">take</span><span class="vh-meaning">Actions, transport, time</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a photo</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a shower (AmE)</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a break</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a risk</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">notes</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">a bus/taxi</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">time</span></div>
+  <div class="coll-chip"><span class="cc-verb">take</span><span class="cc-noun">turns</span></div>
+</div>
+
+<h2>&#128995; get vs give</h2>
+
+<div class="verb-head"><span class="vh-word">get</span><span class="vh-meaning">Receive, become, obtain</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">a job</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">ready</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">lost</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">angry/tired</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">married</span></div>
+  <div class="coll-chip"><span class="cc-verb">get</span><span class="cc-noun">better/worse</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">give</span><span class="vh-meaning">Transfer, provide</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">advice</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">permission</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">a speech</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">sb a hand</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">an answer</span></div>
+  <div class="coll-chip"><span class="cc-verb">give</span><span class="cc-noun">priority</span></div>
+</div>
+
+<h2>&#128312; pay / keep / save</h2>
+
+<div class="verb-head"><span class="vh-word">pay</span><span class="vh-meaning">Money, attention, consequences</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">attention</span></div>
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">a compliment</span></div>
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">a visit</span></div>
+  <div class="coll-chip"><span class="cc-verb">pay</span><span class="cc-noun">the price</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">keep</span><span class="vh-meaning">Continue, maintain a state</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">a promise</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">calm</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">a secret</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">in touch</span></div>
+  <div class="coll-chip"><span class="cc-verb">keep</span><span class="cc-noun">a record</span></div>
+</div>
+
+<div class="verb-head"><span class="vh-word">save</span><span class="vh-meaning">Rescue, preserve, accumulate</span></div>
+<div class="coll-grid">
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">time</span></div>
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">money</span></div>
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">energy</span></div>
+  <div class="coll-chip"><span class="cc-verb">save</span><span class="cc-noun">someone's life</span></div>
+</div>
+
+<div class="wrong-box">
+  <div class="wb-title">&#10060; Common mistakes</div>
+  <div class="wb-list">
+    <del>do a mistake</del> &rarr; <ins>make a mistake</ins><br>
+    <del>make homework</del> &rarr; <ins>do homework</ins><br>
+    <del>do a decision</del> &rarr; <ins>make a decision</ins><br>
+    <del>make exercise</del> &rarr; <ins>do exercise</ins><br>
+    <del>take breakfast</del> &rarr; <ins>have breakfast</ins><br>
+    <del>do a photo</del> &rarr; <ins>take a photo</ins>
+  </div>
+</div>
 
 <!-- SAY vs TELL -->
 <section class="pair-section">
@@ -469,7 +590,8 @@ h1 .accent{font-style:italic;color:var(--blue);}
 </section>
 
 <footer class="guide-footer">
-  <a href="../exercises/confusing-words.html">&larr; Practice confusing words</a>
+  <a href="../exercises/confusing-words.html">&larr; Practice confusing words</a><br>
+  <a href="../exercises/collocations.html">&larr; Practice collocations</a>
 </footer>
 
 </div>

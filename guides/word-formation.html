@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Word Formation Guide | HubFlow</title>
+<title>Word Formation &amp; Parts of Speech Guide | HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/theme-init.js"></script>
 <link rel="stylesheet" href="../css/base.css">
@@ -66,6 +66,14 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 .anatomy-labels .dot.b{background:var(--blue);}
 .anatomy-labels .dot.g{background:var(--green);}
 
+/* PARTS OF SPEECH */
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 24px;}
+.pos-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;}
+.pos-name{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;color:var(--blue-dark);margin-bottom:4px;}
+[data-theme="dark"] .pos-name{color:#7AC7FF;}
+.pos-desc{font-size:.74rem;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.pos-ex{font-size:.7rem;color:var(--muted);font-style:italic;}
+
 /* SUFFIX CARDS */
 .suffix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:12px 0;}
 .suffix-card{
@@ -118,6 +126,7 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 @media(max-width:480px){
   .page{padding:14px 12px 50px;}
   .suffix-grid,.prefix-grid{grid-template-columns:1fr;}
+  .pos-grid{grid-template-columns:1fr;}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 
@@ -143,7 +152,21 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </nav>
 
 <h1>Word Formation <span class="accent">Reference</span></h1>
-<p class="intro">How English builds new words: prefixes change meaning, suffixes change word class.</p>
+<p class="intro">How English builds new words: prefixes change meaning, suffixes change word class &mdash; and word class starts with the 8 parts of speech.</p>
+
+<!-- PARTS OF SPEECH -->
+<h2 id="parts-of-speech">&#128100; The 8 Parts of Speech</h2>
+<p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;">Every English word belongs to one of these eight categories, based on the job it does in a sentence. The suffixes below often signal which one.</p>
+<div class="pos-grid">
+  <div class="pos-card"><div class="pos-name">Noun</div><div class="pos-desc">Names a person, place, thing, or idea</div><div class="pos-ex">dog, London, happiness</div></div>
+  <div class="pos-card"><div class="pos-name">Verb</div><div class="pos-desc">Expresses an action or state</div><div class="pos-ex">run, is, think</div></div>
+  <div class="pos-card"><div class="pos-name">Adjective</div><div class="pos-desc">Describes a noun</div><div class="pos-ex">red car, quick fox</div></div>
+  <div class="pos-card"><div class="pos-name">Adverb</div><div class="pos-desc">Describes a verb, adjective, or another adverb — often how/when/where</div><div class="pos-ex">quickly, very, here</div></div>
+  <div class="pos-card"><div class="pos-name">Pronoun</div><div class="pos-desc">Replaces a noun</div><div class="pos-ex">she, it, her, this</div></div>
+  <div class="pos-card"><div class="pos-name">Preposition</div><div class="pos-desc">Shows the relationship between words (place, time, direction)</div><div class="pos-ex">on, under, since</div></div>
+  <div class="pos-card"><div class="pos-name">Conjunction</div><div class="pos-desc">Connects words, phrases, or clauses</div><div class="pos-ex">and, because, but</div></div>
+  <div class="pos-card"><div class="pos-name">Interjection</div><div class="pos-desc">Expresses sudden emotion, stands alone</div><div class="pos-ex">Wow!, Ouch!, Hey!</div></div>
+</div>
 
 <!-- ANATOMY -->
 <div class="anatomy-box">
@@ -297,7 +320,8 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </table></div>
 
 <footer class="guide-footer">
-  <a href="../exercises/word-formation.html">&larr; Practice word formation</a>
+  <a href="../exercises/word-formation.html">&larr; Practice word formation</a><br>
+  <a href="../exercises/parts-of-speech.html">&larr; Practice parts of speech</a>
 </footer>
 
 </div>

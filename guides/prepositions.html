@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prepositions Guide | HubFlow</title>
+<title>Prepositions &amp; Verb Chunks Guide | HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/theme-init.js"></script>
 <link rel="stylesheet" href="../css/base.css">
@@ -106,6 +106,35 @@ h2{
 .tl-prep{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:var(--blue-dark);margin-top:2px;}
 [data-theme="dark"] .tl-prep{color:#7AC7FF;}
 
+/* VERB + PREP CHUNKS (expanded) */
+.prep-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:16px;}
+.prep-group{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;transition:border-color .2s;}
+.prep-group:hover{border-color:var(--blue);}
+.prep-group .pg-prep{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;margin-bottom:8px;color:var(--blue-dark);}
+[data-theme="dark"] .prep-group .pg-prep{color:#7AC7FF;}
+.pg-verb{font-size:.76rem;line-height:1.7;color:var(--text);}
+.pg-verb strong{font-weight:700;}
+.pg-verb .es{color:var(--muted);font-size:.7rem;}
+.qc-table{
+  width:100%;border-collapse:collapse;font-size:.75rem;font-family:'Manrope',sans-serif;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:12px 0;
+}
+.qc-table th{
+  font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;
+}
+.qc-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.qc-table tr:last-child td{border-bottom:none;}
+.qc-table .prep{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--purple);}
+.qc-table .es{color:var(--muted);}
+.tip-box{
+  background:var(--teal-light);border:1.5px solid var(--teal);border-radius:12px;padding:14px 16px;
+  margin:16px 0;font-size:.8rem;line-height:1.6;color:var(--text);
+}
+.tip-box strong{color:var(--teal);}
+.cat-badge.verb{background:var(--blue-light);color:var(--blue-dark);}
+.cat-badge.quest{background:var(--purple-light);color:var(--purple);}
+
 .dep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
 .dep-card{
   background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px;
@@ -148,7 +177,7 @@ h2{
 </nav>
 
 <h1>Prepositions <span class="accent">Visual Map</span></h1>
-<p class="intro">Time, place, movement, and dependent prepositions &mdash; organized visually for quick reference.</p>
+<p class="intro">Time, place, movement, and dependent prepositions &mdash; plus the verb + preposition chunks that always travel together.</p>
 
 <!-- TIME -->
 <h2><span class="cat-badge time">TIME</span> Prepositions of Time</h2>
@@ -314,8 +343,111 @@ h2{
   </div>
 </div>
 
+<!-- VERB + PREP CHUNKS (expanded) -->
+<h2 id="verb-chunks"><span class="cat-badge verb">FIXED</span> Verb + Prep Chunks in Depth</h2>
+<p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;">Some verbs always need a specific preposition &mdash; learn them as one fixed chunk, not two separate words.</p>
+
+<div class="prep-groups">
+  <div class="prep-group">
+    <div class="pg-prep">to</div>
+    <div class="pg-verb">
+      listen <strong>to</strong> <span class="es">(escuchar)</span><br>
+      talk <strong>to</strong> <span class="es">(hablar con)</span><br>
+      belong <strong>to</strong> <span class="es">(pertenecer a)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">at / for / after</div>
+    <div class="pg-verb">
+      look <strong>at</strong> <span class="es">(mirar)</span><br>
+      look <strong>for</strong> <span class="es">(buscar)</span><br>
+      look <strong>after</strong> <span class="es">(cuidar de)</span><br>
+      laugh <strong>at</strong> <span class="es">(reírse de)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">for</div>
+    <div class="pg-verb">
+      wait <strong>for</strong> <span class="es">(esperar)</span><br>
+      ask <strong>for</strong> <span class="es">(pedir)</span><br>
+      pay <strong>for</strong> <span class="es">(pagar por)</span><br>
+      apologize <strong>for</strong> <span class="es">(disculparse por)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">on</div>
+    <div class="pg-verb">
+      work <strong>on</strong> <span class="es">(trabajar en)</span><br>
+      depend <strong>on</strong> <span class="es">(depender de)</span><br>
+      spend <strong>on</strong> <span class="es">(gastar en)</span><br>
+      concentrate <strong>on</strong> <span class="es">(concentrarse en)</span><br>
+      insist <strong>on</strong> <span class="es">(insistir en)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">of</div>
+    <div class="pg-verb">
+      take care <strong>of</strong> <span class="es">(cuidar / encargarse)</span><br>
+      consist <strong>of</strong> <span class="es">(consistir en)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">with / in</div>
+    <div class="pg-verb">
+      agree <strong>with</strong> <span class="es">(estar de acuerdo con)</span><br>
+      believe <strong>in</strong> <span class="es">(creer en)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">about</div>
+    <div class="pg-verb">
+      think <strong>about</strong> <span class="es">(pensar en)</span><br>
+      dream <strong>about</strong> <span class="es">(soñar con)</span><br>
+      complain <strong>about</strong> <span class="es">(quejarse de)</span>
+    </div>
+  </div>
+  <div class="prep-group">
+    <div class="pg-prep">from</div>
+    <div class="pg-verb">
+      suffer <strong>from</strong> <span class="es">(sufrir de)</span>
+    </div>
+  </div>
+</div>
+
+<div class="tip-box">
+  <strong>Tip:</strong> when you learn a new verb, always learn its preposition at the same time &mdash; write them together as one chunk (<em>depend on</em>, not just <em>depend</em>) so you never have to guess later.
+</div>
+
+<h2><span class="cat-badge quest">WH-</span> Question Chunks (Stranded Preposition)</h2>
+<p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;">In everyday spoken English, the preposition moves to the <strong>end</strong> of the question instead of before the Wh-word.</p>
+
+<table class="qc-table">
+  <tr><th>Question</th><th>Prep</th><th>Meaning</th></tr>
+  <tr><td>Where are you <strong>from</strong>?</td><td class="prep">from</td><td class="es">¿De dónde…?</td></tr>
+  <tr><td>Who are you going <strong>with</strong>?</td><td class="prep">with</td><td class="es">¿Con quién…?</td></tr>
+  <tr><td>What are you talking <strong>about</strong>?</td><td class="prep">about</td><td class="es">¿De/sobre qué…?</td></tr>
+  <tr><td>Who did you speak <strong>to</strong>?</td><td class="prep">to</td><td class="es">¿A/con quién…?</td></tr>
+  <tr><td>What is this button <strong>for</strong>?</td><td class="prep">for</td><td class="es">¿Para qué…?</td></tr>
+  <tr><td>Who is this present <strong>for</strong>?</td><td class="prep">for</td><td class="es">¿Para quién…?</td></tr>
+  <tr><td>What city do you live <strong>in</strong>?</td><td class="prep">in</td><td class="es">¿En qué…?</td></tr>
+  <tr><td>What are you looking <strong>at</strong>?</td><td class="prep">at</td><td class="es">¿A qué/en qué…?</td></tr>
+  <tr><td>Who are you laughing <strong>at</strong>?</td><td class="prep">at</td><td class="es">¿De quién te ríes…?</td></tr>
+  <tr><td>What are you working <strong>on</strong>?</td><td class="prep">on</td><td class="es">¿En qué…?</td></tr>
+  <tr><td>Where are you going <strong>to</strong>?</td><td class="prep">to</td><td class="es">¿A dónde…?</td></tr>
+  <tr><td>Who are you thinking <strong>about</strong>?</td><td class="prep">about</td><td class="es">¿Sobre quién…?</td></tr>
+  <tr><td>What do you think <strong>of</strong> this?</td><td class="prep">of</td><td class="es">¿Qué opinas de…?</td></tr>
+  <tr><td>What did you open it <strong>with</strong>?</td><td class="prep">with</td><td class="es">¿Con qué…?</td></tr>
+  <tr><td>Who did you get this <strong>from</strong>?</td><td class="prep">from</td><td class="es">¿De quién…?</td></tr>
+  <tr><td>Where are you staying <strong>at</strong>?</td><td class="prep">at</td><td class="es">¿En dónde…?</td></tr>
+</table>
+
+<div class="tip-box">
+  <strong>Tip:</strong> ending a question with a preposition (<em>Who are you talking to?</em>) is completely natural and standard in everyday English &mdash; it is not incorrect, despite what some traditional grammar rules say.
+</div>
+
 <footer class="guide-footer">
-  <a href="../exercises/prepositions.html">&larr; Practice prepositions</a>
+  <a href="../exercises/prepositions.html">&larr; Practice prepositions</a><br>
+  <a href="../exercises/verb-chunks.html">&larr; Practice verb + prep chunks</a>
 </footer>
 
 </div>

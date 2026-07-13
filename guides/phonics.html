@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phonics &amp; Pronunciation Guide | HubFlow</title>
+<title>Phonics, Pronunciation &amp; Word Stress Guide | HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/theme-init.js"></script>
 <link rel="stylesheet" href="../css/base.css">
@@ -83,6 +83,13 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 .stress-dots .dot{width:10px;height:10px;border-radius:50%;background:var(--border);}
 .stress-dots .dot.big{width:14px;height:14px;background:var(--blue);}
 
+/* WORD STRESS: common mistakes list */
+.word-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.word-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:12px 14px;}
+.word-stress-form{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;color:#8a6508;}
+[data-theme="dark"] .word-stress-form{color:#E8C468;}
+.word-stress-form .cap{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;}
+
 /* SILENT LETTERS */
 .silent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:12px 0;}
 .silent-card{
@@ -115,6 +122,7 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
   .mp-sounds{flex-wrap:wrap;}
   .stress-grid{grid-template-columns:1fr;}
   .silent-grid{grid-template-columns:1fr 1fr;}
+  .word-grid{grid-template-columns:1fr;}
 }
 /* Cards de pares mínimos no caben en 2 columnas en teléfonos angostos */
 @media(max-width:400px){
@@ -241,6 +249,24 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
   <div class="tp-body">Same spelling, different stress: <strong>RE</strong>cord (noun) vs re<strong>CORD</strong> (verb) &bull; <strong>PRE</strong>sent (noun) vs pre<strong>SENT</strong> (verb) &bull; <strong>OB</strong>ject (noun) vs ob<strong>JECT</strong> (verb)</div>
 </div>
 
+<!-- WORD STRESS: COMMON MISTAKES -->
+<h2 id="word-stress-quiz">&#128483;&#65039; Word Stress: Common Mistakes</h2>
+<p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;">Spanish speakers often stress the wrong syllable in these common English words &mdash; here's where the stress really falls.</p>
+<div class="word-grid">
+  <div class="word-card"><div class="word-stress-form"><span class="cap">COM</span>-for-ta-ble</div></div>
+  <div class="word-card"><div class="word-stress-form">es-<span class="cap">PESH</span>-a-lly</div></div>
+  <div class="word-card"><div class="word-stress-form">pho-<span class="cap">TOG</span>-ra-phy</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">NEC</span>-es-sa-ry</div></div>
+  <div class="word-card"><div class="word-stress-form">de-<span class="cap">VEL</span>-op-ment</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">VEDGE</span>-ta-ble</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">IN</span>-tres-ting</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">TEM</span>-pra-ture</div></div>
+  <div class="word-card"><div class="word-stress-form">un-der-<span class="cap">STAND</span></div></div>
+  <div class="word-card"><div class="word-stress-form">af-ter-<span class="cap">NOON</span></div></div>
+  <div class="word-card"><div class="word-stress-form">en-gi-<span class="cap">NEER</span></div></div>
+  <div class="word-card"><div class="word-stress-form">im-<span class="cap">POR</span>-tant</div></div>
+</div>
+
 <!-- SILENT LETTERS -->
 <h2>&#129296; Silent Letters</h2>
 <div class="silent-grid">
@@ -287,7 +313,8 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </div>
 
 <footer class="guide-footer">
-  <a href="../exercises/phonics.html">&larr; Practice pronunciation</a>
+  <a href="../exercises/phonics.html">&larr; Practice pronunciation</a><br>
+  <a href="../exercises/word-stress-quiz.html">&larr; Practice word stress</a>
 </footer>
 
 </div>

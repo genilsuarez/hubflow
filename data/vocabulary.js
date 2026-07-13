@@ -1,6 +1,6 @@
 export const CATEGORIES = {
-  bodyParts: {
-    label: "🦴 Body Parts",
+  bodyFace: {
+    label: "🧑 Head & Face",
     items: [
       { term: "Head",     es: "Cabeza",      meaning: "The top part of your body",              emoji: "🧑" },
       { term: "Hair",     es: "Cabello",     meaning: "Grows on top of your head",              emoji: "💇" },
@@ -9,28 +9,38 @@ export const CATEGORIES = {
       { term: "Nose",     es: "Nariz",       meaning: "You smell and breathe through it",       emoji: "👃" },
       { term: "Mouth",    es: "Boca",        meaning: "You eat, speak and smile with it",       emoji: "👄" },
       { term: "Neck",     es: "Cuello",      meaning: "Connects your head to your body",        emoji: "🦒" },
+      { term: "Chin",     es: "Mentón",      meaning: "Bottom part of your face",               emoji: "🧔" },
+      { term: "Teeth",    es: "Dientes",     meaning: "Hard white structures for chewing",      emoji: "🦷" },
+    ]
+  },
+  bodyArms: {
+    label: "💪 Arms & Upper Body",
+    items: [
       { term: "Shoulder", es: "Hombro",      meaning: "Joint between arm and torso",            emoji: "🤷" },
       { term: "Arm",      es: "Brazo",       meaning: "Limb between shoulder and hand",         emoji: "💪" },
       { term: "Hand",     es: "Mano",        meaning: "At the end of your arm, five fingers",   emoji: "✋" },
       { term: "Finger",   es: "Dedo (mano)", meaning: "You have five on each hand",             emoji: "☝️" },
+      { term: "Elbow",    es: "Codo",        meaning: "Joint in the middle of your arm",        emoji: "📐" },
+      { term: "Wrist",    es: "Muñeca",      meaning: "Joint connecting hand and arm",          emoji: "⌚" },
       { term: "Chest",    es: "Pecho",       meaning: "Front of your upper body",               emoji: "🫀" },
-      { term: "Stomach",  es: "Estómago",    meaning: "Where food is digested",                 emoji: "🍽️" },
       { term: "Back",     es: "Espalda",     meaning: "Rear side of your torso",                emoji: "🧘" },
+    ]
+  },
+  bodyLegs: {
+    label: "🦵 Waist & Legs",
+    items: [
+      { term: "Stomach",  es: "Estómago",    meaning: "Where food is digested",                 emoji: "🍽️" },
       { term: "Waist",    es: "Cintura",     meaning: "Narrow part between ribs and hips",      emoji: "👖" },
+      { term: "Hip",      es: "Cadera",      meaning: "Joint connecting legs to torso",         emoji: "🦴" },
       { term: "Leg",      es: "Pierna",      meaning: "Lower limb for walking",                 emoji: "🦵" },
       { term: "Knee",     es: "Rodilla",     meaning: "Joint in the middle of your leg",        emoji: "🧎" },
       { term: "Ankle",    es: "Tobillo",     meaning: "Joint connecting foot and leg",           emoji: "🧦" },
       { term: "Foot",     es: "Pie",         meaning: "You stand and walk on these",            emoji: "🦶" },
       { term: "Toe",      es: "Dedo (pie)",  meaning: "You have five on each foot",             emoji: "🩴" },
-      { term: "Elbow",    es: "Codo",        meaning: "Joint in the middle of your arm",        emoji: "📐" },
-      { term: "Wrist",    es: "Muñeca",      meaning: "Joint connecting hand and arm",          emoji: "⌚" },
-      { term: "Hip",      es: "Cadera",      meaning: "Joint connecting legs to torso",         emoji: "🦴" },
-      { term: "Chin",     es: "Mentón",      meaning: "Bottom part of your face",               emoji: "🧔" },
-      { term: "Teeth",    es: "Dientes",     meaning: "Hard white structures for chewing",      emoji: "🦷" },
     ]
   },
-  cooking: {
-    label: "🍳 Cooking",
+  cookingPrep: {
+    label: "🔪 Prep Techniques",
     items: [
       { term: "Chop",     es: "Picar",               meaning: "Cut into small irregular pieces",           emoji: "🔪", example: "Chop the onions finely." },
       { term: "Mix",      es: "Mezclar",             meaning: "Combine ingredients together",              emoji: "🥣", example: "Mix the flour and eggs." },
@@ -42,6 +52,13 @@ export const CATEGORIES = {
       { term: "Slice",    es: "Rebanar",             meaning: "Cut into thin flat pieces",                 emoji: "🍞", example: "Slice the bread evenly." },
       { term: "Dice",     es: "Cortar en cubos",     meaning: "Cut into small cube-shaped pieces",         emoji: "🎲", example: "Dice the tomatoes for salsa." },
       { term: "Knead",    es: "Amasar",              meaning: "Press and fold dough with your hands",      emoji: "🍞", example: "Knead the dough for 10 minutes." },
+      { term: "Toss",     es: "Mezclar suavemente",  meaning: "Mix lightly by lifting and turning",        emoji: "🥗", example: "Toss the salad with dressing." },
+      { term: "Marinate", es: "Marinar",             meaning: "Soak food in seasoned liquid for flavor",   emoji: "🫕", example: "Marinate the chicken overnight." },
+    ]
+  },
+  cookingMethods: {
+    label: "🍳 Cooking Methods",
+    items: [
       { term: "Boil",     es: "Hervir",              meaning: "Heat liquid until bubbles form (100°C)",    emoji: "♨️", example: "Boil water for the pasta." },
       { term: "Simmer",   es: "Cocinar a fuego lento", meaning: "Cook just below boiling, gentle bubbles", emoji: "🍲", example: "Simmer the soup for 30 minutes." },
       { term: "Steam",    es: "Cocinar al vapor",    meaning: "Cook using hot steam, not direct water",    emoji: "💨", example: "Steam the broccoli for 5 minutes." },
@@ -52,8 +69,6 @@ export const CATEGORIES = {
       { term: "Broil",    es: "Gratinar",            meaning: "Cook under direct high heat from above",    emoji: "🔥", example: "Broil the steak for 4 minutes." },
       { term: "Poach",    es: "Escalfar",            meaning: "Cook gently in simmering liquid",           emoji: "🥚", example: "Poach the eggs in vinegar water." },
       { term: "Grill",    es: "Asar a la parrilla",  meaning: "Cook on a rack over direct flame",          emoji: "🥩", example: "Grill burgers for 5 min each side." },
-      { term: "Toss",     es: "Mezclar suavemente",  meaning: "Mix lightly by lifting and turning",        emoji: "🥗", example: "Toss the salad with dressing." },
-      { term: "Marinate", es: "Marinar",             meaning: "Soak food in seasoned liquid for flavor",   emoji: "🫕", example: "Marinate the chicken overnight." },
       { term: "Season",   es: "Sazonar",             meaning: "Add salt, pepper or spices for flavor",     emoji: "🧂", example: "Season the steak generously." },
       { term: "Serve",    es: "Servir",              meaning: "Present the finished food to eat",          emoji: "🍽️", example: "Serve the dish while hot." },
       { term: "Garnish",  es: "Decorar",             meaning: "Add a finishing decorative touch",          emoji: "🌿", example: "Garnish with fresh parsley." },
@@ -62,12 +77,12 @@ export const CATEGORIES = {
   idioms: {
     label: "💬 Idioms",
     items: [
-      { term: "Hit the Road",       es: "Ponerse en camino",     meaning: "Leave or start a journey",                emoji: "🚗", example: "It's late — let's hit the road." },
+      { term: "Beat Around the Bush", es: "Andarse con rodeos",  meaning: "Avoid getting to the point directly",     emoji: "🌳", example: "Stop beating around the bush and tell me." },
       { term: "Hang in There",      es: "No rendirse",           meaning: "Don't give up, be patient",               emoji: "🧗", example: "I know it's tough, but hang in there!" },
       { term: "Cut to the Chase",   es: "Ir al grano",           meaning: "Get to the point, skip details",          emoji: "🎯", example: "Stop rambling and cut to the chase." },
       { term: "Under the Weather",  es: "Sentirse mal",          meaning: "Feeling sick or unwell",                   emoji: "🤒", example: "I'm under the weather today." },
       { term: "Piece of Cake",      es: "Pan comido",            meaning: "Something very easy",                      emoji: "🍰", example: "That exam was a piece of cake!" },
-      { term: "Hit the Books",      es: "Ponerse a estudiar",    meaning: "Study hard",                               emoji: "📚", example: "Finals next week — hit the books!" },
+      { term: "Kill Two Birds with One Stone", es: "Matar dos pájaros de un tiro", meaning: "Achieve two things with a single action", emoji: "🎯", example: "I killed two birds with one stone and did both errands." },
       { term: "On the Ball",        es: "Estar atento",          meaning: "Alert, efficient, quick to understand",    emoji: "💡", example: "She's really on the ball." },
       { term: "Pull Someone's Leg", es: "Tomarle el pelo",       meaning: "Joke with someone, tease them",            emoji: "😂", example: "Relax, I'm pulling your leg!" },
       { term: "Call It a Day",      es: "Dar por terminado",     meaning: "Stop working, decide to finish",           emoji: "🏁", example: "Let's call it a day." },
@@ -197,13 +212,13 @@ export const CATEGORIES = {
       { term: "Twist Someone's Arm",  es: "Persuadir a alguien",      meaning: "Persuade someone to do something they're reluctant about", emoji: "💪", example: "You don't need to twist my arm, I'll come!" },
       { term: "Put Your Foot in It",  es: "Meter la pata",            meaning: "Say something embarrassing or tactless",            emoji: "🦶", example: "I really put my foot in it at dinner." },
       { term: "Give Someone a Hand",  es: "Ayudar a alguien",         meaning: "Help someone with a task",                          emoji: "🤝", example: "Could you give me a hand with these boxes?" },
-      { term: "Break a Leg",          es: "Buena suerte",             meaning: "Good luck (especially before a performance)",       emoji: "🎭", example: "You're on stage in five minutes — break a leg!" },
+      { term: "Elbow Grease",         es: "Esfuerzo físico",          meaning: "Hard physical effort or work",                      emoji: "💪", example: "This floor needs a bit of elbow grease." },
       { term: "Rule of Thumb",        es: "Regla general",            meaning: "A general, practical guideline",                    emoji: "👍", example: "As a rule of thumb, arrive 10 minutes early." },
       { term: "See Eye to Eye",       es: "Estar de acuerdo",         meaning: "Agree completely with someone",                     emoji: "🤝", example: "We don't always see eye to eye on politics." },
     ]
   },
   healthIdioms: {
-    label: "🩺 Health Idioms",
+    label: "🤒 Illness Idioms",
     items: [
       { term: "Feeling Off Colour",       es: "Sentirse mal (UK)",         meaning: "Feeling slightly unwell",                        emoji: "😷", example: "She's feeling a bit off colour today." },
       { term: "On the Mend",              es: "Mejorando / recuperándose", meaning: "Recovering from an illness",                     emoji: "📈", example: "He's still weak, but he's on the mend." },
@@ -211,7 +226,7 @@ export const CATEGORIES = {
       { term: "Catch Your Death",         es: "Resfriarse gravemente",     meaning: "Get a very bad cold (informal warning)",         emoji: "🥶", example: "Put a coat on or you'll catch your death!" },
       { term: "Sick as a Dog",            es: "Muy enfermo",               meaning: "Extremely sick, usually with vomiting",          emoji: "🤢", example: "I was sick as a dog after that flight." },
       { term: "Come Down With Something", es: "Enfermarse de algo",        meaning: "Start to suffer from an illness",                emoji: "🤒", example: "I think I'm coming down with a cold." },
-      { term: "Clean Bill of Health",     es: "Buen reporte médico",       meaning: "A medical report saying you're completely healthy", emoji: "✅", example: "The doctor gave her a clean bill of health." },
+      { term: "Laid Up",                  es: "Postrado en cama",          meaning: "Confined to bed due to illness or injury",       emoji: "🛌", example: "He's been laid up with a bad back all week." },
       { term: "A Bitter Pill to Swallow", es: "Una mala noticia difícil de aceptar", meaning: "Something unpleasant that must be accepted", emoji: "💊", example: "Losing the final was a bitter pill to swallow." },
     ]
   },
@@ -237,7 +252,7 @@ export const CATEGORIES = {
       { term: "Best of Both Worlds",       es: "Lo mejor de ambos mundos",  meaning: "Enjoying the advantages of two different things",   emoji: "🌗", example: "Working from a café gives me the best of both worlds." },
       { term: "Burn the Midnight Oil",     es: "Trabajar hasta tarde",      meaning: "Work late into the night",                           emoji: "🕯️", example: "She's been burning the midnight oil to finish the report." },
       { term: "The Elephant in the Room",  es: "El tema evidente que se evita", meaning: "An obvious problem nobody wants to discuss",     emoji: "🐘", example: "Let's address the elephant in the room." },
-      { term: "On Cloud Nine",             es: "Muy feliz",                 meaning: "Extremely happy",                                    emoji: "☁️", example: "She's been on cloud nine since the engagement." },
+      { term: "The Last Straw",            es: "El colmo",                  meaning: "The final problem in a series that makes you lose patience", emoji: "🥤", example: "Being late again was the last straw." },
       { term: "A Blessing in Disguise",    es: "Una bendición disfrazada",  meaning: "Something that seems bad but turns out good",       emoji: "🎁", example: "Losing that job was a blessing in disguise." },
       { term: "When Pigs Fly",             es: "Cuando las ranas críen pelo", meaning: "Something that will never happen",                 emoji: "🐷", example: "He'll clean his room when pigs fly." },
     ]
@@ -473,7 +488,7 @@ export const CATEGORIES = {
       { term: "Round trip",       es: "Viaje de ida y vuelta",  meaning: "A journey going somewhere and coming back",      emoji: "🔄", example: "A round trip to London costs £200." },
       { term: "Itinerary",        es: "Itinerario",             meaning: "A plan listing all the places to visit",         emoji: "🗺️", example: "Check the itinerary for tomorrow's activities." },
       { term: "Accommodation",    es: "Alojamiento",            meaning: "A place where you stay when travelling",         emoji: "🏨", example: "We booked accommodation near the beach." },
-      { term: "Check in",         es: "Registrarse",            meaning: "To register your arrival at a hotel or airport", emoji: "📋", example: "You can check in online 24 hours before." },
+      { term: "Baggage claim",    es: "Reclamo de equipaje",    meaning: "The area where you collect your luggage after a flight", emoji: "🧳", example: "Meet me at baggage claim after you land." },
       { term: "Turbulence",       es: "Turbulencia",            meaning: "Rough, shaky air movement during a flight",      emoji: "🌊", example: "Please stay seated during turbulence." },
       { term: "Currency exchange", es: "Cambio de moneda",      meaning: "A place to convert money to another currency",   emoji: "💱", example: "Find a currency exchange at the airport." },
       { term: "Sightseeing",      es: "Turismo / visitar lugares", meaning: "Visiting interesting places as a tourist",    emoji: "📸", example: "We spent the day sightseeing in Rome." },
@@ -827,7 +842,7 @@ export const CATEGORIES = {
     ]
   },
   healthIdiomsFitness: {
-    label: "💊 Health & Body Idioms",
+    label: "💪 Recovery & Energy Idioms",
     items: [
       { term: "A Clean Bill of Health",   es: "Estar en perfecto estado",   meaning: "A report saying you're completely healthy",       emoji: "✅", example: "The doctor gave him a clean bill of health." },
       { term: "In the Pink",              es: "En plena forma",             meaning: "In very good health and spirits",                 emoji: "🩷", example: "After the holiday I'm in the pink." },
@@ -889,7 +904,7 @@ export const CATEGORIES = {
       { term: "Semi-detached",  es: "Adosada",             meaning: "A house joined to one other house",               emoji: "🏘️", example: "Semi-detached houses share one wall." },
       { term: "Gazumping",      es: "Subir el precio tras aceptar oferta", meaning: "When a seller accepts a higher offer from someone else", emoji: "😱", example: "They were gazumped at the last minute." },
       { term: "Stamp duty",     es: "Impuesto de transmisión", meaning: "Tax paid when buying property (UK)",           emoji: "📄", example: "Stamp duty adds thousands to the house price." },
-      { term: "Equity",         es: "Capital en la propiedad", meaning: "The portion of the home you actually own",     emoji: "📊", example: "They've built up equity over 10 years." },
+      { term: "Leasehold",      es: "Arrendamiento a largo plazo", meaning: "Owning a property for a fixed period, not the land itself", emoji: "📜", example: "The flat is leasehold with 90 years remaining." },
       { term: "Subsidence",     es: "Hundimiento del terreno", meaning: "When the ground beneath a building sinks",    emoji: "⚠️", example: "Subsidence caused cracks in the walls." },
       { term: "Damp",           es: "Humedad (en paredes)", meaning: "Moisture in walls causing damage and mould",      emoji: "💧", example: "There's damp in the bathroom ceiling." },
       { term: "Double glazing", es: "Doble acristalamiento", meaning: "Windows with two panes for insulation",         emoji: "🪟", example: "Double glazing keeps the house warm." },
@@ -964,7 +979,7 @@ export const CATEGORIES = {
       { term: "Desertification", es: "Desertificación",     meaning: "Land becoming desert due to climate or overuse",  emoji: "🏜️", example: "Desertification threatens millions in Africa." },
     ]
   },
-  natureIdioms2: {
+  environmentIdioms: {
     label: "🌿 Nature Idioms",
     items: [
       { term: "Tip of the Iceberg",    es: "La punta del iceberg",     meaning: "A small visible part of a much bigger problem", emoji: "🧊", example: "The complaints are just the tip of the iceberg." },

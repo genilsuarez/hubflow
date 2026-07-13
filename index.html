@@ -78,9 +78,6 @@
       display: flex; align-items: center; gap: 12px; padding: 16px clamp(16px, 3vw, 34px) 12px;
       border-bottom: 1.5px solid var(--lp-border); flex-shrink: 0;
     }
-    .mobile-brand { display: none; font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); flex-shrink: 0; }
-    .mobile-brand em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
-
     .search-bar { position: relative; flex: 1; min-width: 0; max-width: 380px; }
     .search-bar input {
       width: 100%; padding: 10px 14px 10px 34px;
@@ -109,14 +106,18 @@
     .header-stat__label { font-size: 0.6rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
     .header-stat__divider { width: 1px; height: 18px; background: var(--lp-border); }
 
-    .content { flex: 1; min-height: 0; overflow-y: auto; padding: 18px clamp(16px, 3vw, 34px) 18px; scrollbar-width: none; }
+    .content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: none; padding: 18px clamp(16px, 3vw, 34px) 18px; scrollbar-width: none; }
 
     .no-results { text-align: center; padding: 24px; color: var(--lp-muted); font-size: .8rem; font-weight: var(--lp-weight-medium); display: none; }
     .book.hidden, .guide-link.hidden, .subsec.hidden { display: none !important; }
 
     /* ─── SECTION VISIBILITY (SPA panels) ─── */
-    .section { display: none; margin-bottom: 20px; }
+    .section { display: none; margin-bottom: 0; }
     .section.active-section, .section.search-visible { display: block; }
+    .section[data-key="vocab"] { zoom: 0.98; }
+    /* Separación solo entre secciones apiladas durante la búsqueda cross-section —
+       nunca después de la última visible, para no dejar scroll muerto al final. */
+    .section.search-visible ~ .section.search-visible { margin-top: 20px; }
     /* Prevent flash: hide resumen and show target section before JS runs */
     html[data-init-section] .section.active-section[data-key="resumen"] { display: none; }
     html[data-init-section="vocab"] .section[data-key="vocab"],
@@ -132,14 +133,23 @@
     .subsec:last-child { margin-bottom: 0; }
     .sec-head--sub { font-size: .62rem; opacity: .85; }
 
-    /* ─── TAG FILTER BAR (Fase 2 — catálogo + tags) ─── */
-    .tagbar {
-      display: none; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 4px;
-      scrollbar-width: none;
+    /* ─── FILTER MENU (botón + panel desplegable, reemplaza la tagbar fija) ─── */
+    .filter-menu { position: relative; flex-shrink: 0; }
+    .filter-menu .lp-icon-btn { position: relative; }
+    .filter-badge {
+      position: absolute; top: -2px; right: -2px; min-width: 16px; height: 16px; padding: 0 4px;
+      background: var(--lp-accent); color: #fff; font-size: .6rem; font-weight: var(--lp-weight-extrabold);
+      line-height: 16px; text-align: center; border-radius: var(--lp-radius-full); pointer-events: none;
     }
-    .tagbar.visible { display: flex; }
+    .tagbar {
+      display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 30;
+      flex-wrap: wrap; align-items: center; gap: 6px; width: max-content; max-width: min(86vw, 420px);
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg);
+      box-shadow: var(--lp-shadow-md); padding: 12px;
+    }
+    .tagbar.open { display: flex; }
     .tagbar .lp-pill {
-      flex-shrink: 0; border: 1.5px solid var(--lp-border); background: var(--lp-surface);
+      flex-shrink: 0; border: 1.5px solid var(--lp-border); background: var(--lp-bg-paper);
       color: var(--lp-ink-soft); box-shadow: var(--lp-shadow-xs);
       transition: all 0.25s var(--lp-ease);
     }
@@ -152,21 +162,24 @@
       box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-ink) 30%, transparent);
       transform: scale(1.05);
     }
-    .tagbar .tagbar-sep { width: 1px; flex-shrink: 0; background: var(--lp-border); margin: 4px 2px; }
+    .tagbar .tagbar-sep { flex-basis: 100%; height: 1px; background: var(--lp-border); margin: 2px 0; }
+    @media (max-width: 640px) {
+      .tagbar {
+        position: fixed; top: auto; bottom: 0; left: 0; right: 0; max-width: 100%;
+        border-radius: var(--lp-radius-lg) var(--lp-radius-lg) 0 0;
+        padding: 14px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+        box-shadow: 0 -8px 24px rgba(0,0,0,.18);
+      }
+    }
 
     /* ─── RESUMEN (dashboard) ─── */
-    .resumen-hero {
-      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-xl);
-      padding: 24px clamp(18px, 4vw, 30px); margin-bottom: 20px; box-shadow: var(--lp-shadow-md);
-      position: relative; overflow: hidden;
-    }
-    .resumen-hero::before {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(420px 220px at 100% -10%, color-mix(in srgb, var(--lp-accent) 12%, transparent), transparent 70%);
-    }
-    .resumen-greeting { font-family: var(--lp-font-display); font-size: clamp(1.6rem, 3.2vw, 2.1rem); font-weight: var(--lp-weight-semibold); margin-bottom: 4px; position: relative; }
-    .resumen-greeting em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
-    .resumen-sub { font-size: .82rem; color: var(--lp-ink-soft); position: relative; }
+    /* Greeting lives in the topbar itself (same slot the search bar occupies on
+       other sections) instead of a separate hero card — keeps the topbar from
+       ever reading as empty and matches every other section's header pattern. */
+    .topbar-greeting { display: none; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .topbar-greeting-title { font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); }
+    .topbar-greeting-title em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
+    .topbar-greeting-sub { font-size: .76rem; color: var(--lp-ink-soft); }
 
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
     .tile {
@@ -207,7 +220,7 @@
     .new-chip .nc-badge { font-size: .58rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-accent); text-transform: uppercase; letter-spacing: .04em; }
 
     /* ─── MODULE CARDS (compact grid) ─── */
-    .shelf { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .shelf { display: grid; grid-template-columns: 1fr; gap: 7px; }
     @media (min-width: 720px) { .shelf { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1150px) { .shelf { grid-template-columns: repeat(3, 1fr); } }
     .book {
@@ -223,11 +236,11 @@
 
     .book-spine { width: 6px; height: 100%; background: var(--spine); align-self: stretch; border-radius: 6px 0 0 6px; }
     .book-icon {
-      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.15rem; margin: 8px 4px;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; margin: 7px 4px;
       background: color-mix(in srgb, var(--spine) 10%, transparent); border-radius: var(--lp-radius-md);
     }
-    .book-body { padding: 10px 12px 10px 8px; min-width: 0; }
+    .book-body { padding: 9px 12px 9px 8px; min-width: 0; }
     .book-title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; line-height: 1.25; display: flex; align-items: center; gap: 6px; }
     .book-title code {
       font-family: var(--lp-font-mono); font-weight: var(--lp-weight-bold); font-size: .8em;
@@ -237,7 +250,7 @@
       font-size: .65rem; color: var(--lp-ink-soft); font-weight: var(--lp-weight-medium); margin-top: 4px; line-height: 1.35;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
-    .book-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; opacity: 0; transition: opacity .2s ease; }
+    .book-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; opacity: 0; transition: opacity .2s ease; }
     .book:hover .book-pills, .book:focus-within .book-pills { opacity: 1; }
     .pill {
       font-size: .58rem; font-weight: var(--lp-weight-extrabold); padding: 3px 8px; border-radius: 5px;
@@ -251,7 +264,7 @@
     .book.b-opp { --spine: var(--lp-cat-teal); }
 
     /* ─── GUIDES ─── */
-    .guides { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .guides { display: grid; grid-template-columns: 1fr; gap: 11px; }
     @media (min-width: 640px) { .guides { grid-template-columns: 1fr 1fr; } }
     @media (min-width: 1150px) { .guides { grid-template-columns: repeat(3, 1fr); } }
     .guide-link {
@@ -263,8 +276,8 @@
     }
     .guide-link:hover { border-color: color-mix(in srgb, var(--guide-color) 60%, var(--lp-border)); transform: translateY(-2px); box-shadow: var(--lp-shadow-md); }
     .guide-spine { width: 5px; align-self: stretch; background: var(--guide-color); border-radius: 6px 0 0 6px; flex-shrink: 0; }
-    .guide-icon { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin: 0 2px 0 10px; flex-shrink: 0; background: color-mix(in srgb, var(--guide-color) 10%, transparent); border-radius: var(--lp-radius-sm); }
-    .guide-body { padding: 12px 14px 12px 10px; min-width: 0; }
+    .guide-icon { width: 31px; height: 31px; display: flex; align-items: center; justify-content: center; font-size: .95rem; margin: 0 2px 0 10px; flex-shrink: 0; background: color-mix(in srgb, var(--guide-color) 10%, transparent); border-radius: var(--lp-radius-sm); }
+    .guide-body { padding: 11px 14px 11px 10px; min-width: 0; }
     .guide-title { font-weight: var(--lp-weight-bold); font-size: .76rem; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .guide-tag { font-size: .58rem; font-weight: var(--lp-weight-extrabold); color: var(--guide-color); text-transform: uppercase; letter-spacing: .04em; margin-top: 3px; opacity: .85; }
     .guide-link.g-grammar { --guide-color: var(--lp-accent); }
@@ -289,15 +302,18 @@
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-    /* Hide search bar & stats on resumen to prevent flash on first load.
-       Once JS sets body[data-active], the display is controlled imperatively. */
+    /* Hide search bar & stats on resumen (greeting takes their slot instead) to
+       prevent flash on first load. Once JS sets body[data-active], display is
+       controlled imperatively. */
     body:not([data-active]) .search-bar,
+    body:not([data-active]) .filter-menu,
     body:not([data-active]) .header-stats { display: none; }
+    body:not([data-active]) .topbar-greeting,
+    body[data-active="resumen"] .topbar-greeting { display: flex; }
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
       .sidebar { display: none; }
-      .mobile-brand { display: block; }
       /* En mobile el footer se oculta. El shell usa 100dvh (viewport dinámico)
          menos la altura de la bottom-nav para que el contenido nunca quede
          detrás de la barra de navegación fija. */
@@ -334,9 +350,17 @@
       .search-bar { min-width: 130px; }
     }
     @media (max-width: 480px) {
-      .topbar { padding: 12px 12px 10px; flex-wrap: wrap; }
-      .resumen-hero { padding: 18px 16px; }
+      .topbar { padding: 12px 12px 10px; }
+      .search-bar { min-width: 90px; }
+      .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px 14px; }
+      /* Keep the greeting to two tight lines next to the icon cluster instead of
+         wrapping the subtitle across 3 lines and blowing up the topbar's height. */
+      .topbar-greeting-title { font-size: 1.1rem; }
+      .topbar-greeting-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      /* Drop the "recently added" row on mobile resumen to stay compact — it's
+         a nice-to-have, not essential, and the tiles above cover navigation. */
+      .resumen-recent { display: none; }
     }
   </style>
 </head>
@@ -362,10 +386,19 @@
   <!-- MAIN COLUMN -->
   <div class="main-col">
     <div class="topbar">
-      <span class="mobile-brand">Hub<em>Flow</em></span>
+      <div class="topbar-greeting">
+        <span class="topbar-greeting-title">Bienvenido a Hub<em>Flow</em></span>
+        <p class="topbar-greeting-sub"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia — elige una categoría para empezar.</p>
+      </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
         <button class="clear-btn" id="clearSearch" aria-label="Clear search">✕</button>
+      </div>
+      <div class="filter-menu" id="filterMenu">
+        <button class="lp-icon-btn" id="filterToggle" aria-label="Filtros" aria-expanded="false" title="Filtros">
+          🎚️<span class="filter-badge" id="filterBadge" hidden>0</span>
+        </button>
+        <div class="tagbar" id="tagBar" role="dialog" aria-label="Filtros"></div>
       </div>
       <div class="header-stats" role="status" aria-label="Progress summary">
         <span class="header-stat"><span class="header-stat__val" id="psTotal">0</span><span class="header-stat__label">ses</span></span>
@@ -381,11 +414,6 @@
     <main class="content">
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen">
-        <div class="resumen-hero">
-          <div class="resumen-greeting">Bienvenido a Hub<em>Flow</em></div>
-          <p class="resumen-sub"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia — elige una categoría para empezar.</p>
-        </div>
-
         <div class="sec-head">Categorías</div>
         <div class="tiles">
           <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 módulos</span></button>
@@ -395,14 +423,14 @@
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
         </div>
 
-        <div class="sec-head">Agregado recientemente</div>
-        <div class="new-row" id="newRow">
-          <a class="new-chip" href="guides/vocabulary.html"><span class="nc-icon">📚</span><span><span class="nc-badge">Nuevo</span><br>Vocabulary Reference</span></a>
+        <div class="resumen-recent">
+          <div class="sec-head">Agregado recientemente</div>
+          <div class="new-row" id="newRow">
+            <a class="new-chip" href="guides/vocabulary.html"><span class="nc-icon">📚</span><span><span class="nc-badge">Nuevo</span><br>Vocabulary Reference</span></a>
+          </div>
         </div>
       </section>
 
-      <!-- TAG FILTER BAR (solo visible en secciones de módulos) -->
-      <div class="tagbar" id="tagBar"></div>
       <div class="no-results" id="noResults">No modules match your search.</div>
 
       <!-- VOCABULARY -->
@@ -447,15 +475,10 @@
       <section class="section" data-key="guides">
         <div class="sec-head">Guías de referencia</div>
         <div class="guides">
-          <a class="guide-link g-grammar" href="guides/ing-rules.html" data-tags="spelling,grammar,a1,a2,b1">
-            <div class="guide-spine"></div>
-            <div class="guide-icon">✏️</div>
-            <div class="guide-body"><div class="guide-title">Guía completa del -ing</div><div class="guide-tag">Spelling</div></div>
-          </a>
-          <a class="guide-link g-grammar" href="guides/ed-rules.html" data-tags="spelling,grammar,a1,a2,b1">
+          <a class="guide-link g-grammar" href="guides/ed-rules.html" data-tags="spelling,grammar,pronunciation,a1,a2,b1">
             <div class="guide-spine"></div>
             <div class="guide-icon">📋</div>
-            <div class="guide-body"><div class="guide-title">Guía completa del -ed</div><div class="guide-tag">Spelling</div></div>
+            <div class="guide-body"><div class="guide-title">Word Endings: -ed / -ing / -s</div><div class="guide-tag">Spelling</div></div>
           </a>
           <a class="guide-link g-structure" href="guides/noun-adjuncts.html" data-tags="grammar,vocabulary,b1,b2">
             <div class="guide-spine"></div>
@@ -467,10 +490,10 @@
             <div class="guide-icon">📝</div>
             <div class="guide-body"><div class="guide-title">Irregular Verbs by Pattern</div><div class="guide-tag">Verbs</div></div>
           </a>
-          <a class="guide-link g-structure" href="guides/prepositions.html" data-tags="grammar,a1,a2,b1">
+          <a class="guide-link g-structure" href="guides/prepositions.html" data-tags="grammar,prepositions,a1,a2,b1">
             <div class="guide-spine"></div>
             <div class="guide-icon">📐</div>
-            <div class="guide-body"><div class="guide-title">Prepositions Visual Map</div><div class="guide-tag">Structure</div></div>
+            <div class="guide-body"><div class="guide-title">Prepositions &amp; Verb Chunks</div><div class="guide-tag">Structure</div></div>
           </a>
           <a class="guide-link g-grammar" href="guides/articles.html" data-tags="grammar,a1,a2,b1">
             <div class="guide-spine"></div>
@@ -482,35 +505,30 @@
             <div class="guide-icon">⚖️</div>
             <div class="guide-body"><div class="guide-title">Quantifiers Guide</div><div class="guide-tag">Grammar</div></div>
           </a>
-          <a class="guide-link g-vocab" href="guides/collocations.html" data-tags="vocabulary,b1,b2">
-            <div class="guide-spine"></div>
-            <div class="guide-icon">🔗</div>
-            <div class="guide-body"><div class="guide-title">Collocations Reference</div><div class="guide-tag">Vocabulary</div></div>
-          </a>
           <a class="guide-link g-verbs" href="guides/verb-tenses.html" data-tags="grammar,a1,a2,b1,b2">
             <div class="guide-spine"></div>
             <div class="guide-icon">⏳</div>
             <div class="guide-body"><div class="guide-title">Verb Tenses Timeline</div><div class="guide-tag">Verbs</div></div>
           </a>
-          <a class="guide-link g-vocab" href="guides/word-formation.html" data-tags="vocabulary,spelling,b1,b2">
+          <a class="guide-link g-vocab" href="guides/word-formation.html" data-tags="vocabulary,spelling,grammar,a1,a2,b1,b2">
             <div class="guide-spine"></div>
             <div class="guide-icon">🧠</div>
-            <div class="guide-body"><div class="guide-title">Word Formation</div><div class="guide-tag">Vocabulary</div></div>
+            <div class="guide-body"><div class="guide-title">Word Formation &amp; Parts of Speech</div><div class="guide-tag">Vocabulary</div></div>
           </a>
           <a class="guide-link g-words" href="guides/phrasal-verbs.html" data-tags="vocabulary,grammar,b1,b2">
             <div class="guide-spine"></div>
             <div class="guide-icon">🚀</div>
             <div class="guide-body"><div class="guide-title">Phrasal Verbs by Category</div><div class="guide-tag">Expressions</div></div>
           </a>
-          <a class="guide-link g-words" href="guides/confusing-words.html" data-tags="vocabulary,spelling,a2,b1">
+          <a class="guide-link g-words" href="guides/confusing-words.html" data-tags="vocabulary,spelling,a2,b1,b2">
             <div class="guide-spine"></div>
             <div class="guide-icon">🔀</div>
-            <div class="guide-body"><div class="guide-title">Confusing Words Clarified</div><div class="guide-tag">Expressions</div></div>
+            <div class="guide-body"><div class="guide-title">Confusing Words &amp; Collocations</div><div class="guide-tag">Expressions</div></div>
           </a>
-          <a class="guide-link g-sound" href="guides/phonics.html" data-tags="pronunciation,listening,a1,a2,b1">
+          <a class="guide-link g-sound" href="guides/phonics.html" data-tags="pronunciation,listening,a1,a2,b1,b2">
             <div class="guide-spine"></div>
             <div class="guide-icon">🔊</div>
-            <div class="guide-body"><div class="guide-title">Pronunciation & Phonics</div><div class="guide-tag">Sound</div></div>
+            <div class="guide-body"><div class="guide-title">Phonics, Pronunciation &amp; Word Stress</div><div class="guide-tag">Sound</div></div>
           </a>
           <a class="guide-link g-words" href="guides/opposites-synonyms.html" data-tags="vocabulary,a2,b1">
             <div class="guide-spine"></div>
@@ -547,11 +565,6 @@
             <div class="guide-icon">💭</div>
             <div class="guide-body"><div class="guide-title">Prefer &amp; Would Rather</div><div class="guide-tag">Vocabulary</div></div>
           </a>
-          <a class="guide-link g-grammar" href="guides/parts-of-speech.html" data-tags="grammar,a1,a2">
-            <div class="guide-spine"></div>
-            <div class="guide-icon">🔤</div>
-            <div class="guide-body"><div class="guide-title">8 Parts of Speech</div><div class="guide-tag">Grammar</div></div>
-          </a>
           <a class="guide-link g-verbs" href="guides/gerunds-infinitives.html" data-tags="grammar,b1,b2">
             <div class="guide-spine"></div>
             <div class="guide-icon">🔁</div>
@@ -567,25 +580,10 @@
             <div class="guide-icon">🧩</div>
             <div class="guide-body"><div class="guide-title">Relative Clauses</div><div class="guide-tag">Structure</div></div>
           </a>
-          <a class="guide-link g-sound" href="guides/plural-endings.html" data-tags="pronunciation,spelling,a1,a2">
-            <div class="guide-spine"></div>
-            <div class="guide-icon">🔊</div>
-            <div class="guide-body"><div class="guide-title">Plural Endings</div><div class="guide-tag">Sound</div></div>
-          </a>
-          <a class="guide-link g-sound" href="guides/word-stress-quiz.html" data-tags="pronunciation,listening,b1,b2">
-            <div class="guide-spine"></div>
-            <div class="guide-icon">🗣️</div>
-            <div class="guide-body"><div class="guide-title">Word Stress</div><div class="guide-tag">Sound</div></div>
-          </a>
           <a class="guide-link g-structure" href="guides/made-of.html" data-tags="grammar,vocabulary,a2,b1">
             <div class="guide-spine"></div>
             <div class="guide-icon">🧱</div>
             <div class="guide-body"><div class="guide-title">Made Of / From / With</div><div class="guide-tag">Structure</div></div>
-          </a>
-          <a class="guide-link g-structure" href="guides/verb-chunks.html" data-tags="grammar,prepositions,b1">
-            <div class="guide-spine"></div>
-            <div class="guide-icon">🔗</div>
-            <div class="guide-body"><div class="guide-title">Verb + Prep Chunks</div><div class="guide-tag">Structure</div></div>
           </a>
           <a class="guide-link g-vocab" href="guides/vocabulary.html" data-tags="vocabulary,a1,a2,b1,b2">
             <div class="guide-spine"></div>
@@ -689,7 +687,10 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     newRow.insertAdjacentHTML('afterbegin', newChips);
   }
 
-  // ─── TAG FILTER BAR ───
+  // ─── FILTER MENU (botón + panel de tags, estilo FluentFlow UnifiedFilter) ───
+  const filterMenu = document.getElementById('filterMenu');
+  const filterToggle = document.getElementById('filterToggle');
+  const filterBadge = document.getElementById('filterBadge');
   const tagBar = document.getElementById('tagBar');
   const activeTags = new Set((new URLSearchParams(location.search).get('tag') || '').split(',').filter(Boolean));
 
@@ -704,16 +705,44 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     return `<button class="lp-pill${isActive}" data-tag="${t}">${t.length <= 2 ? t.toUpperCase() : t.charAt(0).toUpperCase() + t.slice(1)}</button>`;
   }
 
+  function updateFilterBadge() {
+    filterBadge.hidden = activeTags.size === 0;
+    filterBadge.textContent = activeTags.size;
+    filterToggle.classList.toggle('active', activeTags.size > 0);
+  }
+
+  function closeFilterPanel() {
+    tagBar.classList.remove('open');
+    filterToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggleFilterPanel() {
+    const willOpen = !tagBar.classList.contains('open');
+    tagBar.classList.toggle('open', willOpen);
+    filterToggle.setAttribute('aria-expanded', String(willOpen));
+  }
+
   if (tagBar) {
     const cefrChips = usedTags(TAGS.cefr).map(tagChipHTML).join('');
     const skillChips = usedTags(TAGS.skill).map(tagChipHTML).join('');
     tagBar.innerHTML = cefrChips + '<span class="tagbar-sep"></span>' + skillChips;
+    updateFilterBadge();
+
+    filterToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleFilterPanel(); });
+    document.addEventListener('click', (e) => {
+      if (tagBar.classList.contains('open') && !filterMenu.contains(e.target)) closeFilterPanel();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && tagBar.classList.contains('open')) { closeFilterPanel(); filterToggle.focus(); }
+    });
+
     tagBar.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-tag]');
       if (!btn) return;
       const t = btn.dataset.tag;
       if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
       btn.classList.toggle('active');
+      updateFilterBadge();
       applyFilters();
       const u = new URL(location.href);
       if (activeTags.size) u.searchParams.set('tag', [...activeTags].join(',')); else u.searchParams.delete('tag');
@@ -781,8 +810,7 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
   const content = document.querySelector('.content');
   const topbarSearch = document.querySelector('.search-bar');
   const topbarStats = document.querySelector('.header-stats');
-  const MODULE_SECTIONS = new Set(['vocab', 'pronunciation', 'grammar', 'analysis', 'guides']);
-
+  const topbarGreeting = document.querySelector('.topbar-greeting');
   function setActive(target) {
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
@@ -790,7 +818,9 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     const isResumen = target === 'resumen';
     topbarSearch.style.display = isResumen ? 'none' : '';
     topbarStats.style.display = isResumen ? 'none' : '';
-    if (tagBar) tagBar.classList.toggle('visible', MODULE_SECTIONS.has(target));
+    topbarGreeting.style.display = isResumen ? 'flex' : 'none';
+    if (filterMenu) filterMenu.style.display = isResumen ? 'none' : '';
+    if (tagBar) closeFilterPanel();
     content.scrollTop = 0;
     if (searchInput.value) { searchInput.value = ''; }
     applyFilters();
