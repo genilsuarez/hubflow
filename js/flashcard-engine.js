@@ -11,6 +11,7 @@ export class FlashcardEngine {
     this.config = config;
     this.categories = config.categories;
     this.currentCat = config.defaultCategory || Object.keys(config.categories)[0];
+    this._lastCatClick = { key: null, time: 0 };
     this.currentMode = 'study';
     this.deck = [];
     this.cardIdx = 0;
@@ -120,7 +121,26 @@ export class FlashcardEngine {
     else bar.innerHTML = pills;
     bar.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
-        this.currentCat = btn.dataset.cat;
+        // Pills are torn down and rebuilt on every click (see above), so the
+        // native dblclick event can't be trusted — it requires the *same*
+        // element to receive both clicks. Detect a double-click by hand instead.
+        const key = btn.dataset.cat;
+        const now = Date.now();
+        const isDoubleClick = this._lastCatClick.key === key && (now - this._lastCatClick.time) < 400;
+        this._lastCatClick = { key, time: now };
+
+        this.currentCat = key;
+
+        // Double-click a category in the expanded panel: select it AND collapse
+        // the panel, so picking a category is a single gesture instead of two.
+        if (isDoubleClick) {
+          const wrapper = document.getElementById('catWrapper');
+          if (wrapper?.classList.contains('expanded')) {
+            wrapper.classList.remove('expanded');
+            document.getElementById('catExpandBtn')?.setAttribute('aria-expanded', 'false');
+          }
+        }
+
         this.renderCatBar();
         this.setMode(this.currentMode);
       });

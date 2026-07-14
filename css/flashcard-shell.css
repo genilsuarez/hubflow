@@ -90,6 +90,11 @@ h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: .95rem; disp
   white-space: nowrap;
   box-shadow: -6px 0 12px -2px var(--lp-bg-paper), 0 2px 6px color-mix(in srgb, var(--lp-accent) 30%, transparent);
 }
+/* Hit-area táctil 44px sin agrandar el visual (mismo patrón que .cat-btn::after) */
+.cat-expand-btn::after {
+  content: ''; position: absolute; inset: 50%; translate: -50% -50%;
+  min-width: 44px; min-height: 44px;
+}
 .cat-expand-btn:hover {
   transform: scale(1.06);
   box-shadow: -6px 0 12px -2px var(--lp-bg-paper), 0 3px 10px color-mix(in srgb, var(--lp-accent) 40%, transparent);

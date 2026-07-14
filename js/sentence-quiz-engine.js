@@ -8,7 +8,7 @@
    13 near-identical copies inline in each exercises/*.html file.
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState } from './utils.js';
 
 export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   initTheme();
@@ -18,23 +18,14 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = 
   let currentCat = catKeys[0];
   let mode = 'study';
   let deck = [], idx = 0, score = 0, total = 0;
-  let timer = null;
-  let timedSeconds = 0;
+  const timerState = makeTimerState();
 
-  function renderCatBar() {
-    const bar = document.getElementById('catBar');
-    bar.innerHTML = catKeys.map(k =>
-      `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${categories[k].icon} ${categories[k].label}</button>`
-    ).join('');
-    bar.querySelectorAll('[data-cat]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentCat = btn.dataset.cat;
-        bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-        startMode();
-      });
-    });
-  }
-  renderCatBar();
+  sharedRenderCatBar({
+    categories,
+    getCurrentCat: () => currentCat,
+    setCurrentCat: (k) => { currentCat = k; },
+    onChange: startMode,
+  });
 
   document.querySelectorAll('[data-mode]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -45,15 +36,13 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = 
   });
 
   function startMode() {
-    stopTimer();
+    timerState.stop();
     document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
     document.getElementById('timerBar').classList.remove('show');
     if (mode === 'practice') initPractice(false);
     else if (mode === 'timed') initPractice(true);
     else if (mode === 'study') initStudy();
   }
-
-  function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
 
   function getData() { return categories[currentCat].items; }
 
@@ -72,13 +61,13 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = 
 
     if (timed) {
       document.getElementById('timerBar').classList.add('show');
-      timedSeconds = total * 7;
+      timerState.timedSeconds = total * 7;
 
-      timer = new Timer(timedSeconds,
+      timerState.timer = new Timer(timerState.timedSeconds,
         r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
         () => finishPractice()
       );
-      timer.start();
+      timerState.timer.start();
     }
     renderPractice();
   }
@@ -119,8 +108,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = 
   }
 
   function finishPractice() {
-    const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
-    stopTimer();
+    const elapsed = timerState.timedSeconds ? timerState.timedSeconds - (timerState.timer && timerState.timer.remaining != null ? timerState.timer.remaining : 0) : null;
+    timerState.stop();
     const pct = showResult({
       correct: score, total,
       containerEl: document.getElementById('resultOverlay'),

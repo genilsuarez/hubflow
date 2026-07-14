@@ -49,17 +49,44 @@ export function recordScore(key, pct) {
   localStorage.setItem(key, JSON.stringify(history));
 }
 
-export function getBestScore(key) {
-  const history = JSON.parse(localStorage.getItem(key) || '[]');
-  if (!history.length) return null;
-  return Math.max(...history.map(h => h.pct));
-}
-
 /** Stars calculation */
 export function getStars(pct) {
   if (pct === 100) return 3;
   if (pct >= 60) return 2;
   return 1;
+}
+
+/**
+ * Renders a category picker bar (used by sentence-quiz-engine and
+ * typed-answer-engine — identical markup/behavior in both, only the current
+ * category is engine-local state, so it's read/written via getter/setter).
+ */
+export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat, setCurrentCat, onChange }) {
+  const bar = document.getElementById(containerId);
+  const catKeys = Object.keys(categories);
+  bar.innerHTML = catKeys.map(k =>
+    `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}">${categories[k].icon} ${categories[k].label}</button>`
+  ).join('');
+  bar.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setCurrentCat(btn.dataset.cat);
+      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === getCurrentCat()));
+      onChange();
+    });
+  });
+}
+
+/** Groups a Timer instance with its total duration so both can be reset in
+ *  one call (used by sentence-quiz-engine and typed-answer-engine). */
+export function makeTimerState() {
+  return {
+    timer: null,
+    timedSeconds: 0,
+    stop() {
+      if (this.timer) { this.timer.stop(); this.timer = null; }
+      this.timedSeconds = 0;
+    },
+  };
 }
 
 /** Progress bar update */

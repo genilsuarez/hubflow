@@ -11,7 +11,7 @@
    current category passed to renderPrompt (for a category badge).
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState } from './utils.js';
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');
@@ -31,23 +31,14 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
   let mode = 'practice';
   let deck = [], idx = 0, score = 0, total = 0;
   let answered = false;
-  let timer = null;
-  let timedSeconds = 0;
+  const timerState = makeTimerState();
 
-  function renderCatBar() {
-    const bar = document.getElementById('catBar');
-    bar.innerHTML = catKeys.map(k =>
-      `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${categories[k].icon} ${categories[k].label}</button>`
-    ).join('');
-    bar.querySelectorAll('[data-cat]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentCat = btn.dataset.cat;
-        bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-        startMode();
-      });
-    });
-  }
-  renderCatBar();
+  sharedRenderCatBar({
+    categories,
+    getCurrentCat: () => currentCat,
+    setCurrentCat: (k) => { currentCat = k; },
+    onChange: startMode,
+  });
 
   document.querySelectorAll('[data-mode]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -57,23 +48,21 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
     });
   });
 
-  function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
-
   function startMode() {
-    stopTimer();
+    timerState.stop();
     deck = shuffle(categories[currentCat].items);
     idx = 0; score = 0;
     total = mode === 'timed' ? Math.min(10, deck.length) : deck.length;
     document.getElementById('timerBar').classList.toggle('show', mode === 'timed');
 
     if (mode === 'timed') {
-      timedSeconds = total * secondsPerQuestion;
+      timerState.timedSeconds = total * secondsPerQuestion;
 
-      timer = new Timer(timedSeconds,
+      timerState.timer = new Timer(timerState.timedSeconds,
         r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= warnThreshold); },
         () => finish()
       );
-      timer.start();
+      timerState.timer.start();
     }
     renderItem();
   }
@@ -86,7 +75,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
   }
 
   function renderItem() {
-    if (idx >= total) { stopTimer(); finish(); return; }
+    if (idx >= total) { timerState.stop(); finish(); return; }
     answered = false;
     const item = deck[idx];
 
@@ -143,7 +132,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
   document.getElementById('nextBtn').addEventListener('click', () => { idx++; renderItem(); });
 
   function finish() {
-    stopTimer();
+    timerState.stop();
     const pct = total > 0 ? Math.round((score / total) * 100) : 0;
     showResult({
       correct: score, total,

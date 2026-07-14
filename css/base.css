@@ -194,7 +194,7 @@
   --purple-light: var(--lp-cat-purple-soft);
   --shadow-sm: var(--lp-shadow-sm);
   --shadow-lg: var(--lp-shadow-lg);
-  --radius: var(--lp-radius-sm);
+  --radius: var(--lp-radius-md);
   --radius-lg: var(--lp-radius-lg);
   --ease: var(--lp-ease);
   --ease-bounce: var(--lp-ease-bounce);
@@ -221,7 +221,6 @@ body::before {
 [data-theme="dark"] body::before { opacity: .12; }
 
 /* ─── TYPOGRAPHY ─── */
-.serif { font-family: var(--lp-font-display); }
 .mono { font-family: var(--lp-font-mono); }
 
 /* ─── LAYOUT ─── */

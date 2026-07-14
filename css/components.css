@@ -9,19 +9,8 @@
   width: 100%; display: flex; justify-content: space-between; align-items: center;
   padding: 6px 0; margin-bottom: 8px;
 }
-.back-link {
-  font-weight: var(--lp-weight-bold); font-size: .8rem; color: var(--lp-accent);
-  display: flex; align-items: center; gap: 4px;
-  transition: opacity .2s; min-height: 40px;
-}
-.back-link { min-height: 44px; }
-.back-link:hover { opacity: .65; }
-.theme-toggle {
-  width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--lp-border);
-  background: var(--lp-surface); display: flex; align-items: center; justify-content: center;
-  font-size: .8rem; cursor: pointer; transition: border-color .2s, transform .2s;
-}
-.theme-toggle:hover { border-color: var(--lp-accent); transform: scale(1.06); }
+/* Volver y tema usan el primitivo compartido .lp-icon-btn (buttons.css) —
+   .back-link y .theme-toggle quedaron sin uso tras unificar sobre esa clase. */
 
 /* ─── BUTTONS ─── */
 .btn {
@@ -63,7 +52,7 @@
 
 .pill-btn {
   flex: 1 0 auto; font-family: var(--lp-font-body); font-size: .7rem; font-weight: var(--lp-weight-bold);
-  padding: 7px 10px; border-radius: 4px; border: none; cursor: pointer;
+  padding: 7px 10px; border-radius: var(--lp-radius-full); border: none; cursor: pointer;
   transition: all .2s var(--lp-ease); color: var(--lp-muted); background: transparent;
   text-align: center; min-height: 36px; white-space: nowrap; position: relative;
 }
@@ -95,8 +84,6 @@
   background: var(--lp-accent);
 }
 .progress__fill--purple { background: var(--lp-cat-purple); }
-.progress__fill--teal { background: var(--lp-cat-teal); }
-.progress__fill--blue { background: var(--lp-cat-blue); }
 
 /* ─── TIMER ─── */
 .timer-bar { display: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
@@ -117,7 +104,6 @@
   transform-style: preserve-3d; will-change: transform;
 }
 .fc-card.flip .fc-inner { transform: rotateY(180deg); }
-.fc-card.swapping .fc-inner { opacity: .35; }
 .fc-face {
   position: absolute; inset: 0; backface-visibility: hidden;
   border-radius: var(--lp-radius-lg); display: flex; flex-direction: column;
@@ -304,7 +290,7 @@
 .cat-btn {
   font-family: var(--lp-font-body);
   font-size: .68rem; font-weight: var(--lp-weight-bold);
-  padding: 8px 12px; border-radius: var(--lp-radius-sm);
+  padding: 8px 12px; border-radius: var(--lp-radius-md);
   border: 1.5px solid var(--lp-border); background: var(--lp-surface); color: var(--lp-muted);
   cursor: pointer; transition: all .2s var(--lp-ease); white-space: nowrap;
   min-height: 36px; position: relative; scroll-snap-align: start; flex-shrink: 0;
@@ -340,6 +326,11 @@
 }
 .cat-bar-arrow--left { left: -4px; }
 .cat-bar-arrow--right { right: -4px; }
+/* Hit-area táctil 44px sin agrandar el visual (mismo patrón que .cat-btn::after) */
+.cat-bar-arrow::after {
+  content: ''; position: absolute; inset: 50%; translate: -50% -50%;
+  min-width: 44px; min-height: 44px;
+}
 .cat-bar-arrow.visible { opacity: 1; pointer-events: auto; }
 .cat-bar-arrow:hover { border-color: var(--lp-accent); color: var(--lp-accent); transform: translateY(-50%) scale(1.08); box-shadow: var(--lp-shadow-md); }
 .cat-bar-arrow:active { transform: translateY(-50%) scale(0.95); }
@@ -374,7 +365,7 @@
 .word-options { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 480px; }
 .word-opt {
   font-family: var(--lp-font-body); font-weight: var(--lp-weight-bold); font-size: .88rem;
-  padding: 12px 20px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
+  padding: 12px 20px; border-radius: var(--lp-radius-md); border: 1.5px solid var(--lp-border);
   background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
   transition: all .2s var(--lp-ease); min-width: 60px; text-align: center;
 }

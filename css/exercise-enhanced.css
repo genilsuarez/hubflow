@@ -41,19 +41,6 @@ body::after {
   padding: 8px 0;
   margin-bottom: 8px;
 }
-.back-link {
-  font-size: .82rem;
-  letter-spacing: -.01em;
-}
-.theme-toggle {
-  width: 44px; height: 44px;
-  box-shadow: var(--lp-shadow-sm);
-}
-.theme-toggle:hover {
-  box-shadow: var(--lp-shadow-md);
-  transform: scale(1.08);
-}
-
 /* ─── HEADER SECTION ─── */
 .header {
   padding: 6px 0 !important;
