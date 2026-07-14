@@ -52,11 +52,19 @@ export class SpellingEngine {
     // Check button
     document.getElementById('checkBtn')?.addEventListener('click', () => this.checkAll());
 
-    // Keyboard: Enter to check
+    // Keyboard: Enter moves to next input; only checks when on last input or outside grid
     document.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        if (!this.checked) this.checkAll();
+        if (this.checked) return;
+        const active = document.activeElement;
+        const grid = document.getElementById('cardGrid');
+        if (active && grid && grid.contains(active) && active.dataset.idx !== undefined) {
+          const nextIdx = +active.dataset.idx + 1;
+          const next = grid.querySelector(`.word-card__input[data-idx="${nextIdx}"], .word-card__select[data-idx="${nextIdx}"]`);
+          if (next) { next.focus(); return; }
+        }
+        this.checkAll();
       }
     });
   }
@@ -155,7 +163,8 @@ export class SpellingEngine {
         input.addEventListener('keydown', e => {
           if (e.key === 'Tab') {
             e.preventDefault();
-            const next = grid.querySelector(`[data-idx="${+e.target.dataset.idx + 1}"]`);
+            const nextIdx = +e.target.dataset.idx + (e.shiftKey ? -1 : 1);
+            const next = grid.querySelector(`.word-card__input[data-idx="${nextIdx}"]`);
             if (next) next.focus();
           }
         });

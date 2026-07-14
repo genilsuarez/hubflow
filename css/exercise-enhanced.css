@@ -40,11 +40,13 @@ body::after {
 .top-bar {
   padding: 8px 0;
   margin-bottom: 8px;
+  border-bottom: 1.5px solid color-mix(in srgb, var(--lp-ink) 30%, transparent);
+  padding-bottom: 10px;
 }
 /* ─── HEADER SECTION ─── */
 .header {
-  padding: 6px 0 !important;
-  margin-bottom: 8px !important;
+  padding: 6px 0 10px !important;
+  margin-bottom: 10px !important;
 }
 h1 {
   font-size: clamp(1.1rem, 3.2vw, 1.5rem) !important;
@@ -95,7 +97,7 @@ h1 {
 
 /* ─── CARD GRID ENHANCED ─── */
 .card-grid {
-  gap: 8px;
+  gap: 5px;
 }
 
 /* ─── WORD CARDS ENHANCED ─── */
@@ -105,12 +107,12 @@ h1 {
   border-radius: var(--lp-radius-md);
 }
 .word-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--lp-shadow-md);
 }
 .word-card__verb {
-  font-size: .92rem;
-  margin-bottom: 6px;
+  font-size: .88rem;
+  margin-bottom: 2px;
 }
 .word-card__input,
 .word-card__select {
@@ -119,8 +121,8 @@ h1 {
 
 /* ─── BUTTON ENHANCED ─── */
 .check-area {
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--lp-border-subtle);
 }
 /* .check-area .btn override eliminado: el radius canónico ya es --lp-radius-md
@@ -155,10 +157,18 @@ h1 {
 }
 
 /* ─── TIMER ENHANCED ─── */
+.timer-bar {
+  display: none;
+}
 .timer-bar.show {
-  padding: 4px 12px;
+  display: block;
+  padding: 2px 10px;
   background: var(--lp-surface);
   border-radius: var(--lp-radius-sm);
   border: 1px solid var(--lp-border-subtle);
-  margin-bottom: 6px;
+  margin: 0;
+  font-size: .82rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  text-align: center;
 }
