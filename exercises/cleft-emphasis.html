@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleft Sentences — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/theme-init.js"></script>
+<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#1A1714;color:#EDE8E0}</style>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<link rel="stylesheet" href="../css/sentence-quiz.css">
+</head>
+<body>
+<div class="wrap" data-color="amber">
+  <div class="top-bar">
+    <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
+    <div class="tb-actions">
+    <a class="lp-icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Ir al portal DeskFlow" title="Portal">🏠</a>
+    <button class="lp-icon-btn" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+  </div>
+  </div>
+
+  <div class="header">
+    <h1>💡 Cleft Sentences & Emphasis</h1>
+
+    <div class="cat-bar" id="catBar"></div>
+
+    <div class="pill-bar">
+      <button class="pill-btn active" data-mode="study">📖 Study</button>
+      <button class="pill-btn" data-mode="practice">🎯 Practice</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
+    </div>
+
+    <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
+
+    <div class="progress">
+      <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+      <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+    </div>
+  </div>
+
+  <div class="scroll-body">
+    <div data-area="practice">
+      <div class="sentence-card">
+        <div class="sc-icon" id="scIcon"></div>
+        <div class="sc-text" id="scText"></div>
+        <div class="sc-counter" id="scCounter"></div>
+      </div>
+      <div class="word-options" id="wordOptions"></div>
+      <div class="explain-box" id="explainBox"></div>
+    </div>
+
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 10</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face art-front">
+            <div class="fc-emoji" id="fcEmoji">💡</div>
+            <div class="fc-term" id="fcSentence"></div>
+            <div class="fc-hint">tap to see answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-term" id="fcAnswer" style="font-size:1.4rem;color:var(--lp-success)"></div>
+            <div class="fc-detail" id="fcExplain"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="btn btn--ghost" id="prevBtn">←</button>
+        <button class="btn btn--green" id="nextBtn">→</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/cleft-emphasis.js';
+import { initSentenceQuiz } from '../js/sentence-quiz-engine.js';
+
+initSentenceQuiz({ categories: CATEGORIES, scoreKeyPrefix: 'cleft' });
+</script>
+
+<script type="module" src="../js/portal-link.js"></script>
+</body>
+</html>

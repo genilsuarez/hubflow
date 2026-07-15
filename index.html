@@ -13,7 +13,7 @@
   <script>
     // Early section detection: prevent flash of resumen when returning from exercise
     (function() {
-      var vs = ['resumen','vocab','grammar','pronunciation','analysis','guides'];
+      var vs = ['resumen','mi-progreso','vocab','grammar','pronunciation','analysis','guides'];
       var p = new URLSearchParams(location.search).get('section');
       var s = sessionStorage.getItem('hf-back-section');
       var target = p || s;
@@ -70,6 +70,7 @@
     .sb-item.g { --spine: var(--lp-cat-amber); }
     .sb-item.a { --spine: var(--lp-cat-teal); }
     .sb-item.r { --spine: var(--lp-cat-green); }
+    .sb-item.path { --spine: var(--lp-accent); }
 
 
     /* ─── MAIN COLUMN ─── */
@@ -121,6 +122,7 @@
     /* Prevent flash: hide resumen and show target section before JS runs */
     html[data-init-section] .section.active-section[data-key="resumen"] { display: none; }
     html[data-init-section="vocab"] .section[data-key="vocab"],
+    html[data-init-section="mi-progreso"] .section[data-key="mi-progreso"],
     html[data-init-section="grammar"] .section[data-key="grammar"],
     html[data-init-section="pronunciation"] .section[data-key="pronunciation"],
     html[data-init-section="analysis"] .section[data-key="analysis"],
@@ -309,7 +311,8 @@
     body:not([data-active]) .filter-menu,
     body:not([data-active]) .header-stats { display: none; }
     body:not([data-active]) .topbar-greeting,
-    body[data-active="resumen"] .topbar-greeting { display: flex; }
+    body[data-active="resumen"] .topbar-greeting,
+    body[data-active="mi-progreso"] .topbar-greeting { display: flex; }
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
@@ -354,14 +357,106 @@
       .search-bar { min-width: 90px; }
       .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px 14px; }
-      /* Keep the greeting to two tight lines next to the icon cluster instead of
-         wrapping the subtitle across 3 lines and blowing up the topbar's height. */
       .topbar-greeting-title { font-size: 1.1rem; }
       .topbar-greeting-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      /* Drop the "recently added" row on mobile resumen to stay compact — it's
-         a nice-to-have, not essential, and the tiles above cover navigation. */
       .resumen-recent { display: none; }
     }
+
+    /* ═══ MI PROGRESO — COLLAPSIBLE PATH CARDS ═══ */
+    .paths-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .paths-head-row .sec-head { margin-bottom: 0; }
+    .paths-actions { display: flex; gap: 4px; background: var(--lp-bg-paper); border-radius: var(--lp-radius-md); padding: 3px; }
+    .paths-icon-btn {
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      color: var(--lp-muted); background: transparent; border: none;
+      border-radius: var(--lp-radius-sm); cursor: pointer; transition: all .2s var(--lp-ease);
+    }
+    .paths-icon-btn:hover { color: var(--lp-ink); background: var(--lp-surface); box-shadow: var(--lp-shadow-sm); }
+    .paths-icon-btn:active { transform: scale(.92); }
+    .paths-icon-btn svg { width: 14px; height: 14px; }
+
+    .paths-full { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+    .path-accordion {
+      --path-color: var(--lp-accent);
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-lg); box-shadow: var(--lp-shadow-sm);
+      overflow: hidden; transition: box-shadow .25s var(--lp-ease), border-color .25s;
+    }
+    .path-accordion:hover { box-shadow: var(--lp-shadow-md); }
+    .path-accordion[open] { border-color: color-mix(in srgb, var(--path-color) 40%, var(--lp-border)); box-shadow: var(--lp-shadow-md); }
+    .path-accordion.spell { --path-color: var(--lp-cat-amber); }
+    .path-accordion.build { --path-color: var(--lp-cat-green); }
+    .path-accordion.decode { --path-color: var(--lp-cat-blue); }
+    .path-accordion.natural { --path-color: var(--lp-cat-purple); }
+    .path-accordion.transform { --path-color: var(--lp-cat-teal); }
+    .path-accordion.advanced { --path-color: var(--lp-accent); }
+
+    .path-summary {
+      display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px;
+      padding: 14px 16px; cursor: pointer; list-style: none; user-select: none;
+    }
+    .path-summary::-webkit-details-marker { display: none; }
+    .path-summary::marker { display: none; content: ''; }
+    .path-summary-icon {
+      width: 36px; height: 36px; border-radius: var(--lp-radius-md);
+      background: color-mix(in srgb, var(--path-color) 12%, transparent);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .path-summary-body { min-width: 0; }
+    .path-summary-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+    .path-summary-title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; }
+    .path-summary-cefr {
+      font-family: var(--lp-font-mono); font-size: .56rem; font-weight: 700;
+      color: var(--path-color); background: color-mix(in srgb, var(--path-color) 12%, transparent);
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .path-summary-next { font-size: .62rem; font-weight: 700; color: var(--path-color); margin-left: auto; }
+    .path-summary-bar { display: flex; align-items: center; gap: 8px; }
+    .path-summary-bar-track { flex: 1; height: 4px; border-radius: 3px; background: var(--lp-border); overflow: hidden; }
+    .path-summary-bar-fill { height: 100%; border-radius: 3px; background: var(--path-color); transition: width .5s var(--lp-ease); }
+    .path-summary-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
+
+    .path-summary-right { display: flex; align-items: center; gap: 8px; }
+    .path-summary-status {
+      font-size: .58rem; font-weight: 700; padding: 3px 9px; border-radius: var(--lp-radius-full);
+      background: color-mix(in srgb, var(--path-color) 10%, transparent); color: var(--path-color); white-space: nowrap;
+    }
+    .path-summary-status.completed { background: var(--lp-success-soft); color: var(--lp-success); }
+    .path-chevron { color: var(--lp-muted); transition: transform .3s var(--lp-ease); font-size: .65rem; }
+    .path-accordion[open] .path-chevron { transform: rotate(180deg); }
+
+    .path-content { padding: 0 16px 16px; border-top: 1px solid var(--lp-border-subtle); }
+    .path-content-desc { font-size: .7rem; color: var(--lp-ink-soft); line-height: 1.4; padding: 12px 0 10px; margin: 0; }
+    .path-modules { display: flex; flex-direction: column; gap: 5px; }
+    .path-module {
+      display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: var(--lp-radius-md);
+      background: var(--lp-bg); border: 1px solid var(--lp-border-subtle);
+      transition: background .2s, border-color .2s, transform .15s;
+    }
+    .path-module:hover { background: var(--lp-surface); border-color: var(--lp-border); transform: translateX(2px); }
+    .path-module.completed { background: color-mix(in srgb, var(--path-color) 4%, var(--lp-bg)); }
+    .path-module.current { border-color: var(--path-color); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
+    .pm-step {
+      width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: .55rem; font-weight: 800; font-family: var(--lp-font-mono);
+      background: var(--lp-border); color: var(--lp-muted);
+    }
+    .path-module.completed .pm-step { background: var(--path-color); color: white; }
+    .path-module.current .pm-step { background: transparent; border: 2.5px solid var(--path-color); color: var(--path-color); }
+    .pm-info { min-width: 0; }
+    .pm-title { font-size: .72rem; font-weight: 700; }
+    .pm-title .pm-cefr {
+      font-family: var(--lp-font-mono); font-size: .5rem; font-weight: 700;
+      color: var(--lp-muted); background: var(--lp-bg-paper); padding: 1px 5px;
+      border-radius: 3px; margin-left: 4px; vertical-align: middle;
+    }
+    .pm-meta { font-size: .58rem; color: var(--lp-muted); margin-top: 1px; }
+    .pm-status { font-size: .58rem; font-weight: 700; padding: 3px 7px; border-radius: var(--lp-radius-full); white-space: nowrap; }
+    .pm-status.done { background: var(--lp-success-soft); color: var(--lp-success); }
+    .pm-status.next { background: color-mix(in srgb, var(--path-color) 12%, transparent); color: var(--path-color); }
+    .pm-status.locked { color: var(--lp-muted); }
   </style>
 </head>
 <body>
@@ -375,6 +470,7 @@
     </div>
     <nav class="sb-nav" id="sbNav">
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">📋</span><span class="sb-label">Resumen</span></button>
+      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon">🛤️</span><span class="sb-label">Mi Progreso</span></button>
       <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">🧠</span><span class="sb-label">Vocabulary &amp; Words</span></button>
       <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">✏️</span><span class="sb-label">Grammar &amp; Spelling</span></button>
       <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">🔊</span><span class="sb-label">Pronunciation</span></button>
@@ -432,6 +528,22 @@
       </section>
 
       <div class="no-results" id="noResults">No modules match your search.</div>
+
+      <!-- MI PROGRESO -->
+      <section class="section" data-key="mi-progreso">
+        <div class="paths-head-row">
+          <div class="sec-head">Rutas de aprendizaje</div>
+          <div class="paths-actions">
+            <button class="paths-icon-btn" id="pathExpandAll" title="Expandir todo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+            </button>
+            <button class="paths-icon-btn" id="pathCollapseAll" title="Colapsar todo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="paths-full" id="pathsContainer"></div>
+      </section>
 
       <!-- VOCABULARY -->
       <section class="section" data-key="vocab">
@@ -815,7 +927,7 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
-    const isResumen = target === 'resumen';
+    const isResumen = target === 'resumen' || target === 'mi-progreso';
     topbarSearch.style.display = isResumen ? 'none' : '';
     topbarStats.style.display = isResumen ? 'none' : '';
     topbarGreeting.style.display = isResumen ? 'flex' : 'none';
@@ -890,7 +1002,150 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; applyFilters(); searchInput.blur(); }
   });
 
-  const VALID_SECTIONS = new Set(['resumen', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+  // ─── MI PROGRESO — LEARNING PATHS ───
+  const LEARNING_PATHS = [
+    {
+      id: 'spell-it-right', title: 'Spell It Right', icon: '✏️', color: 'spell', cefr: 'A1 → B1',
+      description: 'De la regla al oído al texto: domina la ortografía del inglés cruzando gramática, pronunciación y producción escrita.',
+      modules: ['plural-endings', 'ing-spelling', 'ed-spelling', 'spelling-by-ear', 'confusing-words', 'paragraph-cloze', 'word-formation'],
+    },
+    {
+      id: 'build-sentences', title: 'Build Sentences', icon: '🧱', color: 'build', cefr: 'A1 → B1',
+      description: 'De piezas sueltas a oraciones completas: aprende las partes, combínalas, y verifica que el orden sea correcto.',
+      modules: ['parts-of-speech', 'articles', 'tenses', 'prepositions', 'vocabulary', 'word-order', 'collocations', 'sentence-combining'],
+    },
+    {
+      id: 'decode-speech', title: 'Decode Speech', icon: '👂', color: 'decode', cefr: 'A2 → B1',
+      description: 'Del fonema al párrafo completo: entrena a decodificar el inglés hablado combinando sonido, vocabulario y transcripción.',
+      modules: ['phonics', 'pron-vowels', 'confusing-words', 'listening', 'dictation-sprint', 'word-stress-quiz', 'pron-connected', 'phrasal-verbs'],
+    },
+    {
+      id: 'sound-natural', title: 'Sound Natural', icon: '🗣️', color: 'natural', cefr: 'A2 → B1',
+      description: 'De correcto a fluido: colocaciones naturales, connected speech, registro y las estructuras que usan los nativos.',
+      modules: ['confusing-words', 'phrasal-verbs', 'collocations', 'pron-intonation', 'pron-connected', 'causative-verbs', 'preferences', 'register-switch'],
+    },
+    {
+      id: 'transform-produce', title: 'Transform & Produce', icon: '🔄', color: 'transform', cefr: 'A2 → B1',
+      description: 'Expresar lo mismo de formas distintas: transformaciones gramaticales, paráfrasis y producción activa.',
+      modules: ['comparisons', 'opposites', 'odd-one-out', 'gerunds-infinitives', 'reported-speech', 'noun-adjuncts', 'paraphrasing', 'register-switch'],
+    },
+    {
+      id: 'advanced-mastery', title: 'Advanced Mastery', icon: '🏆', color: 'advanced', cefr: 'B2 → C1',
+      description: 'Domina las estructuras avanzadas del inglés: inversiones, colocaciones académicas, cleft sentences y vocabulario C1.',
+      modules: ['advanced-collocations', 'inversions', 'vocab-pack-sound-natural', 'paraphrasing', 'register-switch', 'vocab-pack-c1', 'cleft-emphasis'],
+    },
+  ];
+
+  const moduleMap = new Map(MODULES.map(m => [m.id, m]));
+
+  function isPathModuleCompleted(moduleId) {
+    const mod = moduleMap.get(moduleId);
+    if (!mod) return false;
+    try {
+      const history = JSON.parse(localStorage.getItem(mod.scoreKey) || '[]');
+      return Array.isArray(history) && history.some(e => e.pct >= 60);
+    } catch { return false; }
+  }
+
+  function getBestScore(moduleId) {
+    const mod = moduleMap.get(moduleId);
+    if (!mod) return 0;
+    try {
+      const history = JSON.parse(localStorage.getItem(mod.scoreKey) || '[]');
+      return Array.isArray(history) ? history.reduce((max, e) => Math.max(max, e.pct || 0), 0) : 0;
+    } catch { return 0; }
+  }
+
+  function renderPaths() {
+    const container = document.getElementById('pathsContainer');
+    if (!container) return;
+    container.innerHTML = LEARNING_PATHS.map(path => {
+      const completed = path.modules.filter(isPathModuleCompleted);
+      const completedCount = completed.length;
+      const total = path.modules.length;
+      const pct = Math.round((completedCount / total) * 100);
+      const allDone = completedCount === total;
+      const nextModule = path.modules.find(id => !isPathModuleCompleted(id));
+      const nextMod = nextModule ? moduleMap.get(nextModule) : null;
+      const statusLabel = allDone ? '✓ Completada' : completedCount > 0 ? 'En progreso' : 'Sin empezar';
+      const statusClass = allDone ? ' completed' : '';
+      const nextText = allDone ? '' : nextMod ? (completedCount > 0 ? 'Siguiente: ' : 'Empezar: ') + nextMod.title : '';
+
+      const modulesHTML = path.modules.map((id, i) => {
+        const mod = moduleMap.get(id);
+        if (!mod) return '';
+        const done = isPathModuleCompleted(id);
+        const isNext = id === nextModule;
+        const cls = done ? 'completed' : isNext ? 'current' : '';
+        const step = done ? '✓' : String(i + 1);
+        const best = done ? getBestScore(id) : 0;
+        const statusHTML = done ? `<span class="pm-status done">⭐ ${best}%</span>`
+          : isNext ? `<span class="pm-status next">${completedCount > 0 ? 'Siguiente →' : 'Empezar →'}</span>`
+          : `<span class="pm-status locked">Pendiente</span>`;
+        return `<div class="path-module ${cls}">
+          <div class="pm-step">${step}</div>
+          <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta">${mod.meta}</div></div>
+          ${statusHTML}
+        </div>`;
+      }).join('');
+
+      return `<details class="path-accordion ${path.color}">
+        <summary class="path-summary">
+          <div class="path-summary-icon">${path.icon}</div>
+          <div class="path-summary-body">
+            <div class="path-summary-top">
+              <span class="path-summary-title">${path.title}</span>
+              <span class="path-summary-cefr">${path.cefr}</span>
+              ${nextText ? `<span class="path-summary-next">${nextText}</span>` : ''}
+            </div>
+            <div class="path-summary-bar">
+              <div class="path-summary-bar-track"><div class="path-summary-bar-fill" style="width:${pct}%"></div></div>
+              <span class="path-summary-frac">${completedCount}/${total}</span>
+            </div>
+          </div>
+          <div class="path-summary-right">
+            <span class="path-summary-status${statusClass}">${statusLabel}</span>
+            <span class="path-chevron">▼</span>
+          </div>
+        </summary>
+        <div class="path-content">
+          <p class="path-content-desc">${path.description}</p>
+          <div class="path-modules">${modulesHTML}</div>
+        </div>
+      </details>`;
+    }).join('');
+  }
+
+  renderPaths();
+
+  document.getElementById('pathExpandAll')?.addEventListener('click', () => {
+    document.querySelectorAll('.path-accordion').forEach(d => d.open = true);
+  });
+  document.getElementById('pathCollapseAll')?.addEventListener('click', () => {
+    document.querySelectorAll('.path-accordion').forEach(d => d.open = false);
+  });
+
+  // Auto-scroll when expanding an accordion that overflows the visible area
+  document.querySelectorAll('.path-accordion').forEach(details => {
+    details.addEventListener('toggle', () => {
+      if (!details.open) return;
+      const scrollContainer = document.querySelector('.content');
+      if (!scrollContainer) return;
+      requestAnimationFrame(() => {
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const detailsRect = details.getBoundingClientRect();
+        const overflowBottom = detailsRect.bottom - containerRect.bottom;
+        if (overflowBottom > 0) {
+          const summaryRect = details.querySelector('.path-summary').getBoundingClientRect();
+          const summaryTop = summaryRect.top - containerRect.top + scrollContainer.scrollTop;
+          const padding = 12;
+          scrollContainer.scrollTo({ top: summaryTop - padding, behavior: 'smooth' });
+        }
+      });
+    });
+  });
+
+  const VALID_SECTIONS = new Set(['resumen', 'mi-progreso', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
   const paramSection = new URLSearchParams(location.search).get('section');
   const storedSection = sessionStorage.getItem('hf-back-section');
   const initSection = paramSection || storedSection;
