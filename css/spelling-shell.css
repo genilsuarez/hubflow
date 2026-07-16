@@ -9,8 +9,8 @@
    ═══════════════════════════════════════════════════════ */
 
 body { overflow-x: hidden; min-height: 100vh; padding: 0 14px; }
-.header { padding: 6px 0; margin-bottom: 8px; }
-h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: clamp(1rem,3vw,1.4rem); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+/* .header and h1 sizing → exercise-enhanced.css (single source of truth) */
+h1 { display: flex; align-items: center; gap: 8px; }
 .h1-label { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: var(--muted); font-size: .9em; }
 
 .level-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }

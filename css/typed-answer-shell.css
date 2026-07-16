@@ -9,8 +9,7 @@
    ═══════════════════════════════════════════════════════ */
 
 body { min-height: 100vh; padding: 0 14px; }
-.header { padding: 4px 0; }
-h1 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 1.4rem; margin-bottom: 4px; }
+/* .header and h1 sizing → exercise-enhanced.css (single source of truth) */
 
 .cat-bar { display: flex; gap: 4px; margin-bottom: 4px; overflow-x: auto; scrollbar-width: none; }
 .cat-bar::-webkit-scrollbar { display: none; }
