@@ -14,7 +14,7 @@
  *   1 = errores encontrados
  */
 
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, readFileSync, existsSync } from 'fs';
 import { fileURLToPath, pathToFileURL } from 'url';
 import path from 'path';
 
@@ -166,7 +166,7 @@ async function validateCatalog() {
   const catalogPath = path.join(DATA_DIR, 'catalog.js');
   if (!existsSync(catalogPath)) return;
 
-  const { MODULES, TAGS, SUBCATEGORIES } = await import(pathToFileURL(catalogPath).href);
+  const { MODULES, TAGS, SUBCATEGORIES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT } = await import(pathToFileURL(catalogPath).href);
   const allTags = new Set([...TAGS.skill, ...TAGS.cefr, ...TAGS.mechanic, ...TAGS.theme]);
 
   const seenIds = new Set();
@@ -190,6 +190,76 @@ async function validateCatalog() {
     if (m.subcategory && !SUBCATEGORIES[m.subcategory]) {
       err('CAT-SUBCAT', `catalog.js[${m.id}]: unknown subcategory "${m.subcategory}"`);
     }
+  }
+
+  const moduleIds = new Set(MODULES.map((module) => module.id));
+  for (const module of MODULES) {
+    const rule = PROGRESS_RULES[module.id];
+    if (!rule) {
+      err('CAT-PROGRESS', `catalog.js[${module.id}]: missing explicit progress rule`);
+      continue;
+    }
+    if (!['all', 'any'].includes(rule.completionRule)) {
+      err('CAT-PROGRESS', `catalog.js[${module.id}]: completionRule must be "all" or "any"`);
+    }
+    if (!Array.isArray(rule.requiredActivities) || rule.requiredActivities.length === 0) {
+      err('CAT-PROGRESS', `catalog.js[${module.id}]: requiredActivities must not be empty`);
+      continue;
+    }
+    for (const activity of rule.requiredActivities) {
+      if (!activity.activityId || !Array.isArray(activity.scoreKeys) || activity.scoreKeys.length === 0) {
+        err('CAT-PROGRESS', `catalog.js[${module.id}]: activity requires activityId and exact scoreKeys`);
+      }
+      if (activity.passScorePct !== HUBFLOW_PASS_SCORE_PCT) {
+        err('CAT-PROGRESS', `catalog.js[${module.id}].${activity.activityId}: passScorePct must be ${HUBFLOW_PASS_SCORE_PCT}`);
+      }
+      if (new Set(activity.scoreKeys).size !== activity.scoreKeys.length) {
+        err('CAT-PROGRESS', `catalog.js[${module.id}].${activity.activityId}: duplicate scoreKeys`);
+      }
+    }
+  }
+  for (const contentId of Object.keys(PROGRESS_RULES)) {
+    if (!moduleIds.has(contentId)) err('CAT-PROGRESS', `progress rule references unknown content "${contentId}"`);
+  }
+
+  const emittedScoreKeys = new Set();
+  const exercisePaths = new Set(MODULES.map((module) => module.exercise.split('#')[0]));
+  for (const exercisePath of exercisePaths) {
+    const html = readFileSync(path.join(ROOT_DIR, exercisePath), 'utf8');
+    const dataImport = html.match(/import\s+\{[^}]*\b(?:CATEGORIES|LEVELS)\b[^}]*\}\s+from\s+['"]\.\.\/data\/([^'"]+)['"]/);
+    let categoryKeys = [];
+    if (dataImport) {
+      const dataModule = await import(pathToFileURL(path.join(DATA_DIR, dataImport[1])).href);
+      categoryKeys = Object.keys(dataModule.CATEGORIES || dataModule.LEVELS || {});
+    }
+    if (categoryKeys.length === 0) {
+      categoryKeys = [...html.matchAll(/data-cat=["']([^"']+)["']/g)].map((match) => match[1]);
+    }
+
+    for (const match of html.matchAll(/recordScore\(\s*`([^`]*\$\{currentCat\}[^`]*)`/g)) {
+      categoryKeys.forEach((category) => emittedScoreKeys.add(match[1].replace('${currentCat}', category)));
+    }
+
+    const scorePrefix = html.match(/scoreKeyPrefix:\s*['"]([^'"]+)['"]/)?.[1];
+    if (scorePrefix) categoryKeys.forEach((category) => emittedScoreKeys.add(`${scorePrefix}-${category}`));
+
+    const storagePrefix = html.match(/storagePrefix:\s*['"]([^'"]+)['"]/)?.[1];
+    if (storagePrefix && html.includes('SpellingEngine')) {
+      const modes = [...html.matchAll(/data-mode=["']([^"']+)["']/g)].map((match) => match[1]);
+      categoryKeys.forEach((category) => modes.forEach((mode) => emittedScoreKeys.add(`${storagePrefix}-${category}-${mode}`)));
+    } else if (storagePrefix && html.includes('FlashcardEngine')) {
+      categoryKeys.forEach((category) => emittedScoreKeys.add(`${storagePrefix}-${category}-quiz`));
+    }
+  }
+
+  const declaredScoreKeys = new Set(Object.values(PROGRESS_RULES).flatMap((rule) =>
+    rule.requiredActivities.flatMap((activity) => activity.scoreKeys)
+  ));
+  for (const key of emittedScoreKeys) {
+    if (!declaredScoreKeys.has(key)) err('CAT-SCOREKEY', `runtime score key "${key}" has no progress rule`);
+  }
+  for (const key of declaredScoreKeys) {
+    if (!emittedScoreKeys.has(key)) err('CAT-SCOREKEY', `progress score key "${key}" is not emitted by any exercise`);
   }
 
   // Every exercises/*.html must have a catalog entry (no orphans in either direction).

@@ -884,3 +884,119 @@ export const MODULES = [
 
 /** Todas las guías registradas van 1:1 con un módulo salvo excepciones documentadas. */
 export const GUIDE_COUNT = MODULES.filter((m) => m.guide).length;
+
+export const HUBFLOW_PASS_SCORE_PCT = 60;
+
+const scoreKeys = (prefix, categories, modes = ['']) => categories.flatMap((category) =>
+  modes.map((mode) => [prefix, category, mode].filter(Boolean).join('-'))
+);
+
+const spellingScoreKeys = (prefix) => scoreKeys(
+  prefix,
+  ['beginner', 'intermediate', 'exceptions', 'god'],
+  ['study', 'challenge', 'timed'],
+);
+
+const practiceRule = (keys) => ({
+  completionRule: 'all',
+  requiredActivities: [{
+    activityId: 'practice',
+    scoreKeys: keys,
+    passScorePct: HUBFLOW_PASS_SCORE_PCT,
+  }],
+});
+
+const VOCABULARY_PACKS = {
+  everyday: ['bodyFace', 'bodyArms', 'bodyLegs', 'cookingPrep', 'cookingMethods', 'timeOfDay', 'weather', 'seasons', 'socialExpressions', 'personalityAdjectives', 'rhymingReduplication', 'sameWordDifferentMeaning', 'clothingAppearance', 'eggcorns', 'hobbies', 'telephoneEnglish'],
+  c1: ['dailyRoutineC1', 'foodDrinkC1', 'advancedVerbs', 'advancedPhrases'],
+  idioms: ['idioms', 'bodyIdioms', 'healthIdioms', 'natureIdioms'],
+  soundNatural: ['soundNative', 'saidAlternatives', 'neverUseVery', 'soundingNatural', 'becauseAlternatives'],
+  home: ['homeFurniture', 'homeAdvanced', 'homeIdioms', 'homePhrasals'],
+  shopping: ['shoppingRetail', 'shoppingAdvanced', 'shoppingIdioms', 'shoppingPhrasals'],
+  fitness: ['healthFitness', 'healthAdvanced', 'healthIdiomsFitness', 'healthPhrasals'],
+  travel: ['travelAirport', 'travelAdvanced', 'travelIdioms', 'travelPhrasals'],
+  work: ['workOffice', 'workAdvanced', 'workIdioms', 'workPhrasals'],
+  education: ['educationStudy', 'educationAdvanced', 'educationIdioms'],
+  money: ['moneyFinance', 'moneyAdvanced', 'moneyIdioms', 'moneyPhrasals'],
+  tech: ['technologyInternet', 'techAdvanced', 'techIdioms', 'techPhrasals'],
+  emotions: ['emotionsFeelings', 'emotionsAdvanced', 'emotionsIdioms'],
+  nature: ['natureEnvironment', 'natureAdvanced', 'environmentIdioms'],
+};
+
+const VOCABULARY_OVERVIEW_RULE = {
+  completionRule: 'all',
+  requiredActivities: Object.entries(VOCABULARY_PACKS).map(([packId, categories]) => ({
+    activityId: `pack-${packId}`,
+    scoreKeys: scoreKeys('vocab', categories, ['quiz']),
+    passScorePct: HUBFLOW_PASS_SCORE_PCT,
+  })),
+};
+
+/**
+ * Contrato explícito entre contenido y claves reales de localStorage.
+ * Todas las lecturas de progreso comparan claves exactas de esta tabla; nunca
+ * infieren pertenencia con prefijos libres.
+ */
+export const PROGRESS_RULES = {
+  vocabulary: VOCABULARY_OVERVIEW_RULE,
+  'vocab-pack-everyday': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.everyday, ['quiz'])),
+  'vocab-pack-c1': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.c1, ['quiz'])),
+  'vocab-pack-idioms': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.idioms, ['quiz'])),
+  'vocab-pack-sound-natural': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.soundNatural, ['quiz'])),
+  'vocab-pack-home': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.home, ['quiz'])),
+  'vocab-pack-shopping': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.shopping, ['quiz'])),
+  'vocab-pack-fitness': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.fitness, ['quiz'])),
+  'vocab-pack-travel': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.travel, ['quiz'])),
+  'vocab-pack-work': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.work, ['quiz'])),
+  'vocab-pack-education': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.education, ['quiz'])),
+  'vocab-pack-money': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.money, ['quiz'])),
+  'vocab-pack-tech': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.tech, ['quiz'])),
+  'vocab-pack-emotions': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.emotions, ['quiz'])),
+  'vocab-pack-nature': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.nature, ['quiz'])),
+  opposites: practiceRule(scoreKeys('wr', ['opposites', 'synonyms'], ['quiz'])),
+  'confusing-words': practiceRule(scoreKeys('conf', ['make-do', 'say-tell', 'bring-take', 'borrow-lend', 'watch-look-see', 'less-fewer', 'me-i', 'who-whom', 'affect-effect', 'still-already-just-yet', 'is-are', 'there-their-theyre', 'your-youre', 'its-its', 'principal-principle', 'complement-compliment', 'desert-dessert', 'weather-whether'])),
+  'phrasal-verbs': practiceRule(scoreKeys('phrasal', ['everyday', 'work', 'relationships', 'travel', 'getVerbs', 'food', 'turn', 'advanced'], ['quiz', 'write'])),
+  phonics: practiceRule(scoreKeys('phonics', ['vowel-pairs', 'consonant-pairs', 'word-stress', 'silent-letters'])),
+  'plural-endings': practiceRule(scoreKeys('plural', ['pluralSound'])),
+  'word-stress-quiz': practiceRule(scoreKeys('stress', ['stress'])),
+  listening: practiceRule(scoreKeys('listen', ['everyday', 'travelwork', 'tricky'])),
+  'spelling-by-ear': practiceRule(scoreKeys('sbe', ['ing', 'ed', 'mixed'])),
+  'pron-connected': practiceRule(scoreKeys('pron-study', ['connectedSpeech', 'linking'], ['quiz'])),
+  'pron-intonation': practiceRule(scoreKeys('pron-study', ['intonation', 'sentenceStress', 'rhythm'], ['quiz'])),
+  'pron-mispronunciations': practiceRule(scoreKeys('pron-study', ['mispronunciations', 'tricky50'], ['quiz'])),
+  'pron-vowels': practiceRule(scoreKeys('pron-study', ['vowelSounds', 'schwa'], ['quiz'])),
+  'pron-consonants': practiceRule(scoreKeys('pron-study', ['consonantClusters', 'edPronunciation'], ['quiz'])),
+  'ing-spelling': practiceRule(spellingScoreKeys('ing')),
+  'ed-spelling': practiceRule(spellingScoreKeys('ed')),
+  'irregular-verbs': practiceRule(scoreKeys('irr', ['all', 'common', 'intermediate', 'advanced'], ['quiz', 'write'])),
+  'word-formation': practiceRule(scoreKeys('wf', ['nouns', 'adjectives', 'negatives', 'mixed'])),
+  tenses: practiceRule(scoreKeys('tense', ['present', 'past', 'future', 'perfect', 'perfectContrast', 'haveHasHad'])),
+  'reported-speech': practiceRule(scoreKeys('rs', ['backshift', 'timePlace'])),
+  conditionals: practiceRule(scoreKeys('cond', ['identifyType', 'connectors'])),
+  'used-to': practiceRule(scoreKeys('usedto', ['stateException', 'accustomed'])),
+  'gerunds-infinitives': practiceRule(scoreKeys('ger', ['gerundOrInfinitive'])),
+  articles: practiceRule(scoreKeys('art', ['basics', 'geographic', 'expressions', 'context', 'noThe'])),
+  prepositions: practiceRule(scoreKeys('prep', ['time', 'place', 'movement', 'dependent', 'duration'])),
+  'verb-chunks': practiceRule(scoreKeys('vchunks', ['prepositional', 'questions'], ['', 'write'])),
+  quantifiers: practiceRule(scoreKeys('quant', ['someany', 'muchmany', 'fewlittle', 'general'])),
+  modals: practiceRule(scoreKeys('modals', ['meaning', 'obligation', 'supposedTo'])),
+  'parts-of-speech': practiceRule(scoreKeys('pos', ['identify'])),
+  clauses: practiceRule(scoreKeys('clause', ['relativePronoun'])),
+  'made-of': practiceRule(scoreKeys('madeof', ['madeOf'])),
+  comparisons: practiceRule(scoreKeys('comp', ['structure', 'irregular'])),
+  'causative-verbs': practiceRule(scoreKeys('causative', ['chooseVerb', 'passive'])),
+  preferences: practiceRule(scoreKeys('pref', ['expression', 'structure'])),
+  collocations: practiceRule(scoreKeys('coll', ['makedo', 'havetake', 'getgive', 'paykeep'])),
+  'noun-adjuncts': practiceRule(spellingScoreKeys('noun')),
+  'error-hunt': practiceRule(scoreKeys('errhunt', ['grammar', 'tenses', 'vocabulary', 'prepositions'])),
+  'odd-one-out': practiceRule(scoreKeys('odd', ['grammar', 'vocabulary', 'collocations', 'pronunciation'])),
+  'dictation-sprint': practiceRule(scoreKeys('dict', ['everyday', 'work', 'opinions', 'academic'])),
+  'sentence-combining': practiceRule(scoreKeys('sentcomb', ['relative', 'connectors', 'participles', 'mixed'])),
+  'register-switch': practiceRule(scoreKeys('regswitch', ['toFormal', 'toInformal'])),
+  'paragraph-cloze': practiceRule(scoreKeys('paracloze', ['a2', 'b1', 'b2'])),
+  'word-order': practiceRule(scoreKeys('wordorder', ['statements', 'questions', 'adverbs', 'complex'])),
+  paraphrasing: practiceRule(scoreKeys('paraphrase', ['grammarTransform', 'vocabTransform', 'linkers', 'sentenceTransform'])),
+  inversions: practiceRule(scoreKeys('inver', ['identify', 'complete', 'rewrite'])),
+  'advanced-collocations': practiceRule(scoreKeys('advcoll', ['academic', 'hedging', 'reporting'])),
+  'cleft-emphasis': practiceRule(scoreKeys('cleft', ['identify', 'complete', 'transform'])),
+};

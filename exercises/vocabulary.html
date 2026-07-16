@@ -166,6 +166,17 @@ const PACKS = {
   shopping: { label: 'Shopping & Retail', keys: ['shoppingRetail', 'shoppingAdvanced', 'shoppingIdioms', 'shoppingPhrasals'] },
 };
 
+const PACK_CONTENT_IDS = {
+  everyday: 'vocab-pack-everyday', c1: 'vocab-pack-c1', idioms: 'vocab-pack-idioms',
+  soundNatural: 'vocab-pack-sound-natural', home: 'vocab-pack-home', shopping: 'vocab-pack-shopping',
+  fitness: 'vocab-pack-fitness', travel: 'vocab-pack-travel', work: 'vocab-pack-work',
+  education: 'vocab-pack-education', money: 'vocab-pack-money', tech: 'vocab-pack-tech',
+  emotions: 'vocab-pack-emotions', nature: 'vocab-pack-nature',
+};
+const CATEGORY_PACKS = Object.fromEntries(
+  Object.entries(PACKS).flatMap(([packId, definition]) => definition.keys.map((key) => [key, packId]))
+);
+
 const packParam = new URLSearchParams(location.hash.slice(1)).get('pack');
 const pack = packParam && PACKS[packParam];
 const activeCategories = pack
@@ -181,6 +192,8 @@ if (pack) {
 const engine = new FlashcardEngine({
   categories: activeCategories,
   storagePrefix: 'vocab',
+  contentId: pack ? PACK_CONTENT_IDS[packParam] : 'vocabulary',
+  getActivityId: (category) => pack ? 'practice' : `pack-${CATEGORY_PACKS[category]}`,
   defaultCategory: Object.keys(activeCategories)[0],
 });
 

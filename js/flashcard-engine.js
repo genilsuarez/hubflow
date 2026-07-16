@@ -283,6 +283,7 @@ export class FlashcardEngine {
     this.deck = shuffle(this.getItems());
     this.quizIdx = 0;
     this.quizScore = 0;
+    this.quizResultRecorded = false;
     this.quizTotal = Math.min(this.deck.length, 10);
     this.showArea('quiz');
     this.updateQuizProgress();
@@ -376,9 +377,18 @@ export class FlashcardEngine {
   }
 
   showQuizResult() {
+    if (this.quizResultRecorded) return;
+    this.quizResultRecorded = true;
     const pct = Math.round((this.quizScore / this.quizTotal) * 100);
-    recordScore(`${this.config.storagePrefix}-${this.currentCat}-quiz`, pct);
+    const activity = typeof this.config.getActivityId === 'function'
+      ? this.config.getActivityId(this.currentCat)
+      : this.config.activityId || 'practice';
+    recordScore(`${this.config.storagePrefix}-${this.currentCat}-quiz`, pct, {
+      contentId: this.config.contentId,
+      activity,
+    });
     this.showResultOverlay(this.quizScore, this.quizTotal);
+    this.stopTimer();
   }
 
   // ═══ MATCH (PAIR COLUMNS) ═══
@@ -619,6 +629,7 @@ export class FlashcardEngine {
     this.deck = shuffle(this.getItems());
     this.quizIdx = 0;
     this.quizScore = 0;
+    this.quizResultRecorded = false;
     this.quizTotal = Math.min(this.deck.length, 10);
     this.showArea('quiz');
     document.getElementById('timerBar')?.classList.add('show');

@@ -157,6 +157,11 @@
 }
 
 /* ─── LEGACY ALIASES (exercise pages still reference old names) ─── */
+.learnflow-guide-title {
+  flex: 1; min-width: 0; justify-content: center;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
 :root {
   --bg: var(--lp-bg);
   --paper: var(--lp-bg-paper);

@@ -39,10 +39,27 @@ import { MODULES } from '../data/catalog.js';
   });
 })();
 
-// Local dev: rewrite portal link to local host/IP
+const portalLink = document.getElementById('portalLink');
+if (portalLink) {
+  portalLink.href = '/deskflow/';
+  portalLink.setAttribute('aria-label', 'Volver a LearnFlow');
+  portalLink.title = 'Volver a LearnFlow';
+}
+
+const topBar = document.querySelector('.top-bar');
+const topBarActions = topBar?.querySelector('.tb-actions');
+if (topBar && topBarActions && !topBar.querySelector('.learnflow-signature')) {
+  const signature = document.createElement('span');
+  signature.className = 'learnflow-signature';
+  signature.textContent = 'HubFlow';
+  topBar.insertBefore(signature, topBarActions);
+}
+
+// Independent local servers use ports; the shared gateway keeps the /deskflow/ route.
 const _h = location.hostname;
 const _isLocal = _h === 'localhost' || _h === '127.0.0.1' || _h.startsWith('192.168.');
-if (_isLocal) {
+const _isUnifiedLocal = _isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
+if (_isLocal && !_isUnifiedLocal) {
   const pl = document.getElementById('portalLink');
   if (pl) pl.href = 'http://' + _h + ':3000/';
   document.addEventListener('click', (e) => {

@@ -102,9 +102,13 @@
 import { CATEGORIES } from '../data/articles.js';
 import { initSentenceQuiz } from '../js/sentence-quiz-engine.js';
 
-// Local dev: adjust cross-link
-if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.startsWith('192.168.')) {
-  document.getElementById('ffLink').href = 'http://' + location.hostname + ':3001/#/module/completion-articles-basics-a1';
+// Local dev: route the cross-link through the shared gateway when available.
+const isLocalHost = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.startsWith('192.168.');
+const isUnifiedLocal = isLocalHost && location.port === '3000' && location.pathname.startsWith('/hubflow/');
+if (isLocalHost) {
+  document.getElementById('ffLink').href = isUnifiedLocal
+    ? '/fluentflow/#/module/completion-articles-basics-a1'
+    : 'http://' + location.hostname + ':3001/#/module/completion-articles-basics-a1';
 }
 
 initSentenceQuiz({

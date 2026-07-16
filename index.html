@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
   <script src="js/theme-init.js"></script>
+  <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
     // Early section detection: prevent flash of resumen when returning from exercise
     (function() {
@@ -35,6 +36,15 @@
 
     /* ═══ APP SHELL ═══ */
     .shell { display: grid; grid-template-columns: 232px 1fr; height: 100%; }
+    .navigation-launcher {
+      display: none; position: fixed; top: 16px; left: 16px; z-index: 35;
+      font-size: 1rem;
+    }
+    .sidebar-scrim {
+      position: fixed; inset: 0; z-index: 39;
+      background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
+    }
+    .sidebar-scrim[hidden] { display: none; }
 
     /* ─── SIDEBAR ─── */
     .sidebar {
@@ -42,29 +52,37 @@
       background: var(--lp-bg-paper); border-right: 1.5px solid var(--lp-border);
       padding: 22px 14px 16px;
     }
-    .sb-brand { padding: 0 8px 20px; }
+    .sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); }
+    .sb-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent); }
     .sb-brand h1 {
-      font-family: var(--lp-font-display); font-weight: var(--lp-weight-semibold);
-      font-size: 1.7rem; letter-spacing: -.02em; line-height: 1;
+      font-family: var(--lp-font-display); font-weight: 500;
+      font-size: 18px; line-height: 1;
     }
-    .sb-brand h1 em { font-weight: var(--lp-weight-normal); font-style: italic; color: var(--lp-accent); }
-    .sb-brand .sb-tag { font-size: .64rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); letter-spacing: .04em; margin-top: 2px; }
+    .sb-brand .sb-tag { font-size: 10px; color: var(--lp-muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
 
-    .sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; }
+    .sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-top: 14px; }
+    .sb-mode-toggle { flex: 0 0 auto; margin-bottom: 8px; }
+    .sidebar-footer {
+      display: grid; gap: 2px;
+      padding: 12px 0 0; border-top: 1px solid var(--lp-border); margin-top: auto;
+    }
     .sb-item {
       --spine: var(--lp-accent);
-      display: grid; grid-template-columns: 4px 30px 1fr; align-items: center;
+      display: flex; align-items: center; gap: 10px;
       width: 100%; text-align: left; border: none; background: transparent; cursor: pointer;
-      border-radius: var(--lp-radius-md); padding: 0; min-height: 44px; overflow: hidden;
-      font-family: var(--lp-font-body); color: var(--lp-ink-soft);
-      transition: background .18s var(--lp-ease);
+      border-radius: 10px; padding: 10px 12px; min-height: 44px;
+      font-family: var(--lp-font-body); font-size: 0.82rem; font-weight: 500;
+      color: var(--lp-ink);
+      transition: background .15s ease, color .15s ease, box-shadow .15s ease, transform .15s ease;
     }
-    .sb-item:hover { background: var(--lp-surface); }
-    .sb-item .sb-spine { height: 100%; background: transparent; border-radius: 4px; transition: background .18s; }
-    .sb-item .sb-icon { font-size: 1rem; display: flex; align-items: center; justify-content: center; }
-    .sb-item .sb-label { font-size: .8rem; font-weight: var(--lp-weight-bold); padding: 10px 10px 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sb-item.active { background: var(--lp-surface); color: var(--lp-ink); box-shadow: var(--lp-shadow-sm); }
-    .sb-item.active .sb-spine { background: var(--spine); }
+    .sb-item:hover { background: var(--lp-surface); color: var(--lp-ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .sb-item:active { transform: scale(0.98); }
+    .sb-item:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .sb-item .sb-spine { display: none; }
+    .sb-item .sb-icon { width: 20px; height: 20px; flex: 0 0 20px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 400; color: var(--spine, currentColor); }
+    .sb-item .sb-label { font-size: inherit; font-weight: inherit; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-item.active { background: var(--lp-accent-soft); color: var(--lp-accent-dark); font-weight: 700; box-shadow: none; }
+    .sb-item.active .sb-spine { display: none; }
     .sb-item.v { --spine: var(--lp-cat-purple); }
     .sb-item.p { --spine: var(--lp-cat-blue); }
     .sb-item.g { --spine: var(--lp-cat-amber); }
@@ -76,7 +94,7 @@
     /* ─── MAIN COLUMN ─── */
     .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; }
     .topbar {
-      display: flex; align-items: center; gap: 12px; padding: 16px clamp(16px, 3vw, 34px) 12px;
+      display: flex; align-items: center; gap: 12px; padding: 22px clamp(16px, 3vw, 34px) 22px;
       border-bottom: 1.5px solid var(--lp-border); flex-shrink: 0;
     }
     .search-bar { position: relative; flex: 1; min-width: 0; max-width: 380px; }
@@ -182,6 +200,13 @@
     .topbar-greeting-title { font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); }
     .topbar-greeting-title em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
     .topbar-greeting-sub { font-size: .76rem; color: var(--lp-ink-soft); }
+    /* En "Mi Progreso" el saludo genérico se reemplaza por el título de la
+       sección (evita repetir "Bienvenido a HubFlow" seguido de "Rutas de
+       aprendizaje" un renglón más abajo) y no lleva subtítulo — el espacio que
+       ocupaba se recupera. */
+    .tg-progreso { display: none; }
+    body[data-active="mi-progreso"] .tg-resumen { display: none; }
+    body[data-active="mi-progreso"] .tg-progreso { display: block; }
 
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
     .tile {
@@ -293,11 +318,72 @@
       flex-shrink: 0; padding: 12px clamp(16px, 3vw, 34px); border-top: 1.5px solid var(--lp-border);
       display: flex; justify-content: space-between; align-items: center; background: var(--lp-bg);
     }
-    .foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: .82rem; color: var(--lp-ink-soft); }
-    .foot-meta { font-family: var(--lp-font-mono); font-size: .56rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
+    .foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: 13px; color: var(--lp-ink-soft); }
+    .foot-meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 
-    /* ─── TOPBAR ACTIONS (home + theme, always visible, right-aligned) ─── */
+    .about-overlay {
+      position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: color-mix(in srgb, var(--lp-bg) 82%, transparent);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      animation: aboutFadeIn 0.25s var(--lp-ease) both;
+    }
+    .about-modal {
+      position: relative; width: min(100%, 480px); max-height: min(720px, calc(100svh - 40px));
+      overflow-y: auto; padding: 34px; border: 1px solid var(--lp-border); border-radius: var(--lp-radius-xl);
+      background: var(--lp-surface); box-shadow: var(--lp-shadow-lg); color: var(--lp-ink-soft);
+    }
+    .about-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .about-identity {
+      width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%;
+      background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700;
+      letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
+    }
+    .about-header .about-eyebrow { margin-bottom: 2px; }
+    .about-header h2 { margin: 0; font-size: 1.5rem; line-height: 1; font-family: var(--lp-font-display); font-weight: 400; color: var(--lp-ink); }
+    .about-eyebrow { color: var(--lp-accent); font-size: .62rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase; }
+    .about-close {
+      position: static; flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center;
+      margin-left: auto; border: 1px solid var(--lp-border); border-radius: 50%; background: var(--lp-surface-sunken);
+      color: var(--lp-muted); cursor: pointer; transition: border-color 160ms, color 160ms, transform 160ms;
+    }
+    .about-close:hover { border-color: var(--lp-accent); color: var(--lp-accent); transform: scale(1.05); }
+    .about-close:active { transform: scale(0.97); }
+    .about-close:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
+    .about-description { color: var(--lp-ink-soft); font-size: .82rem; line-height: 1.65; }
+    .about-modules { display: grid; gap: 8px; margin: 20px 0; }
+    .about-modules a {
+      min-height: 52px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+      border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md); background: var(--lp-surface-sunken);
+      color: var(--lp-ink); text-decoration: none; transition: border-color .2s var(--lp-ease), transform .2s var(--lp-ease);
+    }
+    .about-modules a:hover { border-color: var(--lp-accent); transform: translateY(-2px); }
+    .about-modules a:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
+    .about-modules strong { font-size: .78rem; }
+    .about-modules span { color: var(--lp-muted); font-size: .68rem; }
+    .about-footer { display: grid; gap: 10px; padding-top: 16px; border-top: 1px solid var(--lp-border); }
+    .about-footer p { display: flex; justify-content: space-between; gap: 16px; color: var(--lp-muted); font-size: .68rem; line-height: 1.5; margin: 0; }
+    .about-footer strong { color: var(--lp-ink-soft); }
+    .about-footer span { text-align: right; }
+    @keyframes aboutFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (max-width: 580px) { .about-modal { padding: 22px; } .about-footer p { flex-direction: column; gap: 2px; } .about-footer span { text-align: left; } }
+    @media (prefers-reduced-motion: reduce) { .about-overlay { animation: none; } }
+
+    /* ─── TOPBAR ACTIONS (mobile access; desktop controls live in sidebar) ─── */
     .topbar-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: auto; }
+
+    @media (min-width: 861px) {
+      .topbar-actions { display: none; }
+      html[data-navigation-mode="sidebar"] .sidebar-scrim { display: none !important; }
+      html[data-navigation-mode="floating"] .shell { grid-template-columns: 1fr; }
+      html[data-navigation-mode="floating"] .sidebar {
+        position: fixed; inset: 0 auto 0 0; z-index: 40; width: 232px;
+        transform: translateX(-102%); transition: transform 240ms var(--lp-ease);
+        box-shadow: var(--lp-shadow-md);
+      }
+      html[data-navigation-mode="floating"] .sidebar.is-open { transform: translateX(0); }
+      html[data-navigation-mode="floating"] .navigation-launcher { display: flex; }
+      html[data-navigation-mode="floating"] .topbar { padding-left: 88px; }
+    }
 
     /* ─── MOBILE BOTTOM NAV ─── */
     .bottom-nav { display: none; }
@@ -316,7 +402,14 @@
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
-      .sidebar { display: none; }
+      .navigation-launcher { display: flex; top: 10px; left: 10px; }
+      .sidebar {
+        display: flex; position: fixed; inset: 0 auto 0 0; z-index: 40;
+        width: min(232px, 86vw); transform: translateX(-102%);
+        transition: transform 240ms var(--lp-ease); box-shadow: var(--lp-shadow-md);
+      }
+      .sidebar.is-open { transform: translateX(0); }
+      .topbar { padding-left: 66px; }
       /* En mobile el footer se oculta. El shell usa 100dvh (viewport dinámico)
          menos la altura de la bottom-nav para que el contenido nunca quede
          detrás de la barra de navegación fija. */
@@ -353,17 +446,50 @@
       .search-bar { min-width: 130px; }
     }
     @media (max-width: 480px) {
-      .topbar { padding: 12px 12px 10px; }
+      .topbar { padding: 12px 12px 10px 66px; }
       .search-bar { min-width: 90px; }
       .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px 14px; }
       .topbar-greeting-title { font-size: 1.1rem; }
+      /* Versión abreviada en mobile: sin ".tgs-extra" queda "61 ejercicios y 23
+         guías de referencia." — se cortaba a mitad de palabra con el texto
+         completo + ellipsis ("...23 guías de refere…"). Se quita también la
+         frase "elige una categoría", redundante con las tarjetas de abajo. */
+      .tgs-extra { display: none; }
       .topbar-greeting-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .resumen-recent { display: none; }
+
+      /* .book-pills solo se revela con :hover/:focus-within — en mobile eso
+         nunca ocurre (no hay hover, y el tap navega directo), así que quedaba
+         como espacio en blanco reservado sin motivo al final de cada tarjeta
+         de módulo. Se saca del flujo por completo. */
+      .book-pills { display: none; }
+      /* Las descripciones del catálogo son largas (100-156 caracteres) — a 2
+         líneas ya se cortaban a mitad de palabra ("...36…"). Se recorta a 1
+         línea: sigue sin decir todo, pero al menos no queda un fragmento raro
+         a medio cortar, y la tarjeta baja de altura. */
+      .book-meta { -webkit-line-clamp: 1; font-size: .58rem; }
+
+      /* Guías de referencia: usaban más gap entre tarjetas (11px vs 7px de
+         .shelf) y más padding interno (11/14/11/10 vs 9/12/9/8 de .book-body)
+         sin razón funcional — solo desalineaba la densidad visual respecto al
+         resto de las secciones ya compactadas. Se iguala a .book/.shelf. */
+      .guides { gap: 7px; }
+      .guide-icon { width: 28px; height: 28px; margin: 0 2px 0 8px; font-size: .85rem; }
+      .guide-body { padding: 9px 12px 9px 8px; }
+
+      /* Título de tarjeta/item: .book-title (.82rem), .guide-title (.76rem),
+         .path-summary-title (.82→.74rem) y .pm-title (.72rem, sin cambios acá)
+         iban cada uno a un tamaño distinto para el mismo rol semántico. Se
+         iguala todo a .72rem — el más chico de los cuatro — para que las
+         secciones lean con la misma jerarquía tipográfica y de paso queden
+         más compactas. */
+      .book-title { font-size: .72rem; }
+      .guide-title { font-size: .72rem; }
     }
 
     /* ═══ MI PROGRESO — COLLAPSIBLE PATH CARDS ═══ */
-    .paths-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .paths-head-row { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 12px; }
     .paths-head-row .sec-head { margin-bottom: 0; }
     .paths-actions { display: flex; gap: 4px; background: var(--lp-bg-paper); border-radius: var(--lp-radius-md); padding: 3px; }
     .paths-icon-btn {
@@ -426,17 +552,21 @@
     .path-chevron { color: var(--lp-muted); transition: transform .3s var(--lp-ease); font-size: .65rem; }
     .path-accordion[open] .path-chevron { transform: rotate(180deg); }
 
-    .path-content { padding: 0 16px 16px; border-top: 1px solid var(--lp-border-subtle); }
+    /* Fondo --lp-bg-paper (en vez de heredar el blanco del summary) para que el
+       cuerpo expandido se lea como "contenido dentro de la tarjeta padre" en vez
+       de fundirse con el header o con la página. Los módulos van en --lp-surface
+       (blanco) para resaltar sobre ese fondo. */
+    .path-content { padding: 0 16px 16px; border-top: 1px solid var(--lp-border-subtle); background: var(--lp-bg-paper); }
     .path-content-desc { font-size: .7rem; color: var(--lp-ink-soft); line-height: 1.4; padding: 12px 0 10px; margin: 0; }
     .path-modules { display: flex; flex-direction: column; gap: 5px; }
     .path-module {
       display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 10px;
       padding: 8px 10px; border-radius: var(--lp-radius-md);
-      background: var(--lp-bg); border: 1px solid var(--lp-border-subtle);
+      background: var(--lp-surface); border: 1px solid var(--lp-border-subtle);
       transition: background .2s, border-color .2s, transform .15s;
     }
-    .path-module:hover { background: var(--lp-surface); border-color: var(--lp-border); transform: translateX(2px); }
-    .path-module.completed { background: color-mix(in srgb, var(--path-color) 4%, var(--lp-bg)); }
+    .path-module:hover { background: color-mix(in srgb, var(--path-color) 4%, var(--lp-surface)); border-color: var(--lp-border); transform: translateX(2px); }
+    .path-module.completed { background: color-mix(in srgb, var(--path-color) 6%, var(--lp-surface)); }
     .path-module.current { border-color: var(--path-color); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
     .pm-step {
       width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -457,34 +587,120 @@
     .pm-status.done { background: var(--lp-success-soft); color: var(--lp-success); }
     .pm-status.next { background: color-mix(in srgb, var(--path-color) 12%, transparent); color: var(--path-color); }
     .pm-status.locked { color: var(--lp-muted); }
+
+    /* Rutas de aprendizaje (Mi Progreso) compactadas: en colapsado, las 6
+       tarjetas deben caber sin scroll en un iPhone en Safari (viewport
+       reducido por barra de URL). El texto "Empezar/Siguiente: ..." se
+       oculta porque forzaba un salto de línea extra en cada tarjeta. */
+    @media (max-width: 480px) {
+      .paths-head-row { margin-bottom: 8px; }
+      .paths-full { gap: 6px; }
+      /* Expandir/Colapsar todo: a 30px + padding del contenedor, el bloque
+         quedaba visiblemente más alto que el texto de cualquier header de la
+         app (ej. "Morfología y ortografía", una sola línea de ~.62rem) — sin
+         nada de texto al lado en esta fila (se sacó a la topbar), ese salto se
+         notaba aún más. Se baja el tamaño visual a la altura de una línea de
+         texto y se compensa el touch target con ::after (44px, mismo patrón
+         que .lp-icon-btn--sm en css/buttons.css) para no romper el guardrail
+         de 44px mínimo. */
+      /* El gap entre los dos botones sube a 28px a propósito: con hit-area de
+         44px cada uno, un gap chico (los 4px de base) haría que ambas zonas
+         táctiles invisibles se solaparan y un tap cerca del borde disparara
+         el botón equivocado. 28px = sin solape (18px botón + 28px gap > 44px
+         entre centros). */
+      .paths-actions { padding: 1px; gap: 28px; background: none; }
+      .paths-icon-btn { width: 18px; height: 18px; position: relative; }
+      .paths-icon-btn::after {
+        content: ''; position: absolute; inset: 50%; translate: -50% -50%;
+        min-width: 44px; min-height: 44px; width: 100%; height: 100%;
+      }
+      .paths-icon-btn svg { width: 12px; height: 12px; }
+      /* El nivel CEFR (misma longitud en todas las tarjetas: "A1 → B1", "A2 →
+         B1"...) se saca de la línea del título y se coloca en la columna
+         derecha, apilado sobre el estado — así queda alineado a la derecha de
+         forma consistente en vez de "flotar" a distinta distancia según el
+         largo del título. Se logra con display:contents en los wrappers
+         intermedios (.path-summary-body/.path-summary-top) para que sus hijos
+         pasen a ser ítems directos del grid de .path-summary. */
+      /* El chevron vive en su propia columna (ancho auto, fija) separada de la
+         columna del pill/badge — si comparte columna con el badge, el badge
+         termina alineado con la punta de flecha en vez de con el pill, lo
+         que rompe la jerarquía visual (parece asociado al control de
+         expandir en vez de al estado). */
+      .path-summary {
+        grid-template-columns: 30px 1fr auto auto;
+        grid-template-areas: "icon title cefr   ." "icon bar   pill chev";
+        row-gap: 3px; column-gap: 8px; padding: 8px 10px; align-items: center;
+      }
+      .path-summary-icon { grid-area: icon; width: 30px; height: 30px; font-size: .85rem; }
+      .path-summary-body, .path-summary-top, .path-summary-right { display: contents; }
+      .path-summary-next { display: none; }
+      .path-summary-title { grid-area: title; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; align-self: end; }
+      /* Nivel CEFR y estado: iban más chicos que su tamaño base (.56/.58rem) y
+         quedaban ilegibles en pantalla real. Se mantienen en o por encima del
+         tamaño base — alineados en la misma columna (cefr sobre pill), con el
+         mismo ancho mínimo (88px, cubre "✓ Completada", el estado más largo) y
+         el mismo border-radius de píldora (el cefr usaba 4px de base, cuadrado
+         frente al pill de estado) para que se lean como un par uniforme. */
+      .path-summary-cefr { grid-area: cefr; font-size: .6rem; padding: 2px 6px; justify-self: end; align-self: end; min-width: 88px; text-align: center; border-radius: var(--lp-radius-full); }
+      .path-summary-bar { grid-area: bar; align-self: start; }
+      .path-summary-status { grid-area: pill; justify-self: end; align-self: start; font-size: .62rem; padding: 3px 8px; min-width: 88px; text-align: center; }
+      .path-chevron { grid-area: chev; align-self: start; font-size: .6rem; }
+      .path-summary-bar-track { height: 3px; }
+      .path-summary-frac { font-size: .58rem; }
+
+      /* Al expandir en mobile, el gap compacto (6px) deja muy poco aire entre
+         la tarjeta abierta y sus vecinas — se refuerza borde/sombra y se le
+         da más margen para que se note claramente cuál es la tarjeta padre. */
+      .path-accordion[open] { margin: 6px 0; border-width: 2px; box-shadow: var(--lp-shadow-lg); }
+
+      /* pm-meta (descripción del módulo dentro de una ruta expandida) envolvía
+         libremente a 2-3 líneas — misma inconsistencia que .book-meta antes de
+         recortarlo. Se lleva a una sola línea con ellipsis para que la lista de
+         módulos quede compacta y pareja con el resto de las secciones. */
+      .pm-meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    }
   </style>
 </head>
 <body>
+<button class="lp-icon-btn navigation-launcher" id="navigationLauncher" type="button" aria-label="Abrir navegación flotante" aria-controls="sidebar" aria-expanded="false">☰</button>
+<div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
 <div class="shell">
 
   <!-- SIDEBAR (desktop) -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
     <div class="sb-brand">
-      <h1>Hub<em>Flow</em></h1>
-      <div class="sb-tag">Practica inglés todos los días</div>
+      <span class="sb-mark" aria-hidden="true">H</span>
+      <div>
+        <h1>HubFlow</h1>
+        <div class="sb-tag">LearnFlow</div>
+      </div>
     </div>
     <nav class="sb-nav" id="sbNav">
-      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">📋</span><span class="sb-label">Resumen</span></button>
-      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon">🛤️</span><span class="sb-label">Mi Progreso</span></button>
-      <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">🧠</span><span class="sb-label">Vocabulary &amp; Words</span></button>
-      <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">✏️</span><span class="sb-label">Grammar &amp; Spelling</span></button>
-      <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">🔊</span><span class="sb-label">Pronunciation</span></button>
-      <button class="sb-item a" data-target="analysis"><span class="sb-spine"></span><span class="sb-icon">🔍</span><span class="sb-label">Analysis &amp; Production</span></button>
-      <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">📚</span><span class="sb-label">Guías de referencia</span></button>
+      <button class="sb-item sb-mode-toggle" id="navigationModeToggle" type="button" aria-label="Usar navegación flotante" aria-pressed="false"><span class="sb-spine"></span><span class="sb-icon" aria-hidden="true">◫</span><span class="sb-label">Usar menú flotante</span></button>
+      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Inicio</span></button>
+      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon">↗</span><span class="sb-label">Mi Progreso</span></button>
+      <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Vocabulary &amp; Words</span></button>
+      <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Grammar &amp; Spelling</span></button>
+      <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Pronunciation</span></button>
+      <button class="sb-item a" data-target="analysis"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Analysis &amp; Production</span></button>
+      <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Guías de referencia</span></button>
     </nav>
+    <div class="sidebar-footer">
+      <button class="sb-item sb-footer-item" id="aboutTrigger"><span class="sb-spine"></span><span class="sb-icon">ⓘ</span><span class="sb-label">About LearnFlow</span></button>
+      <a class="sb-item sb-footer-item" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Portal</span></a>
+      <button class="sb-item sb-footer-item theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema"><span class="sb-spine"></span><span class="sb-icon">🌙</span><span class="sb-label">Modo oscuro</span></button>
+    </div>
   </aside>
 
   <!-- MAIN COLUMN -->
   <div class="main-col">
     <div class="topbar">
       <div class="topbar-greeting">
-        <span class="topbar-greeting-title">Bienvenido a Hub<em>Flow</em></span>
-        <p class="topbar-greeting-sub"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia — elige una categoría para empezar.</p>
+        <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
+        <p class="topbar-greeting-sub tg-resumen"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia.</p>
+        <span class="topbar-greeting-title tg-progreso">Rutas de aprendizaje</span>
       </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
@@ -502,8 +718,8 @@
         <span class="header-stat"><span class="header-stat__val" id="psMastered">0/58</span><span class="header-stat__label">★</span></span>
       </div>
       <div class="topbar-actions">
-        <a class="lp-icon-btn" id="portalLink" href="https://genilsuarez.github.io/deskflow/" aria-label="Ir al portal DeskFlow" title="Portal">🏠</a>
-        <button class="lp-icon-btn" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+        <a class="lp-icon-btn portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow">🏠</a>
+        <button class="lp-icon-btn theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema">🌙</button>
       </div>
     </div>
 
@@ -525,6 +741,7 @@
             <a class="new-chip" href="guides/vocabulary.html"><span class="nc-icon">📚</span><span><span class="nc-badge">Nuevo</span><br>Vocabulary Reference</span></a>
           </div>
         </div>
+
       </section>
 
       <div class="no-results" id="noResults">No modules match your search.</div>
@@ -532,7 +749,6 @@
       <!-- MI PROGRESO -->
       <section class="section" data-key="mi-progreso">
         <div class="paths-head-row">
-          <div class="sec-head">Rutas de aprendizaje</div>
           <div class="paths-actions">
             <button class="paths-icon-btn" id="pathExpandAll" title="Expandir todo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
@@ -704,11 +920,12 @@
           </a>
         </div>
       </section>
+
     </main>
 
     <footer class="foot">
       <span class="foot-sig">Genil Suárez</span>
-      <span class="foot-meta">HubFlow · 2026</span>
+      <span class="foot-meta">HubFlow → LearnFlow</span>
     </footer>
   </div>
 </div>
@@ -716,6 +933,7 @@
 <!-- BOTTOM NAV (mobile) -->
 <nav class="bottom-nav" id="bottomNav">
   <button class="bn-item active" data-target="resumen"><span class="bn-icon">📋</span><span class="bn-label">Resumen</span></button>
+  <button class="bn-item path" data-target="mi-progreso"><span class="bn-icon">🛤️</span><span class="bn-label">Progreso</span></button>
   <button class="bn-item v" data-target="vocab"><span class="bn-icon">🧠</span><span class="bn-label">Vocab</span></button>
   <button class="bn-item g" data-target="grammar"><span class="bn-icon">✏️</span><span class="bn-label">Gramática</span></button>
   <button class="bn-item p" data-target="pronunciation"><span class="bn-icon">🔊</span><span class="bn-label">Sonido</span></button>
@@ -725,13 +943,27 @@
 
 <script type="module">
 import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
+import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgress } from './js/utils.js';
 
 (function() {
   // Theme
   const saved = localStorage.getItem('lp-theme');
   if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-  const themeBtns = [document.getElementById('themeToggle')].filter(Boolean);
-  function upd() { themeBtns.forEach(b => b.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'); }
+  const themeBtns = [...document.querySelectorAll('.theme-toggle')];
+  function upd() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    themeBtns.forEach((button) => {
+      const icon = button.querySelector('.sb-icon');
+      const label = button.querySelector('.sb-label');
+      if (icon) {
+        icon.textContent = isDark ? '☀️' : '🌙';
+      } else {
+        button.textContent = isDark ? '☀️' : '🌙';
+      }
+      if (label) label.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+      button.setAttribute('aria-label', isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro');
+    });
+  }
   upd();
   const toggleTheme = () => {
     document.documentElement.classList.add('theme-transitioning');
@@ -746,6 +978,112 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 350);
   };
   themeBtns.forEach(b => b.onclick = toggleTheme);
+
+  // Unified navigation mode
+  const NAVIGATION_MODE_KEY = 'lp-navigation-mode';
+  const NAVIGATION_MODES = new Set(['sidebar', 'floating']);
+  const sidebar = document.getElementById('sidebar');
+  const sidebarScrim = document.getElementById('sidebarScrim');
+  const navigationLauncher = document.getElementById('navigationLauncher');
+  const navigationModeToggle = document.getElementById('navigationModeToggle');
+
+  function setNavigationDrawerOpen(open) {
+    sidebar.classList.toggle('is-open', open);
+    sidebarScrim.hidden = !open;
+    navigationLauncher.setAttribute('aria-expanded', String(open));
+    navigationLauncher.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación flotante');
+  }
+
+  function setNavigationMode(mode, persist = false) {
+    const resolvedMode = NAVIGATION_MODES.has(mode) ? mode : 'sidebar';
+    const isFloating = resolvedMode === 'floating';
+    document.documentElement.dataset.navigationMode = resolvedMode;
+    navigationModeToggle.setAttribute('aria-pressed', String(isFloating));
+    navigationModeToggle.setAttribute('aria-label', isFloating ? 'Usar barra lateral fija' : 'Usar navegación flotante');
+    navigationModeToggle.querySelector('.sb-icon').textContent = isFloating ? '▣' : '◫';
+    navigationModeToggle.querySelector('.sb-label').textContent = isFloating ? 'Usar barra lateral' : 'Usar menú flotante';
+    if (persist) localStorage.setItem(NAVIGATION_MODE_KEY, resolvedMode);
+    setNavigationDrawerOpen(false);
+  }
+
+  setNavigationMode(localStorage.getItem(NAVIGATION_MODE_KEY));
+  navigationModeToggle.addEventListener('click', () => {
+    const nextMode = document.documentElement.dataset.navigationMode === 'floating' ? 'sidebar' : 'floating';
+    setNavigationMode(nextMode, true);
+  });
+  navigationLauncher.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
+  sidebarScrim.addEventListener('click', () => setNavigationDrawerOpen(false));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setNavigationDrawerOpen(false);
+  });
+  window.addEventListener('storage', (event) => {
+    if (event.key === NAVIGATION_MODE_KEY) setNavigationMode(event.newValue);
+  });
+
+  // ─── ABOUT LEARNFLOW MODAL ───
+  function getAppHref(path, port) {
+    const host = location.hostname;
+    const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.');
+    if (isLocal) return `http://${host}:${port}/`;
+    return `https://genilsuarez.github.io${path}`;
+  }
+
+  function showAboutLearnFlow(event) {
+    document.getElementById('aboutLearnFlow')?.remove();
+    const opener = event?.currentTarget instanceof HTMLElement ? event.currentTarget : document.activeElement;
+    const shell = document.querySelector('.shell');
+    const overlay = document.createElement('div');
+    overlay.id = 'aboutLearnFlow';
+    overlay.className = 'about-overlay';
+    overlay.innerHTML = `
+      <section class="about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutLearnFlowTitle" aria-describedby="aboutLearnFlowDescription">
+        <header class="about-header">
+          <div class="about-identity" aria-hidden="true">H</div>
+          <div>
+            <p class="about-eyebrow">HubFlow · Parte de LearnFlow</p>
+            <h2 id="aboutLearnFlowTitle">About LearnFlow</h2>
+          </div>
+          <button class="about-close" id="aboutCloseBtn" type="button" aria-label="Cerrar About LearnFlow">✕</button>
+        </header>
+        <p id="aboutLearnFlowDescription" class="about-description">HubFlow es el módulo de práctica flexible para gramática, vocabulario, pronunciación y producción.</p>
+        <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
+          <a href="${getAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow"><strong>LearnFlow</strong><span>Portal y progreso global</span></a>
+          <a href="${getAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></a>
+          <a href="${getAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow"><strong>LyricFlow</strong><span>Aprender con música</span></a>
+        </nav>
+        <footer class="about-footer">
+          <p><strong>Progreso local</strong><span>Guardado únicamente en este navegador.</span></p>
+          <p><strong>Autor</strong><span>Genil Suárez</span></p>
+        </footer>
+      </section>
+    `;
+    shell.inert = true;
+    document.body.appendChild(overlay);
+    setNavigationDrawerOpen(false);
+
+    const focusable = [...overlay.querySelectorAll('button, a[href]')];
+    const close = () => {
+      overlay.remove();
+      shell.inert = false;
+      document.removeEventListener('keydown', onAboutKeydown);
+      if (opener instanceof HTMLElement && opener.isConnected) opener.focus();
+    };
+    const onAboutKeydown = (keyEvent) => {
+      if (keyEvent.key === 'Escape') { keyEvent.preventDefault(); close(); return; }
+      if (keyEvent.key !== 'Tab' || focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (keyEvent.shiftKey && document.activeElement === first) { keyEvent.preventDefault(); last.focus(); }
+      else if (!keyEvent.shiftKey && document.activeElement === last) { keyEvent.preventDefault(); first.focus(); }
+    };
+
+    overlay.querySelector('#aboutCloseBtn').addEventListener('click', close);
+    overlay.addEventListener('click', (clickEvent) => { if (clickEvent.target === overlay) close(); });
+    document.addEventListener('keydown', onAboutKeydown);
+    overlay.querySelector('#aboutCloseBtn').focus();
+  }
+
+  document.getElementById('aboutTrigger').addEventListener('click', showAboutLearnFlow);
 
   // ─── RENDER MODULE CARDS FROM CATALOG (Fase 2) ───
   const SPINE_CYCLE = ['', 'b-ed', 'b-noun', 'b-vocab', 'b-opp'];
@@ -862,29 +1200,12 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     });
   }
 
-  // Stats — prefijos derivados del catálogo, no hardcodeados (bug encontrado en Fase 0:
-  // el regex viejo no cubría 13 de los 34 scoreKey reales, sus sesiones nunca se contaban)
-  const scoreKeySet = new Set(MODULES.map(m => m.scoreKey));
-  const keys = Object.keys(localStorage).filter(k => {
-    const m = k.match(/^[a-z]+/);
-    return m && scoreKeySet.has(m[0]);
-  });
-  let total = 0; const modBest = {};
-  keys.forEach(k => {
-    try {
-      const d = JSON.parse(localStorage.getItem(k));
-      if (Array.isArray(d)) {
-        total += d.length;
-        const prefix = k.match(/^[a-z]+/)[0];
-        const pMax = d.reduce((m, x) => Math.max(m, x.pct || 0), 0);
-        modBest[prefix] = Math.max(modBest[prefix] || 0, pMax);
-      }
-    } catch(e){}
-  });
-  const mastered = Object.values(modBest).filter(v => v >= 90).length;
+  // Canonical LearnFlow projection and header summary use the same explicit rules.
+  publishHubFlowProgress();
+  const progressStats = getProgressStats();
+  document.getElementById('psTotal').textContent = progressStats.totalAttempts || '0';
   const totalModules = document.querySelectorAll('.book[href]').length;
-  document.getElementById('psTotal').textContent = total || '0';
-  document.getElementById('psMastered').textContent = mastered + '/' + totalModules;
+  document.getElementById('psMastered').textContent = progressStats.masteredContent + '/' + progressStats.totalContent;
 
   // Dynamic module/guide counts (never hardcode — always read from the DOM)
   const guideCount = document.querySelectorAll('.guide-link[href]').length;
@@ -900,20 +1221,31 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     }
   });
 
-  // Local dev: rewrite portal link and propagate theme
+  // Local dev supports independent ports and the shared-origin gateway.
   const _h = location.hostname;
   const _isLocal = _h === 'localhost' || _h === '127.0.0.1' || _h.startsWith('192.168.');
+  const _isUnifiedLocal = _isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
   if (_isLocal) {
-    document.getElementById('portalLink').href = 'http://' + _h + ':3000/';
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest('a[href*="' + _h + ':"]');
-      if (a) {
-        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-        const url = new URL(a.href);
-        url.searchParams.set('theme', theme);
-        a.href = url.toString();
-      }
+    const appPorts = { deskflow: 3000, fluentflow: 3001, lyricflow: 3003 };
+    document.querySelectorAll('.portal-link').forEach((link) => {
+      link.href = _isUnifiedLocal ? '/deskflow/' : 'http://' + _h + ':3000/';
     });
+    document.querySelectorAll('[data-learnflow-app]').forEach((link) => {
+      const app = link.dataset.learnflowApp;
+      const port = appPorts[app];
+      if (port) link.href = _isUnifiedLocal ? '/' + app + '/' : 'http://' + _h + ':' + port + '/';
+    });
+    if (!_isUnifiedLocal) {
+      document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href*="' + _h + ':"]');
+        if (a) {
+          const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+          const url = new URL(a.href);
+          url.searchParams.set('theme', theme);
+          a.href = url.toString();
+        }
+      });
+    }
   }
 
   // ─── SECTION SWITCHING (SPA nav) ───
@@ -927,11 +1259,11 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
-    const isResumen = target === 'resumen' || target === 'mi-progreso';
-    topbarSearch.style.display = isResumen ? 'none' : '';
-    topbarStats.style.display = isResumen ? 'none' : '';
-    topbarGreeting.style.display = isResumen ? 'flex' : 'none';
-    if (filterMenu) filterMenu.style.display = isResumen ? 'none' : '';
+    const isOverview = target === 'resumen' || target === 'mi-progreso';
+    topbarSearch.style.display = isOverview ? 'none' : '';
+    topbarStats.style.display = isOverview ? 'none' : '';
+    topbarGreeting.style.display = isOverview ? 'flex' : 'none';
+    if (filterMenu) filterMenu.style.display = isOverview ? 'none' : '';
     if (tagBar) closeFilterPanel();
     content.scrollTop = 0;
     if (searchInput.value) { searchInput.value = ''; }
@@ -940,7 +1272,10 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
 
   navButtons.forEach(b => {
     if (!b.dataset.target) return;
-    b.addEventListener('click', () => setActive(b.dataset.target));
+    b.addEventListener('click', () => {
+      setActive(b.dataset.target);
+      setNavigationDrawerOpen(false);
+    });
   });
 
   // ─── SEARCH + TAG FILTER (combinados: AND entre texto y tags activos) ───
@@ -1038,23 +1373,7 @@ import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
 
   const moduleMap = new Map(MODULES.map(m => [m.id, m]));
 
-  function isPathModuleCompleted(moduleId) {
-    const mod = moduleMap.get(moduleId);
-    if (!mod) return false;
-    try {
-      const history = JSON.parse(localStorage.getItem(mod.scoreKey) || '[]');
-      return Array.isArray(history) && history.some(e => e.pct >= 60);
-    } catch { return false; }
-  }
-
-  function getBestScore(moduleId) {
-    const mod = moduleMap.get(moduleId);
-    if (!mod) return 0;
-    try {
-      const history = JSON.parse(localStorage.getItem(mod.scoreKey) || '[]');
-      return Array.isArray(history) ? history.reduce((max, e) => Math.max(max, e.pct || 0), 0) : 0;
-    } catch { return 0; }
-  }
+  const isPathModuleCompleted = isContentCompleted;
 
   function renderPaths() {
     const container = document.getElementById('pathsContainer');
