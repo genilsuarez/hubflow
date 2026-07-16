@@ -196,6 +196,89 @@
       }
     }
 
+    /* ─── HERO CARD (ejercicio sugerido) ─── */
+    .hero-card {
+      display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-top: 4px solid var(--hero-spine, var(--lp-accent));
+      border-radius: var(--lp-radius-lg); padding: 20px 24px;
+      margin-bottom: 16px; box-shadow: var(--lp-shadow-md);
+      transition: box-shadow .25s var(--lp-ease), border-color .25s;
+    }
+    .hero-card:hover { box-shadow: var(--lp-shadow-hover); }
+    .hero-card__icon {
+      width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; border-radius: var(--lp-radius-md);
+      background: color-mix(in srgb, var(--hero-spine, var(--lp-accent)) 12%, transparent);
+    }
+    .hero-card__body { min-width: 0; }
+    .hero-card__context {
+      font-size: .65rem; font-weight: var(--lp-weight-extrabold); text-transform: uppercase;
+      letter-spacing: .1em; color: var(--hero-spine, var(--lp-accent)); margin-bottom: 4px;
+    }
+    .hero-card__title { font-weight: var(--lp-weight-extrabold); font-size: 1rem; line-height: 1.25; margin-bottom: 3px; }
+    .hero-card__meta { font-size: .72rem; color: var(--lp-ink-soft); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .hero-card__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    .hero-card__cta { white-space: nowrap; font-size: .78rem; padding: 10px 20px; }
+    .hero-card__alt {
+      background: none; border: none; color: var(--lp-muted); font-size: .65rem;
+      font-weight: var(--lp-weight-bold); cursor: pointer; padding: 4px 8px;
+      border-radius: var(--lp-radius-sm); transition: color .2s, background .2s;
+    }
+    .hero-card__alt:hover { color: var(--lp-ink); background: var(--lp-surface-sunken); }
+    .hero-card__alt:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+
+    /* First-run variant */
+    .hero-card--welcome .hero-card__icon { font-size: 1.8rem; }
+
+    @media (max-width: 640px) {
+      .hero-card { grid-template-columns: 44px 1fr; gap: 12px; padding: 16px; }
+      .hero-card__icon { width: 44px; height: 44px; font-size: 1.3rem; }
+      .hero-card__actions { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; }
+      .hero-card__cta { flex: 1; text-align: center; }
+      .hero-card__title { font-size: .88rem; }
+    }
+    @media (max-width: 480px) {
+      .hero-card { padding: 12px; gap: 10px; }
+      .hero-card__title { font-size: .82rem; }
+      .hero-card__meta { font-size: .65rem; }
+      .hero-card__cta { font-size: .72rem; padding: 9px 14px; }
+    }
+
+    /* ─── PROGRESS SNAPSHOT ─── */
+    .progress-snapshot { margin-bottom: 20px; }
+    .progress-snapshot__bar {
+      height: 6px; border-radius: var(--lp-radius-full); background: var(--lp-border);
+      overflow: hidden; margin-bottom: 8px;
+    }
+    .progress-snapshot__fill {
+      height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent);
+      transition: width .6s var(--lp-ease) .3s; width: 0;
+    }
+    .progress-snapshot__stats {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px;
+      font-size: .7rem; color: var(--lp-ink-soft); font-weight: var(--lp-weight-medium);
+    }
+    .progress-snapshot__stat strong { font-weight: var(--lp-weight-extrabold); color: var(--lp-ink); }
+    .progress-snapshot__sep { color: var(--lp-muted); user-select: none; }
+    .progress-snapshot__link {
+      background: none; border: none; color: var(--lp-accent); font-size: .65rem;
+      font-weight: var(--lp-weight-bold); cursor: pointer; padding: 4px 8px;
+      border-radius: var(--lp-radius-sm); margin-left: auto;
+      transition: background .2s, color .2s;
+    }
+    .progress-snapshot__link:hover { background: var(--lp-accent-soft); }
+    .progress-snapshot__link:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+
+    /* First-run: motivational message replaces stats */
+    .progress-snapshot--empty .progress-snapshot__stats { color: var(--lp-muted); font-style: italic; }
+
+    @media (max-width: 480px) {
+      .progress-snapshot__stats { font-size: .62rem; gap: 4px 8px; }
+      .progress-snapshot__link { font-size: .6rem; padding: 3px 6px; }
+      .progress-snapshot__sep:nth-of-type(2) { display: none; }
+    }
+
     /* ─── RESUMEN (dashboard) ─── */
     /* Greeting lives in the topbar itself (same slot the search bar occupies on
        other sections) instead of a separate hero card — keeps the topbar from
@@ -220,6 +303,7 @@
     body[data-active="mi-progreso"] .tg-progreso { display: block; }
 
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
+    .tiles--guides { grid-template-columns: minmax(150px, 1fr); max-width: calc((100% - 30px) / 4); }
     .tile {
       --spine: var(--lp-accent);
       display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
@@ -730,12 +814,45 @@
     <main class="content">
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen">
+        <!-- Hero Card — Siguiente ejercicio sugerido -->
+        <div class="hero-card" id="heroCard" aria-label="Ejercicio sugerido">
+          <div class="hero-card__icon" id="heroIcon" aria-hidden="true"></div>
+          <div class="hero-card__body">
+            <div class="hero-card__context" id="heroContext"></div>
+            <div class="hero-card__title" id="heroTitle"></div>
+            <div class="hero-card__meta" id="heroMeta"></div>
+          </div>
+          <div class="hero-card__actions">
+            <a class="lp-btn lp-btn--primary hero-card__cta" id="heroCta" href="#">Empezar ahora</a>
+            <button class="hero-card__alt" id="heroAlt" type="button">Otra sugerencia</button>
+          </div>
+        </div>
+
+        <!-- Progress Snapshot -->
+        <div class="progress-snapshot" id="progressSnapshot">
+          <div class="progress-snapshot__bar">
+            <div class="progress-snapshot__fill" id="snapshotFill"></div>
+          </div>
+          <div class="progress-snapshot__stats">
+            <span class="progress-snapshot__stat"><strong id="snapshotPct">0%</strong> completado</span>
+            <span class="progress-snapshot__sep" aria-hidden="true">·</span>
+            <span class="progress-snapshot__stat"><strong id="snapshotDone">0</strong>/<span id="snapshotTotal">0</span> módulos</span>
+            <span class="progress-snapshot__sep" aria-hidden="true">·</span>
+            <span class="progress-snapshot__stat"><strong id="snapshotPaths">0</strong> rutas activas</span>
+            <button class="progress-snapshot__link" id="snapshotLink" type="button">Ver progreso →</button>
+          </div>
+        </div>
+
         <div class="sec-head">Categorías</div>
         <div class="tiles">
           <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 módulos</span></button>
           <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 módulos</span></button>
           <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 módulos</span></button>
           <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 módulos</span></button>
+        </div>
+
+        <div class="sec-head">Guías de referencia</div>
+        <div class="tiles tiles--guides">
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
         </div>
 
@@ -1125,7 +1242,167 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub));
   });
 
+  // ─── HERO CARD + PROGRESS SNAPSHOT (dashboard activo) ───
+  const LEARNING_PATHS = [
+    {
+      id: 'spell-it-right', title: 'Spell It Right', icon: '✏️', color: 'spell', cefr: 'A1 → B1',
+      description: 'De la regla al oído al texto: domina la ortografía del inglés cruzando gramática, pronunciación y producción escrita.',
+      modules: ['plural-endings', 'ing-spelling', 'ed-spelling', 'spelling-by-ear', 'confusing-words', 'paragraph-cloze', 'word-formation'],
+    },
+    {
+      id: 'build-sentences', title: 'Build Sentences', icon: '🧱', color: 'build', cefr: 'A1 → B1',
+      description: 'De piezas sueltas a oraciones completas: aprende las partes, combínalas, y verifica que el orden sea correcto.',
+      modules: ['parts-of-speech', 'articles', 'tenses', 'prepositions', 'vocabulary', 'word-order', 'collocations', 'sentence-combining'],
+    },
+    {
+      id: 'decode-speech', title: 'Decode Speech', icon: '👂', color: 'decode', cefr: 'A2 → B1',
+      description: 'Del fonema al párrafo completo: entrena a decodificar el inglés hablado combinando sonido, vocabulario y transcripción.',
+      modules: ['phonics', 'pron-vowels', 'confusing-words', 'listening', 'dictation-sprint', 'word-stress-quiz', 'pron-connected', 'phrasal-verbs'],
+    },
+    {
+      id: 'sound-natural', title: 'Sound Natural', icon: '🗣️', color: 'natural', cefr: 'A2 → B1',
+      description: 'De correcto a fluido: colocaciones naturales, connected speech, registro y las estructuras que usan los nativos.',
+      modules: ['confusing-words', 'phrasal-verbs', 'collocations', 'pron-intonation', 'pron-connected', 'causative-verbs', 'preferences', 'register-switch'],
+    },
+    {
+      id: 'transform-produce', title: 'Transform & Produce', icon: '🔄', color: 'transform', cefr: 'A2 → B1',
+      description: 'Expresar lo mismo de formas distintas: transformaciones gramaticales, paráfrasis y producción activa.',
+      modules: ['comparisons', 'opposites', 'odd-one-out', 'gerunds-infinitives', 'reported-speech', 'noun-adjuncts', 'paraphrasing', 'register-switch'],
+    },
+    {
+      id: 'advanced-mastery', title: 'Advanced Mastery', icon: '🏆', color: 'advanced', cefr: 'B2 → C1',
+      description: 'Domina las estructuras avanzadas del inglés: inversiones, colocaciones académicas, cleft sentences y vocabulario C1.',
+      modules: ['advanced-collocations', 'inversions', 'vocab-pack-sound-natural', 'paraphrasing', 'register-switch', 'vocab-pack-c1', 'cleft-emphasis'],
+    },
+  ];
 
+  const moduleMap = new Map(MODULES.map(m => [m.id, m]));
+
+  const CATEGORY_COLORS = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
+
+  function getSuggestion(exclude) {
+    const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
+    // Priority 1: recent attempt with score < 70%
+    const needsImprovement = exercises.filter(m => {
+      if (m.id === exclude) return false;
+      const best = getBestScore(m.id);
+      return best > 0 && best < 70;
+    });
+    if (needsImprovement.length) {
+      const mod = needsImprovement[Math.floor(Math.random() * needsImprovement.length)];
+      return { mod, reason: 'Mejorar tu último intento' };
+    }
+    // Priority 2: next incomplete module in most-progressed path
+    const pathProgress = LEARNING_PATHS.map(path => {
+      const done = path.modules.filter(isContentCompleted).length;
+      const next = path.modules.find(id => id !== exclude && !isContentCompleted(id));
+      return { path, done, next, pct: done / path.modules.length };
+    }).filter(p => p.next && p.done > 0).sort((a, b) => b.pct - a.pct);
+    if (pathProgress.length) {
+      const { path, next } = pathProgress[0];
+      const mod = moduleMap.get(next);
+      if (mod) return { mod, reason: `Continúa la ruta ${path.title}` };
+    }
+    // Priority 3: never attempted module at lowest CEFR
+    const cefrOrder = ['a1', 'a2', 'b1', 'b2', 'c1'];
+    const unattempted = exercises.filter(m => m.id !== exclude && getBestScore(m.id) === 0 && !isContentCompleted(m.id));
+    if (unattempted.length) {
+      unattempted.sort((a, b) => cefrOrder.indexOf(a.cefr) - cefrOrder.indexOf(b.cefr));
+      const mod = unattempted[0];
+      return { mod, reason: 'Algo nuevo para ti' };
+    }
+    // Priority 4: random from least-visited category
+    const catCounts = {};
+    exercises.forEach(m => { catCounts[m.category] = (catCounts[m.category] || 0) + (getBestScore(m.id) > 0 ? 1 : 0); });
+    const leastCat = Object.entries(catCounts).sort((a, b) => a[1] - b[1])[0]?.[0];
+    const pool = exercises.filter(m => m.category === leastCat && m.id !== exclude);
+    if (pool.length) {
+      const mod = pool[Math.floor(Math.random() * pool.length)];
+      return { mod, reason: 'Explora esta categoría' };
+    }
+    return { mod: exercises[0], reason: 'Practica hoy' };
+  }
+
+  let currentSuggestion = null;
+
+  function renderHeroCard() {
+    const heroCard = document.getElementById('heroCard');
+    const hasAnyProgress = MODULES.some(m => getBestScore(m.id) > 0);
+
+    if (!hasAnyProgress) {
+      // First-run welcome
+      heroCard.classList.add('hero-card--welcome');
+      heroCard.style.setProperty('--hero-spine', 'var(--lp-accent)');
+      document.getElementById('heroIcon').textContent = '🚀';
+      document.getElementById('heroContext').textContent = 'Bienvenido a HubFlow';
+      document.getElementById('heroTitle').textContent = '61 ejercicios te esperan';
+      document.getElementById('heroMeta').textContent = 'Empieza por lo que más te llame o sigue una ruta guiada.';
+      const cta = document.getElementById('heroCta');
+      cta.textContent = 'Empezar ruta guiada';
+      const firstPath = LEARNING_PATHS[0];
+      const firstMod = firstPath ? moduleMap.get(firstPath.modules[0]) : MODULES[0];
+      cta.href = firstMod ? firstMod.exercise : '#';
+      document.getElementById('heroAlt').textContent = 'Explorar categorías ↓';
+      document.getElementById('heroAlt').addEventListener('click', () => {
+        document.querySelector('.tiles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return;
+    }
+
+    // Regular suggestion
+    const suggestion = getSuggestion(currentSuggestion?.mod?.id);
+    currentSuggestion = suggestion;
+    const { mod, reason } = suggestion;
+    const color = CATEGORY_COLORS[mod.category] || 'var(--lp-accent)';
+    heroCard.style.setProperty('--hero-spine', color);
+    heroCard.classList.remove('hero-card--welcome');
+    document.getElementById('heroIcon').textContent = mod.icon;
+    document.getElementById('heroContext').textContent = reason;
+    document.getElementById('heroTitle').textContent = mod.title;
+    document.getElementById('heroMeta').textContent = mod.meta;
+    const cta = document.getElementById('heroCta');
+    cta.textContent = 'Empezar ahora';
+    cta.href = mod.exercise;
+    document.getElementById('heroAlt').textContent = 'Otra sugerencia';
+  }
+
+  function renderProgressSnapshot() {
+    const snapshot = document.getElementById('progressSnapshot');
+    const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
+    const total = exercises.length;
+    const completed = exercises.filter(m => isContentCompleted(m.id)).length;
+    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const activePaths = LEARNING_PATHS.filter(p => p.modules.some(id => getBestScore(id) > 0) && !p.modules.every(isContentCompleted)).length;
+    const hasProgress = completed > 0 || MODULES.some(m => getBestScore(m.id) > 0);
+
+    if (!hasProgress) {
+      snapshot.classList.add('progress-snapshot--empty');
+      document.getElementById('snapshotFill').style.width = '0%';
+      const stats = snapshot.querySelector('.progress-snapshot__stats');
+      stats.innerHTML = '<span class="progress-snapshot__stat">0/' + total + ' completados · tu aventura empieza aquí</span><button class="progress-snapshot__link" id="snapshotLink" type="button">Ver progreso →</button>';
+    } else {
+      snapshot.classList.remove('progress-snapshot--empty');
+      requestAnimationFrame(() => {
+        document.getElementById('snapshotFill').style.width = pct + '%';
+      });
+      document.getElementById('snapshotPct').textContent = pct + '%';
+      document.getElementById('snapshotDone').textContent = completed;
+      document.getElementById('snapshotTotal').textContent = total;
+      document.getElementById('snapshotPaths').textContent = activePaths;
+    }
+
+    // Link to Mi Progreso
+    snapshot.querySelector('#snapshotLink')?.addEventListener('click', () => setActive('mi-progreso'));
+  }
+
+  renderHeroCard();
+  renderProgressSnapshot();
+
+  // "Otra sugerencia" button
+  document.getElementById('heroAlt').addEventListener('click', function() {
+    if (document.getElementById('heroCard').classList.contains('hero-card--welcome')) return;
+    renderHeroCard();
+  });
 
   // ─── FILTER MENU (botón + panel de tags, estilo FluentFlow UnifiedFilter) ───
   const filterMenu = document.getElementById('filterMenu');
@@ -1318,40 +1595,6 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
   });
 
   // ─── MI PROGRESO — LEARNING PATHS ───
-  const LEARNING_PATHS = [
-    {
-      id: 'spell-it-right', title: 'Spell It Right', icon: '✏️', color: 'spell', cefr: 'A1 → B1',
-      description: 'De la regla al oído al texto: domina la ortografía del inglés cruzando gramática, pronunciación y producción escrita.',
-      modules: ['plural-endings', 'ing-spelling', 'ed-spelling', 'spelling-by-ear', 'confusing-words', 'paragraph-cloze', 'word-formation'],
-    },
-    {
-      id: 'build-sentences', title: 'Build Sentences', icon: '🧱', color: 'build', cefr: 'A1 → B1',
-      description: 'De piezas sueltas a oraciones completas: aprende las partes, combínalas, y verifica que el orden sea correcto.',
-      modules: ['parts-of-speech', 'articles', 'tenses', 'prepositions', 'vocabulary', 'word-order', 'collocations', 'sentence-combining'],
-    },
-    {
-      id: 'decode-speech', title: 'Decode Speech', icon: '👂', color: 'decode', cefr: 'A2 → B1',
-      description: 'Del fonema al párrafo completo: entrena a decodificar el inglés hablado combinando sonido, vocabulario y transcripción.',
-      modules: ['phonics', 'pron-vowels', 'confusing-words', 'listening', 'dictation-sprint', 'word-stress-quiz', 'pron-connected', 'phrasal-verbs'],
-    },
-    {
-      id: 'sound-natural', title: 'Sound Natural', icon: '🗣️', color: 'natural', cefr: 'A2 → B1',
-      description: 'De correcto a fluido: colocaciones naturales, connected speech, registro y las estructuras que usan los nativos.',
-      modules: ['confusing-words', 'phrasal-verbs', 'collocations', 'pron-intonation', 'pron-connected', 'causative-verbs', 'preferences', 'register-switch'],
-    },
-    {
-      id: 'transform-produce', title: 'Transform & Produce', icon: '🔄', color: 'transform', cefr: 'A2 → B1',
-      description: 'Expresar lo mismo de formas distintas: transformaciones gramaticales, paráfrasis y producción activa.',
-      modules: ['comparisons', 'opposites', 'odd-one-out', 'gerunds-infinitives', 'reported-speech', 'noun-adjuncts', 'paraphrasing', 'register-switch'],
-    },
-    {
-      id: 'advanced-mastery', title: 'Advanced Mastery', icon: '🏆', color: 'advanced', cefr: 'B2 → C1',
-      description: 'Domina las estructuras avanzadas del inglés: inversiones, colocaciones académicas, cleft sentences y vocabulario C1.',
-      modules: ['advanced-collocations', 'inversions', 'vocab-pack-sound-natural', 'paraphrasing', 'register-switch', 'vocab-pack-c1', 'cleft-emphasis'],
-    },
-  ];
-
-  const moduleMap = new Map(MODULES.map(m => [m.id, m]));
 
   const isPathModuleCompleted = isContentCompleted;
 

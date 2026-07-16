@@ -24,7 +24,8 @@ function isMatch(userAnswer, correctArray) {
 
 export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   initTheme();
-  document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+  const themeToggleEl = document.getElementById('themeToggle');
+  if (themeToggleEl) themeToggleEl.addEventListener('click', () => toggleTheme());
 
   const catKeys = Object.keys(categories);
   let currentCat = catKeys[0];

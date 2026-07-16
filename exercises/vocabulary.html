@@ -244,37 +244,6 @@ catBar.addEventListener('scroll', updateFades);
 new MutationObserver(() => { updateFades(); countHiddenPills(); }).observe(catBar, { childList: true });
 requestAnimationFrame(() => { updateFades(); countHiddenPills(); });
 
-// ─── Scroll-hint on first load (peek + badge nudge) ───
-(function scrollHint() {
-  if (!catBar || !catExpandBtn) return;
-  const run = () => {
-    const { scrollWidth, clientWidth } = catBar;
-    if (scrollWidth <= clientWidth + 20) return; // no overflow, skip
-
-    // 1. Badge nudge pulse
-    catExpandBtn.classList.add('nudge');
-    catExpandBtn.addEventListener('animationend', () => catExpandBtn.classList.remove('nudge'), { once: true });
-
-    // 2. Peek scroll: quick scroll right then back
-    const peekDist = Math.min(60, scrollWidth - clientWidth);
-    catBar.style.scrollBehavior = 'smooth';
-    catBar.scrollLeft = peekDist;
-    setTimeout(() => { catBar.scrollLeft = 0; }, 500);
-
-    // 3. Thin bar flash under catBar
-    let hintBar = catWrapper.querySelector('.scroll-hint-bar');
-    if (!hintBar) {
-      hintBar = document.createElement('div');
-      hintBar.className = 'scroll-hint-bar';
-      catWrapper.appendChild(hintBar);
-    }
-    setTimeout(() => hintBar.classList.add('flash'), 100);
-    setTimeout(() => hintBar.classList.remove('flash'), 1200);
-  };
-  // Small delay so pills are already rendered
-  setTimeout(run, 400);
-})();
-
 // ─── Expand/collapse toggle ───
 catExpandBtn.addEventListener('click', () => {
   const expanded = catWrapper.classList.toggle('expanded');
@@ -283,9 +252,15 @@ catExpandBtn.addEventListener('click', () => {
     expandCount.textContent = '';
     catExpandBtn.title = 'Colapsar';
   } else {
-    // Collapse: scroll active into view
+    // Collapse: instantly position active pill in view (no smooth scroll)
     const active = catBar.querySelector('.pill-btn.active');
-    if (active) requestAnimationFrame(() => active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }));
+    if (active) {
+      catBar.style.scrollBehavior = 'auto';
+      requestAnimationFrame(() => {
+        active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
+        catBar.style.scrollBehavior = '';
+      });
+    }
     requestAnimationFrame(updateFades);
   }
 });

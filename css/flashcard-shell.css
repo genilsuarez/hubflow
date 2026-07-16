@@ -174,7 +174,7 @@ h1 { display: flex; align-items: center; gap: 6px; }
 [data-area].show { display: flex; }
 
 /* Flashcard overrides */
-.fc-card { max-width: 440px; height: 250px; }
+.fc-card { max-width: 720px; height: 250px; }
 .fc-back .fc-detail { font-size: .72rem; }
 
 /* Battle card */

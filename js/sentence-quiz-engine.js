@@ -12,7 +12,8 @@ import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showRe
 
 export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   initTheme();
-  document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+  const themeToggleEl = document.getElementById('themeToggle');
+  if (themeToggleEl) themeToggleEl.addEventListener('click', () => toggleTheme());
 
   const catKeys = Object.keys(categories);
   let currentCat = catKeys[0];

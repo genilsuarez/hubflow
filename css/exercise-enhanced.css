@@ -23,6 +23,19 @@ html[data-theme="dark"] {
 body {
   background: transparent !important;
   position: relative;
+  opacity: 0;
+}
+body.shell-ready {
+  opacity: 1;
+}
+/* Fallback: reveal after 600ms even if exercise-shell.js fails */
+@keyframes shell-fallback { to { opacity: 1; } }
+body:not(.shell-ready) {
+  animation: shell-fallback 0s 600ms forwards;
+}
+/* Reduced motion: skip the hide/reveal entirely */
+@media (prefers-reduced-motion: reduce) {
+  body { opacity: 1 !important; }
 }
 
 /* Subtle dot pattern overlay */
@@ -80,6 +93,9 @@ body::after {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 /* ─── HEADER SECTION ─── */
+/* ─── WIDER WRAP FOR EXERCISES ─── */
+.wrap { max-width: 860px; }
+
 .header {
   padding: 6px 0 10px;
   margin-bottom: 10px;

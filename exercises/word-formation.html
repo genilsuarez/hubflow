@@ -20,7 +20,7 @@
   .cat-bar::-webkit-scrollbar { display: none; }
   [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
   [data-area].show { display: flex; }
-  .sentence-card { width: 100%; max-width: 480px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center; box-shadow: var(--lp-shadow-sm); }
+  .sentence-card { width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center; box-shadow: var(--lp-shadow-sm); }
   .sentence-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
   .sentence-card .sc-text { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 500; color: var(--lp-ink); line-height: 1.5; }
   .sentence-card .sc-text .blank { display: inline-block; min-width: 70px; border-bottom: 2.5px dashed var(--lp-cat-amber); color: var(--lp-cat-amber); font-weight: 700; padding: 0 4px; }
@@ -30,8 +30,8 @@
   .answer-input:focus { border-color: var(--lp-cat-amber); }
   .answer-input.correct { border-color: var(--lp-success); }
   .answer-input.wrong { border-color: var(--lp-error); }
-  .explain-box { width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft); background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm); padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5; }
-  .fc-card { max-width: 460px; height: 220px; }
+  .explain-box { width: 100%; max-width: 720px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft); background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm); padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5; }
+  .fc-card { max-width: 720px; height: 220px; }
   .wf-front .fc-term { font-size: 1.1rem; color: var(--lp-cat-amber); line-height: 1.4; }
   .wf-front .fc-detail { font-size: .82rem; color: var(--lp-ink-soft); margin-top: 4px; }
   .fc-back { background: color-mix(in srgb, var(--lp-cat-amber) 10%, var(--lp-surface)); border-color: var(--lp-cat-amber); }
@@ -61,7 +61,7 @@ import { CATEGORIES } from '../data/word-formation.js';
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 initTheme();
-document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
 function renderCatBar() { const bar = document.getElementById('catBar'); bar.innerHTML = catKeys.map(k => `<button class="cat-btn ${k===currentCat?'active':''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`).join(''); bar.querySelectorAll('[data-cat]').forEach(btn => btn.addEventListener('click', () => { currentCat = btn.dataset.cat; bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat)); startMode(); })); }

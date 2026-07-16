@@ -29,8 +29,8 @@
   .answer-input:focus { border-color: var(--lp-cat-blue); }
   .answer-input.correct { border-color: var(--lp-success); }
   .answer-input.wrong { border-color: var(--lp-error); }
-  .explain-box { width: 100%; max-width: 440px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft); background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm); padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5; }
-  .no-tts { max-width: 440px; font-size: .8rem; color: var(--lp-error-dark); background: var(--lp-error-soft); border: 1px solid var(--lp-error); border-radius: var(--lp-radius-sm); padding: 12px 16px; text-align: center; display: none; }
+  .explain-box { width: 100%; max-width: 720px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft); background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm); padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5; }
+  .no-tts { max-width: 720px; font-size: .8rem; color: var(--lp-error-dark); background: var(--lp-error-soft); border: 1px solid var(--lp-error); border-radius: var(--lp-radius-sm); padding: 12px 16px; text-align: center; display: none; }
   .no-tts.show { display: block; }
   .scroll-body { padding: 8px 0 30px; }
 </style>
@@ -62,7 +62,7 @@
 import { CATEGORIES } from '../data/spelling-by-ear.js';
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable } from '../js/utils.js';
 initTheme();
-document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;

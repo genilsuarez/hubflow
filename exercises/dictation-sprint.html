@@ -25,7 +25,7 @@
 
   /* Dictation card */
   .dict-card {
-    width: 100%; max-width: 540px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
     border-radius: var(--lp-radius-lg); padding: 24px; box-shadow: var(--lp-shadow-md); text-align: center;
   }
   .dict-card__counter {
@@ -69,7 +69,7 @@
 
   /* Input area */
   .dict-input {
-    width: 100%; max-width: 540px;
+    width: 100%; max-width: 720px;
   }
   .dict-input textarea {
     width: 100%; min-height: 80px; padding: 14px; font-family: var(--lp-font-body);
@@ -82,7 +82,7 @@
 
   /* Feedback */
   .dict-feedback {
-    width: 100%; max-width: 540px; display: none; flex-direction: column; gap: 8px;
+    width: 100%; max-width: 720px; display: none; flex-direction: column; gap: 8px;
     background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md);
     padding: 16px; text-align: left;
   }
@@ -185,7 +185,7 @@ import { CATEGORIES } from '../data/dictation-sprint.js';
 import { shuffle, initTheme, toggleTheme, isSpeechAvailable, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
 
 initTheme();
-document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 
 // Check TTS
 if (!isSpeechAvailable()) {

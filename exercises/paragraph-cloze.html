@@ -24,7 +24,7 @@
   [data-area].show { display: flex; }
 
   .pc-card {
-    width: 100%; max-width: 580px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
     border-radius: var(--lp-radius-lg); padding: 22px; box-shadow: var(--lp-shadow-md);
   }
   .pc-title {
@@ -47,7 +47,7 @@
   .pc-status { font-size: .75rem; font-weight: 700; color: var(--lp-muted); text-align: center; }
   .pc-status em { color: var(--lp-cat-purple); font-style: normal; }
 
-  .pc-explanations { width: 100%; max-width: 580px; display: none; flex-direction: column; gap: 6px; }
+  .pc-explanations { width: 100%; max-width: 720px; display: none; flex-direction: column; gap: 6px; }
   .pc-explanations.show { display: flex; }
   .pc-exp-item {
     background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
@@ -57,7 +57,7 @@
   .pc-exp-item em { color: var(--lp-success); font-style: normal; font-weight: 700; }
 
   .pc-explain-final {
-    width: 100%; max-width: 580px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
+    width: 100%; max-width: 720px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
     background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
     padding: 10px 14px; text-align: center; line-height: 1.5;
   }
@@ -116,7 +116,7 @@ import { CATEGORIES } from '../data/paragraph-cloze.js';
 import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
 
 initTheme();
-document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');

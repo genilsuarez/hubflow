@@ -104,7 +104,7 @@
 
 /* ─── FLASHCARD ─── */
 .fc-card {
-  width: 100%; max-width: 440px; height: 260px;
+  width: 100%; max-width: 720px; height: 260px;
   cursor: pointer; perspective: 1200px; position: relative;
 }
 .fc-inner {
@@ -171,7 +171,7 @@
 [data-theme="dark"] .quiz-opt.wrong { background: color-mix(in srgb, var(--lp-error) 35%, transparent); border-color: color-mix(in srgb, var(--lp-error) 45%, white); color: color-mix(in srgb, var(--lp-error) 45%, white); box-shadow: 0 0 0 1px color-mix(in srgb, var(--lp-error) 30%, transparent); }
 
 /* ─── PAIR MATCH ─── */
-.pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; width: 100%; max-width: 500px; }
+.pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; width: 100%; max-width: 720px; }
 @media(max-width:480px) { .pair-grid { gap: 6px 8px; } }
 .pair-col-label {
   font-size: .6rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted);

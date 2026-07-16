@@ -274,3 +274,6 @@ function buildFooter() {
 }
 
 buildFooter();
+
+// Reveal the page now that DOM restructuring is done
+document.body.classList.add('shell-ready');

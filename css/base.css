@@ -239,7 +239,7 @@ body::before {
 .mono { font-family: var(--lp-font-mono); }
 
 /* ─── LAYOUT ─── */
-.wrap { max-width: 680px; margin: 0 auto; padding: 0 14px; position: relative; z-index: 1; flex: 1; }
+.wrap { max-width: 680px; width: 100%; margin: 0 auto; padding: 0 14px; position: relative; z-index: 1; flex: 1; }
 a { color: inherit; text-decoration: none; }
 
 /* ─── ANIMATIONS ─── */

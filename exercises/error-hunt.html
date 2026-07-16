@@ -26,7 +26,7 @@
 
   /* Text display */
   .hunt-card {
-    width: 100%; max-width: 560px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
     border-radius: var(--lp-radius-lg); padding: 24px; box-shadow: var(--lp-shadow-md);
   }
   .hunt-card__counter {
@@ -67,7 +67,7 @@
 
   /* Correction input */
   .correction-panel {
-    width: 100%; max-width: 560px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
     border-radius: var(--lp-radius-md); padding: 14px 18px; box-shadow: var(--lp-shadow-sm);
     display: none; gap: 8px; flex-direction: column;
   }
@@ -88,7 +88,7 @@
 
   /* Explanations after check */
   .hunt-explanations {
-    width: 100%; max-width: 560px; display: none; flex-direction: column; gap: 8px;
+    width: 100%; max-width: 720px; display: none; flex-direction: column; gap: 8px;
   }
   .hunt-explanations.show { display: flex; }
   .hunt-exp-item {
@@ -166,7 +166,7 @@ import { CATEGORIES } from '../data/error-hunt.js';
 import { shuffle, initTheme, toggleTheme, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
 
 initTheme();
-document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0];
