@@ -111,6 +111,14 @@
   --lp-space-lg: 20px;
   --lp-space-xl: 28px;
   --lp-space-2xl: 40px;
+
+  /* Header bars — homologado entre DeskFlow/HubFlow/FluentFlow/LyricFlow */
+  --lp-header-height: 85px;
+  --lp-header-height-compact: 64px;
+
+  /* Progress/score bars — homologado entre DeskFlow/HubFlow/FluentFlow/LyricFlow */
+  --lp-progress-height: 4px;
+  --lp-progress-height-compact: 3px;
 }
 
 /* ─── DARK MODE — warm charcoal ─── */

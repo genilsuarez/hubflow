@@ -9,6 +9,7 @@
   width: 100%; display: flex; justify-content: space-between; align-items: center;
   padding: 6px 0; margin-bottom: 8px;
 }
+.tb-actions { display: flex; align-items: center; gap: 4px; }
 .learnflow-signature {
   margin: 0 10px; color: var(--lp-muted); font-family: var(--lp-font-mono);
   font-size: .58rem; font-weight: var(--lp-weight-bold); letter-spacing: .03em;
@@ -86,9 +87,9 @@
   display: flex; justify-content: space-between;
   font-size: .62rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); margin-bottom: 3px;
 }
-.progress__track { height: 4px; background: var(--lp-border); border-radius: 2px; overflow: hidden; }
+.progress__track { height: var(--lp-progress-height); background: var(--lp-border); border-radius: var(--lp-radius-full); overflow: hidden; }
 .progress__fill {
-  height: 100%; border-radius: 2px; transition: width .5s var(--lp-ease); width: 0%;
+  height: 100%; border-radius: var(--lp-radius-full); transition: width .5s var(--lp-ease); width: 0%;
   background: var(--lp-accent);
 }
 .progress__fill--purple { background: var(--lp-cat-purple); }

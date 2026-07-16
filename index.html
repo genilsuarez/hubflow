@@ -96,8 +96,9 @@
     /* ─── MAIN COLUMN ─── */
     .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; }
     .topbar {
-      display: flex; align-items: center; gap: 12px; min-height: 86px;
-      padding: 21px clamp(16px, 3vw, 34px) 21px; box-sizing: border-box;
+      display: flex; align-items: center; gap: 12px;
+      height: var(--lp-header-height); min-height: var(--lp-header-height);
+      padding: 22px clamp(16px, 3vw, 34px) 22px; box-sizing: border-box;
       border-bottom: 1.5px solid var(--lp-border); flex-shrink: 0;
     }
     .search-bar { position: relative; flex: 1; min-width: 0; max-width: 380px; }
@@ -445,7 +446,7 @@
       .search-bar { min-width: 130px; }
     }
     @media (max-width: 480px) {
-      .topbar { height: 65px; min-height: 65px; max-height: 65px; padding: 10px 12px 10px 66px; }
+      .topbar { height: var(--lp-header-height-compact); min-height: var(--lp-header-height-compact); max-height: var(--lp-header-height-compact); padding: 10px 12px 10px 66px; }
       .search-bar { min-width: 90px; }
       .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px 14px; }
@@ -541,8 +542,8 @@
     }
     .path-summary-next { font-size: .62rem; font-weight: 700; color: var(--path-color); margin-left: auto; }
     .path-summary-bar { display: flex; align-items: center; gap: 8px; }
-    .path-summary-bar-track { flex: 1; height: 4px; border-radius: 3px; background: var(--lp-border); overflow: hidden; }
-    .path-summary-bar-fill { height: 100%; border-radius: 3px; background: var(--path-color); transition: width .5s var(--lp-ease); }
+    .path-summary-bar-track { flex: 1; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
+    .path-summary-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--path-color); transition: width .5s var(--lp-ease); }
     .path-summary-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
 
     .path-summary-right { display: flex; align-items: center; gap: 8px; }
@@ -648,7 +649,7 @@
       .path-summary-bar { grid-area: bar; align-self: start; }
       .path-summary-status { grid-area: pill; justify-self: end; align-self: start; font-size: .62rem; padding: 3px 8px; min-width: 88px; text-align: center; }
       .path-chevron { grid-area: chev; align-self: start; font-size: .6rem; }
-      .path-summary-bar-track { height: 3px; }
+      .path-summary-bar-track { height: var(--lp-progress-height-compact); }
       .path-summary-frac { font-size: .58rem; }
 
       /* Al expandir en mobile, el gap compacto (6px) deja muy poco aire entre

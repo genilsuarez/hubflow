@@ -93,10 +93,6 @@ h1 {
   border: 1px solid var(--lp-border-subtle);
   box-shadow: var(--lp-shadow-xs);
 }
-.progress__track {
-  height: 5px;
-  border-radius: 3px;
-}
 
 /* ─── CARD GRID ENHANCED ─── */
 .card-grid {

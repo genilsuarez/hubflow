@@ -1,0 +1,67 @@
+/* ═══════════════════════════════════════════════════════
+   HubFlow — Off-canvas sidebar + footer for exercise/guide pages
+   Ported from index.html's floating-nav-mode sidebar so exercise
+   pages get the same navigation drawer, always off-canvas (no
+   persistent desktop column here — these pages don't have the
+   .shell grid index.html uses).
+   ═══════════════════════════════════════════════════════ */
+
+.sidebar-scrim {
+  position: fixed; inset: 0; z-index: 39;
+  background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
+}
+.sidebar-scrim[hidden] { display: none; }
+
+.sidebar {
+  display: flex; flex-direction: column; height: 100%; min-height: 0;
+  background: var(--lp-bg-paper); border-right: 1.5px solid var(--lp-border);
+  padding: 22px 14px 16px; box-sizing: border-box;
+  position: fixed; inset: 0 auto 0 0; z-index: 40;
+  width: min(232px, 86vw);
+  transform: translateX(-102%);
+  transition: transform 240ms var(--lp-ease);
+  box-shadow: var(--lp-shadow-md);
+}
+.sidebar.is-open { transform: translateX(0); }
+
+.sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); justify-content: space-between; }
+.sb-brand > div { display: flex; flex-direction: column; }
+.sb-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent); }
+.sb-brand h1 { font-family: var(--lp-font-display); font-weight: 500; font-size: 18px; line-height: 1; }
+.sb-brand .sb-tag { font-size: 10px; color: var(--lp-muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+
+.sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-top: 14px; }
+.sidebar-footer { display: grid; gap: 2px; padding: 12px 0 0; border-top: 1px solid var(--lp-border); margin-top: auto; }
+
+.sb-item {
+  --spine: var(--lp-accent);
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; text-align: left; border: none; background: transparent; cursor: pointer;
+  border-radius: 10px; padding: 10px 12px; min-height: 44px;
+  font-family: var(--lp-font-body); font-size: 0.82rem; font-weight: 500;
+  color: var(--lp-ink); text-decoration: none; box-sizing: border-box;
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+.sb-item:hover { background: var(--lp-surface); color: var(--lp-ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.sb-item:active { transform: scale(0.98); }
+.sb-item:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+.sb-item .sb-icon { width: 20px; height: 20px; flex: 0 0 20px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 400; color: var(--spine, currentColor); }
+.sb-item .sb-label { font-size: inherit; font-weight: inherit; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-item.v { --spine: var(--lp-cat-purple); }
+.sb-item.p { --spine: var(--lp-cat-blue); }
+.sb-item.g { --spine: var(--lp-cat-amber); }
+.sb-item.a { --spine: var(--lp-cat-teal); }
+.sb-item.r { --spine: var(--lp-cat-green); }
+.sb-item.path { --spine: var(--lp-accent); }
+
+.foot {
+  flex-shrink: 0; padding: 12px clamp(16px, 3vw, 34px); border-top: 1.5px solid var(--lp-border);
+  display: flex; justify-content: space-between; align-items: center; background: var(--lp-bg);
+  margin: 24px -14px 0;
+}
+.foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: 13px; color: var(--lp-ink-soft); }
+.foot-meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar { transition: none; }
+}
