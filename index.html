@@ -94,7 +94,8 @@
     /* ─── MAIN COLUMN ─── */
     .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; }
     .topbar {
-      display: flex; align-items: center; gap: 12px; padding: 22px clamp(16px, 3vw, 34px) 22px;
+      display: flex; align-items: center; gap: 12px; min-height: 86px;
+      padding: 21px clamp(16px, 3vw, 34px) 21px; box-sizing: border-box;
       border-bottom: 1.5px solid var(--lp-border); flex-shrink: 0;
     }
     .search-bar { position: relative; flex: 1; min-width: 0; max-width: 380px; }
@@ -196,14 +197,21 @@
     /* Greeting lives in the topbar itself (same slot the search bar occupies on
        other sections) instead of a separate hero card — keeps the topbar from
        ever reading as empty and matches every other section's header pattern. */
-    .topbar-greeting { display: none; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-    .topbar-greeting-title { font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); }
+    .topbar-greeting {
+      display: none; flex-direction: column; justify-content: center; gap: 2px;
+      flex: 1; min-width: 0; overflow: hidden;
+    }
+    .topbar-greeting-title {
+      display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); line-height: 1.15;
+    }
     .topbar-greeting-title em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
-    .topbar-greeting-sub { font-size: .76rem; color: var(--lp-ink-soft); }
-    /* En "Mi Progreso" el saludo genérico se reemplaza por el título de la
-       sección (evita repetir "Bienvenido a HubFlow" seguido de "Rutas de
-       aprendizaje" un renglón más abajo) y no lleva subtítulo — el espacio que
-       ocupaba se recupera. */
+    .topbar-greeting-sub {
+      display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-size: .76rem; line-height: 1.35; color: var(--lp-ink-soft);
+    }
+    /* Resumen y Mi Progreso comparten la misma estructura de título y subtítulo,
+       manteniendo estable la altura de la topbar al cambiar de sección. */
     .tg-progreso { display: none; }
     body[data-active="mi-progreso"] .tg-resumen { display: none; }
     body[data-active="mi-progreso"] .tg-progreso { display: block; }
@@ -234,17 +242,6 @@
     .tile.g { --spine: var(--lp-cat-amber); }
     .tile.a { --spine: var(--lp-cat-teal); }
     .tile.r { --spine: var(--lp-cat-green); }
-
-    .new-row { display: flex; gap: 10px; overflow-x: auto; overflow-y: clip; padding: 4px 0 6px; margin: -4px 0 0; scrollbar-width: none; }
-    .new-chip {
-      flex-shrink: 0; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--lp-ink);
-      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: 50px;
-      padding: 8px 14px 8px 8px; font-size: .74rem; font-weight: var(--lp-weight-bold);
-      box-shadow: var(--lp-shadow-sm); transition: border-color .2s, transform .2s;
-    }
-    .new-chip:hover { border-color: var(--lp-accent); transform: translateY(-2px); }
-    .new-chip .nc-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--lp-accent-soft); display: flex; align-items: center; justify-content: center; font-size: .82rem; }
-    .new-chip .nc-badge { font-size: .58rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-accent); text-transform: uppercase; letter-spacing: .04em; }
 
     /* ─── MODULE CARDS (compact grid) ─── */
     .shelf { display: grid; grid-template-columns: 1fr; gap: 7px; }
@@ -446,7 +443,7 @@
       .search-bar { min-width: 130px; }
     }
     @media (max-width: 480px) {
-      .topbar { padding: 12px 12px 10px 66px; }
+      .topbar { height: 65px; min-height: 65px; max-height: 65px; padding: 10px 12px 10px 66px; }
       .search-bar { min-width: 90px; }
       .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px 14px; }
@@ -456,8 +453,8 @@
          completo + ellipsis ("...23 guías de refere…"). Se quita también la
          frase "elige una categoría", redundante con las tarjetas de abajo. */
       .tgs-extra { display: none; }
+
       .topbar-greeting-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .resumen-recent { display: none; }
 
       /* .book-pills solo se revela con :hover/:focus-within — en mobile eso
          nunca ocurre (no hay hover, y el tap navega directo), así que quedaba
@@ -486,6 +483,9 @@
          más compactas. */
       .book-title { font-size: .72rem; }
       .guide-title { font-size: .72rem; }
+    }
+    @media (max-width: 330px) {
+      .topbar-greeting-title { font-size: .95rem; }
     }
 
     /* ═══ MI PROGRESO — COLLAPSIBLE PATH CARDS ═══ */
@@ -700,7 +700,8 @@
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
         <p class="topbar-greeting-sub tg-resumen"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia.</p>
-        <span class="topbar-greeting-title tg-progreso">Rutas de aprendizaje</span>
+        <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
+        <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
       </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
@@ -735,12 +736,7 @@
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
         </div>
 
-        <div class="resumen-recent">
-          <div class="sec-head">Agregado recientemente</div>
-          <div class="new-row" id="newRow">
-            <a class="new-chip" href="guides/vocabulary.html"><span class="nc-icon">📚</span><span><span class="nc-badge">Nuevo</span><br>Vocabulary Reference</span></a>
-          </div>
-        </div>
+
 
       </section>
 
@@ -1128,14 +1124,7 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub));
   });
 
-  // "Agregado recientemente" — chips generados desde catalog.js (isNew), la guía queda estática en el HTML
-  const newRow = document.getElementById('newRow');
-  if (newRow) {
-    const newChips = MODULES.filter(m => m.isNew).map(m =>
-      `<a class="new-chip" href="${m.exercise}"><span class="nc-icon">${m.icon}</span><span><span class="nc-badge">Nuevo</span><br>${m.title}</span></a>`
-    ).join('');
-    newRow.insertAdjacentHTML('afterbegin', newChips);
-  }
+
 
   // ─── FILTER MENU (botón + panel de tags, estilo FluentFlow UnifiedFilter) ───
   const filterMenu = document.getElementById('filterMenu');

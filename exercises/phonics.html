@@ -146,7 +146,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phonics.js';
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, speak, renderCatBar as sharedRenderCatBar } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 initTheme();
@@ -160,31 +160,18 @@ let timer = null;
 let timedSeconds = 0;
 let currentWord = null;
 
-// TTS helper
-function speak(text, rate = 0.85) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-GB';
-  u.rate = rate;
-  window.speechSynthesis.speak(u);
+// TTS — uses shared speak() from utils.js (object opts signature)
+function speakWord(text, rate = 0.85) {
+  speak(text, { rate, lang: 'en-GB' });
 }
 
-// Category bar
-function renderCatBar() {
-  const bar = document.getElementById('catBar');
-  bar.innerHTML = catKeys.map(k =>
-    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
-  ).join('');
-  bar.querySelectorAll('[data-cat]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentCat = btn.dataset.cat;
-      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-      startMode();
-    });
-  });
-}
-renderCatBar();
+// Category bar — uses shared renderCatBar from utils.js
+sharedRenderCatBar({
+  categories: CATEGORIES,
+  getCurrentCat: () => currentCat,
+  setCurrentCat: (k) => { currentCat = k; },
+  onChange: startMode,
+});
 
 // Mode switching
 document.querySelectorAll('[data-mode]').forEach(btn => {
@@ -257,10 +244,10 @@ function renderStudyCard() {
 document.getElementById('listenBtn').addEventListener('click', () => {
   const item = deck[idx];
   if (currentCat === 'vowel-pairs' || currentCat === 'consonant-pairs') {
-    speak(item.word_a, 0.7);
-    setTimeout(() => speak(item.word_b, 0.7), 1200);
+    speakWord(item.word_a, 0.7);
+    setTimeout(() => speakWord(item.word_b, 0.7), 1200);
   } else {
-    speak(item.word, 0.7);
+    speakWord(item.word, 0.7);
   }
 });
 
@@ -331,7 +318,7 @@ function renderQuiz() {
     document.getElementById('quizLabel').textContent = 'Listen — which word do you hear?';
     document.getElementById('quizEs').textContent = item.es;
 
-    speak(quizTarget, 0.7);
+    speakWord(quizTarget, 0.7);
 
     const opts = shuffle([item.word_a, item.word_b]);
     const optsEl = document.getElementById('quizOptions');
@@ -377,7 +364,7 @@ function renderQuiz() {
     document.getElementById('quizLabel').textContent = `IPA: ${item.ipa} — Which letter is silent?`;
     document.getElementById('quizEs').textContent = item.es;
 
-    speak(item.word, 0.7);
+    speakWord(item.word, 0.7);
 
     // Generate options from letters of the word (unique)
     const letters = [...new Set(item.word.toLowerCase().split(''))].filter(l => l !== ' ');
@@ -403,9 +390,9 @@ function renderQuiz() {
 
 document.getElementById('quizListenBtn').addEventListener('click', () => {
   if (quizTarget && (currentCat === 'vowel-pairs' || currentCat === 'consonant-pairs')) {
-    speak(quizTarget, 0.7);
+    speakWord(quizTarget, 0.7);
   } else if (currentCat === 'silent-letters' && deck[idx]) {
-    speak(deck[idx].word, 0.7);
+    speakWord(deck[idx].word, 0.7);
   }
 });
 

@@ -18,3 +18,5 @@ playwright-report/
 node_modules/
 package.json
 npm-debug.log*
+
+vite.config.js

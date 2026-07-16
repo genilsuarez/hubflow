@@ -52,6 +52,19 @@
   .dict-card__plays {
     font-size: .65rem; color: var(--lp-muted); font-weight: 600;
   }
+  .dict-card__playback {
+    font-size: .62rem; font-weight: 700; color: var(--lp-cat-amber);
+    margin-top: 6px; min-height: 1.2em; transition: opacity .2s;
+  }
+  .dict-card__playback:empty { opacity: 0; }
+  .dict-card__playback-dots {
+    display: inline-flex; gap: 5px; margin-left: 6px; vertical-align: middle;
+  }
+  .dict-card__playback-dots span {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--lp-border);
+    transition: background .3s;
+  }
+  .dict-card__playback-dots span.done { background: var(--lp-cat-amber); }
 
   /* Input area */
   .dict-input {
@@ -146,6 +159,7 @@
           <button class="play-btn" id="playBtn" aria-label="Play audio" title="Play">🔊</button>
         </div>
         <div class="dict-card__plays" id="dPlays">Plays: 0 / 3</div>
+        <div class="dict-card__playback" id="dPlayback"></div>
       </div>
 
       <div class="dict-input">
@@ -171,7 +185,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/dictation-sprint.js';
-import { shuffle, initTheme, toggleTheme, isSpeechAvailable, speak, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
+import { shuffle, initTheme, toggleTheme, isSpeechAvailable, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
 
 initTheme();
 document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
@@ -253,6 +267,7 @@ function loadSentence() {
   document.getElementById('dInput').value = '';
   document.getElementById('dInput').disabled = false;
   document.getElementById('dFeedback').classList.remove('show');
+  document.getElementById('dPlayback').innerHTML = '';
   document.getElementById('checkBtn').style.display = '';
   document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('skipBtn').style.display = '';
@@ -262,13 +277,26 @@ function loadSentence() {
 }
 
 function playSentence(rate) {
-  if (plays >= maxPlays && rate !== 'slow') return;
+  if (plays >= maxPlays && rate !== 'slow') return Promise.resolve();
   const item = deck[idx];
   const cat = CATEGORIES[currentCat];
   const baseRate = cat.rate || 0.85;
   const finalRate = rate === 'slow' ? baseRate * 0.65 : baseRate;
 
-  speak(item.sentence, { rate: finalRate, lang: 'en-GB' });
+  if (!isSpeechAvailable() || !item.sentence) return Promise.resolve();
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(item.sentence);
+  u.lang = 'en-GB';
+  u.rate = finalRate;
+  u.pitch = 1;
+
+  const done = new Promise(resolve => {
+    u.onend = resolve;
+    u.onerror = resolve;
+    // Safety timeout in case onend never fires (browser quirk)
+    setTimeout(resolve, item.sentence.length * 120 + 3000);
+  });
+  window.speechSynthesis.speak(u);
 
   if (rate !== 'slow') {
     plays++;
@@ -279,10 +307,12 @@ function playSentence(rate) {
     document.getElementById('playBtn').style.opacity = '0.4';
     document.getElementById('playBtn').style.cursor = 'not-allowed';
   }
+
+  return done;
 }
 
-document.getElementById('playBtn').addEventListener('click', () => playSentence('normal'));
-document.getElementById('playSlow').addEventListener('click', () => playSentence('slow'));
+document.getElementById('playBtn').addEventListener('click', () => { autoPlaySession++; document.getElementById('dPlayback').innerHTML = ''; playSentence('normal'); });
+document.getElementById('playSlow').addEventListener('click', () => { autoPlaySession++; document.getElementById('dPlayback').innerHTML = ''; playSentence('slow'); });
 
 // ─── Check ───
 document.getElementById('checkBtn').addEventListener('click', checkAnswer);
@@ -367,13 +397,15 @@ function normalize(text) {
 }
 
 // ─── Next / Skip ───
-document.getElementById('nextBtn').addEventListener('click', () => { idx++; loadSentence(); });
+document.getElementById('nextBtn').addEventListener('click', () => { autoPlaySession++; idx++; loadSentence(); autoPlayTwice(); });
 document.getElementById('skipBtn').addEventListener('click', () => {
+  autoPlaySession++;
   const item = deck[idx];
   const wordCount = normalize(item.sentence).split(/\s+/).length;
   totalWords += wordCount; // counts as 0 correct
   idx++;
   loadSentence();
+  autoPlayTwice();
 });
 
 function updateProgress() {
@@ -413,9 +445,33 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Auto-play on load
+// Auto-play on load: play twice with pause (like a real dictation)
+let autoPlaySession = 0; // guard against stale auto-plays after rapid navigation
+async function autoPlayTwice() {
+  const session = ++autoPlaySession;
+  const item = deck[idx];
+  if (!item) return;
+  const pbEl = document.getElementById('dPlayback');
+
+  // First play
+  pbEl.innerHTML = '▶ Playing… <span class="dict-card__playback-dots"><span class="done"></span><span></span></span>';
+  await playSentence('normal');
+  if (session !== autoPlaySession) return; // user moved on
+
+  // Pause between plays
+  await new Promise(r => setTimeout(r, 1000));
+  if (session !== autoPlaySession) return;
+
+  // Second play
+  pbEl.innerHTML = '▶ Playing… <span class="dict-card__playback-dots"><span class="done"></span><span class="done"></span></span>';
+  await playSentence('normal');
+  if (session !== autoPlaySession) return;
+
+  pbEl.innerHTML = '';
+}
+
 startMode();
-setTimeout(() => playSentence('normal'), 500);
+autoPlayTwice();
 </script>
 
 <script type="module" src="../js/portal-link.js"></script>
