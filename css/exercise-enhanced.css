@@ -38,6 +38,7 @@ body::after {
 
 /* ─── TOP BAR REFINEMENT ─── */
 .top-bar {
+  position: relative;
   padding: 8px clamp(16px, 3vw, 34px);
   margin-bottom: 0;
   border-bottom: 1.5px solid color-mix(in srgb, var(--lp-ink) 30%, transparent);
@@ -57,13 +58,26 @@ body::after {
   white-space: nowrap;
 }
 .tb-counter {
-  margin-left: auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 40px;
+  min-width: 80px;
+  justify-content: center;
+  padding: 0 20px;
+  border: 1.5px solid var(--lp-border);
+  border-radius: var(--lp-radius-full);
+  background: var(--lp-surface-sunken, var(--lp-surface));
+  color: var(--lp-ink);
   font-family: var(--lp-font-mono);
-  font-size: .8rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--lp-ink-soft);
   letter-spacing: .04em;
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 /* ─── HEADER SECTION ─── */
 .header {
