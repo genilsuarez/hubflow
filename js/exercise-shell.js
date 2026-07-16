@@ -66,25 +66,54 @@ if (topBar && originalBackLink) {
   originalBackLink.replaceWith(hamburgerBtn);
 }
 
+// Move top-bar out of .wrap so it spans full body width (like LyricFlow header)
 if (topBar) {
-  // Insert branding
+  const wrap = topBar.closest('.wrap');
+  if (wrap) document.body.insertBefore(topBar, wrap);
+}
+
+if (topBar) {
+  // Insert branding after hamburger
   if (!topBar.querySelector('.learnflow-signature')) {
     const sig = document.createElement('span');
     sig.className = 'learnflow-signature';
     sig.textContent = 'HubFlow';
-    const tbActions = topBar.querySelector('.tb-actions');
-    if (tbActions) topBar.insertBefore(sig, tbActions);
+    topBar.appendChild(sig);
   }
 
-  // Fix portal link
-  const portalLink = document.getElementById('portalLink');
-  if (portalLink) {
-    portalLink.href = themedAppHref('/deskflow/', 3000);
-    portalLink.setAttribute('aria-label', 'Volver a LearnFlow');
-    portalLink.title = 'Portal';
+  // Central counter slot — mirrors whichever counter is active
+  const counterSlot = document.createElement('span');
+  counterSlot.className = 'tb-counter';
+  counterSlot.id = 'tbCounter';
+  topBar.appendChild(counterSlot);
+
+  // Sync counter: read from fcCounter or scCounter (whichever has content)
+  function syncCounter() {
+    const fc = document.getElementById('fcCounter');
+    const sc = document.getElementById('scCounter');
+    const text = (fc && fc.textContent.trim()) || (sc && sc.textContent.trim()) || '';
+    counterSlot.textContent = text;
   }
 
-  // Theme sync — engines already wire #themeToggle, we just observe data-theme
+  // Observe scroll-body for text changes from engines
+  const scrollBody = document.querySelector('.scroll-body');
+  if (scrollBody) {
+    new MutationObserver(syncCounter).observe(scrollBody, { childList: true, subtree: true, characterData: true });
+  }
+  // Sync on mode pill clicks
+  document.querySelectorAll('[data-mode]').forEach(btn => {
+    btn.addEventListener('click', () => setTimeout(syncCounter, 50));
+  });
+  // Initial sync (engines may have already set the counter)
+  setTimeout(syncCounter, 0);
+  setTimeout(syncCounter, 200);
+
+  // Hide the original counters visually (they're mirrored in top-bar)
+  const style = document.createElement('style');
+  style.textContent = '.fc-count, .sc-counter { position: absolute; opacity: 0; pointer-events: none; }';
+  document.head.appendChild(style);
+
+  // Theme sync — observe data-theme for sidebar icon updates
   const observer = new MutationObserver(() => {
     const headerToggle = document.getElementById('themeToggle');
     if (headerToggle) headerToggle.textContent = currentThemeIcon();
@@ -238,10 +267,8 @@ function buildFooter() {
   const footer = document.createElement('footer');
   footer.className = 'exercise-foot';
   footer.innerHTML = `
-    <div class="exercise-foot-inner">
-      <span class="foot-sig">Genil Suárez</span>
-      <span class="foot-meta">HubFlow → LearnFlow</span>
-    </div>
+    <span class="foot-sig">Genil Suárez</span>
+    <span class="foot-meta">HubFlow → LearnFlow</span>
   `;
   document.body.appendChild(footer);
 }

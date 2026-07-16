@@ -38,10 +38,32 @@ body::after {
 
 /* ─── TOP BAR REFINEMENT ─── */
 .top-bar {
-  padding: 8px 0;
-  margin-bottom: 8px;
+  padding: 8px clamp(16px, 3vw, 34px);
+  margin-bottom: 0;
   border-bottom: 1.5px solid color-mix(in srgb, var(--lp-ink) 30%, transparent);
-  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  height: 85px;
+  min-height: 85px;
+  box-sizing: border-box;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.learnflow-signature {
+  font-family: var(--lp-font-display);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--lp-ink-soft);
+  white-space: nowrap;
+}
+.tb-counter {
+  margin-left: auto;
+  font-family: var(--lp-font-mono);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--lp-ink-soft);
+  letter-spacing: .04em;
+  white-space: nowrap;
 }
 /* ─── HEADER SECTION ─── */
 .header {
@@ -140,7 +162,7 @@ h1 {
 }
 @media (max-width: 480px) {
   .scroll-body { padding: 0; }
-  .top-bar { padding: 8px 0; margin-bottom: 4px; border-bottom-width: 1px; }
+  .top-bar { padding: 8px 12px; margin-bottom: 4px; border-bottom-width: 1px; height: 64px; min-height: 64px; }
   .header { padding: 4px 0 6px; margin-bottom: 6px; }
   h1 { margin-bottom: 4px; }
   .pill-bar { margin-bottom: 6px; }
