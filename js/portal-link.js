@@ -62,13 +62,4 @@ const _isUnifiedLocal = _isLocal && location.port === '3000' && location.pathnam
 if (_isLocal && !_isUnifiedLocal) {
   const pl = document.getElementById('portalLink');
   if (pl) pl.href = 'http://' + _h + ':3000/';
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href*="' + _h + ':"]');
-    if (a) {
-      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-      const url = new URL(a.href);
-      url.searchParams.set('theme', theme);
-      a.href = url.toString();
-    }
-  });
 }

@@ -52,7 +52,10 @@
       background: var(--lp-bg-paper); border-right: 1.5px solid var(--lp-border);
       padding: 22px 14px 16px;
     }
-    .sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); }
+    .sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); justify-content: space-between; }
+    .sb-brand > div { display: flex; flex-direction: column; }
+    .nav-mode-toggle { flex-shrink: 0; font-size: 1rem; opacity: 0.6; transition: opacity var(--lp-duration-fast) var(--lp-ease); }
+    .nav-mode-toggle:hover { opacity: 1; }
     .sb-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent); }
     .sb-brand h1 {
       font-family: var(--lp-font-display); font-weight: 500;
@@ -61,7 +64,6 @@
     .sb-brand .sb-tag { font-size: 10px; color: var(--lp-muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
 
     .sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-top: 14px; }
-    .sb-mode-toggle { flex: 0 0 auto; margin-bottom: 8px; }
     .sidebar-footer {
       display: grid; gap: 2px;
       padding: 12px 0 0; border-top: 1px solid var(--lp-border); margin-top: auto;
@@ -676,9 +678,9 @@
         <h1>HubFlow</h1>
         <div class="sb-tag">LearnFlow</div>
       </div>
+      <button class="lp-icon-btn lp-icon-btn--sm nav-mode-toggle" id="navigationModeToggle" type="button" aria-label="Usar navegación flotante" aria-pressed="false" title="Oculta la barra lateral y usa un menú flotante"><span aria-hidden="true">◫</span></button>
     </div>
     <nav class="sb-nav" id="sbNav">
-      <button class="sb-item sb-mode-toggle" id="navigationModeToggle" type="button" aria-label="Usar navegación flotante" aria-pressed="false"><span class="sb-spine"></span><span class="sb-icon" aria-hidden="true">◫</span><span class="sb-label">Usar menú flotante</span></button>
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Inicio</span></button>
       <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon">↗</span><span class="sb-label">Mi Progreso</span></button>
       <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Vocabulary &amp; Words</span></button>
@@ -967,9 +969,6 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     const newTheme = d ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : '');
     localStorage.setItem('lp-theme', newTheme);
-    if (location.search.includes('theme=')) {
-      const u = new URL(location.href); u.searchParams.set('theme', newTheme); history.replaceState(null, '', u);
-    }
     upd();
     setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 350);
   };
@@ -996,8 +995,9 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     document.documentElement.dataset.navigationMode = resolvedMode;
     navigationModeToggle.setAttribute('aria-pressed', String(isFloating));
     navigationModeToggle.setAttribute('aria-label', isFloating ? 'Usar barra lateral fija' : 'Usar navegación flotante');
-    navigationModeToggle.querySelector('.sb-icon').textContent = isFloating ? '▣' : '◫';
-    navigationModeToggle.querySelector('.sb-label').textContent = isFloating ? 'Usar barra lateral' : 'Usar menú flotante';
+    navigationModeToggle.title = isFloating ? 'Muestra la barra lateral fija' : 'Oculta la barra lateral y usa un menú flotante';
+    const icon = navigationModeToggle.querySelector('span');
+    if (icon) icon.textContent = isFloating ? '▣' : '◫';
     if (persist) localStorage.setItem(NAVIGATION_MODE_KEY, resolvedMode);
     setNavigationDrawerOpen(false);
   }
@@ -1224,17 +1224,7 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
       const port = appPorts[app];
       if (port) link.href = _isUnifiedLocal ? '/' + app + '/' : 'http://' + _h + ':' + port + '/';
     });
-    if (!_isUnifiedLocal) {
-      document.addEventListener('click', (e) => {
-        const a = e.target.closest('a[href*="' + _h + ':"]');
-        if (a) {
-          const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-          const url = new URL(a.href);
-          url.searchParams.set('theme', theme);
-          a.href = url.toString();
-        }
-      });
-    }
+
   }
 
   // ─── SECTION SWITCHING (SPA nav) ───

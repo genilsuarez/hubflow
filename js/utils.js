@@ -16,9 +16,7 @@ export function shuffle(arr) {
 
 /** Theme toggle */
 export function initTheme(storageKey = 'lp-theme') {
-  const fromUrl = new URLSearchParams(location.search).get('theme');
-  const saved = fromUrl || localStorage.getItem(storageKey);
-  if (fromUrl) localStorage.setItem(storageKey, fromUrl);
+  const saved = localStorage.getItem(storageKey);
   if (saved === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
@@ -30,9 +28,6 @@ export function toggleTheme(storageKey = 'lp-theme') {
   const newTheme = isDark ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : '');
   localStorage.setItem(storageKey, newTheme);
-  if (location.search.includes('theme=')) {
-    const u = new URL(location.href); u.searchParams.set('theme', newTheme); history.replaceState(null, '', u);
-  }
   updateThemeButton();
 }
 
