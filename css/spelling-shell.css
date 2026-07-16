@@ -32,11 +32,11 @@ h1 { display: flex; align-items: center; gap: 8px; }
 
 /* ─── Accent color variants ───────────────────────────────────────────── */
 
-[data-color="amber"] .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--c-ed); }
+[data-color="amber"] .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .8em; color: var(--c-ed); }
 [data-color="amber"] .level-pill.active { background: var(--c-ed); color: #fff; border-color: var(--c-ed); box-shadow: 0 2px 10px rgba(184,134,11,.25); }
 
-[data-color="blue"] .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--c-ing); }
+[data-color="blue"] .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .8em; color: var(--c-ing); }
 [data-color="blue"] .level-pill.active { background: var(--c-ing); color: #fff; border-color: var(--c-ing); box-shadow: 0 2px 10px rgba(61,107,159,.25); }
 
-[data-color="green"] .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--c-noun); }
+[data-color="green"] .h1-suffix { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .8em; color: var(--c-noun); }
 [data-color="green"] .level-pill.active { background: var(--c-noun); color: #fff; border-color: var(--c-noun); box-shadow: 0 2px 10px rgba(74,140,92,.25); }
