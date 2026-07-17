@@ -4,6 +4,7 @@
 // Replaces portal-link.js for exercise pages.
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
+import { renderLessonProgress } from './utils.js';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -261,6 +262,14 @@ function buildSidebar() {
 
 buildSidebar();
 
+// ─── Lesson progress bar (completion indicator for all exercises) ───────────────
+if (currentModule) {
+  // Try common anchor points across all exercise templates
+  renderLessonProgress(currentModule.id, {
+    insertAfter: '.pill-bar, .mode-bar, #catBar, .cat-bar-wrap, .cat-scroll-wrapper, .header',
+  });
+}
+
 // ─── Depth banner (shows module scale on entry) ────────────────────────────────
 
 function buildDepthBanner() {
@@ -273,19 +282,46 @@ function buildDepthBanner() {
   parts.push(`<strong>${depth.modes}</strong> modos`);
   if (depth.hasBattle) parts.push(`<span class="depth-banner__battle">⚔️ Battle 2P</span>`);
 
+  const bannerHTML = parts.join('<span class="depth-banner__sep">·</span>');
+
   const banner = document.createElement('div');
   banner.className = 'depth-banner';
-  banner.innerHTML = parts.join('<span class="depth-banner__sep">·</span>');
+  banner.innerHTML = bannerHTML +
+    '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
   banner.setAttribute('role', 'status');
 
-  // Insert after top-bar or at top of .wrap
-  const wrap = document.querySelector('.wrap');
-  if (wrap) wrap.prepend(banner);
-  else document.body.prepend(banner);
+  document.body.appendChild(banner);
 
-  // Auto-dismiss after 6s
-  setTimeout(() => banner.classList.add('depth-banner--fade'), 5000);
-  setTimeout(() => banner.remove(), 6000);
+  banner.querySelector('.depth-banner__close').addEventListener('click', () => {
+    banner.classList.add('depth-banner--fade');
+    setTimeout(() => { banner.remove(); showDepthBell(bannerHTML); }, 600);
+  });
+
+  function showDepthBell(html) {
+    const footer = document.querySelector('.exercise-foot');
+    if (!footer) return;
+    const meta = footer.querySelector('.foot-meta');
+    const bell = document.createElement('button');
+    bell.className = 'depth-bell';
+    bell.setAttribute('aria-label', 'Mostrar información del módulo');
+    bell.textContent = '🔔';
+    if (meta) meta.parentNode.insertBefore(bell, meta);
+    else footer.appendChild(bell);
+
+    bell.addEventListener('click', () => {
+      bell.remove();
+      const b = document.createElement('div');
+      b.className = 'depth-banner';
+      b.innerHTML = html +
+        '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
+      b.setAttribute('role', 'status');
+      document.body.appendChild(b);
+      b.querySelector('.depth-banner__close').addEventListener('click', () => {
+        b.classList.add('depth-banner--fade');
+        setTimeout(() => { b.remove(); showDepthBell(html); }, 600);
+      });
+    });
+  }
 }
 
 buildDepthBanner();
@@ -306,3 +342,46 @@ buildFooter();
 
 // Reveal the page now that DOM restructuring is done
 document.body.classList.add('shell-ready');
+
+// ─── Cat-bar auto-wrap: add scroll arrows to bare #catBar ──────────────────────
+// Exercises with inline renderCatBar (prepositions, tenses, phrasal-verbs, etc.)
+// don't use the shared utils.renderCatBar, so they miss the arrow navigation.
+// This catches any #catBar that wasn't already wrapped.
+(function initCatBarArrows() {
+  const bar = document.getElementById('catBar');
+  if (!bar) return;
+  const parent = bar.parentElement;
+  if (parent.classList.contains('cat-bar-wrap') || parent.classList.contains('cat-scroll-wrapper')) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'cat-bar-wrap';
+  const arrowL = document.createElement('button');
+  arrowL.className = 'cat-bar-arrow cat-bar-arrow--left';
+  arrowL.setAttribute('aria-label', 'Scroll left');
+  arrowL.textContent = '\u2039';
+  const arrowR = document.createElement('button');
+  arrowR.className = 'cat-bar-arrow cat-bar-arrow--right';
+  arrowR.setAttribute('aria-label', 'Scroll right');
+  arrowR.textContent = '\u203A';
+
+  parent.insertBefore(wrap, bar);
+  wrap.appendChild(arrowL);
+  wrap.appendChild(bar);
+  wrap.appendChild(arrowR);
+
+  const SCROLL_STEP = 140;
+  function updateArrows() {
+    const canLeft = bar.scrollLeft > 4;
+    const canRight = bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4;
+    arrowL.classList.toggle('visible', canLeft);
+    arrowR.classList.toggle('visible', canRight);
+    wrap.classList.toggle('cat-bar-wrap--fade-left', canLeft && !canRight);
+    wrap.classList.toggle('cat-bar-wrap--fade-right', !canLeft && canRight);
+    wrap.classList.toggle('cat-bar-wrap--fade-both', canLeft && canRight);
+  }
+  arrowL.addEventListener('click', () => { bar.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' }); });
+  arrowR.addEventListener('click', () => { bar.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' }); });
+  bar.addEventListener('scroll', updateArrows, { passive: true });
+  new ResizeObserver(updateArrows).observe(bar);
+  setTimeout(updateArrows, 50);
+})();

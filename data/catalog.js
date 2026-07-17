@@ -1030,7 +1030,7 @@ export const PROGRESS_RULES = {
 export const MODULE_DEPTH = {
   vocabulary:        { engine: 'flashcard', items: 500, categories: 36, hasBattle: true },
   opposites:         { engine: 'flashcard', items: 92,  categories: 2,  hasBattle: true },
-  'confusing-words': { engine: 'flashcard', items: 108, categories: 18, hasBattle: true },
+  'confusing-words': { engine: 'custom',    items: 168, categories: 18, modes: 3, hasBattle: false },
   'phrasal-verbs':   { engine: 'flashcard', items: 106, categories: 8,  hasBattle: true },
   'vocab-pack-everyday':     { engine: 'flashcard', items: 200, categories: 13, hasBattle: true },
   'vocab-pack-c1':           { engine: 'flashcard', items: 51,  categories: 4,  hasBattle: true },
@@ -1098,5 +1098,5 @@ const ENGINE_MODES = { flashcard: 5, spelling: 12, tts: 2, analysis: 2, custom: 
 export function getModuleDepth(moduleId) {
   const depth = MODULE_DEPTH[moduleId];
   if (!depth) return null;
-  return { ...depth, modes: ENGINE_MODES[depth.engine] || 2 };
+  return { ...depth, modes: depth.modes || ENGINE_MODES[depth.engine] || 2 };
 }

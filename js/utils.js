@@ -84,11 +84,24 @@ function getActivityProgress(activity) {
     .sort();
   const attemptTimestamps = attempts.map(getAttemptTimestamp).filter(Boolean).sort();
 
+  // Completion requires ALL scoreKeys to have at least one passing attempt.
+  // A single high score in one category no longer marks the whole activity done.
+  const keysWithPass = new Set(
+    attempts
+      .filter((attempt) => Number(attempt.pct) >= activity.passScorePct)
+      .map((attempt) => attempt.scoreKey)
+  );
+  const totalKeys = activity.scoreKeys.length;
+  const completedKeys = activity.scoreKeys.filter((key) => keysWithPass.has(key)).length;
+  const completed = totalKeys > 0 && completedKeys === totalKeys;
+
   return {
-    completed: bestScorePct >= activity.passScorePct,
+    completed,
+    completedKeys,
+    totalKeys,
     bestScorePct,
     attempts: attempts.length,
-    completedAt: passingTimestamps[0] || null,
+    completedAt: completed ? passingTimestamps.at(-1) || null : null,
     lastAttemptAt: attemptTimestamps.at(-1) || null,
   };
 }
@@ -106,9 +119,14 @@ export function getContentProgress(contentId) {
   const completed = rule.completionRule === 'any'
     ? completedCount > 0
     : completedCount === activityStates.length;
+
+  // Progress based on individual key completion across all activities
+  const totalKeys = activityStates.reduce((sum, activity) => sum + activity.totalKeys, 0);
+  const completedKeys = activityStates.reduce((sum, activity) => sum + activity.completedKeys, 0);
   const progressPct = rule.completionRule === 'any'
     ? (completed ? 100 : 0)
-    : (activityStates.length ? (completedCount / activityStates.length) * 100 : 0);
+    : (totalKeys > 0 ? (completedKeys / totalKeys) * 100 : 0);
+
   const completedAt = completed
     ? activityStates.map((activity) => activity.completedAt).filter(Boolean).sort().at(-1) || null
     : null;
@@ -228,6 +246,11 @@ export function recordScore(key, pct, context = {}) {
   localStorage.setItem(key, JSON.stringify(history.slice(0, MAX_SCORE_HISTORY)));
   recordActivityEvent(key, normalizedPct, timestamp, context);
   publishHubFlowProgress();
+  // Auto-refresh the lesson progress bar if present in the DOM
+  if (typeof document !== 'undefined' && document.getElementById('lessonProgress')) {
+    const contentId = context?.contentId || document.getElementById('lessonProgress')?.dataset?.contentId;
+    if (contentId) renderLessonProgress(contentId);
+  }
 }
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
@@ -259,6 +282,42 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
       onChange();
     });
   });
+
+  // Auto-wrap with scroll arrows if not already wrapped
+  const parent = bar.parentElement;
+  if (!parent.classList.contains('cat-bar-wrap') && !parent.classList.contains('cat-scroll-wrapper')) {
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-bar-wrap';
+    const arrowL = document.createElement('button');
+    arrowL.className = 'cat-bar-arrow cat-bar-arrow--left';
+    arrowL.setAttribute('aria-label', 'Scroll left');
+    arrowL.textContent = '\u2039';
+    const arrowR = document.createElement('button');
+    arrowR.className = 'cat-bar-arrow cat-bar-arrow--right';
+    arrowR.setAttribute('aria-label', 'Scroll right');
+    arrowR.textContent = '\u203A';
+
+    parent.insertBefore(wrap, bar);
+    wrap.appendChild(arrowL);
+    wrap.appendChild(bar);
+    wrap.appendChild(arrowR);
+
+    const SCROLL_STEP = 140;
+    function updateArrows() {
+      const canLeft = bar.scrollLeft > 4;
+      const canRight = bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4;
+      arrowL.classList.toggle('visible', canLeft);
+      arrowR.classList.toggle('visible', canRight);
+      wrap.classList.toggle('cat-bar-wrap--fade-left', canLeft && !canRight);
+      wrap.classList.toggle('cat-bar-wrap--fade-right', !canLeft && canRight);
+      wrap.classList.toggle('cat-bar-wrap--fade-both', canLeft && canRight);
+    }
+    arrowL.addEventListener('click', () => { bar.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' }); });
+    arrowR.addEventListener('click', () => { bar.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' }); });
+    bar.addEventListener('scroll', updateArrows, { passive: true });
+    new ResizeObserver(updateArrows).observe(bar);
+    setTimeout(updateArrows, 50);
+  }
 }
 
 /** Groups a Timer instance with its total duration so both can be reset in
@@ -329,6 +388,7 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy, el
 
   containerEl.innerHTML = `
     <div class="result-box">
+      <button class="result-close" id="resultClose" aria-label="Close">✕</button>
       <div class="result-stars">
         <span class="result-star ${stars >= 1 ? 'lit' : ''}">⭐</span>
         <span class="result-star ${stars >= 2 ? 'lit' : ''}">⭐</span>
@@ -345,6 +405,9 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy, el
   `;
   containerEl.classList.add('show');
 
+  containerEl.querySelector('#resultClose').addEventListener('click', () => {
+    containerEl.classList.remove('show');
+  });
   containerEl.querySelector('#resultRestart')?.addEventListener('click', () => {
     containerEl.classList.remove('show');
     onRestart();
@@ -379,4 +442,56 @@ export function speak(text, { lang = 'en-GB', rate = 0.85, pitch = 1 } = {}) {
   u.rate = rate;
   u.pitch = pitch;
   window.speechSynthesis.speak(u);
+}
+
+/**
+ * Renders (or updates) an inline lesson-progress bar inside an exercise page.
+ * Call on init and after each recordScore to keep the UI current.
+ * @param {string} contentId — module ID matching PROGRESS_RULES
+ * @param {object} [options]
+ * @param {string} [options.insertAfter] — CSS selector(s) for the element after which to insert (comma-separated, tries each in order)
+ */
+export function renderLessonProgress(contentId, { insertAfter = '.pill-bar' } = {}) {
+  if (!contentId) return;
+
+  const progress = getContentProgress(contentId);
+  if (!progress) return;
+
+  let container = document.getElementById('lessonProgress');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'lessonProgress';
+    container.className = 'lesson-progress';
+    container.dataset.contentId = contentId;
+    const selectors = insertAfter.split(',').map(s => s.trim());
+    let anchor = null;
+    for (const sel of selectors) {
+      anchor = document.querySelector(sel);
+      if (anchor) break;
+    }
+    if (anchor) anchor.insertAdjacentElement('afterend', container);
+    else return;
+  }
+
+  const { completedKeys, totalKeys } = progress.activities
+    ? Object.values(progress.activities).reduce((acc, act) => ({
+        completedKeys: acc.completedKeys + act.completedKeys,
+        totalKeys: acc.totalKeys + act.totalKeys,
+      }), { completedKeys: 0, totalKeys: 0 })
+    : { completedKeys: 0, totalKeys: 0 };
+
+  const pct = Math.round(progress.progressPct);
+  const label = progress.completed
+    ? '✓ Completado'
+    : `${completedKeys}/${totalKeys} categorías`;
+
+  container.setAttribute('role', 'status');
+  container.setAttribute('aria-label', `Progreso del ejercicio: ${pct}%`);
+  container.innerHTML = `
+    <span class="lesson-progress__label">${label}</span>
+    <span class="lesson-progress__bar" aria-hidden="true">
+      <span class="lesson-progress__fill${progress.completed ? ' lesson-progress__fill--done' : ''}" style="width:${pct}%"></span>
+    </span>
+    <span class="lesson-progress__pct">${pct}%</span>
+  `;
 }

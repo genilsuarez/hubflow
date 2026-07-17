@@ -11,7 +11,7 @@
    current category passed to renderPrompt (for a category badge).
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress } from './utils.js';
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');
@@ -22,10 +22,11 @@ function isMatch(userAnswer, correctArray) {
   return n.length > 0 && correctArray.some(c => normalize(c) === n);
 }
 
-export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
+export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   initTheme();
   const themeToggleEl = document.getElementById('themeToggle');
   if (themeToggleEl) themeToggleEl.addEventListener('click', () => toggleTheme());
+  renderLessonProgress(contentId);
 
   const catKeys = Object.keys(categories);
   let currentCat = catKeys[0];
@@ -142,6 +143,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, secondsPer
       onStudy: null,
     });
     recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
+    renderLessonProgress(contentId);
   }
 
   document.addEventListener('keydown', e => {

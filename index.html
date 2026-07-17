@@ -426,6 +426,29 @@
       padding: 2px 6px; border-radius: 4px; font-size: .55rem; letter-spacing: .02em;
     }
 
+    /* Card progress bar */
+    .book-progress {
+      display: flex; align-items: center; gap: 6px; margin-top: 6px;
+    }
+    .book-progress__bar {
+      flex: 1; height: 4px; border-radius: var(--lp-radius-full);
+      background: var(--lp-border); overflow: hidden;
+    }
+    .book-progress__fill {
+      display: block; height: 100%; border-radius: var(--lp-radius-full);
+      background: var(--lp-accent); transition: width .3s ease;
+    }
+    .book-progress--done .book-progress__fill {
+      background: var(--lp-success);
+    }
+    .book-progress__pct {
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-muted);
+      min-width: 2em; text-align: right; font-variant-numeric: tabular-nums;
+    }
+    .book-progress__check {
+      font-size: .6rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-success);
+    }
+
     /* Rutas guiadas section */
     .rutas-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
     @media (min-width: 720px) { .rutas-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -1183,7 +1206,7 @@
 
 <script type="module">
 import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
-import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgress } from './js/utils.js';
+import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, publishHubFlowProgress } from './js/utils.js';
 
 (function() {
   // Theme
@@ -1352,6 +1375,16 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     return `<div class="book-depth">${parts.join('<span style="opacity:.4">·</span>')}</div>`;
   }
 
+  function progressHTML(mod) {
+    const progress = getContentProgress(mod.id);
+    if (!progress) return '';
+    const pct = Math.round(progress.progressPct);
+    if (progress.completed) {
+      return `<div class="book-progress book-progress--done" aria-label="Completado"><span class="book-progress__check">✓</span><span class="book-progress__bar"><span class="book-progress__fill" style="width:100%"></span></span></div>`;
+    }
+    return `<div class="book-progress" aria-label="${pct}% completado"><span class="book-progress__bar"><span class="book-progress__fill" style="width:${pct}%"></span></span><span class="book-progress__pct">${pct}%</span></div>`;
+  }
+
   function bookCardHTML(mod, spineClass) {
     return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}">
       <div class="book-spine"></div>
@@ -1361,6 +1394,7 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
         <div class="book-meta">${mod.meta}</div>
         ${depthHTML(mod)}
         <div class="book-pills">${pillsHTML(mod)}</div>
+        ${progressHTML(mod)}
       </div>
     </a>`;
   }

@@ -143,6 +143,7 @@ if (pack) {
 const engine = new FlashcardEngine({
   categories: activeCategories,
   storagePrefix: 'pron-study',
+  contentId: packParam ? `pron-${packParam}` : null,
   defaultCategory: Object.keys(activeCategories)[0],
 });
 

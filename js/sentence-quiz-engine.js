@@ -8,12 +8,13 @@
    13 near-identical copies inline in each exercises/*.html file.
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress } from './utils.js';
 
-export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
+export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   initTheme();
   const themeToggleEl = document.getElementById('themeToggle');
   if (themeToggleEl) themeToggleEl.addEventListener('click', () => toggleTheme());
+  renderLessonProgress(contentId);
 
   const catKeys = Object.keys(categories);
   let currentCat = catKeys[0];
@@ -119,6 +120,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, shuffleOptions = 
       elapsedSeconds: elapsed
     });
     recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
+    renderLessonProgress(contentId);
   }
 
   function initStudy() {

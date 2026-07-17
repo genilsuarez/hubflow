@@ -2,7 +2,7 @@
  * HubFlow — Flashcard/Vocabulary Engine
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
-import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable, renderLessonProgress } from './utils.js';
 import { initSwipe } from './swipe.js';
 
 export class FlashcardEngine {
@@ -37,6 +37,7 @@ export class FlashcardEngine {
     initTheme();
     this.bindGlobal();
     this.renderCatBar();
+    this.updateLessonProgress();
     this.setMode('study');
   }
 
@@ -104,6 +105,11 @@ export class FlashcardEngine {
         else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); this.battleJudge(false); }
       }
     });
+  }
+
+  // ═══ LESSON PROGRESS (completion indicator) ═══
+  updateLessonProgress() {
+    renderLessonProgress(this.config.contentId);
   }
 
   // ═══ CATEGORY BAR ═══
@@ -387,6 +393,7 @@ export class FlashcardEngine {
       contentId: this.config.contentId,
       activity,
     });
+    this.updateLessonProgress();
     this.showResultOverlay(this.quizScore, this.quizTotal);
     this.stopTimer();
   }
@@ -610,18 +617,18 @@ export class FlashcardEngine {
     if (!overlay) return;
     overlay.innerHTML = `
       <div class="result-box">
+        <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
         <div style="font-size:3rem;margin-bottom:8px;">${trophy}</div>
         <div class="result-title">${title}</div>
         <div class="result-sub">${this.battle.p1} — ${this.battle.p2}</div>
         <div class="result-btns">
           <button class="lp-btn lp-btn--purple" id="resultRestart">🔄 Play Again</button>
-          <button class="lp-btn lp-btn--ghost" id="resultClose">Done</button>
         </div>
       </div>
     `;
     overlay.classList.add('show');
+    overlay.querySelector('#resultDismiss')?.addEventListener('click', () => { overlay.classList.remove('show'); });
     overlay.querySelector('#resultRestart')?.addEventListener('click', () => { overlay.classList.remove('show'); this.initBattle(); });
-    overlay.querySelector('#resultClose')?.addEventListener('click', () => { overlay.classList.remove('show'); });
   }
 
   // ═══ TIMED ═══
@@ -675,6 +682,7 @@ export class FlashcardEngine {
 
     overlay.innerHTML = `
       <div class="result-box">
+        <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
         <div class="result-stars">
           <span class="result-star ${stars >= 1 ? 'lit' : ''}">⭐</span>
           <span class="result-star ${stars >= 2 ? 'lit' : ''}">⭐</span>
@@ -691,6 +699,9 @@ export class FlashcardEngine {
     `;
     overlay.classList.add('show');
 
+    overlay.querySelector('#resultDismiss')?.addEventListener('click', () => {
+      overlay.classList.remove('show');
+    });
     overlay.querySelector('#resultRestart')?.addEventListener('click', () => {
       overlay.classList.remove('show');
       this.setMode(this.currentMode);

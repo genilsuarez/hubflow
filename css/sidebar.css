@@ -93,27 +93,50 @@ body.has-sidebar {
   body.has-sidebar { padding-left: 0; }
 }
 
-/* ─── Depth banner (exercise entry message) ─── */
+/* ─── Depth banner (toast — bottom center, manual dismiss) ─── */
 .depth-banner {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 50;
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-  gap: 6px; padding: 8px 16px; margin-bottom: 12px;
-  background: color-mix(in srgb, var(--lp-accent) 8%, var(--lp-surface));
-  border: 1px solid color-mix(in srgb, var(--lp-accent) 20%, var(--lp-border));
-  border-radius: var(--lp-radius-md);
-  font-size: .68rem; font-weight: 500; color: var(--lp-ink-soft);
-  animation: depthSlideIn .4s var(--lp-ease);
-  transition: opacity .8s ease, transform .8s ease;
+  gap: 6px; padding: 10px 20px;
+  background: color-mix(in srgb, var(--lp-ink) 92%, var(--lp-surface));
+  border: 1px solid color-mix(in srgb, var(--lp-ink) 60%, transparent);
+  border-radius: var(--lp-radius-full);
+  font-size: .72rem; font-weight: 500; color: var(--lp-ink-inverse);
+  box-shadow: 0 6px 24px rgba(0,0,0,.25);
+  animation: depthSlideUp .4s var(--lp-ease);
+  transition: opacity .6s ease, transform .6s ease;
 }
-.depth-banner strong { color: var(--lp-ink); font-weight: 700; }
-.depth-banner__sep { opacity: .4; }
+body.has-sidebar .depth-banner {
+  left: calc(232px + (100% - 232px) / 2);
+}
+.depth-banner strong { color: var(--lp-ink-inverse); font-weight: 700; }
+.depth-banner__sep { opacity: .5; }
 .depth-banner__battle {
-  background: color-mix(in srgb, var(--lp-cat-teal) 14%, transparent);
-  color: var(--lp-cat-teal); font-weight: 700;
-  padding: 2px 7px; border-radius: 4px; font-size: .62rem;
+  background: rgba(255,255,255,.12);
+  color: #fff; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px; font-size: .65rem;
 }
-.depth-banner--fade { opacity: 0; transform: translateY(-8px); pointer-events: none; }
-@keyframes depthSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.depth-banner__close {
+  margin-left: 6px; background: none; border: none; color: var(--lp-ink-inverse);
+  font-size: 1.1rem; line-height: 1; cursor: pointer; opacity: .6;
+  padding: 4px 6px; border-radius: 4px;
+  transition: opacity .2s, background .2s;
+}
+.depth-banner__close:hover { opacity: 1; background: rgba(255,255,255,.12); }
+.depth-banner__close:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+.depth-banner--fade { opacity: 0; transform: translateX(-50%) translateY(16px); pointer-events: none; }
+@keyframes depthSlideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .depth-banner { animation: none; }
-  .depth-banner--fade { transition: opacity .3s; transform: none; }
+  .depth-banner--fade { transition: opacity .3s; transform: translateX(-50%); }
 }
+
+/* ─── Depth bell (re-show toast) ─── */
+.depth-bell {
+  background: none; border: none; cursor: pointer;
+  font-size: .65rem; line-height: 1; padding: 0; margin: 0;
+  opacity: .5; transition: opacity .2s, transform .2s;
+}
+.depth-bell:hover { opacity: 1; transform: scale(1.15); }
+.depth-bell:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
