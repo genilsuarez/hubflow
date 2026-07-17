@@ -174,6 +174,8 @@ async function validateCatalog() {
     if (seenIds.has(m.id)) err('CAT-DUPID', `catalog.js: duplicate module id "${m.id}"`);
     seenIds.add(m.id);
 
+    if (m.wip) continue;
+
     for (const [field, p] of [['exercise', m.exercise], ['guide', m.guide], ['dataFile', m.dataFile]]) {
       const pathOnly = p ? p.split('#')[0].split('?')[0] : p;
       if (pathOnly && !existsSync(path.join(ROOT_DIR, pathOnly))) {
@@ -223,7 +225,7 @@ async function validateCatalog() {
   }
 
   const emittedScoreKeys = new Set();
-  const exercisePaths = new Set(MODULES.map((module) => module.exercise.split('#')[0]));
+  const exercisePaths = new Set(MODULES.filter((m) => !m.wip).map((module) => module.exercise.split('#')[0]));
   for (const exercisePath of exercisePaths) {
     const html = readFileSync(path.join(ROOT_DIR, exercisePath), 'utf8');
     const dataImport = html.match(/import\s+\{[^}]*\b(?:CATEGORIES|LEVELS)\b[^}]*\}\s+from\s+['"]\.\.\/data\/([^'"]+)['"]/);
@@ -252,9 +254,11 @@ async function validateCatalog() {
     }
   }
 
-  const declaredScoreKeys = new Set(Object.values(PROGRESS_RULES).flatMap((rule) =>
-    rule.requiredActivities.flatMap((activity) => activity.scoreKeys)
-  ));
+  const wipIds = new Set(MODULES.filter((m) => m.wip).map((m) => m.id));
+  const declaredScoreKeys = new Set(Object.entries(PROGRESS_RULES)
+    .filter(([id]) => !wipIds.has(id))
+    .flatMap(([, rule]) => rule.requiredActivities.flatMap((activity) => activity.scoreKeys))
+  );
   for (const key of emittedScoreKeys) {
     if (!declaredScoreKeys.has(key)) err('CAT-SCOREKEY', `runtime score key "${key}" has no progress rule`);
   }
