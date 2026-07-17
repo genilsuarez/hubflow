@@ -389,7 +389,8 @@ export class FlashcardEngine {
     const activity = typeof this.config.getActivityId === 'function'
       ? this.config.getActivityId(this.currentCat)
       : this.config.activityId || 'practice';
-    recordScore(`${this.config.storagePrefix}-${this.currentCat}-quiz`, pct, {
+    const modeSuffix = this.currentMode === 'timed' ? 'timed' : 'quiz';
+    recordScore(`${this.config.storagePrefix}-${this.currentCat}-${modeSuffix}`, pct, {
       contentId: this.config.contentId,
       activity,
     });
@@ -473,6 +474,11 @@ export class FlashcardEngine {
 
       if (this.pairState.matched === this.pairState.total) {
         const score = Math.max(0, this.pairState.total - this.pairState.errors);
+        const pct = Math.round((score / this.pairState.total) * 100);
+        recordScore(`${this.config.storagePrefix}-${this.currentCat}-match`, pct, {
+          contentId: this.config.contentId,
+        });
+        this.updateLessonProgress();
         setTimeout(() => this.showResultOverlay(score, this.pairState.total), 600);
       }
     } else {

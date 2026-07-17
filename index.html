@@ -12,6 +12,24 @@
   <script src="js/theme-init.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
+    // Dev utility: ?reset=full clears all HubFlow progress in the real browser
+    (function() {
+      if (new URLSearchParams(location.search).get('reset') === 'full') {
+        var keys = Object.keys(localStorage);
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          if (k === 'learnflow:progress:hubflow:v2' || k === 'learnflow:activity:hubflow:v2' || k.match(/^(advcoll|art|causative|clause|cleft|coll|comp|cond|conf|dict|errhunt|ger|inver|irr|kwt|listen|madeof|modals|odd|paracloze|paraphrase|phonics|phrasal|plural|pos|pref|prep|pron-study|quant|regswitch|rs|sbe|sentcomb|stress|tense|usedto|vchunks|vocab|wf|wordorder|wr)-/)) {
+            localStorage.removeItem(k);
+          }
+        }
+        var url = new URL(location.href);
+        url.searchParams.delete('reset');
+        location.replace(url.toString());
+        return;
+      }
+    })();
+  </script>
+  <script>
     // Early section detection: prevent flash of resumen when returning from exercise
     (function() {
       var vs = ['resumen','mi-progreso','rutas','vocab','grammar','pronunciation','analysis','guides'];
@@ -63,7 +81,7 @@
     }
     .sb-brand .sb-tag { font-size: 10px; color: var(--lp-muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
 
-    .sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-top: 14px; }
+    .sb-nav { display: flex; flex-direction: column; gap: 3px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-top: 14px; padding: 4px; }
     .sidebar-footer {
       display: grid; gap: 2px;
       padding: 12px 0 0; border-top: 1px solid var(--lp-border); margin-top: auto;
@@ -284,7 +302,7 @@
     .last-activities { margin-bottom: 20px; }
     .last-activities__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .last-activities__title { font-size: .72rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-ink); }
-    .last-activities__list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+    .last-activities__list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 6px 0 4px; margin: -6px 0 -2px; }
     .la-card {
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       min-width: 120px; max-width: 140px; padding: 12px 10px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
@@ -619,6 +637,12 @@
     body[data-active="rutas"] .filter-menu,
     body[data-active="rutas"] .header-stats { display: none; }
 
+    /* Expand/Collapse en topbar: solo visible en desktop + sección mi-progreso */
+    @media (min-width: 861px) {
+      body[data-active="mi-progreso"] .paths-actions.paths-actions--topbar { display: flex; }
+      body[data-active="mi-progreso"] .paths-head-row { display: none; }
+    }
+
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
       .navigation-launcher { display: flex; top: 10px; left: 10px; }
@@ -714,6 +738,7 @@
     .paths-head-row { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 12px; }
     .paths-head-row .sec-head { margin-bottom: 0; }
     .paths-actions { display: flex; gap: 4px; background: var(--lp-bg-paper); border-radius: var(--lp-radius-md); padding: 3px; }
+    .paths-actions.paths-actions--topbar { display: none; }
     .paths-icon-btn {
       width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
       color: var(--lp-muted); background: transparent; border: none;
@@ -942,6 +967,14 @@
         <span class="header-stat"><span class="header-stat__val" id="psTotal">0</span><span class="header-stat__label">ses</span></span>
         <span class="header-stat__divider" aria-hidden="true"></span>
         <span class="header-stat"><span class="header-stat__val" id="psMastered">0/58</span><span class="header-stat__label">★</span></span>
+      </div>
+      <div class="paths-actions paths-actions--topbar" aria-label="Expandir o colapsar rutas">
+        <button class="paths-icon-btn" id="pathExpandAllTopbar" title="Expandir todo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+        </button>
+        <button class="paths-icon-btn" id="pathCollapseAllTopbar" title="Colapsar todo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+        </button>
       </div>
       <div class="topbar-actions">
         <button class="lp-icon-btn theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema">🌙</button>
@@ -1371,8 +1404,8 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     parts.push(`<span class="book-depth__stat"><strong>${depth.items}</strong> items</span>`);
     if (depth.categories > 1) parts.push(`<span class="book-depth__stat"><strong>${depth.categories}</strong> cat</span>`);
     parts.push(`<span class="book-depth__stat"><strong>${depth.modes}</strong> modos</span>`);
-    if (depth.hasBattle) parts.push(`<span class="book-depth__battle">⚔️ 2P</span>`);
-    return `<div class="book-depth">${parts.join('<span style="opacity:.4">·</span>')}</div>`;
+    const battle = depth.hasBattle ? `<span class="book-depth__battle">⚔️ 2P</span>` : '';
+    return `<div class="book-depth">${parts.join('<span style="opacity:.4">·</span>')}${battle}</div>`;
   }
 
   function progressHTML(mod) {
@@ -1548,7 +1581,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
       heroCard.style.setProperty('--hero-spine', 'var(--lp-accent)');
       document.getElementById('heroIcon').textContent = '🚀';
       document.getElementById('heroContext').textContent = 'Bienvenido a HubFlow';
-      document.getElementById('heroTitle').textContent = '61 ejercicios te esperan';
+      document.getElementById('heroTitle').textContent = MODULES.length + ' ejercicios te esperan';
       document.getElementById('heroMeta').textContent = 'Empieza por lo que más te llame o sigue una ruta guiada.';
       const cta = document.getElementById('heroCta');
       cta.textContent = 'Empezar ruta guiada';
@@ -1609,7 +1642,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   }
 
   // ─── LAST ACTIVITIES ───
-  const ACTIVITY_KEY = 'learnflow:activity:hubflow:v1';
+  const ACTIVITY_KEY = 'learnflow:activity:hubflow:v2';
   const CATEGORY_COLOR_MAP = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
   const MAX_LAST_ACTIVITIES = 5;
 
@@ -1952,6 +1985,12 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     document.querySelectorAll('.path-accordion').forEach(d => d.open = true);
   });
   document.getElementById('pathCollapseAll')?.addEventListener('click', () => {
+    document.querySelectorAll('.path-accordion').forEach(d => d.open = false);
+  });
+  document.getElementById('pathExpandAllTopbar')?.addEventListener('click', () => {
+    document.querySelectorAll('.path-accordion').forEach(d => d.open = true);
+  });
+  document.getElementById('pathCollapseAllTopbar')?.addEventListener('click', () => {
     document.querySelectorAll('.path-accordion').forEach(d => d.open = false);
   });
 

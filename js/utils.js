@@ -1,4 +1,4 @@
-import { MODULES, PROGRESS_RULES } from '../data/catalog.js';
+import { MODULES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT, MODULE_DEPTH } from '../data/catalog.js';
 
 /* ═══════════════════════════════════════════════════════
    HubFlow — Shared Utilities
@@ -38,8 +38,9 @@ function updateThemeButton() {
   btn.textContent = isDark ? '☀️' : '🌙';
 }
 
-const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
-const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
+const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v2';
+const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v2';
+const SCORE_KEY_VERSION = ':v2';
 const MAX_SCORE_HISTORY = 20;
 const MAX_ACTIVITY_EVENTS = 200;
 
@@ -52,8 +53,12 @@ function readJson(key, fallback) {
   }
 }
 
+function versionedKey(key) {
+  return key + SCORE_KEY_VERSION;
+}
+
 function readScoreHistory(key) {
-  const history = readJson(key, []);
+  const history = readJson(versionedKey(key), []);
   return Array.isArray(history) ? history : [];
 }
 
@@ -243,7 +248,7 @@ export function recordScore(key, pct, context = {}) {
   const timestamp = new Date().toISOString();
   const history = readScoreHistory(key);
   history.unshift({ pct: normalizedPct, date: timestamp, timestamp, context });
-  localStorage.setItem(key, JSON.stringify(history.slice(0, MAX_SCORE_HISTORY)));
+  localStorage.setItem(versionedKey(key), JSON.stringify(history.slice(0, MAX_SCORE_HISTORY)));
   recordActivityEvent(key, normalizedPct, timestamp, context);
   publishHubFlowProgress();
   // Auto-refresh the lesson progress bar if present in the DOM
@@ -493,5 +498,156 @@ export function renderLessonProgress(contentId, { insertAfter = '.pill-bar' } = 
       <span class="lesson-progress__fill${progress.completed ? ' lesson-progress__fill--done' : ''}" style="width:${pct}%"></span>
     </span>
     <span class="lesson-progress__pct">${pct}%</span>
+    <button class="lesson-progress__detail" type="button" aria-label="Ver detalle de progreso" title="Ver detalle">📊</button>
   `;
+
+  // Bind detail button
+  const detailBtn = container.querySelector('.lesson-progress__detail');
+  if (detailBtn && !detailBtn.dataset.bound) {
+    detailBtn.dataset.bound = '1';
+    detailBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openProgressDetail(contentId);
+    });
+  }
+}
+
+/**
+ * Opens a modal showing detailed per-category progress for a module.
+ * Shows columns for each tracked mode (quiz, match, etc.) per category.
+ * @param {string} contentId
+ */
+export function openProgressDetail(contentId) {
+  if (!contentId) return;
+  const rule = PROGRESS_RULES[contentId];
+  if (!rule) return;
+
+  // Remove existing modal if open
+  document.getElementById('progressDetailModal')?.remove();
+
+  const passScorePct = rule.requiredActivities[0]?.passScorePct || HUBFLOW_PASS_SCORE_PCT;
+
+  // Determine the storage prefix from the first scoreKey
+  const sampleKey = rule.requiredActivities[0]?.scoreKeys[0] || '';
+  const prefix = sampleKey.split('-')[0]; // e.g. "vocab", "ing", "art"
+
+  // Extract unique categories from scoreKeys
+  const knownModes = ['quiz', 'match', 'write', 'study', 'challenge', 'timed'];
+  const categoriesFromKeys = new Set();
+  const modesFromKeys = new Set();
+  let hasNoModeSuffix = false;
+
+  for (const act of rule.requiredActivities) {
+    for (const key of act.scoreKeys) {
+      const parts = key.split('-');
+      const lastPart = parts[parts.length - 1];
+      if (knownModes.includes(lastPart)) {
+        parts.pop();
+        modesFromKeys.add(lastPart);
+      } else {
+        hasNoModeSuffix = true;
+      }
+      parts.shift(); // remove prefix
+      categoriesFromKeys.add(parts.join('-'));
+    }
+  }
+
+  // For flashcard exercises, also check for match keys that exist in localStorage
+  const categories = [...categoriesFromKeys];
+  let trackedModes = [...modesFromKeys];
+
+  // If no mode suffix found, it's a single-mode exercise (practice)
+  if (hasNoModeSuffix && trackedModes.length === 0) {
+    trackedModes = [null]; // null means "no suffix in key"
+  }
+
+  // Determine all possible modes based on engine type
+  const depth = MODULE_DEPTH[contentId];
+  if (depth) {
+    const ENGINE_MODES_MAP = {
+      flashcard: ['quiz', 'match', 'timed'],
+      spelling: ['study', 'challenge', 'timed'],
+      tts: trackedModes.length ? trackedModes : [null],
+      analysis: trackedModes.length ? trackedModes : [null],
+      custom: trackedModes.length ? trackedModes : [null],
+    };
+    const engineModes = ENGINE_MODES_MAP[depth.engine];
+    if (engineModes) {
+      // Merge: engine modes + any extra modes from the rules (e.g. 'write' for phrasal-verbs)
+      const merged = new Set([...engineModes, ...modesFromKeys]);
+      trackedModes = [...merged];
+    }
+  }
+
+  // Determine display modes — always show quiz first, then others
+  const MODE_ORDER = ['quiz', 'match', 'timed', 'write', 'study', 'challenge', null];
+  const MODE_LABELS = { quiz: '⚡ Quiz', match: '⇄ Match', write: '✎ Write', study: '◉ Study', challenge: '◆ Chall.', timed: '◷ Timed', null: '◉ Practice' };
+  const displayModes = MODE_ORDER.filter(m => trackedModes.includes(m));
+
+  // Build per-category row data
+  let passedTotal = 0;
+  let totalCells = 0;
+
+  const rowsHTML = categories.map(cat => {
+    const displayLabel = cat.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()).trim();
+
+    const cells = displayModes.map(mode => {
+      const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
+      const history = readScoreHistory(key);
+      const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+      const attempts = history.length;
+      const passed = best >= passScorePct;
+      if (passed) passedTotal++;
+      totalCells++;
+
+      const cls = passed ? 'pg-cell--pass' : attempts > 0 ? 'pg-cell--tried' : '';
+      const content = passed ? '✓' : attempts > 0 ? `${best}%` : '·';
+      const modeDisplay = MODE_LABELS[mode] || 'Practice';
+      const title = `${modeDisplay}: ${attempts > 0 ? best + '%' : 'pendiente'}`;
+      return `<span class="pg-cell ${cls}" title="${title}">${content}</span>`;
+    }).join('');
+
+    return `<div class="pg-row"><span class="pg-row__label">${displayLabel}</span><span class="pg-row__cells">${cells}</span></div>`;
+  }).join('');
+
+  const pct = totalCells > 0 ? Math.round((passedTotal / totalCells) * 100) : 0;
+
+  // Header row with mode labels
+  const headerCells = displayModes.map(m => `<span class="pg-header-cell">${MODE_LABELS[m] || 'Practice'}</span>`).join('');
+
+  const modal = document.createElement('div');
+  modal.id = 'progressDetailModal';
+  modal.className = 'pg-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-label', 'Detalle de progreso');
+  modal.innerHTML = `
+    <div class="pg-modal__backdrop"></div>
+    <div class="pg-modal__panel">
+      <div class="pg-modal__header">
+        <h3>Progreso detallado</h3>
+        <span class="pg-modal__summary">${passedTotal}/${totalCells} · ${pct}%</span>
+        <button class="pg-modal__close" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="pg-modal__body"><div class="pg-row pg-row--header"><span class="pg-row__label"></span><span class="pg-row__cells">${headerCells}</span></div>${rowsHTML}</div>
+      <div class="pg-modal__legend">
+        <span class="pg-legend-item"><span class="pg-cell pg-cell--pass">✓</span> ≥${passScorePct}%</span>
+        <span class="pg-legend-item"><span class="pg-cell pg-cell--tried">%</span> intentado</span>
+        <span class="pg-legend-item"><span class="pg-cell">·</span> pendiente</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add('pg-modal--open'));
+
+  const close = () => {
+    modal.classList.remove('pg-modal--open');
+    setTimeout(() => modal.remove(), 250);
+  };
+  modal.querySelector('.pg-modal__backdrop').addEventListener('click', close);
+  modal.querySelector('.pg-modal__close').addEventListener('click', close);
+  document.addEventListener('keydown', function esc(e) {
+    if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
+  });
 }
