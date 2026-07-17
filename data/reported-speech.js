@@ -27,7 +27,10 @@ export const CATEGORIES = {
       { sentence: '"I arrived here yesterday," he said. → He said he had arrived ___.', correct: 'there', explain: '"Here" → "there" in reported speech.' },
       { sentence: '"I\'m busy today," she said. → She said she was busy ___.', correct: 'that day', explain: '"Today" → "that day" in reported speech.' },
       { sentence: '"I saw him yesterday," he said. → He said he had seen him ___.', correct: 'the day before', explain: '"Yesterday" → "the day before" in reported speech.' },
-      { sentence: '"I need it now," she said. → She said she needed it ___.', correct: 'then', explain: '"Now" → "then" in reported speech.' }
+      { sentence: '"I need it now," she said. → She said she needed it ___.', correct: 'then', explain: '"Now" → "then" in reported speech.' },
+      { sentence: '"We\'ll finish it today," they said. → They said they would finish it ___.', correct: 'that day', explain: '"Today" → "that day" in reported speech.' },
+      { sentence: '"I\'ll call you tomorrow," he said. → He said he would call me ___.', correct: 'the next day', explain: '"Tomorrow" → "the next day" in reported speech.' },
+      { sentence: '"I was here yesterday," she said. → She said she had been ___ the day before.', correct: 'there', explain: '"Here" → "there" in reported speech.' }
     ]
   }
 };

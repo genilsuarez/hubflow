@@ -35,7 +35,13 @@ export const CATEGORIES = {
       { sentence: 'I ___ visit my grandmother every Sunday when I was a child.', correct: 'used to', explain: '"Used to" + base verb = a repeated past action.' },
       { sentence: "I ___ the noise from the airport now — I've lived here for 20 years.", correct: 'am used to', explain: '"Be used to" + noun = accustomed to it now (settled state).' },
       { sentence: 'I ___ smoke, but I quit five years ago.', correct: 'used to', explain: '"Used to" + base verb = a discontinued past habit.' },
-      { sentence: 'I ___ working night shifts — my body clock is adjusting slowly.', correct: 'am getting used to', explain: '"Get used to" + -ing = the adjustment is still in progress ("slowly").' }
+      { sentence: 'I ___ working night shifts — my body clock is adjusting slowly.', correct: 'am getting used to', explain: '"Get used to" + -ing = the adjustment is still in progress ("slowly").' },
+      { sentence: 'She ___ live in the countryside, but now she prefers the city.', correct: 'used to', explain: '"Used to" + base verb = a past state no longer true.' },
+      { sentence: 'He ___ the spicy food in Thailand after six months there.', correct: 'am used to', explain: '"Be used to" + noun = accustomed after enough time.' },
+      { sentence: 'We ___ play football every weekend when we were teenagers.', correct: 'used to', explain: '"Used to" + base verb = repeated past activity.' },
+      { sentence: 'I ___ cooking for myself since moving out.', correct: 'am getting used to', explain: '"Get used to" + -ing = still learning to adapt.' },
+      { sentence: 'She ___ the long commute — it no longer bothers her.', correct: 'am used to', explain: '"Be used to" + noun = fully accustomed.' },
+      { sentence: 'They ___ have a dog when they lived in that house.', correct: 'used to', explain: '"Used to" + base verb = past state, discontinued.' }
     ]
   }
 };

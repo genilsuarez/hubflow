@@ -21,6 +21,12 @@ export const CATEGORIES = {
       { term: "Dunno",          es: "Don't know",            meaning: "Reduction: 'don't know' → /dʌnəʊ/",              emoji: "🤷", example: "I dunno. = I don't know." },
       { term: "Whatcha",        es: "What are you",          meaning: "Linking: 'what are you' → /wɒtʃə/",              emoji: "👀", example: "Whatcha doing? = What are you doing?" },
       { term: "Gotcha",         es: "Got you / I understand", meaning: "Reduction: 'got you' → /ɡɒtʃə/",               emoji: "👌", example: "Gotcha! = I understand / I caught you." },
+      { term: "Hafta",          es: "Have to",               meaning: "Reduction: 'have to' → /hæftə/",                 emoji: "📋", example: "I hafta go. = I have to go." },
+      { term: "Oughta",         es: "Ought to",              meaning: "Reduction: 'ought to' → /ɔːtə/",                 emoji: "👆", example: "You oughta try it. = You ought to try it." },
+      { term: "Outta",          es: "Out of",                meaning: "Reduction: 'out of' → /aʊtə/",                   emoji: "🚪", example: "Get outta here. = Get out of here." },
+      { term: "Sorta",          es: "Sort of",               meaning: "Reduction: 'sort of' → /sɔːrtə/",                emoji: "🤏", example: "It's sorta nice. = It's sort of nice." },
+      { term: "Lotta",          es: "Lot of",                meaning: "Reduction: 'lot of' → /lɒtə/",                   emoji: "📦", example: "A lotta people came. = A lot of people came." },
+      { term: "Betcha",         es: "Bet you",               meaning: "Reduction: 'bet you' → /betʃə/",                 emoji: "🎲", example: "I betcha can't! = I bet you can't!" },
     ]
   },
   linking: {
@@ -38,6 +44,11 @@ export const CATEGORIES = {
       { term: "Ten_minutes",    es: "Diez minutos",          meaning: "Assimilation: /n/ → /m/ before /m/",              emoji: "⏰", example: "Te(n) minutes → /tem.mɪnɪts/" },
       { term: "Good_boy",       es: "Buen chico",            meaning: "Assimilation: /d/ → /b/ before /b/",              emoji: "🐕", example: "Goo(d) boy → /ɡʊb.bɔɪ/" },
       { term: "In_Paris",       es: "En París",              meaning: "Assimilation: /n/ → /m/ before /p/",              emoji: "🇫🇷", example: "I(n) Paris → /ɪm.pærɪs/" },
+      { term: "Far_away",       es: "Lejos (intrusive r)",   meaning: "Intrusive /r/ between vowels: 'far-raway'",       emoji: "🌄", example: "Far‿away → /fɑː.rə.weɪ/" },
+      { term: "Cup_of_tea",     es: "Taza de té (elision)",  meaning: "Elision: /v/ weakens in 'of': 'cuppa tea'",       emoji: "☕", example: "Cup o(f) tea → /kʌp.ə.tiː/" },
+      { term: "Want_to_go",     es: "Querer ir (linking)",   meaning: "Multiple links: 'wanto-go' → /wɒn.tə.ɡəʊ/",     emoji: "🚶", example: "Want‿to‿go → /wɒn.tə.ɡəʊ/" },
+      { term: "Most_people",    es: "La mayoría (elision)",  meaning: "Elision: /t/ drops before /p/",                   emoji: "👥", example: "Mos(t) people → /məʊs.piː.pəl/" },
+      { term: "I_agree",        es: "Estoy de acuerdo",      meaning: "Vowel-vowel link adds /j/: 'I-yagree'",           emoji: "🤝", example: "I‿agree → /aɪ.jə.ɡriː/" },
     ]
   },
   intonation: {
@@ -90,6 +101,11 @@ export const CATEGORIES = {
       { term: "/ʌ/ — strut",     es: "Vocal central corta",    meaning: "Short — central, relaxed jaw",                       emoji: "🏗️", example: "cup, love, blood, enough" },
       { term: "/ɜː/ — nurse",    es: "Vocal central larga",    meaning: "Long — central, lips neutral (not rounded)",         emoji: "👩‍⚕️", example: "bird, word, learn, journey" },
       { term: "/ə/ — schwa",     es: "Vocal neutra (átona)",   meaning: "The most common English sound — weak, unstressed",   emoji: "😐", example: "about, banana, problem, doctor" },
+      { term: "/eɪ/ — face",     es: "Diptongo frontal",       meaning: "Starts at /e/ and glides to /ɪ/",                     emoji: "😀", example: "day, make, break, weight" },
+      { term: "/aɪ/ — price",    es: "Diptongo abierto",       meaning: "Starts open /a/ and glides up to /ɪ/",                emoji: "🏷️", example: "my, time, buy, eye" },
+      { term: "/ɔɪ/ — choice",   es: "Diptongo redondeado",    meaning: "Starts at /ɔ/ and glides to /ɪ/",                     emoji: "🤔", example: "boy, coin, voice, enjoy" },
+      { term: "/aʊ/ — mouth",    es: "Diptongo posterior",     meaning: "Starts open /a/ and glides to /ʊ/",                   emoji: "👄", example: "now, house, brown, about" },
+      { term: "/əʊ/ — goat",     es: "Diptongo central",       meaning: "Starts at schwa and glides to /ʊ/",                   emoji: "🐐", example: "go, home, know, show" },
     ]
   },
   schwa: {
@@ -107,6 +123,11 @@ export const CATEGORIES = {
       { term: "Interesting",    es: "/ˈɪntrəstɪŋ/",         meaning: "3 syllables — 'IN-truh-sting'",                   emoji: "🤔", example: "Not 'in-ter-ES-ting' — the 'e' is schwa." },
       { term: "Temperature",    es: "/ˈtemprətʃə/",          meaning: "3 syllables — 'TEM-pruh-chuh'",                  emoji: "🌡️", example: "Not 'tem-pe-ra-TURE' — collapsed to 3." },
       { term: "Separate (adj)", es: "/ˈseprət/",             meaning: "The 'a' is schwa — 'SEP-ruht'",                  emoji: "✂️", example: "Adjective: SEP-ruht. Verb: SEP-uh-rate." },
+      { term: "Camera",         es: "/ˈkæmrə/",             meaning: "2 syllables — 'CAM-ruh'",                         emoji: "📸", example: "Not 'ca-me-ra' — just 'CAM-ruh'." },
+      { term: "General",        es: "/ˈdʒenrəl/",           meaning: "2 syllables — 'JEN-ruhl'",                        emoji: "⭐", example: "The middle 'e' vanishes to schwa." },
+      { term: "Secretary",      es: "/ˈsekrətri/",          meaning: "3 syllables — 'SEK-ruh-tree'",                    emoji: "📝", example: "Not 'sec-re-ta-ry' — collapsed." },
+      { term: "Vegetable",      es: "/ˈvedʒtəbəl/",         meaning: "3 syllables — 'VEJ-tuh-buhl'",                   emoji: "🥦", example: "Not 've-ge-ta-ble' — schwas dominate." },
+      { term: "Literally",      es: "/ˈlɪtrəli/",           meaning: "3 syllables — 'LIT-ruh-lee'",                    emoji: "📚", example: "The middle 'e' disappears entirely." },
     ]
   },
   consonantClusters: {
@@ -124,6 +145,12 @@ export const CATEGORIES = {
       { term: "/twelfths/",      es: "Uno de los más difíciles",   meaning: "5 consonants: /l/ + /f/ + /θ/ + /s/ — practice slowly", emoji: "🏆", example: "twelfths — /twelfθs/" },
       { term: "/ŋk/ — think",    es: "Nasal velar + plosiva",     meaning: "The 'n' is actually /ŋ/ (back of tongue on soft palate)", emoji: "🧠", example: "think, bank, drink, thank" },
       { term: "/spl/ — split",   es: "Grupo consonántico inicial", meaning: "Move quickly from /s/ to plosive /p/ to /l/",    emoji: "✂️", example: "split, splash, splendid, explain" },
+      { term: "/fl/ — fly",     es: "Grupo inicial suave",        meaning: "Upper teeth on lip for /f/ then lateral /l/",     emoji: "🪰", example: "fly, floor, flower, flat" },
+      { term: "/dr/ — drink",   es: "Grupo africado",             meaning: "Often sounds like /dʒr/ — 'jrink'",               emoji: "🥤", example: "drink, dream, drive, drop" },
+      { term: "/tr/ — tree",    es: "Grupo africado",             meaning: "Often sounds like /tʃr/ — 'chree'",               emoji: "🌳", example: "tree, train, try, trouble" },
+      { term: "/mps/ — camps",  es: "Grupo nasal final",          meaning: "Close lips for /m/, release /p/, add /s/",         emoji: "🏕️", example: "camps, stamps, lamps, bumps" },
+      { term: "/lpt/ — helped", es: "Grupo lateral final",        meaning: "Tongue stays for /l/, lips for /p/, then /t/",     emoji: "🆘", example: "helped, yelped, sculpt" },
+      { term: "/ŋz/ — songs",   es: "Nasal velar + /z/",          meaning: "Keep nasal /ŋ/ then voice the /z/",               emoji: "🎵", example: "songs, rings, kings, things" },
     ]
   },
   sentenceStress: {
@@ -171,6 +198,11 @@ export const CATEGORIES = {
       { term: "Fixed",                 es: "/fɪkst/",                 meaning: "Voiceless /ks/ → /t/ ending",                        emoji: "🔧", example: "1 syllable: /fɪkst/" },
       { term: "Amazed",                es: "/əˈmeɪzd/",              meaning: "Voiced /z/ → /d/ ending",                             emoji: "😮", example: "2 syllables: a-MAZED /ə.meɪzd/" },
       { term: "Invited",               es: "/ɪnˈvaɪtɪd/",           meaning: "Ends in /t/ → adds /ɪd/ = 3 syllables",              emoji: "💌", example: "in-VY-tid" },
+      { term: "Laughed",               es: "/lɑːft/",                 meaning: "Voiceless /f/ → /t/ ending",                         emoji: "😂", example: "1 syllable: /lɑːft/" },
+      { term: "Rained",                es: "/reɪnd/",                 meaning: "Voiced /n/ → /d/ ending",                            emoji: "🌧️", example: "1 syllable: /reɪnd/" },
+      { term: "Insisted",              es: "/ɪnˈsɪstɪd/",            meaning: "Ends in /t/ → adds /ɪd/ = 3 syllables",              emoji: "💪", example: "in-SIS-tid" },
+      { term: "Watched",               es: "/wɒtʃt/",                meaning: "Voiceless /tʃ/ → /t/ ending",                        emoji: "📺", example: "1 syllable: /wɒtʃt/" },
+      { term: "Enjoyed",               es: "/ɪnˈdʒɔɪd/",            meaning: "Voiced diphthong → /d/ ending",                      emoji: "🎉", example: "2 syllables: en-JOYD" },
     ]
   },
   tricky50: {

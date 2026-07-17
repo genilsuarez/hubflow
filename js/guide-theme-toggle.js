@@ -9,18 +9,6 @@
     navTitle.title = 'HubFlow';
   }
 
-  const portalLink = document.createElement('a');
-  portalLink.className = 'guide-theme-toggle';
-  portalLink.href = '/deskflow/';
-  portalLink.setAttribute('aria-label', 'Volver a LearnFlow');
-  portalLink.title = 'Volver a LearnFlow';
-  portalLink.textContent = '🏠';
-  themeButton.before(portalLink);
-
-  const hostname = location.hostname;
-  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.');
-  if (isLocal) portalLink.href = `http://${hostname}:3000/`;
-
   function updateThemeButton() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     themeButton.textContent = isDark ? '☀️' : '🌙';
@@ -40,11 +28,4 @@
     updateThemeButton();
   });
 
-  portalLink.addEventListener('click', function() {
-    if (!isLocal) return;
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    const url = new URL(portalLink.href);
-    url.searchParams.set('theme', theme);
-    portalLink.href = url.toString();
-  });
 })();

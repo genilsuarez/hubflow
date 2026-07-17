@@ -14,7 +14,7 @@
   <script>
     // Early section detection: prevent flash of resumen when returning from exercise
     (function() {
-      var vs = ['resumen','mi-progreso','vocab','grammar','pronunciation','analysis','guides'];
+      var vs = ['resumen','mi-progreso','rutas','vocab','grammar','pronunciation','analysis','guides'];
       var p = new URLSearchParams(location.search).get('section');
       var s = sessionStorage.getItem('hf-back-section');
       var target = p || s;
@@ -145,6 +145,7 @@
     html[data-init-section] .section.active-section[data-key="resumen"] { display: none; }
     html[data-init-section="vocab"] .section[data-key="vocab"],
     html[data-init-section="mi-progreso"] .section[data-key="mi-progreso"],
+    html[data-init-section="rutas"] .section[data-key="rutas"],
     html[data-init-section="grammar"] .section[data-key="grammar"],
     html[data-init-section="pronunciation"] .section[data-key="pronunciation"],
     html[data-init-section="analysis"] .section[data-key="analysis"],
@@ -279,6 +280,44 @@
       .progress-snapshot__sep:nth-of-type(2) { display: none; }
     }
 
+    /* ─── LAST ACTIVITIES ─── */
+    .last-activities { margin-bottom: 20px; }
+    .last-activities__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .last-activities__title { font-size: .72rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-ink); }
+    .last-activities__list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+    .la-card {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      min-width: 120px; max-width: 140px; padding: 12px 10px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-md); text-decoration: none; color: var(--lp-ink); text-align: center;
+      transition: border-color .2s var(--lp-ease), transform .15s var(--lp-ease), box-shadow .2s;
+      flex-shrink: 0;
+    }
+    .la-card:hover { border-color: var(--la-color, var(--lp-accent)); transform: translateY(-2px); box-shadow: var(--lp-shadow-sm); }
+    .la-card:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .la-card__icon {
+      width: 36px; height: 36px; border-radius: var(--lp-radius-md);
+      background: color-mix(in srgb, var(--la-color, var(--lp-accent)) 12%, transparent);
+      display: flex; align-items: center; justify-content: center; font-size: .95rem;
+    }
+    .la-card__body { min-width: 0; width: 100%; }
+    .la-card__name { font-size: .66rem; font-weight: var(--lp-weight-bold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .la-card__meta { font-size: .56rem; color: var(--lp-muted); margin-top: 2px; }
+    .la-card__score {
+      font-size: .58rem; font-weight: var(--lp-weight-bold); padding: 2px 7px;
+      border-radius: var(--lp-radius-full); white-space: nowrap;
+    }
+    .la-card__score--pass { background: var(--lp-success-soft); color: var(--lp-success); }
+    .la-card__score--fail { background: color-mix(in srgb, var(--lp-error) 12%, transparent); color: var(--lp-error); }
+    .last-activities--empty {
+      font-size: .68rem; color: var(--lp-muted); font-style: italic;
+      padding: 14px 0; text-align: center;
+    }
+    @media (max-width: 480px) {
+      .la-card { min-width: 100px; max-width: 120px; padding: 10px 8px; }
+      .la-card__icon { width: 30px; height: 30px; font-size: .8rem; }
+      .la-card__name { font-size: .6rem; }
+    }
+
     /* ─── RESUMEN (dashboard) ─── */
     /* Greeting lives in the topbar itself (same slot the search bar occupies on
        other sections) instead of a separate hero card — keeps the topbar from
@@ -299,8 +338,11 @@
     /* Resumen y Mi Progreso comparten la misma estructura de título y subtítulo,
        manteniendo estable la altura de la topbar al cambiar de sección. */
     .tg-progreso { display: none; }
+    .tg-rutas { display: none; }
     body[data-active="mi-progreso"] .tg-resumen { display: none; }
     body[data-active="mi-progreso"] .tg-progreso { display: block; }
+    body[data-active="rutas"] .tg-resumen { display: none; }
+    body[data-active="rutas"] .tg-rutas { display: block; }
 
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 24px; }
     .tiles--guides { grid-template-columns: minmax(150px, 1fr); max-width: calc((100% - 30px) / 4); }
@@ -368,6 +410,72 @@
       background: var(--lp-bg-paper); color: var(--lp-ink-soft); border: 1px solid var(--lp-border); letter-spacing: .02em;
     }
     .pill.lvl { background: color-mix(in srgb, var(--spine) 14%, var(--lp-surface)); color: var(--spine); border-color: color-mix(in srgb, var(--spine) 35%, transparent); font-weight: var(--lp-weight-extrabold); }
+
+    /* Depth badges (always visible) */
+    .book-depth {
+      display: flex; align-items: center; gap: 6px; margin-top: 3px;
+      font-size: .6rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted);
+      line-height: 1;
+    }
+    .book-depth__stat { display: inline-flex; align-items: center; gap: 2px; }
+    .book-depth__stat strong { color: var(--lp-ink-soft); font-weight: var(--lp-weight-extrabold); }
+    .book-depth__battle {
+      display: inline-flex; align-items: center; gap: 2px;
+      background: color-mix(in srgb, var(--lp-cat-teal) 14%, transparent);
+      color: var(--lp-cat-teal); font-weight: var(--lp-weight-extrabold);
+      padding: 2px 6px; border-radius: 4px; font-size: .55rem; letter-spacing: .02em;
+    }
+
+    /* Rutas guiadas section */
+    .rutas-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 720px) { .rutas-grid { grid-template-columns: repeat(2, 1fr); } }
+    .ruta-card {
+      --ruta-color: var(--lp-accent);
+      display: flex; flex-direction: column; gap: 6px;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-top: 4px solid var(--ruta-color);
+      border-radius: var(--lp-radius-lg); padding: 14px 18px;
+      box-shadow: var(--lp-shadow-sm);
+      transition: transform .2s var(--lp-ease), box-shadow .2s;
+    }
+    .ruta-card:hover { transform: translateY(-2px); box-shadow: var(--lp-shadow-hover); }
+    .ruta-card__header { display: flex; align-items: center; gap: 8px; }
+    .ruta-card__icon { font-size: 1.1rem; }
+    .ruta-card__title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; display: flex; align-items: center; gap: 6px; }
+    .ruta-card__total {
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold);
+      background: color-mix(in srgb, var(--ruta-color) 14%, transparent);
+      color: var(--ruta-color); padding: 2px 6px; border-radius: 4px;
+      letter-spacing: .01em; cursor: default;
+    }
+    .ruta-card__cefr { font-size: .55rem; font-weight: var(--lp-weight-bold); color: var(--ruta-color); }
+    .ruta-card__desc { font-size: .66rem; color: var(--lp-ink-soft); line-height: 1.35; }
+    .ruta-card__progress { font-size: .56rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted); margin-left: auto; flex-shrink: 0; }
+    .ruta-card__progress strong { color: var(--lp-ink); }
+    .ruta-card__steps { display: flex; flex-wrap: wrap; gap: 4px; }
+    .ruta-step {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: .63rem; padding: 5px 9px; border-radius: 5px;
+      background: var(--lp-bg-paper); border: 1.5px solid var(--lp-border);
+      color: var(--lp-ink); font-weight: var(--lp-weight-semibold);
+      transition: background .15s, border-color .15s, transform .15s, box-shadow .15s;
+      text-decoration: none; cursor: pointer;
+    }
+    .ruta-step:hover { transform: translateY(-1px); border-color: var(--ruta-color); background: color-mix(in srgb, var(--ruta-color) 8%, var(--lp-surface)); box-shadow: 0 2px 8px color-mix(in srgb, var(--ruta-color) 18%, transparent); }
+    .ruta-step:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .ruta-step.done { background: color-mix(in srgb, var(--lp-success) 12%, transparent); border-color: var(--lp-success); color: var(--lp-success); }
+    .ruta-step.done:hover { background: color-mix(in srgb, var(--lp-success) 20%, transparent); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-success) 18%, transparent); }
+    .ruta-step.current { background: color-mix(in srgb, var(--ruta-color) 14%, transparent); border-color: var(--ruta-color); color: var(--ruta-color); font-weight: var(--lp-weight-bold); box-shadow: 0 2px 8px color-mix(in srgb, var(--ruta-color) 15%, transparent); }
+    .ruta-step.current:hover { background: color-mix(in srgb, var(--ruta-color) 22%, transparent); }
+    .ruta-step__items {
+      font-size: .55rem; font-weight: var(--lp-weight-extrabold);
+      background: color-mix(in srgb, var(--lp-ink) 8%, transparent);
+      color: var(--lp-muted); padding: 1px 5px; border-radius: 3px;
+      line-height: 1.2;
+    }
+    .ruta-step.current .ruta-step__items { background: color-mix(in srgb, var(--ruta-color) 20%, transparent); color: var(--ruta-color); }
+    .ruta-step.done .ruta-step__items { background: color-mix(in srgb, var(--lp-success) 20%, transparent); color: var(--lp-success); }
+    .ruta-card__complete { margin-top: 10px; font-size: .68rem; font-weight: var(--lp-weight-bold); color: var(--lp-success); }
 
     .book.b-ed { --spine: var(--lp-cat-amber); }
     .book.b-noun { --spine: var(--lp-cat-green); }
@@ -482,7 +590,11 @@
     body:not([data-active]) .header-stats { display: none; }
     body:not([data-active]) .topbar-greeting,
     body[data-active="resumen"] .topbar-greeting,
-    body[data-active="mi-progreso"] .topbar-greeting { display: flex; }
+    body[data-active="mi-progreso"] .topbar-greeting,
+    body[data-active="rutas"] .topbar-greeting { display: flex; }
+    body[data-active="rutas"] .search-bar,
+    body[data-active="rutas"] .filter-menu,
+    body[data-active="rutas"] .header-stats { display: none; }
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
@@ -768,6 +880,7 @@
     <nav class="sb-nav" id="sbNav">
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Inicio</span></button>
       <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon">↗</span><span class="sb-label">Mi Progreso</span></button>
+      <button class="sb-item path" data-target="rutas"><span class="sb-spine"></span><span class="sb-icon">⚡</span><span class="sb-label">Rutas guiadas</span></button>
       <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Vocabulary &amp; Words</span></button>
       <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Grammar &amp; Spelling</span></button>
       <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Pronunciation</span></button>
@@ -786,9 +899,11 @@
     <div class="topbar">
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
-        <p class="topbar-greeting-sub tg-resumen"><span id="totalExCount">0</span> ejercicios interactivos y <span id="totalGuideCount">0</span> guías de referencia.</p>
+        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 módulos · 5 modos de práctica incluyendo Battle 2P.</p>
         <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
         <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
+        <span class="topbar-greeting-title tg-rutas">Rutas <em>guiadas</em></span>
+        <p class="topbar-greeting-sub tg-rutas">Secuencias de ejercicios conectados por objetivo. Elige una ruta y sigue los pasos — de lo básico a lo avanzado.</p>
       </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
@@ -843,16 +958,15 @@
           </div>
         </div>
 
+        <!-- Last Activities -->
+        <div class="last-activities" id="lastActivities"></div>
+
         <div class="sec-head">Categorías</div>
         <div class="tiles">
           <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 módulos</span></button>
           <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 módulos</span></button>
           <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 módulos</span></button>
           <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 módulos</span></button>
-        </div>
-
-        <div class="sec-head">Guías de referencia</div>
-        <div class="tiles tiles--guides">
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
         </div>
 
@@ -875,6 +989,11 @@
           </div>
         </div>
         <div class="paths-full" id="pathsContainer"></div>
+      </section>
+
+      <!-- RUTAS GUIADAS -->
+      <section class="section" data-key="rutas">
+        <div class="rutas-grid" id="rutasGrid"></div>
       </section>
 
       <!-- VOCABULARY -->
@@ -1034,6 +1153,11 @@
             <div class="guide-icon">🧠</div>
             <div class="guide-body"><div class="guide-title">Vocabulary Reference</div><div class="guide-tag">Vocabulary</div></div>
           </a>
+          <a class="guide-link g-grammar" href="guides/inversions.html" data-tags="grammar,b2,c1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔄</div>
+            <div class="guide-body"><div class="guide-title">Inversions</div><div class="guide-tag">Grammar</div></div>
+          </a>
         </div>
       </section>
 
@@ -1058,7 +1182,7 @@
 </nav>
 
 <script type="module">
-import { MODULES, TAGS, SUBCATEGORIES } from './data/catalog.js';
+import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
 import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgress } from './js/utils.js';
 
 (function() {
@@ -1217,6 +1341,17 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     return mod.title;
   }
 
+  function depthHTML(mod) {
+    const depth = getModuleDepth(mod.id);
+    if (!depth) return '';
+    const parts = [];
+    parts.push(`<span class="book-depth__stat"><strong>${depth.items}</strong> items</span>`);
+    if (depth.categories > 1) parts.push(`<span class="book-depth__stat"><strong>${depth.categories}</strong> cat</span>`);
+    parts.push(`<span class="book-depth__stat"><strong>${depth.modes}</strong> modos</span>`);
+    if (depth.hasBattle) parts.push(`<span class="book-depth__battle">⚔️ 2P</span>`);
+    return `<div class="book-depth">${parts.join('<span style="opacity:.4">·</span>')}</div>`;
+  }
+
   function bookCardHTML(mod, spineClass) {
     return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}">
       <div class="book-spine"></div>
@@ -1224,6 +1359,7 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
       <div class="book-body">
         <div class="book-title">${titleHTML(mod)}</div>
         <div class="book-meta">${mod.meta}</div>
+        ${depthHTML(mod)}
         <div class="book-pills">${pillsHTML(mod)}</div>
       </div>
     </a>`;
@@ -1279,6 +1415,49 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
   const moduleMap = new Map(MODULES.map(m => [m.id, m]));
 
   const CATEGORY_COLORS = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
+
+  const RUTA_COLORS = { spell: 'var(--lp-cat-amber)', build: 'var(--lp-cat-green)', decode: 'var(--lp-cat-blue)', natural: 'var(--lp-cat-purple)', transform: 'var(--lp-cat-teal)', advanced: 'var(--lp-accent)' };
+
+  function renderRutas() {
+    const grid = document.getElementById('rutasGrid');
+    if (!grid) return;
+    grid.innerHTML = LEARNING_PATHS.map(path => {
+      const done = path.modules.filter(isContentCompleted).length;
+      const total = path.modules.length;
+      const nextIdx = path.modules.findIndex(id => !isContentCompleted(id));
+      const steps = path.modules.map((id, i) => {
+        const mod = moduleMap.get(id);
+        const label = mod ? mod.title : id;
+        const href = mod ? mod.exercise : '#';
+        const isDone = isContentCompleted(id);
+        const isCurrent = i === nextIdx;
+        const cls = isDone ? 'done' : isCurrent ? 'current' : '';
+        const depth = getModuleDepth(id);
+        const itemsBadge = depth ? `<span class="ruta-step__items">${depth.items}</span>` : '';
+        return `<a class="ruta-step ${cls}" href="${href}" title="${label}">${label}${itemsBadge}</a>`;
+      }).join('');
+      const color = RUTA_COLORS[path.color] || 'var(--lp-accent)';
+      const totalItems = path.modules.reduce((sum, id) => {
+        const d = getModuleDepth(id);
+        return sum + (d ? d.items : 0);
+      }, 0);
+      const totalTooltip = `${totalItems} items de práctica en ${total} ejercicios — cada uno con múltiples categorías y modos`;
+      return `<div class="ruta-card" style="--ruta-color: ${color}">
+        <div class="ruta-card__header">
+          <span class="ruta-card__icon">${path.icon}</span>
+          <div>
+            <div class="ruta-card__title">${path.title} <span class="ruta-card__total" title="${totalTooltip}" aria-label="${totalTooltip}">${totalItems} items</span></div>
+            <div class="ruta-card__cefr">${path.cefr}</div>
+          </div>
+          <span class="ruta-card__progress"><strong>${done}/${total}</strong> completados</span>
+        </div>
+        <p class="ruta-card__desc">${path.description}</p>
+        <div class="ruta-card__steps">${steps}</div>
+      </div>`;
+    }).join('');
+  }
+
+  renderRutas();
 
   function getSuggestion(exclude) {
     const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
@@ -1395,8 +1574,74 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     snapshot.querySelector('#snapshotLink')?.addEventListener('click', () => setActive('mi-progreso'));
   }
 
+  // ─── LAST ACTIVITIES ───
+  const ACTIVITY_KEY = 'learnflow:activity:hubflow:v1';
+  const CATEGORY_COLOR_MAP = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
+  const MAX_LAST_ACTIVITIES = 5;
+
+  function timeAgo(isoDate) {
+    const diff = Date.now() - new Date(isoDate).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'ahora';
+    if (mins < 60) return mins + ' min';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return hrs + 'h';
+    const days = Math.floor(hrs / 24);
+    if (days < 7) return days + 'd';
+    return new Date(isoDate).toLocaleDateString('es', { day: 'numeric', month: 'short' });
+  }
+
+  function renderLastActivities() {
+    const container = document.getElementById('lastActivities');
+    if (!container) return;
+
+    let ledger;
+    try { ledger = JSON.parse(localStorage.getItem(ACTIVITY_KEY) || 'null'); } catch { ledger = null; }
+    const events = Array.isArray(ledger?.events) ? ledger.events : [];
+
+    // Deduplicate: keep only the most recent event per contentId
+    const seen = new Set();
+    const unique = [];
+    for (const ev of events) {
+      if (!ev.contentId || seen.has(ev.contentId)) continue;
+      seen.add(ev.contentId);
+      unique.push(ev);
+      if (unique.length >= MAX_LAST_ACTIVITIES) break;
+    }
+
+    if (!unique.length) {
+      container.innerHTML = '<p class="last-activities--empty">Aún no hay actividad registrada. ¡Empieza un ejercicio!</p>';
+      return;
+    }
+
+    const cards = unique.map(ev => {
+      const mod = moduleMap.get(ev.contentId);
+      if (!mod) return '';
+      const color = CATEGORY_COLOR_MAP[mod.category] || 'var(--lp-accent)';
+      const scoreClass = ev.passed ? 'la-card__score--pass' : 'la-card__score--fail';
+      const scoreLabel = Math.round(ev.scorePct) + '%';
+      const ago = timeAgo(ev.occurredAt);
+      return `<a class="la-card" href="${mod.exercise}" style="--la-color: ${color}">
+        <div class="la-card__icon">${mod.icon}</div>
+        <div class="la-card__body">
+          <div class="la-card__name">${mod.title}</div>
+          <div class="la-card__meta">${ago}</div>
+        </div>
+        <span class="la-card__score ${scoreClass}">${scoreLabel}</span>
+      </a>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="last-activities__header">
+        <span class="last-activities__title">Última actividad</span>
+      </div>
+      <div class="last-activities__list">${cards}</div>
+    `;
+  }
+
   renderHeroCard();
   renderProgressSnapshot();
+  renderLastActivities();
 
   // "Otra sugerencia" button
   document.getElementById('heroAlt').addEventListener('click', function() {
@@ -1474,19 +1719,28 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
   const totalModules = document.querySelectorAll('.book[href]').length;
   document.getElementById('psMastered').textContent = progressStats.masteredContent + '/' + progressStats.totalContent;
 
-  // Dynamic module/guide counts (never hardcode — always read from the DOM)
+  // Dynamic module/guide counts
   const guideCount = document.querySelectorAll('.guide-link[href]').length;
-  document.getElementById('totalExCount').textContent = totalModules;
-  document.getElementById('totalGuideCount').textContent = guideCount;
   document.querySelectorAll('.tile-count[data-count-for]').forEach(el => {
     const key = el.dataset.countFor;
     if (key === 'guides') {
       el.textContent = guideCount + (guideCount === 1 ? ' guía' : ' guías');
     } else {
-      const n = document.querySelectorAll(`.section[data-key="${key}"] .book[href]`).length;
-      el.textContent = n + (n === 1 ? ' módulo' : ' módulos');
+      const catModules = MODULES.filter(m => m.category === key);
+      const n = catModules.length;
+      const totalItems = catModules.reduce((sum, m) => {
+        const d = getModuleDepth(m.id);
+        return sum + (d ? d.items : 0);
+      }, 0);
+      el.textContent = `${n} módulos · ${totalItems} items`;
     }
   });
+
+  // Resumen subtitle — dynamic total items rounded down to nearest 100
+  const allItems = MODULES.reduce((sum, m) => { const d = getModuleDepth(m.id); return sum + (d ? d.items : 0); }, 0);
+  const roundedItems = Math.floor(allItems / 100) * 100;
+  const resumenSub = document.getElementById('resumenSub');
+  if (resumenSub) resumenSub.textContent = `${MODULES.length} módulos · +${roundedItems.toLocaleString()} items · 5 modos de práctica incluyendo Battle 2P.`;
 
   // Local dev supports independent ports and the shared-origin gateway.
   const _h = location.hostname;
@@ -1516,7 +1770,7 @@ import { getBestScore, getProgressStats, isContentCompleted, publishHubFlowProgr
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
-    const isOverview = target === 'resumen' || target === 'mi-progreso';
+    const isOverview = target === 'resumen' || target === 'mi-progreso' || target === 'rutas';
     topbarSearch.style.display = isOverview ? 'none' : '';
     topbarStats.style.display = isOverview ? 'none' : '';
     topbarGreeting.style.display = isOverview ? 'flex' : 'none';

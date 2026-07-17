@@ -18,7 +18,11 @@ export const CATEGORIES = {
       { sentence: "I won't ___ you leave without saying goodbye.", correct: 'let', explain: '"Let" + person + base verb: giving/refusing permission.' },
       { sentence: 'The manager always tries to ___ everyone work overtime.', correct: 'make', explain: '"Make" + person + base verb: forcing an action.' },
       { sentence: 'Would you ___ me finish this project?', correct: 'help', explain: '"Help" + person + base verb: assisting with a task.' },
-      { sentence: 'We always ___ the plumber fix any leaks quickly.', correct: 'have', explain: '"Have" + person + base verb: arranging a service.' }
+      { sentence: 'We always ___ the plumber fix any leaks quickly.', correct: 'have', explain: '"Have" + person + base verb: arranging a service.' },
+      { sentence: 'My parents never ___ me eat junk food as a child.', correct: 'let', explain: '"Let" + person + base verb: giving/refusing permission.' },
+      { sentence: 'The coach ___ the team run extra laps as punishment.', correct: 'made', explain: '"Make" + person + base verb: forcing an action without choice.' },
+      { sentence: 'Can you ___ me understand this formula?', correct: 'help', explain: '"Help" + person + base verb: assisting with comprehension.' },
+      { sentence: 'She finally ___ her landlord to fix the heating.', correct: 'get', explain: '"Get" + person + to-infinitive: persuading after effort.' }
     ]
   },
   passive: {
@@ -31,7 +35,11 @@ export const CATEGORIES = {
       { sentence: 'We had the house ___ before moving in.', correct: 'painted', explain: 'Passive causative: you paid/arranged for someone to paint it.' },
       { sentence: 'They got the groceries ___ to their door.', correct: 'delivered', explain: 'Passive causative describing a service done for you.' },
       { sentence: 'He had his suit ___ for the wedding.', correct: 'cleaned', explain: 'Passive causative: the suit was cleaned by someone else, for him.' },
-      { sentence: 'I got my laptop ___ after it broke.', correct: 'fixed', explain: 'Passive causative: someone else fixed it, arranged by "I".' }
+      { sentence: 'I got my laptop ___ after it broke.', correct: 'fixed', explain: 'Passive causative: someone else fixed it, arranged by "I".' },
+      { sentence: 'She had her nails ___ before the event.', correct: 'painted', explain: 'Passive causative: someone did her nails for her.' },
+      { sentence: 'We got the carpets ___ professionally.', correct: 'cleaned', explain: '"Get" + object + past participle: a service you arranged.' },
+      { sentence: 'He had the furniture ___ to his new apartment.', correct: 'delivered', explain: 'Passive causative: delivery arranged by him.' },
+      { sentence: 'I had my bike ___ at the shop yesterday.', correct: 'fixed', explain: 'Passive causative: the shop fixed it for you.' }
     ]
   }
 };

@@ -11,6 +11,11 @@ export const CATEGORIES = {
       { term: "Neck",     es: "Cuello",      meaning: "Connects your head to your body",        emoji: "🦒" },
       { term: "Chin",     es: "Mentón",      meaning: "Bottom part of your face",               emoji: "🧔" },
       { term: "Teeth",    es: "Dientes",     meaning: "Hard white structures for chewing",      emoji: "🦷" },
+      { term: "Forehead", es: "Frente",      meaning: "The flat area above your eyebrows",      emoji: "🧠" },
+      { term: "Cheek",   es: "Mejilla",     meaning: "The soft sides of your face below the eyes", emoji: "😊" },
+      { term: "Lip",     es: "Labio",       meaning: "The edges of your mouth",                emoji: "💋" },
+      { term: "Tongue",  es: "Lengua",      meaning: "The muscle inside your mouth for tasting", emoji: "👅" },
+      { term: "Eyebrow", es: "Ceja",        meaning: "The line of hair above each eye",        emoji: "🤨" },
     ]
   },
   bodyArms: {
@@ -24,6 +29,11 @@ export const CATEGORIES = {
       { term: "Wrist",    es: "Muñeca",      meaning: "Joint connecting hand and arm",          emoji: "⌚" },
       { term: "Chest",    es: "Pecho",       meaning: "Front of your upper body",               emoji: "🫀" },
       { term: "Back",     es: "Espalda",     meaning: "Rear side of your torso",                emoji: "🧘" },
+      { term: "Thumb",    es: "Pulgar",      meaning: "The short thick finger on each hand",    emoji: "👍" },
+      { term: "Palm",     es: "Palma",       meaning: "The flat inner surface of your hand",    emoji: "🤚" },
+      { term: "Rib",      es: "Costilla",    meaning: "Curved bones protecting your lungs",     emoji: "🦴" },
+      { term: "Armpit",   es: "Axila",       meaning: "The hollow area under your shoulder",    emoji: "💪" },
+      { term: "Nail",     es: "Uña",         meaning: "The hard covering on the tip of each finger", emoji: "💅" },
     ]
   },
   bodyLegs: {
@@ -37,6 +47,11 @@ export const CATEGORIES = {
       { term: "Ankle",    es: "Tobillo",     meaning: "Joint connecting foot and leg",           emoji: "🧦" },
       { term: "Foot",     es: "Pie",         meaning: "You stand and walk on these",            emoji: "🦶" },
       { term: "Toe",      es: "Dedo (pie)",  meaning: "You have five on each foot",             emoji: "🩴" },
+      { term: "Thigh",    es: "Muslo",       meaning: "The upper part of your leg above the knee", emoji: "🦵" },
+      { term: "Calf",     es: "Pantorrilla", meaning: "The back part of your lower leg",        emoji: "🏃" },
+      { term: "Shin",     es: "Espinilla",   meaning: "The front of your leg below the knee",   emoji: "⚽" },
+      { term: "Heel",     es: "Talón",       meaning: "The back part of your foot",             emoji: "👟" },
+      { term: "Sole",     es: "Planta",      meaning: "The bottom surface of your foot",        emoji: "🦶" },
     ]
   },
   cookingPrep: {
@@ -141,6 +156,11 @@ export const CATEGORIES = {
       { term: "Wet season", es: "Temporada lluviosa", meaning: "Period of heavy rainfall",               emoji: "🌊", extra: "Tropical climates" },
       { term: "Solstice",   es: "Solsticio",          meaning: "Longest or shortest day of the year",    emoji: "🌞", extra: "~Jun 21 / ~Dec 21" },
       { term: "Equinox",    es: "Equinoccio",         meaning: "Day and night are equal length",          emoji: "⚖️", extra: "~Mar 20 / ~Sep 22" },
+      { term: "Harvest",    es: "Cosecha",            meaning: "The time when crops are gathered",         emoji: "🌾", extra: "Late summer/autumn" },
+      { term: "Frost",      es: "Escarcha",           meaning: "Thin ice crystals that form on cold surfaces", emoji: "🥶", extra: "Winter mornings" },
+      { term: "Bloom",      es: "Floración",          meaning: "When flowers open in spring",              emoji: "🌸", extra: "Spring event" },
+      { term: "Heatwave",   es: "Ola de calor",       meaning: "A prolonged period of abnormally hot weather", emoji: "🥵", extra: "Summer extreme" },
+      { term: "Monsoon",    es: "Monzón",             meaning: "Seasonal wind bringing heavy rain",        emoji: "🌧️", extra: "Tropical regions" },
     ]
   },
   becauseAlternatives: {

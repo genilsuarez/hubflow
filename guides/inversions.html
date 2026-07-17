@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inversions Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/theme-init.js"></script>
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#B8860B;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#1A1714;--text:#EDE8E0;--muted:#998E84;--surface:#282420;--border:#3D362C;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
+  --yellow-light:#2D2510;--purple-light:#221A30;--orange-light:#2D2510;--teal-light:#1A2D2D;
+  --ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;background:var(--bg);}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--yellow);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--yellow);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+.type-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;}
+.type-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--yellow);color:#fff;font-weight:800;font-size:.8rem;margin-right:8px;}
+.type-name{font-weight:800;font-size:.95rem;}
+.type-formula{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--yellow-light);color:var(--text);padding:8px 12px;border-radius:8px;margin:8px 0;}
+.type-meaning{font-size:.8rem;color:var(--ink-soft);margin-bottom:6px;}
+.type-ex{font-size:.76rem;font-style:italic;color:var(--muted);}
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-title{font-weight:700;font-size:.85rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.78rem;color:var(--ink-soft);line-height:1.5;}
+.ex{font-family:'JetBrains Mono',monospace;font-size:.74rem;background:var(--teal-light);padding:6px 10px;border-radius:6px;margin:6px 0;display:block;line-height:1.5;}
+.ex .hl{color:var(--teal);font-weight:700;}
+.warn{background:var(--orange-light);border:1.5px solid var(--orange);border-radius:10px;padding:12px;font-size:.78rem;margin:14px 0;line-height:1.5;}
+.warn strong{color:var(--orange);}
+.tip{background:var(--blue-light);border:1.5px solid var(--blue);border-radius:10px;padding:12px;font-size:.78rem;margin:14px 0;line-height:1.5;}
+.tip strong{color:var(--blue);}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.76rem;}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
+th{font-weight:700;background:var(--surface);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+td code{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:var(--yellow-light);padding:2px 5px;border-radius:4px;}
+</style>
+</head>
+<body>
+<div class="page">
+  <nav class="nav-bar">
+    <a class="nav-back" href="../index.html">← Back to HubFlow</a>
+    <span class="nav-title">Reference Guide</span>
+  </nav>
+
+  <h1>English <span class="accent">Inversions</span></h1>
+  <p class="intro">Inversion means placing the auxiliary verb before the subject — the same word order as a question, but in a statement. It adds emphasis, formality, or dramatic effect. Common at C1+ level.</p>
+
+  <h2>⚡ Negative Adverb Inversions</h2>
+  <p class="type-meaning">When a negative or restrictive adverb starts the clause, invert subject and auxiliary.</p>
+
+  <div class="type-card">
+    <span class="type-num">1</span><span class="type-name">Never / Rarely / Seldom</span>
+    <div class="type-formula">Never + auxiliary + subject + verb</div>
+    <code class="ex"><span class="hl">Never have I</span> seen such a beautiful sunset.</code>
+    <code class="ex"><span class="hl">Rarely does she</span> complain about anything.</code>
+    <code class="ex"><span class="hl">Seldom do we</span> get the chance to relax.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">2</span><span class="type-name">No sooner... than / Hardly... when</span>
+    <div class="type-formula">No sooner + had + subject + past participle + than...</div>
+    <code class="ex"><span class="hl">No sooner had</span> I arrived <span class="hl">than</span> it started raining.</code>
+    <code class="ex"><span class="hl">Hardly had</span> she sat down <span class="hl">when</span> the phone rang.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">3</span><span class="type-name">Not only... but also</span>
+    <div class="type-formula">Not only + auxiliary + subject + verb, but (subject) also...</div>
+    <code class="ex"><span class="hl">Not only did</span> he apologise, <span class="hl">but</span> he also offered to pay.</code>
+    <code class="ex"><span class="hl">Not only is</span> she talented, <span class="hl">but</span> she's also hardworking.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">4</span><span class="type-name">Under no circumstances / On no account / In no way</span>
+    <div class="type-formula">Negative phrase + auxiliary + subject + verb</div>
+    <code class="ex"><span class="hl">Under no circumstances should</span> you open this door.</code>
+    <code class="ex"><span class="hl">On no account must</span> passengers leave their bags unattended.</code>
+    <code class="ex"><span class="hl">In no way does</span> this reflect my opinion.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">5</span><span class="type-name">Only after / Only when / Only then</span>
+    <div class="type-formula">Only + time expression + auxiliary + subject + verb</div>
+    <code class="ex"><span class="hl">Only after</span> reading the report <span class="hl">did I</span> understand the problem.</code>
+    <code class="ex"><span class="hl">Only when</span> she spoke <span class="hl">did I</span> realise who she was.</code>
+    <code class="ex"><span class="hl">Only then did</span> he appreciate what he had.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">6</span><span class="type-name">Little / At no time / Nowhere</span>
+    <div class="type-formula">Negative/restrictive word + auxiliary + subject + verb</div>
+    <code class="ex"><span class="hl">Little did</span> they know what awaited them.</code>
+    <code class="ex"><span class="hl">At no time were</span> the children in danger.</code>
+    <code class="ex"><span class="hl">Nowhere will</span> you find a better deal.</code>
+  </div>
+
+  <h2>🔁 Conditional Inversions (no "if")</h2>
+  <p class="type-meaning">Drop "if" and invert to make conditionals more formal.</p>
+
+  <div class="type-card">
+    <span class="type-num">7</span><span class="type-name">Had + subject (= If subject had)</span>
+    <div class="type-formula">Had + subject + past participle, subject + would have...</div>
+    <code class="ex"><span class="hl">Had I known</span>, I would have helped. (= If I had known)</code>
+    <code class="ex"><span class="hl">Had she arrived</span> earlier, she would have caught the train.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">8</span><span class="type-name">Were + subject (= If subject were)</span>
+    <div class="type-formula">Were + subject + to-infinitive / adjective, subject + would...</div>
+    <code class="ex"><span class="hl">Were I</span> you, I'd accept the offer. (= If I were you)</code>
+    <code class="ex"><span class="hl">Were she to</span> resign, the team would collapse.</code>
+  </div>
+
+  <div class="type-card">
+    <span class="type-num">9</span><span class="type-name">Should + subject (= If subject should)</span>
+    <div class="type-formula">Should + subject + verb, imperative/result clause</div>
+    <code class="ex"><span class="hl">Should you need</span> anything, don't hesitate to ask. (= If you should need)</code>
+    <code class="ex"><span class="hl">Should the weather</span> improve, we'll go out.</code>
+  </div>
+
+  <h2>🎭 Concessive Inversions</h2>
+
+  <div class="type-card">
+    <span class="type-num">10</span><span class="type-name">Adjective + as/though + subject + verb</span>
+    <div class="type-formula">Adjective/Adverb + as + subject + linking verb</div>
+    <code class="ex"><span class="hl">Young as he is</span>, he's very mature. (= Although he's young)</code>
+    <code class="ex"><span class="hl">Hard as she tried</span>, she couldn't solve it.</code>
+    <code class="ex"><span class="hl">Much as I like</span> him, I disagree with his methods.</code>
+  </div>
+
+  <h2>📍 Place/Direction Inversions (literary)</h2>
+
+  <div class="type-card">
+    <span class="type-num">11</span><span class="type-name">Adverb of place + verb + subject</span>
+    <div class="type-formula">Here/There/Direction + main verb + subject (full noun only)</div>
+    <code class="ex"><span class="hl">Here comes</span> the bus. (NOT: Here it comes → no inversion with pronoun)</code>
+    <code class="ex"><span class="hl">Down fell</span> the rain.</code>
+    <code class="ex"><span class="hl">On the table sat</span> a mysterious letter.</code>
+  </div>
+
+  <div class="warn">
+    <strong>⚠️ Common mistakes:</strong><br>
+    • Don't invert with pronouns in place inversions: "Here he comes" ✓ (NOT "Here comes he")<br>
+    • Don't invert after "only if" mid-sentence: "I'll go only if you come" ✓ (inversion only when "only" starts the sentence)<br>
+    • "Not only" needs "but (also)" in the second clause — don't forget it
+  </div>
+
+  <h2>📋 Quick Reference Table</h2>
+
+  <table>
+    <tr><th>Trigger</th><th>Structure</th><th>Example</th></tr>
+    <tr><td>Never</td><td><code>Never + aux + S + V</code></td><td>Never have I been so happy.</td></tr>
+    <tr><td>No sooner...than</td><td><code>No sooner + had + S + PP + than</code></td><td>No sooner had we left than it rained.</td></tr>
+    <tr><td>Not only...but also</td><td><code>Not only + aux + S + V, but also</code></td><td>Not only did she sing, but she also danced.</td></tr>
+    <tr><td>Only after/when</td><td><code>Only + time + aux + S + V</code></td><td>Only after lunch did he call.</td></tr>
+    <tr><td>Had (3rd cond.)</td><td><code>Had + S + PP, S + would have</code></td><td>Had I known, I'd have stayed.</td></tr>
+    <tr><td>Were (2nd cond.)</td><td><code>Were + S + adj/to-inf, S + would</code></td><td>Were I richer, I'd travel more.</td></tr>
+    <tr><td>Should (1st cond.)</td><td><code>Should + S + V, imperative</code></td><td>Should you see him, tell him.</td></tr>
+    <tr><td>Adj + as</td><td><code>Adj + as + S + be</code></td><td>Tired as I was, I kept going.</td></tr>
+    <tr><td>Little</td><td><code>Little + aux + S + V</code></td><td>Little did they suspect.</td></tr>
+    <tr><td>Under no circumstances</td><td><code>Phrase + aux + S + V</code></td><td>Under no circumstances should you lie.</td></tr>
+  </table>
+
+  <div class="tip">
+    <strong>💡 When to use inversions:</strong> Formal writing (essays, reports, speeches), emphasis in storytelling, and Cambridge C1/C2 exams. In casual conversation they sound literary or dramatic — use intentionally, not as default.
+  </div>
+</div>
+</body>
+</html>

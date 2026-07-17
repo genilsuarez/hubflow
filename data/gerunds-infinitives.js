@@ -19,7 +19,18 @@ export const CATEGORIES = {
       { sentence: 'He admitted ___ it wrong.', correct: 'doing', explain: '"Admit" is followed by the -ing form.' },
       { sentence: 'We plan ___ it next week.', correct: 'to do', explain: '"Plan" is followed by the to-infinitive.' },
       { sentence: "I can't afford ___ it right now.", correct: 'to do', explain: '"Afford" is followed by the to-infinitive.' },
-      { sentence: 'She practised ___ it every day.', correct: 'doing', explain: '"Practise" is followed by the -ing form.' }
+      { sentence: 'She practised ___ it every day.', correct: 'doing', explain: '"Practise" is followed by the -ing form.' },
+      { sentence: 'I regret ___ you that the position has been filled.', correct: 'to tell', explain: '"Regret + to-infinitive" = sorry about what you are about to say.' },
+      { sentence: 'He denied ___ anything wrong.', correct: 'doing', explain: '"Deny" is followed by the -ing form.' },
+      { sentence: 'We offered ___ them move house.', correct: 'to help', explain: '"Offer" is followed by the to-infinitive.' },
+      { sentence: 'She keeps ___ the same mistake.', correct: 'making', explain: '"Keep" (= continue) is followed by the -ing form.' },
+      { sentence: 'They threatened ___ the police.', correct: 'to call', explain: '"Threaten" is followed by the to-infinitive.' },
+      { sentence: 'I miss ___ near the beach.', correct: 'living', explain: '"Miss" is followed by the -ing form.' },
+      { sentence: 'He pretended ___ asleep.', correct: 'to be', explain: '"Pretend" is followed by the to-infinitive.' },
+      { sentence: 'She considered ___ her job.', correct: 'leaving', explain: '"Consider" is followed by the -ing form.' },
+      { sentence: 'We managed ___ the project on time.', correct: 'to finish', explain: '"Manage" is followed by the to-infinitive.' },
+      { sentence: 'They postponed ___ the contract.', correct: 'signing', explain: '"Postpone" is followed by the -ing form.' },
+      { sentence: 'I expect ___ from you by Friday.', correct: 'to hear', explain: '"Expect" is followed by the to-infinitive.' }
     ]
   }
 };

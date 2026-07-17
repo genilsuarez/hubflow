@@ -35,7 +35,15 @@ export const CATEGORIES = {
       { sentence: "She won't forgive you ___ you apologise.", correct: 'unless', explain: '"Unless" = "if you don\'t apologise".' },
       { sentence: "I'll lend you the money ___ you pay me back next week.", correct: 'as long as', explain: '"As long as" sets the required condition.' },
       { sentence: 'The trip will go ahead ___ the weather is good.', correct: 'provided that', explain: 'Formal condition → "provided that".' },
-      { sentence: "You won't pass the test ___ you study.", correct: 'unless', explain: '"Unless" = "if you don\'t study".' }
+      { sentence: "You won't pass the test ___ you study.", correct: 'unless', explain: '"Unless" = "if you don\'t study".' },
+      { sentence: 'I\'ll help you ___ you ask politely.', correct: 'if', explain: '"If" introduces a straightforward condition.' },
+      { sentence: '___ you have a valid ticket, you can\'t board the plane.', correct: 'unless', explain: '"Unless" = "if you don\'t have" — exclusion condition.' },
+      { sentence: 'We\'ll go hiking ___ it doesn\'t rain.', correct: 'as long as', explain: '"As long as" = the condition must hold for the plan to proceed.' },
+      { sentence: 'The deal is valid ___ both parties agree.', correct: 'provided that', explain: '"Provided that" — formal condition that must be met.' },
+      { sentence: '___ you follow the recipe exactly, it should turn out fine.', correct: 'if', explain: '"If" introduces a simple conditional expectation.' },
+      { sentence: 'You can stay ___ you keep quiet.', correct: 'as long as', explain: '"As long as" = the ongoing requirement for permission.' },
+      { sentence: 'The refund is available ___ you return the item within 30 days.', correct: 'provided that', explain: '"Provided that" sets a formal requirement.' },
+      { sentence: 'I never eat dessert ___ it\'s a special occasion.', correct: 'unless', explain: '"Unless" = the only exception when the action happens.' }
     ]
   }
 };

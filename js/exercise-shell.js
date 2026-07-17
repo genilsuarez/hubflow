@@ -3,7 +3,7 @@
 // and appends a footer — matching the LyricFlow player layout.
 // Replaces portal-link.js for exercise pages.
 
-import { MODULES } from '../data/catalog.js';
+import { MODULES, getModuleDepth } from '../data/catalog.js';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -260,6 +260,35 @@ function buildSidebar() {
 }
 
 buildSidebar();
+
+// ─── Depth banner (shows module scale on entry) ────────────────────────────────
+
+function buildDepthBanner() {
+  if (!currentModule) return;
+  const depth = getModuleDepth(currentModule.id);
+  if (!depth) return;
+
+  const parts = [`<strong>${depth.items}</strong> items`];
+  if (depth.categories > 1) parts.push(`<strong>${depth.categories}</strong> categorías`);
+  parts.push(`<strong>${depth.modes}</strong> modos`);
+  if (depth.hasBattle) parts.push(`<span class="depth-banner__battle">⚔️ Battle 2P</span>`);
+
+  const banner = document.createElement('div');
+  banner.className = 'depth-banner';
+  banner.innerHTML = parts.join('<span class="depth-banner__sep">·</span>');
+  banner.setAttribute('role', 'status');
+
+  // Insert after top-bar or at top of .wrap
+  const wrap = document.querySelector('.wrap');
+  if (wrap) wrap.prepend(banner);
+  else document.body.prepend(banner);
+
+  // Auto-dismiss after 6s
+  setTimeout(() => banner.classList.add('depth-banner--fade'), 5000);
+  setTimeout(() => banner.remove(), 6000);
+}
+
+buildDepthBanner();
 
 // ─── Footer ────────────────────────────────────────────────────────────────────
 
