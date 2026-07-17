@@ -177,7 +177,7 @@ h1 {
   border-top: 1px solid var(--lp-border-subtle);
 }
 /* .check-area .btn override eliminado: el radius canónico ya es --lp-radius-md
-   y el padding se unifica con .btn (INFORME-BOTONES §2.4 / Fase D) */
+   y el padding se unifica con .lp-btn (INFORME-BOTONES §2.4 / Fase D) */
 
 /* ─── RESULT OVERLAY ENHANCED ─── */
 .result-box {

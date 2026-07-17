@@ -21,30 +21,9 @@
 /* Volver y tema usan el primitivo compartido .lp-icon-btn (buttons.css) —
    .back-link y .theme-toggle quedaron sin uso tras unificar sobre esa clase. */
 
-/* ─── BUTTONS ─── */
-.btn {
-  font-family: var(--lp-font-body); font-weight: var(--lp-weight-bold); font-size: .8rem;
-  padding: 10px 18px; border-radius: var(--lp-radius-md); border: none; cursor: pointer;
-  transition: transform .2s var(--lp-ease), box-shadow .2s, opacity .2s;
-  display: inline-flex; align-items: center; gap: 5px; min-height: 44px;
-  text-decoration: none;
-}
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0) scale(.97); }
-.btn--primary {
-  background: var(--lp-accent); color: var(--lp-ink-inverse);
-  box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-accent) 25%, transparent);
-}
-.btn--primary:hover { box-shadow: 0 6px 20px color-mix(in srgb, var(--lp-accent) 30%, transparent); }
-.btn--purple { background: var(--lp-cat-purple); color: var(--lp-ink-inverse); box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-cat-purple) 25%, transparent); }
-.btn--green { background: var(--lp-success); color: var(--lp-ink-inverse); box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-success) 25%, transparent); }
-.btn--red { background: var(--lp-error); color: var(--lp-ink-inverse); box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-error) 20%, transparent); }
-.btn--ghost {
-  background: var(--lp-surface); border: 1.5px solid var(--lp-border); color: var(--lp-ink-soft);
-  box-shadow: none;
-}
-.btn--ghost:hover { border-color: var(--lp-accent); color: var(--lp-accent); }
-.btn:disabled { opacity: .4; cursor: not-allowed; transform: none !important; }
+/* ─── BUTTONS ───
+   Legacy .btn block removed — all exercises migrated to .lp-btn (buttons.css).
+   See AGENTS.md for canonical button spec. */
 
 /* ─── PILL TABS ─── */
 /* Scroll horizontal por defecto: en pantallas angostas (≤375px) las bars de 4-5

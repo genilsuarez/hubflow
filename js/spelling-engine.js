@@ -380,8 +380,8 @@ export class SpellingEngine {
         </div>
         ${timeHtml}
         <div class="result-btns">
-          <button class="btn btn--primary" id="resultRestart">🔄 Try Again</button>
-          <button class="btn btn--ghost" id="resultClose">✕ Close</button>
+          <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Try Again</button>
+          <button class="lp-btn lp-btn--ghost" id="resultClose">✕ Close</button>
         </div>
       </div>
     `;

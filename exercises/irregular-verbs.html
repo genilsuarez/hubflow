@@ -146,9 +146,9 @@
         </div>
       </div>
       <div class="fc-nav">
-        <button class="btn btn--ghost" id="shuffleBtn">🔀</button>
-        <button class="btn btn--ghost" id="prevBtn">←</button>
-        <button class="btn btn--green" id="nextBtn">→</button>
+        <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
+        <button class="lp-btn lp-btn--success" id="nextBtn">→</button>
       </div>
     </div>
 
@@ -178,8 +178,8 @@
         </div>
         <div class="write-feedback" id="writeFeedback"></div>
       </div>
-      <button class="btn btn--primary" id="writeCheck">Check ✓</button>
-      <button class="btn btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+      <button class="lp-btn lp-btn--primary" id="writeCheck">Check ✓</button>
+      <button class="lp-btn lp-btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
     </div>
 
     <!-- BATTLE -->
@@ -208,16 +208,16 @@
       </div>
       <div class="battle-instruction" id="battleInstruction">Press 1 or 2 to claim · S to skip</div>
       <div class="battle-actions" id="battleActions">
-        <button class="btn btn--blue btn--sm" id="bClaim1">1️⃣ P1</button>
-        <button class="btn btn--ghost btn--sm" id="bSkip">⏭️ Skip</button>
-        <button class="btn btn--orange btn--sm" id="bClaim2">2️⃣ P2</button>
+        <button class="lp-btn lp-btn--primary" id="bClaim1">1️⃣ P1</button>
+        <button class="lp-btn lp-btn--ghost" id="bSkip">⏭️ Skip</button>
+        <button class="lp-btn lp-btn--primary" id="bClaim2">2️⃣ P2</button>
       </div>
       <div class="battle-actions" id="battleJudge" style="display:none;">
-        <button class="btn btn--green btn--sm" id="bCorrect">✓ Correct (Y)</button>
-        <button class="btn btn--red btn--sm" id="bWrong">✗ Wrong (N)</button>
+        <button class="lp-btn lp-btn--success" id="bCorrect">✓ Correct (Y)</button>
+        <button class="lp-btn lp-btn--danger" id="bWrong">✗ Wrong (N)</button>
       </div>
       <div class="battle-actions" id="battleNext" style="display:none;">
-        <button class="btn btn--green btn--sm" id="bNext">→ Next (Space)</button>
+        <button class="lp-btn lp-btn--success" id="bNext">→ Next (Space)</button>
       </div>
     </div>
   </div>
@@ -554,7 +554,7 @@ function showBattleResult() {
     <div class="result-title">${winner}</div>
     <div class="result-sub" style="font-size:1.2rem;margin:8px 0;">🔵 ${battle.p1} — ${battle.p2} 🔴</div>
     <div class="result-sub">${battle.total} rounds</div>
-    <div class="result-btns"><button class="btn btn--green" id="rr">🔄 Rematch</button><button class="btn btn--ghost" id="rs">📖 Study</button></div>
+    <div class="result-btns"><button class="lp-btn lp-btn--success" id="rr">🔄 Rematch</button><button class="lp-btn lp-btn--ghost" id="rs">📖 Study</button></div>
   </div>`;
   overlay.classList.add('show');
   overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); initBattle(); });

@@ -338,8 +338,8 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy, el
       <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
       ${timeHtml}
       <div class="result-btns">
-        <button class="btn btn--primary" id="resultRestart">🔄 Try Again</button>
-        ${onStudy ? '<button class="btn btn--ghost" id="resultStudy">📖 Study</button>' : ''}
+        <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Try Again</button>
+        ${onStudy ? '<button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>' : ''}
       </div>
     </div>
   `;

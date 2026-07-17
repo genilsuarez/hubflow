@@ -614,8 +614,8 @@ export class FlashcardEngine {
         <div class="result-title">${title}</div>
         <div class="result-sub">${this.battle.p1} — ${this.battle.p2}</div>
         <div class="result-btns">
-          <button class="btn btn--purple" id="resultRestart">🔄 Play Again</button>
-          <button class="btn btn--ghost" id="resultClose">Done</button>
+          <button class="lp-btn lp-btn--purple" id="resultRestart">🔄 Play Again</button>
+          <button class="lp-btn lp-btn--ghost" id="resultClose">Done</button>
         </div>
       </div>
     `;
@@ -684,8 +684,8 @@ export class FlashcardEngine {
         <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
         ${timeHtml}
         <div class="result-btns">
-          <button class="btn btn--purple" id="resultRestart">🔄 Try Again</button>
-          <button class="btn btn--ghost" id="resultStudy">📖 Study</button>
+          <button class="lp-btn lp-btn--purple" id="resultRestart">🔄 Try Again</button>
+          <button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>
         </div>
       </div>
     `;
