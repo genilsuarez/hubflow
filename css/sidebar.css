@@ -48,6 +48,11 @@
 .sb-item .sb-icon { width: 20px; height: 20px; flex: 0 0 20px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 400; color: var(--spine, currentColor); }
 .sb-item .sb-label { font-size: inherit; font-weight: inherit; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sb-item.active { background: var(--lp-accent-soft); color: var(--lp-accent-dark); font-weight: 700; }
+[data-theme="dark"] .sb-item.active {
+  background: color-mix(in srgb, var(--lp-accent) 15%, var(--lp-surface));
+  border: 1px solid color-mix(in srgb, var(--lp-accent) 30%, transparent);
+  color: var(--lp-accent);
+}
 .sb-item.v { --spine: var(--lp-cat-purple); }
 .sb-item.p { --spine: var(--lp-cat-blue); }
 .sb-item.g { --spine: var(--lp-cat-amber); }

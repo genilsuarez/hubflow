@@ -217,52 +217,54 @@
 
     /* ─── HERO CARD (ejercicio sugerido) ─── */
     .hero-card {
-      display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px;
+      display: flex; align-items: center; gap: 14px;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border);
       border-top: 4px solid var(--hero-spine, var(--lp-accent));
-      border-radius: var(--lp-radius-lg); padding: 20px 24px;
+      border-radius: var(--lp-radius-lg); padding: 16px 20px;
       margin-bottom: 16px; box-shadow: var(--lp-shadow-md);
       transition: box-shadow .25s var(--lp-ease), border-color .25s;
     }
     .hero-card:hover { box-shadow: var(--lp-shadow-hover); }
     .hero-card__icon {
-      width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; border-radius: var(--lp-radius-md);
+      width: 42px; height: 42px; flex: 0 0 42px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; border-radius: var(--lp-radius-md);
       background: color-mix(in srgb, var(--hero-spine, var(--lp-accent)) 12%, transparent);
     }
-    .hero-card__body { min-width: 0; }
+    .hero-card__body { flex: 1; min-width: 0; }
     .hero-card__context {
-      font-size: .65rem; font-weight: var(--lp-weight-extrabold); text-transform: uppercase;
-      letter-spacing: .1em; color: var(--hero-spine, var(--lp-accent)); margin-bottom: 4px;
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold); text-transform: uppercase;
+      letter-spacing: .1em; color: var(--hero-spine, var(--lp-accent)); margin-bottom: 2px;
     }
-    .hero-card__title { font-weight: var(--lp-weight-extrabold); font-size: 1rem; line-height: 1.25; margin-bottom: 3px; }
-    .hero-card__meta { font-size: .72rem; color: var(--lp-ink-soft); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-    .hero-card__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
-    .hero-card__cta { white-space: nowrap; font-size: .78rem; padding: 10px 20px; }
+    .hero-card__title { font-weight: var(--lp-weight-extrabold); font-size: .88rem; line-height: 1.25; margin-bottom: 1px; }
+    .hero-card__meta { font-size: .66rem; color: var(--lp-ink-soft); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .hero-card__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .hero-card__cta { white-space: nowrap; font-size: .72rem; padding: 9px 18px; }
     .hero-card__alt {
-      background: none; border: none; color: var(--lp-muted); font-size: .65rem;
+      background: none; border: none; color: var(--lp-muted); font-size: .62rem;
       font-weight: var(--lp-weight-bold); cursor: pointer; padding: 4px 8px;
       border-radius: var(--lp-radius-sm); transition: color .2s, background .2s;
+      white-space: nowrap;
     }
     .hero-card__alt:hover { color: var(--lp-ink); background: var(--lp-surface-sunken); }
     .hero-card__alt:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
-    .hero-card__browse { font-size: .72rem; padding: 8px 16px; white-space: nowrap; }
+    .hero-card__browse { display: none; }
 
     /* First-run variant */
-    .hero-card--welcome .hero-card__icon { font-size: 1.8rem; }
+    .hero-card--welcome .hero-card__icon { font-size: 1.5rem; }
 
     @media (max-width: 640px) {
-      .hero-card { grid-template-columns: 44px 1fr; gap: 12px; padding: 16px; }
-      .hero-card__icon { width: 44px; height: 44px; font-size: 1.3rem; }
-      .hero-card__actions { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; }
+      .hero-card { flex-wrap: wrap; padding: 14px; gap: 10px; }
+      .hero-card__icon { width: 38px; height: 38px; flex: 0 0 38px; font-size: 1.1rem; }
+      .hero-card__body { flex-basis: calc(100% - 52px); }
+      .hero-card__actions { width: 100%; }
       .hero-card__cta { flex: 1; text-align: center; }
-      .hero-card__title { font-size: .88rem; }
+      .hero-card__title { font-size: .82rem; }
     }
     @media (max-width: 480px) {
-      .hero-card { padding: 12px; gap: 10px; }
-      .hero-card__title { font-size: .82rem; }
-      .hero-card__meta { font-size: .65rem; }
-      .hero-card__cta { font-size: .72rem; padding: 9px 14px; }
+      .hero-card { padding: 12px; gap: 8px; }
+      .hero-card__title { font-size: .78rem; }
+      .hero-card__meta { font-size: .6rem; }
+      .hero-card__cta { font-size: .68rem; padding: 8px 14px; }
     }
 
     /* ─── PROGRESS SNAPSHOT ─── */
@@ -996,9 +998,9 @@
           </div>
           <div class="hero-card__actions">
             <a class="lp-btn lp-btn--primary hero-card__cta" id="heroCta" href="#">Empezar ahora</a>
-            <button class="lp-btn lp-btn--ghost hero-card__browse" id="heroBrowse" type="button">Ver ejercicios</button>
             <button class="hero-card__alt" id="heroAlt" type="button">Otra sugerencia</button>
           </div>
+          <button class="hero-card__browse" id="heroBrowse" type="button" hidden>Ver ejercicios</button>
         </div>
 
         <!-- Progress Snapshot -->
@@ -1594,10 +1596,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
       const firstPath = LEARNING_PATHS[0];
       const firstMod = firstPath ? moduleMap.get(firstPath.modules[0]) : MODULES[0];
       cta.href = firstMod ? firstMod.exercise : '#';
-      document.getElementById('heroAlt').textContent = 'Explorar categorías ↓';
-      document.getElementById('heroAlt').addEventListener('click', () => {
-        document.querySelector('.tiles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      document.getElementById('heroAlt').hidden = true;
       return;
     }
 
@@ -1615,7 +1614,9 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     const cta = document.getElementById('heroCta');
     cta.textContent = 'Empezar ahora';
     cta.href = mod.exercise;
-    document.getElementById('heroAlt').textContent = 'Otra sugerencia';
+    const altBtn = document.getElementById('heroAlt');
+    altBtn.hidden = false;
+    altBtn.textContent = 'Otra sugerencia';
   }
 
   function renderProgressSnapshot() {
