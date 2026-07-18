@@ -246,6 +246,7 @@
     }
     .hero-card__alt:hover { color: var(--lp-ink); background: var(--lp-surface-sunken); }
     .hero-card__alt:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .hero-card__browse { font-size: .72rem; padding: 8px 16px; white-space: nowrap; }
 
     /* First-run variant */
     .hero-card--welcome .hero-card__icon { font-size: 1.8rem; }
@@ -947,7 +948,7 @@
     <div class="topbar">
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
-        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 módulos · 5 modos de práctica incluyendo Battle 2P.</p>
+        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos de práctica incluyendo Battle 2P.</p>
         <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
         <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
         <span class="topbar-greeting-title tg-rutas">Rutas <em>guiadas</em></span>
@@ -995,6 +996,7 @@
           </div>
           <div class="hero-card__actions">
             <a class="lp-btn lp-btn--primary hero-card__cta" id="heroCta" href="#">Empezar ahora</a>
+            <button class="lp-btn lp-btn--ghost hero-card__browse" id="heroBrowse" type="button">Ver ejercicios</button>
             <button class="hero-card__alt" id="heroAlt" type="button">Otra sugerencia</button>
           </div>
         </div>
@@ -1007,7 +1009,7 @@
           <div class="progress-snapshot__stats">
             <span class="progress-snapshot__stat"><strong id="snapshotPct">0%</strong> completado</span>
             <span class="progress-snapshot__sep" aria-hidden="true">·</span>
-            <span class="progress-snapshot__stat"><strong id="snapshotDone">0</strong>/<span id="snapshotTotal">0</span> módulos</span>
+            <span class="progress-snapshot__stat"><strong id="snapshotDone">0</strong>/<span id="snapshotTotal">0</span> ejercicios</span>
             <span class="progress-snapshot__sep" aria-hidden="true">·</span>
             <span class="progress-snapshot__stat"><strong id="snapshotPaths">0</strong> rutas activas</span>
             <button class="progress-snapshot__link" id="snapshotLink" type="button">Ver progreso →</button>
@@ -1017,12 +1019,12 @@
         <!-- Last Activities -->
         <div class="last-activities" id="lastActivities"></div>
 
-        <div class="sec-head">Categorías</div>
+        <div class="sec-head">Explora por tema</div>
         <div class="tiles">
-          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 módulos</span></button>
-          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 módulos</span></button>
-          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 módulos</span></button>
-          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 módulos</span></button>
+          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 ejercicios</span></button>
+          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 ejercicios</span></button>
+          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 ejercicios</span></button>
+          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 ejercicios</span></button>
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
         </div>
 
@@ -1716,6 +1718,11 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     renderHeroCard();
   });
 
+  // "Ver ejercicios" button — scrolls to category tiles
+  document.getElementById('heroBrowse').addEventListener('click', function() {
+    document.querySelector('.tiles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   // ─── FILTER MENU (botón + panel de tags, estilo FluentFlow UnifiedFilter) ───
   const filterMenu = document.getElementById('filterMenu');
   const filterToggle = document.getElementById('filterToggle');
@@ -1799,7 +1806,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
         const d = getModuleDepth(m.id);
         return sum + (d ? d.items : 0);
       }, 0);
-      el.textContent = `${n} módulos · ${totalItems} items`;
+      el.textContent = `${n} ejercicios · ${totalItems} items`;
     }
   });
 
@@ -1807,7 +1814,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   const allItems = MODULES.reduce((sum, m) => { const d = getModuleDepth(m.id); return sum + (d ? d.items : 0); }, 0);
   const roundedItems = Math.floor(allItems / 100) * 100;
   const resumenSub = document.getElementById('resumenSub');
-  if (resumenSub) resumenSub.textContent = `${MODULES.length} módulos · +${roundedItems.toLocaleString()} items · 5 modos de práctica incluyendo Battle 2P.`;
+  if (resumenSub) resumenSub.textContent = `${MODULES.length} ejercicios · +${roundedItems.toLocaleString()} items · 5 modos de práctica incluyendo Battle 2P.`;
 
   // Local dev supports independent ports and the shared-origin gateway.
   const _h = location.hostname;

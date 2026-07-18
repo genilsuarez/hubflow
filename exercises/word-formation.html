@@ -87,11 +87,25 @@ initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advance
 function advanceCard(dir) {
   const card = document.getElementById('fcCard');
   const inner = card.querySelector('.fc-inner');
-  if (card.classList.contains('flip')) {
-    inner.style.transition = 'none';
+  if (card.classList.contains('flip') && inner) {
+    inner.style.transition = 'opacity .15s ease, transform .2s ease';
+    inner.style.opacity = '0';
     card.classList.remove('flip');
-    void inner.offsetHeight;
-    inner.style.transition = '';
+    let done = false;
+    const onDone = () => {
+      if (done) return; done = true;
+      inner.removeEventListener('transitionend', onDone);
+      inner.style.transition = 'none';
+      idx = (idx + dir + deck.length) % deck.length;
+      renderStudyCard();
+      void inner.offsetHeight;
+      inner.style.transition = 'opacity .15s ease';
+      inner.style.opacity = '1';
+      setTimeout(() => { inner.style.transition = ''; }, 170);
+    };
+    inner.addEventListener('transitionend', onDone, { once: true });
+    setTimeout(onDone, 250);
+    return;
   }
   idx = (idx + dir + deck.length) % deck.length;
   renderStudyCard();

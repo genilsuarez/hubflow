@@ -8,9 +8,10 @@
 import { PAIRS, SYNONYMS } from './opposites.js';
 
 function pairsToItems(pairs, relation) {
+  const symbol = relation === 'Opposite' ? '↔' : '≈';
   return pairs.flatMap(p => [
-    { term: p.a, meaning: p.b, emoji: p.ea, es: p.es, extra: `${relation}: ${p.a} ${relation === 'Opposite' ? '↔' : '≈'} ${p.b}` },
-    { term: p.b, meaning: p.a, emoji: p.eb, es: p.es, extra: `${relation}: ${p.a} ${relation === 'Opposite' ? '↔' : '≈'} ${p.b}` },
+    { term: p.a, meaning: p.b, emoji: p.ea, pairEmoji: p.eb, pairTerm: p.b, relation: symbol, es: p.es, extra: `${relation}: ${p.a} ${symbol} ${p.b}` },
+    { term: p.b, meaning: p.a, emoji: p.eb, pairEmoji: p.ea, pairTerm: p.a, relation: symbol, es: p.es, extra: `${relation}: ${p.a} ${symbol} ${p.b}` },
   ]);
 }
 

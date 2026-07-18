@@ -408,6 +408,10 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy, el
       </div>
     </div>
   `;
+  // Move overlay to body to escape .wrap stacking context (z-index: 1)
+  if (containerEl.parentElement !== document.body) {
+    document.body.appendChild(containerEl);
+  }
   containerEl.classList.add('show');
 
   containerEl.querySelector('#resultClose').addEventListener('click', () => {
@@ -604,16 +608,16 @@ export function openProgressDetail(contentId) {
       const content = passed ? '✓' : attempts > 0 ? `${best}%` : '·';
       const modeDisplay = MODE_LABELS[mode] || 'Practice';
       const title = `${modeDisplay}: ${attempts > 0 ? best + '%' : 'pendiente'}`;
-      return `<span class="pg-cell ${cls}" title="${title}">${content}</span>`;
+      return `<td class="pg-cell ${cls}" title="${title}">${content}</td>`;
     }).join('');
 
-    return `<div class="pg-row"><span class="pg-row__label">${displayLabel}</span><span class="pg-row__cells">${cells}</span></div>`;
+    return `<tr class="pg-row"><td class="pg-row__label">${displayLabel}</td>${cells}</tr>`;
   }).join('');
 
   const pct = totalCells > 0 ? Math.round((passedTotal / totalCells) * 100) : 0;
 
   // Header row with mode labels
-  const headerCells = displayModes.map(m => `<span class="pg-header-cell">${MODE_LABELS[m] || 'Practice'}</span>`).join('');
+  const headerLabels = displayModes.map(m => `<span class="pg-header-cell">${MODE_LABELS[m] || 'Practice'}</span>`).join('');
 
   const modal = document.createElement('div');
   modal.id = 'progressDetailModal';
@@ -625,11 +629,14 @@ export function openProgressDetail(contentId) {
     <div class="pg-modal__backdrop"></div>
     <div class="pg-modal__panel">
       <div class="pg-modal__header">
-        <h3>Progreso detallado</h3>
-        <span class="pg-modal__summary">${passedTotal}/${totalCells} · ${pct}%</span>
-        <button class="pg-modal__close" aria-label="Cerrar">&times;</button>
+        <div class="pg-modal__header-top">
+          <h3>Progreso detallado</h3>
+          <span class="pg-modal__summary">${passedTotal}/${totalCells} · ${pct}%</span>
+          <button class="pg-modal__close" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="pg-modal__header-cols">${headerLabels}</div>
       </div>
-      <div class="pg-modal__body"><div class="pg-row pg-row--header"><span class="pg-row__label"></span><span class="pg-row__cells">${headerCells}</span></div>${rowsHTML}</div>
+      <div class="pg-modal__body"><table class="pg-table"><tbody>${rowsHTML}</tbody></table></div>
       <div class="pg-modal__legend">
         <span class="pg-legend-item"><span class="pg-cell pg-cell--pass">✓</span> ≥${passScorePct}%</span>
         <span class="pg-legend-item"><span class="pg-cell pg-cell--tried">%</span> intentado</span>

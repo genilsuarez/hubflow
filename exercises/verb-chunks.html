@@ -71,6 +71,7 @@
   /* Study flashcard */
   .fc-card { max-width: 720px; height: 220px; }
   .chunk-front .fc-term { font-size: 1.4rem; color: var(--lp-cat-purple); line-height: 1.4; }
+  .fc-ipa { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--muted); letter-spacing: .02em; margin-top: 2px; min-height: 1.1em; }
   .chunk-front .fc-detail { font-size: .72rem; color: var(--lp-muted); margin-top: 4px; }
   .fc-back { background: rgba(123,94,167,.08); border-color: var(--lp-cat-purple); }
   .fc-back .chunk-meaning { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 600; color: var(--lp-ink); margin-bottom: 6px; }
@@ -156,6 +157,7 @@
           <div class="fc-face chunk-front">
             <div class="fc-emoji" id="fcEmoji">🔗</div>
             <div class="fc-term" id="fcTerm"></div>
+            <div class="fc-ipa" id="fcIpa"></div>
             <div class="fc-detail" id="fcEs"></div>
             <div class="fc-hint">tap to see example</div>
           </div>
@@ -364,6 +366,7 @@ function renderStudyCard() {
   } else {
     document.getElementById('fcTerm').textContent = item.pattern;
   }
+  document.getElementById('fcIpa').textContent = item.ipa || '';
   document.getElementById('fcEs').textContent = item.es;
   document.getElementById('fcMeaning').textContent = item.prep;
   document.getElementById('fcExample').textContent = item.example;

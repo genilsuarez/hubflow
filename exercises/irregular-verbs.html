@@ -26,6 +26,7 @@
   /* Flashcard face customization */
   .fc-card { max-width: 720px; height: 220px; }
   .verb-front .fc-term { font-size: 1.8rem; color: var(--lp-cat-amber); }
+  .fc-ipa { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--muted); letter-spacing: .02em; margin-top: 2px; min-height: 1.1em; }
   .fc-back { background: var(--lp-accent-soft); border-color: var(--lp-cat-amber); }
   .verb-forms { display: flex; flex-direction: column; gap: 6px; align-items: center; }
   .verb-forms .vf-row { display: flex; gap: 8px; align-items: baseline; }
@@ -133,6 +134,7 @@
           <div class="fc-face verb-front">
             <div class="fc-emoji" id="fcEmoji">📝</div>
             <div class="fc-term" id="fcBase"></div>
+            <div class="fc-ipa" id="fcIpa"></div>
             <div class="fc-hint">tap to see forms</div>
           </div>
           <div class="fc-face fc-back">
@@ -298,6 +300,7 @@ function renderCard() {
   const card = document.getElementById('fcCard');
   card.classList.remove('flip');
   document.getElementById('fcBase').textContent = v.base;
+  document.getElementById('fcIpa').textContent = v.ipa || '';
   document.getElementById('fcBackBase').textContent = v.base;
   document.getElementById('fcBackPast').textContent = v.past;
   document.getElementById('fcBackPP').textContent = v.pp;

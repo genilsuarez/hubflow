@@ -27,6 +27,7 @@
   /* Flashcard for study */
   .fc-card { max-width: 720px; height: 220px; }
   .pv-front .fc-term { font-size: 1.6rem; color: var(--lp-cat-teal); }
+  .fc-ipa { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--muted); letter-spacing: .02em; margin-top: 2px; min-height: 1.1em; }
   .pv-front .fc-detail { font-size: .72rem; margin-top: 2px; }
   .fc-back { background: rgba(61,127,127,.08); border-color: var(--lp-cat-teal); }
   .fc-back .pv-meaning { font-family: var(--lp-font-display); font-size: 1.2rem; font-weight: 600; color: var(--lp-ink); margin-bottom: 6px; }
@@ -140,6 +141,7 @@
           <div class="fc-face pv-front">
             <div class="fc-emoji" id="fcEmoji">🚀</div>
             <div class="fc-term" id="fcVerb"></div>
+            <div class="fc-ipa" id="fcIpa"></div>
             <div class="fc-detail" id="fcEs"></div>
             <div class="fc-hint">tap to see example</div>
           </div>
@@ -293,6 +295,7 @@ function renderStudyCard() {
   card.classList.remove('flip');
   document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon;
   document.getElementById('fcVerb').textContent = item.verb;
+  document.getElementById('fcIpa').textContent = item.ipa || '';
   document.getElementById('fcEs').textContent = item.es;
   document.getElementById('fcMeaning').textContent = `${item.verb} = ${item.es}`;
   document.getElementById('fcExample').textContent = item.example;

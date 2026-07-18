@@ -226,28 +226,63 @@ export class FlashcardEngine {
     const card = document.getElementById('fcCard');
     if (card) card.classList.remove('flip');
 
-    // Front
-    const emoji = document.getElementById('fcEmoji');
-    const word = document.getElementById('fcWord');
-    if (emoji) emoji.textContent = item.emoji;
-    if (word) word.textContent = item.term;
+    // Dual-word layout (Word Relations: each item has pairTerm + pairEmoji)
+    if (item.pairTerm) {
+      const emoji = document.getElementById('fcEmoji');
+      const word = document.getElementById('fcWord');
+      const pairEmoji = document.getElementById('fcPairEmoji');
+      const pairWord = document.getElementById('fcPairWord');
+      const relation = document.getElementById('fcRelation');
 
-    // Back
-    const backEmoji = document.getElementById('fcBackEmoji');
-    const backWord = document.getElementById('fcBackWord');
-    const backMeaning = document.getElementById('fcBackMeaning');
-    const backExtra = document.getElementById('fcBackExtra');
+      if (emoji) emoji.textContent = item.emoji;
+      if (word) word.textContent = item.term;
+      if (pairEmoji) pairEmoji.textContent = item.pairEmoji;
+      if (pairWord) pairWord.textContent = item.pairTerm;
+      if (relation) relation.textContent = item.relation || '↔';
 
-    if (backEmoji) backEmoji.textContent = item.emoji;
-    if (backWord) backWord.textContent = item.term;
-    if (backMeaning) backMeaning.textContent = item.meaning || item.description || '';
+      // Back
+      const backEmoji = document.getElementById('fcBackEmoji');
+      const backWord = document.getElementById('fcBackWord');
+      const backPairEmoji = document.getElementById('fcBackPairEmoji');
+      const backPairWord = document.getElementById('fcBackPairWord');
+      const backRelation = document.getElementById('fcBackRelation');
+      const backMeaning = document.getElementById('fcBackMeaning');
+      const backExtra = document.getElementById('fcBackExtra');
 
-    let extra = '';
-    if (item.es) extra += `🇪🇸 ${item.es}`;
-    if (item.time) extra += `${extra ? '\n' : ''}🕐 ${item.time}`;
-    if (item.example) extra += `${extra ? '\n' : ''}💬 ${item.example}`;
-    if (item.extra) extra += `${extra ? '\n' : ''}📅 ${item.extra}`;
-    if (backExtra) backExtra.textContent = extra;
+      if (backEmoji) backEmoji.textContent = item.emoji;
+      if (backWord) backWord.textContent = item.term;
+      if (backPairEmoji) backPairEmoji.textContent = item.pairEmoji;
+      if (backPairWord) backPairWord.textContent = item.pairTerm;
+      if (backRelation) backRelation.textContent = item.relation || '↔';
+      if (backMeaning) backMeaning.textContent = item.es || '';
+      if (backExtra) backExtra.textContent = item.extra || '';
+    } else {
+      // Standard single-word layout (Vocabulary, Pronunciation)
+      const emoji = document.getElementById('fcEmoji');
+      const word = document.getElementById('fcWord');
+      const ipa = document.getElementById('fcIpa');
+      if (emoji) emoji.textContent = item.emoji;
+      if (word) word.textContent = item.term;
+      if (ipa) ipa.textContent = item.ipa || '';
+
+      const backEmoji = document.getElementById('fcBackEmoji');
+      const backWord = document.getElementById('fcBackWord');
+      const backIpa = document.getElementById('fcBackIpa');
+      const backMeaning = document.getElementById('fcBackMeaning');
+      const backExtra = document.getElementById('fcBackExtra');
+
+      if (backEmoji) backEmoji.textContent = item.emoji;
+      if (backIpa) backIpa.textContent = item.ipa || '';
+      if (backWord) backWord.textContent = item.term;
+      if (backMeaning) backMeaning.textContent = item.meaning || item.description || '';
+
+      let extra = '';
+      if (item.es) extra += `🇪🇸 ${item.es}`;
+      if (item.time) extra += `${extra ? '\n' : ''}🕐 ${item.time}`;
+      if (item.example) extra += `${extra ? '\n' : ''}💬 ${item.example}`;
+      if (item.extra) extra += `${extra ? '\n' : ''}📅 ${item.extra}`;
+      if (backExtra) backExtra.textContent = extra;
+    }
 
     // Counter
     const counter = document.getElementById('fcCounter');
@@ -263,18 +298,38 @@ export class FlashcardEngine {
 
   navCard(delta) {
     const card = document.getElementById('fcCard');
-    if (card && card.classList.contains('flip')) {
-      const inner = card.querySelector('.fc-inner');
-      if (inner) {
-        inner.style.transition = 'none';
-        card.classList.remove('flip');
-        void inner.offsetHeight; // reflow: instant unflip without animation
-        inner.style.transition = '';
-      }
-    }
-    this.cardIdx = (this.cardIdx + delta + this.deck.length) % this.deck.length;
-    this.renderStudyCard();
-    this.updateStudyProgress();
+    const inner = card?.querySelector('.fc-inner');
+    if (!card || !inner) return;
+
+    const isFlipped = card.classList.contains('flip');
+    const slideX = delta > 0 ? '-12px' : '12px';
+
+    // Slide out
+    inner.style.transition = 'opacity .12s ease, transform .12s ease';
+    inner.style.opacity = '0';
+    inner.style.transform = isFlipped
+      ? `rotateY(180deg) translateX(${delta > 0 ? '12px' : '-12px'})`
+      : `translateX(${slideX})`;
+
+    setTimeout(() => {
+      // Instant reset — no animation, no flip
+      inner.style.transition = 'none';
+      card.classList.remove('flip');
+      inner.style.transform = `translateX(${delta > 0 ? '12px' : '-12px'})`;
+      inner.style.opacity = '0';
+
+      // Update content while hidden
+      this.cardIdx = (this.cardIdx + delta + this.deck.length) % this.deck.length;
+      this.renderStudyCard();
+      this.updateStudyProgress();
+      void inner.offsetHeight;
+
+      // Slide in from opposite side
+      inner.style.transition = 'opacity .15s ease, transform .15s ease';
+      inner.style.opacity = '1';
+      inner.style.transform = '';
+      setTimeout(() => { inner.style.transition = ''; }, 170);
+    }, 130);
   }
 
   shuffleDeck() {

@@ -177,6 +177,16 @@ h1 { display: flex; align-items: center; gap: 6px; }
 .fc-card { max-width: 720px; height: 250px; }
 .fc-back .fc-detail { font-size: .72rem; }
 
+/* IPA pronunciation */
+.fc-ipa {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  color: var(--muted);
+  letter-spacing: .02em;
+  margin-top: 2px;
+  min-height: 1.1em;
+}
+
 /* Battle card */
 .battle-card { width: 100%; max-width: 360px; height: 140px; perspective: 1200px; position: relative; margin: 0 auto 8px; }
 .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: transform .55s var(--ease); transform-style: preserve-3d; }
@@ -227,4 +237,114 @@ h1 { display: flex; align-items: center; gap: 6px; }
   .scroll-body { padding-bottom: 8px; }
   [data-area] { gap: 2px; }
   .fc-nav { margin-top: 4px; gap: 8px; }
+}
+
+/* ─── DUAL WORD CARD (Word Relations) ─────────────────────────────────── */
+
+.fc-card--dual { height: 220px; }
+
+.fc-card--dual .fc-face.fc-face--dual {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 1.2rem 1rem;
+  position: absolute;
+  inset: 0;
+}
+
+.fc-card--dual .fc-face--dual .fc-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.fc-dual-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.fc-dual-emoji {
+  font-size: 2.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.12));
+}
+
+.fc-dual-term {
+  font-family: 'Newsreader', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  word-break: break-word;
+}
+
+.fc-dual-relation {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--muted);
+  opacity: .5;
+  flex-shrink: 0;
+  padding: 0 10px;
+  align-self: center;
+}
+
+/* Back — dual pair recap */
+.fc-card--dual .fc-back--dual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 1.2rem 1rem;
+}
+
+.fc-dual-back-pair {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fc-back-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--lp-radius-full, 999px);
+  background: color-mix(in srgb, var(--lp-cat-teal) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lp-cat-teal) 25%, transparent);
+  font-family: 'Newsreader', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.fc-back-rel {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--muted);
+  opacity: .6;
+}
+
+/* ─── Dual card color variants ─── */
+[data-color="teal"] .fc-dual-term { color: var(--lp-cat-teal); }
+[data-color="teal"] .fc-dual-relation { color: var(--lp-cat-teal); }
+[data-color="teal"] .fc-back-chip { color: var(--lp-cat-teal); }
+
+/* ─── Mobile: dual card ─── */
+@media (max-width: 480px) {
+  .fc-card--dual { height: 190px; }
+  .fc-dual-emoji { font-size: 2.2rem; }
+  .fc-dual-term { font-size: 1.15rem; }
+  .fc-dual-relation { font-size: 1.2rem; padding: 0 5px; }
+  .fc-card--dual .fc-face--dual { padding: 0.75rem 0.5rem; }
 }

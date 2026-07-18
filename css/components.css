@@ -172,7 +172,7 @@
 /* ─── RESULT OVERLAY ─── */
 .result-overlay {
   display: none; position: fixed; inset: 0;
-  background: color-mix(in srgb, var(--lp-ink) 45%, transparent); backdrop-filter: blur(3px);
+  background: var(--lp-bg); backdrop-filter: none;
   align-items: center; justify-content: center; z-index: 200; padding: 16px;
 }
 .result-overlay.show { display: flex; }
@@ -503,11 +503,15 @@
 }
 
 .pg-modal__header {
+  padding: 16px 18px 10px;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.pg-modal__header-top {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 16px 18px 12px;
-  border-bottom: 1px solid var(--lp-border);
+  margin-bottom: 10px;
 }
 
 .pg-modal__header h3 {
@@ -516,6 +520,13 @@
   font-weight: 600;
   margin: 0;
   flex: 1;
+}
+
+.pg-modal__header-cols {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  padding-left: 40%;
 }
 
 .pg-modal__summary {
@@ -554,59 +565,47 @@
   min-height: 0;
 }
 
-.pg-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 9px 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--lp-border) 40%, transparent);
+/* ─── PROGRESS DETAIL TABLE ─── */
+.pg-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 6px 4px;
 }
 
-.pg-row:last-child {
-  border-bottom: none;
+.pg-table thead {
+  display: none;
 }
 
-.pg-row--header {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  padding: 10px 0 8px;
-  margin: -8px 0 0;
-  border-bottom: 1.5px solid var(--lp-border);
-  background: var(--lp-surface);
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: var(--lp-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.pg-table thead th {
+  display: none;
+}
+
+.pg-row td {
+  padding: 0;
 }
 
 .pg-row__label {
-  flex: 1;
   font-size: 0.78rem;
   font-weight: 500;
   color: var(--lp-ink-soft);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.pg-row__cells {
-  display: flex;
-  gap: 6px;
+  text-align: left;
+  padding: 6px 8px 6px 0;
+  max-width: 160px;
 }
 
 .pg-cell {
   width: 48px;
   height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 6px;
   font-size: 0.65rem;
   font-weight: 700;
   background: var(--lp-border);
   color: var(--lp-muted);
+  text-align: center;
+  vertical-align: middle;
   transition: background 0.2s, color 0.2s;
 }
 
@@ -623,12 +622,12 @@
 .pg-header-cell {
   width: 48px;
   text-align: center;
-  font-size: 0.58rem;
+  font-size: 0.6rem;
+  font-weight: 700;
   white-space: nowrap;
-  letter-spacing: -0.01em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--lp-muted);
 }
 
 .pg-modal__legend {
