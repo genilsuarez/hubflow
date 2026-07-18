@@ -565,17 +565,17 @@
     }
     .about-modal {
       position: relative; width: min(100%, 480px); max-height: min(720px, calc(100svh - 40px));
-      overflow-y: auto; padding: 34px; border: 1px solid var(--lp-border); border-radius: var(--lp-radius-xl);
+      overflow-y: auto; padding: 24px; border: 1px solid var(--lp-border); border-radius: var(--lp-radius-xl);
       background: var(--lp-surface); box-shadow: var(--lp-shadow-lg); color: var(--lp-ink-soft);
     }
-    .about-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .about-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .about-identity {
       width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%;
       background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700;
       letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
     }
     .about-header .about-eyebrow { margin-bottom: 2px; }
-    .about-header h2 { margin: 0; font-size: 1.5rem; line-height: 1; font-family: var(--lp-font-display); font-weight: 400; color: var(--lp-ink); }
+    .about-header h2 { margin: 0; font-size: 1.5rem; line-height: 1; font-family: var(--lp-font-display); font-weight: var(--lp-weight-normal); color: var(--lp-ink); }
     .about-eyebrow { color: var(--lp-accent); font-size: .62rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase; }
     .about-close {
       position: static; flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center;
@@ -586,7 +586,7 @@
     .about-close:active { transform: scale(0.97); }
     .about-close:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
     .about-description { color: var(--lp-ink-soft); font-size: .82rem; line-height: 1.65; }
-    .about-modules { display: grid; gap: 8px; margin: 20px 0; }
+    .about-modules { display: grid; gap: 6px; margin: 14px 0; }
     .about-modules a {
       min-height: 52px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
       border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md); background: var(--lp-surface-sunken);
@@ -596,12 +596,12 @@
     .about-modules a:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
     .about-modules strong { font-size: .78rem; }
     .about-modules span { color: var(--lp-muted); font-size: .68rem; }
-    .about-footer { display: grid; gap: 10px; padding-top: 16px; border-top: 1px solid var(--lp-border); }
+    .about-footer { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--lp-border); }
     .about-footer p { display: flex; justify-content: space-between; gap: 16px; color: var(--lp-muted); font-size: .68rem; line-height: 1.5; margin: 0; }
     .about-footer strong { color: var(--lp-ink-soft); }
     .about-footer span { text-align: right; }
     @keyframes aboutFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @media (max-width: 580px) { .about-modal { padding: 22px; } .about-footer p { flex-direction: column; gap: 2px; } .about-footer span { text-align: left; } }
+    @media (max-width: 580px) { .about-modal { padding: 22px; } .about-header h2 { font-size: 1.35rem; } .about-footer p { flex-direction: column; gap: 2px; } .about-footer span { text-align: left; } }
     @media (prefers-reduced-motion: reduce) { .about-overlay { animation: none; } }
 
     /* ─── TOPBAR ACTIONS (mobile access; desktop controls live in sidebar) ─── */
@@ -1322,6 +1322,8 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   function getAppHref(path, port) {
     const host = location.hostname;
     const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.');
+    const isUnified = isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
+    if (isUnified) return path;
     if (isLocal) return `http://${host}:${port}/`;
     return `https://genilsuarez.github.io${path}`;
   }
@@ -1336,17 +1338,18 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     overlay.innerHTML = `
       <section class="about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutLearnFlowTitle" aria-describedby="aboutLearnFlowDescription">
         <header class="about-header">
-          <div class="about-identity" aria-hidden="true">H</div>
+          <div class="about-identity" aria-hidden="true">L</div>
           <div>
-            <p class="about-eyebrow">HubFlow · Parte de LearnFlow</p>
+            <p class="about-eyebrow">LearnFlow · Plataforma</p>
             <h2 id="aboutLearnFlowTitle">About LearnFlow</h2>
           </div>
           <button class="about-close" id="aboutCloseBtn" type="button" aria-label="Cerrar About LearnFlow">✕</button>
         </header>
-        <p id="aboutLearnFlowDescription" class="about-description">HubFlow es el módulo de práctica flexible para gramática, vocabulario, pronunciación y producción.</p>
+        <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
         <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-          <a href="${getAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow"><strong>LearnFlow</strong><span>Portal y progreso global</span></a>
+          <a href="${getAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow"><strong>LearnFlow</strong><span>Portal</span></a>
           <a href="${getAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></a>
+          <a href="${getAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></a>
           <a href="${getAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow"><strong>LyricFlow</strong><span>Aprender con música</span></a>
         </nav>
         <footer class="about-footer">
