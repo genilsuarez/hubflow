@@ -58,14 +58,16 @@
     padding: 10px 14px; text-align: center; min-height: 2.2em; line-height: 1.5;
   }
 
-  /* Listen button */
+  /* Listen button (inline with nav) */
   .listen-btn {
-    width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--lp-cat-blue);
+    width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--lp-cat-blue);
     background: rgba(59,130,246,.08); display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem; cursor: pointer; transition: all .2s;
+    font-size: 1.1rem; cursor: pointer; transition: all .2s;
   }
-  .listen-btn:hover { background: rgba(59,130,246,.15); transform: scale(1.08); }
+  .listen-btn:hover { background: rgba(59,130,246,.15); transform: scale(1.06); }
   .listen-btn:active { transform: scale(.95); }
+  .listen-btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+  .quiz-actions { display: flex; justify-content: center; gap: 8px; }
 
   .scroll-body { padding: 8px 0 30px; }
 
@@ -103,7 +105,6 @@
     <!-- STUDY -->
     <div data-area="study">
       <div class="fc-count" id="fcCounter">1 / 14</div>
-      <button class="listen-btn" id="listenBtn" aria-label="Listen to pronunciation">🔊</button>
       <div class="fc-card" id="fcCard">
         <div class="fc-inner">
           <div class="fc-face ph-front">
@@ -119,6 +120,7 @@
         </div>
       </div>
       <div class="fc-nav">
+        <button class="listen-btn" id="listenBtn" aria-label="Listen to pronunciation">🔊</button>
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--success" id="nextBtn">→</button>
@@ -127,13 +129,15 @@
 
     <!-- QUIZ -->
     <div data-area="quiz">
-      <button class="listen-btn" id="quizListenBtn" aria-label="Listen again">🔊</button>
       <div class="quiz-prompt">
         <div class="qp-sound" id="quizSound"></div>
         <div class="qp-label" id="quizLabel">Which word has this sound?</div>
         <div class="qp-es" id="quizEs"></div>
       </div>
       <div class="quiz-opts" id="quizOptions"></div>
+      <div class="quiz-actions">
+        <button class="listen-btn" id="quizListenBtn" aria-label="Listen again">🔊</button>
+      </div>
       <div class="explain-box" id="explainBox"></div>
     </div>
   </div>

@@ -1440,12 +1440,16 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     el.innerHTML = modules.map((mod, i) => bookCardHTML(mod, SPINE_CYCLE[i % SPINE_CYCLE.length])).join('');
   }
 
-  renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'));
-  renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'));
-  renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'));
-  Object.keys(SUBCATEGORIES).forEach(sub => {
-    renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub));
-  });
+  function renderAllShelves() {
+    renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'));
+    renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'));
+    renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'));
+    Object.keys(SUBCATEGORIES).forEach(sub => {
+      renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub));
+    });
+  }
+
+  renderAllShelves();
 
   // ─── HERO CARD + PROGRESS SNAPSHOT (dashboard activo) ───
   const LEARNING_PATHS = [
@@ -2033,6 +2037,17 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   // Handle bfcache restore (history.back from exercise)
   window.addEventListener('pageshow', function(e) {
     if (e.persisted) {
+      // Re-render cards so progress checks reflect latest localStorage data
+      renderAllShelves();
+      renderHeroCard();
+      renderProgressSnapshot();
+      renderRutas();
+      renderLastActivities();
+      applyFilters();
+      // Refresh topbar stats
+      const ps = getProgressStats();
+      document.getElementById('psTotal').textContent = ps.totalAttempts || '0';
+      document.getElementById('psMastered').textContent = ps.masteredContent + '/' + ps.totalContent;
       var s = sessionStorage.getItem('hf-back-section');
       if (s && VALID_SECTIONS.has(s)) {
         sessionStorage.removeItem('hf-back-section');

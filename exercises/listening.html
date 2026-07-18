@@ -23,18 +23,18 @@
   [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
   [data-area].show { display: flex; }
 
-  /* Big listen button */
+  /* Listen button (inline with actions) */
   .listen-btn {
-    width: 84px; height: 84px; border-radius: 50%; border: 2.5px solid var(--lp-cat-amber);
+    width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--lp-cat-amber);
     background: rgba(184,134,11,.10); display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; cursor: pointer; transition: all .2s; margin-top: 8px;
+    font-size: 1.1rem; cursor: pointer; transition: all .2s;
   }
-  .listen-btn:hover { background: rgba(184,134,11,.2); transform: scale(1.08); }
+  .listen-btn:hover { background: rgba(184,134,11,.2); transform: scale(1.06); }
   .listen-btn:active { transform: scale(.95); }
+  .listen-btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
   .listen-btn.playing { animation: pulse 1s ease-in-out infinite; }
-  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-
-  .replay-hint { font-size: .66rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: .05em; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+  .practice-actions { display: flex; justify-content: center; gap: 8px; }
 
   .sc-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); }
 
@@ -106,10 +106,11 @@
 
     <!-- PRACTICE / TIMED -->
     <div data-area="practice">
-      <button class="listen-btn" id="listenBtn" aria-label="Play audio">🔊</button>
-      <div class="replay-hint">tap to listen · again to replay</div>
       <div class="sc-counter" id="scCounter"></div>
       <div class="word-options" id="wordOptions"></div>
+      <div class="practice-actions">
+        <button class="listen-btn" id="listenBtn" aria-label="Play audio">🔊</button>
+      </div>
       <div class="reveal-box" id="revealBox">Listen and choose the word you hear.</div>
     </div>
   </div>
