@@ -332,7 +332,6 @@ function buildFooter() {
   const footer = document.createElement('footer');
   footer.className = 'exercise-foot';
   footer.innerHTML = `
-    <span class="foot-sig">Genil Suárez</span>
     <span class="foot-meta">HubFlow → LearnFlow</span>
   `;
   document.body.appendChild(footer);

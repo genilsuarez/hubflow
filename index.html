@@ -600,6 +600,11 @@
     .about-footer p { display: flex; justify-content: space-between; gap: 16px; color: var(--lp-muted); font-size: .68rem; line-height: 1.5; margin: 0; }
     .about-footer strong { color: var(--lp-ink-soft); }
     .about-footer span { text-align: right; }
+    .about-author { display: flex; align-items: center; gap: 12px; }
+    .about-author__avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--lp-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; letter-spacing: .03em; flex-shrink: 0; }
+    .about-author__info { display: flex; flex-direction: column; gap: 2px; }
+    .about-author__info strong { font-size: .78rem; color: var(--lp-ink); font-weight: 600; }
+    .about-author__info span { font-size: .68rem; color: var(--lp-muted); }
     @keyframes aboutFadeIn { from { opacity: 0; } to { opacity: 1; } }
     @media (max-width: 580px) { .about-modal { padding: 22px; } .about-header h2 { font-size: 1.35rem; } .about-footer p { flex-direction: column; gap: 2px; } .about-footer span { text-align: left; } }
     @media (prefers-reduced-motion: reduce) { .about-overlay { animation: none; } }
@@ -1224,7 +1229,6 @@
     </main>
 
     <footer class="foot">
-      <span class="foot-sig">Genil Suárez</span>
       <span class="foot-meta">HubFlow → LearnFlow</span>
     </footer>
   </div>
@@ -1353,8 +1357,13 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
           <a href="${getAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow"><strong>LyricFlow</strong><span>Aprender con música</span></a>
         </nav>
         <footer class="about-footer">
-          <p><strong>Progreso local</strong><span>Guardado únicamente en este navegador.</span></p>
-          <p><strong>Autor</strong><span>Genil Suárez</span></p>
+          <div class="about-author">
+            <div class="about-author__avatar" aria-hidden="true">GS</div>
+            <div class="about-author__info">
+              <strong>Genil Suárez</strong>
+              <span>Diseñado y desarrollado como proyecto personal</span>
+            </div>
+          </div>
         </footer>
       </section>
     `;
