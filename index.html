@@ -50,13 +50,18 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/buttons.css">
   <style>
-    html, body { height: 100%; }
-    body { overflow: hidden; }
+    html, body { height: 100%; height: 100dvh; }
+    body { overflow: hidden; max-height: 100dvh; }
+    body > .shell { flex: 1 1 auto; min-height: 0; width: 100%; }
 
     /* ═══ APP SHELL ═══ */
-    .shell { display: grid; grid-template-columns: 232px 1fr; height: 100%; }
+    .shell {
+      display: grid; grid-template-columns: 232px 1fr;
+      height: 100%; height: 100dvh; max-height: 100dvh;
+      min-height: 0; overflow: hidden;
+    }
     .navigation-launcher {
-      display: none; position: fixed; top: 16px; left: 16px; z-index: var(--lp-navbtn-z);
+      display: none; position: fixed; top: var(--lp-navbtn-offset-top); left: var(--lp-navbtn-offset-left); z-index: var(--lp-navbtn-z);
       font-size: 1rem;
     }
     .sidebar-scrim {
@@ -113,11 +118,11 @@
 
 
     /* ─── MAIN COLUMN ─── */
-    .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; }
+    .main-col { display: flex; flex-direction: column; height: 100%; min-width: 0; min-height: 0; overflow: hidden; }
     .topbar {
       display: flex; align-items: center; gap: 12px; position: relative;
       height: var(--lp-header-height); min-height: var(--lp-header-height);
-      padding: 22px clamp(16px, 3vw, 34px) 22px; box-sizing: border-box;
+      padding: var(--lp-header-pad-y) var(--lp-header-pad-x); box-sizing: border-box;
       border-bottom: 1.5px solid var(--lp-border); flex-shrink: 0;
     }
     .search-bar { position: relative; flex: 1; min-width: 0; max-width: 380px; }
@@ -151,7 +156,12 @@
     .lp-header-stats__icon { width: var(--lp-score-icon-size); height: var(--lp-score-icon-size); flex-shrink: 0; }
     .lp-header-stats__icon--trophy, .lp-header-stats__icon--star { color: var(--lp-score-icon-color); }
 
-    .content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: none; padding: 18px clamp(16px, 3vw, 34px) 18px; scrollbar-width: none; }
+    .content {
+      flex: 1; min-height: 0; overflow-y: auto;
+      overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+      padding: 18px clamp(16px, 3vw, 34px) max(18px, env(safe-area-inset-bottom, 0px));
+      scrollbar-width: none;
+    }
 
     .no-results { text-align: center; padding: 24px; color: var(--lp-muted); font-size: .8rem; font-weight: var(--lp-weight-medium); display: none; }
     .book.hidden, .guide-link.hidden, .subsec.hidden { display: none !important; }
@@ -336,6 +346,9 @@
       font-size: .68rem; color: var(--lp-muted); font-style: italic;
       padding: 14px 0; text-align: center;
     }
+    @media (max-width: 860px) {
+      #lastActivities:has(.last-activities--empty) { display: none; }
+    }
     @media (max-width: 480px) {
       .la-card { width: 110px; flex: 0 0 110px; padding: 10px 8px; }
       .la-card__icon { width: 30px; height: 30px; font-size: .8rem; }
@@ -358,12 +371,14 @@
     body[data-active="rutas"] .topbar-greeting { max-width: 380px; }
     .topbar-greeting-title {
       display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); line-height: 1.15;
+      font-family: var(--lp-font-display); font-size: var(--lp-header-title-size); font-weight: var(--lp-header-title-weight);
+      letter-spacing: var(--lp-header-title-tracking); line-height: var(--lp-header-title-line-height);
     }
     .topbar-greeting-title em { font-style: italic; color: var(--lp-accent); font-weight: var(--lp-weight-normal); }
     .topbar-greeting-sub {
       display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      font-size: .76rem; line-height: 1.35; color: var(--lp-ink-soft);
+      font-size: var(--lp-header-sub-size); font-weight: var(--lp-header-sub-weight);
+      line-height: var(--lp-header-sub-line-height); color: var(--lp-ink-soft);
     }
     /* Resumen y Mi Progreso comparten la misma estructura de título y subtítulo,
        manteniendo estable la altura de la topbar al cambiar de sección. */
@@ -627,7 +642,7 @@
       }
       html[data-navigation-mode="floating"] .sidebar.is-open { transform: translateX(0); }
       html[data-navigation-mode="floating"] .navigation-launcher { display: flex; }
-      html[data-navigation-mode="floating"] .topbar { padding-left: 88px; }
+      html[data-navigation-mode="floating"] .topbar { padding-left: var(--lp-header-floating-pad-left); }
     }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
@@ -653,22 +668,28 @@
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; }
-      .navigation-launcher { display: flex; top: 16px; left: 16px; }
+      .navigation-launcher { display: flex; top: var(--lp-navbtn-offset-top-compact); left: var(--lp-navbtn-offset-left); }
       .sidebar {
         display: flex; position: fixed; inset: 0 auto 0 0; z-index: 40;
         width: min(232px, 86vw); transform: translateX(-102%);
         transition: transform 240ms var(--lp-ease); box-shadow: var(--lp-shadow-md);
       }
       .sidebar.is-open { transform: translateX(0); }
-      .topbar { padding-left: 66px; }
+      .topbar { padding-left: var(--lp-header-floating-pad-left-compact); }
       .foot { display: none; }
-      .content { padding-bottom: 14px; }
+      .content { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
+      body[data-active="mi-progreso"] .content {
+        /* Rutas expandidas: aire extra al final para que la última tarjeta no
+           quede tapada por la barra del navegador en iOS / simuladores mobile. */
+        padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+      }
     }
     /* El pill centrado necesita el ancho completo de desktop (sidebar fija) para
        no pisar el buscador/filtro — se oculta desde el mismo quiebre en que el
        shell colapsa a sidebar flotante (860px, ver arriba). */
     @media (max-width: 860px) {
       .lp-header-stats { display: none; }
+      .tile.r[data-target="guides"] { display: none; }
     }
     /* Topbar angosta: el buscador manda — las stats se ocultan en pantallas chicas.
        min-width evita que flex lo aplaste a un ancho inusable. */
@@ -676,11 +697,15 @@
       .search-bar { min-width: 130px; }
     }
     @media (max-width: 480px) {
-      .topbar { height: var(--lp-header-height-compact); min-height: var(--lp-header-height-compact); max-height: var(--lp-header-height-compact); padding: 10px 12px 10px 66px; }
+      .topbar { height: var(--lp-header-height-compact); min-height: var(--lp-header-height-compact); max-height: var(--lp-header-height-compact); padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact) var(--lp-header-pad-y-compact) var(--lp-header-floating-pad-left-compact); }
+      .navigation-launcher { top: var(--lp-navbtn-offset-top-compact); }
       .search-bar { min-width: 90px; }
       .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
-      .content { padding: 14px 12px 14px; }
-      .topbar-greeting-title { font-size: 1.1rem; }
+      .content { padding: 14px 12px max(20px, env(safe-area-inset-bottom, 0px)); }
+      body[data-active="mi-progreso"] .content {
+        padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+      }
+      .topbar-greeting-title { font-size: var(--lp-header-title-size); }
       /* Versión abreviada en mobile: sin ".tgs-extra" queda "61 ejercicios y 23
          guías de referencia." — se cortaba a mitad de palabra con el texto
          completo + ellipsis ("...23 guías de refere…"). Se quita también la
