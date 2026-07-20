@@ -8,8 +8,8 @@
 /* ─── ENHANCED BACKGROUND ─── */
 html {
   background:
-    radial-gradient(900px 480px at 50% -8%, rgba(212, 118, 78, .08) 0%, rgba(212, 118, 78, .03) 40%, transparent 64%),
-    radial-gradient(620px 460px at 100% 4%, rgba(212, 118, 78, .05) 0%, transparent 58%),
+    radial-gradient(900px 480px at 50% -8%, rgba(37, 99, 235, .08) 0%, rgba(37, 99, 235, .03) 40%, transparent 64%),
+    radial-gradient(620px 460px at 100% 4%, rgba(37, 99, 235, .05) 0%, transparent 58%),
     linear-gradient(180deg, var(--lp-bg) 0%, #F8F4EE 55%, #F0EBE3 100%);
   background-attachment: fixed;
   min-height: 100%;
@@ -42,7 +42,7 @@ body:not(.shell-ready) {
 body::after {
   content: '';
   position: fixed; inset: 0; pointer-events: none; z-index: -1;
-  background-image: radial-gradient(rgba(212, 118, 78, .04) 1px, transparent 1.5px);
+  background-image: radial-gradient(rgba(37, 99, 235, .04) 1px, transparent 1.5px);
   background-size: 22px 22px;
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 22%, #000 0%, transparent 80%);
   mask-image: radial-gradient(ellipse 70% 60% at 50% 22%, #000 0%, transparent 80%);
