@@ -202,7 +202,7 @@
     }
     .tagbar .lp-pill:hover:not(.active) {
       border-color: var(--lp-border-strong); color: var(--lp-ink);
-      transform: translateY(-1px); box-shadow: var(--lp-shadow-sm);
+      box-shadow: var(--lp-shadow-sm);
     }
     .tagbar .lp-pill.active {
       border-color: var(--lp-ink); background: var(--lp-ink); color: var(--lp-bg);
@@ -312,12 +312,11 @@
     .last-activities__list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 6px 0 4px; margin: -6px 0 -2px; }
     .la-card {
       display: flex; flex-direction: column; align-items: center; gap: 6px;
-      min-width: 120px; max-width: 140px; padding: 12px 10px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      width: 130px; flex: 0 0 130px; padding: 12px 10px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
       border-radius: var(--lp-radius-md); text-decoration: none; color: var(--lp-ink); text-align: center;
       transition: border-color .2s var(--lp-ease), transform .15s var(--lp-ease), box-shadow .2s;
-      flex-shrink: 0;
     }
-    .la-card:hover { border-color: var(--la-color, var(--lp-accent)); transform: translateY(-2px); box-shadow: var(--lp-shadow-sm); }
+    .la-card:hover { border-color: var(--la-color, var(--lp-accent)); box-shadow: var(--lp-shadow-sm); }
     .la-card:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
     .la-card__icon {
       width: 36px; height: 36px; border-radius: var(--lp-radius-md);
@@ -338,7 +337,7 @@
       padding: 14px 0; text-align: center;
     }
     @media (max-width: 480px) {
-      .la-card { min-width: 100px; max-width: 120px; padding: 10px 8px; }
+      .la-card { width: 110px; flex: 0 0 110px; padding: 10px 8px; }
       .la-card__icon { width: 30px; height: 30px; font-size: .8rem; }
       .la-card__name { font-size: .6rem; }
     }
@@ -351,6 +350,12 @@
       display: none; flex-direction: column; justify-content: center; gap: 2px;
       flex: 1; min-width: 0; overflow: hidden;
     }
+    /* Las 3 vistas "overview" combinan saludo + pill de stats centrado — el
+       saludo cede espacio al centro del topbar en vez de usar el ancho completo. */
+    body:not([data-active]) .topbar-greeting,
+    body[data-active="resumen"] .topbar-greeting,
+    body[data-active="mi-progreso"] .topbar-greeting,
+    body[data-active="rutas"] .topbar-greeting { max-width: 380px; }
     .topbar-greeting-title {
       display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       font-family: var(--lp-font-display); font-size: 1.3rem; font-weight: var(--lp-weight-semibold); line-height: 1.15;
@@ -380,7 +385,6 @@
       border-top: 4px solid var(--spine);
     }
     .tile:hover {
-      transform: translateY(-3px);
       box-shadow: var(--lp-shadow-hover), 0 14px 32px -10px color-mix(in srgb, var(--spine) 35%, transparent);
     }
     .tile .tile-icon {
@@ -409,8 +413,8 @@
       box-shadow: var(--lp-shadow-md);
       transition: transform .25s var(--lp-ease), box-shadow .25s var(--lp-ease), border-color .2s;
     }
-    .book:hover { transform: translateY(-2px); box-shadow: var(--lp-shadow-hover); border-color: color-mix(in srgb, var(--spine) 50%, var(--lp-border)); }
-    .book:active { transform: translateY(0) scale(.98); }
+    .book:hover { box-shadow: var(--lp-shadow-hover); border-color: color-mix(in srgb, var(--spine) 50%, var(--lp-border)); }
+    .book:active { transform: scale(.98); }
 
     .book-spine { width: 6px; height: 100%; background: var(--spine); align-self: stretch; border-radius: 6px 0 0 6px; }
     .book-icon {
@@ -486,7 +490,7 @@
       box-shadow: var(--lp-shadow-sm);
       transition: transform .2s var(--lp-ease), box-shadow .2s;
     }
-    .ruta-card:hover { transform: translateY(-2px); box-shadow: var(--lp-shadow-hover); }
+    .ruta-card:hover { box-shadow: var(--lp-shadow-hover); }
     .ruta-card__header { display: flex; align-items: center; gap: 8px; }
     .ruta-card__icon { font-size: 1.1rem; }
     .ruta-card__title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; display: flex; align-items: center; gap: 6px; }
@@ -509,26 +513,26 @@
       transition: background .15s, border-color .15s, transform .15s, box-shadow .15s;
       text-decoration: none; cursor: pointer;
     }
-    .ruta-step:hover { transform: translateY(-1px); border-color: var(--ruta-color); background: color-mix(in srgb, var(--ruta-color) 8%, var(--lp-surface)); box-shadow: 0 2px 8px color-mix(in srgb, var(--ruta-color) 18%, transparent); }
+    .ruta-step:hover { border-color: var(--lp-border-strong); background: var(--lp-surface); }
     .ruta-step:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
-    .ruta-step.done { background: color-mix(in srgb, var(--lp-success) 12%, transparent); border-color: var(--lp-success); color: var(--lp-success); }
-    .ruta-step.done:hover { background: color-mix(in srgb, var(--lp-success) 20%, transparent); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-success) 18%, transparent); }
-    .ruta-step.current { background: color-mix(in srgb, var(--ruta-color) 14%, transparent); border-color: var(--ruta-color); color: var(--ruta-color); font-weight: var(--lp-weight-bold); box-shadow: 0 2px 8px color-mix(in srgb, var(--ruta-color) 15%, transparent); }
-    .ruta-step.current:hover { background: color-mix(in srgb, var(--ruta-color) 22%, transparent); }
+    .ruta-step.done { background: var(--lp-bg-paper); border-color: var(--lp-border); color: var(--lp-muted); }
+    .ruta-step.done:hover { background: var(--lp-surface); border-color: var(--lp-border-strong); }
+    .ruta-step.current { background: var(--lp-surface); border-color: var(--lp-border-strong); color: var(--lp-ink); font-weight: var(--lp-weight-bold); }
+    .ruta-step.current:hover { background: var(--lp-surface); border-color: var(--lp-ink); }
     .ruta-step__items {
       font-size: .55rem; font-weight: var(--lp-weight-extrabold);
       background: color-mix(in srgb, var(--lp-ink) 8%, transparent);
       color: var(--lp-muted); padding: 1px 5px; border-radius: 3px;
       line-height: 1.2;
     }
-    .ruta-step.current .ruta-step__items { background: color-mix(in srgb, var(--ruta-color) 20%, transparent); color: var(--ruta-color); }
-    .ruta-step.done .ruta-step__items { background: color-mix(in srgb, var(--lp-success) 20%, transparent); color: var(--lp-success); }
+    .ruta-step.current .ruta-step__items { background: color-mix(in srgb, var(--lp-ink) 10%, transparent); color: var(--lp-muted); }
+    .ruta-step.done .ruta-step__items { background: color-mix(in srgb, var(--lp-ink) 6%, transparent); color: var(--lp-muted); }
     .ruta-card__complete { margin-top: 10px; font-size: .68rem; font-weight: var(--lp-weight-bold); color: var(--lp-success); }
 
-    .book.b-ed { --spine: var(--lp-cat-amber); }
-    .book.b-noun { --spine: var(--lp-cat-green); }
     .book.b-vocab { --spine: var(--lp-cat-purple); }
-    .book.b-opp { --spine: var(--lp-cat-teal); }
+    .book.b-grammar { --spine: var(--lp-cat-amber); }
+    .book.b-pron { --spine: var(--lp-cat-blue); }
+    .book.b-analysis { --spine: var(--lp-cat-teal); }
 
     /* ─── GUIDES ─── */
     .guides { display: grid; grid-template-columns: 1fr; gap: 11px; }
@@ -541,7 +545,7 @@
       font-size: .76rem; font-weight: var(--lp-weight-bold);
       transition: border-color .2s, transform .2s, box-shadow .2s; box-shadow: var(--lp-shadow-sm); overflow: hidden;
     }
-    .guide-link:hover { border-color: color-mix(in srgb, var(--guide-color) 60%, var(--lp-border)); transform: translateY(-2px); box-shadow: var(--lp-shadow-md); }
+    .guide-link:hover { border-color: color-mix(in srgb, var(--guide-color) 60%, var(--lp-border)); box-shadow: var(--lp-shadow-md); }
     .guide-spine { width: 5px; align-self: stretch; background: var(--guide-color); border-radius: 6px 0 0 6px; flex-shrink: 0; }
     .guide-icon { width: 31px; height: 31px; display: flex; align-items: center; justify-content: center; font-size: .95rem; margin: 0 2px 0 10px; flex-shrink: 0; background: color-mix(in srgb, var(--guide-color) 10%, transparent); border-radius: var(--lp-radius-sm); }
     .guide-body { padding: 11px 14px 11px 10px; min-width: 0; }
@@ -596,7 +600,7 @@
       border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md); background: var(--lp-surface-sunken);
       color: var(--lp-ink); text-decoration: none; transition: border-color .2s var(--lp-ease), transform .2s var(--lp-ease);
     }
-    .about-modules a:hover { border-color: var(--lp-accent); transform: translateY(-2px); }
+    .about-modules a:hover { border-color: var(--lp-accent); }
     .about-modules a:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
     .about-modules strong { font-size: .78rem; }
     .about-modules span { color: var(--lp-muted); font-size: .68rem; }
@@ -646,8 +650,7 @@
     body[data-active="mi-progreso"] .topbar-greeting,
     body[data-active="rutas"] .topbar-greeting { display: flex; }
     body[data-active="rutas"] .search-bar,
-    body[data-active="rutas"] .filter-menu,
-    body[data-active="rutas"] .lp-header-stats { display: none; }
+    body[data-active="rutas"] .filter-menu { display: none; }
 
     /* Expand/Collapse en topbar: solo visible en desktop + sección mi-progreso */
     @media (min-width: 861px) {
@@ -774,7 +777,7 @@
       overflow: hidden; transition: box-shadow .25s var(--lp-ease), border-color .25s;
     }
     .path-accordion:hover { box-shadow: var(--lp-shadow-md); }
-    .path-accordion[open] { border-color: color-mix(in srgb, var(--path-color) 40%, var(--lp-border)); box-shadow: var(--lp-shadow-md); }
+    .path-accordion[open] { border-color: color-mix(in srgb, var(--path-color) 25%, var(--lp-border)); box-shadow: var(--lp-shadow-md); }
     .path-accordion.spell { --path-color: var(--lp-cat-amber); }
     .path-accordion.build { --path-color: var(--lp-cat-green); }
     .path-accordion.decode { --path-color: var(--lp-cat-blue); }
@@ -829,7 +832,7 @@
       background: var(--lp-surface); border: 1px solid var(--lp-border-subtle);
       transition: background .2s, border-color .2s, transform .15s;
     }
-    .path-module:hover { background: color-mix(in srgb, var(--path-color) 4%, var(--lp-surface)); border-color: var(--lp-border); transform: translateX(2px); }
+    .path-module:hover { background: color-mix(in srgb, var(--path-color) 4%, var(--lp-surface)); border-color: var(--lp-border); }
     .path-module.completed { background: color-mix(in srgb, var(--path-color) 6%, var(--lp-surface)); }
     .path-module.current { border-color: var(--path-color); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
     .pm-step {
@@ -965,11 +968,11 @@
     <div class="topbar">
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
-        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos de práctica incluyendo Battle 2P.</p>
+        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos, incl. Battle 2P.</p>
         <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
         <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
         <span class="topbar-greeting-title tg-rutas">Rutas <em>guiadas</em></span>
-        <p class="topbar-greeting-sub tg-rutas">Secuencias de ejercicios conectados por objetivo. Elige una ruta y sigue los pasos — de lo básico a lo avanzado.</p>
+        <p class="topbar-greeting-sub tg-rutas">Secuencias de ejercicios, de lo básico a lo avanzado.</p>
       </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
@@ -1422,7 +1425,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   (function() { var u = lpLogin.getUser(); if (u) { var l = document.querySelector('#loginTrigger .sb-label'); if (l) l.textContent = u.name; } })();
 
   // ─── RENDER MODULE CARDS FROM CATALOG (Fase 2) ───
-  const SPINE_CYCLE = ['', 'b-ed', 'b-noun', 'b-vocab', 'b-opp'];
+  const CATEGORY_SPINE = { vocab: 'b-vocab', grammar: 'b-grammar', pronunciation: 'b-pron', analysis: 'b-analysis', guides: '' };
   const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
   const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
 
@@ -1474,18 +1477,19 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     </a>`;
   }
 
-  function renderShelf(containerId, modules) {
+  function renderShelf(containerId, modules, category) {
     const el = document.getElementById(containerId);
     if (!el) return;
-    el.innerHTML = modules.map((mod, i) => bookCardHTML(mod, SPINE_CYCLE[i % SPINE_CYCLE.length])).join('');
+    const cls = CATEGORY_SPINE[category] || '';
+    el.innerHTML = modules.map(mod => bookCardHTML(mod, cls)).join('');
   }
 
   function renderAllShelves() {
-    renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'));
-    renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'));
-    renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'));
+    renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'), 'vocab');
+    renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'), 'pronunciation');
+    renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'), 'analysis');
     Object.keys(SUBCATEGORIES).forEach(sub => {
-      renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub));
+      renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub), 'grammar');
     });
   }
 
@@ -1529,7 +1533,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
 
   const CATEGORY_COLORS = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
 
-  const RUTA_COLORS = { spell: 'var(--lp-cat-amber)', build: 'var(--lp-cat-green)', decode: 'var(--lp-cat-blue)', natural: 'var(--lp-cat-purple)', transform: 'var(--lp-cat-teal)', advanced: 'var(--lp-accent)' };
+  const RUTA_COLORS = { spell: 'var(--lp-cat-amber)', build: 'var(--lp-cat-amber)', decode: 'var(--lp-cat-blue)', natural: 'var(--lp-cat-blue)', transform: 'var(--lp-cat-blue)', advanced: 'var(--lp-accent)' };
 
   function renderRutas() {
     const grid = document.getElementById('rutasGrid');
@@ -1857,7 +1861,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   const allItems = MODULES.reduce((sum, m) => { const d = getModuleDepth(m.id); return sum + (d ? d.items : 0); }, 0);
   const roundedItems = Math.floor(allItems / 100) * 100;
   const resumenSub = document.getElementById('resumenSub');
-  if (resumenSub) resumenSub.textContent = `${MODULES.length} ejercicios · +${roundedItems.toLocaleString()} items · 5 modos de práctica incluyendo Battle 2P.`;
+  if (resumenSub) resumenSub.textContent = `${MODULES.length} ejercicios · +${roundedItems.toLocaleString()} items · 5 modos, incl. Battle 2P.`;
 
   // Local dev supports independent ports and the shared-origin gateway.
   const _h = location.hostname;
@@ -1889,7 +1893,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     document.body.dataset.active = target;
     const isOverview = target === 'resumen' || target === 'mi-progreso' || target === 'rutas';
     topbarSearch.style.display = isOverview ? 'none' : '';
-    topbarStats.style.display = isOverview ? 'none' : '';
+    topbarStats.style.display = '';
     topbarGreeting.style.display = isOverview ? 'flex' : 'none';
     if (filterMenu) filterMenu.style.display = isOverview ? 'none' : '';
     if (tagBar) closeFilterPanel();

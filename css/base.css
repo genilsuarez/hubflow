@@ -163,6 +163,7 @@
   --lp-muted: #998E84;
   --lp-ink-inverse: #1A1714;
 
+  --lp-accent: #a87a62;
   --lp-accent-soft: #3A2820;
   --lp-cat-blue-soft: #1E3350;
   --lp-cat-amber-soft: #3D3018;
@@ -175,12 +176,12 @@
   --lp-info-soft: #1A2A3D;
   --lp-warning-soft: #2D2510;
 
-  /* Lightened category colors for dark mode contrast */
-  --lp-cat-blue: #6FA3D4;
-  --lp-cat-amber: #D4A847;
-  --lp-cat-green: #6BBF82;
-  --lp-cat-purple: #A98ED4;
-  --lp-cat-teal: #6BB5B5;
+  /* Muted category colors for dark mode — softer contrast */
+  --lp-cat-blue: #6d8ea8;
+  --lp-cat-amber: #a08f6e;
+  --lp-cat-green: #6f9a7c;
+  --lp-cat-purple: #8a7d9e;
+  --lp-cat-teal: #6d9696;
 
   --lp-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.18);
   --lp-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.18);

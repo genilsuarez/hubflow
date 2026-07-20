@@ -50,21 +50,22 @@ const currentModule = MODULES.find(m => {
 const section = currentModule?.category || 'vocab';
 
 // ─── Header restructure ────────────────────────────────────────────────────────
-// Replace the back-link <a> with a ☰ button that opens the sidebar.
+// Keep the original ← back link (always visible, matches LyricFlow's player header
+// and FluentFlow's in-game header, both of which keep a dedicated back arrow even
+// when a hamburger is also present) and add a ☰ next to it to open the sidebar.
 
 const topBar = document.querySelector('.top-bar');
 const originalBackLink = topBar?.querySelector('a[href*="../index.html"]');
 
 let hamburgerBtn;
 if (topBar && originalBackLink) {
-  // Create a proper button to replace the old <a>
   hamburgerBtn = document.createElement('button');
   hamburgerBtn.type = 'button';
   hamburgerBtn.className = originalBackLink.className; // keeps lp-icon-btn
   hamburgerBtn.textContent = '☰';
   hamburgerBtn.setAttribute('aria-label', 'Abrir navegación');
   hamburgerBtn.setAttribute('aria-controls', 'exerciseSidebar');
-  originalBackLink.replaceWith(hamburgerBtn);
+  originalBackLink.insertAdjacentElement('afterend', hamburgerBtn);
 }
 
 // Move top-bar out of .wrap so it spans full body width (like LyricFlow header)

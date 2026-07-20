@@ -57,6 +57,7 @@ body::after {
   border-bottom: 1.5px solid color-mix(in srgb, var(--lp-ink) 30%, transparent);
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   height: 85px;
   min-height: 85px;
   box-sizing: border-box;
