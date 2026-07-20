@@ -969,7 +969,7 @@ export const PROGRESS_RULES = {
   'vocab-pack-nature': practiceRule(scoreKeys('vocab', VOCABULARY_PACKS.nature, ['quiz'])),
   opposites: practiceRule(scoreKeys('wr', ['opposites', 'synonyms'], ['quiz'])),
   'confusing-words': practiceRule(scoreKeys('conf', ['make-do', 'say-tell', 'bring-take', 'borrow-lend', 'watch-look-see', 'less-fewer', 'me-i', 'who-whom', 'affect-effect', 'still-already-just-yet', 'is-are', 'there-their-theyre', 'your-youre', 'its-its', 'principal-principle', 'complement-compliment', 'desert-dessert', 'weather-whether'])),
-  'phrasal-verbs': practiceRule(scoreKeys('phrasal', ['everyday', 'work', 'relationships', 'travel', 'getVerbs', 'food', 'turn', 'advanced'], ['quiz', 'write'])),
+  'phrasal-verbs': practiceRule(scoreKeys('phrasal', ['everyday', 'work', 'relationships', 'travel', 'getVerbs', 'food', 'turn', 'advanced'], ['quiz', 'write', 'sort'])),
   phonics: practiceRule(scoreKeys('phonics', ['vowel-pairs', 'consonant-pairs', 'word-stress', 'silent-letters'])),
   'plural-endings': practiceRule(scoreKeys('plural', ['pluralSound'])),
   'word-stress-quiz': practiceRule(scoreKeys('stress', ['stress'])),
