@@ -41,21 +41,21 @@
 
 /* 2. Botón de icono circular (tema, home, back, toggles del player) */
 .lp-icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1.5px solid var(--lp-border);
-  background: var(--lp-surface);
-  color: var(--lp-ink-soft);
+  width: var(--lp-navbtn-size);
+  height: var(--lp-navbtn-size);
+  border-radius: var(--lp-navbtn-radius);
+  border: var(--lp-navbtn-border-width) solid var(--lp-navbtn-border);
+  background: var(--lp-navbtn-bg);
+  color: var(--lp-navbtn-icon-color);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 0.9rem;
-  box-shadow: var(--lp-shadow-sm);
+  box-shadow: var(--lp-navbtn-shadow);
   transition: border-color 0.2s, transform 0.2s, background 0.2s, box-shadow 0.2s, color 0.2s;
 }
-.lp-icon-btn:hover { border-color: var(--lp-accent); transform: scale(1.06); box-shadow: var(--lp-shadow-md); }
+.lp-icon-btn:hover { border-color: var(--lp-navbtn-accent); transform: scale(1.06); box-shadow: var(--lp-navbtn-shadow-hover); }
 .lp-icon-btn.active {
   background: var(--lp-accent-soft);
   border-color: color-mix(in srgb, var(--lp-accent) 35%, transparent);

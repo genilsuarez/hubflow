@@ -157,3 +157,12 @@ body.has-sidebar .depth-banner {
 }
 .depth-bell:hover { opacity: 1; transform: scale(1.15); }
 .depth-bell:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+
+/* En mobile el footer de firma y el sistema de toast/campana de profundidad
+   de módulo se ocultan — son ruido secundario en pantallas chicas y el resto
+   de las apps no tiene equivalente en su vista mobile. */
+@media (max-width: 860px) {
+  .exercise-foot,
+  .depth-banner,
+  .depth-bell { display: none; }
+}

@@ -56,7 +56,7 @@
     /* ═══ APP SHELL ═══ */
     .shell { display: grid; grid-template-columns: 232px 1fr; height: 100%; }
     .navigation-launcher {
-      display: none; position: fixed; top: 16px; left: 16px; z-index: 35;
+      display: none; position: fixed; top: 16px; left: 16px; z-index: var(--lp-navbtn-z);
       font-size: 1rem;
     }
     .sidebar-scrim {
@@ -617,11 +617,7 @@
     @media (max-width: 580px) { .about-modal { padding: 22px; } .about-header h2 { font-size: 1.35rem; } .about-footer p { flex-direction: column; gap: 2px; } .about-footer span { text-align: left; } }
     @media (prefers-reduced-motion: reduce) { .about-overlay { animation: none; } }
 
-    /* ─── TOPBAR ACTIONS (mobile access; desktop controls live in sidebar) ─── */
-    .topbar-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: auto; }
-
     @media (min-width: 861px) {
-      .topbar-actions { display: none; }
       html[data-navigation-mode="sidebar"] .sidebar-scrim { display: none !important; }
       html[data-navigation-mode="floating"] .shell { grid-template-columns: 1fr; }
       html[data-navigation-mode="floating"] .sidebar {
@@ -633,9 +629,6 @@
       html[data-navigation-mode="floating"] .navigation-launcher { display: flex; }
       html[data-navigation-mode="floating"] .topbar { padding-left: 88px; }
     }
-
-    /* ─── MOBILE BOTTOM NAV ─── */
-    .bottom-nav { display: none; }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
@@ -659,8 +652,8 @@
     }
 
     @media (max-width: 860px) {
-      .shell { grid-template-columns: 1fr; height: calc(100vh - 62px - env(safe-area-inset-bottom, 0px)); height: calc(100dvh - 62px - env(safe-area-inset-bottom, 0px)); }
-      .navigation-launcher { display: flex; top: 10px; left: 10px; }
+      .shell { grid-template-columns: 1fr; }
+      .navigation-launcher { display: flex; top: 16px; left: 16px; }
       .sidebar {
         display: flex; position: fixed; inset: 0 auto 0 0; z-index: 40;
         width: min(232px, 86vw); transform: translateX(-102%);
@@ -668,34 +661,8 @@
       }
       .sidebar.is-open { transform: translateX(0); }
       .topbar { padding-left: 66px; }
-      /* En mobile el footer se oculta. El shell usa 100dvh (viewport dinámico)
-         menos la altura de la bottom-nav para que el contenido nunca quede
-         detrás de la barra de navegación fija. */
       .foot { display: none; }
       .content { padding-bottom: 14px; }
-
-      .bottom-nav {
-        display: flex; justify-content: space-around; align-items: stretch;
-        position: fixed; left: 0; right: 0; bottom: 0; height: 62px;
-        background: var(--lp-surface); border-top: 1.5px solid var(--lp-border);
-        box-shadow: 0 -4px 16px rgba(0,0,0,.06); z-index: 20;
-        padding-bottom: env(safe-area-inset-bottom, 0);
-      }
-      .bn-item {
-        --spine: var(--lp-accent);
-        flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-        border: none; background: none; color: var(--lp-muted); font-family: var(--lp-font-body);
-        cursor: pointer; min-height: 44px; position: relative;
-      }
-      .bn-item .bn-icon { font-size: 1.15rem; }
-      .bn-item .bn-label { font-size: .58rem; font-weight: var(--lp-weight-bold); }
-      .bn-item.active { color: var(--spine); }
-      .bn-item.active::before { content: ''; position: absolute; top: 0; left: 30%; right: 30%; height: 2.5px; background: var(--spine); border-radius: 0 0 4px 4px; }
-      .bn-item.v { --spine: var(--lp-cat-purple); }
-      .bn-item.p { --spine: var(--lp-cat-blue); }
-      .bn-item.g { --spine: var(--lp-cat-amber); }
-      .bn-item.a { --spine: var(--lp-cat-teal); }
-      .bn-item.r { --spine: var(--lp-cat-green); }
     }
     /* El pill centrado necesita el ancho completo de desktop (sidebar fija) para
        no pisar el buscador/filtro — se oculta desde el mismo quiebre en que el
@@ -959,7 +926,7 @@
       <button class="sb-item sb-footer-item" id="aboutTrigger"><span class="sb-spine"></span><span class="sb-icon">ⓘ</span><span class="sb-label">About LearnFlow</span></button>
       <button class="sb-item sb-footer-item theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema"><span class="sb-spine"></span><span class="sb-icon">🌙</span><span class="sb-label">Modo oscuro</span></button>
       <button class="sb-item sb-footer-item" id="loginTrigger" type="button" aria-label="Iniciar sesión" title="Iniciar sesión"><span class="sb-spine"></span><span class="sb-icon">👤</span><span class="sb-label">Iniciar Sesión</span></button>
-      <a class="sb-item sb-footer-item" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Portal</span></a>
+      <a class="sb-item sb-footer-item portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Portal</span></a>
     </div>
   </aside>
 
@@ -1003,10 +970,6 @@
         <button class="paths-icon-btn" id="pathCollapseAllTopbar" title="Colapsar todo">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
         </button>
-      </div>
-      <div class="topbar-actions">
-        <button class="lp-icon-btn theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema">🌙</button>
-        <a class="lp-icon-btn portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow">🏠</a>
       </div>
     </div>
 
@@ -1253,17 +1216,6 @@
     </footer>
   </div>
 </div>
-
-<!-- BOTTOM NAV (mobile) -->
-<nav class="bottom-nav" id="bottomNav">
-  <button class="bn-item active" data-target="resumen"><span class="bn-icon">📋</span><span class="bn-label">Resumen</span></button>
-  <button class="bn-item path" data-target="mi-progreso"><span class="bn-icon">🛤️</span><span class="bn-label">Progreso</span></button>
-  <button class="bn-item v" data-target="vocab"><span class="bn-icon">🧠</span><span class="bn-label">Vocab</span></button>
-  <button class="bn-item g" data-target="grammar"><span class="bn-icon">✏️</span><span class="bn-label">Gramática</span></button>
-  <button class="bn-item p" data-target="pronunciation"><span class="bn-icon">🔊</span><span class="bn-label">Sonido</span></button>
-  <button class="bn-item a" data-target="analysis"><span class="bn-icon">🔍</span><span class="bn-label">Análisis</span></button>
-  <button class="bn-item r" data-target="guides"><span class="bn-icon">📚</span><span class="bn-label">Guías</span></button>
-</nav>
 
 <script type="module">
 import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
@@ -1882,13 +1834,13 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
 
   // ─── SECTION SWITCHING (SPA nav) ───
   const sections = document.querySelectorAll('.section');
-  const navButtons = document.querySelectorAll('.sb-item, .bn-item, .tile');
+  const navButtons = document.querySelectorAll('.sb-item, .tile');
   const content = document.querySelector('.content');
   const topbarSearch = document.querySelector('.search-bar');
   const topbarStats = document.querySelector('.lp-header-stats');
   const topbarGreeting = document.querySelector('.topbar-greeting');
   function setActive(target) {
-    navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('bn-item'))));
+    navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && b.classList.contains('sb-item')));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
     const isOverview = target === 'resumen' || target === 'mi-progreso' || target === 'rutas';
