@@ -121,6 +121,7 @@
       <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">🎯 Quiz</button>
       <button class="pill-btn" data-mode="write">✍️ Write</button>
+      <button class="pill-btn" data-mode="sort">🗂️ Sort</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
@@ -179,6 +180,15 @@
       </div>
       <button class="lp-btn lp-btn--primary" id="writeCheck">Check ✓</button>
       <button class="lp-btn lp-btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+    </div>
+
+    <!-- SORT -->
+    <div data-area="sort">
+      <div class="sort-instruction" id="sortInstruction">Tap a verb, then tap the category it belongs to</div>
+      <div class="sort-score" id="sortScore">0 / 8</div>
+      <div class="sort-pool" id="sortPool"></div>
+      <div class="sort-categories" id="sortCategories"></div>
+      <button class="lp-btn lp-btn--primary" id="sortCheck" style="display:none;">✓ Verify</button>
     </div>
 
     <!-- BATTLE -->
