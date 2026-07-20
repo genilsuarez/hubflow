@@ -98,6 +98,35 @@
   .btn--orange { background: var(--lp-warning, #e85d5d); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
   .btn--red { background: var(--lp-error, #e85d5d); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
 
+  /* Sort mode */
+  .sort-instruction { font-size: .72rem; font-weight: 700; color: var(--lp-muted); text-align: center; }
+  .sort-score { font-family: var(--lp-font-mono); font-size: .7rem; color: var(--lp-muted); text-align: center; }
+  .sort-pool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; max-width: 720px; padding: 12px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); min-height: 52px; }
+  .sort-word {
+    font-family: var(--lp-font-body); font-weight: 700; font-size: .82rem;
+    padding: 8px 14px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
+    background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
+    transition: all .2s var(--lp-ease); user-select: none;
+  }
+  .sort-word:hover { border-color: var(--lp-cat-teal); transform: translateY(-2px); }
+  .sort-word.selected { border-color: var(--lp-cat-teal); background: rgba(61,127,127,.12); box-shadow: 0 0 0 2px rgba(61,127,127,.25); }
+  .sort-word.placed { opacity: .4; pointer-events: none; }
+  .sort-word.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
+  .sort-word.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
+  .sort-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; max-width: 720px; }
+  .sort-cat {
+    background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg);
+    padding: 10px; min-height: 100px; display: flex; flex-direction: column; gap: 6px;
+    transition: border-color .2s, background .2s; cursor: pointer;
+  }
+  .sort-cat:hover { border-color: var(--lp-cat-teal); }
+  .sort-cat.drop-active { border-color: var(--lp-cat-teal); background: rgba(61,127,127,.06); }
+  .sort-cat-label { font-family: var(--lp-font-display); font-size: .78rem; font-weight: 700; color: var(--lp-cat-teal); text-align: center; padding-bottom: 6px; border-bottom: 1px solid var(--lp-border); }
+  .sort-cat-items { display: flex; flex-wrap: wrap; gap: 5px; min-height: 32px; }
+  .sort-cat-items .sort-word { font-size: .72rem; padding: 5px 10px; }
+  [data-theme="dark"] .sort-word.correct { color: #6FE8A8; }
+  [data-theme="dark"] .sort-word.wrong { color: #FF9F9F; }
+
   @media (max-width: 480px) {
     .quiz-opt { min-width: 55px; padding: 9px 14px; }
     .write-input-row input { width: 90px; }
@@ -278,6 +307,7 @@ function startMode() {
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'write') initWrite();
+  else if (mode === 'sort') initSort();
   else if (mode === 'battle') initBattle();
   else if (mode === 'timed') initQuiz(true);
 }
@@ -504,6 +534,168 @@ function finishWrite() {
   });
   recordScore(`phrasal-${currentCat}-write`, pct);
 }
+
+// ═══ SORT (classify by meaning) ═══
+const SORT_THEMES = [
+  { label: 'Starting / Continuing', verbs: ['carry on', 'keep up with', 'set up', 'set off', 'get on', 'take on'] },
+  { label: 'Stopping / Ending', verbs: ['give up', 'break up', 'call off', 'put off', 'turn down', 'hold off'] },
+  { label: 'Discovering / Understanding', verbs: ['find out', 'figure out', 'work out', 'look into', 'go over', 'point out'] },
+  { label: 'Movement / Travel', verbs: ['set off', 'take off', 'get on', 'get off', 'drop off', 'pick up', 'slow down', 'speed up', 'check in', 'head off', 'pull over'] },
+  { label: 'Socializing / Relationships', verbs: ['hang out', 'get along', 'ask out', 'make up', 'fall out', 'show off', 'look up to', 'cheer up'] },
+  { label: 'Communication', verbs: ['bring up', 'point out', 'come up with', 'get across', 'hang up', 'turn to'] },
+  { label: 'Household / Daily', verbs: ['clean up', 'turn on', 'turn off', 'throw away', 'pick up', 'put on', 'take off', 'wake up', 'sit down', 'stand up'] },
+  { label: 'Food / Eating', verbs: ['eat out', 'warm up', 'wolf down', 'fill up', 'whip up', 'polish off', 'dish up', 'live on', 'cut down on'] },
+  { label: 'Emotions / Attitude', verbs: ['cheer up', 'let down', 'show off', 'give up', 'put up with', 'turn against', 'hold back'] },
+  { label: 'Work / Tasks', verbs: ['carry out', 'set up', 'take on', 'hand in', 'write down', 'figure out', 'work out', 'call off'] },
+];
+
+let sortState = { selected: null, placements: {}, correctMap: {}, total: 0, score: 0, checked: false };
+
+function initSort() {
+  document.querySelector('[data-area="sort"]').classList.add('show');
+  sortState = { selected: null, placements: {}, correctMap: {}, total: 0, score: 0, checked: false };
+
+  // Pick 4 random themes
+  const themes = shuffle([...SORT_THEMES]).slice(0, 4);
+  // From each theme, pick 2 verbs that exist in our data
+  const allVerbs = Object.values(CATEGORIES).flatMap(c => c.items);
+  const verbMap = new Map(allVerbs.map(v => [v.verb, v]));
+
+  const roundData = [];
+  themes.forEach(theme => {
+    const available = theme.verbs.filter(v => verbMap.has(v));
+    const picked = shuffle(available).slice(0, 2);
+    picked.forEach(v => roundData.push({ verb: v, category: theme.label, data: verbMap.get(v) }));
+  });
+
+  sortState.total = roundData.length;
+  sortState.correctMap = {};
+  roundData.forEach(r => { sortState.correctMap[r.verb] = r.category; });
+
+  // Render pool
+  const poolEl = document.getElementById('sortPool');
+  const shuffledVerbs = shuffle(roundData.map(r => r.verb));
+  poolEl.innerHTML = shuffledVerbs.map(v =>
+    `<button class="sort-word" data-verb="${v}">${v}</button>`
+  ).join('');
+
+  // Render categories
+  const catsEl = document.getElementById('sortCategories');
+  catsEl.innerHTML = themes.map(t =>
+    `<div class="sort-cat" data-cat="${t.label}"><div class="sort-cat-label">${t.label}</div><div class="sort-cat-items"></div></div>`
+  ).join('');
+
+  // Event: select word from pool
+  poolEl.querySelectorAll('.sort-word').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (sortState.checked) return;
+      poolEl.querySelectorAll('.sort-word').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      sortState.selected = btn.dataset.verb;
+    });
+  });
+
+  // Event: click category to place
+  catsEl.querySelectorAll('.sort-cat').forEach(cat => {
+    cat.addEventListener('click', () => {
+      if (sortState.checked || !sortState.selected) return;
+      const verb = sortState.selected;
+      const catLabel = cat.dataset.cat;
+
+      // Remove from previous category if already placed
+      if (sortState.placements[verb]) {
+        const prevCat = catsEl.querySelector(`[data-cat="${sortState.placements[verb]}"] .sort-cat-items`);
+        const prevChip = prevCat?.querySelector(`[data-verb="${verb}"]`);
+        if (prevChip) prevChip.remove();
+      }
+
+      // Place in new category
+      sortState.placements[verb] = catLabel;
+      const itemsEl = cat.querySelector('.sort-cat-items');
+      // Remove existing chip if re-placing
+      const existing = itemsEl.querySelector(`[data-verb="${verb}"]`);
+      if (existing) existing.remove();
+
+      const chip = document.createElement('button');
+      chip.className = 'sort-word';
+      chip.dataset.verb = verb;
+      chip.textContent = verb;
+      chip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (sortState.checked) return;
+        // Return to pool
+        delete sortState.placements[verb];
+        chip.remove();
+        const poolBtn = poolEl.querySelector(`[data-verb="${verb}"]`);
+        if (poolBtn) poolBtn.classList.remove('placed');
+        updateSortProgress();
+        toggleSortCheck();
+      });
+      itemsEl.appendChild(chip);
+
+      // Mark pool word as placed
+      const poolBtn = poolEl.querySelector(`[data-verb="${verb}"]`);
+      if (poolBtn) { poolBtn.classList.remove('selected'); poolBtn.classList.add('placed'); }
+      sortState.selected = null;
+
+      updateSortProgress();
+      toggleSortCheck();
+    });
+  });
+
+  document.getElementById('sortCheck').style.display = 'none';
+  updateSortProgress();
+}
+
+function updateSortProgress() {
+  const placed = Object.keys(sortState.placements).length;
+  document.getElementById('sortScore').textContent = `${placed} / ${sortState.total}`;
+  updProgress(placed, sortState.total);
+}
+
+function toggleSortCheck() {
+  const placed = Object.keys(sortState.placements).length;
+  document.getElementById('sortCheck').style.display = placed === sortState.total ? '' : 'none';
+}
+
+function checkSort() {
+  sortState.checked = true;
+  let correct = 0;
+
+  // Check each placed word
+  document.querySelectorAll('.sort-cat-items .sort-word').forEach(chip => {
+    const verb = chip.dataset.verb;
+    const placedIn = sortState.placements[verb];
+    const correctCat = sortState.correctMap[verb];
+    if (placedIn === correctCat) {
+      chip.classList.add('correct');
+      correct++;
+    } else {
+      chip.classList.add('wrong');
+    }
+  });
+
+  // Also mark pool words that weren't placed
+  document.querySelectorAll('#sortPool .sort-word.placed').forEach(btn => {
+    const verb = btn.dataset.verb;
+    const placedIn = sortState.placements[verb];
+    const correctCat = sortState.correctMap[verb];
+    if (placedIn === correctCat) btn.classList.add('correct');
+    else btn.classList.add('wrong');
+  });
+
+  sortState.score = correct;
+
+  const pct = showResult({
+    correct, total: sortState.total,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+  });
+  recordScore(`phrasal-${currentCat}-sort`, pct);
+}
+
+document.getElementById('sortCheck').addEventListener('click', checkSort);
 
 // ═══ BATTLE ═══
 let battle = { p1: 0, p2: 0, round: 0, total: 10, claimer: null, deck: [], phase: 'claim' };
