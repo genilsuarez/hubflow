@@ -65,10 +65,14 @@ body::after {
 }
 .learnflow-signature {
   font-family: var(--lp-font-display);
-  font-size: .85rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: var(--lp-ink-soft);
+  color: var(--lp-ink);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: clamp(160px, 30vw, 320px);
+  min-width: 0;
 }
 .tb-counter {
   position: absolute;
@@ -76,21 +80,30 @@ body::after {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 0;
-  height: 40px;
+  gap: var(--lp-score-group-gap);
+  height: var(--lp-score-height);
   min-width: 80px;
   justify-content: center;
-  padding: 0 20px;
-  border: 1.5px solid var(--lp-border);
-  border-radius: var(--lp-radius-full);
-  background: var(--lp-surface-sunken, var(--lp-surface));
-  color: var(--lp-ink);
-  font-family: var(--lp-font-mono);
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: .04em;
+  padding: 0 var(--lp-score-padding-x);
+  border: var(--lp-score-border-width) solid var(--lp-score-border);
+  border-radius: var(--lp-score-radius);
+  background: var(--lp-score-bg);
+  color: var(--lp-score-value-color);
+  font-family: var(--lp-score-font-family);
+  font-size: var(--lp-score-value-size);
+  font-weight: var(--lp-score-value-weight);
   white-space: nowrap;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--lp-score-shadow);
+}
+.tb-counter .lp-header-stats__icon {
+  width: var(--lp-score-icon-size);
+  height: var(--lp-score-icon-size);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.tb-counter .lp-header-stats__icon--target {
+  color: var(--lp-score-icon-color);
 }
 /* ─── HEADER SECTION ─── */
 /* ─── WIDER WRAP FOR EXERCISES ─── */

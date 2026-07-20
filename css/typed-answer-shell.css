@@ -27,6 +27,20 @@ body { min-height: 100vh; padding: 0 14px; }
 .answer-input.correct { border-color: var(--lp-success); }
 .answer-input.wrong { border-color: var(--lp-error); }
 
+/* Apostrophe tolerance tip */
+.apostrophe-tip {
+  display: none; width: 100%; max-width: 480px; font-size: .75rem; font-weight: 500;
+  color: var(--lp-warning-dark, #7a5c00); background: var(--lp-warning-soft, #fff8e1);
+  border: 1px solid var(--lp-warning, #f5a623); border-radius: var(--lp-radius-sm);
+  padding: 8px 12px; text-align: center; line-height: 1.5;
+}
+.apostrophe-tip.show { display: block; }
+.apostrophe-tip-icon { margin-right: 4px; }
+
+[data-theme="dark"] .apostrophe-tip {
+  color: var(--lp-warning, #f5a623); background: rgba(245, 166, 35, .08);
+}
+
 .hint-box, .explain-box {
   width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
   background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);

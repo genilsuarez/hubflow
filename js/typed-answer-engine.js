@@ -17,9 +17,36 @@ function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');
 }
 
-function isMatch(userAnswer, correctArray) {
+function stripApostrophes(s) {
+  return s.replace(/[''ʼ]/g, '');
+}
+
+/**
+ * Returns: { exact: bool, fuzzy: bool, corrected: string|null }
+ * - exact: user answer matches one of correctArray exactly (after normalize)
+ * - fuzzy: matches if we also strip apostrophes (user forgot them)
+ * - corrected: the canonical correct string that matched (for tip display)
+ */
+function matchAnswer(userAnswer, correctArray) {
   const n = normalize(userAnswer);
-  return n.length > 0 && correctArray.some(c => normalize(c) === n);
+  if (!n.length) return { exact: false, fuzzy: false, corrected: null };
+
+  if (correctArray.some(c => normalize(c) === n)) {
+    return { exact: true, fuzzy: false, corrected: null };
+  }
+
+  const nStripped = stripApostrophes(n);
+  const fuzzyMatch = correctArray.find(c => stripApostrophes(normalize(c)) === nStripped);
+  if (fuzzyMatch) {
+    return { exact: false, fuzzy: true, corrected: fuzzyMatch };
+  }
+
+  return { exact: false, fuzzy: false, corrected: null };
+}
+
+function isMatch(userAnswer, correctArray) {
+  const { exact, fuzzy } = matchAnswer(userAnswer, correctArray);
+  return exact || fuzzy;
 }
 
 export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
@@ -88,6 +115,8 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     document.getElementById('explainBox').textContent = '';
     document.getElementById('answersList').classList.remove('show');
     document.getElementById('answersList').innerHTML = '';
+    const tipEl = document.getElementById('apostropheTip');
+    if (tipEl) { tipEl.textContent = ''; tipEl.classList.remove('show'); }
 
     const input = document.getElementById('answerInput');
     input.value = '';
@@ -114,9 +143,22 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     input.disabled = true;
 
     const item = deck[idx];
-    const correct = isMatch(val, item.correct);
+    const result = matchAnswer(val, item.correct);
+    const correct = result.exact || result.fuzzy;
     input.classList.add(correct ? 'correct' : 'wrong');
     if (correct) score++;
+
+    // Apostrophe tip — accepted but nudge the user
+    const tipEl = document.getElementById('apostropheTip');
+    if (tipEl) {
+      if (result.fuzzy && result.corrected) {
+        tipEl.innerHTML = `<span class="apostrophe-tip-icon">💡</span> Casi perfecto — recuerda el apóstrofe: <strong>${result.corrected}</strong>`;
+        tipEl.classList.add('show');
+      } else {
+        tipEl.textContent = '';
+        tipEl.classList.remove('show');
+      }
+    }
 
     document.getElementById('explainBox').textContent = item.explain;
     const answersEl = document.getElementById('answersList');
