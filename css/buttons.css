@@ -110,3 +110,37 @@
   height: 36px;
   position: relative;
 }
+
+/* ☰ ghost — app bar estándar mobile (sin círculo/borde/sombra web) */
+@media (max-width: 860px) {
+  .navigation-launcher,
+  .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"] {
+    border: none;
+    border-radius: var(--lp-radius-md);
+    background: transparent;
+    box-shadow: none;
+    color: var(--lp-ink-soft);
+    font-size: 1.0625rem;
+    font-weight: 400;
+  }
+
+  .navigation-launcher:hover,
+  .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"]:hover {
+    background: color-mix(in srgb, var(--lp-ink) 5%, transparent);
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+    color: var(--lp-ink);
+  }
+
+  .navigation-launcher:active,
+  .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"]:active {
+    background: color-mix(in srgb, var(--lp-ink) 9%, transparent);
+    transform: scale(0.97);
+  }
+
+  /* Sidebar pin es desktop-only — ocultar toggle de modo nav en mobile/tablet */
+  .nav-mode-toggle {
+    display: none;
+  }
+}
