@@ -14,20 +14,24 @@ export function shuffle(arr) {
   return a;
 }
 
-/** Theme toggle */
-export function initTheme(storageKey = 'lp-theme') {
-  const saved = localStorage.getItem(storageKey);
-  if (saved === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
+/** Theme — delegates to LPTheme (lp-theme.js) */
+export function initTheme() {
+  if (window.LPTheme) return;
+  const saved = localStorage.getItem('lp-theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
   updateThemeButton();
 }
 
-export function toggleTheme(storageKey = 'lp-theme') {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const newTheme = isDark ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : '');
-  localStorage.setItem(storageKey, newTheme);
+export function toggleTheme() {
+  if (window.LPTheme) {
+    window.LPTheme.toggleTheme();
+  } else {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    if (newTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    else document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('lp-theme', newTheme);
+  }
   updateThemeButton();
 }
 

@@ -9,7 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
-  <script src="js/theme-init.js"></script>
+  <meta name="theme-color" content="#faf7f2">
+  <meta name="color-scheme" content="light">
+  <script src="js/lp-theme.js"></script>
   <script src="lp-login.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
@@ -1251,9 +1253,6 @@ import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js'
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, publishHubFlowProgress } from './js/utils.js';
 
 (function() {
-  // Theme
-  const saved = localStorage.getItem('lp-theme');
-  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
   function upd() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -1271,13 +1270,8 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   }
   upd();
   const toggleTheme = () => {
-    document.documentElement.classList.add('theme-transitioning');
-    const d = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = d ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme === 'dark' ? 'dark' : '');
-    localStorage.setItem('lp-theme', newTheme);
+    if (window.LPTheme) window.LPTheme.toggleTheme();
     upd();
-    setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 350);
   };
   themeBtns.forEach(b => b.onclick = toggleTheme);
 

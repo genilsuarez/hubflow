@@ -12,9 +12,9 @@ function themedAppHref(path, port) {
   const h = location.hostname;
   const isLocal = h === 'localhost' || h === '127.0.0.1' || h.startsWith('192.168.');
   const isUnified = isLocal && location.port === '3000';
-  if (isUnified) return path;
-  if (isLocal) return `http://${h}:${port}/`;
-  return path;
+  let href = isUnified ? path : isLocal ? `http://${h}:${port}/` : path;
+  if (window.LPTheme) href = window.LPTheme.appendThemeToHref(href);
+  return href;
 }
 
 function currentTheme() {
@@ -26,10 +26,15 @@ function currentThemeIcon() {
 }
 
 function toggleTheme() {
+  if (window.LPTheme) {
+    window.LPTheme.toggleTheme();
+    return;
+  }
   const isDark = currentTheme() === 'dark';
   const next = isDark ? 'light' : 'dark';
   document.documentElement.classList.add('theme-transitioning');
-  document.documentElement.setAttribute('data-theme', next);
+  if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  else document.documentElement.removeAttribute('data-theme');
   localStorage.setItem('lp-theme', next);
   const url = new URL(location.href);
   if (url.searchParams.has('theme')) {

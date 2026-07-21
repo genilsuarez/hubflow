@@ -16,14 +16,23 @@
 
   updateThemeButton();
   themeButton.addEventListener('click', function() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const nextTheme = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', nextTheme === 'dark' ? 'dark' : '');
-    localStorage.setItem('lp-theme', nextTheme);
-    if (location.search.includes('theme=')) {
-      const url = new URL(location.href);
-      url.searchParams.set('theme', nextTheme);
-      history.replaceState(null, '', url);
+    if (window.LPTheme) {
+      window.LPTheme.toggleTheme();
+    } else {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const nextTheme = isDark ? 'light' : 'dark';
+      document.documentElement.classList.add('theme-transitioning');
+      if (nextTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('lp-theme', nextTheme);
+      if (location.search.includes('theme=')) {
+        const url = new URL(location.href);
+        url.searchParams.set('theme', nextTheme);
+        history.replaceState(null, '', url);
+      }
+      setTimeout(function() {
+        document.documentElement.classList.remove('theme-transitioning');
+      }, 350);
     }
     updateThemeButton();
   });
