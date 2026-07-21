@@ -193,7 +193,7 @@ function buildSidebar() {
   const scrim = document.createElement('div');
   scrim.className = 'sidebar-scrim';
   scrim.id = 'exerciseSidebarScrim';
-  scrim.hidden = true;
+  scrim.setAttribute('aria-hidden', 'true');
 
   const sidebar = document.createElement('aside');
   sidebar.className = 'sidebar';
@@ -228,13 +228,15 @@ function buildSidebar() {
 
   function openSidebar() {
     sidebar.classList.add('is-open');
-    scrim.hidden = false;
+    scrim.classList.add('is-visible');
+    scrim.setAttribute('aria-hidden', 'false');
   }
   function closeSidebar() {
     // In persistent mode, don't close
     if (isPersistent()) return;
     sidebar.classList.remove('is-open');
-    scrim.hidden = true;
+    scrim.classList.remove('is-visible');
+    scrim.setAttribute('aria-hidden', 'true');
   }
 
   function applyMode() {
@@ -242,7 +244,8 @@ function buildSidebar() {
       // Persistent: sidebar always visible, body shifted right
       sidebar.classList.add('is-open');
       sidebar.classList.add('is-persistent');
-      scrim.hidden = true;
+      scrim.classList.remove('is-visible');
+      scrim.setAttribute('aria-hidden', 'true');
       document.body.classList.add('has-sidebar');
       if (hamburgerBtn) hamburgerBtn.style.display = 'none';
     } else {
@@ -250,7 +253,8 @@ function buildSidebar() {
       sidebar.classList.remove('is-open');
       sidebar.classList.remove('is-persistent');
       document.body.classList.remove('has-sidebar');
-      scrim.hidden = true;
+      scrim.classList.remove('is-visible');
+      scrim.setAttribute('aria-hidden', 'true');
       if (hamburgerBtn) hamburgerBtn.style.display = '';
     }
   }
@@ -277,7 +281,8 @@ function buildSidebar() {
     if (nextMode === 'floating') {
       // When switching to floating, close the sidebar
       sidebar.classList.remove('is-open');
-      scrim.hidden = true;
+      scrim.classList.remove('is-visible');
+      scrim.setAttribute('aria-hidden', 'true');
     }
   });
 

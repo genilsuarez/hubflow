@@ -9,8 +9,16 @@
 .sidebar-scrim {
   position: fixed; inset: 0; z-index: 39;
   background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 320ms cubic-bezier(0.22, 0.9, 0.36, 1), visibility 320ms;
 }
-.sidebar-scrim[hidden] { display: none; }
+.sidebar-scrim.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 
 .sidebar {
   display: flex; flex-direction: column; height: 100%; min-height: 0;
@@ -18,14 +26,16 @@
   padding: 22px 14px 16px; box-sizing: border-box;
   position: fixed; inset: 0 auto 0 0; z-index: 40;
   width: min(232px, 86vw);
-  transform: translateX(-102%);
-  transition: transform 240ms var(--lp-ease);
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 320ms cubic-bezier(0.22, 0.9, 0.36, 1);
   box-shadow: var(--lp-shadow-md);
+  backface-visibility: hidden;
 }
-.sidebar.is-open { transform: translateX(0); }
+.sidebar.is-open { transform: translate3d(0, 0, 0); }
 
-.sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); justify-content: space-between; }
-.sb-brand > div { display: flex; flex-direction: column; }
+.sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); }
+.sb-brand > div { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.sb-brand .nav-mode-toggle { flex-shrink: 0; margin-left: auto; }
 .sb-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent); }
 .sb-brand h1 { font-family: var(--lp-font-display); font-weight: 500; font-size: 18px; line-height: 1; }
 .sb-brand .sb-tag { font-size: 10px; color: var(--lp-muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
@@ -91,7 +101,8 @@
 .foot-meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 
 @media (prefers-reduced-motion: reduce) {
-  .sidebar { transition: none; }
+  .sidebar,
+  .sidebar-scrim { transition: none; }
 }
 
 /* ─── PERSISTENT MODE (desktop + sidebar mode) ─── */

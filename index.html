@@ -70,8 +70,16 @@
     .sidebar-scrim {
       position: fixed; inset: 0; z-index: 39;
       background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 320ms cubic-bezier(0.22, 0.9, 0.36, 1), visibility 320ms;
     }
-    .sidebar-scrim[hidden] { display: none; }
+    .sidebar-scrim.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
     /* ─── SIDEBAR ─── */
     .sidebar {
@@ -79,9 +87,9 @@
       background: var(--lp-bg-paper); border-right: 1.5px solid var(--lp-border);
       padding: 22px 14px 16px;
     }
-    .sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); justify-content: space-between; }
-    .sb-brand > div { display: flex; flex-direction: column; }
-    .nav-mode-toggle { flex-shrink: 0; font-size: 1rem; opacity: 0.6; transition: opacity var(--lp-duration-fast) var(--lp-ease); }
+    .sb-brand { display: flex; align-items: center; gap: 12px; padding: 6px 8px 16px; border-bottom: 1px solid var(--lp-border); }
+    .sb-brand > div { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+    .nav-mode-toggle { flex-shrink: 0; margin-left: auto; font-size: 1rem; opacity: 0.6; transition: opacity var(--lp-duration-fast) var(--lp-ease); }
     .nav-mode-toggle:hover { opacity: 1; }
     .sb-mark { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent); }
     .sb-brand h1 {
@@ -202,42 +210,203 @@
     .subsec:last-child { margin-bottom: 0; }
     .sec-head--sub { font-size: .62rem; opacity: .85; }
 
-    /* ─── FILTER MENU (botón + panel desplegable, reemplaza la tagbar fija) ─── */
+    /* ─── FILTER MENU (homologado con FluentFlow UnifiedFilter) ─── */
     .filter-menu { position: relative; flex-shrink: 0; }
-    .filter-menu .lp-icon-btn { position: relative; }
+    .filter-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 2.8125rem; height: 2.8125rem; padding: 0; position: relative;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-md); color: var(--lp-ink-soft);
+      cursor: pointer; touch-action: manipulation; box-shadow: var(--lp-shadow-xs);
+      transition: border-color 0.2s var(--lp-ease), color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .filter-toggle svg { width: 1.125rem; height: 1.125rem; }
+    .filter-toggle:hover {
+      color: var(--lp-accent); border-color: color-mix(in srgb, var(--lp-accent) 30%, transparent);
+      background: var(--lp-accent-soft);
+    }
+    .filter-toggle:active { transform: scale(0.97); }
+    .filter-toggle:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .filter-toggle.filter-toggle--active,
+    .filter-toggle.active {
+      color: var(--lp-accent); border-color: color-mix(in srgb, var(--lp-accent) 35%, transparent);
+      background: var(--lp-accent-soft);
+    }
     .filter-badge {
-      position: absolute; top: -2px; right: -2px; min-width: 16px; height: 16px; padding: 0 4px;
-      background: var(--lp-accent); color: #fff; font-size: .6rem; font-weight: var(--lp-weight-extrabold);
-      line-height: 16px; text-align: center; border-radius: var(--lp-radius-full); pointer-events: none;
+      position: absolute; top: -0.25rem; right: -0.25rem; min-width: 1.125rem; height: 1.125rem;
+      padding: 0 0.3rem; background: var(--lp-accent); color: var(--lp-ink-inverse);
+      font-size: 0.5625rem; font-weight: 700; line-height: 1.125rem; text-align: center;
+      border-radius: var(--lp-radius-full); pointer-events: none;
+    }
+    /* Scrim ligero sin blur — el listado filtrado sigue visible detrás */
+    .filter-backdrop {
+      position: fixed; inset: 0; z-index: 9998; margin: 0; padding: 0; border: none;
+      background: color-mix(in srgb, var(--lp-ink) 25%, transparent);
+      cursor: pointer; animation: filter-backdrop-in 0.2s ease-out;
+    }
+    .filter-backdrop[hidden] { display: none; }
+    @keyframes filter-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes filter-slide-up {
+      from { opacity: 0; transform: translateY(100%); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes filter-panel-in {
+      from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+      to { opacity: 1; transform: none; }
     }
     .tagbar {
-      display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 30;
-      flex-wrap: wrap; align-items: center; gap: 6px; width: max-content; max-width: min(86vw, 420px);
-      background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg);
-      box-shadow: var(--lp-shadow-md); padding: 12px;
+      display: none; position: absolute; top: calc(100% + 0.375rem); right: 0; z-index: 50;
+      flex-direction: column; width: fit-content; min-width: 20rem;
+      max-width: calc(100vw - 1.5rem); background: var(--lp-surface);
+      border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg);
+      box-shadow: var(--lp-shadow-lg); animation: filter-panel-in 0.18s ease-out;
     }
     .tagbar.open { display: flex; }
-    .tagbar .lp-pill {
-      flex-shrink: 0; border: 1.5px solid var(--lp-border); background: var(--lp-bg-paper);
-      color: var(--lp-ink-soft); box-shadow: var(--lp-shadow-xs);
-      transition: all 0.25s var(--lp-ease);
+    .tagbar__handle { display: none; }
+    .tagbar__header {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      padding: 0.75rem 0.75rem 0.625rem; flex-shrink: 0;
     }
-    .tagbar .lp-pill:hover:not(.active) {
-      border-color: var(--lp-border-strong); color: var(--lp-ink);
-      box-shadow: var(--lp-shadow-sm);
+    .tagbar__tabs {
+      display: flex; flex: 1; min-width: 0; gap: 0.25rem; padding: 0.25rem;
+      background: var(--lp-surface-sunken); border-radius: var(--lp-radius-full);
     }
-    .tagbar .lp-pill.active {
-      border-color: var(--lp-ink); background: var(--lp-ink); color: var(--lp-bg);
-      box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-ink) 30%, transparent);
-      transform: scale(1.05);
+    .tagbar__tab {
+      display: flex; align-items: center; justify-content: center; gap: 0.25rem;
+      flex: 1; min-width: 0; padding: 0.4375rem 0.375rem;
+      background: transparent; border: none; border-radius: var(--lp-radius-full);
+      color: var(--lp-muted); font-family: var(--lp-font-body);
+      font-size: 0.625rem; font-weight: 600; cursor: pointer; touch-action: manipulation;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+      white-space: nowrap; overflow: hidden;
     }
-    .tagbar .tagbar-sep { flex-basis: 100%; height: 1px; background: var(--lp-border); margin: 2px 0; }
+    .tagbar__tab:hover { color: var(--lp-ink-soft); }
+    .tagbar__tab:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .tagbar__tab--active {
+      background: var(--lp-surface); color: var(--lp-accent); box-shadow: var(--lp-shadow-xs);
+    }
+    .tagbar__tab svg { flex-shrink: 0; width: 0.8125rem; height: 0.8125rem; }
+    .tagbar__tab-label { overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
+    .tagbar__tab-count {
+      min-width: 0.875rem; height: 0.875rem; padding: 0 0.2rem;
+      background: var(--lp-accent); color: var(--lp-ink-inverse);
+      font-size: 0.5rem; font-weight: 700; line-height: 0.875rem; text-align: center;
+      border-radius: var(--lp-radius-full); flex-shrink: 0;
+    }
+    .tagbar__tab-count[hidden] { display: none; }
+    .tagbar__close {
+      display: none; align-items: center; justify-content: center;
+      width: 2.75rem; height: 2.75rem; padding: 0; background: var(--lp-surface);
+      border: 1.5px solid var(--lp-border); border-radius: 50%; color: var(--lp-ink-soft);
+      cursor: pointer; box-shadow: var(--lp-shadow-xs);
+      transition: border-color 0.15s, color 0.15s, transform 0.15s;
+    }
+    .tagbar__close:hover { border-color: var(--lp-accent); color: var(--lp-accent); }
+    .tagbar__close:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .tagbar__content {
+      padding: 0 0.75rem 0.875rem; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+    .tagbar__panel[hidden] { display: none; }
+    .tagbar__chips {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.375rem;
+    }
+    .tagbar__chips--cefr {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-content: center;
+    }
+    .tagbar__chips--skills {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-content: center;
+    }
+    .tagbar__chips--skills .filter-chip:last-child:nth-child(3n + 1) { grid-column: 2; }
+    .filter-chip {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.3125rem;
+      min-height: 2.75rem; padding: 0.375rem 0.75rem; width: 100%;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-full); cursor: pointer;
+      font-family: var(--lp-font-body); font-size: 0.75rem; font-weight: 600;
+      color: var(--lp-ink-soft); touch-action: manipulation; line-height: 1;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .filter-chip:hover {
+      border-color: color-mix(in srgb, var(--lp-accent) 28%, transparent);
+      background: var(--lp-accent-soft); color: var(--lp-accent-dark);
+    }
+    .filter-chip:active { transform: scale(0.97); }
+    .filter-chip:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .filter-chip--active {
+      background: var(--lp-accent-soft);
+      border-color: color-mix(in srgb, var(--lp-accent) 35%, transparent);
+      color: var(--lp-accent-dark); box-shadow: none;
+    }
+    .filter-chip--level.filter-chip--active {
+      background: color-mix(in srgb, var(--level-color, var(--lp-accent)) 14%, var(--lp-surface));
+      border-color: color-mix(in srgb, var(--level-color, var(--lp-accent)) 45%, transparent);
+      color: var(--level-color, var(--lp-accent));
+    }
+    [data-theme="dark"] .filter-toggle {
+      background: var(--lp-surface); border-color: var(--lp-border); color: var(--lp-ink-soft);
+    }
+    [data-theme="dark"] .filter-toggle:hover,
+    [data-theme="dark"] .filter-toggle.filter-toggle--active,
+    [data-theme="dark"] .filter-toggle.active {
+      color: #6b9fe8; border-color: color-mix(in srgb, #60a5fa 35%, transparent);
+      background: var(--lp-accent-soft);
+    }
+    [data-theme="dark"] .filter-backdrop {
+      background: color-mix(in srgb, #14171c 45%, transparent);
+    }
+    [data-theme="dark"] .tagbar {
+      background: var(--lp-surface); border-color: var(--lp-border);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+    [data-theme="dark"] .tagbar__tabs { background: var(--lp-surface-sunken); }
+    [data-theme="dark"] .tagbar__tab { color: var(--lp-muted); }
+    [data-theme="dark"] .tagbar__tab:hover { color: var(--lp-ink-soft); }
+    [data-theme="dark"] .tagbar__tab--active {
+      background: var(--lp-surface-raised); color: #6b9fe8;
+    }
+    [data-theme="dark"] .tagbar__close {
+      background: var(--lp-surface-raised); border-color: var(--lp-border); color: var(--lp-ink-soft);
+    }
+    [data-theme="dark"] .tagbar__close:hover { border-color: #60a5fa; color: #60a5fa; }
+    [data-theme="dark"] .filter-chip {
+      background: var(--lp-surface-raised); border-color: var(--lp-border); color: var(--lp-ink-soft);
+    }
+    [data-theme="dark"] .filter-chip:hover,
+    [data-theme="dark"] .filter-chip--active {
+      background: var(--lp-accent-soft); border-color: color-mix(in srgb, #60a5fa 40%, transparent);
+      color: #93c5fd;
+    }
     @media (max-width: 640px) {
       .tagbar {
-        position: fixed; top: auto; bottom: 0; left: 0; right: 0; max-width: 100%;
-        border-radius: var(--lp-radius-lg) var(--lp-radius-lg) 0 0;
-        padding: 14px 14px calc(14px + env(safe-area-inset-bottom, 0px));
-        box-shadow: 0 -8px 24px rgba(0,0,0,.18);
+        position: fixed; top: auto; bottom: 0; left: 0; right: 0; z-index: 9999;
+        width: 100%; min-width: 0; max-width: 100%; max-height: min(78dvh, 100%);
+        border-radius: var(--lp-radius-xl) var(--lp-radius-xl) 0 0; border-bottom: none;
+        animation: filter-slide-up 0.28s cubic-bezier(0.22, 0.9, 0.36, 1);
+      }
+      .tagbar__handle {
+        display: block; width: 2.25rem; height: 0.25rem; margin: 0.625rem auto 0;
+        border-radius: var(--lp-radius-full); background: var(--lp-border); flex-shrink: 0;
+      }
+      .tagbar__header { padding: 0.25rem 0.625rem 0.5rem; gap: 0.375rem; }
+      .tagbar__tabs { gap: 0.1875rem; padding: 0.1875rem; }
+      .tagbar__tab {
+        flex-direction: column; gap: 0.125rem; padding: 0.375rem 0.25rem;
+        font-size: 0.625rem; line-height: 1.05; white-space: normal; text-align: center;
+      }
+      .tagbar__tab svg { width: 0.875rem; height: 0.875rem; }
+      .tagbar__tab-label { overflow: visible; text-overflow: unset; word-break: break-word; }
+      .tagbar__close {
+        width: 2.25rem; height: 2.25rem; min-width: 2.25rem; min-height: 2.25rem; position: relative;
+      }
+      .tagbar__close::after { content: ''; position: absolute; inset: -0.5rem; }
+      .tagbar__close { display: flex; }
+      .tagbar__content {
+        flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+        padding-bottom: calc(0.875rem + env(safe-area-inset-bottom, 0px));
+      }
+      .tagbar__chips--skills .filter-chip {
+        flex-direction: column; gap: 0.125rem; min-height: 2.625rem;
+        padding: 0.25rem 0.1875rem; font-size: 0.625rem;
       }
     }
 
@@ -649,12 +818,19 @@
       html[data-navigation-mode="floating"] .shell { grid-template-columns: 1fr; }
       html[data-navigation-mode="floating"] .sidebar {
         position: fixed; inset: 0 auto 0 0; z-index: 40; width: 232px;
-        transform: translateX(-102%); transition: transform 240ms var(--lp-ease);
+        transform: translate3d(-100%, 0, 0);
+        transition: transform 320ms cubic-bezier(0.22, 0.9, 0.36, 1);
         box-shadow: var(--lp-shadow-md);
+        backface-visibility: hidden;
       }
-      html[data-navigation-mode="floating"] .sidebar.is-open { transform: translateX(0); }
+      html[data-navigation-mode="floating"] .sidebar.is-open { transform: translate3d(0, 0, 0); }
       html[data-navigation-mode="floating"] .navigation-launcher { display: flex; }
       html[data-navigation-mode="floating"] .topbar { padding-left: var(--lp-header-floating-pad-left); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sidebar,
+      .sidebar-scrim { transition: none !important; }
     }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
@@ -683,10 +859,12 @@
       .navigation-launcher { display: flex; top: var(--lp-navbtn-offset-top-compact); left: var(--lp-navbtn-offset-left); }
       .sidebar {
         display: flex; position: fixed; inset: 0 auto 0 0; z-index: 40;
-        width: min(232px, 86vw); transform: translateX(-102%);
-        transition: transform 240ms var(--lp-ease); box-shadow: var(--lp-shadow-md);
+        width: min(232px, 86vw); transform: translate3d(-100%, 0, 0);
+        transition: transform 320ms cubic-bezier(0.22, 0.9, 0.36, 1);
+        box-shadow: var(--lp-shadow-md);
+        backface-visibility: hidden;
       }
-      .sidebar.is-open { transform: translateX(0); }
+      .sidebar.is-open { transform: translate3d(0, 0, 0); }
       .topbar { padding-left: var(--lp-header-floating-pad-left-compact); }
       .foot { display: none; }
       .content { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
@@ -939,7 +1117,8 @@
 </head>
 <body>
 <button class="lp-icon-btn navigation-launcher" id="navigationLauncher" type="button" aria-label="Abrir navegación flotante" aria-controls="sidebar" aria-expanded="false"><span data-lp-icon="menu" aria-hidden="true"></span></button>
-<div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+<div class="sidebar-scrim" id="sidebarScrim" aria-hidden="true"></div>
+<button type="button" class="filter-backdrop" id="filterBackdrop" hidden aria-label="Cerrar filtros"></button>
 
 <div class="shell">
 
@@ -987,10 +1166,38 @@
         <button class="clear-btn" id="clearSearch" aria-label="Clear search">✕</button>
       </div>
       <div class="filter-menu" id="filterMenu">
-        <button class="lp-icon-btn" id="filterToggle" aria-label="Filtros" aria-expanded="false" title="Filtros">
-          🎚️<span class="filter-badge" id="filterBadge" hidden>0</span>
+        <button type="button" class="filter-toggle" id="filterToggle" aria-label="Filtros" aria-expanded="false" title="Filtros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></svg>
+          <span class="filter-badge" id="filterBadge" hidden>0</span>
         </button>
-        <div class="tagbar" id="tagBar" role="dialog" aria-label="Filtros"></div>
+        <div class="tagbar" id="tagBar" role="dialog" aria-label="Filtros" aria-modal="true">
+          <div class="tagbar__handle" aria-hidden="true"></div>
+          <div class="tagbar__header">
+            <div class="tagbar__tabs" role="tablist" aria-label="Secciones de filtro">
+              <button type="button" class="tagbar__tab tagbar__tab--active" id="filterTabCefr" data-filter-tab="cefr" role="tab" aria-selected="true" aria-controls="tagBarPanelCefr">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+                <span class="tagbar__tab-label">Nivel</span>
+                <span class="tagbar__tab-count" id="filterTabCountCefr" hidden>0</span>
+              </button>
+              <button type="button" class="tagbar__tab" id="filterTabSkill" data-filter-tab="skill" role="tab" aria-selected="false" aria-controls="tagBarPanelSkills">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                <span class="tagbar__tab-label">Habilidad</span>
+                <span class="tagbar__tab-count" id="filterTabCountSkill" hidden>0</span>
+              </button>
+            </div>
+            <button type="button" class="tagbar__close" id="filterClose" aria-label="Cerrar filtros">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="tagbar__content">
+            <div class="tagbar__panel" id="tagBarPanelCefr" data-filter-panel="cefr" role="tabpanel" aria-labelledby="filterTabCefr">
+              <div class="tagbar__chips tagbar__chips--cefr" id="tagBarCefr"></div>
+            </div>
+            <div class="tagbar__panel" id="tagBarPanelSkills" data-filter-panel="skill" role="tabpanel" aria-labelledby="filterTabSkill" hidden>
+              <div class="tagbar__chips tagbar__chips--skills" id="tagBarSkills"></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="lp-header-stats" role="status" aria-label="Progress summary">
         <span class="lp-header-stats__group">
@@ -1295,7 +1502,8 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
 
   function setNavigationDrawerOpen(open) {
     sidebar.classList.toggle('is-open', open);
-    sidebarScrim.hidden = !open;
+    sidebarScrim.classList.toggle('is-visible', open);
+    sidebarScrim.setAttribute('aria-hidden', String(!open));
     navigationLauncher.setAttribute('aria-expanded', String(open));
     navigationLauncher.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación flotante');
   }
@@ -1753,12 +1961,24 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     document.querySelector('.tiles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  // ─── FILTER MENU (botón + panel de tags, estilo FluentFlow UnifiedFilter) ───
+  // ─── FILTER MENU (homologado con FluentFlow UnifiedFilter) ───
   const filterMenu = document.getElementById('filterMenu');
   const filterToggle = document.getElementById('filterToggle');
   const filterBadge = document.getElementById('filterBadge');
+  const filterBackdrop = document.getElementById('filterBackdrop');
+  const filterClose = document.getElementById('filterClose');
   const tagBar = document.getElementById('tagBar');
+  const tagBarCefr = document.getElementById('tagBarCefr');
+  const tagBarSkills = document.getElementById('tagBarSkills');
+  const filterTabCefr = document.getElementById('filterTabCefr');
+  const filterTabSkill = document.getElementById('filterTabSkill');
+  const filterTabCountCefr = document.getElementById('filterTabCountCefr');
+  const filterTabCountSkill = document.getElementById('filterTabCountSkill');
+  const tagBarPanelCefr = document.getElementById('tagBarPanelCefr');
+  const tagBarPanelSkills = document.getElementById('tagBarPanelSkills');
   const activeTags = new Set((new URLSearchParams(location.search).get('tag') || '').split(',').filter(Boolean));
+  const LEVEL_COLORS = { a1: '#22c55e', a2: '#eab308', b1: '#f97316', b2: '#ef4444', c1: '#a855f7', c2: '#374151' };
+  let activeFilterTab = 'cefr';
 
   function usedTags(list) {
     const used = new Set();
@@ -1766,37 +1986,88 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     return list.filter(t => used.has(t));
   }
 
-  function tagChipHTML(t) {
-    const isActive = activeTags.has(t) ? ' active' : '';
-    return `<button class="lp-pill${isActive}" data-tag="${t}">${t.length <= 2 ? t.toUpperCase() : t.charAt(0).toUpperCase() + t.slice(1)}</button>`;
+  function countActiveIn(list) {
+    return list.filter(t => activeTags.has(t)).length;
+  }
+
+  function setFilterTab(tab) {
+    activeFilterTab = tab;
+    filterTabCefr?.classList.toggle('tagbar__tab--active', tab === 'cefr');
+    filterTabSkill?.classList.toggle('tagbar__tab--active', tab === 'skill');
+    filterTabCefr?.setAttribute('aria-selected', tab === 'cefr');
+    filterTabSkill?.setAttribute('aria-selected', tab === 'skill');
+    if (tagBarPanelCefr) tagBarPanelCefr.hidden = tab !== 'cefr';
+    if (tagBarPanelSkills) tagBarPanelSkills.hidden = tab !== 'skill';
+  }
+
+  function updateFilterTabCounts() {
+    const cefrCount = countActiveIn(usedTags(TAGS.cefr));
+    const skillCount = countActiveIn(usedTags(TAGS.skill));
+    if (filterTabCountCefr) {
+      filterTabCountCefr.hidden = cefrCount === 0;
+      filterTabCountCefr.textContent = cefrCount;
+    }
+    if (filterTabCountSkill) {
+      filterTabCountSkill.hidden = skillCount === 0;
+      filterTabCountSkill.textContent = skillCount;
+    }
+  }
+
+  function tagChipHTML(t, group) {
+    const isActive = activeTags.has(t);
+    const isLevel = group === 'cefr';
+    const label = t.length <= 2 ? t.toUpperCase() : t.charAt(0).toUpperCase() + t.slice(1);
+    const levelStyle = isLevel ? ` style="--level-color:${LEVEL_COLORS[t] || 'var(--lp-accent)'}"` : '';
+    const classes = ['filter-chip', isLevel ? 'filter-chip--level' : '', isActive ? 'filter-chip--active' : ''].filter(Boolean).join(' ');
+    return `<button type="button" class="${classes}" data-tag="${t}"${levelStyle}>${label}</button>`;
   }
 
   function updateFilterBadge() {
     filterBadge.hidden = activeTags.size === 0;
     filterBadge.textContent = activeTags.size;
-    filterToggle.classList.toggle('active', activeTags.size > 0);
+    filterToggle.classList.toggle('filter-toggle--active', activeTags.size > 0);
+    updateFilterTabCounts();
   }
+
+  const FILTER_MOBILE_MQ = window.matchMedia('(max-width: 639px)');
+  function isFilterMobile() { return FILTER_MOBILE_MQ.matches; }
 
   function closeFilterPanel() {
     tagBar.classList.remove('open');
+    if (filterBackdrop) filterBackdrop.hidden = true;
     filterToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  function openFilterPanel() {
+    tagBar.classList.add('open');
+    if (filterBackdrop && isFilterMobile()) filterBackdrop.hidden = false;
+    filterToggle.setAttribute('aria-expanded', 'true');
+    if (isFilterMobile()) document.body.style.overflow = 'hidden';
   }
 
   function toggleFilterPanel() {
-    const willOpen = !tagBar.classList.contains('open');
-    tagBar.classList.toggle('open', willOpen);
-    filterToggle.setAttribute('aria-expanded', String(willOpen));
+    if (tagBar.classList.contains('open')) closeFilterPanel();
+    else openFilterPanel();
   }
 
-  if (tagBar) {
-    const cefrChips = usedTags(TAGS.cefr).map(tagChipHTML).join('');
-    const skillChips = usedTags(TAGS.skill).map(tagChipHTML).join('');
-    tagBar.innerHTML = cefrChips + '<span class="tagbar-sep"></span>' + skillChips;
+  if (tagBar && tagBarCefr && tagBarSkills) {
+    tagBarCefr.innerHTML = usedTags(TAGS.cefr).map(t => tagChipHTML(t, 'cefr')).join('');
+    tagBarSkills.innerHTML = usedTags(TAGS.skill).map(t => tagChipHTML(t, 'skill')).join('');
     updateFilterBadge();
+    setFilterTab(activeFilterTab);
 
     filterToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleFilterPanel(); });
+    filterClose?.addEventListener('click', closeFilterPanel);
+    filterBackdrop?.addEventListener('click', closeFilterPanel);
+    tagBar.querySelector('.tagbar__tabs')?.addEventListener('click', (e) => {
+      const tabBtn = e.target.closest('[data-filter-tab]');
+      if (!tabBtn) return;
+      setFilterTab(tabBtn.dataset.filterTab);
+    });
     document.addEventListener('click', (e) => {
-      if (tagBar.classList.contains('open') && !filterMenu.contains(e.target)) closeFilterPanel();
+      if (!tagBar.classList.contains('open') || isFilterMobile()) return;
+      if (!filterMenu.contains(e.target)) closeFilterPanel();
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && tagBar.classList.contains('open')) { closeFilterPanel(); filterToggle.focus(); }
@@ -1807,7 +2078,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
       if (!btn) return;
       const t = btn.dataset.tag;
       if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
-      btn.classList.toggle('active');
+      btn.classList.toggle('filter-chip--active', activeTags.has(t));
       updateFilterBadge();
       applyFilters();
       const u = new URL(location.href);
