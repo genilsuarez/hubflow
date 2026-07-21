@@ -124,6 +124,22 @@ if (topBar) {
   setTimeout(syncCounter, 0);
   setTimeout(syncCounter, 200);
 
+  // Layout: [← ☰] · title · [counter] — evita solape del pill centrado
+  const backEl = topBar.querySelector('a[href*="../index.html"]');
+  const menuEl = topBar.querySelector('[aria-controls="exerciseSidebar"]');
+  const sigEl = topBar.querySelector('.learnflow-signature');
+  const counterEl = topBar.querySelector('.tb-counter');
+  if (backEl && sigEl) {
+    const start = document.createElement('div');
+    start.className = 'top-bar__start';
+    const end = document.createElement('div');
+    end.className = 'top-bar__end';
+    start.appendChild(backEl);
+    if (menuEl) start.appendChild(menuEl);
+    if (counterEl) end.appendChild(counterEl);
+    topBar.replaceChildren(start, sigEl, end);
+  }
+
   // Hide the original counters visually (they're mirrored in top-bar)
   const style = document.createElement('style');
   style.textContent = '.fc-count, .sc-counter, .item-counter, .ooo-card__counter, .dict-card__counter, .pc-counter, .hunt-card__counter { position: absolute; opacity: 0; pointer-events: none; }';

@@ -27,8 +27,8 @@
 .lp-btn:active { transform: translateY(0) scale(0.97); }
 
 /* Variantes semánticas (sombra derivada del token, no rgba a mano) */
-.lp-btn--primary { background: var(--lp-accent);  color: var(--lp-ink-inverse);
-  box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-accent) 25%, transparent); }
+.lp-btn--primary { background: var(--lp-primary, var(--lp-accent)); color: #fff;
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-primary, var(--lp-accent)) 25%, transparent); }
 .lp-btn--success { background: var(--lp-success); color: var(--lp-ink-inverse);
   box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-success) 25%, transparent); }
 .lp-btn--danger  { background: var(--lp-error);   color: var(--lp-ink-inverse);
@@ -111,9 +111,10 @@
   position: relative;
 }
 
-/* ☰ ghost — app bar estándar mobile (sin círculo/borde/sombra web) */
+/* Ghost nav — app bar mobile (sin círculo/borde/sombra web) */
 @media (max-width: 860px) {
   .navigation-launcher,
+  .top-bar .top-bar__start .lp-icon-btn,
   .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"] {
     border: none;
     border-radius: var(--lp-radius-md);
@@ -124,7 +125,12 @@
     font-weight: 400;
   }
 
+  .top-bar .top-bar__start a.lp-icon-btn {
+    font-size: 0.9rem;
+  }
+
   .navigation-launcher:hover,
+  .top-bar .top-bar__start .lp-icon-btn:hover,
   .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"]:hover {
     background: color-mix(in srgb, var(--lp-ink) 5%, transparent);
     border-color: transparent;
@@ -134,6 +140,7 @@
   }
 
   .navigation-launcher:active,
+  .top-bar .top-bar__start .lp-icon-btn:active,
   .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"]:active {
     background: color-mix(in srgb, var(--lp-ink) 9%, transparent);
     transform: scale(0.97);

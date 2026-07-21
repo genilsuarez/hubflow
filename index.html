@@ -500,7 +500,6 @@
       --ruta-color: var(--lp-accent);
       display: flex; flex-direction: column; gap: 6px;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border);
-      border-top: 4px solid var(--ruta-color);
       border-radius: var(--lp-radius-lg); padding: 14px 18px;
       box-shadow: var(--lp-shadow-sm);
       transition: transform .2s var(--lp-ease), box-shadow .2s;
@@ -511,11 +510,12 @@
     .ruta-card__title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; display: flex; align-items: center; gap: 6px; }
     .ruta-card__total {
       font-size: .58rem; font-weight: var(--lp-weight-extrabold);
-      background: color-mix(in srgb, var(--ruta-color) 14%, transparent);
-      color: var(--ruta-color); padding: 2px 6px; border-radius: 4px;
+      background: var(--lp-surface-sunken);
+      color: var(--lp-muted); padding: 2px 6px; border-radius: var(--lp-radius-full);
+      border: 1px solid var(--lp-border-subtle);
       letter-spacing: .01em; cursor: default;
     }
-    .ruta-card__cefr { font-size: .55rem; font-weight: var(--lp-weight-bold); color: var(--ruta-color); }
+    .ruta-card__cefr { font-size: .55rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); }
     .ruta-card__desc { font-size: .66rem; color: var(--lp-ink-soft); line-height: 1.35; }
     .ruta-card__progress { font-size: .56rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted); margin-left: auto; flex-shrink: 0; }
     .ruta-card__progress strong { color: var(--lp-ink); }
@@ -741,6 +741,9 @@
          más compactas. */
       .book-title { font-size: .72rem; }
       .guide-title { font-size: .72rem; }
+
+      /* Rutas guiadas: la descripción larga no aporta en pantalla estrecha */
+      .ruta-card__desc { display: none; }
     }
     @media (max-width: 330px) {
       .topbar-greeting-title { font-size: .95rem; }
@@ -769,13 +772,7 @@
       overflow: hidden; transition: box-shadow .25s var(--lp-ease), border-color .25s;
     }
     .path-accordion:hover { box-shadow: var(--lp-shadow-md); }
-    .path-accordion[open] { border-color: color-mix(in srgb, var(--path-color) 25%, var(--lp-border)); box-shadow: var(--lp-shadow-md); }
-    .path-accordion.spell { --path-color: var(--lp-cat-amber); }
-    .path-accordion.build { --path-color: var(--lp-cat-green); }
-    .path-accordion.decode { --path-color: var(--lp-cat-blue); }
-    .path-accordion.natural { --path-color: var(--lp-cat-purple); }
-    .path-accordion.transform { --path-color: var(--lp-cat-teal); }
-    .path-accordion.advanced { --path-color: var(--lp-accent); }
+    .path-accordion[open] { border-color: var(--lp-border-strong); box-shadow: var(--lp-shadow-md); }
 
     .path-summary {
       display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px;
@@ -785,7 +782,7 @@
     .path-summary::marker { display: none; content: ''; }
     .path-summary-icon {
       width: 36px; height: 36px; border-radius: var(--lp-radius-md);
-      background: color-mix(in srgb, var(--path-color) 12%, transparent);
+      background: var(--lp-surface-sunken); border: 1px solid var(--lp-border-subtle);
       display: flex; align-items: center; justify-content: center; font-size: 1rem;
     }
     .path-summary-body { min-width: 0; }
@@ -793,21 +790,28 @@
     .path-summary-title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; }
     .path-summary-cefr {
       font-family: var(--lp-font-mono); font-size: .56rem; font-weight: 700;
-      color: var(--path-color); background: color-mix(in srgb, var(--path-color) 12%, transparent);
-      padding: 2px 6px; border-radius: 4px;
+      color: var(--lp-muted); background: var(--lp-surface-sunken);
+      border: 1px solid var(--lp-border-subtle);
+      padding: 2px 6px; border-radius: var(--lp-radius-full);
     }
-    .path-summary-next { font-size: .62rem; font-weight: 700; color: var(--path-color); margin-left: auto; }
+    .path-summary-next { font-size: .62rem; font-weight: 700; color: var(--lp-accent); margin-left: auto; }
     .path-summary-bar { display: flex; align-items: center; gap: 8px; }
     .path-summary-bar-track { flex: 1; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
-    .path-summary-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--path-color); transition: width .5s var(--lp-ease); }
+    .path-summary-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
     .path-summary-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
 
     .path-summary-right { display: flex; align-items: center; gap: 8px; }
     .path-summary-status {
       font-size: .58rem; font-weight: 700; padding: 3px 9px; border-radius: var(--lp-radius-full);
-      background: color-mix(in srgb, var(--path-color) 10%, transparent); color: var(--path-color); white-space: nowrap;
+      background: var(--lp-surface-sunken); color: var(--lp-muted);
+      border: 1px solid var(--lp-border-subtle); white-space: nowrap;
     }
-    .path-summary-status.completed { background: var(--lp-success-soft); color: var(--lp-success); }
+    .path-summary-status.in-progress {
+      background: color-mix(in srgb, var(--lp-accent) 10%, transparent);
+      color: var(--lp-accent);
+      border-color: color-mix(in srgb, var(--lp-accent) 18%, transparent);
+    }
+    .path-summary-status.completed { background: var(--lp-success-soft); color: var(--lp-success); border-color: transparent; }
     .path-chevron { color: var(--lp-muted); transition: transform .3s var(--lp-ease); font-size: .65rem; }
     .path-accordion[open] .path-chevron { transform: rotate(180deg); }
 
@@ -824,16 +828,16 @@
       background: var(--lp-surface); border: 1px solid var(--lp-border-subtle);
       transition: background .2s, border-color .2s, transform .15s;
     }
-    .path-module:hover { background: color-mix(in srgb, var(--path-color) 4%, var(--lp-surface)); border-color: var(--lp-border); }
-    .path-module.completed { background: color-mix(in srgb, var(--path-color) 6%, var(--lp-surface)); }
-    .path-module.current { border-color: var(--path-color); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
+    .path-module:hover { background: var(--lp-surface-sunken); border-color: var(--lp-border); }
+    .path-module.completed { background: var(--lp-surface-sunken); }
+    .path-module.current { border-color: var(--lp-accent); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
     .pm-step {
       width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: .55rem; font-weight: 800; font-family: var(--lp-font-mono);
       background: var(--lp-border); color: var(--lp-muted);
     }
-    .path-module.completed .pm-step { background: var(--path-color); color: white; }
-    .path-module.current .pm-step { background: transparent; border: 2.5px solid var(--path-color); color: var(--path-color); }
+    .path-module.completed .pm-step { background: var(--lp-success); color: white; }
+    .path-module.current .pm-step { background: transparent; border: 2.5px solid var(--lp-accent); color: var(--lp-accent); }
     .pm-info { min-width: 0; }
     .pm-title { font-size: .72rem; font-weight: 700; }
     .pm-title .pm-cefr {
@@ -844,7 +848,7 @@
     .pm-meta { font-size: .58rem; color: var(--lp-muted); margin-top: 1px; }
     .pm-status { font-size: .58rem; font-weight: 700; padding: 3px 7px; border-radius: var(--lp-radius-full); white-space: nowrap; }
     .pm-status.done { background: var(--lp-success-soft); color: var(--lp-success); }
-    .pm-status.next { background: color-mix(in srgb, var(--path-color) 12%, transparent); color: var(--path-color); }
+    .pm-status.next { background: color-mix(in srgb, var(--lp-accent) 12%, transparent); color: var(--lp-accent); }
     .pm-status.locked { color: var(--lp-muted); }
 
     /* Rutas de aprendizaje (Mi Progreso) compactadas: en colapsado, las 6
@@ -1510,8 +1514,6 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
 
   const CATEGORY_COLORS = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
 
-  const RUTA_COLORS = { spell: 'var(--lp-cat-amber)', build: 'var(--lp-cat-amber)', decode: 'var(--lp-cat-blue)', natural: 'var(--lp-cat-blue)', transform: 'var(--lp-cat-blue)', advanced: 'var(--lp-accent)' };
-
   function renderRutas() {
     const grid = document.getElementById('rutasGrid');
     if (!grid) return;
@@ -1530,7 +1532,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
         const itemsBadge = depth ? `<span class="ruta-step__items">${depth.items}</span>` : '';
         return `<a class="ruta-step ${cls}" href="${href}" title="${label}">${label}${itemsBadge}</a>`;
       }).join('');
-      const color = RUTA_COLORS[path.color] || 'var(--lp-accent)';
+      const color = 'var(--lp-accent)';
       const totalItems = path.modules.reduce((sum, id) => {
         const d = getModuleDepth(id);
         return sum + (d ? d.items : 0);
@@ -1962,7 +1964,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
       const nextModule = path.modules.find(id => !isPathModuleCompleted(id));
       const nextMod = nextModule ? moduleMap.get(nextModule) : null;
       const statusLabel = allDone ? '✓ Completada' : completedCount > 0 ? 'En progreso' : 'Sin empezar';
-      const statusClass = allDone ? ' completed' : '';
+      const statusClass = allDone ? ' completed' : completedCount > 0 ? ' in-progress' : '';
       const nextText = allDone ? '' : nextMod ? (completedCount > 0 ? 'Siguiente: ' : 'Empezar: ') + nextMod.title : '';
 
       const modulesHTML = path.modules.map((id, i) => {
@@ -1983,7 +1985,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
         </div>`;
       }).join('');
 
-      return `<details class="path-accordion ${path.color}">
+      return `<details class="path-accordion">
         <summary class="path-summary">
           <div class="path-summary-icon">${path.icon}</div>
           <div class="path-summary-body">

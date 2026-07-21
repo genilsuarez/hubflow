@@ -138,6 +138,7 @@ export function getContentProgress(contentId) {
 
   return {
     contentId,
+    title: MODULES.find((module) => module.id === contentId)?.title ?? contentId,
     contentType: 'exercise',
     progressPct,
     completed,
@@ -218,11 +219,13 @@ function recordActivityEvent(key, pct, timestamp, context) {
   const ledger = readJson(ACTIVITY_STORAGE_KEY, {});
   const events = Array.isArray(ledger.events) ? ledger.events : [];
   const eventId = createId();
+  const moduleTitle = MODULES.find((module) => module.id === match.contentId)?.title;
   const event = {
     eventId,
     runId: typeof context?.runId === 'string' ? context.runId : eventId,
     app: 'hubflow',
     contentId: match.contentId,
+    title: moduleTitle || match.contentId,
     activity: context?.activity || match.activity.activityId,
     eventType: 'attempt_completed',
     occurredAt: timestamp,

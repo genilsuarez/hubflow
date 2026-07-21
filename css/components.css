@@ -113,7 +113,42 @@
   white-space: pre-line; max-width: 320px;
 }
 .fc-hint { font-size: .62rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); margin-top: 4px; font-style: italic; }
-.fc-nav { display: flex; gap: 8px; align-items: center; justify-content: center; }
+.fc-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 440px;
+  margin-inline: auto;
+  padding: 8px 12px;
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border-subtle, var(--lp-border));
+  box-shadow: var(--lp-shadow-xs);
+}
+
+/* Flashcard nav — compact icon buttons (← / → / 🔀) */
+.fc-nav .lp-btn {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.125rem;
+  line-height: 1;
+  flex-shrink: 0;
+  border-radius: var(--lp-radius-md);
+}
+
+.fc-nav .lp-btn--ghost {
+  font-size: 1rem;
+}
+
+.fc-nav .lp-btn--primary,
+.fc-nav .lp-btn--success,
+.fc-nav .lp-btn--purple {
+  color: #fff;
+}
 .fc-count {
   font-family: var(--lp-font-mono); font-size: .65rem;
   color: var(--lp-muted); font-weight: var(--lp-weight-bold); letter-spacing: 1px;
@@ -649,4 +684,39 @@
   width: 18px;
   height: 16px;
   font-size: 0.55rem;
+}
+
+/* ─── EXERCISE BOTTOM CONTROLS (mobile sticky — mirrors FluentFlow game-controls) ─── */
+@media (max-width: 768px) {
+  .battle-actions,
+  .result-btns {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    flex-shrink: 0;
+    max-width: none;
+    width: 100%;
+    margin-inline: 0;
+    margin-top: 0.75rem;
+    padding: 0.625rem 12px max(0.625rem, env(safe-area-inset-bottom));
+    background: var(--lp-surface);
+    border-top: 1px solid var(--lp-border-subtle, var(--lp-border));
+    box-shadow: 0 -4px 16px color-mix(in srgb, var(--lp-ink) 6%, transparent);
+  }
+
+  .fc-nav {
+    position: sticky;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: 10;
+    justify-content: center;
+    gap: 12px;
+    width: calc(100% - 16px);
+    max-width: none;
+    margin-inline: auto;
+    margin-top: 0.75rem;
+    padding: 8px 14px;
+    border-radius: var(--lp-radius-xl);
+    border: 1px solid var(--lp-border-subtle, var(--lp-border));
+    box-shadow: var(--lp-shadow-sm);
+  }
 }

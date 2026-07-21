@@ -34,6 +34,7 @@
   --lp-accent-soft: #E8F0FE;
   --lp-accent-dark: #1E40AF;
   --lp-accent-hover: #1D4ED8;
+  --lp-primary: var(--lp-accent);
 
   /* Category spines */
   --lp-cat-blue: #3D6B9F;

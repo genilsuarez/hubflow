@@ -185,7 +185,7 @@
       <div class="fc-nav">
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
-        <button class="lp-btn lp-btn--success" id="nextBtn">→</button>
+        <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
       </div>
     </div>
 
@@ -248,11 +248,11 @@
         <button class="lp-btn lp-btn--primary" id="bClaim2">2️⃣ P2</button>
       </div>
       <div class="battle-actions" id="battleJudge" style="display:none;">
-        <button class="lp-btn lp-btn--success" id="bCorrect">✓ Correct (Y)</button>
+        <button class="lp-btn lp-btn--primary" id="bCorrect">✓ Correct (Y)</button>
         <button class="lp-btn lp-btn--danger" id="bWrong">✗ Wrong (N)</button>
       </div>
       <div class="battle-actions" id="battleNext" style="display:none;">
-        <button class="lp-btn lp-btn--success" id="bNext">→ Next (Space)</button>
+        <button class="lp-btn lp-btn--primary" id="bNext">→ Next (Space)</button>
       </div>
     </div>
   </div>
@@ -771,7 +771,7 @@ function showBattleResult() {
     <div class="result-title">${winner}</div>
     <div class="result-sub" style="font-size:1.2rem;margin:8px 0;">🔵 ${battle.p1} — ${battle.p2} 🔴</div>
     <div class="result-sub">${battle.total} rounds</div>
-    <div class="result-btns"><button class="lp-btn lp-btn--success" id="rr">🔄 Rematch</button><button class="lp-btn lp-btn--ghost" id="rs">📖 Study</button></div>
+    <div class="result-btns"><button class="lp-btn lp-btn--primary" id="rr">🔄 Rematch</button><button class="lp-btn lp-btn--ghost" id="rs">📖 Study</button></div>
   </div>`;
   overlay.classList.add('show');
   overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); initBattle(); });

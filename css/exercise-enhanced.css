@@ -52,18 +52,40 @@ body::after {
 /* ─── TOP BAR REFINEMENT ─── */
 .top-bar {
   position: relative;
+  z-index: 1;
+  background: var(--lp-surface);
   padding: var(--lp-header-pad-y) var(--lp-header-pad-x);
   margin-bottom: 0;
-  border-bottom: 1.5px solid color-mix(in srgb, var(--lp-ink) 30%, transparent);
-  display: flex;
+  border-bottom: 1px solid var(--lp-border);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: flex-start;
   height: var(--lp-header-height);
   min-height: var(--lp-header-height);
   box-sizing: border-box;
-  gap: 12px;
+  gap: 10px;
   flex-shrink: 0;
 }
+
+/* Hoisted to body by exercise-shell.js — break out of body horizontal padding */
+body > .top-bar {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.top-bar__start,
+.top-bar__end {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.top-bar__end {
+  gap: 6px;
+  justify-content: flex-end;
+}
+
 .learnflow-signature {
   font-family: var(--lp-font-display);
   font-size: var(--lp-header-title-size);
@@ -73,18 +95,28 @@ body::after {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: clamp(160px, 30vw, 320px);
   min-width: 0;
+  text-align: center;
+  justify-self: center;
+  width: 100%;
+  max-width: none;
 }
+
+.learnflow-signature .accent {
+  font-style: italic;
+  color: var(--lp-accent);
+  font-weight: var(--lp-weight-normal);
+}
+
 .tb-counter {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
+  position: static;
+  left: auto;
+  transform: none;
+  display: inline-flex;
   align-items: center;
   gap: var(--lp-score-group-gap);
   height: var(--lp-score-height);
-  min-width: 80px;
+  min-width: 0;
   justify-content: center;
   padding: 0 var(--lp-score-padding-x);
   border: var(--lp-score-border-width) solid var(--lp-score-border);
@@ -96,6 +128,7 @@ body::after {
   font-weight: var(--lp-score-value-weight);
   white-space: nowrap;
   box-shadow: var(--lp-score-shadow);
+  flex-shrink: 0;
 }
 .tb-counter .lp-header-stats__icon {
   width: var(--lp-score-icon-size);
@@ -107,6 +140,37 @@ body::after {
 .tb-counter .lp-header-stats__icon--target {
   color: var(--lp-score-icon-color);
 }
+
+@media (max-width: 860px) {
+  .top-bar {
+    height: var(--lp-header-height-compact);
+    min-height: var(--lp-header-height-compact);
+    padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact);
+    gap: 6px;
+  }
+
+  .learnflow-signature {
+    font-size: 1rem;
+  }
+
+  /* Counter compacto: solo "1/90", sin icono target */
+  .tb-counter .lp-header-stats__icon {
+    display: none;
+  }
+
+  .tb-counter {
+    height: 36px;
+    padding: 0 10px;
+    gap: 0;
+    font-size: var(--lp-score-font-size);
+  }
+
+  .tb-counter .tb-counter__text {
+    font-size: 0.875rem;
+    font-weight: var(--lp-score-value-weight);
+  }
+}
+
 /* ─── HEADER SECTION ─── */
 /* ─── WIDER WRAP FOR EXERCISES ─── */
 .wrap { max-width: 860px; }
@@ -207,7 +271,10 @@ h1 {
 }
 @media (max-width: 480px) {
   .scroll-body { padding: 0; }
-  .top-bar { padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact); margin-bottom: 4px; border-bottom-width: 1px; height: var(--lp-header-height-compact); min-height: var(--lp-header-height-compact); }
+  .top-bar { margin-bottom: 4px; gap: 4px; }
+  .learnflow-signature { font-size: 0.9375rem; }
+  .tb-counter { height: 32px; padding: 0 8px; border-width: 1px; box-shadow: none; }
+  .tb-counter .tb-counter__text { font-size: 0.8125rem; }
   .header { padding: 4px 0 6px; margin-bottom: 6px; }
   h1 { margin-bottom: 4px; }
   .pill-bar { margin-bottom: 6px; }
