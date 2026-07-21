@@ -34,6 +34,7 @@
   --lp-accent-soft: #E8F0FE;
   --lp-accent-dark: #1E40AF;
   --lp-accent-hover: #1D4ED8;
+  --lp-accent-text: #1E40AF;
   --lp-primary: var(--lp-accent);
 
   /* Category spines */
@@ -200,6 +201,7 @@
   --lp-ink-inverse: #181B20;
 
   --lp-accent-soft: #1A2744;
+  --lp-accent-text: #93c5fd;
 
   --lp-cat-blue: #6FA8DC;
   --lp-cat-blue-soft: #1E3350;

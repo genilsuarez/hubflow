@@ -39,7 +39,7 @@ function updateThemeButton() {
   const btn = document.getElementById('themeToggle');
   if (!btn) return;
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  btn.textContent = isDark ? '☀️' : '🌙';
+  if (window.LpNavIcons) window.LpNavIcons.setTheme(btn, isDark);
 }
 
 const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v2';

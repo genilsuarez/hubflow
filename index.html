@@ -12,6 +12,7 @@
   <meta name="theme-color" content="#faf7f2">
   <meta name="color-scheme" content="light">
   <script src="js/lp-theme.js"></script>
+  <script src="js/lp-nav-icons.js"></script>
   <script src="lp-login.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
@@ -108,8 +109,17 @@
     .sb-item:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
     .sb-item .sb-spine { display: none; }
     .sb-item .sb-icon { width: 20px; height: 20px; flex: 0 0 20px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 400; color: var(--spine, currentColor); }
+    .sb-item .sb-icon .lp-nav-svg { width: 18px; height: 18px; display: block; }
+    .lp-icon-btn .lp-nav-svg { width: 20px; height: 20px; display: block; }
     .sb-item .sb-label { font-size: inherit; font-weight: inherit; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sb-item.active { background: var(--lp-accent-soft); color: var(--lp-accent-dark); font-weight: 700; box-shadow: none; }
+    .sb-item.active { background: var(--lp-accent-soft); color: var(--lp-accent-text); font-weight: 700; box-shadow: none; }
+    [data-theme="dark"] .sb-item.active {
+      background: color-mix(in srgb, var(--lp-accent) 20%, var(--lp-surface-raised));
+      border: 1px solid color-mix(in srgb, var(--lp-accent-text) 42%, transparent);
+      color: var(--lp-accent-text);
+      box-shadow: inset 0 1px 0 color-mix(in srgb, var(--lp-accent-text) 10%, transparent);
+    }
+    [data-theme="dark"] .sidebar-footer .sb-icon { color: var(--lp-accent-text); }
     .sb-item.active .sb-spine { display: none; }
     .sb-item.v { --spine: var(--lp-cat-purple); }
     .sb-item.p { --spine: var(--lp-cat-blue); }
@@ -928,7 +938,7 @@
   </style>
 </head>
 <body>
-<button class="lp-icon-btn navigation-launcher" id="navigationLauncher" type="button" aria-label="Abrir navegación flotante" aria-controls="sidebar" aria-expanded="false">☰</button>
+<button class="lp-icon-btn navigation-launcher" id="navigationLauncher" type="button" aria-label="Abrir navegación flotante" aria-controls="sidebar" aria-expanded="false"><span data-lp-icon="menu" aria-hidden="true"></span></button>
 <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
 
 <div class="shell">
@@ -944,9 +954,9 @@
       <button class="lp-icon-btn lp-icon-btn--sm nav-mode-toggle" id="navigationModeToggle" type="button" aria-label="Usar navegación flotante" aria-pressed="false" title="Oculta la barra lateral y usa un menú flotante"><span aria-hidden="true">◫</span></button>
     </div>
     <nav class="sb-nav" id="sbNav">
-      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Inicio</span></button>
-      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon">↗</span><span class="sb-label">Mi Progreso</span></button>
-      <button class="sb-item path" data-target="rutas"><span class="sb-spine"></span><span class="sb-icon">⚡</span><span class="sb-label">Rutas guiadas</span></button>
+      <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Inicio</span></button>
+      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="progress" aria-hidden="true"></span><span class="sb-label">Mi Progreso</span></button>
+      <button class="sb-item path" data-target="rutas"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="route" aria-hidden="true"></span><span class="sb-label">Rutas guiadas</span></button>
       <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Vocabulary &amp; Words</span></button>
       <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Grammar &amp; Spelling</span></button>
       <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Pronunciation</span></button>
@@ -954,10 +964,10 @@
       <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Guías de referencia</span></button>
     </nav>
     <div class="sidebar-footer">
-      <button class="sb-item sb-footer-item" id="aboutTrigger"><span class="sb-spine"></span><span class="sb-icon">ⓘ</span><span class="sb-label">About LearnFlow</span></button>
-      <button class="sb-item sb-footer-item theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema"><span class="sb-spine"></span><span class="sb-icon">🌙</span><span class="sb-label">Modo oscuro</span></button>
-      <button class="sb-item sb-footer-item" id="loginTrigger" type="button" aria-label="Iniciar sesión" title="Iniciar sesión"><span class="sb-spine"></span><span class="sb-icon">👤</span><span class="sb-label">Iniciar Sesión</span></button>
-      <a class="sb-item sb-footer-item portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon">⌂</span><span class="sb-label">Portal</span></a>
+      <button class="sb-item sb-footer-item" id="aboutTrigger"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">About LearnFlow</span></button>
+      <button class="sb-item sb-footer-item theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="moon" aria-hidden="true"></span><span class="sb-label">Modo oscuro</span></button>
+      <button class="sb-item sb-footer-item" id="loginTrigger" type="button" aria-label="Iniciar sesión" title="Iniciar sesión"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="user" aria-hidden="true"></span><span class="sb-label">Iniciar Sesión</span></button>
+      <a class="sb-item sb-footer-item portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Portal</span></a>
     </div>
   </aside>
 
@@ -1260,7 +1270,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
       const icon = button.querySelector('.sb-icon');
       const label = button.querySelector('.sb-label');
       if (icon) {
-        icon.textContent = isDark ? '☀️' : '🌙';
+        if (window.LpNavIcons) window.LpNavIcons.setTheme(icon, isDark);
       } else {
         button.textContent = isDark ? '☀️' : '🌙';
       }

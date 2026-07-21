@@ -22,7 +22,12 @@ function currentTheme() {
 }
 
 function currentThemeIcon() {
-  return currentTheme() === 'dark' ? '☀️' : '🌙';
+  if (window.LpNavIcons) return window.LpNavIcons.themeIcon(currentTheme() === 'dark');
+  return '';
+}
+
+function navIcon(name) {
+  return window.LpNavIcons ? window.LpNavIcons.svg(name) : '';
 }
 
 function toggleTheme() {
@@ -67,7 +72,7 @@ if (topBar && originalBackLink) {
   hamburgerBtn = document.createElement('button');
   hamburgerBtn.type = 'button';
   hamburgerBtn.className = originalBackLink.className; // keeps lp-icon-btn
-  hamburgerBtn.textContent = '☰';
+  hamburgerBtn.innerHTML = navIcon('menu') || '<span aria-hidden="true">☰</span>';
   hamburgerBtn.setAttribute('aria-label', 'Abrir navegación');
   hamburgerBtn.setAttribute('aria-controls', 'exerciseSidebar');
   originalBackLink.insertAdjacentElement('afterend', hamburgerBtn);
@@ -153,11 +158,11 @@ if (topBar) {
   // Theme sync — observe data-theme for sidebar icon updates
   const observer = new MutationObserver(() => {
     const headerToggle = document.getElementById('themeToggle');
-    if (headerToggle) headerToggle.textContent = currentThemeIcon();
+    if (headerToggle) headerToggle.innerHTML = currentThemeIcon();
     const sidebarThemeLabel = document.getElementById('sbThemeLabel');
     const sidebarThemeIcon = document.getElementById('sbThemeIcon');
     if (sidebarThemeLabel) sidebarThemeLabel.textContent = currentTheme() === 'dark' ? 'Modo claro' : 'Modo oscuro';
-    if (sidebarThemeIcon) sidebarThemeIcon.textContent = currentThemeIcon();
+    if (sidebarThemeIcon) sidebarThemeIcon.innerHTML = currentThemeIcon();
   });
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 }
@@ -175,13 +180,13 @@ function isPersistent() {
 }
 
 const SECTIONS = [
-  { key: 'resumen', icon: '⌂', label: 'Inicio', cls: '' },
-  { key: 'mi-progreso', icon: '↗', label: 'Mi Progreso', cls: 'path' },
-  { key: 'vocab', icon: '◆', label: 'Vocabulary & Words', cls: 'v' },
-  { key: 'grammar', icon: '◆', label: 'Grammar & Spelling', cls: 'g' },
-  { key: 'pronunciation', icon: '◆', label: 'Pronunciation', cls: 'p' },
-  { key: 'analysis', icon: '◆', label: 'Analysis & Production', cls: 'a' },
-  { key: 'guides', icon: '◆', label: 'Guías de referencia', cls: 'r' },
+  { key: 'resumen', icon: 'home', label: 'Inicio', cls: '' },
+  { key: 'mi-progreso', icon: 'progress', label: 'Mi Progreso', cls: 'path' },
+  { key: 'vocab', icon: 'diamond', label: 'Vocabulary & Words', cls: 'v' },
+  { key: 'grammar', icon: 'diamond', label: 'Grammar & Spelling', cls: 'g' },
+  { key: 'pronunciation', icon: 'diamond', label: 'Pronunciation', cls: 'p' },
+  { key: 'analysis', icon: 'diamond', label: 'Analysis & Production', cls: 'a' },
+  { key: 'guides', icon: 'diamond', label: 'Guías de referencia', cls: 'r' },
 ];
 
 function buildSidebar() {
@@ -197,7 +202,8 @@ function buildSidebar() {
 
   const navItems = SECTIONS.map(s => {
     const active = s.key === section ? ' active' : '';
-    return `<a class="sb-item ${s.cls}${active}" href="../?section=${s.key}"><span class="sb-icon">${s.icon}</span><span class="sb-label">${s.label}</span></a>`;
+    const iconMarkup = s.icon === 'diamond' ? '◆' : navIcon(s.icon);
+    return `<a class="sb-item ${s.cls}${active}" href="../?section=${s.key}"><span class="sb-icon">${iconMarkup}</span><span class="sb-label">${s.label}</span></a>`;
   }).join('');
 
   sidebar.innerHTML = `
@@ -211,10 +217,10 @@ function buildSidebar() {
     </div>
     <nav class="sb-nav">${navItems}</nav>
     <div class="sidebar-footer">
-      <button class="sb-item" id="sbAboutBtn" type="button"><span class="sb-icon">ⓘ</span><span class="sb-label">About LearnFlow</span></button>
+      <button class="sb-item" id="sbAboutBtn" type="button"><span class="sb-icon">${navIcon('info')}</span><span class="sb-label">About LearnFlow</span></button>
       <button class="sb-item" id="sbThemeBtn" type="button"><span class="sb-icon" id="sbThemeIcon">${currentThemeIcon()}</span><span class="sb-label" id="sbThemeLabel">${currentTheme() === 'dark' ? 'Modo claro' : 'Modo oscuro'}</span></button>
-      <button class="sb-item" id="sbLoginBtn" type="button" aria-label="Iniciar sesión"><span class="sb-icon">👤</span><span class="sb-label" id="sbLoginLabel">${(typeof lpLogin !== 'undefined' && lpLogin.getUser()) ? lpLogin.getUser().name : 'Iniciar Sesión'}</span></button>
-      <a class="sb-item" href="${themedAppHref('/deskflow/', 3000)}" aria-label="Volver a LearnFlow"><span class="sb-icon">⌂</span><span class="sb-label">Portal</span></a>
+      <button class="sb-item" id="sbLoginBtn" type="button" aria-label="Iniciar sesión"><span class="sb-icon">${navIcon('user')}</span><span class="sb-label" id="sbLoginLabel">${(typeof lpLogin !== 'undefined' && lpLogin.getUser()) ? lpLogin.getUser().name : 'Iniciar Sesión'}</span></button>
+      <a class="sb-item" href="${themedAppHref('/deskflow/', 3000)}" aria-label="Volver a LearnFlow"><span class="sb-icon">${navIcon('home')}</span><span class="sb-label">Portal</span></a>
     </div>
   `;
 
@@ -278,10 +284,10 @@ function buildSidebar() {
   // Theme toggle in sidebar
   document.getElementById('sbThemeBtn').addEventListener('click', () => {
     toggleTheme();
-    document.getElementById('sbThemeIcon').textContent = currentThemeIcon();
+    document.getElementById('sbThemeIcon').innerHTML = currentThemeIcon();
     document.getElementById('sbThemeLabel').textContent = currentTheme() === 'dark' ? 'Modo claro' : 'Modo oscuro';
     const headerToggle = document.getElementById('themeToggle');
-    if (headerToggle) headerToggle.textContent = currentThemeIcon();
+    if (headerToggle) headerToggle.innerHTML = currentThemeIcon();
   });
 
   // About LearnFlow modal
