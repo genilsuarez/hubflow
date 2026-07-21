@@ -1,0 +1,30 @@
+/* ═══════════════════════════════════════════════════════
+   HubFlow — Guide pages mobile layout
+   Guides scroll vertically (long reference content) but
+   should not have horizontal overflow or phantom padding.
+   ═══════════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  /* Standard guide shell (.page wrapper — 23 guides) */
+  .page {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Alternate guide shell (e.g. noun-adjuncts — no .page wrapper) */
+  body > .top-bar:first-child {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  body > .hero:last-of-type,
+  body > .dt-box:last-child,
+  body > .section:last-child {
+    margin-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+}

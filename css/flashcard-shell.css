@@ -225,18 +225,16 @@ h1 { display: flex; align-items: center; gap: 6px; }
 [data-color="teal"] .fc-back .fc-term { color: var(--lp-cat-teal); font-size: 1.3rem; }
 [data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
 
-/* ─── MOBILE: eliminate unnecessary scroll ─── */
+/* ─── MOBILE: flashcard-specific compact layout ─── */
 @media (max-width: 480px) {
-  body { min-height: auto; padding: 0 10px; }
   .cat-scroll-wrapper { margin-bottom: 2px; }
   .header .pill-bar:not(.pill-bar--scroll) { margin-bottom: 0; }
   #progressWrap { margin-bottom: 0; }
   .fc-card { height: 180px; max-width: 100%; }
   .fc-count { font-size: .7rem; margin-bottom: 0; }
   .listen-btn { width: 38px !important; height: 38px !important; font-size: 1rem !important; }
-  .scroll-body { padding-bottom: 8px; }
   [data-area] { gap: 2px; }
-  .fc-nav { margin-top: 4px; gap: 8px; }
+  .fc-nav { gap: 8px; }
 }
 
 /* ─── DUAL WORD CARD (Word Relations) ─────────────────────────────────── */

@@ -697,7 +697,7 @@
     max-width: none;
     width: 100%;
     margin-inline: 0;
-    margin-top: 0.75rem;
+    margin-top: 0;
     padding: 0.625rem 12px max(0.625rem, env(safe-area-inset-bottom));
     background: var(--lp-surface);
     border-top: 1px solid var(--lp-border-subtle, var(--lp-border));
@@ -713,10 +713,16 @@
     width: calc(100% - 16px);
     max-width: none;
     margin-inline: auto;
-    margin-top: 0.75rem;
+    margin-top: 0;
     padding: 8px 14px;
     border-radius: var(--lp-radius-xl);
     border: 1px solid var(--lp-border-subtle, var(--lp-border));
     box-shadow: var(--lp-shadow-sm);
+  }
+
+  body.shell-ready .check-area {
+    margin-top: 0;
+    padding-top: 0.5rem;
+    border-top: none;
   }
 }
