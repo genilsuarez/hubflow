@@ -4,7 +4,7 @@
 // Replaces portal-link.js for exercise pages.
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
-import { initCatBarExpander, renderLessonProgress } from './utils.js';
+import { initCatBarExpander, renderLessonProgress, setupPracticeBottomNav } from './utils.js';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -715,6 +715,7 @@ function relocateLessonProgressButton() {
   }
   syncBottomNavMode();
   relocateBattleActionsToBottomNav();
+  setupPracticeBottomNav();
   reorderStudySpeakButton();
 }
 
@@ -834,7 +835,7 @@ window.__resetModeStageScroll = resetModeStageScroll;
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-mode]')) {
     setTimeout(() => {
-      syncBottomNavMode();
+      window.__syncBottomNavMode?.();
       syncBattleProgressPlacement();
       resetModeStageScroll();
       window.__syncModeTabIndicator?.({ scrollActive: true });
@@ -925,8 +926,8 @@ function buildFooter() {
 
 buildFooter();
 
+// Cat-bar: wrap + expand badge before first paint (no load-time scroll hint).
+initCatBarExpander({ hintOnLoad: false });
+
 // Reveal the page now that DOM restructuring is done
 document.body.classList.add('shell-ready');
-
-// ─── Cat-bar expander: unified scroll + expand for all exercises ───────────────
-queueMicrotask(() => initCatBarExpander());

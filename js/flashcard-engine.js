@@ -152,9 +152,9 @@ export class FlashcardEngine {
         this.setMode(this.currentMode);
       });
     });
-    // Scroll active pill into view
+    // Scroll active pill into view without animating the bar on load/switch
     const active = bar.querySelector('.pill-btn.active');
-    if (active) active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+    if (active) active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
   }
 
   // ═══ MODE MANAGEMENT ═══

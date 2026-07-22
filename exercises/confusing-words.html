@@ -15,80 +15,20 @@
   <link rel="stylesheet" href="../css/buttons.css">
 <link rel="stylesheet" href="../css/exercise-enhanced.css">
 <link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/sentence-quiz.css">
 <style>
   body { min-height: 100vh; padding: 0 14px; }
-  .progress__fill { background: var(--lp-cat-purple); }
 
-  /* Category pills — scrollable (handled by .cat-scroll-wrapper in components.css) */
-  .cat-bar { display: flex; gap: 4px; padding-bottom: 2px; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
-  [data-area].show { display: flex; }
-
-  /* Sentence card */
-  .sentence-card {
-    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
-    border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center;
-    box-shadow: var(--lp-shadow-sm);
-  }
-  .sentence-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
-  .sentence-card .sc-text {
-    font-family: var(--lp-font-display); font-size: 1.15rem; font-weight: 500;
-    color: var(--lp-ink); line-height: 1.5;
-  }
-  .sentence-card .sc-text .blank {
-    display: inline-block; min-width: 80px; border-bottom: 2.5px dashed var(--lp-cat-purple);
-    color: var(--lp-cat-purple); font-weight: 700; padding: 0 4px;
-  }
-  .sentence-card .sc-counter {
-    font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 8px;
-  }
-
-  /* Options */
-  .word-options { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 720px; }
-  .word-opt {
-    font-family: var(--lp-font-body); font-weight: 700; font-size: .88rem;
-    padding: 12px 22px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
-    background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
-    transition: all .2s var(--lp-ease); min-width: 100px; text-align: center;
-  }
-  .word-opt:hover:not(.disabled) { border-color: var(--lp-cat-purple); background: rgba(123,94,167,.08); transform: translateY(-2px); }
-  .word-opt.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
-  .word-opt.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
-  .word-opt.disabled { cursor: default; opacity: .7; }
-  [data-theme="dark"] .word-opt.correct { color: #6FE8A8; }
-  [data-theme="dark"] .word-opt.wrong { color: #FF9F9F; }
-
-  /* Next button (practice mode) */
-  .btn--next {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--lp-font-body); font-weight: 700; font-size: .82rem;
-    padding: 10px 28px; border-radius: var(--lp-radius-sm);
-    border: none; cursor: pointer;
-    background: var(--lp-cat-purple); color: #fff;
-    box-shadow: 0 2px 8px rgba(123,94,167,.3);
-    transition: all .2s var(--lp-ease);
-    margin-top: 4px;
-  }
-  .btn--next:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(123,94,167,.4); }
-  .btn--next:active { transform: translateY(0); }
-
-  /* Study flashcard */
-  .fc-card { max-width: 720px; height: 200px; }
   .cw-front .fc-term { font-size: 1.5rem; color: var(--lp-cat-purple); }
   .cw-front .fc-detail { font-size: .72rem; margin-top: 4px; }
   .fc-back { background: var(--lp-accent-soft); border-color: var(--lp-cat-purple); }
 
-  .scroll-body { padding: 8px 0 30px; }
-
-  @media (max-width: 480px) {
-    .word-opt { min-width: 80px; padding: 10px 16px; font-size: .8rem; }
-  }
+  [data-theme="dark"] .word-opt.correct { color: #6FE8A8; }
+  [data-theme="dark"] .word-opt.wrong { color: #FF9F9F; }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" data-color="purple">
   <div class="top-bar">
     <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
   </div>
@@ -122,9 +62,10 @@
         <div class="sc-text" id="scText"></div>
         <div class="sc-counter" id="scCounter"></div>
       </div>
-      <div class="word-options" id="wordOptions"></div>
-      <div class="explain-box" id="explainBox"></div>
-      <button class="lp-btn lp-btn--primary" id="nextPracticeBtn" style="display:none">Next →</button>
+      <div class="word-options" id="wordOptions">
+        <div class="word-options__choices" id="wordChoices"></div>
+        <div class="explain-box" id="explainBox"></div>
+      </div>
     </div>
 
     <!-- STUDY -->
@@ -173,9 +114,14 @@ let timedSeconds = 0;
 // ─── Category bar ───
 function renderCatBar() {
   const bar = document.getElementById('catBar');
-  bar.innerHTML = catKeys.map(k =>
+  if (!bar) return;
+  const expandBtn = bar.querySelector('.cat-expand-btn');
+  const pills = catKeys.map(k =>
     `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
   ).join('');
+  bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
+  if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
+  else bar.innerHTML = pills;
   bar.querySelectorAll('[data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
       currentCat = btn.dataset.cat;
@@ -192,6 +138,10 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
     mode = btn.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
     startMode();
+    setTimeout(() => {
+      if (mode === 'practice' || mode === 'timed') syncPracticeNav({ showNext: !!practiceAdvance });
+      else if (mode === 'study') restoreStudyNav();
+    }, 10);
   });
 });
 
@@ -207,6 +157,51 @@ function startMode() {
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
 
 function getData() { return CATEGORIES[currentCat].items; }
+
+let practiceAdvance = null;
+
+function syncPracticeNav({ showNext = false } = {}) {
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  [shuffleBtn, prevBtn].forEach((btn) => {
+    if (!btn) return;
+    btn.hidden = true;
+    btn.style.display = 'none';
+  });
+  if (nextBtn) {
+    nextBtn.hidden = !showNext;
+    if (showNext) nextBtn.style.removeProperty('display');
+    else nextBtn.style.display = 'none';
+  }
+}
+
+function restoreStudyNav() {
+  ['shuffleBtn', 'prevBtn', 'nextBtn'].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.hidden = false;
+    btn.style.removeProperty('display');
+  });
+  practiceAdvance = null;
+}
+
+function installBottomNavHook(attempt = 0) {
+  const orig = window.__syncBottomNavMode;
+  if (!orig) {
+    if (attempt < 40) setTimeout(() => installBottomNavHook(attempt + 1), 50);
+    return;
+  }
+  window.__syncBottomNavMode = () => {
+    orig();
+    if (mode === 'practice' || mode === 'timed') {
+      syncPracticeNav({ showNext: !!practiceAdvance });
+    } else if (mode === 'study') {
+      restoreStudyNav();
+    }
+  };
+  window.__syncBottomNavMode();
+}
 
 function updProgress(current, t) {
   const pct = Math.round((current / t) * 100);
@@ -244,11 +239,11 @@ function renderPractice() {
   document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
   document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
   document.getElementById('explainBox').textContent = '';
-  document.getElementById('nextPracticeBtn').style.display = 'none';
+  syncPracticeNav({ showNext: false });
 
   // Build options from the category pairs
   const opts = shuffle([...cat.pairs]);
-  const optsEl = document.getElementById('wordOptions');
+  const optsEl = document.getElementById('wordChoices');
   optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join('');
   optsEl.querySelectorAll('.word-opt').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -277,14 +272,21 @@ function renderPractice() {
       idx++;
       updProgress(idx, total);
 
-      // Show "Next" button instead of auto-advancing
-      const nextBtn = document.getElementById('nextPracticeBtn');
-      nextBtn.style.display = 'inline-flex';
-      nextBtn.focus();
-      const advance = () => { nextBtn.style.display = 'none'; nextBtn.onclick = null; document.removeEventListener('keydown', onKey); renderPractice(); };
-      const onKey = (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') { e.preventDefault(); advance(); } };
-      nextBtn.onclick = advance;
-      document.addEventListener('keydown', onKey);
+      if (idx >= total) {
+        practiceAdvance = null;
+        syncPracticeNav({ showNext: false });
+        requestAnimationFrame(() => finishPractice());
+        return;
+      }
+
+      practiceAdvance = () => {
+        practiceAdvance = null;
+        syncPracticeNav({ showNext: false });
+        renderPractice();
+      };
+      syncPracticeNav({ showNext: true });
+      setTimeout(() => syncPracticeNav({ showNext: true }), 10);
+      document.getElementById('nextBtn')?.focus();
     });
   });
   updProgress(idx, total);
@@ -300,13 +302,14 @@ function finishPractice() {
     onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
     elapsedSeconds: elapsed
   });
-  recordScore(`conf-${currentCat}`, pct);
+  requestAnimationFrame(() => recordScore(`conf-${currentCat}`, pct));
 }
 
 // ═══ STUDY ═══
 function initStudy() {
   deck = shuffle(getData());
   idx = 0;
+  restoreStudyNav();
   document.querySelector('[data-area="study"]').classList.add('show');
   renderStudyCard();
 }
@@ -325,7 +328,10 @@ function renderStudyCard() {
 }
 
 document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
-document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (practiceAdvance) { practiceAdvance(); return; }
+  if (mode === 'study') advanceCard(1);
+});
 document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
 document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
 initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
@@ -358,6 +364,13 @@ function advanceCard(dir) {
 }
 
 document.addEventListener('keydown', e => {
+  if (mode === 'practice' || mode === 'timed') {
+    if (practiceAdvance && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
+      e.preventDefault();
+      practiceAdvance();
+    }
+    return;
+  }
   if (mode !== 'study') return;
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
@@ -369,6 +382,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── Init ───
+installBottomNavHook();
 startMode();
 </script>
 

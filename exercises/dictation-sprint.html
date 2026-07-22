@@ -12,114 +12,14 @@
 <style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/buttons.css">
 <link rel="stylesheet" href="../css/exercise-enhanced.css">
 <link rel="stylesheet" href="../css/sidebar.css">
-<style>
-  body { min-height: 100vh; padding: 0 14px; }
-  .progress__fill { background: var(--lp-cat-amber); }
-
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
-  [data-area].show { display: flex; }
-
-  /* Dictation card */
-  .dict-card {
-    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
-    border-radius: var(--lp-radius-lg); padding: 24px; box-shadow: var(--lp-shadow-md); text-align: center;
-  }
-  .dict-card__counter {
-    font-size: .65rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase;
-    letter-spacing: .08em; margin-bottom: 8px;
-  }
-  .dict-card__hint {
-    font-size: .72rem; color: var(--lp-cat-amber); font-weight: 700; margin-bottom: 12px;
-    background: var(--lp-cat-amber-soft); padding: 4px 12px; border-radius: var(--lp-radius-sm);
-    display: inline-block;
-  }
-  .dict-card__controls {
-    display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 16px;
-  }
-  .play-btn {
-    width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--lp-cat-amber);
-    background: var(--lp-cat-amber-soft); display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; cursor: pointer; transition: transform .2s, box-shadow .2s;
-    box-shadow: 0 3px 12px rgba(184,134,11,.2);
-  }
-  .play-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(184,134,11,.3); }
-  .play-btn:active { transform: scale(.95); }
-  .play-btn.slow { width: 42px; height: 42px; font-size: 1.1rem; border-width: 1.5px; }
-
-  .dict-card__plays {
-    font-size: .65rem; color: var(--lp-muted); font-weight: 600;
-  }
-  .dict-card__playback {
-    font-size: .62rem; font-weight: 700; color: var(--lp-cat-amber);
-    margin-top: 6px; min-height: 1.2em; transition: opacity .2s;
-  }
-  .dict-card__playback:empty { opacity: 0; }
-  .dict-card__playback-dots {
-    display: inline-flex; gap: 5px; margin-left: 6px; vertical-align: middle;
-  }
-  .dict-card__playback-dots span {
-    width: 8px; height: 8px; border-radius: 50%; background: var(--lp-border);
-    transition: background .3s;
-  }
-  .dict-card__playback-dots span.done { background: var(--lp-cat-amber); }
-
-  /* Input area */
-  .dict-input {
-    width: 100%; max-width: 720px;
-  }
-  .dict-input textarea {
-    width: 100%; min-height: 80px; padding: 14px; font-family: var(--lp-font-body);
-    font-size: .92rem; line-height: 1.6; border: 1.5px solid var(--lp-border);
-    border-radius: var(--lp-radius-md); background: var(--lp-bg-paper); color: var(--lp-ink);
-    resize: vertical; outline: none; transition: border-color .2s;
-  }
-  .dict-input textarea:focus { border-color: var(--lp-cat-amber); }
-  .dict-input textarea::placeholder { color: var(--lp-muted); font-style: italic; }
-
-  /* Feedback */
-  .dict-feedback {
-    width: 100%; max-width: 720px; display: none; flex-direction: column; gap: 8px;
-    background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md);
-    padding: 16px; text-align: left;
-  }
-  .dict-feedback.show { display: flex; }
-  .dict-feedback__score {
-    font-family: var(--lp-font-display); font-size: 1.2rem; font-weight: 600;
-    text-align: center; margin-bottom: 4px;
-  }
-  .dict-feedback__score.perfect { color: var(--lp-success); }
-  .dict-feedback__score.good { color: var(--lp-cat-amber); }
-  .dict-feedback__score.low { color: var(--lp-error); }
-
-  .dict-diff { font-size: .82rem; line-height: 1.8; }
-  .dict-diff .match { color: var(--lp-success-dark); }
-  .dict-diff .miss { color: var(--lp-error); text-decoration: underline; font-weight: 700; }
-  .dict-diff .extra { color: var(--lp-muted); text-decoration: line-through; }
-
-  .dict-correct {
-    font-size: .78rem; color: var(--lp-ink-soft); font-style: italic;
-    border-top: 1px solid var(--lp-border); padding-top: 8px; margin-top: 4px;
-  }
-
-  .scroll-body { padding: 8px 0 30px; }
-
-  /* No TTS warning */
-  .no-tts-warning {
-    background: var(--lp-error-soft); border: 1.5px solid var(--lp-error);
-    border-radius: var(--lp-radius-md); padding: 14px 18px; text-align: center;
-    font-size: .8rem; font-weight: 600; color: var(--lp-error-dark); display: none;
-  }
-  .no-tts-warning.show { display: block; }
-</style>
+<link rel="stylesheet" href="../css/typed-answer-shell.css">
+<link rel="stylesheet" href="../css/dictation-shell.css">
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" data-color="amber">
 
   <div class="top-bar">
     <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
@@ -162,13 +62,19 @@
       </div>
 
       <div class="dict-input">
-        <textarea id="dInput" placeholder="Type what you hear..." rows="3" autocomplete="off" autocapitalize="sentences" spellcheck="false"></textarea>
+        <textarea id="dInput" placeholder="Type what you hear..." rows="2" autocomplete="off" autocapitalize="sentences" spellcheck="false"></textarea>
       </div>
 
       <div class="dict-feedback" id="dFeedback">
         <div class="dict-feedback__score" id="dScore"></div>
-        <div class="dict-diff" id="dDiff"></div>
-        <div class="dict-correct" id="dCorrect"></div>
+        <div class="dict-feedback__row" id="dUserRow">
+          <span class="dict-feedback__label">You wrote</span>
+          <p class="dict-feedback__text" id="dDiff"></p>
+        </div>
+        <div class="dict-feedback__row" id="dCorrectRow">
+          <span class="dict-feedback__label">Answer</span>
+          <p class="dict-feedback__text" id="dCorrect"></p>
+        </div>
       </div>
 
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
@@ -184,293 +90,13 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/dictation-sprint.js';
-import { shuffle, initTheme, toggleTheme, isSpeechAvailable, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
+import { initDictationPractice } from '../js/dictation-engine.js';
 
-initTheme();
-document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
-
-// Check TTS
-if (!isSpeechAvailable()) {
-  document.getElementById('noTtsWarning').classList.add('show');
-}
-
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0];
-let mode = 'practice';
-let deck = [], idx = 0, totalScore = 0, totalWords = 0;
-let plays = 0;
-let maxPlays = 3;
-let checked = false;
-let timer = null;
-let timedSeconds = 0;
-
-// ─── Category bar ───
-function renderCatBar() {
-  const bar = document.getElementById('catBar');
-  bar.innerHTML = catKeys.map(k =>
-    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label} <span style="font-size:.6rem;opacity:.7">${CATEGORIES[k].level}</span></button>`
-  ).join('');
-  bar.querySelectorAll('[data-cat]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentCat = btn.dataset.cat;
-      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-      startMode();
-    });
-  });
-}
-renderCatBar();
-
-// ─── Mode switching ───
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    startMode();
-  });
+initDictationPractice({
+  categories: CATEGORIES,
+  scoreKeyPrefix: 'dict',
+  contentId: 'dictation-sprint',
 });
-
-function startMode() {
-  stopTimer();
-  const cat = CATEGORIES[currentCat];
-  deck = shuffle(cat.items);
-  idx = 0; totalScore = 0; totalWords = 0;
-  document.getElementById('timerBar').classList.toggle('show', mode === 'timed');
-  document.querySelector('[data-area="dictation"]').classList.add('show');
-
-  if (mode === 'timed') {
-    maxPlays = 2;
-    timedSeconds = 180;
-
-    timer = new Timer(timedSeconds,
-      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 15); },
-      () => finish()
-    );
-    timer.start();
-  } else {
-    maxPlays = 3;
-  }
-  loadSentence();
-}
-
-function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
-
-function loadSentence() {
-  if (idx >= deck.length) { finish(); return; }
-  const item = deck[idx];
-  plays = 0;
-  checked = false;
-
-  document.getElementById('dCounter').textContent = `${idx + 1} / ${deck.length}`;
-  document.getElementById('dHint').textContent = item.hint || '';
-  document.getElementById('dPlays').textContent = `Plays: 0 / ${maxPlays}`;
-  document.getElementById('dInput').value = '';
-  document.getElementById('dInput').disabled = false;
-  document.getElementById('dFeedback').classList.remove('show');
-  document.getElementById('dPlayback').innerHTML = '';
-  document.getElementById('checkBtn').style.display = '';
-  document.getElementById('nextBtn').style.display = 'none';
-  document.getElementById('skipBtn').style.display = '';
-  document.getElementById('dInput').focus();
-
-  updateProgress();
-}
-
-function playSentence(rate) {
-  if (plays >= maxPlays && rate !== 'slow') return Promise.resolve();
-  const item = deck[idx];
-  const cat = CATEGORIES[currentCat];
-  const baseRate = cat.rate || 0.85;
-  const finalRate = rate === 'slow' ? baseRate * 0.65 : baseRate;
-
-  if (!isSpeechAvailable() || !item.sentence) return Promise.resolve();
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(item.sentence);
-  u.lang = 'en-GB';
-  u.rate = finalRate;
-  u.pitch = 1;
-
-  const done = new Promise(resolve => {
-    u.onend = resolve;
-    u.onerror = resolve;
-    // Safety timeout in case onend never fires (browser quirk)
-    setTimeout(resolve, item.sentence.length * 120 + 3000);
-  });
-  window.speechSynthesis.speak(u);
-
-  if (rate !== 'slow') {
-    plays++;
-    document.getElementById('dPlays').textContent = `Plays: ${plays} / ${maxPlays}`;
-  }
-
-  if (plays >= maxPlays) {
-    document.getElementById('playBtn').style.opacity = '0.4';
-    document.getElementById('playBtn').style.cursor = 'not-allowed';
-  }
-
-  return done;
-}
-
-document.getElementById('playBtn').addEventListener('click', () => { autoPlaySession++; document.getElementById('dPlayback').innerHTML = ''; playSentence('normal'); });
-document.getElementById('playSlow').addEventListener('click', () => { autoPlaySession++; document.getElementById('dPlayback').innerHTML = ''; playSentence('slow'); });
-
-// ─── Check ───
-document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-
-function checkAnswer() {
-  if (checked) return;
-  checked = true;
-
-  const item = deck[idx];
-  const userText = document.getElementById('dInput').value.trim();
-  document.getElementById('dInput').disabled = true;
-
-  // Score: word-by-word comparison
-  const correctWords = normalize(item.sentence).split(/\s+/);
-  const userWords = normalize(userText).split(/\s+/).filter(w => w);
-
-  let matched = 0;
-  const diffHtml = [];
-
-  // Simple LCS-like word matching
-  const correctUsed = new Array(correctWords.length).fill(false);
-  const userMatched = new Array(userWords.length).fill(false);
-
-  // First pass: exact position matches
-  for (let i = 0; i < Math.min(correctWords.length, userWords.length); i++) {
-    if (correctWords[i] === userWords[i]) {
-      correctUsed[i] = true;
-      userMatched[i] = true;
-      matched++;
-    }
-  }
-
-  // Second pass: out-of-order matches
-  for (let i = 0; i < userWords.length; i++) {
-    if (userMatched[i]) continue;
-    for (let j = 0; j < correctWords.length; j++) {
-      if (correctUsed[j]) continue;
-      if (userWords[i] === correctWords[j]) {
-        correctUsed[j] = true;
-        userMatched[i] = true;
-        matched++;
-        break;
-      }
-    }
-  }
-
-  // Build diff display
-  const diffWords = correctWords.map((w, i) => {
-    if (correctUsed[i]) return `<span class="match">${item.sentence.split(/\s+/)[i]}</span>`;
-    return `<span class="miss">${item.sentence.split(/\s+/)[i]}</span>`;
-  });
-
-  const wordCount = correctWords.length;
-  const pct = Math.round((matched / wordCount) * 100);
-  totalScore += matched;
-  totalWords += wordCount;
-
-  // Display
-  const scoreEl = document.getElementById('dScore');
-  scoreEl.textContent = `${matched}/${wordCount} words (${pct}%)`;
-  scoreEl.className = 'dict-feedback__score ' + (pct === 100 ? 'perfect' : pct >= 60 ? 'good' : 'low');
-
-  document.getElementById('dDiff').innerHTML = diffWords.join(' ');
-  document.getElementById('dCorrect').textContent = `✓ ${item.sentence}`;
-  document.getElementById('dFeedback').classList.add('show');
-
-  document.getElementById('checkBtn').style.display = 'none';
-  document.getElementById('nextBtn').style.display = '';
-  document.getElementById('skipBtn').style.display = 'none';
-
-  // Reset play button opacity
-  document.getElementById('playBtn').style.opacity = '';
-  document.getElementById('playBtn').style.cursor = '';
-}
-
-function normalize(text) {
-  return text.toLowerCase()
-    .replace(/['']/g, "'")
-    .replace(/[^a-z0-9'\s-]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-// ─── Next / Skip ───
-document.getElementById('nextBtn').addEventListener('click', () => { autoPlaySession++; idx++; loadSentence(); autoPlayTwice(); });
-document.getElementById('skipBtn').addEventListener('click', () => {
-  autoPlaySession++;
-  const item = deck[idx];
-  const wordCount = normalize(item.sentence).split(/\s+/).length;
-  totalWords += wordCount; // counts as 0 correct
-  idx++;
-  loadSentence();
-  autoPlayTwice();
-});
-
-function updateProgress() {
-  const pct = deck.length > 0 ? Math.round((idx / deck.length) * 100) : 0;
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progTxt').textContent = `${idx} / ${deck.length}`;
-  document.getElementById('progPct').textContent = pct + '%';
-}
-
-function finish() {
-  stopTimer();
-  const pct = totalWords > 0 ? Math.round((totalScore / totalWords) * 100) : 0;
-  showResult({
-    correct: totalScore,
-    total: totalWords,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: null
-  });
-  recordScore(`dict-${currentCat}`, pct);
-  document.getElementById('progFill').style.width = '100%';
-  document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;
-  document.getElementById('progPct').textContent = '100%';
-}
-
-// ─── Keyboard shortcuts ───
-document.addEventListener('keydown', e => {
-  // Ctrl+Enter to check
-  if (e.key === 'Enter' && e.ctrlKey && !checked) {
-    e.preventDefault();
-    checkAnswer();
-  }
-  // Ctrl+P to play
-  if (e.key === 'p' && e.ctrlKey) {
-    e.preventDefault();
-    playSentence('normal');
-  }
-});
-
-// Auto-play on load: play twice with pause (like a real dictation)
-let autoPlaySession = 0; // guard against stale auto-plays after rapid navigation
-async function autoPlayTwice() {
-  const session = ++autoPlaySession;
-  const item = deck[idx];
-  if (!item) return;
-  const pbEl = document.getElementById('dPlayback');
-
-  // First play
-  pbEl.innerHTML = '▶ Playing… <span class="dict-card__playback-dots"><span class="done"></span><span></span></span>';
-  await playSentence('normal');
-  if (session !== autoPlaySession) return; // user moved on
-
-  // Pause between plays
-  await new Promise(r => setTimeout(r, 1000));
-  if (session !== autoPlaySession) return;
-
-  // Second play
-  pbEl.innerHTML = '▶ Playing… <span class="dict-card__playback-dots"><span class="done"></span><span class="done"></span></span>';
-  await playSentence('normal');
-  if (session !== autoPlaySession) return;
-
-  pbEl.innerHTML = '';
-}
-
-startMode();
-autoPlayTwice();
 </script>
 
 <script type="module" src="../js/exercise-shell.js"></script>

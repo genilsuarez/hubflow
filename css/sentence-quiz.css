@@ -14,8 +14,103 @@ body { min-height: 100vh; padding: 0 14px; }
 .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
 .cat-bar::-webkit-scrollbar { display: none; }
 
-[data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+[data-area] { display: none; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
 [data-area].show { display: flex; }
+
+/* Align MCQ practice / study stacks across mode switches (matches flashcard 230px) */
+.wrap:has(.ex-mode-stage) {
+  --lp-mcq-mode-h: 230px;
+  --lp-mcq-prompt-h: 130px;
+  --lp-mcq-stack-gap: 4px;
+}
+
+[data-area="practice"] {
+  gap: var(--lp-mcq-stack-gap);
+}
+
+[data-area="practice"] .sentence-card {
+  height: var(--lp-mcq-prompt-h);
+  min-height: var(--lp-mcq-prompt-h);
+  max-height: var(--lp-mcq-prompt-h);
+  padding: 12px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+  overflow: hidden;
+}
+[data-area="practice"] .sentence-card .sc-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+[data-area="practice"] .sentence-card .sc-text {
+  font-size: 1.1rem;
+  line-height: 1.35;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-area="practice"] .sentence-card .sc-counter {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+[data-area="practice"] .word-options {
+  height: calc(var(--lp-mcq-mode-h) - var(--lp-mcq-prompt-h) - var(--lp-mcq-stack-gap));
+  min-height: calc(var(--lp-mcq-mode-h) - var(--lp-mcq-prompt-h) - var(--lp-mcq-stack-gap));
+  max-height: calc(var(--lp-mcq-mode-h) - var(--lp-mcq-prompt-h) - var(--lp-mcq-stack-gap));
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+[data-area="practice"] .word-options__choices {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+[data-area="practice"] .word-options .explain-box {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  padding: 5px 8px;
+}
+
+[data-area="practice"] .word-options:has(.explain-box:not(:empty)) .word-opt {
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+}
+[data-area="practice"] .word-opt {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  line-height: 1.25;
+}
+
+[data-area="study"] .fc-card {
+  height: var(--lp-mcq-mode-h);
+  min-height: var(--lp-mcq-mode-h);
+}
 
 .sentence-card {
   width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
@@ -47,13 +142,18 @@ body { min-height: 100vh; padding: 0 14px; }
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--lp-accent) 18%, transparent);
 }
 
-.fc-card { max-width: 720px; height: 200px; }
+.fc-card { max-width: 720px; }
 .word-options { max-width: 720px; }
 .art-front .fc-term { font-size: 1.3rem; line-height: 1.4; }
 
 .scroll-body { padding: 8px 0 30px; }
 
 @media (max-width: 480px) {
+  .wrap:has(.ex-mode-stage) {
+    --lp-mcq-mode-h: 165px;
+    --lp-mcq-prompt-h: 102px;
+  }
+  [data-area="practice"] .word-opt { min-height: 52px; }
 }
 
 /* ─── Category color variants ─────────────────────────────────────────── */
@@ -70,6 +170,10 @@ body { min-height: 100vh; padding: 0 14px; }
 
 [data-color="purple"] .progress__fill { background: var(--lp-cat-purple); }
 [data-color="purple"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-purple); color: var(--lp-cat-purple); }
+[data-color="purple"] .word-opt:hover:not(.disabled) {
+  border-color: var(--lp-cat-purple);
+  background: color-mix(in srgb, var(--lp-cat-purple) 8%, transparent);
+}
 [data-color="purple"] .art-front .fc-term { color: var(--lp-cat-purple); }
 [data-color="purple"] .fc-back { background: color-mix(in srgb, var(--lp-cat-purple) 10%, var(--lp-surface)); border-color: var(--lp-cat-purple); }
 

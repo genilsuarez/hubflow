@@ -566,7 +566,8 @@ h1 {
 /* Anti-jump: study/quiz/timed share exact stage height */
 .ex-mode-stage:has([data-area="study"].show),
 .ex-mode-stage:has([data-area="quiz"].show),
-.ex-mode-stage:has([data-area="timed"].show) { min-height: 230px; }
+.ex-mode-stage:has([data-area="timed"].show),
+.ex-mode-stage:has([data-area="practice"].show) { min-height: 230px; }
 .ex-mode-stage:has([data-area="match"].show),
 .ex-mode-stage:has([data-area="battle"].show) { min-height: var(--lp-flashcard-mode-h, 230px); }
 .ex-mode-stage > [data-area] {

@@ -366,7 +366,7 @@ function runCatBarScrollHint(bar, wrapper, expandBtn) {
 export function initCatBarExpander({
   barId = 'catBar',
   wrapperId = 'catWrapper',
-  hintOnLoad = true,
+  hintOnLoad = false,
 } = {}) {
   const bar = document.getElementById(barId);
   if (!bar) return;
@@ -456,13 +456,15 @@ export function initCatBarExpander({
  * typed-answer-engine — identical markup/behavior in both, only the current
  * category is engine-local state, so it's read/written via getter/setter).
  */
-export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat, setCurrentCat, onChange }) {
+export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat, setCurrentCat, onChange, formatLabel }) {
   const bar = document.getElementById(containerId);
   const expandBtn = bar.querySelector('.cat-expand-btn');
   const catKeys = Object.keys(categories);
-  const pills = catKeys.map(k =>
-    `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}">${categories[k].icon} ${categories[k].label}</button>`
-  ).join('');
+  const pills = catKeys.map((k) => {
+    const cat = categories[k];
+    const label = formatLabel ? formatLabel(k, cat) : `${cat.icon} ${cat.label}`;
+    return `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}">${label}</button>`;
+  }).join('');
   bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
   if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
   else bar.innerHTML = pills;
@@ -488,6 +490,97 @@ export function makeTimerState() {
       this.timedSeconds = 0;
     },
   };
+}
+
+/** Hoist practice action buttons into the shared #exBottomNav (stats + ✓ / → / ⏭). */
+export function setupPracticeBottomNav(attempt = 0) {
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  if (!checkBtn || !nextBtn) return;
+
+  const nav = document.getElementById('exBottomNav');
+  if (!nav) {
+    if (attempt < 40) setTimeout(() => setupPracticeBottomNav(attempt + 1), 50);
+    return;
+  }
+
+  const hintBtn = document.getElementById('hintBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const progressBtn = document.getElementById('lessonProgressBtn');
+
+  checkBtn.className = 'lp-btn lp-btn--primary typed-action-btn typed-action-btn--check';
+  checkBtn.textContent = '✓';
+  checkBtn.setAttribute('aria-label', 'Comprobar respuesta');
+  checkBtn.title = 'Comprobar';
+
+  nextBtn.className = 'lp-btn lp-btn--primary typed-action-btn typed-action-btn--next';
+  nextBtn.textContent = '→';
+  nextBtn.setAttribute('aria-label', 'Siguiente');
+  nextBtn.title = 'Siguiente';
+  nextBtn.hidden = true;
+
+  if (hintBtn) {
+    hintBtn.className = 'lp-btn lp-btn--ghost typed-hint-btn';
+    hintBtn.textContent = '💡';
+    hintBtn.setAttribute('aria-label', 'Mostrar pista');
+    hintBtn.setAttribute('aria-pressed', 'false');
+    hintBtn.title = 'Pista';
+  }
+
+  if (skipBtn) {
+    skipBtn.className = 'lp-btn lp-btn--ghost typed-action-btn typed-action-btn--skip';
+    skipBtn.textContent = '⏭';
+    skipBtn.setAttribute('aria-label', 'Saltar');
+    skipBtn.title = 'Saltar';
+  }
+
+  const wrapper = checkBtn.parentElement;
+  let insertAfter = progressBtn?.parentElement === nav ? progressBtn : null;
+
+  if (hintBtn && hintBtn.parentElement !== nav) {
+    if (insertAfter) insertAfter.insertAdjacentElement('afterend', hintBtn);
+    else nav.insertBefore(hintBtn, nav.firstChild);
+    insertAfter = hintBtn;
+  }
+
+  if (checkBtn.parentElement !== nav) {
+    if (insertAfter?.parentElement === nav) insertAfter.insertAdjacentElement('afterend', checkBtn);
+    else nav.appendChild(checkBtn);
+    insertAfter = checkBtn;
+  }
+
+  if (nextBtn.parentElement !== nav) {
+    if (insertAfter?.parentElement === nav) insertAfter.insertAdjacentElement('afterend', nextBtn);
+    else nav.appendChild(nextBtn);
+    insertAfter = nextBtn;
+  }
+
+  if (skipBtn && skipBtn.parentElement !== nav) {
+    if (insertAfter?.parentElement === nav) insertAfter.insertAdjacentElement('afterend', skipBtn);
+    else nav.appendChild(skipBtn);
+  }
+
+  const meta = document.querySelector('.typed-answer-meta');
+  if (meta && hintBtn && !meta.contains(hintBtn)) {
+    const counter = meta.querySelector('.item-counter');
+    if (counter) meta.parentElement?.insertBefore(counter, meta);
+    meta.remove();
+  }
+
+  if (wrapper && wrapper !== nav && wrapper.tagName === 'DIV' && !wrapper.id && !wrapper.classList.length) {
+    wrapper.remove();
+  }
+
+  nav.classList.add('ex-bottom-nav--practice');
+}
+
+export function setPracticeBottomNav({ check = true, next = false, skip = true } = {}) {
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  if (checkBtn) checkBtn.hidden = !check;
+  if (nextBtn) nextBtn.hidden = !next;
+  if (skipBtn) skipBtn.hidden = !skip;
 }
 
 /** Progress bar update */
@@ -566,16 +659,18 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy, el
   }
   containerEl.classList.add('show');
 
-  containerEl.querySelector('#resultClose').addEventListener('click', () => {
-    containerEl.classList.remove('show');
-  });
-  containerEl.querySelector('#resultRestart')?.addEventListener('click', () => {
-    containerEl.classList.remove('show');
-    onRestart();
-  });
-  containerEl.querySelector('#resultStudy')?.addEventListener('click', () => {
-    containerEl.classList.remove('show');
-    onStudy();
+  requestAnimationFrame(() => {
+    containerEl.querySelector('#resultClose').addEventListener('click', () => {
+      containerEl.classList.remove('show');
+    });
+    containerEl.querySelector('#resultRestart')?.addEventListener('click', () => {
+      containerEl.classList.remove('show');
+      onRestart();
+    });
+    containerEl.querySelector('#resultStudy')?.addEventListener('click', () => {
+      containerEl.classList.remove('show');
+      onStudy();
+    });
   });
 
   return pct;

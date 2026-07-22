@@ -165,6 +165,10 @@ body { min-height: 100vh; padding: 0 14px; }
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--lp-accent) 18%, transparent);
 }
 
+.ex-bottom-nav--practice .typed-action-btn--skip {
+  font-size: 1rem;
+}
+
 /* ─── Category color variants ─────────────────────────────────────────── */
 
 [data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
