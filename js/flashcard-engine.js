@@ -175,6 +175,8 @@ export class FlashcardEngine {
     }
     window.__syncBattleProgressPlacement?.();
     window.__syncBottomNavMode?.();
+    window.__resetModeStageScroll?.();
+    window.__syncModeTabIndicator?.({ scrollActive: true });
   }
 
   hideAllAreas() {

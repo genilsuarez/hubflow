@@ -13,7 +13,7 @@
 .learnflow-signature {
   margin: 0 10px; color: var(--lp-muted); font-family: var(--lp-font-mono);
   font-size: .58rem; font-weight: var(--lp-weight-bold); letter-spacing: .03em;
-  text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 @media (max-width: 420px) {
   .learnflow-signature { max-width: 132px; font-size: .52rem; white-space: normal; line-height: 1.2; }
@@ -955,7 +955,7 @@
 
 /* ─── EXERCISE BOTTOM CONTROLS (mobile sticky — mirrors FluentFlow game-controls) ─── */
 @media (max-width: 768px) {
-  .battle-actions,
+  .battle-actions:not(.ex-bottom-nav .battle-actions),
   .result-btns {
     position: sticky;
     bottom: 0;
@@ -971,6 +971,18 @@
     border-bottom: none;
     border-radius: var(--lp-radius-lg) var(--lp-radius-lg) 0 0;
     box-shadow: 0 -4px 16px color-mix(in srgb, var(--lp-ink) 6%, transparent);
+  }
+
+  .ex-bottom-nav .battle-actions {
+    position: static;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   .fc-nav,

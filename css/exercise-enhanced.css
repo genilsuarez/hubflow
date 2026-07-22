@@ -57,20 +57,20 @@ body::after {
   padding: var(--lp-header-pad-y) var(--lp-header-pad-x);
   margin-bottom: 0;
   border-bottom: 1px solid var(--lp-border);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
   height: var(--lp-header-height);
   min-height: var(--lp-header-height);
   box-sizing: border-box;
-  gap: 10px;
   flex-shrink: 0;
 }
 
-/* Hoisted to body by exercise-shell.js — break out of body horizontal padding */
+/* Hoisted to body by exercise-shell.js — stay aligned with main column (sidebar padding) */
 body > .top-bar {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
+  margin-left: 0;
 }
 
 .top-bar__start,
@@ -84,6 +84,7 @@ body > .top-bar {
 .top-bar__end {
   gap: 6px;
   justify-content: flex-end;
+  margin-left: auto;
 }
 
 .top-bar > a.lp-icon-btn {
@@ -108,10 +109,8 @@ body > .top-bar {
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
-  text-align: center;
-  justify-self: center;
-  width: 100%;
-  max-width: none;
+  flex: 1;
+  text-align: left;
 }
 
 .learnflow-signature .accent {
@@ -121,9 +120,11 @@ body > .top-bar {
 }
 
 .tb-counter {
-  position: static;
-  left: auto;
-  transform: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: var(--lp-score-group-gap);
@@ -259,6 +260,8 @@ h1 {
   border-bottom: 1px solid var(--lp-border-subtle);
 }
 .ex-header__modes .pill-bar {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   box-shadow: none;
   border: none;
@@ -266,12 +269,48 @@ h1 {
   padding: 2px;
   gap: 4px;
 }
-.ex-header__modes .pill-btn.active,
-.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal) {
+.ex-mode-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: var(--lp-radius-full);
   background: var(--lp-chip-active-bg);
-  color: var(--lp-chip-active-text);
   border: 1.5px solid var(--lp-chip-active-border);
   box-shadow: var(--lp-chip-active-shadow);
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.28s cubic-bezier(0.34, 1.15, 0.64, 1),
+    width 0.28s cubic-bezier(0.34, 1.15, 0.64, 1),
+    height 0.28s cubic-bezier(0.34, 1.15, 0.64, 1),
+    opacity 0.18s ease;
+  will-change: transform, width;
+}
+.ex-mode-indicator.is-ready {
+  opacity: 1;
+}
+.ex-header__modes .pill-btn {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+  border: 1.5px solid transparent !important;
+  box-shadow: none !important;
+  transition: color 0.22s ease, font-weight 0.22s ease;
+}
+.ex-header__modes .pill-btn.active,
+.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal) {
+  background: transparent !important;
+  color: var(--lp-chip-active-text);
+  border-color: transparent !important;
+  box-shadow: none !important;
+  font-weight: var(--lp-weight-extrabold);
+}
+.ex-header__modes .pill-btn.active:hover,
+.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal):hover {
+  background: transparent !important;
+  color: var(--lp-chip-active-text);
+  border-color: transparent !important;
 }
 
 .ex-progress-row {
@@ -314,17 +353,6 @@ h1 {
   display: none;
 }
 .ex-progress-row--session::before { content: 'Sesión actual'; }
-
-.ex-progress-row--session.is-progress-relocated {
-  display: none;
-}
-
-[data-area="battle"] > .progress {
-  width: 100%;
-  margin: 0 0 6px;
-  padding: 0 2px;
-  box-sizing: border-box;
-}
 
 .ex-progress-row--session #pairScore {
   grid-column: 1;
@@ -403,6 +431,8 @@ h1 {
   display: flex;
   flex-direction: column;
   background: var(--lp-surface);
+  min-height: 52px;
+  flex-shrink: 0;
 }
 
 .ex-control-panel .progress {
@@ -523,15 +553,55 @@ h1 {
 .scroll-body {
   padding: 6px 0 48px;
 }
-.scroll-body:has([data-area="battle"].show) > .ex-bottom-nav,
-.ex-bottom-nav.is-battle-hidden,
+
+/* Stable mode stage — modest min-height on the container only (not flex-grow) */
+.wrap:has(.ex-mode-stage) {
+  --lp-mode-stage-min-h: 0px;
+}
+.ex-mode-stage {
+  flex: 0 1 auto;
+  width: 100%;
+  min-height: var(--lp-mode-stage-min-h);
+}
+/* Anti-jump: study/quiz/timed share exact stage height */
+.ex-mode-stage:has([data-area="study"].show),
+.ex-mode-stage:has([data-area="quiz"].show),
+.ex-mode-stage:has([data-area="timed"].show) { min-height: 230px; }
+.ex-mode-stage:has([data-area="match"].show),
+.ex-mode-stage:has([data-area="battle"].show) { min-height: var(--lp-flashcard-mode-h, 230px); }
+.ex-mode-stage > [data-area] {
+  width: 100%;
+}
+.ex-mode-stage > [data-area].show {
+  justify-content: flex-start;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ex-mode-stage > [data-area].show {
+    animation: ex-mode-enter 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .ex-header__progress {
+    transition: opacity 0.2s ease;
+  }
+}
+@keyframes ex-mode-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ex-mode-stage > [data-area].show { animation: none; }
+  .ex-mode-indicator { transition: none; }
+}
+
 .ex-bottom-nav[hidden] {
   display: none !important;
 }
-.scroll-body:has([data-area="battle"].show) {
-  padding-bottom: max(16px, env(safe-area-inset-bottom));
-}
-.scroll-body:has(.ex-bottom-nav:not([hidden]):not(.is-battle-hidden)) {
+.scroll-body:has(.ex-bottom-nav:not([hidden])) {
   padding-bottom: max(72px, calc(48px + env(safe-area-inset-bottom)));
 }
 @media (max-width: 480px) {
@@ -620,11 +690,19 @@ h1 {
     align-items: stretch;
   }
 
-  body.shell-ready .scroll-body > [data-area].show {
-    align-items: stretch;
+  body.shell-ready .scroll-body > .ex-mode-stage {
+    flex: 0 1 auto;
+    width: 100%;
+    min-height: 0;
   }
 
-  body.shell-ready .scroll-body > .ex-bottom-nav {
-    margin-top: 10px;
+  body.shell-ready .scroll-body > .ex-mode-stage > [data-area].show {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  body.shell-ready .scroll-body > [data-area].show {
+    align-items: stretch;
   }
 }

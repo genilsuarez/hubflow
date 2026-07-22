@@ -34,8 +34,97 @@ h1 { display: flex; align-items: center; gap: 6px; }
 [data-area] { display: none; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
 [data-area].show { display: flex; }
 
+/* Align primary content blocks across modes */
+.wrap:has(.ex-mode-stage) {
+  --lp-flashcard-mode-h: 230px;
+  --lp-quiz-prompt-h: 95px;
+  --lp-quiz-stack-gap: 4px;
+  --lp-match-battle-h: var(--lp-flashcard-mode-h);
+  --lp-battle-stack-gap: 6px;
+  --lp-battle-stack-overhead: 78px;
+}
+.fc-card,
+.quiz-prompt {
+  box-sizing: border-box;
+}
+[data-area="study"] .fc-card {
+  height: var(--lp-flashcard-mode-h);
+  min-height: var(--lp-flashcard-mode-h);
+}
+[data-area="study"] .fc-face {
+  padding: 18px 20px;
+  gap: 6px;
+}
+[data-area="quiz"] .quiz-prompt,
+[data-area="timed"] .quiz-prompt {
+  min-height: var(--lp-quiz-prompt-h);
+  height: auto;
+  padding: 10px 14px;
+  gap: 2px;
+}
+.quiz-prompt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+[data-area="quiz"] .quiz-prompt__emoji,
+[data-area="timed"] .quiz-prompt__emoji {
+  font-size: 1.35rem;
+  margin-bottom: 2px;
+}
+[data-area="quiz"] .quiz-prompt__label,
+[data-area="timed"] .quiz-prompt__label {
+  margin-bottom: 2px;
+}
+[data-area="quiz"] .quiz-prompt__text,
+[data-area="timed"] .quiz-prompt__text {
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+[data-area="quiz"] .quiz-options,
+[data-area="timed"] .quiz-options {
+  min-height: calc(var(--lp-flashcard-mode-h) - var(--lp-quiz-prompt-h) - var(--lp-quiz-stack-gap));
+  align-content: start;
+}
+[data-area="quiz"] .quiz-opt,
+[data-area="timed"] .quiz-opt {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
+  box-sizing: border-box;
+}
+[data-area="match"] .pair-grid {
+  min-height: var(--lp-flashcard-mode-h);
+  align-content: start;
+  gap: 6px 10px;
+}
+[data-area="match"] .pair-col-label {
+  padding-bottom: 2px;
+  font-size: .58rem;
+}
+[data-area="match"] .pair-item {
+  min-height: 36px;
+  padding: 7px 10px;
+  font-size: .73rem;
+}
+[data-area="battle"].show {
+  gap: var(--lp-battle-stack-gap);
+  min-height: var(--lp-match-battle-h);
+}
+[data-area="battle"] .battle-scores {
+  margin-bottom: 2px;
+}
+[data-area="battle"] .player-score {
+  padding: 4px 14px;
+}
+[data-area="battle"] > .progress {
+  flex-shrink: 0;
+}
+
 /* Flashcard overrides */
-.fc-card { max-width: 720px; height: 250px; }
+.fc-card { max-width: 720px; height: var(--lp-flashcard-mode-h, 230px); }
 .fc-back .fc-detail { font-size: .72rem; }
 
 /* IPA pronunciation */
@@ -49,7 +138,14 @@ h1 { display: flex; align-items: center; gap: 6px; }
 }
 
 /* Battle card */
-.battle-card { width: 100%; max-width: 360px; height: 140px; perspective: 1200px; position: relative; margin: 0 auto 8px; }
+.battle-card {
+  width: 100%;
+  max-width: 360px;
+  height: calc(var(--lp-match-battle-h, 259px) - var(--lp-battle-stack-overhead, 140px));
+  perspective: 1200px;
+  position: relative;
+  margin: 0 auto 4px;
+}
 .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: transform .55s var(--ease); transform-style: preserve-3d; }
 .battle-card.flipped .fc-inner { transform: rotateY(180deg); }
 .battle-card .fc-face { border-radius: var(--radius-lg); padding: 16px; }
@@ -68,6 +164,54 @@ h1 { display: flex; align-items: center; gap: 6px; }
   border: 1px solid var(--lp-border-subtle, var(--lp-border));
   box-shadow: var(--lp-shadow-xs);
   box-sizing: border-box;
+}
+
+/* Battle controls live in the shared bottom nav (not a second bar). */
+.ex-bottom-nav .battle-actions,
+.ex-bottom-nav .battle-actions--nav {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.ex-bottom-nav--battle {
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.ex-bottom-nav--battle .lesson-progress__detail {
+  flex-shrink: 0;
+}
+
+/* Battle only — study nav must stay visible in Study (and hidden via [hidden] elsewhere). */
+.ex-bottom-nav--battle > #speakBtn,
+.ex-bottom-nav--battle > #listenBtn,
+.ex-bottom-nav--battle > #studySpeakBtn,
+.ex-bottom-nav--battle > #shuffleBtn,
+.ex-bottom-nav--battle > #prevBtn,
+.ex-bottom-nav--battle > #nextBtn {
+  display: none !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ex-bottom-nav > [hidden] {
+  display: none !important;
+}
+
+.ex-bottom-nav .battle-actions .lp-btn {
+  width: auto;
+  min-width: 44px;
+  max-width: none;
+  flex: 1;
+  padding: 0 10px;
+  font-size: .78rem;
+  white-space: nowrap;
 }
 .battle-instruction {
   font-size: .58rem;
@@ -88,8 +232,6 @@ h1 { display: flex; align-items: center; gap: 6px; }
   .battle-instruction { transition: none; }
 }
 #pairScore:not(.show) { display: none; }
-.match-instruction { font-size: .78rem; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 8px; }
-
 .scroll-body { padding: 0 0 40px; }
 
 /* ─── Accent color variants ───────────────────────────────────────────── */
@@ -112,10 +254,33 @@ h1 { display: flex; align-items: center; gap: 6px; }
 
 /* ─── MOBILE: flashcard-specific compact layout ─── */
 @media (max-width: 480px) {
+  .wrap:has(.ex-mode-stage) {
+    --lp-flashcard-mode-h: 165px;
+    --lp-quiz-prompt-h: 88px;
+  --lp-match-battle-h: var(--lp-flashcard-mode-h);
+  --lp-battle-stack-gap: 4px;
+  --lp-battle-stack-overhead: 74px;
+  }
+  .ex-mode-stage:has([data-area="study"].show),
+  .ex-mode-stage:has([data-area="quiz"].show),
+  .ex-mode-stage:has([data-area="timed"].show) { min-height: var(--lp-flashcard-mode-h); }
+  .ex-mode-stage:has([data-area="match"].show),
+  .ex-mode-stage:has([data-area="battle"].show) { min-height: var(--lp-match-battle-h); }
   .cat-scroll-wrapper { margin-bottom: 2px; }
   .header .pill-bar:not(.pill-bar--scroll) { margin-bottom: 0; }
   #progressWrap { margin-bottom: 0; }
-  .fc-card { height: 180px; max-width: 100%; }
+  .fc-card {
+    height: var(--lp-flashcard-mode-h);
+    min-height: var(--lp-flashcard-mode-h);
+    max-width: 100%;
+  }
+  [data-area="quiz"] .quiz-prompt,
+  [data-area="timed"] .quiz-prompt {
+    height: auto;
+    min-height: 0;
+    padding: 8px 12px;
+  }
+  [data-area="match"] .pair-grid { min-height: var(--lp-flashcard-mode-h); }
   .fc-count { font-size: .7rem; margin-bottom: 0; }
   .listen-btn { width: 38px !important; height: 38px !important; font-size: 1rem !important; }
   [data-area] { gap: 2px; }

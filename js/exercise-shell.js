@@ -137,7 +137,7 @@ if (topBar) {
   setTimeout(syncCounter, 0);
   setTimeout(syncCounter, 200);
 
-  // Layout: [←] · title · [counter + ☰] — homologado a LyricFlow/FluentFlow player
+  // Layout: [←] title … [counter centered] … [☰] — homologado a LyricFlow/FluentFlow player
   const backEl = topBar.querySelector('a[href*="../index.html"]');
   const menuEl = hamburgerBtn || topBar.querySelector('[aria-controls="exerciseSidebar"]');
   const sigEl = topBar.querySelector('.learnflow-signature');
@@ -146,9 +146,11 @@ if (topBar) {
     preserveTopBarTimer();
     const end = document.createElement('div');
     end.className = 'top-bar__end';
-    if (counterEl) end.appendChild(counterEl);
     if (menuEl) end.appendChild(menuEl);
-    topBar.replaceChildren(backEl, sigEl, end);
+    const layout = [backEl, sigEl];
+    if (counterEl) layout.push(counterEl);
+    layout.push(end);
+    topBar.replaceChildren(...layout);
   }
 
   // Hide the original counters visually (they're mirrored in top-bar)
@@ -609,6 +611,7 @@ function restructureExerciseHeader() {
 }
 
 const STUDY_NAV_IDS = ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn'];
+const BATTLE_ACTION_IDS = ['battleClaim', 'battleJudge', 'battleNext'];
 
 function getActiveExerciseMode() {
   return document.querySelector('.ex-header__modes [data-mode].active')?.dataset.mode
@@ -621,14 +624,49 @@ function syncBottomNavMode() {
   const mode = getActiveExerciseMode();
   const nav = document.getElementById('exBottomNav');
   if (nav) {
-    const hide = mode === 'battle';
-    nav.hidden = hide;
-    nav.classList.toggle('is-battle-hidden', hide);
+    nav.hidden = false;
+    nav.classList.remove('is-battle-hidden');
+    nav.classList.toggle('ex-bottom-nav--battle', mode === 'battle');
   }
+
+  const hideStudyNav = mode === 'battle';
 
   STUDY_NAV_IDS.forEach((id) => {
     const btn = document.getElementById(id);
-    if (btn) btn.hidden = mode !== 'study';
+    if (!btn) return;
+    btn.hidden = hideStudyNav;
+    if (hideStudyNav) {
+      btn.style.display = 'none';
+    } else {
+      btn.style.removeProperty('display');
+    }
+  });
+
+  BATTLE_ACTION_IDS.forEach((id) => {
+    const group = document.getElementById(id);
+    if (!group) return;
+    if (mode !== 'battle') {
+      group.style.display = 'none';
+    }
+  });
+}
+
+function relocateBattleActionsToBottomNav() {
+  const nav = setupPersistentBottomNav({ force: true }) || document.getElementById('exBottomNav');
+  if (!nav) return;
+
+  let insertAfter = document.getElementById('lessonProgressBtn');
+  BATTLE_ACTION_IDS.forEach((id) => {
+    const group = document.getElementById(id);
+    if (!group) return;
+    group.classList.add('battle-actions--nav');
+    if (group.parentElement === nav) return;
+    if (insertAfter?.parentElement === nav) {
+      insertAfter.insertAdjacentElement('afterend', group);
+    } else {
+      nav.appendChild(group);
+    }
+    insertAfter = group;
   });
 }
 
@@ -676,6 +714,7 @@ function relocateLessonProgressButton() {
     nav.insertBefore(btn, nav.firstChild);
   }
   syncBottomNavMode();
+  relocateBattleActionsToBottomNav();
   reorderStudySpeakButton();
 }
 
@@ -689,55 +728,131 @@ function reorderStudySpeakButton() {
   }
 }
 
+function wrapModeStage() {
+  const scrollBody = document.querySelector('.scroll-body');
+  if (!scrollBody || scrollBody.querySelector('.ex-mode-stage')) return;
+
+  const areas = [...scrollBody.querySelectorAll(':scope > [data-area]')];
+  if (areas.length < 2) return;
+
+  const stage = document.createElement('div');
+  stage.className = 'ex-mode-stage';
+  const bottomNav = scrollBody.querySelector('.ex-bottom-nav');
+  areas.forEach((area) => stage.appendChild(area));
+  scrollBody.insertBefore(stage, bottomNav);
+}
+
+function resetModeStageScroll() {
+  const stage = document.querySelector('.ex-mode-stage');
+  const scrollBody = document.querySelector('.scroll-body');
+  if (stage) stage.scrollTop = 0;
+  if (scrollBody) scrollBody.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
 function getSessionProgressEl() {
   return document.getElementById('progressWrap')
     || document.querySelector('.ex-progress-row--session > .progress');
 }
 
-function relocateSessionProgressForBattle(isBattle) {
+/** Keep session progress in `.ex-header__progress` for all modes (including Battle). */
+function syncBattleProgressPlacement() {
   const prog = getSessionProgressEl();
   const sessionRow = document.querySelector('.ex-progress-row--session');
-  const battleArea = document.querySelector('[data-area="battle"]');
-  const anchor = battleArea?.querySelector('#battleInstruction')
-    || battleArea?.querySelector('.battle-scores');
-  if (!prog || !sessionRow || !battleArea || !anchor) return;
+  if (!prog || !sessionRow) return;
 
-  if (isBattle) {
-    if (prog.parentElement !== battleArea) {
-      battleArea.insertBefore(prog, anchor);
-    }
-    sessionRow.classList.add('is-progress-relocated');
-  } else if (prog.parentElement !== sessionRow) {
+  if (prog.parentElement !== sessionRow) {
     sessionRow.appendChild(prog);
-    sessionRow.classList.remove('is-progress-relocated');
   }
+  sessionRow.classList.remove('is-progress-relocated');
 }
 
-function syncBattleProgressPlacement() {
-  relocateSessionProgressForBattle(getActiveExerciseMode() === 'battle');
+/** Sliding chip behind the active mode pill (Study / Quiz / Timed / …). */
+function setupModeTabIndicator() {
+  const pillBar = document.querySelector('.ex-header__modes .pill-bar, .ex-header__modes .pill-bar--scroll');
+  if (!pillBar || pillBar.querySelector('.ex-mode-indicator')) return;
+
+  const indicator = document.createElement('span');
+  indicator.className = 'ex-mode-indicator';
+  indicator.setAttribute('aria-hidden', 'true');
+  pillBar.prepend(indicator);
+
+  let rafId = 0;
+  let scrollSyncTimer = 0;
+  function syncModeTabIndicator({ scrollActive = false } = {}) {
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      const active = pillBar.querySelector('[data-mode].active, .pill-btn.active[data-mode]');
+      if (!active) {
+        indicator.classList.remove('is-ready');
+        return;
+      }
+
+      const positionIndicator = () => {
+        const barRect = pillBar.getBoundingClientRect();
+        const btnRect = active.getBoundingClientRect();
+        indicator.style.width = `${btnRect.width}px`;
+        indicator.style.height = `${btnRect.height}px`;
+        indicator.style.transform = `translate(${btnRect.left - barRect.left}px, ${btnRect.top - barRect.top}px)`;
+        indicator.classList.add('is-ready');
+      };
+
+      if (scrollActive) {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        active.scrollIntoView({
+          inline: 'nearest',
+          block: 'nearest',
+          behavior: reducedMotion ? 'auto' : 'smooth',
+        });
+        positionIndicator();
+        clearTimeout(scrollSyncTimer);
+        scrollSyncTimer = window.setTimeout(positionIndicator, reducedMotion ? 0 : 320);
+      } else {
+        positionIndicator();
+      }
+    });
+  }
+
+  window.__syncModeTabIndicator = syncModeTabIndicator;
+  syncModeTabIndicator();
+  document.fonts?.ready?.then(() => syncModeTabIndicator());
+
+  window.addEventListener('resize', () => syncModeTabIndicator(), { passive: true });
+  pillBar.addEventListener('scroll', () => syncModeTabIndicator(), { passive: true });
+
+  new MutationObserver(() => syncModeTabIndicator()).observe(pillBar, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class'],
+  });
 }
 
 window.__relocateLessonProgressBtn = relocateLessonProgressButton;
 window.__syncBattleProgressPlacement = syncBattleProgressPlacement;
 window.__syncBottomNavMode = syncBottomNavMode;
+window.__resetModeStageScroll = resetModeStageScroll;
 
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-mode]')) {
     setTimeout(() => {
       syncBottomNavMode();
       syncBattleProgressPlacement();
+      resetModeStageScroll();
+      window.__syncModeTabIndicator?.({ scrollActive: true });
     }, 0);
   }
 });
 
 // ─── Lesson progress button (detail modal — lives in bottom nav) ────────────────
 restructureExerciseHeader();
+setupModeTabIndicator();
+wrapModeStage();
 setupPersistentBottomNav();
 
 if (currentModule) {
   renderLessonProgress(currentModule.id);
 }
 relocateLessonProgressButton();
+relocateBattleActionsToBottomNav();
 syncBottomNavMode();
 syncBattleProgressPlacement();
 
