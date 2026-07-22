@@ -14,14 +14,10 @@ export const CATEGORIES = {
       { sentence: 'Did the teacher ___ the students rewrite their essays?', correct: 'make', explain: '"Make" + person + base verb: you force someone, no choice involved.' },
       { sentence: 'Will your parents ___ you stay out late for the party?', correct: 'let', explain: '"Let" + person + base verb: you give someone permission.' },
       { sentence: 'Could you ___ me carry these bags?', correct: 'help', explain: '"Help" + person + base verb (or to + base): you assist someone.' },
-      { sentence: 'Did he ___ his assistant book the flights?', correct: 'get', explain: '"Get" + person + to-infinitive: persuading someone to act.' },
       { sentence: "I won't ___ you leave without saying goodbye.", correct: 'let', explain: '"Let" + person + base verb: giving/refusing permission.' },
       { sentence: 'The manager always tries to ___ everyone work overtime.', correct: 'make', explain: '"Make" + person + base verb: forcing an action.' },
       { sentence: 'Would you ___ me finish this project?', correct: 'help', explain: '"Help" + person + base verb: assisting with a task.' },
       { sentence: 'We always ___ the plumber fix any leaks quickly.', correct: 'have', explain: '"Have" + person + base verb: arranging a service.' },
-      { sentence: 'My parents never ___ me eat junk food as a child.', correct: 'let', explain: '"Let" + person + base verb: giving/refusing permission.' },
-      { sentence: 'The coach ___ the team run extra laps as punishment.', correct: 'made', explain: '"Make" + person + base verb: forcing an action without choice.' },
-      { sentence: 'Can you ___ me understand this formula?', correct: 'help', explain: '"Help" + person + base verb: assisting with comprehension.' },
       { sentence: 'She finally ___ her landlord to fix the heating.', correct: 'get', explain: '"Get" + person + to-infinitive: persuading after effort.' }
     ]
   },

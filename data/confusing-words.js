@@ -20,16 +20,6 @@ export const CATEGORIES = {
       { sentence: "She ___ her best to pass the exam.", correct: "did", explain: "'Do your best' = hacer lo mejor posible." },
       { sentence: "We need to ___ a decision soon.", correct: "make", explain: "'Make a decision' = tomar una decisión. Expresión fija." },
       { sentence: "He ___ the shopping on Fridays.", correct: "does", explain: "'Do the shopping' = hacer las compras. Actividad → do." },
-      { sentence: "Don't ___ so much noise!", correct: "make", explain: "'Make noise' = hacer ruido. Producir sonidos → make." },
-      { sentence: "I need to ___ some exercise.", correct: "do", explain: "'Do exercise' = hacer ejercicio. Actividad física → do." },
-      { sentence: "She ___ a mistake on the test.", correct: "made", explain: "'Make a mistake' = cometer un error. Expresión fija." },
-      { sentence: "Can you ___ the dishes tonight?", correct: "do", explain: "'Do the dishes' = lavar los platos. Tareas → do." },
-      { sentence: "They ___ plans for the weekend.", correct: "made", explain: "'Make plans' = hacer planes. Crear algo nuevo → make." },
-      { sentence: "He ___ a lot of damage to the car.", correct: "did", explain: "'Do damage' = causar daño. Excepción que usa do." },
-      { sentence: "I'll ___ an exception this time.", correct: "make", explain: "'Make an exception' = hacer una excepción." },
-      { sentence: "She ___ yoga every morning.", correct: "does", explain: "'Do yoga' = practicar yoga. Actividades → do." },
-      { sentence: "We ___ a deal with the supplier.", correct: "made", explain: "'Make a deal' = hacer un trato. Crear acuerdos → make." },
-      { sentence: "He ___ nothing all day!", correct: "did", explain: "'Do nothing' = no hacer nada. Actividad general → do." },
     ]
   },
   'say-tell': {
@@ -47,16 +37,6 @@ export const CATEGORIES = {
       { sentence: "He ___ 'I'm sorry' and left.", correct: "said", explain: "'Say' para citas directas: He said '...'." },
       { sentence: "Can you ___ the difference?", correct: "tell", explain: "'Tell the difference' = notar la diferencia. Expresión fija." },
       { sentence: "She ___ goodbye and walked away.", correct: "said", explain: "'Say goodbye' — expresiones sociales siempre con say." },
-      { sentence: "I ___ him to wait outside.", correct: "told", explain: "'Tell someone to do something' = pedirle que haga algo." },
-      { sentence: "What does the sign ___?", correct: "say", explain: "'What does it say?' para texto escrito. Say sin persona." },
-      { sentence: "He ___ me a story before bed.", correct: "told", explain: "'Tell a story' = contar un cuento. Expresión fija." },
-      { sentence: "She ___ nothing during the meeting.", correct: "said", explain: "'Say nothing/something/anything' — sin objeto indirecto." },
-      { sentence: "The teacher ___ us to open our books.", correct: "told", explain: "'Tell us to...' = indicarnos que. Tell + persona + to." },
-      { sentence: "I'd rather not ___ .", correct: "say", explain: "'I'd rather not say' = prefiero no decirlo. Sin persona." },
-      { sentence: "Can you ___ me how to get there?", correct: "tell", explain: "'Tell me how/where/when...' — dar información a alguien." },
-      { sentence: "It's hard to ___ which is better.", correct: "say", explain: "'It's hard to say' = es difícil decirlo. Expresión fija." },
-      { sentence: "She ___ jokes all the time.", correct: "tells", explain: "'Tell jokes' = contar chistes. Expresión fija con tell." },
-      { sentence: "What did the report ___?", correct: "say", explain: "Reportes/documentos siempre 'say', no 'tell'." },
     ]
   },
   'bring-take': {
@@ -74,8 +54,6 @@ export const CATEGORIES = {
       { sentence: "I need to ___ the car to the mechanic.", correct: "take", explain: "Llevar lejos → take." },
       { sentence: "Can you ___ some snacks when you come?", correct: "bring", explain: "'When you come' implica hacia mí → bring." },
       { sentence: "He ___ his dog for a walk every evening.", correct: "takes", explain: "'Take for a walk' = sacar a pasear. Expresión con take." },
-      { sentence: "Let me ___ you home after the party.", correct: "take", explain: "Llevar a alguien a otro lugar → take." },
-      { sentence: "Don't forget to ___ back the library books.", correct: "take", explain: "'Take back' = devolver (llevar de vuelta al lugar)." },
     ]
   },
   'borrow-lend': {
@@ -93,8 +71,6 @@ export const CATEGORIES = {
       { sentence: "I ___ a ladder from my neighbor.", correct: "borrowed", explain: "Pedí prestada (yo recibo de mi vecino) → borrow." },
       { sentence: "She doesn't like to ___ her things.", correct: "lend", explain: "No le gusta prestar (dar) sus cosas → lend." },
       { sentence: "May I ___ your charger?", correct: "borrow", explain: "Yo quiero usar algo temporalmente → borrow." },
-      { sentence: "He ___ me his jacket because I was cold.", correct: "lent", explain: "Él me dio su chaqueta temporalmente → lent." },
-      { sentence: "I ___ this dress from my sister.", correct: "borrowed", explain: "Yo tomé prestado de mi hermana → borrow from." },
     ]
   },
   'watch-look-see': {
@@ -112,8 +88,6 @@ export const CATEGORIES = {
       { sentence: "___ out! There's a car coming!", correct: "Watch", explain: "'Watch out!' = ¡cuidado! Expresión fija." },
       { sentence: "I haven't ___ her since last week.", correct: "seen", explain: "'See someone' = encontrarse con alguien / percibir." },
       { sentence: "Can you ___ after my bag?", correct: "look", explain: "'Look after' = cuidar de. Phrasal verb con look." },
-      { sentence: "We're going to ___ the football match.", correct: "watch", explain: "Eventos deportivos con atención prolongada → watch." },
-      { sentence: "I ___ something strange in the garden.", correct: "saw", explain: "Percepción espontánea (no buscada) → see/saw." },
     ]
   },
   'less-fewer': {
@@ -128,7 +102,9 @@ export const CATEGORIES = {
       { sentence: "He has ___ patience than his brother.", correct: "less", explain: "'Patience' es incontable → less." },
       { sentence: "There were ___ mistakes in this essay.", correct: "fewer", explain: "'Mistakes' es contable → fewer." },
       { sentence: "I drink ___ coffee these days.", correct: "less", explain: "'Coffee' es incontable → less." },
-      { sentence: "This year, ___ students signed up.", correct: "fewer", explain: "'Students' es contable → fewer." }
+      { sentence: "There's ___ traffic on Sundays.", correct: "less", explain: "'Traffic' es incontable → less." },
+      { sentence: "___ tourists visit in winter.", correct: "Fewer", explain: "'Tourists' es contable → fewer." },
+      { sentence: "I make ___ mistakes than before.", correct: "fewer", explain: "'Mistakes' es contable → fewer." }
     ]
   },
   'me-i': {
@@ -143,7 +119,9 @@ export const CATEGORIES = {
       { sentence: "My sister and ___ love to travel.", correct: "I", explain: "Sujeto de la oración → 'I'." },
       { sentence: "Can you help my brother and ___?", correct: "me", explain: "Objeto del verbo 'help' → 'me'." },
       { sentence: "It was my colleague and ___ who finished the project.", correct: "I", explain: "Sujeto → 'I'." },
-      { sentence: "This gift is for you and ___.", correct: "me", explain: "Después de preposición ('for') → 'me'." }
+      { sentence: "The manager spoke to my colleague and ___.", correct: "me", explain: "Objeto (después de 'to') → 'me'." },
+      { sentence: "My parents and ___ are going on holiday.", correct: "I", explain: "Sujeto de la oración → 'I'." },
+      { sentence: "___ love spending time with my family.", correct: "I", explain: "Sujeto de la oración → 'I'." }
     ]
   },
   'who-whom': {
@@ -158,7 +136,9 @@ export const CATEGORIES = {
       { sentence: "For ___ are these flowers?", correct: "whom", explain: "'Whom' = objeto de preposición ('for')." },
       { sentence: "I wonder ___ won the race.", correct: "who", explain: "'Who' = sujeto de 'won'." },
       { sentence: "With ___ are you going?", correct: "whom", explain: "'Whom' = objeto de preposición ('with')." },
-      { sentence: "She's the one ___ helped me.", correct: "who", explain: "'Who' = sujeto de 'helped'." }
+      { sentence: "___ did you invite to the wedding?", correct: "Whom", explain: "'Whom' = objeto del verbo 'invite'." },
+      { sentence: "___ is responsible for this mess?", correct: "Who", explain: "'Who' = sujeto del verbo 'is'." },
+      { sentence: "The woman ___ I met yesterday is a doctor.", correct: "whom", explain: "'Whom' = objeto de 'met' en la cláusula relativa." }
     ]
   },
   'affect-effect': {
@@ -171,7 +151,11 @@ export const CATEGORIES = {
       { sentence: "Loud noise can ___ your hearing.", correct: "affect", explain: "'Affect' (verbo) = afectar/influir." },
       { sentence: "The medicine had no ___ at all.", correct: "effect", explain: "'Effect' (sustantivo) = efecto/resultado." },
       { sentence: "Stress can ___ your health.", correct: "affect", explain: "'Affect' (verbo) = afectar." },
-      { sentence: "What ___ did the storm have on the city?", correct: "effect", explain: "'Effect' (sustantivo) = efecto." }
+      { sentence: "What ___ did the storm have on the city?", correct: "effect", explain: "'Effect' (sustantivo) = efecto." },
+      { sentence: "Her kind words had a positive ___ on him.", correct: "effect", explain: "'Effect' (sustantivo) = el resultado." },
+      { sentence: "Smoking can seriously ___ your lungs.", correct: "affect", explain: "'Affect' (verbo) = afectar." },
+      { sentence: "The drug's side ___ include dizziness.", correct: "effects", explain: "'Effects' (sustantivo, plural) = efectos secundarios." },
+      { sentence: "Lack of sleep can ___ your concentration.", correct: "affect", explain: "'Affect' (verbo) = afectar/influir." }
     ]
   },
   'still-already-just-yet': {
@@ -188,7 +172,7 @@ export const CATEGORIES = {
       { sentence: "I can't believe you've ___ finished the whole book!", correct: "already", explain: "'Already' = sorpresa, antes de lo esperado." },
       { sentence: "She's ___ left the office.", correct: "just", explain: "'Just' = hace un momento." },
       { sentence: "Don't leave ___ — I need to talk to you.", correct: "yet", explain: "'Yet' = todavía no (ahora mismo)." },
-      { sentence: "Are you ___ here? I thought you'd gone.", correct: "still", explain: "'Still' = continúa la misma situación." }
+      { sentence: "I haven't called her ___.", correct: "yet", explain: "'Yet' en negativas = todavía no." }
     ]
   },
   'is-are': {
@@ -203,7 +187,9 @@ export const CATEGORIES = {
       { sentence: "The team ___ playing really well this season.", correct: "is", explain: "'Team' como grupo unido → is (inglés británico también acepta 'are')." },
       { sentence: "Ten dollars ___ too much for this.", correct: "is", explain: "Cantidades de dinero como suma total → is." },
       { sentence: "The police ___ investigating the case.", correct: "are", explain: "'Police' siempre se trata como plural → are." },
-      { sentence: "Neither of the answers ___ correct.", correct: "is", explain: "'Neither of' + sustantivo plural → verbo singular is." }
+      { sentence: "Mathematics ___ my favourite subject.", correct: "is", explain: "'Mathematics' termina en -s pero es singular → is." },
+      { sentence: "Your scissors ___ on the desk.", correct: "are", explain: "'Scissors' se trata como plural → are." },
+      { sentence: "Physics ___ a fascinating subject.", correct: "is", explain: "Materias que terminan en -ics son singulares → is." }
     ]
   },
   'there-their-theyre': {
@@ -218,7 +204,9 @@ export const CATEGORIES = {
       { sentence: "I saw ___ new car yesterday.", correct: "their", explain: "'Their' = posesivo antes de un sustantivo." },
       { sentence: "___ always late to meetings.", correct: "they're", explain: "'They're' = 'they are' + adjetivo." },
       { sentence: "We left the keys over ___.", correct: "there", explain: "'There' = lugar." },
-      { sentence: "___ dog barks all night.", correct: "their", explain: "'Their' = posesivo." }
+      { sentence: "Look over ___, near the door.", correct: "there", explain: "'There' = lugar (adverbio de lugar)." },
+      { sentence: "___ car broke down on the motorway.", correct: "Their", explain: "'Their' = posesivo." },
+      { sentence: "___ not sure if they can come.", correct: "They're", explain: "'They're' = contracción de 'they are'." }
     ]
   },
   'your-youre': {
@@ -231,7 +219,11 @@ export const CATEGORIES = {
       { sentence: "Don't forget ___ passport.", correct: "your", explain: "'Your' + sustantivo = posesivo." },
       { sentence: "___ right, I made a mistake.", correct: "you're", explain: "'You're' = 'you are' + adjetivo." },
       { sentence: "What's ___ favourite colour?", correct: "your", explain: "'Your' = posesivo." },
-      { sentence: "___ doing a great job.", correct: "you're", explain: "'You're' = 'you are' + gerundio." }
+      { sentence: "___ doing a great job.", correct: "you're", explain: "'You're' = 'you are' + gerundio." },
+      { sentence: "I love ___ new haircut.", correct: "your", explain: "'Your' = posesivo." },
+      { sentence: "___ welcome to join us anytime.", correct: "You're", explain: "'You're' = contracción de 'you are'." },
+      { sentence: "Where did you leave ___ keys?", correct: "your", explain: "'Your' + sustantivo = posesivo." },
+      { sentence: "___ not going to believe this.", correct: "You're", explain: "'You're' = 'you are' + going to." }
     ]
   },
   'its-its': {
@@ -244,7 +236,11 @@ export const CATEGORIES = {
       { sentence: "The company changed ___ policy.", correct: "its", explain: "'Its' = posesivo." },
       { sentence: "___ been a long day.", correct: "it's", explain: "'It's' = 'it has' (contracción)." },
       { sentence: "Every dog has ___ day.", correct: "its", explain: "'Its' = posesivo (refrán)." },
-      { sentence: "___ too late to cancel now.", correct: "it's", explain: "'It's' = 'it is'." }
+      { sentence: "___ too late to cancel now.", correct: "it's", explain: "'It's' = 'it is'." },
+      { sentence: "The cat licked ___ paw.", correct: "its", explain: "'Its' (sin apóstrofe) = posesivo." },
+      { sentence: "___ nice to finally meet you.", correct: "It's", explain: "'It's' = contracción de 'it is'." },
+      { sentence: "The company updated ___ website.", correct: "its", explain: "'Its' = posesivo." },
+      { sentence: "___ getting late, we should go.", correct: "It's", explain: "'It's' = 'it is'." }
     ]
   },
   'principal-principle': {
@@ -257,7 +253,11 @@ export const CATEGORIES = {
       { sentence: "That's my ___ concern about the plan.", correct: "principal", explain: "'Principal' (adjetivo) = principal, más importante." },
       { sentence: "He refused on ___ .", correct: "principle", explain: "'On principle' = por una cuestión de valores." },
       { sentence: "She was called to the ___'s office.", correct: "principal", explain: "'Principal' = director/a de la escuela." },
-      { sentence: "The basic ___ of physics is simple.", correct: "principle", explain: "'Principle' = una regla o ley fundamental." }
+      { sentence: "The basic ___ of physics is simple.", correct: "principle", explain: "'Principle' = una regla o ley fundamental." },
+      { sentence: "The company's main ___ is customer satisfaction.", correct: "principle", explain: "'Principle' = un valor fundamental." },
+      { sentence: "He met with the ___ to discuss the incident.", correct: "principal", explain: "'Principal' = director/a de la escuela." },
+      { sentence: "Democracy is based on the ___ of equality.", correct: "principle", explain: "'Principle' = una regla o ley fundamental." },
+      { sentence: "The ___ reason for the delay was the weather.", correct: "principal", explain: "'Principal' (adjetivo) = principal, más importante." }
     ]
   },
   'complement-compliment': {
@@ -270,7 +270,11 @@ export const CATEGORIES = {
       { sentence: "Thank you for the ___, that's very kind.", correct: "compliment", explain: "'Compliment' = un cumplido." },
       { sentence: "The two colours ___ each other beautifully.", correct: "complement", explain: "'Complement' = complementarse mutuamente." },
       { sentence: "He paid her a genuine ___.", correct: "compliment", explain: "'Compliment' = un halago." },
-      { sentence: "These skills ___ the rest of the team.", correct: "complement", explain: "'Complement' = añadir algo que hace mejor el conjunto." }
+      { sentence: "These skills ___ the rest of the team.", correct: "complement", explain: "'Complement' = añadir algo que hace mejor el conjunto." },
+      { sentence: "Her scarf ___ her outfit nicely.", correct: "complements", explain: "'Complement' (verbo) = combina bien con algo." },
+      { sentence: "He blushed at the unexpected ___.", correct: "compliment", explain: "'Compliment' = un elogio inesperado." },
+      { sentence: "The wine and cheese ___ each other well.", correct: "complement", explain: "'Complement' = complementarse mutuamente." },
+      { sentence: "I want to pay you a ___.", correct: "compliment", explain: "'Compliment' = un cumplido." }
     ]
   },
   'desert-dessert': {
@@ -283,7 +287,11 @@ export const CATEGORIES = {
       { sentence: "Camels are well adapted to the ___.", correct: "desert", explain: "'Desert' = zona árida y seca." },
       { sentence: "She ordered chocolate cake for ___.", correct: "dessert", explain: "'Dessert' = el postre después de comer." },
       { sentence: "Don't ___ your friends when they need you.", correct: "desert", explain: "'Desert' (verbo) = abandonar." },
-      { sentence: "This restaurant has an amazing ___ menu.", correct: "dessert", explain: "'Dessert' = postre." }
+      { sentence: "This restaurant has an amazing ___ menu.", correct: "dessert", explain: "'Dessert' = postre." },
+      { sentence: "The Gobi is a cold ___ in Asia.", correct: "desert", explain: "'Desert' = región árida, puede ser fría o cálida." },
+      { sentence: "We shared a delicious ___ after dinner.", correct: "dessert", explain: "'Dessert' = postre compartido al final de la comida." },
+      { sentence: "Soldiers must never ___ their post.", correct: "desert", explain: "'Desert' (verbo) = abandonar un deber o puesto." },
+      { sentence: "Ice cream is my favourite ___.", correct: "dessert", explain: "'Dessert' = postre favorito." }
     ]
   },
   'weather-whether': {
@@ -296,7 +304,11 @@ export const CATEGORIES = {
       { sentence: "We'll go for a walk if the ___ is nice.", correct: "weather", explain: "'Weather' = el estado del tiempo." },
       { sentence: "She asked ___ I was coming to the party.", correct: "whether", explain: "'Whether' = si (introduce una duda)." },
       { sentence: "Check the ___ forecast before you leave.", correct: "weather", explain: "'Weather' = el clima." },
-      { sentence: "It doesn't matter ___ we win or lose.", correct: "whether", explain: "'Whether...or' = ya sea que...o." }
+      { sentence: "It doesn't matter ___ we win or lose.", correct: "whether", explain: "'Whether...or' = ya sea que...o." },
+      { sentence: "I'm not sure ___ she'll come or not.", correct: "whether", explain: "'Whether...or not' = si...o no." },
+      { sentence: "The ___ has been terrible this week.", correct: "weather", explain: "'Weather' = el tiempo/clima." },
+      { sentence: "___ or not it rains, we're going hiking.", correct: "Whether", explain: "'Whether' al inicio de frase, con mayúscula." },
+      { sentence: "Cold ___ makes me want to stay inside.", correct: "weather", explain: "'Weather' = clima frío." }
     ]
   }
 };

@@ -14,11 +14,8 @@ export const CATEGORIES = {
       { text: 'Can you turn off the lights, please?', blank: 'turn off', options: ['turn off', 'turn on', 'take off', 'turn up'] },
       { text: 'We are going to the cinema tonight.', blank: 'cinema', options: ['cinema', 'sonita', 'senior', 'seminar'] },
       { text: 'He forgot his keys at the office.', blank: 'keys', options: ['keys', 'cheese', 'case', 'ease'] },
-      { text: 'They live in a small flat near the park.', blank: 'flat', options: ['flat', 'flag', 'float', 'flap'] },
       { text: 'I would like a cup of coffee, please.', blank: 'cup', options: ['cup', 'cap', 'cop', 'cape'] },
       { text: 'The weather is very cold today.', blank: 'cold', options: ['cold', 'called', 'gold', 'coal'] },
-      { text: 'She bought some bread and milk.', blank: 'bread', options: ['bread', 'breed', 'brad', 'braid'] },
-      { text: 'Please close the window before you leave.', blank: 'window', options: ['window', 'widow', 'winner', 'winter'] }
     ]
   },
   travelwork: {
@@ -28,12 +25,9 @@ export const CATEGORIES = {
       { text: 'The meeting has been scheduled for Monday.', blank: 'scheduled', options: ['scheduled', 'schooled', 'shielded', 'settled'] },
       { text: 'I need to book a flight to London.', blank: 'flight', options: ['flight', 'fright', 'flute', 'fight'] },
       { text: 'Our department is hiring new employees.', blank: 'employees', options: ['employees', 'employers', 'emphasis', 'empathies'] },
-      { text: 'The train departs from platform four.', blank: 'platform', options: ['platform', 'plateau', 'platoon', 'plot form'] },
       { text: 'Please send me the report by email.', blank: 'report', options: ['report', 'resort', 'rapport', 'reward'] },
       { text: 'We should arrive at the airport early.', blank: 'airport', options: ['airport', 'aeroplane', 'airline', 'harbour'] },
       { text: 'The deadline for the project is Friday.', blank: 'deadline', options: ['deadline', 'headline', 'dateline', 'redline'] },
-      { text: 'Can I pay by credit card?', blank: 'credit card', options: ['credit card', 'debit card', 'gift card', 'cash card'] },
-      { text: 'The hotel room has a beautiful view.', blank: 'view', options: ['view', 'few', 'vue', 'value'] },
       { text: 'She works as a software engineer.', blank: 'engineer', options: ['engineer', 'engine ear', 'engineered', 'engineering'] }
     ]
   },
@@ -42,14 +36,10 @@ export const CATEGORIES = {
     icon: '🎧',
     items: [
       { text: 'I can see the ship on the horizon.', blank: 'ship', options: ['ship', 'sheep', 'chip', 'shape'] },
-      { text: 'She lives on Third Street.', blank: 'Third', options: ['Third', 'Turd', 'Thread', 'Tared'] },
       { text: 'He ate three pieces of cake.', blank: 'three', options: ['three', 'free', 'tree', 'threw'] },
       { text: 'The desert is very hot and dry.', blank: 'desert', options: ['desert', 'dessert', 'deserve', 'decent'] },
-      { text: 'They walked along the beach.', blank: 'beach', options: ['beach', 'beech', 'bitch', 'bench'] },
       { text: 'Please write your name here.', blank: 'write', options: ['write', 'right', 'rite', 'ride'] },
-      { text: 'The weather affected our plans.', blank: 'affected', options: ['affected', 'effected', 'infected', 'expected'] },
       { text: 'I bought a new pair of shoes.', blank: 'pair', options: ['pair', 'pear', 'pare', 'peer'] },
-      { text: 'She felt very tired after work.', blank: 'tired', options: ['tired', 'tied', 'tried', 'tide'] },
       { text: 'We need to accept the new terms.', blank: 'accept', options: ['accept', 'except', 'expect', 'access'] }
     ]
   }

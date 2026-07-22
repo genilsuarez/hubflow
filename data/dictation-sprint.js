@@ -22,12 +22,7 @@ export const CATEGORIES = {
       { sentence: "The weather was terrible yesterday, so we stayed at home all day.", keywords: ["weather", "terrible", "yesterday", "stayed", "home"], hint: "Weather" },
       { sentence: "My brother is taller than me, but I'm faster than him.", keywords: ["brother", "taller", "than", "faster", "him"], hint: "Comparisons" },
       { sentence: "There are three bedrooms, a kitchen, and a small garden in our house.", keywords: ["three", "bedrooms", "kitchen", "garden", "house"], hint: "Home description" },
-      { sentence: "I've been living in this city for about five years now.", keywords: ["been", "living", "city", "five", "years"], hint: "Duration" },
-      { sentence: "She asked me if I wanted to go to the cinema with her tonight.", keywords: ["asked", "wanted", "cinema", "her", "tonight"], hint: "Invitation" },
       { sentence: "We had a wonderful time at the beach last weekend.", keywords: ["wonderful", "time", "beach", "last", "weekend"], hint: "Past event" },
-      { sentence: "The children are playing in the park while their parents are sitting on a bench.", keywords: ["children", "playing", "park", "parents", "bench"], hint: "Scene description" },
-      { sentence: "I forgot to bring my umbrella and now it's raining heavily.", keywords: ["forgot", "bring", "umbrella", "raining", "heavily"], hint: "Regret" },
-      { sentence: "Would you mind opening the window? It's very hot in here.", keywords: ["mind", "opening", "window", "very", "hot"], hint: "Polite request" },
       { sentence: "He's been working at the same company since he finished university.", keywords: ["been", "working", "same", "since", "finished"], hint: "Work history" },
       { sentence: "I need to go to the pharmacy to buy some medicine for my headache.", keywords: ["need", "pharmacy", "buy", "medicine", "headache"], hint: "Health" }
     ]
@@ -41,17 +36,12 @@ export const CATEGORIES = {
       { sentence: "The meeting has been postponed until next Thursday because the director is travelling.", keywords: ["meeting", "postponed", "Thursday", "director", "travelling"], hint: "Schedule change" },
       { sentence: "I'd like to book a return flight to Barcelona, departing on the fifteenth of March.", keywords: ["book", "return", "flight", "departing", "fifteenth"], hint: "Travel booking" },
       { sentence: "Could you send me the report by Friday? I need to review it before the presentation.", keywords: ["send", "report", "Friday", "review", "presentation"], hint: "Work deadline" },
-      { sentence: "The hotel reception told us that checkout time is eleven o'clock sharp.", keywords: ["reception", "checkout", "eleven", "o'clock", "sharp"], hint: "Hotel rules" },
       { sentence: "We've been experiencing some technical difficulties with the system since this morning.", keywords: ["experiencing", "technical", "difficulties", "system", "morning"], hint: "IT problem" },
       { sentence: "The flight was delayed by two hours due to bad weather conditions.", keywords: ["flight", "delayed", "hours", "weather", "conditions"], hint: "Travel disruption" },
       { sentence: "She was promoted to senior manager after working there for just three years.", keywords: ["promoted", "senior", "manager", "working", "three"], hint: "Career" },
-      { sentence: "I'm afraid we'll have to reschedule the appointment because something urgent came up.", keywords: ["afraid", "reschedule", "appointment", "urgent", "came"], hint: "Cancellation" },
-      { sentence: "The train to Edinburgh leaves from platform nine at quarter past two.", keywords: ["train", "Edinburgh", "platform", "quarter", "past"], hint: "Train information" },
-      { sentence: "Would it be possible to have a window seat on my next flight?", keywords: ["possible", "window", "seat", "next", "flight"], hint: "Travel preference" },
       { sentence: "The deadline for submitting the proposal has been extended until the end of the month.", keywords: ["deadline", "submitting", "proposal", "extended", "month"], hint: "Work update" },
       { sentence: "Passengers are advised to arrive at the airport at least two hours before departure.", keywords: ["passengers", "advised", "airport", "hours", "departure"], hint: "Travel advice" },
       { sentence: "I've attached the revised budget to this email for your approval.", keywords: ["attached", "revised", "budget", "email", "approval"], hint: "Email language" },
-      { sentence: "The conference will take place on the third floor in the main auditorium.", keywords: ["conference", "place", "third", "floor", "auditorium"], hint: "Event location" },
       { sentence: "Unfortunately, the position has already been filled by another candidate.", keywords: ["unfortunately", "position", "filled", "another", "candidate"], hint: "Job application" }
     ]
   },
@@ -64,7 +54,6 @@ export const CATEGORIES = {
       { sentence: "In my opinion, social media has both positive and negative effects on young people.", keywords: ["opinion", "social", "media", "positive", "negative"], hint: "Expressing views" },
       { sentence: "According to recent studies, regular exercise can significantly improve mental health.", keywords: ["according", "studies", "exercise", "significantly", "mental"], hint: "Research findings" },
       { sentence: "I strongly believe that education should be accessible to everyone regardless of income.", keywords: ["strongly", "believe", "education", "accessible", "regardless"], hint: "Social issue" },
-      { sentence: "The government announced that they would invest more money in renewable energy sources.", keywords: ["government", "announced", "invest", "renewable", "energy"], hint: "Political news" },
       { sentence: "Although many people disagree, I think remote working is more productive than office work.", keywords: ["although", "disagree", "remote", "productive", "office"], hint: "Work debate" },
       { sentence: "Scientists have warned that climate change could lead to more extreme weather events.", keywords: ["scientists", "warned", "climate", "extreme", "weather"], hint: "Environment" },
       { sentence: "On the one hand, technology makes life easier; on the other hand, it can be addictive.", keywords: ["one", "hand", "technology", "other", "addictive"], hint: "Balanced argument" },
@@ -72,10 +61,6 @@ export const CATEGORIES = {
       { sentence: "It's widely accepted that learning a second language improves cognitive abilities.", keywords: ["widely", "accepted", "learning", "language", "cognitive"], hint: "Language learning" },
       { sentence: "Despite the economic downturn, unemployment rates have actually decreased this quarter.", keywords: ["despite", "economic", "unemployment", "decreased", "quarter"], hint: "Economic news" },
       { sentence: "Many experts argue that artificial intelligence will transform the job market within a decade.", keywords: ["experts", "argue", "artificial", "intelligence", "transform"], hint: "Technology future" },
-      { sentence: "There is growing evidence to suggest that screen time before bed affects sleep quality.", keywords: ["growing", "evidence", "suggest", "screen", "sleep"], hint: "Health study" },
-      { sentence: "While some people prefer city life, others find the countryside more peaceful and relaxing.", keywords: ["while", "prefer", "city", "countryside", "peaceful"], hint: "Lifestyle comparison" },
-      { sentence: "The report concluded that poverty remains the biggest challenge facing developing nations.", keywords: ["report", "concluded", "poverty", "biggest", "developing"], hint: "Global issues" },
-      { sentence: "It seems unlikely that the proposed law will be approved by the end of this year.", keywords: ["seems", "unlikely", "proposed", "approved", "year"], hint: "Political prediction" }
     ]
   },
   academic: {
@@ -88,16 +73,11 @@ export const CATEGORIES = {
       { sentence: "It is essential that all participants sign the consent form before the experiment begins.", keywords: ["essential", "participants", "consent", "form", "experiment"], hint: "Research ethics" },
       { sentence: "The author argues convincingly that economic growth alone does not guarantee social progress.", keywords: ["argues", "convincingly", "economic", "guarantee", "progress"], hint: "Critical analysis" },
       { sentence: "Further investigation is required to determine whether these results can be replicated.", keywords: ["investigation", "required", "determine", "results", "replicated"], hint: "Research limitation" },
-      { sentence: "The data suggests that there has been a significant decline in biodiversity over the past century.", keywords: ["data", "suggests", "significant", "decline", "biodiversity"], hint: "Environmental science" },
       { sentence: "One of the main limitations of this study is the relatively small sample size.", keywords: ["limitations", "study", "relatively", "small", "sample"], hint: "Methodology" },
-      { sentence: "These findings are consistent with previous research conducted by similar institutions.", keywords: ["findings", "consistent", "previous", "research", "institutions"], hint: "Literature comparison" },
       { sentence: "The hypothesis was rejected because the experimental results did not support the initial predictions.", keywords: ["hypothesis", "rejected", "experimental", "results", "predictions"], hint: "Scientific method" },
       { sentence: "In conclusion, the evidence overwhelmingly supports the implementation of preventive measures.", keywords: ["conclusion", "evidence", "overwhelmingly", "implementation", "preventive"], hint: "Paper conclusion" },
-      { sentence: "The methodology employed in this study has several advantages over traditional approaches.", keywords: ["methodology", "employed", "several", "advantages", "traditional"], hint: "Methods section" },
-      { sentence: "Participants were randomly assigned to either the control group or the experimental group.", keywords: ["participants", "randomly", "assigned", "control", "experimental"], hint: "Research design" },
       { sentence: "The results demonstrate a statistically significant difference between the two treatment conditions.", keywords: ["results", "demonstrate", "statistically", "significant", "conditions"], hint: "Statistical analysis" },
       { sentence: "It is worth noting that these conclusions are based on a limited geographical sample.", keywords: ["worth", "noting", "conclusions", "limited", "geographical"], hint: "Hedging" },
-      { sentence: "The literature review revealed several gaps in our understanding of this phenomenon.", keywords: ["literature", "review", "revealed", "gaps", "phenomenon"], hint: "Literature review" },
       { sentence: "This theory has been widely criticised for its lack of empirical evidence and methodological rigour.", keywords: ["theory", "criticised", "lack", "empirical", "rigour"], hint: "Academic critique" }
     ]
   }

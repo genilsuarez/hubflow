@@ -44,14 +44,6 @@ export const CATEGORIES = {
         ]
       },
       {
-        text: "My sister is more taller than me. She has long hairs and blue eyes. Everyone say she is beautiful.",
-        errors: [
-          { word: "more", index: 3, correction: "", rule: "'Taller' already has -er — don't add 'more'" },
-          { word: "hairs", index: 10, correction: "hair", rule: "'Hair' (on head) is uncountable" },
-          { word: "say", index: 15, correction: "says", rule: "Third person singular: 'everyone says'" }
-        ]
-      },
-      {
         text: "I have been to Paris last year. It were amazing. I visited the Eiffel Tower and taked many photos.",
         errors: [
           { word: "have", index: 1, correction: "went", rule: "'Last year' = past simple, not present perfect" },
@@ -68,22 +60,6 @@ export const CATEGORIES = {
         ]
       },
       {
-        text: "The informations you gave me was very useful. I already readed the document and writed my report.",
-        errors: [
-          { word: "informations", index: 1, correction: "information", rule: "'Information' is uncountable — no plural" },
-          { word: "was", index: 5, correction: "were", rule: "Subject is 'informations (information)' but the verb should match: if uncountable → 'was' is OK; the real fix is making the noun singular. Accept 'was' with corrected noun." },
-          { word: "readed", index: 10, correction: "read", rule: "'Read' is irregular: read → read → read (past = same spelling, /rɛd/)" },
-          { word: "writed", index: 14, correction: "wrote", rule: "'Write' is irregular: write → wrote → written" }
-        ]
-      },
-      {
-        text: "She suggested me to go to the doctor. I agreed going there next week.",
-        errors: [
-          { word: "me", index: 2, correction: "", rule: "'Suggest' doesn't take indirect object + to-infinitive. Use: 'suggested that I go' or 'suggested going'" },
-          { word: "going", index: 10, correction: "to go", rule: "'Agree' takes to + infinitive: 'agreed to go'" }
-        ]
-      },
-      {
         text: "He is knowing the answer but he doesn't wants to tell nobody.",
         errors: [
           { word: "knowing", index: 2, correction: "knows", rule: "'Know' is a state verb — not used in continuous" },
@@ -97,13 +73,6 @@ export const CATEGORIES = {
           { word: "was", index: 1, correction: "had been", rule: "'Since two hours' + past event = past perfect continuous" },
           { word: "since", index: 3, correction: "for", rule: "'Two hours' is a duration — use 'for', not 'since'" },
           { word: "were", index: 12, correction: "was", rule: "'Everyone' is singular — use 'was'" }
-        ]
-      },
-      {
-        text: "I have less problems than you, but she have much less patience for this than her sister.",
-        errors: [
-          { word: "less", index: 2, correction: "fewer", rule: "'Problems' is countable — use 'fewer', not 'less'" },
-          { word: "have", index: 8, correction: "has", rule: "Third person singular: 'she has'" }
         ]
       },
       {

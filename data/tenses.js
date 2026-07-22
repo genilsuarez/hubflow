@@ -19,8 +19,7 @@ export const CATEGORIES = {
       { sentence: 'We ___ a meeting at 3 pm today.', correct: 'are having', options: ['are having', 'have', 'has', 'had'], explain: 'Present continuous for scheduled future arrangements.' },
       { sentence: 'The train ___ at 9:15 every morning.', correct: 'leaves', options: ['leaves', 'is leaving', 'leave', 'left'], explain: 'Present simple for timetables and schedules.' },
       { sentence: 'She ___ like vegetables.', correct: "doesn't", options: ["doesn't", "don't", "isn't", "not"], explain: "Negative present simple, 3rd person: doesn't + base verb." },
-      { sentence: 'What ___ you doing here?', correct: 'are', options: ['are', 'do', 'is', 'does'], explain: 'Present continuous question: What are you doing?' },
-      { sentence: 'He never ___ to class on time.', correct: 'comes', options: ['comes', 'come', 'is coming', 'came'], explain: 'Present simple with frequency adverb "never".' }
+      { sentence: 'What ___ you doing here?', correct: 'are', options: ['are', 'do', 'is', 'does'], explain: 'Present continuous question: What are you doing?' }
     ]
   },
   past: {
@@ -36,7 +35,6 @@ export const CATEGORIES = {
       { sentence: '___ you see the match last night?', correct: 'Did', options: ['Did', 'Do', 'Were', 'Have'], explain: 'Past simple question: Did + subject + base verb.' },
       { sentence: 'She ___ born in 1990.', correct: 'was', options: ['was', 'is', 'has been', 'were'], explain: 'Past simple passive: was born (fixed expression).' },
       { sentence: 'I ___ already finished when he arrived.', correct: 'had', options: ['had', 'have', 'was', 'did'], explain: 'Past perfect: had + past participle (before another past event).' },
-      { sentence: 'They ___ very tired after the long walk.', correct: 'were', options: ['were', 'was', 'are', 'been'], explain: 'Past simple of "be": They (plural) → were.' },
       { sentence: 'He ___ his homework and then went out.', correct: 'did', options: ['did', 'does', 'was doing', 'has done'], explain: 'Past simple: did (completed action in sequence).' },
       { sentence: 'While I ___ for the bus, it started to rain.', correct: 'was waiting', options: ['was waiting', 'waited', 'wait', 'am waiting'], explain: 'Past continuous: background action interrupted by another event.' },
       { sentence: 'She ___ never been to Asia before that trip.', correct: 'had', options: ['had', 'has', 'was', 'did'], explain: 'Past perfect: had never been (experience before a past reference point).' }
@@ -57,8 +55,7 @@ export const CATEGORIES = {
       { sentence: 'By next year, she ___ graduated.', correct: 'will have', options: ['will have', 'will', 'has', 'had'], explain: 'Future perfect: will have + past participle (completed before a future point).' },
       { sentence: 'This time tomorrow I ___ on the beach.', correct: 'will be lying', options: ['will be lying', 'will lie', 'am lying', 'lie'], explain: 'Future continuous: will be + -ing (action in progress at a future time).' },
       { sentence: '___ I open the window?', correct: 'Shall', options: ['Shall', 'Will', 'Do', 'Am'], explain: 'Shall I...? = offer/suggestion (1st person).' },
-      { sentence: 'He ___ 30 next month.', correct: 'will be', options: ['will be', 'is', 'is being', 'was'], explain: 'Future fact: will be (age/date in future).' },
-      { sentence: 'I ___ to call him later.', correct: 'am going', options: ['am going', 'will', 'shall', 'do'], explain: 'Planned intention: am going + to + verb.' }
+      { sentence: 'He ___ 30 next month.', correct: 'will be', options: ['will be', 'is', 'is being', 'was'], explain: 'Future fact: will be (age/date in future).' }
     ]
   },
   perfect: {
@@ -76,8 +73,7 @@ export const CATEGORIES = {
       { sentence: 'By 2030, they ___ completed the project.', correct: 'will have', options: ['will have', 'have', 'had', 'will'], explain: 'Future perfect: will have + past participle.' },
       { sentence: 'I ___ known him since childhood.', correct: 'have', options: ['have', 'has', 'had', 'am'], explain: 'Present perfect for duration from past to now: have known since.' },
       { sentence: 'She ___ lost her keys — she can\'t find them anywhere.', correct: 'has', options: ['has', 'have', 'had', 'is'], explain: 'Present perfect: result visible now (she has lost → still lost).' },
-      { sentence: 'After he ___ eaten, he went for a walk.', correct: 'had', options: ['had', 'has', 'have', 'was'], explain: 'Past perfect: action completed before another past action.' },
-      { sentence: 'I ___ been waiting for an hour!', correct: 'have', options: ['have', 'has', 'had', 'am'], explain: 'Present perfect continuous: have been + -ing (frustration/duration up to now).' }
+      { sentence: 'After he ___ eaten, he went for a walk.', correct: 'had', options: ['had', 'has', 'have', 'was'], explain: 'Past perfect: action completed before another past action.' }
     ]
   },
   perfectContrast: {

@@ -19,8 +19,7 @@ export const CATEGORIES = {
       { sentence: 'Can I have ___ water, please?', correct: 'some', explain: 'Use "some" in requests.' },
       { sentence: 'He didn\'t give me ___ advice.', correct: 'any', explain: 'Use "any" in negative sentences.' },
       { sentence: 'We need ___ help with this project.', correct: 'some', explain: 'Use "some" in affirmative sentences.' },
-      { sentence: 'Is there ___ sugar in my tea?', correct: 'any', explain: 'Use "any" in questions.' },
-      { sentence: 'There are ___ books on the table.', correct: 'some', explain: 'Use "some" in affirmative sentences.' }
+      { sentence: 'Is there ___ sugar in my tea?', correct: 'any', explain: 'Use "any" in questions.' }
     ]
   },
   muchmany: {
@@ -38,8 +37,7 @@ export const CATEGORIES = {
       { sentence: 'He doesn\'t have ___ books.', correct: 'many', explain: 'Use "many" with countable plural nouns (books).' },
       { sentence: 'How ___ water do you drink daily?', correct: 'much', explain: 'Use "much" with uncountable nouns (water).' },
       { sentence: 'Were there ___ cars on the road?', correct: 'many', explain: 'Use "many" with countable plural nouns (cars).' },
-      { sentence: 'We don\'t have ___ information yet.', correct: 'much', explain: 'Use "much" with uncountable nouns (information).' },
-      { sentence: 'How ___ eggs do we need?', correct: 'many', explain: 'Use "many" with countable plural nouns (eggs).' }
+      { sentence: 'We don\'t have ___ information yet.', correct: 'much', explain: 'Use "much" with uncountable nouns (information).' }
     ]
   },
   fewlittle: {
@@ -54,7 +52,6 @@ export const CATEGORIES = {
       { sentence: 'We have ___ time, let\'s hurry.', correct: 'little', explain: '"Little" (uncountable) = almost no time.' },
       { sentence: 'I need ___ minutes to finish.', correct: 'a few', explain: '"A few" (countable) = a small positive number.' },
       { sentence: 'Very ___ students passed the exam.', correct: 'few', explain: '"Few" (countable) = almost none.' },
-      { sentence: 'Can I have ___ more sugar?', correct: 'a little', explain: '"A little" (uncountable) = a small positive amount.' },
       { sentence: 'He speaks ___ words of Spanish.', correct: 'a few', explain: '"A few" (countable) = some words.' },
       { sentence: 'There is ___ hope of finding it now.', correct: 'little', explain: '"Little" (uncountable) = almost no hope.' }
     ]
@@ -72,7 +69,6 @@ export const CATEGORIES = {
       { sentence: 'We don\'t have ___ money for a holiday.', correct: 'enough', explain: '"Enough" = sufficient amount (here, negative).' },
       { sentence: 'You eat ___ sugar — it\'s unhealthy.', correct: 'too much', explain: '"Too much" (uncountable) = excessive.' },
       { sentence: 'He made ___ mistakes in the test.', correct: 'too many', explain: '"Too many" (countable) = excessive number.' },
-      { sentence: 'There were ___ tourists at the beach.', correct: 'a lot of', explain: '"A lot of" works with countable plurals too.' },
       { sentence: 'Is there ___ food for the guests?', correct: 'enough', explain: '"Enough" = sufficient amount.' }
     ]
   }

@@ -17,10 +17,6 @@ export const CATEGORIES = {
       { sentence: "If I have time this weekend, I'll clean the garage.", correct: 'First', explain: 'Real future possibility → First Conditional.' },
       { sentence: 'If I were you, I would apologise.', correct: 'Second', explain: 'Hypothetical advice, uses "were" for all subjects → Second Conditional.' },
       { sentence: "If we had left earlier, we wouldn't have missed the train.", correct: 'Third', explain: 'Impossible past → Third Conditional.' },
-      { sentence: 'Water boils if you heat it to 100°C.', correct: 'Zero', explain: 'Scientific fact → Zero Conditional.' },
-      { sentence: "If he calls, tell him I'm busy.", correct: 'First', explain: 'Real future possibility, imperative in the result clause → First Conditional.' },
-      { sentence: 'If I had more free time, I would learn the guitar.', correct: 'Second', explain: 'Hypothetical present situation → Second Conditional.' },
-      { sentence: 'If they had known about the traffic, they would have taken another route.', correct: 'Third', explain: 'Impossible past → Third Conditional.' }
     ]
   },
   connectors: {
@@ -32,16 +28,12 @@ export const CATEGORIES = {
       { sentence: "I'll come to the party ___ I finish work on time.", correct: 'if', explain: '"If" introduces a simple, neutral condition.' },
       { sentence: 'You can borrow my car ___ you bring it back by 6pm.', correct: 'as long as', explain: '"As long as" = the condition that must be met for something to happen.' },
       { sentence: 'We\'ll sign the contract ___ all terms are met.', correct: 'provided that', explain: '"Provided that" is a formal way of saying "if".' },
-      { sentence: "She won't forgive you ___ you apologise.", correct: 'unless', explain: '"Unless" = "if you don\'t apologise".' },
-      { sentence: "I'll lend you the money ___ you pay me back next week.", correct: 'as long as', explain: '"As long as" sets the required condition.' },
-      { sentence: 'The trip will go ahead ___ the weather is good.', correct: 'provided that', explain: 'Formal condition → "provided that".' },
       { sentence: "You won't pass the test ___ you study.", correct: 'unless', explain: '"Unless" = "if you don\'t study".' },
       { sentence: 'I\'ll help you ___ you ask politely.', correct: 'if', explain: '"If" introduces a straightforward condition.' },
-      { sentence: '___ you have a valid ticket, you can\'t board the plane.', correct: 'unless', explain: '"Unless" = "if you don\'t have" — exclusion condition.' },
-      { sentence: 'We\'ll go hiking ___ it doesn\'t rain.', correct: 'as long as', explain: '"As long as" = the condition must hold for the plan to proceed.' },
       { sentence: 'The deal is valid ___ both parties agree.', correct: 'provided that', explain: '"Provided that" — formal condition that must be met.' },
       { sentence: '___ you follow the recipe exactly, it should turn out fine.', correct: 'if', explain: '"If" introduces a simple conditional expectation.' },
       { sentence: 'You can stay ___ you keep quiet.', correct: 'as long as', explain: '"As long as" = the ongoing requirement for permission.' },
+      { sentence: 'We\'ll go hiking ___ it doesn\'t rain.', correct: 'as long as', explain: '"As long as" = the condition must hold for the plan to proceed.' },
       { sentence: 'The refund is available ___ you return the item within 30 days.', correct: 'provided that', explain: '"Provided that" sets a formal requirement.' },
       { sentence: 'I never eat dessert ___ it\'s a special occasion.', correct: 'unless', explain: '"Unless" = the only exception when the action happens.' }
     ]

@@ -22,7 +22,12 @@ export const CATEGORIES = {
       { sentence: 'I bought a RED car.', correct: 'Adjective', explain: 'Describes the noun "car" → adjective.' },
       { sentence: 'HAPPINESS is important in life.', correct: 'Noun', explain: 'Names an abstract thing/idea → noun.' },
       { sentence: 'We WAITED for hours.', correct: 'Verb', explain: 'Expresses the action → verb.' },
-      { sentence: 'He arrived late, AND everyone was upset.', correct: 'Conjunction', explain: 'Connects two independent clauses → conjunction.' }
+      { sentence: 'He arrived late, AND everyone was upset.', correct: 'Conjunction', explain: 'Connects two independent clauses → conjunction.' },
+      { sentence: 'He speaks SLOWLY so everyone understands.', correct: 'Adverb', explain: 'Describes how he speaks → adverb.' },
+      { sentence: 'She arrived VERY late to the meeting.', correct: 'Adverb', explain: 'Modifies the adjective "late", showing degree → adverb.' },
+      { sentence: 'FREEDOM is a fundamental human right.', correct: 'Noun', explain: 'Names an abstract idea → noun.' },
+      { sentence: 'That was a TERRIBLE mistake.', correct: 'Adjective', explain: 'Describes the noun "mistake" → adjective.' },
+      { sentence: 'They DANCED all night at the party.', correct: 'Verb', explain: 'Expresses the action → verb.' }
     ]
   }
 };

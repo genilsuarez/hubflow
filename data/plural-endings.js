@@ -22,7 +22,12 @@ export const CATEGORIES = {
       { sentence: 'judges', correct: '/ɪz/', explain: '"Ge" is a sibilant sound → /ɪz/.' },
       { sentence: 'dreams', correct: '/z/', explain: '"M" is voiced → /z/.' },
       { sentence: 'plates', correct: '/s/', explain: '"T" is voiceless → /s/.' },
-      { sentence: 'roses', correct: '/ɪz/', explain: '"S" is a sibilant sound → /ɪz/.' }
+      { sentence: 'roses', correct: '/ɪz/', explain: '"S" is a sibilant sound → /ɪz/.' },
+      { sentence: 'laughs', correct: '/s/', explain: '"Gh" (pronounced /f/, voiceless) → /s/.' },
+      { sentence: 'clocks', correct: '/s/', explain: '"K" is voiceless → /s/.' },
+      { sentence: 'trees', correct: '/z/', explain: 'Vowel + voiced ending → /z/.' },
+      { sentence: 'balls', correct: '/z/', explain: '"L" is voiced → /z/.' },
+      { sentence: 'pages', correct: '/ɪz/', explain: '"Ge" is a sibilant sound → /ɪz/.' }
     ]
   }
 };

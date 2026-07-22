@@ -13,7 +13,6 @@ export const CATEGORIES = {
     level: 'B1',
     items: [
       { sentences: ["The man is my neighbor.", "He lives next door."], correct: ["The man who lives next door is my neighbor.", "The man that lives next door is my neighbor."], hint: "Use a relative pronoun for people", explain: "'Who'/'that' introduces a relative clause describing the man." },
-      { sentences: ["I bought a book.", "The book was very expensive."], correct: ["I bought a book that was very expensive.", "I bought a book which was very expensive."], hint: "Use a relative pronoun for things", explain: "'That'/'which' introduces a defining clause about the book." },
       { sentences: ["This is the restaurant.", "We had our first date there."], correct: ["This is the restaurant where we had our first date."], hint: "Use 'where' for places", explain: "'Where' replaces 'there' when combining a place with a relative clause." },
       { sentences: ["She's the woman.", "Her car was stolen."], correct: ["She's the woman whose car was stolen."], hint: "Use 'whose' for possession", explain: "'Whose' shows that the car belongs to the woman." },
       { sentences: ["That's the reason.", "I left early for that reason."], correct: ["That's the reason why I left early.", "That's why I left early."], hint: "Use 'why' for reasons", explain: "'Why' introduces a relative clause about a reason." },
@@ -23,7 +22,6 @@ export const CATEGORIES = {
       { sentences: ["The hotel was right on the beach.", "We stayed there."], correct: ["The hotel where we stayed was right on the beach."], hint: "Use 'where' again", explain: "'Where' replaces 'there' for the hotel." },
       { sentences: ["I work with some people.", "They are very friendly."], correct: ["The people I work with are very friendly.", "The people who I work with are very friendly.", "The people that I work with are very friendly."], hint: "The pronoun can be omitted here", explain: "As object of the clause, the relative pronoun is optional." },
       { sentences: ["London has over 8 million people.", "London is the capital of England."], correct: ["London, which is the capital of England, has over 8 million people."], hint: "Non-defining clause about a place", explain: "Extra info about a named place uses commas + 'which'." },
-      { sentences: ["The report shows alarming data.", "It was published yesterday."], correct: ["The report, which was published yesterday, shows alarming data."], hint: "Non-defining clause again", explain: "Extra info in the middle of the sentence, set off by commas." },
     ],
   },
   connectors: {
@@ -39,8 +37,6 @@ export const CATEGORIES = {
       { sentences: ["Prices went up.", "Demand fell."], correct: ["Because prices went up, demand fell.", "Prices went up, so demand fell."], hint: "Use a cause/result connector", explain: "Rising prices caused falling demand." },
       { sentences: ["He didn't study.", "He failed the test."], correct: ["Since he didn't study, he failed the test.", "He didn't study, so he failed the test."], hint: "'Since' can also mean 'because' here", explain: "'Since' at the start of a clause can express reason, not just time." },
       { sentences: ["The team lost the game.", "They played very well."], correct: ["Although they played very well, the team lost the game.", "The team lost the game even though they played very well."], hint: "Use a stronger contrast connector", explain: "'Even though' emphasizes the contrast more than 'although'." },
-      { sentences: ["It was very cold.", "The children played outside."], correct: ["Despite the cold, the children played outside.", "Although it was very cold, the children played outside."], hint: "Use a contrast connector", explain: "'Despite the cold' is a noun phrase version of 'although it was cold'." },
-      { sentences: ["She has a busy schedule.", "She always finds time to exercise."], correct: ["Although she has a busy schedule, she always finds time to exercise.", "Despite her busy schedule, she always finds time to exercise."], hint: "Use a contrast connector", explain: "'Despite her busy schedule' turns the first sentence into a noun phrase." },
       { sentences: ["The company cut costs.", "Profits increased."], correct: ["Because the company cut costs, profits increased.", "The company cut costs, so profits increased."], hint: "Use a cause/result connector", explain: "Cutting costs caused profits to rise." },
       { sentences: ["He apologized.", "She was still angry."], correct: ["Although he apologized, she was still angry.", "He apologized, but she was still angry."], hint: "Use a contrast connector", explain: "The apology didn't change her anger — a contrast." },
     ],

@@ -2,11 +2,9 @@ export const LEVELS = {
   beginner: [
     // 🔵 Noun + Noun (6)
     { prompt: "___ stop",    modifier: "bus",      nucleus: "stop",    full: "bus stop",      rule: "blue",  why: "🔵 Noun+Noun: tipo de parada. Modifier SINGULAR", focus: "type" },
-    { prompt: "___ cup",     modifier: "coffee",   nucleus: "cup",     full: "coffee cup",    rule: "blue",  why: "🔵 Noun+Noun: contenido habitual del recipiente", focus: "content" },
     { prompt: "___ key",     modifier: "car",      nucleus: "key",     full: "car key",       rule: "blue",  why: "🔵 Noun+Noun: a qué pertenece la llave", focus: "object" },
     { prompt: "___ station", modifier: "fire",     nucleus: "station", full: "fire station",  rule: "blue",  why: "🔵 Noun+Noun: tipo de servicio", focus: "type" },
     { prompt: "___ shift",   modifier: "night",    nucleus: "shift",   full: "night shift",   rule: "blue",  why: "🔵 Noun+Noun: cuándo ocurre el turno", focus: "time" },
-    { prompt: "___ door",    modifier: "garden",   nucleus: "door",    full: "garden door",   rule: "blue",  why: "🔵 Noun+Noun: ubicación de la puerta", focus: "location" },
     // 🟢 -ing nominal (5)
     { prompt: "___ pool",    modifier: "swimming", nucleus: "pool",    full: "swimming pool", rule: "green", why: "🟢 -ing nominal: la actividad define el propósito", focus: "purpose" },
     { prompt: "___ shoes",   modifier: "running",  nucleus: "shoes",   full: "running shoes", rule: "green", why: "🟢 -ing nominal: actividad para la que están diseñados", focus: "activity" },
@@ -33,7 +31,6 @@ export const LEVELS = {
     { prompt: "___ desk",    modifier: "writing",  nucleus: "desk",    full: "writing desk",    rule: "green", why: "🟢 -ing nominal: actividad principal del mueble", focus: "activity" },
     { prompt: "___ room",    modifier: "meeting",  nucleus: "room",    full: "meeting room",    rule: "green", why: "🟢 -ing nominal: la actividad (reunirse) define la sala", focus: "activity" },
     { prompt: "___ oil",     modifier: "cooking",  nucleus: "oil",     full: "cooking oil",     rule: "green", why: "🟢 -ing nominal: propósito funcional del aceite", focus: "purpose" },
-    { prompt: "___ board",   modifier: "cutting",  nucleus: "board",   full: "cutting board",   rule: "green", why: "🟢 -ing nominal: actividad para la que se usa la tabla", focus: "activity" },
     // 🔴 Genitivo 's / of (5)
     { prompt: "team's ___",     modifier: "decision",  nucleus: "decision",  full: "team's decision",   rule: "red", why: "🔴 Genitivo 's: propiedad del equipo", focus: "possession" },
     { prompt: "cup of ___",     modifier: "coffee",    nucleus: "cup",       full: "cup of coffee",     rule: "red", why: "🔴 Partitivo 'of': una porción de algo incontable", focus: "partitive" },
@@ -54,11 +51,9 @@ export const LEVELS = {
     { prompt: "company's ___",  modifier: "profit",      nucleus: "profit",      full: "company's profit",       rule: "red",   why: "🔴 Genitivo 's: la ganancia pertenece a la empresa", focus: "possession" },
     { prompt: "___ room",       modifier: "dining",      nucleus: "room",        full: "dining room",            rule: "green", why: "🟢 -ing nominal: actividad habitual del espacio", focus: "activity" },
     { prompt: "___ shop",       modifier: "shoe",        nucleus: "shop",        full: "shoe shop",              rule: "blue",  why: "🔵 REGLA SINGULAR: modifier SIEMPRE en singular", focus: "singular" },
-    { prompt: "wall of ___",    modifier: "fire",        nucleus: "wall",        full: "wall of fire",           rule: "red",   why: "🔴 'of' composición dramática/énfasis", focus: "composition" },
     { prompt: "___ line",       modifier: "finishing",    nucleus: "line",        full: "finishing line",          rule: "green", why: "🟢 -ing nominal: la acción que define la línea", focus: "activity" },
     { prompt: "children's ___", modifier: "hospital",    nucleus: "hospital",    full: "children's hospital",    rule: "red",   why: "🔴 Genitivo 's plural irregular: children+'s", focus: "possession" },
     { prompt: "___ hat",        modifier: "cowboy",      nucleus: "hat",         full: "cowboy hat",             rule: "blue",  why: "🔵 Noun+Noun: tipo de persona que lo usa", focus: "type" },
-    { prompt: "piece of ___",   modifier: "advice",      nucleus: "piece",       full: "piece of advice",        rule: "red",   why: "🔴 Partitivo 'of': 'advice' es incontable", focus: "partitive" },
   ],
   god: [
     // 🔵 Noun + Noun (6) — incluye excepciones de pluralización
@@ -70,7 +65,6 @@ export const LEVELS = {
     { prompt: "___ belt",             modifier: "seat",        nucleus: "belt",        full: "seat belt",                   rule: "blue",  why: "🔵 Noun+Noun: propósito (el asiento). Modifier SINGULAR", focus: "purpose" },
     // 🟢 -ing nominal (6) — roles y contextos avanzados
     { prompt: "___ board",            modifier: "diving",      nucleus: "board",       full: "diving board",                rule: "green", why: "🟢 -ing nominal: actividad del trampolín", focus: "activity" },
-    { prompt: "___ costs",            modifier: "operating",   nucleus: "costs",       full: "operating costs",             rule: "green", why: "🟢 -ing nominal: actividad que genera los costos", focus: "function" },
     { prompt: "___ director",         modifier: "engineering", nucleus: "director",    full: "engineering director",        rule: "green", why: "🟢 -ing nominal: la disciplina lidera el rol", focus: "title" },
     { prompt: "___ list",             modifier: "waiting",     nucleus: "list",        full: "waiting list",                rule: "green", why: "🟢 -ing nominal: actividad que define la lista", focus: "activity" },
     { prompt: "___ system",           modifier: "heating",     nucleus: "system",      full: "heating system",              rule: "green", why: "🟢 -ing nominal: función que define el sistema", focus: "function" },

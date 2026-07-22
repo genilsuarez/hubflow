@@ -25,8 +25,6 @@ export const CATEGORIES = {
       { verb: "stand up", ipa: "/stænd ʌp/",    particle: "up",    base: "stand",   es: "ponerse de pie",      example: "Stand up when the teacher enters.",        gap: "___ ___ when the teacher enters." },
       { verb: "go out", ipa: "/ɡoʊ aʊt/",      particle: "out",   base: "go",      es: "salir",               example: "We're going out tonight.",                 gap: "We're ___ ___ tonight." },
       { verb: "run out", ipa: "/rʌn aʊt/",     particle: "out",   base: "run",     es: "quedarse sin",        example: "We've run out of milk.",                   gap: "We've ___ ___ of milk." },
-      { verb: "hang up", ipa: "/hæŋ ʌp/",     particle: "up",    base: "hang",    es: "colgar (teléfono)",   example: "She hung up without saying goodbye.",      gap: "She ___ ___ without saying goodbye." },
-      { verb: "fill in", ipa: "/fɪl ɪn/",     particle: "in",    base: "fill",    es: "rellenar (formulario)", example: "Please fill in this form.",              gap: "Please ___ ___ this form." },
     ]
   },
   work: {
@@ -48,7 +46,6 @@ export const CATEGORIES = {
       { verb: "go over", ipa: "/ɡoʊ ˈoʊvər/",     particle: "over",  base: "go",      es: "repasar / revisar",   example: "Let's go over the plan again.",            gap: "Let's ___ ___ the plan again." },
       { verb: "work out", ipa: "/wɜːrk aʊt/",    particle: "out",   base: "work",    es: "resolver / funcionar", example: "It'll work out in the end.",              gap: "It'll ___ ___ in the end." },
       { verb: "call off", ipa: "/kɔːl ɒf/",    particle: "off",   base: "call",    es: "cancelar",            example: "They called off the event.",               gap: "They ___ ___ the event." },
-      { verb: "turn down", ipa: "/tɜːrn daʊn/",   particle: "down",  base: "turn",    es: "rechazar",            example: "She turned down the job offer.",           gap: "She ___ ___ the job offer." },
     ]
   },
   relationships: {
@@ -68,7 +65,6 @@ export const CATEGORIES = {
       { verb: "hang out", ipa: "/hæŋ aʊt/",    particle: "out",   base: "hang",    es: "pasar el rato",       example: "We hang out every weekend.",               gap: "We ___ ___ every weekend." },
       { verb: "put up with", ipa: "/pʊt ʌp wɪð/", particle: "up with", base: "put",   es: "aguantar / tolerar",  example: "I can't put up with this noise.",          gap: "I can't ___ ___ ___ this noise." },
       { verb: "show off", ipa: "/ʃoʊ ɒf/",    particle: "off",   base: "show",    es: "presumir / lucirse",  example: "He's always showing off.",                 gap: "He's always ___ ___." },
-      { verb: "turn up", ipa: "/tɜːrn ʌp/",     particle: "up",    base: "turn",    es: "aparecer / presentarse", example: "She turned up late to the party.",      gap: "She ___ ___ late to the party." },
     ]
   },
   travel: {
@@ -88,7 +84,6 @@ export const CATEGORIES = {
       { verb: "pull over", ipa: "/pʊl ˈoʊvər/",   particle: "over",  base: "pull",    es: "orillarse / detenerse", example: "The police told him to pull over.",      gap: "The police told him to ___ ___." },
       { verb: "look around", ipa: "/lʊk əˈraʊnd/", particle: "around", base: "look",   es: "mirar alrededor / recorrer", example: "Let's look around the city.",      gap: "Let's ___ ___ the city." },
       { verb: "head off", ipa: "/hɛd ɒf/",    particle: "off",   base: "head",    es: "irse / dirigirse",    example: "We should head off before dark.",           gap: "We should ___ ___ before dark." },
-      { verb: "stop over", ipa: "/stɒp ˈoʊvər/",   particle: "over",  base: "stop",    es: "hacer escala",        example: "We stopped over in Dubai.",                gap: "We ___ ___ in Dubai." },
     ]
   },
   getVerbs: {
@@ -156,7 +151,6 @@ export const CATEGORIES = {
       { verb: "weigh up", ipa: "/weɪ ʌp/",      particle: "up",      base: "weigh", es: "sopesar (opciones)",          example: "We need to weigh up our options.",    gap: "We need to ___ ___ our options." },
       { verb: "branch out", ipa: "/brɑːntʃ aʊt/",    particle: "out",     base: "branch",es: "diversificarse / expandirse", example: "The company is branching out into new markets.", gap: "The company is ___ ___ into new markets." },
       { verb: "hold back", ipa: "/hoʊld bæk/",     particle: "back",    base: "hold",  es: "contenerse / reprimir",       example: "She held back her tears.",            gap: "She ___ ___ her tears." },
-      { verb: "live up to", ipa: "/lɪv ʌp tuː/",    particle: "up to",   base: "live",  es: "estar a la altura de",        example: "The film lived up to the hype.",      gap: "The film ___ ___ ___ the hype." },
     ]
   }
 };

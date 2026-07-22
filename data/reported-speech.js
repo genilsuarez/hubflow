@@ -15,7 +15,9 @@ export const CATEGORIES = {
       { sentence: '"I must leave now," she said. → She said she ___ leave then.', correct: 'had to', explain: '"Must" (obligation) → "had to" in reported speech.' },
       { sentence: '"I am working," he said. → He said he ___ working.', correct: 'was', explain: 'Present continuous → past continuous in reported speech.' },
       { sentence: '"I will help," she said. → She said she ___ help.', correct: 'would', explain: '"Will" → "would" in reported speech.' },
-      { sentence: '"I have seen that film," he said. → He said he ___ seen that film.', correct: 'had', explain: 'Present perfect → past perfect in reported speech.' }
+      { sentence: '"I have seen that film," he said. → He said he ___ seen that film.', correct: 'had', explain: 'Present perfect → past perfect in reported speech.' },
+      { sentence: '"I am ready," he said. → He said he ___ ready.', correct: 'was', explain: 'Present simple ("am") → past simple ("was") in reported speech.' },
+      { sentence: '"I have already eaten," she said. → She said she ___ already eaten.', correct: 'had', explain: 'Present perfect → past perfect in reported speech.' }
     ]
   },
   timePlace: {
@@ -30,7 +32,9 @@ export const CATEGORIES = {
       { sentence: '"I need it now," she said. → She said she needed it ___.', correct: 'then', explain: '"Now" → "then" in reported speech.' },
       { sentence: '"We\'ll finish it today," they said. → They said they would finish it ___.', correct: 'that day', explain: '"Today" → "that day" in reported speech.' },
       { sentence: '"I\'ll call you tomorrow," he said. → He said he would call me ___.', correct: 'the next day', explain: '"Tomorrow" → "the next day" in reported speech.' },
-      { sentence: '"I was here yesterday," she said. → She said she had been ___ the day before.', correct: 'there', explain: '"Here" → "there" in reported speech.' }
+      { sentence: '"I was here yesterday," she said. → She said she had been ___ the day before.', correct: 'there', explain: '"Here" → "there" in reported speech.' },
+      { sentence: '"I\'m meeting her today," he said. → He said he was meeting her ___.', correct: 'that day', explain: '"Today" → "that day" in reported speech.' },
+      { sentence: '"I finished it yesterday," she said. → She said she had finished it ___.', correct: 'the day before', explain: '"Yesterday" → "the day before" in reported speech.' }
     ]
   }
 };

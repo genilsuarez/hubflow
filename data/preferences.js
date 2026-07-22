@@ -30,15 +30,10 @@ export const CATEGORIES = {
       { sentence: 'She prefers to walk rather ___ drive.', correct: 'than', explain: '"Rather than" compares two actions.' },
       { sentence: 'We prefer ___ guests remove their shoes before entering.', correct: 'that', explain: '"Prefer that" + clause is the formal structure.' },
       { sentence: 'I would rather ___ stay in than go out.', correct: '∅', explain: '"Would rather" is followed directly by the base verb — no "to".' },
-      { sentence: 'He prefers reading ___ watching TV.', correct: 'to', explain: '"Prefer" + -ing + "to" + -ing.' },
-      { sentence: 'Rather ___ going abroad, we stayed in the UK this summer.', correct: 'than', explain: '"Rather than" + -ing describes the alternative not chosen.' },
-      { sentence: 'I\'d prefer ___ stay in tonight.', correct: 'to', explain: '"Would prefer" + to-infinitive for a specific choice.' },
       { sentence: 'They would rather fly ___ drive to Paris.', correct: 'than', explain: '"Would rather X than Y" compares two actions.' },
-      { sentence: 'I prefer tea ___ coffee in the mornings.', correct: 'to', explain: '"Prefer" + noun + "to" + noun.' },
       { sentence: 'I would rather ___ not discuss this right now.', correct: '∅', explain: '"Would rather" + base verb, no "to" even in the negative form.' },
       { sentence: "She'd prefer ___ eat at home tonight.", correct: 'to', explain: '"Would prefer" + to-infinitive for a specific occasion.' },
       { sentence: 'I prefer cycling ___ running for exercise.', correct: 'to', explain: '"Prefer" + -ing + "to" + -ing for general preferences.' },
-      { sentence: 'We would rather leave early ___ get stuck in traffic.', correct: 'than', explain: '"Would rather X than Y" contrasts the preferred option.' },
       { sentence: 'I prefer ___ people call before visiting.', correct: 'that', explain: '"Prefer that" + subject + verb for a formal wish.' },
       { sentence: 'He would rather ___ take the train.', correct: '∅', explain: '"Would rather" + base verb — no preposition needed.' }
     ]

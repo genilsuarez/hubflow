@@ -25,7 +25,9 @@ export const CATEGORIES = {
       { sentence: 'Butter is ___ cream.', correct: 'made from', explain: 'Cream is transformed into a different substance → "made from".' },
       { sentence: 'This pizza is ___ buffalo mozzarella.', correct: 'made with', explain: '"Made with" features a special ingredient.' },
       { sentence: 'She made earrings ___ bottle caps.', correct: 'made out of', explain: '"Made out of" for repurposed/upcycled items.' },
-      { sentence: 'The walls are ___ brick.', correct: 'made of', explain: 'Bricks are visible in the wall → "made of".' }
+      { sentence: 'The walls are ___ brick.', correct: 'made of', explain: 'Bricks are visible in the wall → "made of".' },
+      { sentence: 'This dessert is ___ dark chocolate and cream.', correct: 'made with', explain: '"Made with" highlights a key ingredient in the recipe.' },
+      { sentence: 'They built a raft ___ empty plastic bottles.', correct: 'made out of', explain: '"Made out of" for inventive, improvised material use.' }
     ]
   }
 };

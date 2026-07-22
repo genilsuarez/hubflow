@@ -17,8 +17,6 @@ export const CATEGORIES = {
       { root: 'develop', sentence: 'The ___ of new technology takes time.', correct: 'development', explain: 'develop → development (suffix -ment)' },
       { root: 'educate', sentence: '___ is the key to a better future.', correct: 'Education', explain: 'educate → education (suffix -tion)' },
       { root: 'free', sentence: '___ of speech is a basic right.', correct: 'Freedom', explain: 'free → freedom (suffix -dom)' },
-      { root: 'weak', sentence: 'His main ___ is lack of confidence.', correct: 'weakness', explain: 'weak → weakness (suffix -ness)' },
-      { root: 'argue', sentence: 'They had a terrible ___ last night.', correct: 'argument', explain: 'argue → argument (suffix -ment, drop -e)' },
       { root: 'invite', sentence: 'Did you get an ___ to the party?', correct: 'invitation', explain: 'invite → invitation (suffix -ation)' },
       { root: 'know', sentence: 'He has a lot of ___ about history.', correct: 'knowledge', explain: 'know → knowledge (irregular derivation)' }
     ]
@@ -30,13 +28,11 @@ export const CATEGORIES = {
       { root: 'beauty', sentence: 'What a ___ day!', correct: 'beautiful', explain: 'beauty → beautiful (suffix -ful)' },
       { root: 'danger', sentence: 'Swimming here is very ___.', correct: 'dangerous', explain: 'danger → dangerous (suffix -ous)' },
       { root: 'care', sentence: 'Be ___ when you cross the road.', correct: 'careful', explain: 'care → careful (suffix -ful)' },
-      { root: 'use', sentence: 'This tool is very ___.', correct: 'useful', explain: 'use → useful (suffix -ful)' },
       { root: 'comfort', sentence: 'This chair is very ___.', correct: 'comfortable', explain: 'comfort → comfortable (suffix -able)' },
       { root: 'create', sentence: 'She is a very ___ person.', correct: 'creative', explain: 'create → creative (suffix -ive)' },
       { root: 'hope', sentence: 'The situation looks ___.', correct: 'hopeless', explain: 'hope → hopeless (suffix -less = without)' },
       { root: 'nature', sentence: 'It looks completely ___.', correct: 'natural', explain: 'nature → natural (suffix -al)' },
       { root: 'child', sentence: 'His behaviour was very ___.', correct: 'childish', explain: 'child → childish (suffix -ish = like a child, negative)' },
-      { root: 'rely', sentence: 'He has always been ___ — never late once.', correct: 'reliable', explain: 'rely → reliable (suffix -able, y → i)' },
       { root: 'expense', sentence: 'That restaurant is too ___.', correct: 'expensive', explain: 'expense → expensive (suffix -ive)' },
       { root: 'tradition', sentence: 'It is a ___ dish in this region.', correct: 'traditional', explain: 'tradition → traditional (suffix -al)' }
     ]
@@ -51,11 +47,9 @@ export const CATEGORIES = {
       { root: 'legal', sentence: 'Downloading pirated films is ___.', correct: 'illegal', explain: 'legal → illegal (prefix il- before l)' },
       { root: 'regular', sentence: 'The verb "go" is ___.', correct: 'irregular', explain: 'regular → irregular (prefix ir- before r)' },
       { root: 'patient', sentence: 'He gets ___ when he has to wait.', correct: 'impatient', explain: 'patient → impatient (prefix im- before p)' },
-      { root: 'honest', sentence: 'It was ___ of him to lie.', correct: 'dishonest', explain: 'honest → dishonest (prefix dis-)' },
       { root: 'responsible', sentence: 'It was very ___ to drive so fast.', correct: 'irresponsible', explain: 'responsible → irresponsible (prefix ir- before r)' },
       { root: 'comfortable', sentence: 'These shoes are really ___.', correct: 'uncomfortable', explain: 'comfortable → uncomfortable (prefix un-)' },
       { root: 'visible', sentence: 'The stars were ___ due to clouds.', correct: 'invisible', explain: 'visible → invisible (prefix in- → before v)' },
-      { root: 'polite', sentence: 'It is ___ to talk with your mouth full.', correct: 'impolite', explain: 'polite → impolite (prefix im- before p)' },
       { root: 'appear', sentence: 'The rabbit seemed to ___ into thin air.', correct: 'disappear', explain: 'appear → disappear (prefix dis-)' }
     ]
   },
@@ -63,10 +57,8 @@ export const CATEGORIES = {
     label: 'Mixed',
     icon: '🔀',
     items: [
-      { root: 'employ', sentence: 'The company has 500 ___.', correct: 'employees', explain: 'employ → employee (suffix -ee = person who is employed) + plural' },
       { root: 'success', sentence: 'She is a very ___ businesswoman.', correct: 'successful', explain: 'success → successful (suffix -ful)' },
       { root: 'science', sentence: 'He is a famous ___.', correct: 'scientist', explain: 'science → scientist (suffix -ist = person)' },
-      { root: 'wide', sentence: 'We need to ___ the road.', correct: 'widen', explain: 'wide → widen (suffix -en = make/become)' },
       { root: 'strong', sentence: 'Exercise will ___ your muscles.', correct: 'strengthen', explain: 'strong → strengthen (suffix -en = make/become)' },
       { root: 'long', sentence: 'What is the ___ of this room?', correct: 'length', explain: 'long → length (irregular noun form)' },
       { root: 'advise', sentence: 'Can you give me some ___?', correct: 'advice', explain: 'advise (verb) → advice (noun). Note: s → c.' },

@@ -17,10 +17,6 @@ export const CATEGORIES = {
       { sentence: 'Only when she spoke did I recognise her.', correct: 'Only + time', explain: '"Only when..." fronted → inversion in main clause.' },
       { sentence: 'Such was the force of the explosion that windows shattered.', correct: 'So/Such...that', explain: '"Such was..." → noun subject complement fronted with inversion.' },
       { sentence: 'Hardly had the game begun when it started raining.', correct: 'No sooner/Hardly', explain: '"Hardly...when" → past perfect inversion.' },
-      { sentence: 'Not until I got home did I notice the stain on my shirt.', correct: 'Negative adverb', explain: '"Not until" is a negative time expression → inversion follows.' },
-      { sentence: 'Only by working together can we solve this problem.', correct: 'Only + time', explain: '"Only by..." fronted → modal + subject inversion.' },
-      { sentence: 'So quickly did the fire spread that no one could escape.', correct: 'So/Such...that', explain: '"So + adverb" fronted → auxiliary inversion.' },
-      { sentence: 'No sooner had I put down the phone than it rang again.', correct: 'No sooner/Hardly', explain: '"No sooner...than" classic pattern with past perfect.' },
     ]
   },
   complete: {

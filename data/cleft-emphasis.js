@@ -17,10 +17,6 @@ export const CATEGORIES = {
       { sentence: 'What bothers me is his complete lack of effort.', correct: 'Wh-cleft', explain: '"What + verb + is..." — emphasises the cause of the feeling.' },
       { sentence: 'All they did was complain about the food.', correct: 'All-cleft', explain: '"All + subject + did + was..." — emphasises the ONLY action taken (often critical).' },
       { sentence: 'The lack of communication is what caused the problem.', correct: 'Reverse wh-cleft', explain: 'Focused element first + "is what..." — useful in arguments to pinpoint a cause.' },
-      { sentence: 'It was the weather that ruined our plans, not the budget.', correct: 'It-cleft', explain: '"It + was... + that" — contrasts one factor against another (not X, but Y).' },
-      { sentence: 'What surprised everyone was how calm she remained.', correct: 'Wh-cleft', explain: '"What + verb + was + how..." — emphasises the unexpected aspect.' },
-      { sentence: 'All we can do now is wait for the results.', correct: 'All-cleft', explain: '"All + subject + can do + is..." — expresses limited options.' },
-      { sentence: 'His attitude is what really annoys me.', correct: 'Reverse wh-cleft', explain: 'Puts the topic first, then "is what" + emotional reaction.' },
     ]
   },
   complete: {

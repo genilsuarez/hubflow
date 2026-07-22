@@ -19,7 +19,6 @@ export const CATEGORIES = {
       { sentence: 'He needs to ___ some exercise.', correct: 'do', explain: '"Do exercise" — fixed collocation.' },
       { sentence: 'They will ___ an effort to arrive early.', correct: 'make', explain: '"Make an effort" — fixed collocation.' },
       { sentence: 'I always ___ my best at work.', correct: 'do', explain: '"Do your best" — fixed collocation.' },
-      { sentence: 'Can you ___ a noise? I\'m trying to sleep.', correct: 'make', explain: '"Make a noise" — fixed collocation.' },
       { sentence: 'She has to ___ the shopping this evening.', correct: 'do', explain: '"Do the shopping" — fixed collocation.' }
     ]
   },
@@ -38,8 +37,7 @@ export const CATEGORIES = {
       { sentence: 'We should ___ a conversation about this.', correct: 'have', explain: '"Have a conversation" — fixed collocation.' },
       { sentence: 'He decided to ___ a risk and invest.', correct: 'take', explain: '"Take a risk" — fixed collocation.' },
       { sentence: 'Let\'s ___ lunch together tomorrow.', correct: 'have', explain: '"Have lunch" — fixed collocation.' },
-      { sentence: 'She will ___ care of the children.', correct: 'take', explain: '"Take care of" — fixed collocation.' },
-      { sentence: 'I always ___ a nap after lunch.', correct: 'take', explain: '"Take a nap" — fixed collocation (also "have a nap").' }
+      { sentence: 'She will ___ care of the children.', correct: 'take', explain: '"Take care of" — fixed collocation.' }
     ]
   },
   getgive: {
@@ -55,7 +53,6 @@ export const CATEGORIES = {
       { sentence: 'I hope to ___ a job soon.', correct: 'get', explain: '"Get a job" — fixed collocation.' },
       { sentence: 'Please ___ me a call tonight.', correct: 'give', explain: '"Give someone a call" — fixed collocation.' },
       { sentence: 'She wants to ___ a haircut.', correct: 'get', explain: '"Get a haircut" — fixed collocation.' },
-      { sentence: 'Can I ___ you a piece of advice?', correct: 'give', explain: '"Give a piece of advice" — fixed collocation.' },
       { sentence: 'We need to ___ in touch with them.', correct: 'get', explain: '"Get in touch" — fixed collocation.' }
     ]
   },
@@ -71,7 +68,6 @@ export const CATEGORIES = {
       { sentence: 'Can you ___ a secret?', correct: 'keep', explain: '"Keep a secret" — fixed collocation.' },
       { sentence: 'This app helps you ___ time.', correct: 'save', explain: '"Save time" — fixed collocation.' },
       { sentence: 'He forgot to ___ the bill.', correct: 'pay', explain: '"Pay the bill" — fixed collocation.' },
-      { sentence: 'Let\'s ___ in touch after the trip.', correct: 'keep', explain: '"Keep in touch" — fixed collocation.' },
       { sentence: 'Firefighters ___ lives every day.', correct: 'save', explain: '"Save lives" — fixed collocation.' },
       { sentence: 'She had to ___ a fine for speeding.', correct: 'pay', explain: '"Pay a fine" — fixed collocation.' }
     ]

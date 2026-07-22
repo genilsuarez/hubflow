@@ -12,10 +12,8 @@ export const LEVELS = {
     { verb: "make",  ans: "making",   rule: "blue",  why: "silent -e → drop" },
     { verb: "read",  ans: "reading",  rule: "red",   why: "2 vowels → +ing" },
     { verb: "study", ans: "studying", rule: "red",   why: "consonant+y → keep y" },
-    { verb: "shop",  ans: "shopping", rule: "green", why: "CVC → double" },
     { verb: "cook",  ans: "cooking",  rule: "red",   why: "2 vowels → +ing" },
     { verb: "swim",  ans: "swimming", rule: "green", why: "CVC → double" },
-    { verb: "talk",  ans: "talking",  rule: "red",   why: "2 consonants → +ing" },
   ],
   intermediate: [
     { verb: "prefer",  ans: "preferring", rule: "green", why: "stress last + CVC → double" },
@@ -31,8 +29,6 @@ export const LEVELS = {
     { verb: "visit",   ans: "visiting",   rule: "red",   why: "stress 1st → no double" },
     { verb: "open",    ans: "opening",    rule: "red",   why: "stress 1st → no double" },
     { verb: "plan",    ans: "planning",   rule: "green", why: "CVC → double" },
-    { verb: "admit",   ans: "admitting",  rule: "green", why: "stress last + CVC → double" },
-    { verb: "escape",  ans: "escaping",   rule: "blue",  why: "silent -e → drop" },
     { verb: "enjoy",   ans: "enjoying",   rule: "red",   why: "vowel+y → +ing" },
   ],
   exceptions: [
@@ -42,7 +38,6 @@ export const LEVELS = {
     { verb: "dye",     ans: "dyeing",     rule: "red",   why: "keep -e (≠ dying)" },
     { verb: "lie",     ans: "lying",      rule: "blue",  why: "-ie → y+ing" },
     { verb: "die",     ans: "dying",      rule: "blue",  why: "-ie → y+ing" },
-    { verb: "tie",     ans: "tying",      rule: "blue",  why: "-ie → y+ing" },
     { verb: "snow",    ans: "snowing",    rule: "red",   why: "-w → no double" },
     { verb: "box",     ans: "boxing",     rule: "red",   why: "-x = 2 sounds, no double" },
     { verb: "show",    ans: "showing",    rule: "red",   why: "-w → no double" },
@@ -56,7 +51,6 @@ export const LEVELS = {
   god: [
     { verb: "ski",       ans: "skiing",      rule: "red",   why: "-i ending → just add -ing (double i is correct)" },
     { verb: "vie",       ans: "vying",       rule: "blue",  why: "-ie → y+ing" },
-    { verb: "untie",     ans: "untying",     rule: "blue",  why: "-ie → y+ing" },
     { verb: "referee",   ans: "refereeing",  rule: "red",   why: "-ee real vowel → +ing" },
     { verb: "singe",     ans: "singeing",    rule: "red",   why: "keep -e (≠ singing)" },
     { verb: "tinge",     ans: "tingeing",    rule: "red",   why: "keep -e (soft g)" },
