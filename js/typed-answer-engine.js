@@ -49,6 +49,73 @@ function isMatch(userAnswer, correctArray) {
   return exact || fuzzy;
 }
 
+function setupPracticeActionNav(attempt = 0) {
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  if (!checkBtn || !nextBtn) return;
+
+  const nav = document.getElementById('exBottomNav');
+  if (!nav) {
+    if (attempt < 40) setTimeout(() => setupPracticeActionNav(attempt + 1), 50);
+    return;
+  }
+
+  if (hintBtn) {
+    hintBtn.className = 'lp-btn lp-btn--ghost typed-hint-btn';
+    hintBtn.textContent = '💡';
+    hintBtn.setAttribute('aria-label', 'Mostrar pista');
+    hintBtn.setAttribute('aria-pressed', 'false');
+    hintBtn.title = 'Pista';
+  }
+
+  checkBtn.className = 'lp-btn lp-btn--primary typed-action-btn typed-action-btn--check';
+  checkBtn.textContent = '✓';
+  checkBtn.setAttribute('aria-label', 'Comprobar respuesta');
+  checkBtn.title = 'Comprobar';
+
+  nextBtn.className = 'lp-btn lp-btn--primary typed-action-btn typed-action-btn--next';
+  nextBtn.textContent = '→';
+  nextBtn.setAttribute('aria-label', 'Siguiente');
+  nextBtn.title = 'Siguiente';
+  nextBtn.hidden = true;
+
+  const wrapper = checkBtn.parentElement;
+  const progressBtn = document.getElementById('lessonProgressBtn');
+
+  if (hintBtn && hintBtn.parentElement !== nav) {
+    if (progressBtn?.parentElement === nav) progressBtn.insertAdjacentElement('afterend', hintBtn);
+    else nav.insertBefore(hintBtn, nav.firstChild);
+  }
+
+  const actionAnchor = hintBtn?.parentElement === nav ? hintBtn : progressBtn;
+  if (checkBtn.parentElement !== nav) {
+    if (actionAnchor?.parentElement === nav) actionAnchor.insertAdjacentElement('afterend', checkBtn);
+    else nav.appendChild(checkBtn);
+  }
+  if (nextBtn.parentElement !== nav) checkBtn.insertAdjacentElement('afterend', nextBtn);
+
+  const meta = document.querySelector('.typed-answer-meta');
+  if (meta && hintBtn && !meta.contains(hintBtn)) {
+    const counter = meta.querySelector('.item-counter');
+    if (counter) meta.parentElement?.insertBefore(counter, meta);
+    meta.remove();
+  }
+
+  if (wrapper && wrapper !== nav && wrapper.tagName === 'DIV' && !wrapper.id && !wrapper.classList.length) {
+    wrapper.remove();
+  }
+
+  nav.classList.add('ex-bottom-nav--practice');
+}
+
+function setPracticeActionNav({ check = true, next = false } = {}) {
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  if (checkBtn) checkBtn.hidden = !check;
+  if (nextBtn) nextBtn.hidden = !next;
+}
+
 export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   initTheme();
   const themeToggleEl = document.getElementById('themeToggle');
@@ -112,6 +179,11 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     document.getElementById('itemCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('hintBox').classList.remove('show');
     document.getElementById('hintBox').textContent = item.hint || '';
+    const hintBtn = document.getElementById('hintBtn');
+    if (hintBtn) {
+      hintBtn.classList.remove('active');
+      hintBtn.setAttribute('aria-pressed', 'false');
+    }
     document.getElementById('explainBox').textContent = '';
     document.getElementById('answersList').classList.remove('show');
     document.getElementById('answersList').innerHTML = '';
@@ -124,14 +196,18 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     input.disabled = false;
     input.focus();
 
-    document.getElementById('checkBtn').style.display = '';
-    document.getElementById('nextBtn').style.display = 'none';
+    setPracticeActionNav({ check: true, next: false });
 
     updProgress();
   }
 
   document.getElementById('hintBtn').addEventListener('click', () => {
-    document.getElementById('hintBox').classList.toggle('show');
+    const box = document.getElementById('hintBox');
+    const btn = document.getElementById('hintBtn');
+    const show = !box.classList.contains('show');
+    box.classList.toggle('show', show);
+    btn.classList.toggle('active', show);
+    btn.setAttribute('aria-pressed', String(show));
   });
 
   function checkAnswer() {
@@ -165,8 +241,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     answersEl.innerHTML = item.correct.map(a => `<div class="answer-item">${a}</div>`).join('');
     answersEl.classList.add('show');
 
-    document.getElementById('checkBtn').style.display = 'none';
-    document.getElementById('nextBtn').style.display = '';
+    setPracticeActionNav({ check: false, next: true });
   }
 
   document.getElementById('checkBtn').addEventListener('click', checkAnswer);
@@ -193,4 +268,5 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
   });
 
   startMode();
+  setupPracticeActionNav();
 }

@@ -20,6 +20,7 @@ export class FlashcardEngine {
     this.quizIdx = 0;
     this.quizScore = 0;
     this.quizTotal = 10;
+    this.matchPairCount = 5;
 
     // Match state
     this.pairState = { left: null, right: null, matched: 0, total: 0, errors: 0, pairs: [] };
@@ -172,11 +173,14 @@ export class FlashcardEngine {
       case 'battle': this.initBattle(); break;
       case 'timed': this.initTimed(); break;
     }
+    window.__syncBattleProgressPlacement?.();
+    window.__syncBottomNavMode?.();
   }
 
   hideAllAreas() {
     document.querySelectorAll('[data-area]').forEach(el => el.classList.remove('show'));
     document.getElementById('timerBar')?.classList.remove('show');
+    document.getElementById('pairScore')?.classList.remove('show');
   }
 
   showArea(name) {
@@ -460,7 +464,7 @@ export class FlashcardEngine {
     const cat = this.categories[this.currentCat];
 
     // If category has order, use drag-sort mode (not implemented in engine, fallback to pair)
-    const selected = shuffle(items).slice(0, 8);
+    const selected = shuffle(items).slice(0, this.matchPairCount);
     this.pairState = { left: null, right: null, matched: 0, total: selected.length, errors: 0, pairs: selected };
 
     this.showArea('match');
@@ -497,7 +501,7 @@ export class FlashcardEngine {
       el.addEventListener('click', () => this.selectPair(el, 'right'));
     });
 
-    this.updatePairScore();
+    this.updateMatchProgress();
   }
 
   selectPair(el, side) {
@@ -525,7 +529,7 @@ export class FlashcardEngine {
       this.pairState.left.classList.add('matched');
       this.pairState.right.classList.add('matched');
       this.pairState.matched++;
-      this.updatePairScore();
+      this.updateMatchProgress();
 
       if (this.pairState.matched === this.pairState.total) {
         const score = Math.max(0, this.pairState.total - this.pairState.errors);
@@ -538,7 +542,7 @@ export class FlashcardEngine {
       }
     } else {
       this.pairState.errors++;
-      this.updatePairScore();
+      this.updateMatchProgress();
       const l = this.pairState.left;
       const r = this.pairState.right;
       l.classList.remove('selected');
@@ -552,12 +556,41 @@ export class FlashcardEngine {
     this.pairState.right = null;
   }
 
-  updatePairScore() {
-    const el = document.getElementById('pairScore');
-    if (el) el.textContent = `✓ ${this.pairState.matched}/${this.pairState.total}${this.pairState.errors ? '  ✗ ' + this.pairState.errors + ' errors' : ''}`;
+  updateMatchProgress() {
+    const { matched, total, errors } = this.pairState;
+    const pct = total > 0 ? Math.round((matched / total) * 100) : 0;
+
+    const scoreEl = document.getElementById('pairScore');
+    if (scoreEl) {
+      if (errors > 0) {
+        scoreEl.textContent = `✗ ${errors} error${errors === 1 ? '' : 's'}`;
+        scoreEl.classList.add('show');
+      } else {
+        scoreEl.textContent = '';
+        scoreEl.classList.remove('show');
+      }
+    }
+
+    const fillEl = document.getElementById('progFill');
+    const txtEl = document.getElementById('progTxt');
+    const pctEl = document.getElementById('progPct');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+    if (txtEl) txtEl.textContent = `${matched} / ${total}`;
+    if (pctEl) pctEl.textContent = `${pct}%`;
   }
 
   // ═══ BATTLE ═══
+  _setBattleInstruction(text, { fadeAfter = 0 } = {}) {
+    const el = document.getElementById('battleInstruction');
+    if (!el) return;
+    clearTimeout(this._battleHintTimer);
+    el.textContent = text;
+    el.classList.remove('is-fading');
+    if (fadeAfter > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this._battleHintTimer = setTimeout(() => el.classList.add('is-fading'), fadeAfter);
+    }
+  }
+
   initBattle() {
     const items = shuffle(this.getItems());
     this.battle = { p1: 0, p2: 0, round: 0, total: Math.min(10, items.length), claimer: null, deck: items, phase: 'claim' };
@@ -588,11 +621,7 @@ export class FlashcardEngine {
     if (backTerm) backTerm.textContent = item.term;
     if (backSpanish) backSpanish.textContent = item.es ? `🇪🇸 ${item.es}` : '';
 
-    const roundEl = document.getElementById('battleRound');
-    if (roundEl) roundEl.textContent = `Round ${this.battle.round + 1} / ${this.battle.total}`;
-
-    const instruction = document.getElementById('battleInstruction');
-    if (instruction) instruction.textContent = 'Who knows? Tap your button!';
+    this._setBattleInstruction('Who knows? Tap your button!', { fadeAfter: 2500 });
 
     this.showBattleActions('claim');
     this.battle.claimer = null;
@@ -603,16 +632,14 @@ export class FlashcardEngine {
     this.battle.claimer = player;
     this.battle.phase = 'judge';
     document.getElementById('battleCard')?.classList.add('flipped');
-    const instruction = document.getElementById('battleInstruction');
-    if (instruction) instruction.textContent = `Player ${player} claimed! Correct?`;
+    this._setBattleInstruction(`Player ${player} claimed! Correct?`);
     this.showBattleActions('judge');
   }
 
   battleSkip() {
     this.battle.phase = 'next';
     document.getElementById('battleCard')?.classList.add('flipped');
-    const instruction = document.getElementById('battleInstruction');
-    if (instruction) instruction.textContent = 'Skipped — no points';
+    this._setBattleInstruction('Skipped — no points');
     this.showBattleActions('next');
   }
 
@@ -629,12 +656,9 @@ export class FlashcardEngine {
     // Show correct answer
     const item = this.battle.deck[this.battle.round];
     const answer = item ? (item.meaning || item.es || item.description || '') : '';
-    const instruction = document.getElementById('battleInstruction');
-    if (instruction) {
-      instruction.textContent = correct
-        ? `✓ Correct! — ${answer}`
-        : `✗ Wrong — Answer: ${answer}`;
-    }
+    this._setBattleInstruction(correct
+      ? `✓ Correct! — ${answer}`
+      : `✗ Wrong — Answer: ${answer}`);
     this.showBattleActions('next');
   }
 

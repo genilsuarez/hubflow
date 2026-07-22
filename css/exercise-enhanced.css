@@ -86,6 +86,18 @@ body > .top-bar {
   justify-content: flex-end;
 }
 
+.top-bar > a.lp-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.top-bar > a.lp-icon-btn .lp-nav-svg {
+  width: 18px;
+  height: 18px;
+}
+
 .learnflow-signature {
   font-family: var(--lp-font-display);
   font-size: var(--lp-header-title-size);
@@ -146,11 +158,43 @@ body > .top-bar {
     height: var(--lp-header-height-compact);
     min-height: var(--lp-header-height-compact);
     padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact);
-    gap: 6px;
+    gap: 0;
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+  }
+
+  .top-bar > a.lp-icon-btn {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .learnflow-signature {
+    grid-column: 2;
+    grid-row: 1;
     font-size: 1rem;
+    text-align: center;
+    justify-self: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 2px;
+  }
+
+  .top-bar__end {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    gap: 0;
+  }
+
+  /* Counter vive en el área de juego en mobile — header solo [←] título [☰] */
+  .top-bar .tb-counter {
+    display: none;
   }
 
   /* Counter compacto: solo "1/90", sin icono target */
@@ -176,7 +220,7 @@ body > .top-bar {
 .wrap { max-width: 860px; }
 
 .header {
-  padding: 6px 0 10px;
+  padding: 0;
   margin-bottom: 10px;
 }
 h1 {
@@ -187,16 +231,226 @@ h1 {
   margin-bottom: 6px;
 }
 
-/* ─── PILL BAR ENHANCED ─── */
+/* ─── EXERCISE CONTROL PANEL (homologated via exercise-shell.js) ─── */
+.ex-control-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  box-shadow: var(--lp-shadow-xs);
+  overflow: hidden;
+}
+
+.ex-header__scope {
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid var(--lp-border-subtle);
+  background: var(--lp-surface);
+}
+.ex-header__scope .cat-bar,
+.ex-header__scope #catBar,
+.ex-header__scope .cat-scroll-wrapper {
+  margin-bottom: 0;
+}
+
+.ex-header__modes {
+  padding: 6px 8px;
+  background: var(--lp-bg-paper);
+  border-bottom: 1px solid var(--lp-border-subtle);
+}
+.ex-header__modes .pill-bar {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+  padding: 2px;
+  gap: 4px;
+}
+.ex-header__modes .pill-btn.active,
+.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal) {
+  background: var(--lp-chip-active-bg);
+  color: var(--lp-chip-active-text);
+  border: 1.5px solid var(--lp-chip-active-border);
+  box-shadow: var(--lp-chip-active-shadow);
+}
+
+.ex-progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 12px;
+}
+.ex-progress-row + .ex-progress-row {
+  border-top: 1px solid var(--lp-border-subtle);
+}
+.ex-progress-row--session {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 5px;
+}
+.ex-progress-row--session:has(.timer-bar.show) {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  row-gap: 3px;
+}
+.ex-progress-row--session::before {
+  display: block;
+  font-size: .56rem;
+  font-weight: var(--lp-weight-extrabold);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--lp-muted);
+  line-height: 1;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+.ex-progress-row--session:has(.timer-bar.show)::before {
+  display: none;
+}
+.ex-progress-row--session:has(#pairScore.show)::before {
+  display: none;
+}
+.ex-progress-row--session::before { content: 'Sesión actual'; }
+
+.ex-progress-row--session.is-progress-relocated {
+  display: none;
+}
+
+[data-area="battle"] > .progress {
+  width: 100%;
+  margin: 0 0 6px;
+  padding: 0 2px;
+  box-sizing: border-box;
+}
+
+.ex-progress-row--session #pairScore {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  align-self: center;
+  display: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--lp-font-mono);
+  font-size: .68rem;
+  font-weight: var(--lp-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--lp-muted);
+  text-align: center;
+  z-index: 1;
+}
+.ex-progress-row--session #pairScore.show {
+  display: block;
+  color: var(--lp-error);
+}
+.ex-progress-row--session:has(#pairScore.show) {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  row-gap: 3px;
+}
+
+.ex-progress-row--session .timer-bar {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  align-self: center;
+  display: none;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0 5px 0 4px;
+  min-height: 0;
+  border-radius: var(--lp-radius-full);
+  background: color-mix(in srgb, var(--lp-warning) 10%, var(--lp-surface));
+  border: 1px solid color-mix(in srgb, var(--lp-warning) 28%, var(--lp-border));
+  box-shadow: none;
+  z-index: 1;
+}
+.ex-progress-row--session .timer-bar.show {
+  display: inline-flex;
+}
+.ex-progress-row--session .timer-bar::before {
+  content: '⏱';
+  font-size: .58rem;
+  line-height: 1;
+  opacity: .85;
+}
+.ex-progress-row--session .timer-display {
+  font-family: var(--lp-font-mono);
+  font-size: .68rem;
+  font-weight: var(--lp-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--lp-warning);
+  letter-spacing: .01em;
+}
+.ex-progress-row--session .timer-display.warn {
+  color: var(--lp-error);
+  animation: pulse .5s infinite alternate;
+}
+
+.ex-progress-row--session .progress {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
+}
+
+.ex-header__progress {
+  display: flex;
+  flex-direction: column;
+  background: var(--lp-surface);
+}
+
+.ex-control-panel .progress {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .ex-header__scope { padding: 6px 8px 4px; }
+  .ex-header__modes { padding: 4px 6px; }
+  .ex-progress-row { padding: 6px 10px; gap: 3px; }
+  .ex-progress-row--session::before { font-size: .52rem; }
+  .ex-progress-row--session:has(#pairScore.show) {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    row-gap: 2px;
+  }
+  .ex-progress-row--session:has(#pairScore.show) #pairScore {
+    font-size: .64rem;
+  }
+  .ex-progress-row--session:has(.timer-bar.show) {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    row-gap: 2px;
+  }
+  .ex-progress-row--session:has(.timer-bar.show) .timer-bar {
+    padding: 0 4px 0 3px;
+    gap: 2px;
+  }
+  .ex-progress-row--session:has(.timer-bar.show) .timer-display {
+    font-size: .64rem;
+  }
+}
+
+/* ─── PILL BAR ENHANCED (fallback outside control panel) ─── */
 .pill-bar {
   box-shadow: var(--lp-shadow-sm);
   margin-bottom: 10px;
 }
 .pill-btn.active {
-  box-shadow: 0 3px 12px rgba(44, 36, 24, .15);
+  box-shadow: var(--lp-chip-active-shadow);
 }
 [data-theme="dark"] .pill-btn.active {
-  box-shadow: 0 3px 12px rgba(0, 0, 0, .3);
+  box-shadow: var(--lp-chip-active-shadow);
 }
 
 /* ─── LEVEL BAR ENHANCED ─── */
@@ -269,16 +523,28 @@ h1 {
 .scroll-body {
   padding: 6px 0 48px;
 }
+.scroll-body:has([data-area="battle"].show) > .ex-bottom-nav,
+.ex-bottom-nav.is-battle-hidden,
+.ex-bottom-nav[hidden] {
+  display: none !important;
+}
+.scroll-body:has([data-area="battle"].show) {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+.scroll-body:has(.ex-bottom-nav:not([hidden]):not(.is-battle-hidden)) {
+  padding-bottom: max(72px, calc(48px + env(safe-area-inset-bottom)));
+}
 @media (max-width: 480px) {
   .scroll-body { padding: 0; }
   .top-bar { margin-bottom: 4px; gap: 4px; }
   .learnflow-signature { font-size: 0.9375rem; }
   .tb-counter { height: 32px; padding: 0 8px; border-width: 1px; box-shadow: none; }
   .tb-counter .tb-counter__text { font-size: 0.8125rem; }
-  .header { padding: 4px 0 6px; margin-bottom: 6px; }
+  .header { padding: 0; margin-bottom: 6px; }
   h1 { margin-bottom: 4px; }
-  .pill-bar { margin-bottom: 6px; }
-  .progress { margin-bottom: 4px; padding: 4px 10px; }
+  .ex-header__modes .pill-bar { margin-bottom: 0; }
+  .ex-control-panel .pill-btn { font-size: .58rem; padding: 6px 4px; }
+  .ex-control-panel .progress { margin-bottom: 0; padding: 0; }
 }
 
 /* ─── LEGEND ENHANCED ─── */
@@ -289,20 +555,18 @@ h1 {
   border: 1px solid var(--lp-border-subtle);
 }
 
-/* ─── TIMER ENHANCED ─── */
-.timer-bar {
-  display: none;
-}
-.timer-bar.show {
+/* Timer fallback for exercises not homologated via exercise-shell */
+.wrap > .timer-bar.show,
+.header:not(.ex-control-panel) .timer-bar.show {
   display: block;
   padding: 2px 10px;
   background: var(--lp-surface);
   border-radius: var(--lp-radius-sm);
   border: 1px solid var(--lp-border-subtle);
-  margin: 0;
+  margin: 0 0 6px;
   font-size: .82rem;
   font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--lp-font-mono);
   text-align: center;
 }
 
@@ -351,5 +615,16 @@ h1 {
     overscroll-behavior: contain;
     padding-top: 0;
     padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.shell-ready .scroll-body > [data-area].show {
+    align-items: stretch;
+  }
+
+  body.shell-ready .scroll-body > .ex-bottom-nav {
+    margin-top: 10px;
   }
 }

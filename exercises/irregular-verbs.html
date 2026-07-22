@@ -9,7 +9,7 @@
 <script src="../js/lp-input-zoom.js"></script>
 <script src="../js/lp-nav-icons.js"></script>
 <script src="../lp-login.js"></script>
-<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/buttons.css">
@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <style>
   body { min-height: 100vh; padding: 0 14px; }
-  .pill-btn.active { background: var(--lp-cat-amber); color: #fff; box-shadow: 0 2px 10px rgba(180,130,40,.25); }
   .progress__fill { background: var(--lp-cat-amber); }
 
   /* Category pills */
@@ -80,8 +79,17 @@
   .battle-card .fc-face { border-radius: var(--lp-radius-lg, 12px); }
   .battle-card .fc-term { font-size: 1.5rem; }
   .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .battle-instruction { font-size: .7rem; font-weight: 700; color: var(--lp-muted); text-align: center; }
-  .battle-round { font-family: var(--lp-font-mono); font-size: .62rem; color: var(--lp-muted); text-align: center; }
+  .battle-instruction {
+    font-size: .58rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--lp-muted) 80%, transparent);
+    text-align: center;
+    line-height: 1.2;
+    margin: 0 0 4px;
+    opacity: 1;
+    transition: opacity 0.55s ease;
+  }
+  .battle-instruction.is-fading { opacity: 0; pointer-events: none; }
   .btn--sm { font-size: .7rem; padding: 8px 14px; }
   .btn--blue { background: var(--lp-cat-blue, #4a9eff); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
   .btn--orange { background: var(--lp-warning, #e85d5d); color: #fff; border: none; border-radius: var(--lp-radius-sm); cursor: pointer; }
@@ -115,9 +123,9 @@
     <div class="pill-bar">
       <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">🎯 Quiz</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
       <button class="pill-btn" data-mode="write">✍️ Write</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
-      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
     <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
@@ -189,12 +197,12 @@
 
     <!-- BATTLE -->
     <div data-area="battle">
+      <div class="battle-instruction" id="battleInstruction">Press 1 or 2 to claim · S to skip</div>
       <div class="battle-scores">
         <div class="player-score p1"><span class="p-label">Player 1</span><span class="p-points" id="bp1">0</span></div>
         <span class="vs-badge">vs</span>
         <div class="player-score p2"><span class="p-label">Player 2</span><span class="p-points" id="bp2">0</span></div>
       </div>
-      <div class="battle-round" id="battleRound">Round 1 / 10</div>
       <div class="fc-card battle-card" id="battleCard">
         <div class="fc-inner">
           <div class="fc-face verb-front">
@@ -211,7 +219,6 @@
           </div>
         </div>
       </div>
-      <div class="battle-instruction" id="battleInstruction">Press 1 or 2 to claim · S to skip</div>
       <div class="battle-actions" id="battleActions">
         <button class="lp-btn lp-btn--primary" id="bClaim1">1️⃣ P1</button>
         <button class="lp-btn lp-btn--ghost" id="bSkip">⏭️ Skip</button>
@@ -516,7 +523,6 @@ function showBattleCard() {
   document.getElementById('bBackPast').textContent = verb.past;
   document.getElementById('bBackPP').textContent = verb.pp;
 
-  document.getElementById('battleRound').textContent = `Round ${battle.round + 1} / ${battle.total}`;
   updProgress(battle.round + 1, battle.total);
   setBattlePhase('claim');
 }

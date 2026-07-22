@@ -12,21 +12,21 @@
 /* ─── TOKENS ─── */
 :root {
   /* Surface & Paper */
-  --lp-bg: #FAF7F2;
-  --lp-bg-paper: #F5F1EB;
+  --lp-bg: #FFFFFF;
+  --lp-bg-paper: #F7F4EF;
   --lp-surface: #FFFFFF;
   --lp-surface-raised: #FFFFFF;
-  --lp-surface-sunken: #F0EDE7;
+  --lp-surface-sunken: #F3F0EA;
 
   /* Borders */
-  --lp-border: #E8E0D4;
-  --lp-border-strong: #D4CABB;
-  --lp-border-subtle: #F0EBE3;
+  --lp-border: #E2DAD0;
+  --lp-border-strong: #CFC4B6;
+  --lp-border-subtle: #EEEAE4;
 
   /* Ink */
   --lp-ink: #2C2418;
-  --lp-ink-soft: #5E5041;
-  --lp-muted: #9C8E7C;
+  --lp-ink-soft: #574A3C;
+  --lp-muted: #8A7D6E;
   --lp-ink-inverse: #FFFFFF;
 
   /* Accent — vivid blue (homologado entre las 4 apps) */
@@ -36,6 +36,13 @@
   --lp-accent-hover: #1D4ED8;
   --lp-accent-text: #1E40AF;
   --lp-primary: var(--lp-accent);
+
+  /* Selection chip — cat-bar / category pills (unificado light + dark) */
+  --lp-chip-active-bg: #E8F0FE;
+  --lp-chip-active-text: #1E40AF;
+  --lp-chip-active-border: #93C5FD;
+  --lp-chip-active-shadow: 0 1px 4px rgba(37, 99, 235, 0.14);
+  --lp-chip-active-bg-hover: #DCE8FC;
 
   /* Category spines */
   --lp-cat-blue: #3D6B9F;
@@ -63,11 +70,11 @@
   --lp-warning-soft: #FDF5E0;
 
   /* Elevation */
-  --lp-shadow-xs: 0 1px 2px rgba(44, 36, 24, 0.04);
-  --lp-shadow-sm: 0 2px 4px rgba(44, 36, 24, 0.05), 0 4px 12px rgba(44, 36, 24, 0.05);
-  --lp-shadow-md: 0 4px 14px rgba(44, 36, 24, 0.08), 0 2px 6px rgba(44, 36, 24, 0.05);
-  --lp-shadow-lg: 0 8px 30px rgba(44, 36, 24, 0.12), 0 3px 8px rgba(44, 36, 24, 0.06);
-  --lp-shadow-hover: 0 10px 36px rgba(44, 36, 24, 0.15), 0 4px 10px rgba(44, 36, 24, 0.07);
+  --lp-shadow-xs: 0 1px 2px rgba(44, 36, 24, 0.05);
+  --lp-shadow-sm: 0 2px 6px rgba(44, 36, 24, 0.06), 0 4px 14px rgba(44, 36, 24, 0.05);
+  --lp-shadow-md: 0 4px 16px rgba(44, 36, 24, 0.09), 0 2px 6px rgba(44, 36, 24, 0.05);
+  --lp-shadow-lg: 0 10px 32px rgba(44, 36, 24, 0.11), 0 3px 8px rgba(44, 36, 24, 0.06);
+  --lp-shadow-hover: 0 12px 38px rgba(44, 36, 24, 0.14), 0 4px 10px rgba(44, 36, 24, 0.07);
 
   /* Shape */
   --lp-radius-xs: 4px;
@@ -139,10 +146,10 @@
   --lp-score-value-size: 1.125rem;
   --lp-score-value-weight: 700;
   --lp-score-bg: #FFFFFF;
-  --lp-score-border: #E5E7EB;
+  --lp-score-border: #E2DAD0;
   --lp-score-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.06);
   --lp-score-value-color: #2C2418;
-  --lp-score-label-color: #9C8E7C;
+  --lp-score-label-color: #8A7D6E;
   --lp-score-icon-color: #2563EB;
   --lp-score-success-color: #27865A;
   --lp-score-error-color: #C0392B;
@@ -202,6 +209,13 @@
 
   --lp-accent-soft: #1A2744;
   --lp-accent-text: #93c5fd;
+
+  /* Selection chip — cat-bar / category pills */
+  --lp-chip-active-bg: color-mix(in srgb, #60A5FA 22%, var(--lp-surface));
+  --lp-chip-active-text: #BFDBFE;
+  --lp-chip-active-border: color-mix(in srgb, #60A5FA 48%, var(--lp-border));
+  --lp-chip-active-shadow: 0 1px 4px rgba(59, 130, 246, 0.22);
+  --lp-chip-active-bg-hover: color-mix(in srgb, #60A5FA 30%, var(--lp-surface));
 
   --lp-cat-blue: #6FA8DC;
   --lp-cat-blue-soft: #1E3350;

@@ -9,7 +9,7 @@
 <script src="../js/lp-input-zoom.js"></script>
 <script src="../js/lp-nav-icons.js"></script>
 <script src="../lp-login.js"></script>
-<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
 <link rel="stylesheet" href="../css/buttons.css">
@@ -37,9 +37,9 @@
     <div class="pill-bar">
       <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">⚡ Quiz</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
       <button class="pill-btn" data-mode="match">🔀 Match</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
-      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
     <!-- Timer -->
@@ -110,13 +110,12 @@
 
     <!-- BATTLE -->
     <div data-area="battle">
+      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
       <div class="battle-scores">
         <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
         <span class="vs-badge">vs</span>
         <div class="player-score p2"><span class="p-label">P2</span><span class="p-points" id="p2Score">0</span></div>
       </div>
-      <div class="battle-round" id="battleRound">Round 1 / 10</div>
-      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
 
       <div class="battle-card" id="battleCard">
         <div class="fc-inner">
@@ -170,77 +169,6 @@ document.getElementById('battleClaimP2').addEventListener('click', () => engine.
 document.getElementById('battleJudgeCorrect').addEventListener('click', () => engine.battleJudge(true));
 document.getElementById('battleJudgeWrong').addEventListener('click', () => engine.battleJudge(false));
 document.getElementById('battleNextBtn').addEventListener('click', () => engine.battleNext());
-
-// Category bar scroll fades & expand (same pattern as vocabulary/pronunciation)
-const catBar = document.getElementById('catBar');
-const catWrapper = document.getElementById('catWrapper');
-const catExpandBtn = document.getElementById('catExpandBtn');
-
-function updateFades() {
-  if (!catBar || !catWrapper || catWrapper.classList.contains('expanded')) return;
-  const { scrollLeft, scrollWidth, clientWidth } = catBar;
-  catWrapper.classList.toggle('fade-left', scrollLeft > 8);
-  catWrapper.classList.toggle('fade-right', scrollLeft < scrollWidth - clientWidth - 8);
-}
-
-if (catBar) {
-  catBar.addEventListener('scroll', updateFades);
-  new ResizeObserver(updateFades).observe(catBar);
-  setTimeout(updateFades, 100);
-}
-
-if (catExpandBtn) {
-  catExpandBtn.addEventListener('click', () => {
-    const expanded = catWrapper.classList.toggle('expanded');
-    catExpandBtn.setAttribute('aria-expanded', expanded);
-    if (!expanded) setTimeout(updateFades, 50);
-  });
-}
-
-// Badge counter for hidden pills
-function countHiddenPills() {
-  if (!catBar || !catWrapper) return;
-  const countEl = catExpandBtn?.querySelector('.expand-count');
-  if (!countEl) return;
-  if (catWrapper.classList.contains('expanded')) { countEl.textContent = ''; return; }
-  const barRect = catBar.getBoundingClientRect();
-  const pills = catBar.querySelectorAll('.pill-btn');
-  let hidden = 0;
-  pills.forEach(p => { if (p.getBoundingClientRect().right > barRect.right - 36) hidden++; });
-  const hasOverflow = catBar.scrollWidth > catBar.clientWidth + 20;
-  countEl.textContent = hidden > 0 ? `+${hidden}` : '';
-  catExpandBtn.disabled = !hasOverflow && hidden === 0;
-}
-
-if (catBar) {
-  catBar.addEventListener('scroll', countHiddenPills);
-  new MutationObserver(countHiddenPills).observe(catBar, { childList: true });
-  setTimeout(countHiddenPills, 150);
-}
-
-// ─── Scroll-hint on first load (peek + badge nudge) ───
-(function scrollHint() {
-  if (!catBar || !catExpandBtn) return;
-  const run = () => {
-    const { scrollWidth, clientWidth } = catBar;
-    if (scrollWidth <= clientWidth + 20) return;
-    catExpandBtn.classList.add('nudge');
-    catExpandBtn.addEventListener('animationend', () => catExpandBtn.classList.remove('nudge'), { once: true });
-    const peekDist = Math.min(60, scrollWidth - clientWidth);
-    catBar.style.scrollBehavior = 'smooth';
-    catBar.scrollLeft = peekDist;
-    setTimeout(() => { catBar.scrollLeft = 0; }, 500);
-    let hintBar = catWrapper.querySelector('.scroll-hint-bar');
-    if (!hintBar) {
-      hintBar = document.createElement('div');
-      hintBar.className = 'scroll-hint-bar';
-      catWrapper.appendChild(hintBar);
-    }
-    setTimeout(() => hintBar.classList.add('flash'), 100);
-    setTimeout(() => hintBar.classList.remove('flash'), 1200);
-  };
-  setTimeout(run, 400);
-})();
 </script>
 
 <script type="module" src="../js/exercise-shell.js"></script>

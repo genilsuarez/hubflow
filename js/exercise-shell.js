@@ -4,7 +4,7 @@
 // Replaces portal-link.js for exercise pages.
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
-import { renderLessonProgress } from './utils.js';
+import { initCatBarExpander, renderLessonProgress } from './utils.js';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -60,22 +60,25 @@ const currentModule = MODULES.find(m => {
 const section = currentModule?.category || 'vocab';
 
 // ─── Header restructure ────────────────────────────────────────────────────────
-// Keep the original ← back link (always visible, matches LyricFlow's player header
-// and FluentFlow's in-game header, both of which keep a dedicated back arrow even
-// when a hamburger is also present) and add a ☰ next to it to open the sidebar.
+// LyricFlow player pattern: [← back] · [title centered] · [☰ menu]
+// (counter stays in the right cluster on desktop; hidden in header on mobile)
 
 const topBar = document.querySelector('.top-bar');
 const originalBackLink = topBar?.querySelector('a[href*="../index.html"]');
 
 let hamburgerBtn;
 if (topBar && originalBackLink) {
+  originalBackLink.innerHTML = navIcon('arrow-left') || '<span aria-hidden="true">←</span>';
+  if (!originalBackLink.getAttribute('aria-label')) {
+    originalBackLink.setAttribute('aria-label', 'Volver');
+  }
+
   hamburgerBtn = document.createElement('button');
   hamburgerBtn.type = 'button';
   hamburgerBtn.className = originalBackLink.className; // keeps lp-icon-btn
   hamburgerBtn.innerHTML = navIcon('menu') || '<span aria-hidden="true">☰</span>';
   hamburgerBtn.setAttribute('aria-label', 'Abrir navegación');
   hamburgerBtn.setAttribute('aria-controls', 'exerciseSidebar');
-  originalBackLink.insertAdjacentElement('afterend', hamburgerBtn);
 }
 
 // Move top-bar out of .wrap so it spans full body width (like LyricFlow header)
@@ -134,20 +137,18 @@ if (topBar) {
   setTimeout(syncCounter, 0);
   setTimeout(syncCounter, 200);
 
-  // Layout: [← ☰] · title · [counter] — evita solape del pill centrado
+  // Layout: [←] · title · [counter + ☰] — homologado a LyricFlow/FluentFlow player
   const backEl = topBar.querySelector('a[href*="../index.html"]');
-  const menuEl = topBar.querySelector('[aria-controls="exerciseSidebar"]');
+  const menuEl = hamburgerBtn || topBar.querySelector('[aria-controls="exerciseSidebar"]');
   const sigEl = topBar.querySelector('.learnflow-signature');
   const counterEl = topBar.querySelector('.tb-counter');
   if (backEl && sigEl) {
-    const start = document.createElement('div');
-    start.className = 'top-bar__start';
+    preserveTopBarTimer();
     const end = document.createElement('div');
     end.className = 'top-bar__end';
-    start.appendChild(backEl);
-    if (menuEl) start.appendChild(menuEl);
     if (counterEl) end.appendChild(counterEl);
-    topBar.replaceChildren(start, sigEl, end);
+    if (menuEl) end.appendChild(menuEl);
+    topBar.replaceChildren(backEl, sigEl, end);
   }
 
   // Hide the original counters visually (they're mirrored in top-bar)
@@ -189,6 +190,42 @@ const SECTIONS = [
   { key: 'guides', icon: 'diamond', label: 'Guías de referencia', cls: 'r' },
 ];
 
+const SIDEBAR_PRIMARY_KEYS = new Set(['resumen', 'mi-progreso']);
+
+function renderSidebarItem(s) {
+  const active = s.key === section ? ' active' : '';
+  const iconMarkup = s.icon === 'diamond' ? '◆' : navIcon(s.icon);
+  return `<a class="sb-item ${s.cls}${active}" href="../?section=${s.key}" data-target="${s.key}"><span class="sb-icon">${iconMarkup}</span><span class="sb-label">${s.label}</span></a>`;
+}
+
+function setupSidebarMobileNav(sidebar) {
+  const group = sidebar.querySelector('#sbNavTopics');
+  const toggle = sidebar.querySelector('#sbNavTopicsToggle');
+  const nav = sidebar.querySelector('.sb-nav');
+  if (!group || !toggle || !nav) return null;
+
+  function syncTopicGroupState() {
+    const open = group.classList.contains('is-open') || !!group.querySelector('.sb-item.active');
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', () => {
+    group.classList.toggle('is-open');
+    syncTopicGroupState();
+  });
+
+  function syncNavScrollHint() {
+    const atEnd = nav.scrollHeight - nav.scrollTop <= nav.clientHeight + 2;
+    nav.classList.toggle('is-scroll-end', atEnd);
+  }
+
+  nav.addEventListener('scroll', syncNavScrollHint, { passive: true });
+  window.addEventListener('resize', syncNavScrollHint);
+  syncNavScrollHint();
+  syncTopicGroupState();
+  return syncTopicGroupState;
+}
+
 function buildSidebar() {
   const scrim = document.createElement('div');
   scrim.className = 'sidebar-scrim';
@@ -200,11 +237,8 @@ function buildSidebar() {
   sidebar.id = 'exerciseSidebar';
   sidebar.setAttribute('aria-label', 'Navegación HubFlow');
 
-  const navItems = SECTIONS.map(s => {
-    const active = s.key === section ? ' active' : '';
-    const iconMarkup = s.icon === 'diamond' ? '◆' : navIcon(s.icon);
-    return `<a class="sb-item ${s.cls}${active}" href="../?section=${s.key}"><span class="sb-icon">${iconMarkup}</span><span class="sb-label">${s.label}</span></a>`;
-  }).join('');
+  const primaryItems = SECTIONS.filter(s => SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
+  const topicItems = SECTIONS.filter(s => !SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
 
   sidebar.innerHTML = `
     <div class="sb-brand">
@@ -215,7 +249,17 @@ function buildSidebar() {
       </div>
       <button class="lp-icon-btn nav-mode-toggle" id="sbNavModeToggle" type="button" aria-label="${navigationMode() === 'sidebar' ? 'Usar navegación flotante' : 'Usar barra lateral fija'}" title="${navigationMode() === 'sidebar' ? 'Oculta la barra lateral' : 'Fijar barra lateral'}"><span aria-hidden="true">◫</span></button>
     </div>
-    <nav class="sb-nav">${navItems}</nav>
+    <nav class="sb-nav" id="sbNav">
+      ${primaryItems}
+      <div class="sb-nav-group" id="sbNavTopics">
+        <button type="button" class="sb-nav-group__toggle" id="sbNavTopicsToggle" aria-expanded="false" aria-controls="sbNavTopicsList">
+          <span class="sb-icon">${navIcon('book')}</span>
+          <span class="sb-label">Explorar temas</span>
+          <span class="sb-nav-group__chev" aria-hidden="true">›</span>
+        </button>
+        <div class="sb-nav-group__items" id="sbNavTopicsList">${topicItems}</div>
+      </div>
+    </nav>
     <div class="sidebar-footer">
       <button class="sb-item" id="sbAboutBtn" type="button"><span class="sb-icon">${navIcon('info')}</span><span class="sb-label">About LearnFlow</span></button>
       <button class="sb-item" id="sbThemeBtn" type="button"><span class="sb-icon" id="sbThemeIcon">${currentThemeIcon()}</span><span class="sb-label" id="sbThemeLabel">${currentTheme() === 'dark' ? 'Modo claro' : 'Modo oscuro'}</span></button>
@@ -225,6 +269,7 @@ function buildSidebar() {
   `;
 
   document.body.prepend(scrim, sidebar);
+  setupSidebarMobileNav(sidebar);
 
   function openSidebar() {
     sidebar.classList.add('is-open');
@@ -340,52 +385,74 @@ function injectAboutStyles() {
   s.textContent = `
     .about-overlay {
       position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
-      padding: 20px; background: color-mix(in srgb, var(--lp-bg) 82%, transparent);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      animation: aboutFadeIn 0.25s var(--lp-ease) both;
+      padding: 20px; background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      animation: aboutFadeIn 0.2s ease-out both;
     }
+    [data-theme="dark"] .about-overlay { background: color-mix(in srgb, #14171c 55%, transparent); }
     .about-modal {
-      position: relative; width: min(100%, 480px); max-height: min(720px, calc(100svh - 40px));
-      overflow-y: auto; padding: 24px; border: 1px solid var(--lp-border); border-radius: var(--lp-radius-xl);
-      background: var(--lp-surface); box-shadow: var(--lp-shadow-lg); color: var(--lp-ink-soft);
+      position: relative; width: min(100%, 420px); max-height: min(680px, calc(100svh - 40px));
+      display: flex; flex-direction: column; overflow: hidden;
+      border: 1px solid var(--lp-border); border-radius: var(--lp-radius-lg);
+      background: var(--lp-bg-paper, var(--lp-surface));
+      box-shadow: 0 24px 48px color-mix(in srgb, var(--lp-ink) 18%, transparent), 0 4px 12px color-mix(in srgb, var(--lp-ink) 8%, transparent);
+      color: var(--lp-ink-soft); animation: aboutSlideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    .about-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .about-header { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px; border-bottom: 1px solid var(--lp-border); flex-shrink: 0; }
+    .about-header__text { flex: 1; min-width: 0; }
     .about-identity {
       width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%;
       background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700;
       letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
     }
-    .about-header .about-eyebrow { margin-bottom: 2px; }
-    .about-header h2 { margin: 0; font-size: 1.5rem; line-height: 1; font-family: var(--lp-font-display); font-weight: var(--lp-weight-normal); color: var(--lp-ink); }
-    .about-eyebrow { color: var(--lp-accent); font-size: .62rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase; }
+    .about-header .about-eyebrow { margin: 0 0 2px; }
+    .about-header h2 { margin: 0; font-family: var(--lp-font-display); font-size: 18px; font-weight: 500; line-height: 1.1; color: var(--lp-ink); }
+    .about-eyebrow { color: var(--lp-muted); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
     .about-close {
-      position: static; flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center;
-      margin-left: auto; border: 1px solid var(--lp-border); border-radius: 50%; background: var(--lp-surface-sunken);
-      color: var(--lp-muted); cursor: pointer; transition: border-color 160ms, color 160ms, transform 160ms;
+      flex: 0 0 44px; width: 44px; height: 44px; margin: -4px -6px -4px 0; padding: 0;
+      display: grid; place-items: center; border: none; border-radius: var(--lp-radius-full);
+      background: transparent; color: var(--lp-muted); cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
     }
-    .about-close:hover { border-color: var(--lp-accent); color: var(--lp-accent); transform: scale(1.05); }
+    .about-close:hover { background: color-mix(in srgb, var(--lp-ink) 6%, transparent); color: var(--lp-ink); }
     .about-close:active { transform: scale(0.97); }
-    .about-close:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
-    .about-description { color: var(--lp-ink-soft); font-size: .82rem; line-height: 1.65; }
-    .about-modules { display: grid; gap: 6px; margin: 14px 0; }
+    .about-close:focus-visible, .about-modules a:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .about-body { padding: 12px 10px 14px; overflow-y: auto; flex: 1; min-height: 0; }
+    .about-description { margin: 0 0 10px; padding: 0 4px; color: var(--lp-muted); font-size: .82rem; line-height: 1.6; }
+    .about-modules { display: grid; gap: 2px; margin: 0; }
     .about-modules a {
-      min-height: 52px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
-      border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md); background: var(--lp-surface-sunken);
-      color: var(--lp-ink); text-decoration: none; transition: border-color .2s var(--lp-ease), transform .2s var(--lp-ease);
+      display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 10px;
+      border: none; border-radius: var(--lp-radius-md); background: transparent; color: var(--lp-ink); text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
     }
-    .about-modules a:hover { border-color: var(--lp-accent); transform: translateY(-2px); }
-    .about-modules a:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
-    .about-modules strong { font-size: .78rem; }
-    .about-modules span { color: var(--lp-muted); font-size: .68rem; }
-    .about-footer { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--lp-border); }
+    .about-modules a:hover { background: var(--lp-surface); box-shadow: 0 1px 3px color-mix(in srgb, var(--lp-ink) 8%, transparent); }
+    .about-modules a:active { transform: scale(0.98); }
+    [data-theme="dark"] .about-modules a:hover { background: var(--lp-surface); }
+    .about-module__mark {
+      width: 32px; height: 32px; flex: 0 0 32px; display: grid; place-items: center; border-radius: 50%;
+      background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: .68rem; font-weight: 700; letter-spacing: -0.02em;
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-accent) 20%, transparent);
+    }
+    .about-module__mark--portal { background: var(--lp-accent); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-accent) 20%, transparent); }
+    .about-module__mark--fluent { background: var(--lp-cat-purple, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-purple, var(--lp-accent)) 20%, transparent); }
+    .about-module__mark--hub { background: var(--lp-cat-amber, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-amber, var(--lp-accent)) 20%, transparent); }
+    .about-module__mark--lyric { background: var(--lp-cat-teal, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-teal, var(--lp-accent)) 20%, transparent); }
+    .about-module__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .about-modules strong { font-size: .82rem; font-weight: 500; color: var(--lp-ink); }
+    .about-modules .about-module__text > span { color: var(--lp-muted); font-size: .68rem; line-height: 1.35; }
+    .about-footer { display: grid; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--lp-border); flex-shrink: 0; }
     .about-author { display: flex; align-items: center; gap: 12px; }
-    .about-author__avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--lp-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; letter-spacing: .03em; flex-shrink: 0; }
+    .about-author__avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse);
+      display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700;
+      letter-spacing: .03em; flex-shrink: 0; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
+    }
     .about-author__info { display: flex; flex-direction: column; gap: 2px; }
     .about-author__info strong { font-size: .78rem; color: var(--lp-ink); font-weight: 600; }
     .about-author__info span { font-size: .68rem; color: var(--lp-muted); }
     @keyframes aboutFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @media (max-width: 580px) { .about-modal { padding: 22px; } .about-header h2 { font-size: 1.35rem; } }
-    @media (prefers-reduced-motion: reduce) { .about-overlay { animation: none; } }
+    @keyframes aboutSlideUp { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .about-overlay, .about-modal { animation: none; } }
   `;
   document.head.appendChild(s);
 }
@@ -401,19 +468,33 @@ function showAboutModal(event) {
     <section class="about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutLearnFlowTitle" aria-describedby="aboutLearnFlowDescription">
       <header class="about-header">
         <div class="about-identity" aria-hidden="true">L</div>
-        <div>
+        <div class="about-header__text">
           <p class="about-eyebrow">LearnFlow · Plataforma</p>
           <h2 id="aboutLearnFlowTitle">About LearnFlow</h2>
         </div>
         <button class="about-close" id="aboutCloseBtn" type="button" aria-label="Cerrar About LearnFlow">✕</button>
       </header>
-      <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
-      <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-        <a href="${themedAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow"><strong>LearnFlow</strong><span>Portal</span></a>
-        <a href="${themedAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></a>
-        <a href="${themedAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></a>
-        <a href="${themedAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow"><strong>LyricFlow</strong><span>Aprender con música</span></a>
-      </nav>
+      <div class="about-body">
+        <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
+        <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
+          <a href="${themedAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow">
+            <span class="about-module__mark about-module__mark--portal" aria-hidden="true">L</span>
+            <span class="about-module__text"><strong>LearnFlow</strong><span>Portal</span></span>
+          </a>
+          <a href="${themedAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow">
+            <span class="about-module__mark about-module__mark--fluent" aria-hidden="true">F</span>
+            <span class="about-module__text"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></span>
+          </a>
+          <a href="${themedAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow">
+            <span class="about-module__mark about-module__mark--hub" aria-hidden="true">H</span>
+            <span class="about-module__text"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></span>
+          </a>
+          <a href="${themedAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow">
+            <span class="about-module__mark about-module__mark--lyric" aria-hidden="true">LF</span>
+            <span class="about-module__text"><strong>LyricFlow</strong><span>Aprender con música</span></span>
+          </a>
+        </nav>
+      </div>
       <footer class="about-footer">
         <div class="about-author">
           <div class="about-author__avatar" aria-hidden="true">GS</div>
@@ -450,13 +531,215 @@ function showAboutModal(event) {
 
 buildSidebar();
 
-// ─── Lesson progress bar (completion indicator for all exercises) ───────────────
-if (currentModule) {
-  // Try common anchor points across all exercise templates
-  renderLessonProgress(currentModule.id, {
-    insertAfter: '.pill-bar, .mode-bar, #catBar, .cat-bar-wrap, .cat-scroll-wrapper, .header',
+// ─── Exercise header homologation (all 44 exercise templates) ─────────────────
+// Legacy .header stacked cat-bar + modes + dual progress bars without hierarchy.
+// Restructure once in the shell — no per-HTML edits.
+
+const HEADER_ORPHAN_SEL = [
+  '.progress', '#progressWrap', '.timer-bar', '#timerBar',
+  '#catBar', '.cat-bar', '.cat-bar-wrap', '.cat-scroll-wrapper', '#catWrapper', '.level-bar',
+].join(', ');
+
+function hoistHeaderOrphans(header) {
+  const wrap = header.closest('.wrap');
+  if (!wrap) return;
+
+  const scrollBody = wrap.querySelector('.scroll-body');
+  let node = header.nextElementSibling;
+  while (node && node !== scrollBody) {
+    const next = node.nextElementSibling;
+    if (node.matches(HEADER_ORPHAN_SEL)) header.appendChild(node);
+    node = next;
+  }
+}
+
+/** Move timer out of top-bar before replaceChildren strips it. */
+function preserveTopBarTimer(header = document.querySelector('.header')) {
+  if (!header) return;
+  const topBarTimer = document.querySelector('.top-bar .timer-bar, .top-bar #timerBar');
+  if (topBarTimer && !header.contains(topBarTimer)) header.appendChild(topBarTimer);
+}
+
+function restructureExerciseHeader() {
+  const header = document.querySelector('.header');
+  if (!header || header.dataset.exHomologated) return;
+
+  hoistHeaderOrphans(header);
+  preserveTopBarTimer(header);
+  header.dataset.exHomologated = '1';
+
+  const scopeEl = header.querySelector('.cat-bar-wrap, .cat-scroll-wrapper, #catWrapper, .level-bar')
+    || header.querySelector('#catBar, .cat-bar');
+  const pillBar = header.querySelector('.pill-bar, .pill-bar--scroll');
+  const timerBar = header.querySelector('.timer-bar, #timerBar');
+  const sessionProg = header.querySelector('.progress, #progressWrap');
+  const pairScore = document.getElementById('pairScore');
+
+  const parts = [];
+
+  if (scopeEl) {
+    const scope = document.createElement('div');
+    scope.className = 'ex-header__scope';
+    scope.appendChild(scopeEl);
+    parts.push(scope);
+  }
+
+  if (pillBar) {
+    const modes = document.createElement('div');
+    modes.className = 'ex-header__modes';
+    modes.appendChild(pillBar);
+    parts.push(modes);
+  }
+
+  if (sessionProg || timerBar || pairScore) {
+    const progress = document.createElement('div');
+    progress.className = 'ex-header__progress';
+    const row = document.createElement('div');
+    row.className = 'ex-progress-row ex-progress-row--session';
+    if (timerBar) row.appendChild(timerBar);
+    if (pairScore) row.appendChild(pairScore);
+    if (sessionProg) row.appendChild(sessionProg);
+    progress.appendChild(row);
+    parts.push(progress);
+  }
+
+  header.querySelector('h1')?.remove();
+  header.classList.add('ex-control-panel');
+  header.replaceChildren(...parts);
+}
+
+const STUDY_NAV_IDS = ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn'];
+
+function getActiveExerciseMode() {
+  return document.querySelector('.ex-header__modes [data-mode].active')?.dataset.mode
+    || document.querySelector('.pill-btn.active[data-mode]')?.dataset.mode
+    || document.querySelector('[data-mode].active')?.dataset.mode
+    || 'study';
+}
+
+function syncBottomNavMode() {
+  const mode = getActiveExerciseMode();
+  const nav = document.getElementById('exBottomNav');
+  if (nav) {
+    const hide = mode === 'battle';
+    nav.hidden = hide;
+    nav.classList.toggle('is-battle-hidden', hide);
+  }
+
+  STUDY_NAV_IDS.forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.hidden = mode !== 'study';
   });
 }
+
+/** Hoist .fc-nav out of mode-specific areas so the bar stays visible in practice/timed. */
+function setupPersistentBottomNav({ force = false } = {}) {
+  const anchor = document.querySelector('.scroll-body') || document.querySelector('.wrap');
+  if (!anchor) return null;
+
+  const legacyNav = document.querySelector('.fc-nav:not(#exBottomNav)');
+  let bottomNav = document.getElementById('exBottomNav');
+  if (!bottomNav && !legacyNav && !force) return null;
+
+  if (!bottomNav) {
+    bottomNav = document.createElement('div');
+    bottomNav.id = 'exBottomNav';
+    bottomNav.className = 'ex-bottom-nav fc-nav';
+    anchor.appendChild(bottomNav);
+  }
+
+  if (legacyNav) {
+    while (legacyNav.firstChild) bottomNav.appendChild(legacyNav.firstChild);
+    legacyNav.remove();
+  }
+
+  // Normalize legacy listen/speak buttons hoisted from .fc-nav
+  bottomNav.querySelectorAll('#speakBtn, #listenBtn, .listen-btn').forEach((btn) => {
+    btn.classList.add('lp-btn', 'lp-btn--ghost');
+    btn.classList.remove('listen-btn');
+    btn.style.cssText = '';
+  });
+
+  return bottomNav;
+}
+
+function relocateLessonProgressButton() {
+  const btn = document.getElementById('lessonProgressBtn');
+  if (!btn) return;
+
+  let nav = setupPersistentBottomNav();
+  if (!nav) nav = setupPersistentBottomNav({ force: true });
+  if (!nav) return;
+
+  btn.classList.add('lp-btn', 'lp-btn--ghost', 'lesson-progress__detail');
+  if (btn.parentElement !== nav || btn !== nav.firstElementChild) {
+    nav.insertBefore(btn, nav.firstChild);
+  }
+  syncBottomNavMode();
+  reorderStudySpeakButton();
+}
+
+function reorderStudySpeakButton() {
+  const speakBtn = document.getElementById('studySpeakBtn');
+  const progressBtn = document.getElementById('lessonProgressBtn');
+  const nav = document.getElementById('exBottomNav');
+  if (!speakBtn || speakBtn.hidden || !nav || speakBtn.parentElement !== nav) return;
+  if (progressBtn?.parentElement === nav) {
+    progressBtn.insertAdjacentElement('afterend', speakBtn);
+  }
+}
+
+function getSessionProgressEl() {
+  return document.getElementById('progressWrap')
+    || document.querySelector('.ex-progress-row--session > .progress');
+}
+
+function relocateSessionProgressForBattle(isBattle) {
+  const prog = getSessionProgressEl();
+  const sessionRow = document.querySelector('.ex-progress-row--session');
+  const battleArea = document.querySelector('[data-area="battle"]');
+  const anchor = battleArea?.querySelector('#battleInstruction')
+    || battleArea?.querySelector('.battle-scores');
+  if (!prog || !sessionRow || !battleArea || !anchor) return;
+
+  if (isBattle) {
+    if (prog.parentElement !== battleArea) {
+      battleArea.insertBefore(prog, anchor);
+    }
+    sessionRow.classList.add('is-progress-relocated');
+  } else if (prog.parentElement !== sessionRow) {
+    sessionRow.appendChild(prog);
+    sessionRow.classList.remove('is-progress-relocated');
+  }
+}
+
+function syncBattleProgressPlacement() {
+  relocateSessionProgressForBattle(getActiveExerciseMode() === 'battle');
+}
+
+window.__relocateLessonProgressBtn = relocateLessonProgressButton;
+window.__syncBattleProgressPlacement = syncBattleProgressPlacement;
+window.__syncBottomNavMode = syncBottomNavMode;
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-mode]')) {
+    setTimeout(() => {
+      syncBottomNavMode();
+      syncBattleProgressPlacement();
+    }, 0);
+  }
+});
+
+// ─── Lesson progress button (detail modal — lives in bottom nav) ────────────────
+restructureExerciseHeader();
+setupPersistentBottomNav();
+
+if (currentModule) {
+  renderLessonProgress(currentModule.id);
+}
+relocateLessonProgressButton();
+syncBottomNavMode();
+syncBattleProgressPlacement();
 
 // ─── Depth banner (shows module scale on entry) ────────────────────────────────
 
@@ -530,45 +813,5 @@ buildFooter();
 // Reveal the page now that DOM restructuring is done
 document.body.classList.add('shell-ready');
 
-// ─── Cat-bar auto-wrap: add scroll arrows to bare #catBar ──────────────────────
-// Exercises with inline renderCatBar (prepositions, tenses, phrasal-verbs, etc.)
-// don't use the shared utils.renderCatBar, so they miss the arrow navigation.
-// This catches any #catBar that wasn't already wrapped.
-(function initCatBarArrows() {
-  const bar = document.getElementById('catBar');
-  if (!bar) return;
-  const parent = bar.parentElement;
-  if (parent.classList.contains('cat-bar-wrap') || parent.classList.contains('cat-scroll-wrapper')) return;
-
-  const wrap = document.createElement('div');
-  wrap.className = 'cat-bar-wrap';
-  const arrowL = document.createElement('button');
-  arrowL.className = 'cat-bar-arrow cat-bar-arrow--left';
-  arrowL.setAttribute('aria-label', 'Scroll left');
-  arrowL.textContent = '\u2039';
-  const arrowR = document.createElement('button');
-  arrowR.className = 'cat-bar-arrow cat-bar-arrow--right';
-  arrowR.setAttribute('aria-label', 'Scroll right');
-  arrowR.textContent = '\u203A';
-
-  parent.insertBefore(wrap, bar);
-  wrap.appendChild(arrowL);
-  wrap.appendChild(bar);
-  wrap.appendChild(arrowR);
-
-  const SCROLL_STEP = 140;
-  function updateArrows() {
-    const canLeft = bar.scrollLeft > 4;
-    const canRight = bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4;
-    arrowL.classList.toggle('visible', canLeft);
-    arrowR.classList.toggle('visible', canRight);
-    wrap.classList.toggle('cat-bar-wrap--fade-left', canLeft && !canRight);
-    wrap.classList.toggle('cat-bar-wrap--fade-right', !canLeft && canRight);
-    wrap.classList.toggle('cat-bar-wrap--fade-both', canLeft && canRight);
-  }
-  arrowL.addEventListener('click', () => { bar.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' }); });
-  arrowR.addEventListener('click', () => { bar.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' }); });
-  bar.addEventListener('scroll', updateArrows, { passive: true });
-  new ResizeObserver(updateArrows).observe(bar);
-  setTimeout(updateArrows, 50);
-})();
+// ─── Cat-bar expander: unified scroll + expand for all exercises ───────────────
+queueMicrotask(() => initCatBarExpander());

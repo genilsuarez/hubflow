@@ -9,7 +9,7 @@
 <script src="../js/lp-input-zoom.js"></script>
 <script src="../js/lp-nav-icons.js"></script>
 <script src="../lp-login.js"></script>
-<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/buttons.css">
@@ -37,9 +37,9 @@
     <div class="pill-bar">
       <button class="pill-btn active purple" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">⚡ Quiz</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
       <button class="pill-btn" data-mode="match">🔀 Match</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
-      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
     <!-- Timer -->
@@ -102,13 +102,12 @@
 
     <!-- BATTLE -->
     <div data-area="battle">
+      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
       <div class="battle-scores">
         <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
         <span class="vs-badge">vs</span>
         <div class="player-score p2"><span class="p-label">P2</span><span class="p-points" id="p2Score">0</span></div>
       </div>
-      <div class="battle-round" id="battleRound">Round 1 / 10</div>
-      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
 
       <div class="battle-card" id="battleCard">
         <div class="fc-inner">
@@ -208,67 +207,6 @@ document.getElementById('battleClaimP2').addEventListener('click', () => engine.
 document.getElementById('battleJudgeCorrect').addEventListener('click', () => engine.battleJudge(true));
 document.getElementById('battleJudgeWrong').addEventListener('click', () => engine.battleJudge(false));
 document.getElementById('battleNextBtn').addEventListener('click', () => engine.battleNext());
-
-// ─── Category scroll fade indicators ───
-const catBar = document.getElementById('catBar');
-const catWrapper = document.getElementById('catWrapper');
-const catExpandBtn = document.getElementById('catExpandBtn');
-const expandCount = catExpandBtn.querySelector('.expand-count');
-
-function countHiddenPills() {
-  if (!catBar || !expandCount) return;
-  // Never disable the button while expanded — user needs it to collapse
-  if (catWrapper.classList.contains('expanded')) {
-    catExpandBtn.disabled = false;
-    expandCount.textContent = '';
-    catExpandBtn.title = 'Colapsar';
-    return;
-  }
-  const pills = catBar.querySelectorAll('.pill-btn');
-  const barRect = catBar.getBoundingClientRect();
-  let hidden = 0;
-  pills.forEach(pill => {
-    const r = pill.getBoundingClientRect();
-    // Consider hidden if more than half is outside the visible area (excluding expand btn width)
-    if (r.right < barRect.left + 4 || r.left > barRect.right - 36) hidden++;
-  });
-  const hasOverflow = catBar.scrollWidth > catBar.clientWidth + 20;
-  expandCount.textContent = hidden > 0 ? `+${hidden}` : '';
-  catExpandBtn.title = hidden > 0 ? `${hidden} más` : 'Ver todas';
-  catExpandBtn.disabled = !hasOverflow && hidden === 0;
-}
-
-function updateFades() {
-  if (!catBar || !catWrapper || catWrapper.classList.contains('expanded')) return;
-  const { scrollLeft, scrollWidth, clientWidth } = catBar;
-  catWrapper.classList.toggle('fade-left', scrollLeft > 8);
-  catWrapper.classList.toggle('fade-right', scrollLeft + clientWidth < scrollWidth - 8);
-  countHiddenPills();
-}
-catBar.addEventListener('scroll', updateFades);
-new MutationObserver(() => { updateFades(); countHiddenPills(); }).observe(catBar, { childList: true });
-requestAnimationFrame(() => { updateFades(); countHiddenPills(); });
-
-// ─── Expand/collapse toggle ───
-catExpandBtn.addEventListener('click', () => {
-  const expanded = catWrapper.classList.toggle('expanded');
-  catExpandBtn.setAttribute('aria-expanded', expanded);
-  if (expanded) {
-    expandCount.textContent = '';
-    catExpandBtn.title = 'Colapsar';
-  } else {
-    // Collapse: instantly position active pill in view (no smooth scroll)
-    const active = catBar.querySelector('.pill-btn.active');
-    if (active) {
-      catBar.style.scrollBehavior = 'auto';
-      requestAnimationFrame(() => {
-        active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
-        catBar.style.scrollBehavior = '';
-      });
-    }
-    requestAnimationFrame(updateFades);
-  }
-});
 
 // Battle card flip on click
 document.getElementById('battleCard')?.addEventListener('click', () => {

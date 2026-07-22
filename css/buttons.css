@@ -114,8 +114,9 @@
 /* Ghost nav — app bar mobile (sin círculo/borde/sombra web) */
 @media (max-width: 860px) {
   .navigation-launcher,
-  .top-bar .top-bar__start .lp-icon-btn,
-  .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"] {
+  .top-bar > a.lp-icon-btn,
+  .top-bar .top-bar__end .lp-icon-btn,
+  .top-bar .top-bar__end button.lp-icon-btn[aria-controls="exerciseSidebar"] {
     border: none;
     border-radius: var(--lp-radius-md);
     background: transparent;
@@ -125,13 +126,10 @@
     font-weight: 400;
   }
 
-  .top-bar .top-bar__start a.lp-icon-btn {
-    font-size: 0.9rem;
-  }
-
   .navigation-launcher:hover,
-  .top-bar .top-bar__start .lp-icon-btn:hover,
-  .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"]:hover {
+  .top-bar > a.lp-icon-btn:hover,
+  .top-bar .top-bar__end .lp-icon-btn:hover,
+  .top-bar .top-bar__end button.lp-icon-btn[aria-controls="exerciseSidebar"]:hover {
     background: color-mix(in srgb, var(--lp-ink) 5%, transparent);
     border-color: transparent;
     box-shadow: none;
@@ -140,8 +138,9 @@
   }
 
   .navigation-launcher:active,
-  .top-bar .top-bar__start .lp-icon-btn:active,
-  .top-bar button.lp-icon-btn[aria-controls="exerciseSidebar"]:active {
+  .top-bar > a.lp-icon-btn:active,
+  .top-bar .top-bar__end .lp-icon-btn:active,
+  .top-bar .top-bar__end button.lp-icon-btn[aria-controls="exerciseSidebar"]:active {
     background: color-mix(in srgb, var(--lp-ink) 9%, transparent);
     transform: scale(0.97);
   }

@@ -17,19 +17,104 @@ body { min-height: 100vh; padding: 0 14px; }
 [data-area] { display: none; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 [data-area].show { display: flex; }
 
-.item-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); text-align: center; margin-top: 2px; }
+/* Keyword transformation prompt card (key-word-transformation, paraphrasing) */
+.kw-card {
+  width: 100%;
+  max-width: 720px;
+  background: var(--lp-surface);
+  border: 1.5px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  padding: 10px 14px 12px;
+  box-shadow: var(--lp-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.kw-instruction {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  color: var(--lp-muted);
+  text-align: center;
+  max-width: 17rem;
+  padding: 4px 10px;
+  border-radius: var(--lp-radius-full);
+  background: var(--lp-bg-paper);
+  border: 1px solid var(--lp-border);
+  position: relative;
+}
+
+.kw-instruction::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 6px;
+  height: 6px;
+  background: var(--lp-bg-paper);
+  border-right: 1px solid var(--lp-border);
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.kw-source {
+  font-family: var(--lp-font-display);
+  font-size: 0.95rem;
+  color: var(--lp-ink);
+  line-height: 1.45;
+  padding: 2px 0 0;
+  margin: 2px 0 0;
+  text-align: center;
+}
+
+.kw-keyword-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.kw-keyword {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--lp-bg-paper);
+  border: 1.5px solid var(--lp-cat-teal);
+  border-radius: var(--lp-radius-full);
+  color: var(--lp-cat-teal);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.item-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); text-align: center; margin-top: 2px; width: 100%; max-width: 720px; }
 
 .answer-input {
-  width: 100%; max-width: 480px; padding: 12px 16px; font-size: .95rem; text-align: center;
-  border-radius: var(--lp-radius-md); border: 2px solid var(--lp-border); background: var(--lp-surface);
-  color: var(--lp-ink); outline: none; transition: border-color .2s; font-family: var(--lp-font-body);
+  width: 100%;
+  max-width: 720px;
+  align-self: stretch;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  font-size: .95rem;
+  text-align: center;
+  border-radius: var(--lp-radius-md);
+  border: 1.5px solid var(--lp-border);
+  background: var(--lp-surface);
+  color: var(--lp-ink);
+  outline: none;
+  transition: border-color .2s;
+  font-family: var(--lp-font-body);
 }
 .answer-input.correct { border-color: var(--lp-success); }
 .answer-input.wrong { border-color: var(--lp-error); }
 
 /* Apostrophe tolerance tip */
 .apostrophe-tip {
-  display: none; width: 100%; max-width: 480px; font-size: .75rem; font-weight: 500;
+  display: none; width: 100%; max-width: 720px; font-size: .75rem; font-weight: 500;
   color: var(--lp-warning-dark, #7a5c00); background: var(--lp-warning-soft, #fff8e1);
   border: 1px solid var(--lp-warning, #f5a623); border-radius: var(--lp-radius-sm);
   padding: 8px 12px; text-align: center; line-height: 1.5;
@@ -41,15 +126,15 @@ body { min-height: 100vh; padding: 0 14px; }
   color: var(--lp-warning, #f5a623); background: rgba(245, 166, 35, .08);
 }
 
-.hint-box, .explain-box {
-  width: 100%; max-width: 480px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
-  background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
-  padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5;
+.hint-box {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
 }
 .hint-box { display: none; }
 .hint-box.show { display: block; }
 
-.answers-list { width: 100%; max-width: 480px; display: none; flex-direction: column; gap: 6px; }
+.answers-list { width: 100%; max-width: 720px; display: none; flex-direction: column; gap: 6px; }
 .answers-list.show { display: flex; }
 .answer-item {
   background: var(--lp-success-soft); border: 1px solid var(--lp-success); border-radius: var(--lp-radius-sm);
@@ -58,19 +143,38 @@ body { min-height: 100vh; padding: 0 14px; }
 
 .scroll-body { padding: 4px 0 30px; }
 
+.ex-bottom-nav--practice {
+  justify-content: center;
+  gap: 12px;
+}
+
+.ex-bottom-nav--practice .lesson-progress__detail,
+.ex-bottom-nav--practice .typed-action-btn--check,
+.ex-bottom-nav--practice .typed-action-btn--next {
+  margin: 0;
+}
+
+.ex-bottom-nav--practice .typed-hint-btn {
+  font-size: 1.05rem;
+}
+
+.ex-bottom-nav--practice .typed-hint-btn.active {
+  border-color: var(--lp-accent);
+  background: color-mix(in srgb, var(--lp-accent) 12%, transparent);
+  color: var(--lp-accent-dark);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lp-accent) 18%, transparent);
+}
+
 /* ─── Category color variants ─────────────────────────────────────────── */
 
-[data-color="teal"] .pill-btn.active { background: var(--lp-cat-teal); color: #fff; box-shadow: 0 2px 10px rgba(0,150,136,.25); }
 [data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
 [data-color="teal"] .answer-input:focus { border-color: var(--lp-cat-teal); }
 
-[data-color="green"] .pill-btn.active { background: var(--lp-cat-green); color: #fff; box-shadow: 0 2px 10px rgba(74,140,92,.25); }
 [data-color="green"] .progress__fill { background: var(--lp-cat-green); }
 [data-color="green"] .answer-input:focus { border-color: var(--lp-cat-green); }
 
 /* This page's blue rgba tint (53,122,189) doesn't match either of the
    existing "blue"/"azure" tints in sentence-quiz.css — preserved exactly
    as found rather than silently normalized to one of those. */
-[data-color="blue"] .pill-btn.active { background: var(--lp-cat-blue); color: #fff; box-shadow: 0 2px 10px rgba(53,122,189,.25); }
 [data-color="blue"] .progress__fill { background: var(--lp-cat-blue); }
 [data-color="blue"] .answer-input:focus { border-color: var(--lp-cat-blue); }

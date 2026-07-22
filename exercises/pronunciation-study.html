@@ -9,7 +9,7 @@
 <script src="../js/lp-input-zoom.js"></script>
 <script src="../js/lp-nav-icons.js"></script>
 <script src="../lp-login.js"></script>
-<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
 <link rel="stylesheet" href="../css/buttons.css">
@@ -26,15 +26,15 @@
     <h1>🔊 Pronunciation <span class="accent">Study</span></h1>
     <div class="cat-scroll-wrapper" id="catWrapper">
       <div id="catBar">
-        <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas">▼</button>
+        <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas"><span class="expand-count"></span><span class="expand-icon">▼</span></button>
       </div>
     </div>
     <div class="pill-bar">
       <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="quiz">⚡ Quiz</button>
+      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
       <button class="pill-btn" data-mode="match">🔀 Match</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
-      <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
     <div class="timer-bar" id="timerBar">
       <span class="timer-display" id="timerDisplay">1:00</span>
@@ -85,13 +85,12 @@
       <div id="pairScore"></div>
     </div>
     <div data-area="battle">
+      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
       <div class="battle-scores">
         <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
         <span class="vs-badge">vs</span>
         <div class="player-score p2"><span class="p-label">P2</span><span class="p-points" id="p2Score">0</span></div>
       </div>
-      <div class="battle-round" id="battleRound">Round 1 / 10</div>
-      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
       <div class="battle-card" id="battleCard">
         <div class="fc-inner">
           <div class="fc-face">
@@ -161,27 +160,6 @@ document.getElementById('battleClaimP2').addEventListener('click', () => engine.
 document.getElementById('battleJudgeCorrect').addEventListener('click', () => engine.battleJudge(true));
 document.getElementById('battleJudgeWrong').addEventListener('click', () => engine.battleJudge(false));
 document.getElementById('battleNextBtn').addEventListener('click', () => engine.battleNext());
-
-const catBar = document.getElementById('catBar');
-const catWrapper = document.getElementById('catWrapper');
-const catExpandBtn = document.getElementById('catExpandBtn');
-
-function updateFades() {
-  if (!catBar || !catWrapper || catWrapper.classList.contains('expanded')) return;
-  const { scrollLeft, scrollWidth, clientWidth } = catBar;
-  catWrapper.classList.toggle('fade-left', scrollLeft > 8);
-  catWrapper.classList.toggle('fade-right', scrollLeft < scrollWidth - clientWidth - 8);
-}
-if (catBar) {
-  catBar.addEventListener('scroll', updateFades);
-  setTimeout(updateFades, 100);
-}
-if (catExpandBtn) {
-  catExpandBtn.addEventListener('click', () => {
-    const expanded = catWrapper.classList.toggle('expanded');
-    catExpandBtn.setAttribute('aria-expanded', expanded);
-  });
-}
 </script>
 
 <script type="module" src="../js/exercise-shell.js"></script>

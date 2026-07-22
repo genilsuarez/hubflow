@@ -9,7 +9,7 @@
 <script src="../js/lp-input-zoom.js"></script>
 <script src="../js/lp-nav-icons.js"></script>
 <script src="../lp-login.js"></script>
-<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/buttons.css">
@@ -17,10 +17,9 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <style>
   body { min-height: 100vh; padding: 0 14px; }
-  .pill-btn.active { background: var(--lp-cat-purple); color: #fff; box-shadow: 0 2px 10px rgba(123,94,167,.25); }
   .progress__fill { background: var(--lp-cat-purple); }
 
-  /* Category pills — scrollable (handled by .cat-bar-wrap in components.css) */
+  /* Category pills — scrollable (handled by .cat-scroll-wrapper in components.css) */
   .cat-bar { display: flex; gap: 4px; padding-bottom: 2px; }
   .cat-bar::-webkit-scrollbar { display: none; }
 
@@ -61,13 +60,6 @@
   [data-theme="dark"] .word-opt.correct { color: #6FE8A8; }
   [data-theme="dark"] .word-opt.wrong { color: #FF9F9F; }
 
-  /* Explanation */
-  .explain-box {
-    width: 100%; max-width: 720px; font-size: .75rem; font-weight: 600; color: var(--lp-ink-soft);
-    background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
-    padding: 10px 14px; text-align: center; min-height: 2.4em; line-height: 1.5;
-  }
-
   /* Next button (practice mode) */
   .btn--next {
     display: inline-flex; align-items: center; gap: 6px;
@@ -105,11 +97,7 @@
     <h1>🔀 Confusing Words</h1>
 
     <!-- Category -->
-    <div class="cat-bar-wrap" id="catBarWrap">
-      <button class="cat-bar-arrow cat-bar-arrow--left" id="catArrowL" aria-label="Scroll left">‹</button>
-      <div class="cat-bar" id="catBar"></div>
-      <button class="cat-bar-arrow cat-bar-arrow--right" id="catArrowR" aria-label="Scroll right">›</button>
-    </div>
+    <div class="cat-bar" id="catBar"></div>
 
     <!-- Modes -->
     <div class="pill-bar">
@@ -197,31 +185,6 @@ function renderCatBar() {
   });
 }
 renderCatBar();
-
-// ─── Cat-bar scroll arrows ───
-(function initCatArrows() {
-  const wrap = document.getElementById('catBarWrap');
-  const bar = document.getElementById('catBar');
-  const arrowL = document.getElementById('catArrowL');
-  const arrowR = document.getElementById('catArrowR');
-  const SCROLL_STEP = 140;
-
-  function updateArrows() {
-    const canLeft = bar.scrollLeft > 4;
-    const canRight = bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4;
-    arrowL.classList.toggle('visible', canLeft);
-    arrowR.classList.toggle('visible', canRight);
-    wrap.classList.toggle('cat-bar-wrap--fade-left', canLeft && !canRight);
-    wrap.classList.toggle('cat-bar-wrap--fade-right', !canLeft && canRight);
-    wrap.classList.toggle('cat-bar-wrap--fade-both', canLeft && canRight);
-  }
-
-  arrowL.addEventListener('click', () => { bar.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' }); });
-  arrowR.addEventListener('click', () => { bar.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' }); });
-  bar.addEventListener('scroll', updateArrows, { passive: true });
-  new ResizeObserver(updateArrows).observe(bar);
-  setTimeout(updateArrows, 50);
-})();
 
 // ─── Mode switching ───
 document.querySelectorAll('[data-mode]').forEach(btn => {

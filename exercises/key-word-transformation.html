@@ -9,31 +9,13 @@
 <script src="../js/lp-input-zoom.js"></script>
 <script src="../js/lp-nav-icons.js"></script>
 <script src="../lp-login.js"></script>
-<style>body{background:#FAF7F2;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/components.css">
 <link rel="stylesheet" href="../css/buttons.css">
 <link rel="stylesheet" href="../css/exercise-enhanced.css">
 <link rel="stylesheet" href="../css/sidebar.css">
 <link rel="stylesheet" href="../css/typed-answer-shell.css">
-<style>
-  .kw-card {
-    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
-    border-radius: var(--lp-radius-lg); padding: 14px 20px; box-shadow: var(--lp-shadow-sm);
-  }
-  .kw-source {
-    font-family: var(--lp-font-display); font-size: 1rem; color: var(--lp-ink);
-    line-height: 1.6; padding: 6px 0; text-align: center;
-  }
-  .kw-keyword {
-    display: inline-block; margin-top: 10px; padding: 6px 14px; font-size: .85rem; font-weight: 700;
-    background: var(--lp-bg-paper); border: 1.5px solid var(--lp-cat-teal); border-radius: var(--lp-radius-full);
-    color: var(--lp-cat-teal); letter-spacing: .04em; text-transform: uppercase;
-  }
-  .kw-instruction {
-    font-size: .8rem; color: var(--lp-muted); margin-top: 10px; text-align: center;
-  }
-</style>
 </head>
 <body>
 <div class="wrap" data-color="teal">
@@ -61,9 +43,11 @@
   <div class="scroll-body">
     <div data-area="practice" class="show">
       <div class="kw-card">
+        <p class="kw-instruction">Rewrite using 2–5 words including the keyword:</p>
         <div class="kw-source" id="kwSource"></div>
-        <div style="text-align:center"><span class="kw-keyword" id="kwKeyword"></span></div>
-        <div class="kw-instruction">Rewrite using 2–5 words including the keyword:</div>
+        <div class="kw-keyword-wrap">
+          <span class="kw-keyword" id="kwKeyword"></span>
+        </div>
       </div>
       <div class="item-counter" id="itemCounter"></div>
 

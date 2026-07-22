@@ -258,9 +258,11 @@ export function recordScore(key, pct, context = {}) {
   localStorage.setItem(versionedKey(key), JSON.stringify(history.slice(0, MAX_SCORE_HISTORY)));
   recordActivityEvent(key, normalizedPct, timestamp, context);
   publishHubFlowProgress();
-  // Auto-refresh the lesson progress bar if present in the DOM
-  if (typeof document !== 'undefined' && document.getElementById('lessonProgress')) {
-    const contentId = context?.contentId || document.getElementById('lessonProgress')?.dataset?.contentId;
+  // Auto-refresh the lesson progress button if present in the DOM
+  if (typeof document !== 'undefined') {
+    const contentId = context?.contentId
+      || document.getElementById('lessonProgress')?.dataset?.contentId
+      || document.getElementById('lessonProgressBtn')?.dataset?.contentId;
     if (contentId) renderLessonProgress(contentId);
   }
 }
@@ -276,6 +278,179 @@ export function getStars(pct) {
   return 1;
 }
 
+const CAT_EXPANDER_INIT = 'data-cat-expander-init';
+const CAT_PILL_SELECTOR = '.cat-btn, .pill-btn';
+
+function ensureCatScrollWrapper(bar, wrapperId = 'catWrapper') {
+  let parent = bar.parentElement;
+
+  if (parent?.classList.contains('cat-bar-wrap')) {
+    const host = parent.parentElement;
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-scroll-wrapper';
+    if (wrapperId) wrap.id = wrapperId;
+    host.insertBefore(wrap, parent);
+    wrap.appendChild(bar);
+    parent.remove();
+    return wrap;
+  }
+
+  if (parent?.classList.contains('cat-scroll-wrapper')) {
+    if (wrapperId && !parent.id) parent.id = wrapperId;
+    return parent;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'cat-scroll-wrapper';
+  if (wrapperId) wrap.id = wrapperId;
+  parent.insertBefore(wrap, bar);
+  wrap.appendChild(bar);
+  return wrap;
+}
+
+function ensureCatExpandButton(bar) {
+  let expandBtn = bar.querySelector('.cat-expand-btn');
+  if (!expandBtn) {
+    expandBtn = document.createElement('button');
+    expandBtn.className = 'cat-expand-btn';
+    expandBtn.type = 'button';
+    expandBtn.setAttribute('aria-label', 'Expandir categorías');
+    expandBtn.setAttribute('aria-expanded', 'false');
+    expandBtn.title = 'Ver todas';
+    expandBtn.innerHTML = '<span class="expand-count"></span><span class="expand-icon">▼</span>';
+    bar.appendChild(expandBtn);
+    return expandBtn;
+  }
+
+  if (!expandBtn.querySelector('.expand-count')) {
+    expandBtn.insertAdjacentHTML('afterbegin', '<span class="expand-count"></span>');
+  }
+  if (!expandBtn.querySelector('.expand-icon')) {
+    const icon = document.createElement('span');
+    icon.className = 'expand-icon';
+    icon.textContent = '▼';
+    expandBtn.appendChild(icon);
+  }
+  if (expandBtn.parentElement === bar && expandBtn !== bar.lastElementChild) {
+    bar.appendChild(expandBtn);
+  }
+  return expandBtn;
+}
+
+function runCatBarScrollHint(bar, wrapper, expandBtn) {
+  const { scrollWidth, clientWidth } = bar;
+  if (scrollWidth <= clientWidth + 20) return;
+
+  expandBtn.classList.add('nudge');
+  expandBtn.addEventListener('animationend', () => expandBtn.classList.remove('nudge'), { once: true });
+
+  const peekDist = Math.min(60, scrollWidth - clientWidth);
+  bar.style.scrollBehavior = 'smooth';
+  bar.scrollLeft = peekDist;
+  setTimeout(() => { bar.scrollLeft = 0; }, 500);
+
+  let hintBar = wrapper.querySelector('.scroll-hint-bar');
+  if (!hintBar) {
+    hintBar = document.createElement('div');
+    hintBar.className = 'scroll-hint-bar';
+    wrapper.appendChild(hintBar);
+  }
+  setTimeout(() => hintBar.classList.add('flash'), 100);
+  setTimeout(() => hintBar.classList.remove('flash'), 1200);
+}
+
+/**
+ * Unified category bar: horizontal scroll, edge fades, and expand/collapse.
+ * Upgrades legacy .cat-bar-wrap (arrow navigation) automatically.
+ */
+export function initCatBarExpander({
+  barId = 'catBar',
+  wrapperId = 'catWrapper',
+  hintOnLoad = true,
+} = {}) {
+  const bar = document.getElementById(barId);
+  if (!bar) return;
+
+  const wrapper = ensureCatScrollWrapper(bar, wrapperId);
+  ensureCatExpandButton(bar);
+
+  const expandBtn = bar.querySelector('.cat-expand-btn');
+  const expandCount = expandBtn?.querySelector('.expand-count');
+
+  function getPills() {
+    return bar.querySelectorAll(CAT_PILL_SELECTOR);
+  }
+
+  function countHiddenPills() {
+    if (!expandBtn || !expandCount) return;
+    if (wrapper.classList.contains('expanded')) {
+      expandBtn.disabled = false;
+      expandCount.textContent = '';
+      expandBtn.title = 'Colapsar';
+      return;
+    }
+
+    const barRect = bar.getBoundingClientRect();
+    let hidden = 0;
+    getPills().forEach((pill) => {
+      const rect = pill.getBoundingClientRect();
+      if (rect.right < barRect.left + 4 || rect.left > barRect.right - 36) hidden++;
+    });
+
+    const hasOverflow = bar.scrollWidth > bar.clientWidth + 20;
+    expandCount.textContent = hidden > 0 ? `+${hidden}` : '';
+    expandBtn.title = hidden > 0 ? `${hidden} más` : 'Ver todas';
+    expandBtn.disabled = !hasOverflow && hidden === 0;
+  }
+
+  function updateFades() {
+    if (wrapper.classList.contains('expanded')) return;
+    const { scrollLeft, scrollWidth, clientWidth } = bar;
+    wrapper.classList.toggle('fade-left', scrollLeft > 8);
+    wrapper.classList.toggle('fade-right', scrollLeft + clientWidth < scrollWidth - 8);
+    countHiddenPills();
+  }
+
+  if (expandBtn) {
+    expandBtn.onclick = () => {
+      const expanded = wrapper.classList.toggle('expanded');
+      expandBtn.setAttribute('aria-expanded', expanded);
+      if (expanded) {
+        if (expandCount) expandCount.textContent = '';
+        expandBtn.title = 'Colapsar';
+        return;
+      }
+
+      const active = bar.querySelector(`${CAT_PILL_SELECTOR}.active`);
+      if (active) {
+        bar.style.scrollBehavior = 'auto';
+        requestAnimationFrame(() => {
+          active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
+          bar.style.scrollBehavior = '';
+        });
+      }
+      requestAnimationFrame(updateFades);
+    };
+  }
+
+  if (!wrapper.getAttribute(CAT_EXPANDER_INIT)) {
+    wrapper.setAttribute(CAT_EXPANDER_INIT, '1');
+
+    bar.addEventListener('scroll', updateFades, { passive: true });
+    new MutationObserver(updateFades).observe(bar, { childList: true });
+    new MutationObserver(() => {
+      if (!wrapper.classList.contains('expanded')) updateFades();
+    }).observe(wrapper, { attributes: true, attributeFilter: ['class'] });
+    new ResizeObserver(updateFades).observe(bar);
+
+    if (hintOnLoad) {
+      setTimeout(() => runCatBarScrollHint(bar, wrapper, expandBtn), 400);
+    }
+  }
+
+  requestAnimationFrame(updateFades);
+}
+
 /**
  * Renders a category picker bar (used by sentence-quiz-engine and
  * typed-answer-engine — identical markup/behavior in both, only the current
@@ -283,10 +458,14 @@ export function getStars(pct) {
  */
 export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat, setCurrentCat, onChange }) {
   const bar = document.getElementById(containerId);
+  const expandBtn = bar.querySelector('.cat-expand-btn');
   const catKeys = Object.keys(categories);
-  bar.innerHTML = catKeys.map(k =>
+  const pills = catKeys.map(k =>
     `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}">${categories[k].icon} ${categories[k].label}</button>`
   ).join('');
+  bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
+  if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
+  else bar.innerHTML = pills;
   bar.querySelectorAll('[data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
       setCurrentCat(btn.dataset.cat);
@@ -295,41 +474,7 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
     });
   });
 
-  // Auto-wrap with scroll arrows if not already wrapped
-  const parent = bar.parentElement;
-  if (!parent.classList.contains('cat-bar-wrap') && !parent.classList.contains('cat-scroll-wrapper')) {
-    const wrap = document.createElement('div');
-    wrap.className = 'cat-bar-wrap';
-    const arrowL = document.createElement('button');
-    arrowL.className = 'cat-bar-arrow cat-bar-arrow--left';
-    arrowL.setAttribute('aria-label', 'Scroll left');
-    arrowL.textContent = '\u2039';
-    const arrowR = document.createElement('button');
-    arrowR.className = 'cat-bar-arrow cat-bar-arrow--right';
-    arrowR.setAttribute('aria-label', 'Scroll right');
-    arrowR.textContent = '\u203A';
-
-    parent.insertBefore(wrap, bar);
-    wrap.appendChild(arrowL);
-    wrap.appendChild(bar);
-    wrap.appendChild(arrowR);
-
-    const SCROLL_STEP = 140;
-    function updateArrows() {
-      const canLeft = bar.scrollLeft > 4;
-      const canRight = bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4;
-      arrowL.classList.toggle('visible', canLeft);
-      arrowR.classList.toggle('visible', canRight);
-      wrap.classList.toggle('cat-bar-wrap--fade-left', canLeft && !canRight);
-      wrap.classList.toggle('cat-bar-wrap--fade-right', !canLeft && canRight);
-      wrap.classList.toggle('cat-bar-wrap--fade-both', canLeft && canRight);
-    }
-    arrowL.addEventListener('click', () => { bar.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' }); });
-    arrowR.addEventListener('click', () => { bar.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' }); });
-    bar.addEventListener('scroll', updateArrows, { passive: true });
-    new ResizeObserver(updateArrows).observe(bar);
-    setTimeout(updateArrows, 50);
-  }
+  initCatBarExpander({ barId: containerId });
 }
 
 /** Groups a Timer instance with its total duration so both can be reset in
@@ -461,13 +606,12 @@ export function speak(text, { lang = 'en-GB', rate = 0.85, pitch = 1 } = {}) {
 }
 
 /**
- * Renders (or updates) an inline lesson-progress bar inside an exercise page.
- * Call on init and after each recordScore to keep the UI current.
+ * Renders (or updates) the module-progress detail button for an exercise page.
+ * The button is relocated to .fc-nav (or .check-area) by exercise-shell.js.
+ * Call on init and after each recordScore to keep labels current.
  * @param {string} contentId — module ID matching PROGRESS_RULES
- * @param {object} [options]
- * @param {string} [options.insertAfter] — CSS selector(s) for the element after which to insert (comma-separated, tries each in order)
  */
-export function renderLessonProgress(contentId, { insertAfter = '.pill-bar' } = {}) {
+export function renderLessonProgress(contentId) {
   if (!contentId) return;
 
   const progress = getContentProgress(contentId);
@@ -477,17 +621,11 @@ export function renderLessonProgress(contentId, { insertAfter = '.pill-bar' } = 
   if (!container) {
     container = document.createElement('div');
     container.id = 'lessonProgress';
-    container.className = 'lesson-progress';
-    container.dataset.contentId = contentId;
-    const selectors = insertAfter.split(',').map(s => s.trim());
-    let anchor = null;
-    for (const sel of selectors) {
-      anchor = document.querySelector(sel);
-      if (anchor) break;
-    }
-    if (anchor) anchor.insertAdjacentElement('afterend', container);
-    else return;
+    container.className = 'lesson-progress lesson-progress--anchor';
+    container.hidden = true;
+    document.body.appendChild(container);
   }
+  container.dataset.contentId = contentId;
 
   const { completedKeys, totalKeys } = progress.activities
     ? Object.values(progress.activities).reduce((acc, act) => ({
@@ -497,29 +635,32 @@ export function renderLessonProgress(contentId, { insertAfter = '.pill-bar' } = 
     : { completedKeys: 0, totalKeys: 0 };
 
   const pct = Math.round(progress.progressPct);
-  const label = progress.completed
-    ? '✓ Completado'
-    : `${completedKeys}/${totalKeys} categorías`;
+  const summary = progress.completed
+    ? 'Módulo completado'
+    : `${completedKeys}/${totalKeys} categorías · ${pct}%`;
 
-  container.setAttribute('role', 'status');
-  container.setAttribute('aria-label', `Progreso del ejercicio: ${pct}%`);
-  container.innerHTML = `
-    <span class="lesson-progress__label">${label}</span>
-    <span class="lesson-progress__bar" aria-hidden="true">
-      <span class="lesson-progress__fill${progress.completed ? ' lesson-progress__fill--done' : ''}" style="width:${pct}%"></span>
-    </span>
-    <span class="lesson-progress__pct">${pct}%</span>
-    <button class="lesson-progress__detail" type="button" aria-label="Ver detalle de progreso" title="Ver detalle">📊</button>
-  `;
-
-  // Bind detail button
-  const detailBtn = container.querySelector('.lesson-progress__detail');
-  if (detailBtn && !detailBtn.dataset.bound) {
-    detailBtn.dataset.bound = '1';
+  let detailBtn = document.getElementById('lessonProgressBtn');
+  if (!detailBtn) {
+    detailBtn = document.createElement('button');
+    detailBtn.id = 'lessonProgressBtn';
+    detailBtn.type = 'button';
+    detailBtn.className = 'lp-btn lp-btn--ghost lesson-progress__detail';
+    detailBtn.textContent = '📊';
     detailBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      openProgressDetail(contentId);
+      const id = document.getElementById('lessonProgress')?.dataset.contentId
+        || document.getElementById('lessonProgressBtn')?.dataset.contentId;
+      if (id) openProgressDetail(id);
     });
+    container.appendChild(detailBtn);
+  }
+
+  detailBtn.dataset.contentId = contentId;
+  detailBtn.setAttribute('aria-label', `Ver detalle de progreso: ${summary}`);
+  detailBtn.title = summary;
+
+  if (typeof window !== 'undefined' && typeof window.__relocateLessonProgressBtn === 'function') {
+    window.__relocateLessonProgressBtn();
   }
 }
 
@@ -592,8 +733,13 @@ export function openProgressDetail(contentId) {
 
   // Determine display modes — always show quiz first, then others
   const MODE_ORDER = ['quiz', 'match', 'timed', 'write', 'study', 'challenge', null];
-  const MODE_LABELS = { quiz: '⚡ Quiz', match: '⇄ Match', write: '✎ Write', study: '◉ Study', challenge: '◆ Chall.', timed: '◷ Timed', null: '◉ Practice' };
+  const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', null: 'Practice' };
+  const MODE_ICONS = { quiz: '⚡', match: '⇄', write: '✎', study: '◉', challenge: '◆', timed: '◷', null: '◉' };
   const displayModes = MODE_ORDER.filter(m => trackedModes.includes(m));
+  const showModeInPill = displayModes.length > 1;
+
+  const mod = MODULES.find(m => m.id === contentId);
+  const moduleTitle = mod?.title || contentId;
 
   // Build per-category row data
   let passedTotal = 0;
@@ -602,7 +748,7 @@ export function openProgressDetail(contentId) {
   const rowsHTML = categories.map(cat => {
     const displayLabel = cat.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()).trim();
 
-    const cells = displayModes.map(mode => {
+    const pills = displayModes.map(mode => {
       const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
       const history = readScoreHistory(key);
       const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
@@ -611,44 +757,46 @@ export function openProgressDetail(contentId) {
       if (passed) passedTotal++;
       totalCells++;
 
-      const cls = passed ? 'pg-cell--pass' : attempts > 0 ? 'pg-cell--tried' : '';
-      const content = passed ? '✓' : attempts > 0 ? `${best}%` : '·';
-      const modeDisplay = MODE_LABELS[mode] || 'Practice';
-      const title = `${modeDisplay}: ${attempts > 0 ? best + '%' : 'pendiente'}`;
-      return `<td class="pg-cell ${cls}" title="${title}">${content}</td>`;
+      const cls = passed ? 'pg-status--pass' : attempts > 0 ? 'pg-status--tried' : '';
+      const value = passed ? '✓' : attempts > 0 ? `${best}%` : '·';
+      const modeLabel = MODE_SHORT[mode] || 'Practice';
+      const modeIcon = MODE_ICONS[mode] || '◉';
+      const title = `${modeLabel}: ${attempts > 0 ? `${best}%` : 'pendiente'}`;
+      const modeMarkup = showModeInPill
+        ? `<span class="pg-status__mode" aria-hidden="true">${modeIcon}</span>`
+        : '';
+      return `<span class="pg-status ${cls}" title="${title}">${modeMarkup}${value}</span>`;
     }).join('');
 
-    return `<tr class="pg-row"><td class="pg-row__label">${displayLabel}</td>${cells}</tr>`;
+    return `<li class="pg-item"><span class="pg-item__label">${displayLabel}</span><div class="pg-item__modes">${pills}</div></li>`;
   }).join('');
 
   const pct = totalCells > 0 ? Math.round((passedTotal / totalCells) * 100) : 0;
-
-  // Header row with mode labels
-  const headerLabels = displayModes.map(m => `<span class="pg-header-cell">${MODE_LABELS[m] || 'Practice'}</span>`).join('');
 
   const modal = document.createElement('div');
   modal.id = 'progressDetailModal';
   modal.className = 'pg-modal';
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
-  modal.setAttribute('aria-label', 'Detalle de progreso');
+  modal.setAttribute('aria-labelledby', 'pgModalTitle');
   modal.innerHTML = `
     <div class="pg-modal__backdrop"></div>
     <div class="pg-modal__panel">
-      <div class="pg-modal__header">
-        <div class="pg-modal__header-top">
-          <h3>Progreso detallado</h3>
-          <span class="pg-modal__summary">${passedTotal}/${totalCells} · ${pct}%</span>
-          <button class="pg-modal__close" aria-label="Cerrar">&times;</button>
+      <header class="pg-modal__header">
+        <div class="pg-modal__mark" aria-hidden="true">📊</div>
+        <div class="pg-modal__header-text">
+          <p class="pg-modal__eyebrow">${moduleTitle}</p>
+          <h3 id="pgModalTitle">Progreso del módulo</h3>
         </div>
-        <div class="pg-modal__header-cols">${headerLabels}</div>
-      </div>
-      <div class="pg-modal__body"><table class="pg-table"><tbody>${rowsHTML}</tbody></table></div>
-      <div class="pg-modal__legend">
-        <span class="pg-legend-item"><span class="pg-cell pg-cell--pass">✓</span> ≥${passScorePct}%</span>
-        <span class="pg-legend-item"><span class="pg-cell pg-cell--tried">%</span> intentado</span>
-        <span class="pg-legend-item"><span class="pg-cell">·</span> pendiente</span>
-      </div>
+        <span class="pg-modal__summary-pill">${passedTotal}/${totalCells} · ${pct}%</span>
+        <button type="button" class="pg-modal__close" aria-label="Cerrar detalle de progreso">✕</button>
+      </header>
+      <div class="pg-modal__body"><ul class="pg-list">${rowsHTML}</ul></div>
+      <footer class="pg-modal__legend">
+        <span class="pg-legend-item"><span class="pg-status pg-status--pass">✓</span> ≥${passScorePct}%</span>
+        <span class="pg-legend-item"><span class="pg-status pg-status--tried">%</span> intentado</span>
+        <span class="pg-legend-item"><span class="pg-status">·</span> pendiente</span>
+      </footer>
     </div>
   `;
 
@@ -661,6 +809,7 @@ export function openProgressDetail(contentId) {
   };
   modal.querySelector('.pg-modal__backdrop').addEventListener('click', close);
   modal.querySelector('.pg-modal__close').addEventListener('click', close);
+  modal.querySelector('.pg-modal__close').focus();
   document.addEventListener('keydown', function esc(e) {
     if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
   });

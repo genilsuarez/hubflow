@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
-  <meta name="theme-color" content="#faf7f2">
+  <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
   <script src="js/lp-theme.js"></script>
   <script src="js/lp-nav-icons.js"></script>
@@ -48,7 +48,7 @@
   </script>
   <style>
     /* Critical: prevent flash while external CSS loads */
-    body { background: #FAF7F2; color: #2C2418; }
+    body { background: #FFFFFF; color: #2C2418; }
     [data-theme="dark"] body { background: #181B20; color: #E8EAED; }
   </style>
   <link rel="stylesheet" href="css/base.css">
@@ -136,6 +136,40 @@
     .sb-item.a { --spine: var(--lp-cat-teal); }
     .sb-item.r { --spine: var(--lp-cat-green); }
     .sb-item.path { --spine: var(--lp-accent); }
+
+    /* Agrupa módulos temáticos — en mobile colapsable; desktop: lista plana */
+    .sb-nav-group { display: flex; flex-direction: column; gap: 3px; }
+    .sb-nav-group__toggle {
+      --spine: var(--lp-accent);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 44px;
+      font-family: var(--lp-font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--lp-ink);
+      transition: background .15s ease, color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    .sb-nav-group__toggle:hover { background: var(--lp-surface); color: var(--lp-ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .sb-nav-group__toggle:active { transform: scale(0.98); }
+    .sb-nav-group__toggle:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .sb-nav-group__toggle .sb-icon { color: var(--spine, currentColor); }
+    .sb-nav-group__chev {
+      margin-left: auto;
+      font-size: 1rem;
+      line-height: 1;
+      color: var(--lp-muted);
+      transition: transform 0.2s var(--lp-ease);
+    }
+    .sb-nav-group__items { display: flex; flex-direction: column; gap: 3px; }
 
 
     /* ─── MAIN COLUMN ─── */
@@ -420,6 +454,7 @@
       margin-bottom: 16px; box-shadow: var(--lp-shadow-md);
       transition: box-shadow .25s var(--lp-ease), border-color .25s;
     }
+    .hero-card__inner { display: contents; }
     .hero-card:hover { box-shadow: var(--lp-shadow-hover); }
     .hero-card__icon {
       width: 42px; height: 42px; flex: 0 0 42px; display: flex; align-items: center; justify-content: center;
@@ -433,7 +468,7 @@
     }
     .hero-card__title { font-weight: var(--lp-weight-extrabold); font-size: .88rem; line-height: 1.25; margin-bottom: 1px; }
     .hero-card__meta { font-size: .66rem; color: var(--lp-ink-soft); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-    .hero-card__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .hero-card__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; min-width: 0; }
     .hero-card__cta { white-space: nowrap; font-size: .72rem; padding: 9px 18px; }
     .hero-card__alt {
       background: none; border: none; color: var(--lp-muted); font-size: .62rem;
@@ -446,21 +481,199 @@
     .hero-card__browse { display: none; }
 
     /* First-run variant */
+    .hero-card--welcome {
+      background: linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--lp-accent) 5%, var(--lp-surface)) 0%,
+        var(--lp-surface) 52%
+      );
+    }
     .hero-card--welcome .hero-card__icon { font-size: 1.5rem; }
 
+    /* ─── HERO CARD — mobile-native layout (≤640px) ─── */
     @media (max-width: 640px) {
-      .hero-card { flex-wrap: wrap; padding: 14px; gap: 10px; }
-      .hero-card__icon { width: 38px; height: 38px; flex: 0 0 38px; font-size: 1.1rem; }
-      .hero-card__body { flex-basis: calc(100% - 52px); }
-      .hero-card__actions { width: 100%; }
-      .hero-card__cta { flex: 1; text-align: center; }
-      .hero-card__title { font-size: .82rem; }
+      .hero-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .hero-card__inner {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        grid-template-areas:
+          "icon context"
+          "icon title"
+          "meta meta";
+        gap: 4px 12px;
+        padding: 14px 14px 12px;
+        align-items: start;
+      }
+      .hero-card__body { display: contents; }
+      .hero-card__icon {
+        width: 44px; height: 44px; flex: none;
+        font-size: 1.25rem;
+        grid-area: icon;
+        grid-row: 1 / 3;
+        align-self: start;
+      }
+      .hero-card__context {
+        grid-area: context;
+        font-size: .62rem;
+        letter-spacing: .08em;
+        margin-bottom: 0;
+        padding-right: 44px;
+      }
+      .hero-card__title {
+        grid-area: title;
+        font-size: .95rem;
+        line-height: 1.25;
+        margin-bottom: 0;
+        padding-right: 36px;
+      }
+      .hero-card__meta {
+        grid-area: meta;
+        font-size: .78rem;
+        line-height: 1.4;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        margin-top: 2px;
+      }
+
+      /* Footer action bar — mobile only pattern */
+      .hero-card__actions {
+        width: 100%;
+        border-top: 1px solid var(--lp-border-subtle);
+        background: color-mix(in srgb, var(--lp-surface-sunken) 55%, var(--lp-surface));
+      }
+      .hero-card__cta {
+        width: 100%;
+        flex: none;
+        min-height: 48px;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+        font-size: .875rem;
+        font-weight: var(--lp-weight-bold);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: none;
+      }
+      .hero-card__cta::after {
+        content: '→';
+        font-size: 1rem;
+        line-height: 1;
+        opacity: .9;
+      }
+      .hero-card__alt {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        min-height: 40px;
+        padding: 0;
+        border-radius: var(--lp-radius-full);
+        border: 1px solid var(--lp-border);
+        background: var(--lp-surface);
+        color: var(--lp-ink-soft);
+        font-size: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--lp-shadow-xs);
+      }
+      .hero-card__alt::before {
+        content: '↻';
+        font-size: 1.05rem;
+        line-height: 1;
+      }
+      .hero-card__alt:hover,
+      .hero-card__alt:active {
+        color: var(--lp-ink);
+        background: var(--lp-surface-sunken);
+      }
+      .hero-card__alt[hidden] { display: none !important; }
+
+      .hero-card { position: relative; }
+
+      /* Welcome — compact editorial hero */
+      .hero-card--welcome .hero-card__inner {
+        grid-template-columns: 36px 1fr;
+        grid-template-areas:
+          "icon context"
+          "icon title"
+          "meta meta";
+        gap: 1px 10px;
+        padding: 10px 12px 8px;
+      }
+      .hero-card--welcome .hero-card__icon {
+        grid-area: icon;
+        grid-row: 1 / 3;
+        width: 36px; height: 36px;
+        font-size: 1.1rem;
+        border-radius: var(--lp-radius-sm);
+      }
+      .hero-card--welcome .hero-card__context {
+        grid-area: context;
+        align-self: center;
+        margin-bottom: 0;
+        padding-right: 0;
+        font-size: .56rem;
+        letter-spacing: .07em;
+        line-height: 1.2;
+      }
+      .hero-card--welcome .hero-card__title {
+        grid-area: title;
+        font-family: var(--lp-font-display);
+        font-size: 1.02rem;
+        font-weight: var(--lp-weight-semibold);
+        line-height: 1.2;
+        margin: 0;
+        padding-right: 0;
+      }
+      .hero-card--welcome .hero-card__meta {
+        grid-area: meta;
+        font-size: .72rem;
+        line-height: 1.35;
+        margin: 4px 0 0;
+        padding-right: 0;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+      }
+      .hero-card--welcome .hero-card__actions {
+        background: transparent;
+        border-top: 1px solid color-mix(in srgb, var(--lp-accent) 12%, var(--lp-border-subtle));
+      }
+      .hero-card--welcome .hero-card__cta {
+        min-height: 44px;
+        padding: 10px 14px;
+        font-size: .8125rem;
+        gap: 6px;
+        border-radius: 0 0 calc(var(--lp-radius-lg) - 1.5px) calc(var(--lp-radius-lg) - 1.5px);
+      }
+      .hero-card--welcome .hero-card__cta::after { font-size: .9rem; }
+
+      /* Suggestion — compact card + shuffle chip */
+      .hero-card:not(.hero-card--welcome) .hero-card__inner {
+        padding-right: 12px;
+      }
+      .hero-card:not(.hero-card--welcome) .hero-card__title {
+        font-weight: var(--lp-weight-bold);
+      }
     }
     @media (max-width: 480px) {
-      .hero-card { padding: 12px; gap: 8px; }
-      .hero-card__title { font-size: .78rem; }
-      .hero-card__meta { font-size: .6rem; }
-      .hero-card__cta { font-size: .68rem; padding: 8px 14px; }
+      .hero-card--welcome .hero-card__title { font-size: .98rem; }
+      .hero-card--welcome .hero-card__meta { font-size: .7rem; }
+      .hero-card--welcome .hero-card__inner { padding: 9px 11px 7px; }
+      .hero-card:not(.hero-card--welcome) .hero-card__title { font-size: .9rem; }
+      .hero-card:not(.hero-card--welcome) .hero-card__meta { font-size: .74rem; }
+      .hero-card__cta { font-size: .84rem; min-height: 46px; }
     }
 
     /* ─── PROGRESS SNAPSHOT ─── */
@@ -562,6 +775,7 @@
       font-size: var(--lp-header-sub-size); font-weight: var(--lp-header-sub-weight);
       line-height: var(--lp-header-sub-line-height); color: var(--lp-ink-soft);
     }
+    .topbar-greeting-sub .tgs-short { display: none; }
     /* Resumen y Mi Progreso comparten la misma estructura de título y subtítulo,
        manteniendo estable la altura de la topbar al cambiar de sección. */
     .tg-progreso { display: none; }
@@ -764,55 +978,74 @@
 
     .about-overlay {
       position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
-      padding: 20px; background: color-mix(in srgb, var(--lp-bg) 82%, transparent);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      animation: aboutFadeIn 0.25s var(--lp-ease) both;
+      padding: 20px; background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      animation: aboutFadeIn 0.2s ease-out both;
     }
+    [data-theme="dark"] .about-overlay { background: color-mix(in srgb, #14171c 55%, transparent); }
     .about-modal {
-      position: relative; width: min(100%, 480px); max-height: min(720px, calc(100svh - 40px));
-      overflow-y: auto; padding: 24px; border: 1px solid var(--lp-border); border-radius: var(--lp-radius-xl);
-      background: var(--lp-surface); box-shadow: var(--lp-shadow-lg); color: var(--lp-ink-soft);
+      position: relative; width: min(100%, 420px); max-height: min(680px, calc(100svh - 40px));
+      display: flex; flex-direction: column; overflow: hidden;
+      border: 1px solid var(--lp-border); border-radius: var(--lp-radius-lg);
+      background: var(--lp-bg-paper, var(--lp-surface));
+      box-shadow: 0 24px 48px color-mix(in srgb, var(--lp-ink) 18%, transparent), 0 4px 12px color-mix(in srgb, var(--lp-ink) 8%, transparent);
+      color: var(--lp-ink-soft); animation: aboutSlideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    .about-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .about-header { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px; border-bottom: 1px solid var(--lp-border); flex-shrink: 0; }
+    .about-header__text { flex: 1; min-width: 0; }
     .about-identity {
       width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%;
       background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700;
       letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
     }
-    .about-header .about-eyebrow { margin-bottom: 2px; }
-    .about-header h2 { margin: 0; font-size: 1.5rem; line-height: 1; font-family: var(--lp-font-display); font-weight: var(--lp-weight-normal); color: var(--lp-ink); }
-    .about-eyebrow { color: var(--lp-accent); font-size: .62rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase; }
+    .about-header .about-eyebrow { margin: 0 0 2px; }
+    .about-header h2 { margin: 0; font-family: var(--lp-font-display); font-size: 18px; font-weight: 500; line-height: 1.1; color: var(--lp-ink); }
+    .about-eyebrow { color: var(--lp-muted); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
     .about-close {
-      position: static; flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center;
-      margin-left: auto; border: 1px solid var(--lp-border); border-radius: 50%; background: var(--lp-surface-sunken);
-      color: var(--lp-muted); cursor: pointer; transition: border-color 160ms, color 160ms, transform 160ms;
+      flex: 0 0 44px; width: 44px; height: 44px; margin: -4px -6px -4px 0; padding: 0;
+      display: grid; place-items: center; border: none; border-radius: var(--lp-radius-full);
+      background: transparent; color: var(--lp-muted); cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
     }
-    .about-close:hover { border-color: var(--lp-accent); color: var(--lp-accent); transform: scale(1.05); }
+    .about-close:hover { background: color-mix(in srgb, var(--lp-ink) 6%, transparent); color: var(--lp-ink); }
     .about-close:active { transform: scale(0.97); }
-    .about-close:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
-    .about-description { color: var(--lp-ink-soft); font-size: .82rem; line-height: 1.65; }
-    .about-modules { display: grid; gap: 6px; margin: 14px 0; }
+    .about-close:focus-visible, .about-modules a:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .about-body { padding: 12px 10px 14px; overflow-y: auto; flex: 1; min-height: 0; }
+    .about-description { margin: 0 0 10px; padding: 0 4px; color: var(--lp-muted); font-size: .82rem; line-height: 1.6; }
+    .about-modules { display: grid; gap: 2px; margin: 0; }
     .about-modules a {
-      min-height: 52px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
-      border: 1px solid var(--lp-border); border-radius: var(--lp-radius-md); background: var(--lp-surface-sunken);
-      color: var(--lp-ink); text-decoration: none; transition: border-color .2s var(--lp-ease), transform .2s var(--lp-ease);
+      display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 10px;
+      border: none; border-radius: var(--lp-radius-md); background: transparent; color: var(--lp-ink); text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
     }
-    .about-modules a:hover { border-color: var(--lp-accent); }
-    .about-modules a:focus-visible { outline: 3px solid var(--lp-accent); outline-offset: 2px; }
-    .about-modules strong { font-size: .78rem; }
-    .about-modules span { color: var(--lp-muted); font-size: .68rem; }
-    .about-footer { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--lp-border); }
-    .about-footer p { display: flex; justify-content: space-between; gap: 16px; color: var(--lp-muted); font-size: .68rem; line-height: 1.5; margin: 0; }
-    .about-footer strong { color: var(--lp-ink-soft); }
-    .about-footer span { text-align: right; }
+    .about-modules a:hover { background: var(--lp-surface); box-shadow: 0 1px 3px color-mix(in srgb, var(--lp-ink) 8%, transparent); }
+    .about-modules a:active { transform: scale(0.98); }
+    [data-theme="dark"] .about-modules a:hover { background: var(--lp-surface); }
+    .about-module__mark {
+      width: 32px; height: 32px; flex: 0 0 32px; display: grid; place-items: center; border-radius: 50%;
+      background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: .68rem; font-weight: 700; letter-spacing: -0.02em;
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-accent) 20%, transparent);
+    }
+    .about-module__mark--portal { background: var(--lp-accent); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-accent) 20%, transparent); }
+    .about-module__mark--fluent { background: var(--lp-cat-purple, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-purple, var(--lp-accent)) 20%, transparent); }
+    .about-module__mark--hub { background: var(--lp-cat-amber, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-amber, var(--lp-accent)) 20%, transparent); }
+    .about-module__mark--lyric { background: var(--lp-cat-teal, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-teal, var(--lp-accent)) 20%, transparent); }
+    .about-module__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .about-modules strong { font-size: .82rem; font-weight: 500; color: var(--lp-ink); }
+    .about-modules .about-module__text > span { color: var(--lp-muted); font-size: .68rem; line-height: 1.35; }
+    .about-footer { display: grid; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--lp-border); flex-shrink: 0; }
     .about-author { display: flex; align-items: center; gap: 12px; }
-    .about-author__avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--lp-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; letter-spacing: .03em; flex-shrink: 0; }
+    .about-author__avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse);
+      display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700;
+      letter-spacing: .03em; flex-shrink: 0; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
+    }
     .about-author__info { display: flex; flex-direction: column; gap: 2px; }
     .about-author__info strong { font-size: .78rem; color: var(--lp-ink); font-weight: 600; }
     .about-author__info span { font-size: .68rem; color: var(--lp-muted); }
     @keyframes aboutFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @media (max-width: 580px) { .about-modal { padding: 22px; } .about-header h2 { font-size: 1.35rem; } .about-footer p { flex-direction: column; gap: 2px; } .about-footer span { text-align: left; } }
-    @media (prefers-reduced-motion: reduce) { .about-overlay { animation: none; } }
+    @keyframes aboutSlideUp { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .about-overlay, .about-modal { animation: none; } }
 
     @media (min-width: 861px) {
       html[data-navigation-mode="sidebar"] .sidebar-scrim { display: none !important; }
@@ -827,6 +1060,9 @@
       html[data-navigation-mode="floating"] .sidebar.is-open { transform: translate3d(0, 0, 0); }
       html[data-navigation-mode="floating"] .navigation-launcher { display: flex; }
       html[data-navigation-mode="floating"] .topbar { padding-left: var(--lp-header-floating-pad-left); }
+      .sb-nav-group { display: contents; }
+      .sb-nav-group__toggle { display: none !important; }
+      .sb-nav-group__items { display: contents; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -857,16 +1093,77 @@
 
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; }
-      .navigation-launcher { display: flex; top: var(--lp-navbtn-offset-top-compact); left: var(--lp-navbtn-offset-left); }
+      .navigation-launcher { display: flex; top: calc(var(--lp-navbtn-offset-top-compact) + env(safe-area-inset-top, 0px)); left: var(--lp-navbtn-offset-left); }
       .sidebar {
         display: flex; position: fixed; inset: 0 auto 0 0; z-index: 40;
         width: min(232px, 86vw); transform: translate3d(-100%, 0, 0);
         transition: transform 320ms cubic-bezier(0.22, 0.9, 0.36, 1);
         box-shadow: var(--lp-shadow-md);
         backface-visibility: hidden;
+        height: 100dvh;
+        max-height: 100dvh;
+        overflow: hidden;
+        padding-top: max(22px, env(safe-area-inset-top));
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        box-sizing: border-box;
       }
       .sidebar.is-open { transform: translate3d(0, 0, 0); }
-      .topbar { padding-left: var(--lp-header-floating-pad-left-compact); }
+      .sb-brand { flex-shrink: 0; }
+      .sidebar-footer { flex-shrink: 0; margin-top: 0; }
+      .sb-nav {
+        flex: 1 1 auto;
+        min-height: 0;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+      .sb-nav:not(.is-scroll-end)::after {
+        content: '';
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: block;
+        height: 18px;
+        margin-top: -18px;
+        pointer-events: none;
+        background: linear-gradient(to bottom, transparent, var(--lp-bg-paper));
+      }
+      .sb-nav-group__toggle { display: flex; }
+      .sb-nav-group__items { display: none; padding-left: 6px; }
+      .sb-nav-group.is-open .sb-nav-group__items,
+      .sb-nav-group:has(.sb-item.active) .sb-nav-group__items { display: flex; }
+      .sb-nav-group.is-open .sb-nav-group__chev,
+      .sb-nav-group:has(.sb-item.active) .sb-nav-group__chev { transform: rotate(90deg); }
+      .sb-nav-group.is-open .sb-nav-group__toggle,
+      .sb-nav-group:has(.sb-item.active) .sb-nav-group__toggle {
+        color: var(--lp-accent-text);
+        font-weight: 600;
+      }
+      .sb-item[data-target="guides"] { display: none; }
+      .topbar {
+        height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px));
+        min-height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px));
+        padding-top: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px));
+        padding-left: var(--lp-header-floating-pad-left-compact);
+        background: var(--lp-bg);
+      }
+      /* Overview: marca centrada en app bar (☰ flotante a la izquierda) */
+      body[data-active="resumen"] .topbar,
+      body[data-active="mi-progreso"] .topbar,
+      body[data-active="rutas"] .topbar { justify-content: center; }
+      body[data-active="resumen"] .topbar-greeting,
+      body[data-active="mi-progreso"] .topbar-greeting,
+      body[data-active="rutas"] .topbar-greeting {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        align-items: center;
+        max-width: calc(100% - 88px);
+        pointer-events: none;
+      }
+      .topbar-greeting-sub .tgs-full { display: none; }
+      .topbar-greeting-sub .tgs-short { display: inline; }
       .foot { display: none; }
       .content { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
       body[data-active="mi-progreso"] .content {
@@ -888,8 +1185,8 @@
       .search-bar { min-width: 130px; }
     }
     @media (max-width: 480px) {
-      .topbar { height: var(--lp-header-height-compact); min-height: var(--lp-header-height-compact); max-height: var(--lp-header-height-compact); padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact) var(--lp-header-pad-y-compact) var(--lp-header-floating-pad-left-compact); }
-      .navigation-launcher { top: var(--lp-navbtn-offset-top-compact); }
+      .topbar { height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); min-height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); max-height: none; padding: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px)) var(--lp-header-pad-x-compact) var(--lp-header-pad-y-compact) var(--lp-header-floating-pad-left-compact); }
+      .navigation-launcher { top: calc(var(--lp-navbtn-offset-top-compact) + env(safe-area-inset-top, 0px)); }
       .search-bar { min-width: 90px; }
       .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px max(20px, env(safe-area-inset-bottom, 0px)); }
@@ -897,12 +1194,6 @@
         padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));
       }
       .topbar-greeting-title { font-size: var(--lp-header-title-size); }
-      /* Versión abreviada en mobile: sin ".tgs-extra" queda "61 ejercicios y 23
-         guías de referencia." — se cortaba a mitad de palabra con el texto
-         completo + ellipsis ("...23 guías de refere…"). Se quita también la
-         frase "elige una categoría", redundante con las tarjetas de abajo. */
-      .tgs-extra { display: none; }
-
       .topbar-greeting-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
       /* .book-pills solo se revela con :hover/:focus-within — en mobile eso
@@ -1019,7 +1310,15 @@
       background: var(--lp-surface); border: 1px solid var(--lp-border-subtle);
       transition: background .2s, border-color .2s, transform .15s;
     }
-    .path-module:hover { background: var(--lp-surface-sunken); border-color: var(--lp-border); }
+    a.path-module {
+      text-decoration: none; color: inherit; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    a.path-module:hover { background: var(--lp-surface-sunken); border-color: var(--lp-border); }
+    a.path-module:active { transform: scale(.98); }
+    a.path-module:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    div.path-module { cursor: default; }
+    div.path-module:hover { background: var(--lp-surface); border-color: var(--lp-border-subtle); }
     .path-module.completed { background: var(--lp-surface-sunken); }
     .path-module.current { border-color: var(--lp-accent); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
     .pm-step {
@@ -1069,37 +1368,28 @@
         min-width: 44px; min-height: 44px; width: 100%; height: 100%;
       }
       .paths-icon-btn svg { width: 12px; height: 12px; }
-      /* El nivel CEFR (misma longitud en todas las tarjetas: "A1 → B1", "A2 →
-         B1"...) se saca de la línea del título y se coloca en la columna
-         derecha, apilado sobre el estado — así queda alineado a la derecha de
-         forma consistente en vez de "flotar" a distinta distancia según el
-         largo del título. Se logra con display:contents en los wrappers
-         intermedios (.path-summary-body/.path-summary-top) para que sus hijos
-         pasen a ser ítems directos del grid de .path-summary. */
-      /* El chevron vive en su propia columna (ancho auto, fija) separada de la
-         columna del pill/badge — si comparte columna con el badge, el badge
-         termina alineado con la punta de flecha en vez de con el pill, lo
-         que rompe la jerarquía visual (parece asociado al control de
-         expandir en vez de al estado). */
+      /* CEFR a la derecha del título; chevron en la misma fila; barra en la segunda. */
       .path-summary {
         grid-template-columns: 30px 1fr auto auto;
-        grid-template-areas: "icon title cefr   ." "icon bar   pill chev";
-        row-gap: 3px; column-gap: 8px; padding: 8px 10px; align-items: center;
+        grid-template-areas:
+          "icon title cefr chev"
+          "icon bar   bar  bar";
+        row-gap: 4px; column-gap: 8px; padding: 8px 10px; align-items: center;
       }
       .path-summary-icon { grid-area: icon; width: 30px; height: 30px; font-size: .85rem; }
       .path-summary-body, .path-summary-top, .path-summary-right { display: contents; }
       .path-summary-next { display: none; }
-      .path-summary-title { grid-area: title; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; align-self: end; }
-      /* Nivel CEFR y estado: iban más chicos que su tamaño base (.56/.58rem) y
-         quedaban ilegibles en pantalla real. Se mantienen en o por encima del
-         tamaño base — alineados en la misma columna (cefr sobre pill), con el
-         mismo ancho mínimo (88px, cubre "✓ Completada", el estado más largo) y
-         el mismo border-radius de píldora (el cefr usaba 4px de base, cuadrado
-         frente al pill de estado) para que se lean como un par uniforme. */
-      .path-summary-cefr { grid-area: cefr; font-size: .6rem; padding: 2px 6px; justify-self: end; align-self: end; min-width: 88px; text-align: center; border-radius: var(--lp-radius-full); }
-      .path-summary-bar { grid-area: bar; align-self: start; }
-      .path-summary-status { grid-area: pill; justify-self: end; align-self: start; font-size: .62rem; padding: 3px 8px; min-width: 88px; text-align: center; }
-      .path-chevron { grid-area: chev; align-self: start; font-size: .6rem; }
+      .path-summary-title { grid-area: title; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; align-self: center; }
+      /* Mobile: solo nivel CEFR — el estado (Sin empezar / En progreso / ✓)
+         duplicaba info ya visible en la barra 0/7 y ocupaba una segunda píldora. */
+      .path-summary-status { display: none; }
+      .path-summary-cefr {
+        grid-area: cefr; font-size: .6rem; padding: 2px 8px;
+        justify-self: end; align-self: center; min-width: 0; text-align: center;
+        border-radius: var(--lp-radius-full);
+      }
+      .path-summary-bar { grid-area: bar; align-self: center; }
+      .path-chevron { grid-area: chev; align-self: center; font-size: .6rem; }
       .path-summary-bar-track { height: var(--lp-progress-height-compact); }
       .path-summary-frac { font-size: .58rem; }
 
@@ -1113,6 +1403,24 @@
          recortarlo. Se lleva a una sola línea con ellipsis para que la lista de
          módulos quede compacta y pareja con el resto de las secciones. */
       .pm-meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+      /* Path modules — filas táctiles completas (el span "Empezar →" no era clicable) */
+      .path-module {
+        grid-template-columns: 30px minmax(0, 1fr) auto;
+        gap: 6px 10px;
+        padding: 10px 12px;
+        min-height: 48px;
+        align-items: center;
+      }
+      .pm-step { width: 26px; height: 26px; font-size: .58rem; }
+      .pm-title { font-size: .74rem; line-height: 1.25; }
+      .pm-meta { font-size: .62rem; margin-top: 2px; }
+      .pm-status {
+        min-height: 36px; min-width: 44px;
+        display: inline-flex; align-items: center; justify-content: center;
+        padding: 6px 10px; font-size: .62rem;
+      }
+      div.path-module { opacity: .72; }
     }
   </style>
 </head>
@@ -1137,11 +1445,20 @@
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Inicio</span></button>
       <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="progress" aria-hidden="true"></span><span class="sb-label">Mi Progreso</span></button>
       <button class="sb-item path" data-target="rutas"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="route" aria-hidden="true"></span><span class="sb-label">Rutas guiadas</span></button>
-      <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Vocabulary &amp; Words</span></button>
-      <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Grammar &amp; Spelling</span></button>
-      <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Pronunciation</span></button>
-      <button class="sb-item a" data-target="analysis"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Analysis &amp; Production</span></button>
-      <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Guías de referencia</span></button>
+      <div class="sb-nav-group" id="sbNavTopics">
+        <button type="button" class="sb-nav-group__toggle" id="sbNavTopicsToggle" aria-expanded="false" aria-controls="sbNavTopicsList">
+          <span class="sb-icon" data-lp-icon="book" aria-hidden="true"></span>
+          <span class="sb-label">Explorar temas</span>
+          <span class="sb-nav-group__chev" aria-hidden="true">›</span>
+        </button>
+        <div class="sb-nav-group__items" id="sbNavTopicsList">
+          <button class="sb-item v" data-target="vocab"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Vocabulary &amp; Words</span></button>
+          <button class="sb-item g" data-target="grammar"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Grammar &amp; Spelling</span></button>
+          <button class="sb-item p" data-target="pronunciation"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Pronunciation</span></button>
+          <button class="sb-item a" data-target="analysis"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Analysis &amp; Production</span></button>
+          <button class="sb-item r" data-target="guides"><span class="sb-spine"></span><span class="sb-icon">◆</span><span class="sb-label">Guías de referencia</span></button>
+        </div>
+      </div>
     </nav>
     <div class="sidebar-footer">
       <button class="sb-item sb-footer-item" id="aboutTrigger"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">About LearnFlow</span></button>
@@ -1156,11 +1473,14 @@
     <div class="topbar">
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
-        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos, incl. Battle 2P.</p>
+        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos</p>
         <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
         <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
         <span class="topbar-greeting-title tg-rutas">Rutas <em>guiadas</em></span>
-        <p class="topbar-greeting-sub tg-rutas">Secuencias de ejercicios, de lo básico a lo avanzado.</p>
+        <p class="topbar-greeting-sub tg-rutas">
+          <span class="tgs-full">Secuencias de ejercicios, de lo básico a lo avanzado.</span>
+          <span class="tgs-short">De básico a avanzado.</span>
+        </p>
       </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
@@ -1227,15 +1547,17 @@
       <section class="section active-section" data-key="resumen">
         <!-- Hero Card — Siguiente ejercicio sugerido -->
         <div class="hero-card" id="heroCard" aria-label="Ejercicio sugerido">
-          <div class="hero-card__icon" id="heroIcon" aria-hidden="true"></div>
-          <div class="hero-card__body">
-            <div class="hero-card__context" id="heroContext"></div>
-            <div class="hero-card__title" id="heroTitle"></div>
-            <div class="hero-card__meta" id="heroMeta"></div>
+          <div class="hero-card__inner">
+            <div class="hero-card__icon" id="heroIcon" aria-hidden="true"></div>
+            <div class="hero-card__body">
+              <div class="hero-card__context" id="heroContext"></div>
+              <div class="hero-card__title" id="heroTitle"></div>
+              <div class="hero-card__meta" id="heroMeta"></div>
+            </div>
           </div>
           <div class="hero-card__actions">
             <a class="lp-btn lp-btn--primary hero-card__cta" id="heroCta" href="#">Empezar ahora</a>
-            <button class="hero-card__alt" id="heroAlt" type="button">Otra sugerencia</button>
+            <button class="hero-card__alt" id="heroAlt" type="button" aria-label="Otra sugerencia">Otra sugerencia</button>
           </div>
           <button class="hero-card__browse" id="heroBrowse" type="button" hidden>Ver ejercicios</button>
         </div>
@@ -1532,6 +1854,37 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') setNavigationDrawerOpen(false);
   });
+
+  function setupSidebarMobileNav() {
+    const group = document.getElementById('sbNavTopics');
+    const toggle = document.getElementById('sbNavTopicsToggle');
+    const nav = document.getElementById('sbNav');
+    if (!group || !toggle || !nav) return;
+
+    function syncTopicGroupState() {
+      const open = group.classList.contains('is-open') || !!group.querySelector('.sb-item.active');
+      toggle.setAttribute('aria-expanded', String(open));
+    }
+
+    toggle.addEventListener('click', () => {
+      group.classList.toggle('is-open');
+      syncTopicGroupState();
+    });
+
+    function syncNavScrollHint() {
+      const atEnd = nav.scrollHeight - nav.scrollTop <= nav.clientHeight + 2;
+      nav.classList.toggle('is-scroll-end', atEnd);
+    }
+
+    nav.addEventListener('scroll', syncNavScrollHint, { passive: true });
+    window.addEventListener('resize', syncNavScrollHint);
+    group.addEventListener('transitionend', syncNavScrollHint);
+    syncNavScrollHint();
+    syncTopicGroupState();
+    return syncTopicGroupState;
+  }
+
+  const syncSidebarTopicGroup = setupSidebarMobileNav();
   window.addEventListener('storage', (event) => {
     if (event.key === NAVIGATION_MODE_KEY) setNavigationMode(event.newValue);
   });
@@ -1557,19 +1910,33 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
       <section class="about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutLearnFlowTitle" aria-describedby="aboutLearnFlowDescription">
         <header class="about-header">
           <div class="about-identity" aria-hidden="true">L</div>
-          <div>
+          <div class="about-header__text">
             <p class="about-eyebrow">LearnFlow · Plataforma</p>
             <h2 id="aboutLearnFlowTitle">About LearnFlow</h2>
           </div>
           <button class="about-close" id="aboutCloseBtn" type="button" aria-label="Cerrar About LearnFlow">✕</button>
         </header>
-        <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
-        <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-          <a href="${getAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow"><strong>LearnFlow</strong><span>Portal</span></a>
-          <a href="${getAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></a>
-          <a href="${getAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></a>
-          <a href="${getAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow"><strong>LyricFlow</strong><span>Aprender con música</span></a>
-        </nav>
+        <div class="about-body">
+          <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
+          <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
+            <a href="${getAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow">
+              <span class="about-module__mark about-module__mark--portal" aria-hidden="true">L</span>
+              <span class="about-module__text"><strong>LearnFlow</strong><span>Portal</span></span>
+            </a>
+            <a href="${getAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow">
+              <span class="about-module__mark about-module__mark--fluent" aria-hidden="true">F</span>
+              <span class="about-module__text"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></span>
+            </a>
+            <a href="${getAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow">
+              <span class="about-module__mark about-module__mark--hub" aria-hidden="true">H</span>
+              <span class="about-module__text"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></span>
+            </a>
+            <a href="${getAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow">
+              <span class="about-module__mark about-module__mark--lyric" aria-hidden="true">LF</span>
+              <span class="about-module__text"><strong>LyricFlow</strong><span>Aprender con música</span></span>
+            </a>
+          </nav>
+        </div>
         <footer class="about-footer">
           <div class="about-author">
             <div class="about-author__avatar" aria-hidden="true">GS</div>
@@ -2112,11 +2479,28 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     }
   });
 
-  // Resumen subtitle — dynamic total items rounded down to nearest 100
-  const allItems = MODULES.reduce((sum, m) => { const d = getModuleDepth(m.id); return sum + (d ? d.items : 0); }, 0);
-  const roundedItems = Math.floor(allItems / 100) * 100;
-  const resumenSub = document.getElementById('resumenSub');
-  if (resumenSub) resumenSub.textContent = `${MODULES.length} ejercicios · +${roundedItems.toLocaleString()} items · 5 modos, incl. Battle 2P.`;
+  // Resumen subtitle — full on desktop, compact on mobile (≤480px via .tgs-short)
+  function formatItemsK(roundedItems) {
+    if (roundedItems >= 1000) {
+      return '+' + (roundedItems / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return '+' + roundedItems.toLocaleString();
+  }
+  function updateResumenSub() {
+    const el = document.getElementById('resumenSub');
+    if (!el) return;
+    const n = MODULES.length;
+    const allItems = MODULES.reduce((sum, m) => {
+      const d = getModuleDepth(m.id);
+      return sum + (d ? d.items : 0);
+    }, 0);
+    const roundedItems = Math.floor(allItems / 100) * 100;
+    const itemsK = formatItemsK(roundedItems);
+    const full = `${n} ejercicios · ${itemsK} items · 5 modos, incl. Battle 2P.`;
+    const short = `${n} ejercicios · 5 modos`;
+    el.innerHTML = `<span class="tgs-full">${full}</span><span class="tgs-short">${short}</span>`;
+  }
+  updateResumenSub();
 
   // Local dev supports independent ports and the shared-origin gateway.
   const _h = location.hostname;
@@ -2146,6 +2530,7 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && b.classList.contains('sb-item')));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
+    if (typeof syncSidebarTopicGroup === 'function') syncSidebarTopicGroup();
     const isOverview = target === 'resumen' || target === 'mi-progreso' || target === 'rutas';
     topbarSearch.style.display = isOverview ? 'none' : '';
     topbarStats.style.display = '';
@@ -2254,11 +2639,14 @@ import { getBestScore, getProgressStats, isContentCompleted, getContentProgress,
         const statusHTML = done ? `<span class="pm-status done">⭐ ${best}%</span>`
           : isNext ? `<span class="pm-status next">${completedCount > 0 ? 'Siguiente →' : 'Empezar →'}</span>`
           : `<span class="pm-status locked">Pendiente</span>`;
-        return `<div class="path-module ${cls}">
+        const canOpen = done || isNext;
+        const tag = canOpen ? 'a' : 'div';
+        const hrefAttr = canOpen ? ` href="${mod.exercise}"` : '';
+        return `<${tag} class="path-module ${cls}"${hrefAttr}${canOpen ? '' : ' aria-disabled="true"'}>
           <div class="pm-step">${step}</div>
           <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta">${mod.meta}</div></div>
           ${statusHTML}
-        </div>`;
+        </${tag}>`;
       }).join('');
 
       return `<details class="path-accordion">

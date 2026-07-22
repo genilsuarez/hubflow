@@ -8,7 +8,9 @@
    13 near-identical copies inline in each exercises/*.html file.
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress } from './utils.js';
+import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, speak } from './utils.js';
+
+const SPEAK_ICON = '🔊';
 
 export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   initTheme();
@@ -20,6 +22,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   let currentCat = catKeys[0];
   let mode = 'study';
   let deck = [], idx = 0, score = 0, total = 0;
+  let autoSpeak = false;
   const timerState = makeTimerState();
 
   sharedRenderCatBar({
@@ -44,9 +47,109 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     if (mode === 'practice') initPractice(false);
     else if (mode === 'timed') initPractice(true);
     else if (mode === 'study') initStudy();
+    syncSpeakNavUI();
   }
 
   function getData() { return categories[currentCat].items; }
+
+  function usesSpeakNav() {
+    return categories[currentCat]?.icon === SPEAK_ICON;
+  }
+
+  function getSpeakableText(item) {
+    if (!item?.sentence) return '';
+    const text = studyBlankPlaceholder
+      ? item.sentence.replace('___', studyBlankPlaceholder)
+      : item.sentence.replace('___', item.correct || '');
+    return text.replace(/<[^>]*>/g, '').trim();
+  }
+
+  function speakCurrentItem() {
+    const item = deck[idx];
+    const text = getSpeakableText(item);
+    if (text) speak(text);
+  }
+
+  function setAutoSpeak(on) {
+    autoSpeak = on;
+    const btn = document.getElementById('studySpeakBtn');
+    if (!btn) return;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', String(on));
+    const label = on ? 'Desactivar auto-pronunciación' : 'Activar auto-pronunciación';
+    btn.setAttribute('aria-label', label);
+    btn.title = on ? 'Auto-pronunciación activa' : 'Activar auto-pronunciación';
+    if (on) speakCurrentItem();
+    else if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  function maybeAutoSpeak() {
+    if (autoSpeak && usesSpeakNav()) speakCurrentItem();
+  }
+
+  function insertSpeakInNav(btn, attempt = 0) {
+    const nav = document.getElementById('exBottomNav') || document.querySelector('.fc-nav');
+    if (!nav) {
+      if (attempt < 24) setTimeout(() => insertSpeakInNav(btn, attempt + 1), 50);
+      return;
+    }
+    const progressBtn = document.getElementById('lessonProgressBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    if (btn.parentElement !== nav) {
+      if (progressBtn?.parentElement === nav) progressBtn.insertAdjacentElement('afterend', btn);
+      else if (shuffleBtn?.parentElement === nav) nav.insertBefore(btn, shuffleBtn);
+      else nav.insertBefore(btn, nav.firstChild);
+    }
+  }
+
+  function ensureSpeakButton() {
+    let btn = document.getElementById('studySpeakBtn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'studySpeakBtn';
+      btn.type = 'button';
+      btn.className = 'lp-btn lp-btn--ghost';
+      btn.textContent = SPEAK_ICON;
+      btn.setAttribute('aria-label', 'Activar auto-pronunciación');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.title = 'Activar auto-pronunciación';
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setAutoSpeak(!autoSpeak);
+      });
+      insertSpeakInNav(btn);
+    }
+    btn.hidden = !usesSpeakNav();
+    btn.classList.toggle('active', autoSpeak && usesSpeakNav());
+    btn.setAttribute('aria-pressed', String(autoSpeak && usesSpeakNav()));
+    return btn;
+  }
+
+  function syncSpeakNavUI() {
+    const active = usesSpeakNav();
+    const fcCard = document.getElementById('fcCard');
+    const sentenceCard = document.querySelector('.sentence-card');
+    const fcEmoji = document.getElementById('fcEmoji');
+    const scIcon = document.getElementById('scIcon');
+
+    fcCard?.classList.toggle('fc-card--speak-in-nav', active);
+    sentenceCard?.classList.toggle('sentence-card--speak-in-nav', active);
+
+    if (fcEmoji) {
+      if (active) fcEmoji.textContent = '';
+      else fcEmoji.textContent = categories[currentCat].icon;
+    }
+    if (scIcon) {
+      if (active) scIcon.textContent = '';
+      else scIcon.textContent = categories[currentCat].icon;
+    }
+
+    const speakBtn = document.getElementById('studySpeakBtn');
+    if (active) ensureSpeakButton();
+    else if (speakBtn) speakBtn.hidden = true;
+  }
 
   function updProgress(current, t) {
     const pct = Math.round((current / t) * 100);
@@ -79,7 +182,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     const item = deck[idx];
     const cat = categories[currentCat];
 
-    document.getElementById('scIcon').textContent = cat.icon;
+    const scIcon = document.getElementById('scIcon');
+    if (scIcon && !usesSpeakNav()) scIcon.textContent = cat.icon;
     document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
@@ -107,6 +211,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
       });
     });
     updProgress(idx, total);
+    maybeAutoSpeak();
   }
 
   function finishPractice() {
@@ -134,7 +239,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     const item = deck[idx];
     const card = document.getElementById('fcCard');
     card.classList.remove('flip');
-    document.getElementById('fcEmoji').textContent = categories[currentCat].icon;
+    const fcEmoji = document.getElementById('fcEmoji');
+    if (fcEmoji && !usesSpeakNav()) fcEmoji.textContent = categories[currentCat].icon;
     document.getElementById('fcSentence').textContent = studyBlankPlaceholder
       ? item.sentence.replace('___', studyBlankPlaceholder)
       : item.sentence;
@@ -142,6 +248,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     document.getElementById('fcExplain').textContent = item.explain;
     document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
     updProgress(idx + 1, deck.length);
+    maybeAutoSpeak();
   }
 
   document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
