@@ -1136,3 +1136,23 @@ export const CATEGORIES = {
     ]
   },
 };
+
+// Paquetes temáticos que agrupan subcategorías de CATEGORIES para
+// exercises/vocabulary.html#pack=<name> y para las stats de data/catalog.js.
+// Fuente única — no duplicar esta lista en otro archivo.
+export const PACKS = {
+  idioms: { label: 'Idioms Pack', keys: ['idioms', 'bodyIdioms', 'healthIdioms', 'natureIdioms'] },
+  soundNatural: { label: 'Sound Natural', keys: ['soundNative', 'saidAlternatives', 'neverUseVery', 'soundingNatural', 'becauseAlternatives'] },
+  c1: { label: 'C1 Vocabulary', keys: ['dailyRoutineC1', 'foodDrinkC1', 'advancedVerbs', 'advancedPhrases'] },
+  everyday: { label: 'Everyday Basics', keys: ['bodyFace', 'bodyArms', 'bodyLegs', 'cookingPrep', 'cookingMethods', 'timeOfDay', 'weather', 'seasons', 'socialExpressions', 'personalityAdjectives', 'rhymingReduplication', 'sameWordDifferentMeaning', 'clothingAppearance', 'eggcorns', 'hobbies', 'telephoneEnglish'] },
+  travel: { label: 'Travel & Airport', keys: ['travelAirport', 'travelAdvanced', 'travelIdioms', 'travelPhrasals'] },
+  emotions: { label: 'Emotions & Feelings', keys: ['emotionsFeelings', 'emotionsAdvanced', 'emotionsIdioms'] },
+  work: { label: 'Work & Office', keys: ['workOffice', 'workAdvanced', 'workIdioms', 'workPhrasals'] },
+  tech: { label: 'Technology & Internet', keys: ['technologyInternet', 'techAdvanced', 'techIdioms', 'techPhrasals'] },
+  money: { label: 'Money & Finance', keys: ['moneyFinance', 'moneyAdvanced', 'moneyIdioms', 'moneyPhrasals'] },
+  fitness: { label: 'Health & Fitness', keys: ['healthFitness', 'healthAdvanced', 'healthIdiomsFitness', 'healthPhrasals'] },
+  home: { label: 'Home & Furniture', keys: ['homeFurniture', 'homeAdvanced', 'homeIdioms', 'homePhrasals'] },
+  nature: { label: 'Nature & Environment', keys: ['natureEnvironment', 'natureAdvanced', 'environmentIdioms'] },
+  education: { label: 'Education & Study', keys: ['educationStudy', 'educationAdvanced', 'educationIdioms'] },
+  shopping: { label: 'Shopping & Retail', keys: ['shoppingRetail', 'shoppingAdvanced', 'shoppingIdioms', 'shoppingPhrasals'] },
+};

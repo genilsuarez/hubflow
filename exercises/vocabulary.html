@@ -141,30 +141,15 @@
 </div>
 
 <script type="module">
-import { CATEGORIES } from '../data/vocabulary.js';
+import { CATEGORIES, PACKS } from '../data/vocabulary.js';
 import { FlashcardEngine } from '../js/flashcard-engine.js';
 
-// Vocabulary packs (Fase 4 del plan de recategorización): agrupan las 26
-// subcategorías de vocabulary.js en paquetes temáticos accesibles vía
-// exercises/vocabulary.html#pack=<name> — sin tocar flashcard-engine.js.
+// Vocabulary packs (Fase 4 del plan de recategorización): agrupan las subcategorías
+// de vocabulary.js en paquetes temáticos accesibles vía exercises/vocabulary.html#pack=<name>
+// — sin tocar flashcard-engine.js. PACKS vive en data/vocabulary.js (fuente única),
+// también usado por data/catalog.js para calcular las stats de cada tarjeta.
 // Se usa hash (no query string) porque serve.json tiene cleanUrls:true, cuyo
 // redirect .html→sin-extensión descarta el query string; el hash nunca viaja al servidor.
-const PACKS = {
-  idioms: { label: 'Idioms Pack', keys: ['idioms', 'bodyIdioms', 'healthIdioms', 'natureIdioms'] },
-  soundNatural: { label: 'Sound Natural', keys: ['soundNative', 'saidAlternatives', 'neverUseVery', 'soundingNatural', 'becauseAlternatives'] },
-  c1: { label: 'C1 Vocabulary', keys: ['dailyRoutineC1', 'foodDrinkC1', 'advancedVerbs', 'advancedPhrases'] },
-  everyday: { label: 'Everyday Basics', keys: ['bodyFace', 'bodyArms', 'bodyLegs', 'cookingPrep', 'cookingMethods', 'timeOfDay', 'weather', 'seasons', 'socialExpressions', 'personalityAdjectives', 'rhymingReduplication', 'sameWordDifferentMeaning', 'clothingAppearance', 'eggcorns', 'hobbies', 'telephoneEnglish'] },
-  travel: { label: 'Travel & Airport', keys: ['travelAirport', 'travelAdvanced', 'travelIdioms', 'travelPhrasals'] },
-  emotions: { label: 'Emotions & Feelings', keys: ['emotionsFeelings', 'emotionsAdvanced', 'emotionsIdioms'] },
-  work: { label: 'Work & Office', keys: ['workOffice', 'workAdvanced', 'workIdioms', 'workPhrasals'] },
-  tech: { label: 'Technology & Internet', keys: ['technologyInternet', 'techAdvanced', 'techIdioms', 'techPhrasals'] },
-  money: { label: 'Money & Finance', keys: ['moneyFinance', 'moneyAdvanced', 'moneyIdioms', 'moneyPhrasals'] },
-  fitness: { label: 'Health & Fitness', keys: ['healthFitness', 'healthAdvanced', 'healthIdiomsFitness', 'healthPhrasals'] },
-  home: { label: 'Home & Furniture', keys: ['homeFurniture', 'homeAdvanced', 'homeIdioms', 'homePhrasals'] },
-  nature: { label: 'Nature & Environment', keys: ['natureEnvironment', 'natureAdvanced', 'environmentIdioms'] },
-  education: { label: 'Education & Study', keys: ['educationStudy', 'educationAdvanced', 'educationIdioms'] },
-  shopping: { label: 'Shopping & Retail', keys: ['shoppingRetail', 'shoppingAdvanced', 'shoppingIdioms', 'shoppingPhrasals'] },
-};
 
 const PACK_CONTENT_IDS = {
   everyday: 'vocab-pack-everyday', c1: 'vocab-pack-c1', idioms: 'vocab-pack-idioms',

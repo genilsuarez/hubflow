@@ -12,6 +12,8 @@
  * o storagePrefix en SpellingEngine/FlashcardEngine), no adivinado.
  */
 
+import { CATEGORIES as VOCAB_CATEGORIES, PACKS as VOCAB_PACKS } from './vocabulary.js';
+
 /** Vocabulario cerrado de tags — Fase 1. Los módulos solo usan valores de aquí. */
 export const TAGS = {
   skill: ['spelling', 'listening', 'grammar', 'vocabulary', 'pronunciation', 'writing'],
@@ -41,7 +43,7 @@ export const MODULES = [
     tags: ['vocabulary', 'a2', 'b1', 'study', 'match', 'idioms'],
     cefr: 'a2',
     icon: '🧠',
-    meta: 'Body · Cooking · Idioms · Hobbies · Travel · Emotions · Work · Tech · Money · Fitness · Home · Nature · Education · Shopping — 36 categorías',
+    meta: 'Body · Cooking · Idioms · Hobbies · Travel · Emotions · Work · Tech · Money · Fitness · Home · Nature · Education · Shopping',
     exercise: 'exercises/vocabulary.html',
     guide: 'guides/vocabulary.html',
     dataFile: 'data/vocabulary.js',
@@ -95,7 +97,7 @@ export const MODULES = [
     tags: ['vocabulary', 'a2', 'study'],
     cefr: 'a2',
     icon: '☀️',
-    meta: 'Body · Cooking · Time · Weather · Seasons · Clothing · Hobbies — 13 subcategorías cotidianas',
+    meta: 'Body · Cooking · Time · Weather · Seasons · Clothing · Hobbies — subcategorías cotidianas',
     exercise: 'exercises/vocabulary.html#pack=everyday',
     guide: 'guides/vocabulary.html',
     dataFile: 'data/vocabulary.js',
@@ -1026,26 +1028,36 @@ export const PROGRESS_RULES = {
  * items: total de items de datos jugables
  * categories: número de categorías/subcategorías internas
  * hasBattle: true si tiene modo Battle (2 jugadores)
+ *
+ * Las entradas de vocabulary/vocab-pack-* se calculan desde CATEGORIES/PACKS
+ * de data/vocabulary.js (ver vocabDepth() abajo) en vez de contarse a mano —
+ * un conteo en duro quedó desincronizado silenciosamente cuando creció el dataset
+ * (llegó a decir 36 categorías/500 items cuando ya había 66/805).
  */
+function vocabDepth(keys) {
+  const cats = keys.map((k) => VOCAB_CATEGORIES[k]).filter(Boolean);
+  return { items: cats.reduce((sum, c) => sum + c.items.length, 0), categories: cats.length };
+}
+
 export const MODULE_DEPTH = {
-  vocabulary:        { engine: 'flashcard', items: 500, categories: 36, hasBattle: true },
+  vocabulary:        { engine: 'flashcard', ...vocabDepth(Object.keys(VOCAB_CATEGORIES)), hasBattle: true },
   opposites:         { engine: 'flashcard', items: 92,  categories: 2,  hasBattle: true },
   'confusing-words': { engine: 'custom',    items: 168, categories: 18, modes: 3, hasBattle: false },
   'phrasal-verbs':   { engine: 'flashcard', items: 106, categories: 8,  hasBattle: true },
-  'vocab-pack-everyday':     { engine: 'flashcard', items: 200, categories: 13, hasBattle: true },
-  'vocab-pack-c1':           { engine: 'flashcard', items: 51,  categories: 4,  hasBattle: true },
-  'vocab-pack-idioms':       { engine: 'flashcard', items: 41,  categories: 4,  hasBattle: true },
-  'vocab-pack-sound-natural':{ engine: 'flashcard', items: 58,  categories: 5,  hasBattle: true },
-  'vocab-pack-home':         { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-shopping':     { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-fitness':      { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-travel':       { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-work':         { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-education':    { engine: 'flashcard', items: 36,  categories: 3,  hasBattle: true },
-  'vocab-pack-money':        { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-tech':         { engine: 'flashcard', items: 48,  categories: 4,  hasBattle: true },
-  'vocab-pack-emotions':     { engine: 'flashcard', items: 36,  categories: 3,  hasBattle: true },
-  'vocab-pack-nature':       { engine: 'flashcard', items: 36,  categories: 3,  hasBattle: true },
+  'vocab-pack-everyday':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.everyday.keys), hasBattle: true },
+  'vocab-pack-c1':           { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.c1.keys), hasBattle: true },
+  'vocab-pack-idioms':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.idioms.keys), hasBattle: true },
+  'vocab-pack-sound-natural':{ engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.soundNatural.keys), hasBattle: true },
+  'vocab-pack-home':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.home.keys), hasBattle: true },
+  'vocab-pack-shopping':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.shopping.keys), hasBattle: true },
+  'vocab-pack-fitness':      { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.fitness.keys), hasBattle: true },
+  'vocab-pack-travel':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.travel.keys), hasBattle: true },
+  'vocab-pack-work':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.work.keys), hasBattle: true },
+  'vocab-pack-education':    { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.education.keys), hasBattle: true },
+  'vocab-pack-money':        { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.money.keys), hasBattle: true },
+  'vocab-pack-tech':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.tech.keys), hasBattle: true },
+  'vocab-pack-emotions':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.emotions.keys), hasBattle: true },
+  'vocab-pack-nature':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.nature.keys), hasBattle: true },
   articles:          { engine: 'flashcard', items: 54,  categories: 5,  hasBattle: true },
   prepositions:      { engine: 'flashcard', items: 80,  categories: 5,  hasBattle: true },
   quantifiers:       { engine: 'flashcard', items: 40,  categories: 4,  hasBattle: true },
