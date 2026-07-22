@@ -1,4 +1,5 @@
 import { MODULES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT, MODULE_DEPTH } from '../data/catalog.js';
+import * as lpSupabase from './lp-supabase.js';
 
 /* ═══════════════════════════════════════════════════════
    HubFlow — Shared Utilities
@@ -258,6 +259,7 @@ export function recordScore(key, pct, context = {}) {
   localStorage.setItem(versionedKey(key), JSON.stringify(history.slice(0, MAX_SCORE_HISTORY)));
   recordActivityEvent(key, normalizedPct, timestamp, context);
   publishHubFlowProgress();
+  scheduleCloudSync();
   // Auto-refresh the lesson progress button if present in the DOM
   if (typeof document !== 'undefined') {
     const contentId = context?.contentId
@@ -265,6 +267,28 @@ export function recordScore(key, pct, context = {}) {
       || document.getElementById('lessonProgressBtn')?.dataset?.contentId;
     if (contentId) renderLessonProgress(contentId);
   }
+}
+
+// Sube progreso + eventos a Supabase cuando el usuario está autenticado.
+// Debounced porque recordScore puede dispararse varias veces seguidas
+// (p.ej. quiz de varias preguntas registrando cada intento).
+let cloudSyncTimer = null;
+function scheduleCloudSync() {
+  if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(async () => {
+    cloudSyncTimer = null;
+    const authed = await lpSupabase.isAuthenticated().catch(() => false);
+    if (!authed) return;
+
+    const progressDoc = readJson(PROGRESS_STORAGE_KEY, null);
+    if (progressDoc?.content) {
+      await lpSupabase.syncProgress('hubflow', { content: progressDoc.content });
+    }
+    const activityDoc = readJson(ACTIVITY_STORAGE_KEY, null);
+    if (activityDoc?.events?.length) {
+      await lpSupabase.syncActivityEvents('hubflow', activityDoc.events);
+    }
+  }, 500);
 }
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
