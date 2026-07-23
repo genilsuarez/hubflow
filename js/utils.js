@@ -43,9 +43,9 @@ function updateThemeButton() {
   if (window.LpNavIcons) window.LpNavIcons.setTheme(btn, isDark);
 }
 
-const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v2';
-const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v2';
-const SCORE_KEY_VERSION = ':v2';
+const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
+const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
+const SCORE_KEY_VERSION = ':v1';
 const MAX_SCORE_HISTORY = 20;
 const MAX_ACTIVITY_EVENTS = 200;
 
