@@ -213,6 +213,17 @@ export function publishHubFlowProgress() {
     getContentProgress(module.id),
   ]));
   const contentStates = Object.values(content).filter(Boolean);
+  let completedActivities = 0;
+  let totalActivities = 0;
+  let attemptedActivities = 0;
+  for (const item of contentStates) {
+    const activities = Object.values(item.activities || {});
+    totalActivities += activities.length;
+    for (const activity of activities) {
+      if (activity.completed) completedActivities++;
+      if (activity.attempts > 0 || activity.completedKeys > 0) attemptedActivities++;
+    }
+  }
   const summary = {
     progressPct: contentStates.length
       ? contentStates.reduce((total, item) => total + item.progressPct, 0) / contentStates.length
@@ -220,6 +231,9 @@ export function publishHubFlowProgress() {
     completedContent: contentStates.filter((item) => item.completed).length,
     totalContent: contentStates.length,
     attemptedContent: contentStates.filter((item) => item.attempts > 0).length,
+    completedActivities,
+    totalActivities,
+    attemptedActivities,
   };
   const projection = {
     schemaVersion: 1,

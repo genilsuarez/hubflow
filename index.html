@@ -1793,8 +1793,6 @@ import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js'
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/utils.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 
-setupSupabaseAuth({ onAfterLogin: () => hydrateHubFlowFromCloud() });
-
 (function() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
   function upd() {
@@ -2320,6 +2318,14 @@ setupSupabaseAuth({ onAfterLogin: () => hydrateHubFlowFromCloud() });
   renderHeroCard();
   renderProgressSnapshot();
   renderLastActivities();
+
+  setupSupabaseAuth({
+    onAfterLogin: () => {
+      hydrateHubFlowFromCloud();
+      renderLastActivities();
+      renderProgressSnapshot();
+    },
+  });
 
   // "Otra sugerencia" button
   document.getElementById('heroAlt').addEventListener('click', function() {
