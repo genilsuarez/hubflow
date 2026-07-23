@@ -585,10 +585,24 @@
 /* Header de ejercicio: acciones agrupadas a la derecha (portal + tema) — Fase E */
 .tb-actions { display: flex; align-items: center; gap: 8px; }
 
-/* ─── PILL BAR MOBILE: fit all tabs without scroll ─── */
+/* ─── PILL BAR MOBILE: scroll when tabs don't fit (e.g. 5 modes) ─── */
 @media (max-width: 480px) {
-  .pill-bar { overflow-x: visible; gap: 1px; padding: 2px; }
-  .pill-btn { padding: 6px 6px; font-size: .6rem; flex: 1 1 0; min-width: 0; }
+  .pill-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 2px;
+    padding: 2px;
+  }
+  .pill-bar::-webkit-scrollbar { display: none; }
+  .pill-btn {
+    flex: 0 0 auto;
+    padding: 5px 7px;
+    font-size: 0.56rem;
+    min-height: 32px;
+    min-width: 0;
+  }
 }
 
 /* ═══ FEEDBACK CALLOUTS (hint / explain — all exercises) ═══ */
@@ -963,17 +977,18 @@
 /* ─── EXERCISE BOTTOM CONTROLS (mobile sticky — mirrors FluentFlow game-controls) ─── */
 @media (max-width: 768px) {
   :root {
-    --ex-bottom-nav-btn-size: 86px;
-    --ex-bottom-nav-padding-y: 16px;
-    --ex-bottom-nav-padding-x: 21px;
-    --ex-bottom-nav-min-height: 117px;
-    --ex-bottom-nav-scroll-reserve: 140px;
-    --ex-bottom-nav-btn-font-size: 1.4625rem;
-    --ex-bottom-nav-btn-ghost-font-size: 1.3rem;
-    --ex-bottom-nav-detail-font-size: 1.3rem;
-    --ex-bottom-nav-battle-font-size: 1.3rem;
-    --ex-bottom-nav-practice-hint-font-size: 1.365rem;
-    --ex-bottom-nav-practice-skip-font-size: 1.3rem;
+    /* −20% vs previous mobile scale; touch targets stay ≥ 44px */
+    --ex-bottom-nav-btn-size: 69px;
+    --ex-bottom-nav-padding-y: 13px;
+    --ex-bottom-nav-padding-x: 17px;
+    --ex-bottom-nav-min-height: 94px;
+    --ex-bottom-nav-scroll-reserve: 112px;
+    --ex-bottom-nav-btn-font-size: 1.17rem;
+    --ex-bottom-nav-btn-ghost-font-size: 1.04rem;
+    --ex-bottom-nav-detail-font-size: 1.04rem;
+    --ex-bottom-nav-battle-font-size: 1.04rem;
+    --ex-bottom-nav-practice-hint-font-size: 1.09rem;
+    --ex-bottom-nav-practice-skip-font-size: 1.04rem;
   }
 
   .battle-actions:not(.ex-bottom-nav .battle-actions),
@@ -1012,8 +1027,8 @@
     position: sticky;
     bottom: max(8px, env(safe-area-inset-bottom));
     z-index: 10;
-    justify-content: center;
-    gap: 21px;
+    justify-content: safe center;
+    gap: 17px;
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
@@ -1024,6 +1039,16 @@
     border-radius: var(--lp-radius-lg);
     border: 1px solid var(--lp-border-subtle, var(--lp-border));
     box-shadow: var(--lp-shadow-sm);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+
+  .fc-nav::-webkit-scrollbar,
+  .ex-bottom-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .fc-nav .lp-btn,
@@ -1065,10 +1090,10 @@
   .ex-bottom-nav .battle-actions .lp-btn,
   .result-btns .lp-btn {
     width: auto;
-    min-width: calc(var(--ex-bottom-nav-btn-size) * 1.35);
+    min-width: calc(var(--ex-bottom-nav-btn-size) * 1.1);
     min-height: var(--ex-bottom-nav-btn-size);
     height: var(--ex-bottom-nav-btn-size);
-    padding: 0 18px;
+    padding: 0 14px;
     font-size: var(--ex-bottom-nav-battle-font-size);
     white-space: nowrap;
   }
@@ -1093,5 +1118,20 @@
     margin-top: 0;
     padding-top: 0.5rem;
     border-top: none;
+  }
+}
+
+@media (max-width: 390px) {
+  .fc-nav,
+  .ex-bottom-nav {
+    gap: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .ex-bottom-nav .battle-actions .lp-btn,
+  .result-btns .lp-btn {
+    min-width: auto;
+    padding: 0 10px;
   }
 }

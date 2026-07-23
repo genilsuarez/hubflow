@@ -447,6 +447,20 @@ h1 {
 @media (max-width: 640px) {
   .ex-header__scope { padding: 6px 8px 4px; }
   .ex-header__modes { padding: 4px 6px; }
+  .ex-header__modes .pill-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 2px;
+  }
+  .ex-header__modes .pill-bar::-webkit-scrollbar { display: none; }
+  .ex-header__modes .pill-btn {
+    flex: 0 0 auto;
+    font-size: 0.56rem;
+    padding: 5px 7px;
+    min-height: 32px;
+  }
   .ex-progress-row { padding: 6px 10px; gap: 3px; }
   .ex-progress-row--session::before { font-size: .52rem; }
   .ex-progress-row--session:has(#pairScore.show) {
@@ -607,7 +621,7 @@ h1 {
 }
 
 body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
-  padding-bottom: max(var(--ex-bottom-nav-scroll-reserve), calc(94px + env(safe-area-inset-bottom)));
+  padding-bottom: max(var(--ex-bottom-nav-scroll-reserve), calc(var(--ex-bottom-nav-min-height) + env(safe-area-inset-bottom)));
 }
 @media (max-width: 480px) {
   .scroll-body { padding: 0; }
@@ -618,7 +632,16 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
   .header { padding: 0; margin-bottom: 6px; }
   h1 { margin-bottom: 4px; }
   .ex-header__modes .pill-bar { margin-bottom: 0; }
-  .ex-control-panel .pill-btn { font-size: .58rem; padding: 6px 4px; }
+  .ex-control-panel .pill-btn { font-size: 0.52rem; padding: 5px 6px; min-height: 32px; }
+  .ex-control-panel .pill-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 2px;
+  }
+  .ex-control-panel .pill-bar::-webkit-scrollbar { display: none; }
+  .ex-control-panel .pill-btn { flex: 0 0 auto; }
   .ex-control-panel .progress { margin-bottom: 0; padding: 0; }
 }
 

@@ -159,6 +159,10 @@ body { min-height: 100vh; padding: 0 14px; }
 }
 
 @media (max-width: 768px) {
+  .ex-bottom-nav--practice {
+    gap: 10px;
+  }
+
   .ex-bottom-nav--practice .typed-hint-btn {
     font-size: var(--ex-bottom-nav-practice-hint-font-size);
   }
