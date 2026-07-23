@@ -290,8 +290,53 @@ export function syncScoreKeysFromProgressDoc() {
   return changed;
 }
 
+export function syncScoreKeysFromActivityDoc() {
+  const doc = readJson(ACTIVITY_STORAGE_KEY, null);
+  if (!doc?.events?.length) return false;
+
+  let changed = false;
+  for (const event of doc.events) {
+    if (!event?.contentId || event.scorePct == null) continue;
+
+    const rule = PROGRESS_RULES[event.contentId];
+    if (!rule) continue;
+
+    const activityRule =
+      rule.requiredActivities.find((activity) => activity.activityId === event.activity) ||
+      rule.requiredActivities[0];
+    if (!activityRule) continue;
+
+    const scoreKey =
+      activityRule.scoreKeys.find((key) => readScoreHistory(key).length === 0) ||
+      activityRule.scoreKeys[0];
+    if (!scoreKey || readScoreHistory(scoreKey).length > 0) continue;
+
+    const timestamp = event.occurredAt || doc.updatedAt || new Date().toISOString();
+    const pct = Math.max(0, Math.min(100, Number(event.scorePct) || 0));
+
+    try {
+      localStorage.setItem(
+        versionedKey(scoreKey),
+        JSON.stringify([
+          {
+            pct,
+            date: timestamp,
+            timestamp,
+            context: { contentId: event.contentId, activity: event.activity },
+          },
+        ])
+      );
+      changed = true;
+    } catch {
+      /* ignore quota errors */
+    }
+  }
+  return changed;
+}
+
 export function hydrateHubFlowFromCloud() {
   syncScoreKeysFromProgressDoc();
+  syncScoreKeysFromActivityDoc();
   return publishHubFlowProgress();
 }
 

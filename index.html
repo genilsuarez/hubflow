@@ -2319,11 +2319,20 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   renderProgressSnapshot();
   renderLastActivities();
 
+  function refreshHeaderStats() {
+    const progressStats = getProgressStats();
+    document.getElementById('psTotal').textContent = progressStats.totalAttempts || '0';
+    document.getElementById('psMastered').textContent =
+      progressStats.masteredContent + '/' + progressStats.totalContent;
+  }
+
   setupSupabaseAuth({
     onAfterLogin: () => {
       hydrateHubFlowFromCloud();
       renderLastActivities();
       renderProgressSnapshot();
+      refreshHeaderStats();
+      renderHeroCard();
     },
   });
 
@@ -2466,10 +2475,7 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 
   // Canonical LearnFlow projection and header summary use the same explicit rules.
   hydrateHubFlowFromCloud();
-  const progressStats = getProgressStats();
-  document.getElementById('psTotal').textContent = progressStats.totalAttempts || '0';
-  const totalModules = document.querySelectorAll('.book[href]').length;
-  document.getElementById('psMastered').textContent = progressStats.masteredContent + '/' + progressStats.totalContent;
+  refreshHeaderStats();
 
   // Dynamic module/guide counts
   const guideCount = document.querySelectorAll('.guide-link[href]').length;
