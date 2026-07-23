@@ -63,8 +63,38 @@ function versionedKey(key) {
 }
 
 function readScoreHistory(key) {
-  const history = readJson(versionedKey(key), []);
+  const v1Key = versionedKey(key);
+  const history = readJson(v1Key, []);
+  if (Array.isArray(history) && history.length) return history;
+
+  const legacy = readJson(`${key}:v2`, []);
+  if (Array.isArray(legacy) && legacy.length) {
+    try {
+      localStorage.setItem(v1Key, JSON.stringify(legacy));
+    } catch {
+      /* usar legacy en memoria aunque no se persista */
+    }
+    return legacy;
+  }
   return Array.isArray(history) ? history : [];
+}
+
+function migrateLegacyProjectionKeys() {
+  const pairs = [
+    ['learnflow:progress:hubflow:v1', 'learnflow:progress:hubflow:v2'],
+    ['learnflow:activity:hubflow:v1', 'learnflow:activity:hubflow:v2'],
+  ];
+  pairs.forEach(([current, legacy]) => {
+    if (localStorage.getItem(current) !== null) return;
+    const old = localStorage.getItem(legacy);
+    if (old !== null) {
+      try {
+        localStorage.setItem(current, old);
+      } catch {
+        /* ignore */
+      }
+    }
+  });
 }
 
 function toIsoTimestamp(value) {
@@ -292,6 +322,7 @@ function scheduleCloudSync() {
 }
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+  migrateLegacyProjectionKeys();
   publishHubFlowProgress();
 }
 
