@@ -505,8 +505,7 @@
         grid-template-columns: 44px 1fr;
         grid-template-areas:
           "icon context"
-          "icon title"
-          "meta meta";
+          "icon title";
         gap: 4px 12px;
         padding: 14px 14px 12px;
         align-items: start;
@@ -524,22 +523,15 @@
         font-size: .62rem;
         letter-spacing: .08em;
         margin-bottom: 0;
-        padding-right: 44px;
       }
       .hero-card__title {
         grid-area: title;
         font-size: .95rem;
         line-height: 1.25;
         margin-bottom: 0;
-        padding-right: 36px;
       }
       .hero-card__meta {
-        grid-area: meta;
-        font-size: .78rem;
-        line-height: 1.4;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        margin-top: 2px;
+        display: none;
       }
 
       /* Footer action bar — mobile only pattern */
@@ -571,35 +563,8 @@
         opacity: .9;
       }
       .hero-card__alt {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        z-index: 2;
-        width: 40px;
-        height: 40px;
-        min-height: 40px;
-        padding: 0;
-        border-radius: var(--lp-radius-full);
-        border: 1px solid var(--lp-border);
-        background: var(--lp-surface);
-        color: var(--lp-ink-soft);
-        font-size: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--lp-shadow-xs);
+        display: none !important;
       }
-      .hero-card__alt::before {
-        content: '↻';
-        font-size: 1.05rem;
-        line-height: 1;
-      }
-      .hero-card__alt:hover,
-      .hero-card__alt:active {
-        color: var(--lp-ink);
-        background: var(--lp-surface-sunken);
-      }
-      .hero-card__alt[hidden] { display: none !important; }
 
       .hero-card { position: relative; }
 
@@ -608,8 +573,7 @@
         grid-template-columns: 36px 1fr;
         grid-template-areas:
           "icon context"
-          "icon title"
-          "meta meta";
+          "icon title";
         gap: 1px 10px;
         padding: 10px 12px 8px;
       }
@@ -639,13 +603,7 @@
         padding-right: 0;
       }
       .hero-card--welcome .hero-card__meta {
-        grid-area: meta;
-        font-size: .72rem;
-        line-height: 1.35;
-        margin: 4px 0 0;
-        padding-right: 0;
-        -webkit-line-clamp: 1;
-        line-clamp: 1;
+        display: none;
       }
       .hero-card--welcome .hero-card__actions {
         background: transparent;
@@ -670,10 +628,8 @@
     }
     @media (max-width: 480px) {
       .hero-card--welcome .hero-card__title { font-size: .98rem; }
-      .hero-card--welcome .hero-card__meta { font-size: .7rem; }
       .hero-card--welcome .hero-card__inner { padding: 9px 11px 7px; }
       .hero-card:not(.hero-card--welcome) .hero-card__title { font-size: .9rem; }
-      .hero-card:not(.hero-card--welcome) .hero-card__meta { font-size: .74rem; }
       .hero-card__cta { font-size: .84rem; min-height: 46px; }
     }
 
@@ -731,7 +687,6 @@
     }
     .la-card__body { min-width: 0; width: 100%; }
     .la-card__name { font-size: .66rem; font-weight: var(--lp-weight-bold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .la-card__meta { font-size: .56rem; color: var(--lp-muted); margin-top: 2px; }
     .la-card__score {
       font-size: .58rem; font-weight: var(--lp-weight-bold); padding: 2px 7px;
       border-radius: var(--lp-radius-full); white-space: nowrap;
@@ -1163,6 +1118,7 @@
         max-width: calc(100% - 88px);
         pointer-events: none;
       }
+      .topbar-greeting-sub { display: none; }
       .topbar-greeting-sub .tgs-full { display: none; }
       .topbar-greeting-sub .tgs-short { display: inline; }
       .foot { display: none; }
@@ -1184,6 +1140,19 @@
        min-width evita que flex lo aplaste a un ancho inusable. */
     @media (max-width: 640px) {
       .search-bar { min-width: 130px; }
+
+      /* Topic tiles: −15% altura en mobile */
+      .tile {
+        padding: 13px;
+        gap: 6px;
+      }
+      .tile .tile-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 1.1rem;
+      }
+      .tile .tile-title { font-size: .7rem; }
+      .tile .tile-count { font-size: .56rem; }
     }
     @media (max-width: 480px) {
       .topbar { height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); min-height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); max-height: none; padding: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px)) var(--lp-header-pad-x-compact) var(--lp-header-pad-y-compact) var(--lp-header-floating-pad-left-compact); }
@@ -1195,7 +1164,6 @@
         padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));
       }
       .topbar-greeting-title { font-size: var(--lp-header-title-size); }
-      .topbar-greeting-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
       /* .book-pills solo se revela con :hover/:focus-within — en mobile eso
          nunca ocurre (no hay hover, y el tap navega directo), así que quedaba
@@ -1206,7 +1174,36 @@
          líneas ya se cortaban a mitad de palabra ("...36…"). Se recorta a 1
          línea: sigue sin decir todo, pero al menos no queda un fragmento raro
          a medio cortar, y la tarjeta baja de altura. */
-      .book-meta { -webkit-line-clamp: 1; font-size: .58rem; }
+      .book-title { font-size: .72rem; line-height: 1.15; }
+      .book-body { padding: 7px 10px 7px 7px; }
+      .book-icon {
+        width: 28px;
+        height: 28px;
+        font-size: .95rem;
+        margin: 5px 3px;
+      }
+      .book-meta {
+        -webkit-line-clamp: 1;
+        font-size: .56rem;
+        margin-top: 2px;
+        line-height: 1.25;
+      }
+      .book-depth {
+        margin-top: 2px;
+        font-size: .55rem;
+        gap: 4px;
+      }
+      .book-depth__battle {
+        padding: 1px 5px;
+        font-size: .5rem;
+      }
+      .book-progress {
+        margin-top: 4px;
+        gap: 4px;
+      }
+      .book-progress__bar { height: 3px; }
+      .book-progress__pct { font-size: .52rem; }
+      .book-progress__check { font-size: .55rem; }
 
       /* Guías de referencia: usaban más gap entre tarjetas (11px vs 7px de
          .shelf) y más padding interno (11/14/11/10 vs 9/12/9/8 de .book-body)
@@ -1215,14 +1212,6 @@
       .guides { gap: 7px; }
       .guide-icon { width: 28px; height: 28px; margin: 0 2px 0 8px; font-size: .85rem; }
       .guide-body { padding: 9px 12px 9px 8px; }
-
-      /* Título de tarjeta/item: .book-title (.82rem), .guide-title (.76rem),
-         .path-summary-title (.82→.74rem) y .pm-title (.72rem, sin cambios acá)
-         iban cada uno a un tamaño distinto para el mismo rol semántico. Se
-         iguala todo a .72rem — el más chico de los cuatro — para que las
-         secciones lean con la misma jerarquía tipográfica y de paso queden
-         más compactas. */
-      .book-title { font-size: .72rem; }
       .guide-title { font-size: .72rem; }
 
       /* Rutas guiadas: la descripción larga no aporta en pantalla estrecha */
@@ -2252,18 +2241,6 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   const CATEGORY_COLOR_MAP = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
   const MAX_LAST_ACTIVITIES = 5;
 
-  function timeAgo(isoDate) {
-    const diff = Date.now() - new Date(isoDate).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 1) return 'ahora';
-    if (mins < 60) return mins + ' min';
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return hrs + 'h';
-    const days = Math.floor(hrs / 24);
-    if (days < 7) return days + 'd';
-    return new Date(isoDate).toLocaleDateString('es', { day: 'numeric', month: 'short' });
-  }
-
   function renderLastActivities() {
     const container = document.getElementById('lastActivities');
     if (!container) return;
@@ -2293,12 +2270,10 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
       const color = CATEGORY_COLOR_MAP[mod.category] || 'var(--lp-accent)';
       const scoreClass = ev.passed ? 'la-card__score--pass' : 'la-card__score--fail';
       const scoreLabel = Math.round(ev.scorePct) + '%';
-      const ago = timeAgo(ev.occurredAt);
       return `<a class="la-card" href="${mod.exercise}" style="--la-color: ${color}">
         <div class="la-card__icon">${mod.icon}</div>
         <div class="la-card__body">
           <div class="la-card__name">${mod.title}</div>
-          <div class="la-card__meta">${ago}</div>
         </div>
         <span class="la-card__score ${scoreClass}">${scoreLabel}</span>
       </a>`;
