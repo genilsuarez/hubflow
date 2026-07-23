@@ -1790,10 +1790,10 @@
 
 <script type="module">
 import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
-import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, publishHubFlowProgress } from './js/utils.js';
+import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/utils.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 
-setupSupabaseAuth({ onAfterLogin: () => publishHubFlowProgress() });
+setupSupabaseAuth({ onAfterLogin: () => hydrateHubFlowFromCloud() });
 
 (function() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
@@ -2253,7 +2253,7 @@ setupSupabaseAuth({ onAfterLogin: () => publishHubFlowProgress() });
   }
 
   // ─── LAST ACTIVITIES ───
-  const ACTIVITY_KEY = 'learnflow:activity:hubflow:v2';
+  const ACTIVITY_KEY = 'learnflow:activity:hubflow:v1';
   const CATEGORY_COLOR_MAP = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
   const MAX_LAST_ACTIVITIES = 5;
 
@@ -2459,7 +2459,7 @@ setupSupabaseAuth({ onAfterLogin: () => publishHubFlowProgress() });
   }
 
   // Canonical LearnFlow projection and header summary use the same explicit rules.
-  publishHubFlowProgress();
+  hydrateHubFlowFromCloud();
   const progressStats = getProgressStats();
   document.getElementById('psTotal').textContent = progressStats.totalAttempts || '0';
   const totalModules = document.querySelectorAll('.book[href]').length;

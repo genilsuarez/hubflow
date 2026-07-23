@@ -963,11 +963,17 @@
 /* ─── EXERCISE BOTTOM CONTROLS (mobile sticky — mirrors FluentFlow game-controls) ─── */
 @media (max-width: 768px) {
   :root {
-    --ex-bottom-nav-btn-size: 66px;
-    --ex-bottom-nav-padding-y: 12px;
-    --ex-bottom-nav-padding-x: 16px;
-    --ex-bottom-nav-min-height: 90px;
-    --ex-bottom-nav-scroll-reserve: 108px;
+    --ex-bottom-nav-btn-size: 86px;
+    --ex-bottom-nav-padding-y: 16px;
+    --ex-bottom-nav-padding-x: 21px;
+    --ex-bottom-nav-min-height: 117px;
+    --ex-bottom-nav-scroll-reserve: 140px;
+    --ex-bottom-nav-btn-font-size: 1.4625rem;
+    --ex-bottom-nav-btn-ghost-font-size: 1.3rem;
+    --ex-bottom-nav-detail-font-size: 1.3rem;
+    --ex-bottom-nav-battle-font-size: 1.3rem;
+    --ex-bottom-nav-practice-hint-font-size: 1.365rem;
+    --ex-bottom-nav-practice-skip-font-size: 1.3rem;
   }
 
   .battle-actions:not(.ex-bottom-nav .battle-actions),
@@ -980,7 +986,8 @@
     width: 100%;
     margin-inline: 0;
     margin-top: 0;
-    padding: 0.8125rem 16px max(0.8125rem, env(safe-area-inset-bottom));
+    padding: 1.05625rem 21px max(1.05625rem, env(safe-area-inset-bottom));
+    font-size: var(--ex-bottom-nav-battle-font-size);
     background: var(--lp-surface);
     border: 1px solid var(--lp-border-subtle, var(--lp-border));
     border-bottom: none;
@@ -1006,7 +1013,7 @@
     bottom: max(8px, env(safe-area-inset-bottom));
     z-index: 10;
     justify-content: center;
-    gap: 16px;
+    gap: 21px;
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
@@ -1017,6 +1024,63 @@
     border-radius: var(--lp-radius-lg);
     border: 1px solid var(--lp-border-subtle, var(--lp-border));
     box-shadow: var(--lp-shadow-sm);
+  }
+
+  .fc-nav .lp-btn,
+  .ex-bottom-nav .lp-btn {
+    font-size: var(--ex-bottom-nav-btn-font-size);
+  }
+
+  .fc-nav .lp-btn--ghost,
+  .ex-bottom-nav .lp-btn--ghost {
+    font-size: var(--ex-bottom-nav-btn-ghost-font-size);
+  }
+
+  /* Every control in the bottom bar — same touch height as prev/next */
+  .ex-bottom-nav .lp-btn,
+  .ex-bottom-nav .lesson-progress__detail,
+  .ex-bottom-nav .typed-hint-btn,
+  .ex-bottom-nav .typed-action-btn,
+  .ex-bottom-nav #speakBtn,
+  .ex-bottom-nav #listenBtn,
+  .ex-bottom-nav #studySpeakBtn,
+  .ex-bottom-nav #shuffleBtn,
+  .ex-bottom-nav #prevBtn,
+  .ex-bottom-nav #nextBtn {
+    min-width: var(--ex-bottom-nav-btn-size);
+    width: var(--ex-bottom-nav-btn-size);
+    height: var(--ex-bottom-nav-btn-size);
+    min-height: var(--ex-bottom-nav-btn-size);
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .fc-nav .lesson-progress__detail,
+  .ex-bottom-nav .lesson-progress__detail {
+    font-size: var(--ex-bottom-nav-detail-font-size);
+  }
+
+  /* Text labels inside battle / result strips */
+  .ex-bottom-nav .battle-actions .lp-btn,
+  .result-btns .lp-btn {
+    width: auto;
+    min-width: calc(var(--ex-bottom-nav-btn-size) * 1.35);
+    min-height: var(--ex-bottom-nav-btn-size);
+    height: var(--ex-bottom-nav-btn-size);
+    padding: 0 18px;
+    font-size: var(--ex-bottom-nav-battle-font-size);
+    white-space: nowrap;
+  }
+
+  .ex-bottom-nav--practice .typed-hint-btn,
+  .ex-bottom-nav--practice .typed-action-btn--skip {
+    font-size: var(--ex-bottom-nav-practice-hint-font-size);
+  }
+
+  .ex-bottom-nav--practice .typed-action-btn--check,
+  .ex-bottom-nav--practice .typed-action-btn--next {
+    font-size: var(--ex-bottom-nav-btn-font-size);
   }
 
   body.shell-ready .scroll-body > .ex-bottom-nav,

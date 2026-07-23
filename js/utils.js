@@ -233,6 +233,54 @@ export function publishHubFlowProgress() {
   return projection;
 }
 
+// Rebuild per-exercise score keys from the cloud projection (learnflow:progress:hubflow:v1).
+// HubFlow's score-history keys are the source of truth for the UI; downloadOnLogin only
+// merges the v1 doc — without this step, publishHubFlowProgress() would wipe remote data.
+export function syncScoreKeysFromProgressDoc() {
+  const doc = readJson(PROGRESS_STORAGE_KEY, null);
+  if (!doc?.content) return false;
+
+  let changed = false;
+  for (const [contentId, item] of Object.entries(doc.content)) {
+    if (!item) continue;
+    const hasProgress =
+      item.completed || (item.bestScorePct ?? 0) > 0 || (item.attempts ?? 0) > 0;
+    if (!hasProgress) continue;
+
+    const rule = PROGRESS_RULES[contentId];
+    if (!rule) continue;
+
+    const pct = Math.max(
+      item.bestScorePct ?? 0,
+      item.completed ? Math.max(HUBFLOW_PASS_SCORE_PCT, item.bestScorePct ?? 0) : 0
+    );
+    if (pct <= 0) continue;
+
+    const timestamp = item.completedAt || doc.updatedAt || new Date().toISOString();
+
+    for (const activity of rule.requiredActivities) {
+      for (const scoreKey of activity.scoreKeys) {
+        if (readScoreHistory(scoreKey).length > 0) continue;
+        try {
+          localStorage.setItem(
+            versionedKey(scoreKey),
+            JSON.stringify([{ pct, date: timestamp, timestamp }])
+          );
+          changed = true;
+        } catch {
+          /* ignore quota errors */
+        }
+      }
+    }
+  }
+  return changed;
+}
+
+export function hydrateHubFlowFromCloud() {
+  syncScoreKeysFromProgressDoc();
+  return publishHubFlowProgress();
+}
+
 function resolveScoreActivity(key, context) {
   const requestedContent = context?.contentId;
   const candidates = Object.entries(PROGRESS_RULES).flatMap(([contentId, rule]) =>
@@ -323,7 +371,11 @@ function scheduleCloudSync() {
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
   migrateLegacyProjectionKeys();
-  publishHubFlowProgress();
+  if (localStorage.getItem(PROGRESS_STORAGE_KEY)) {
+    syncScoreKeysFromProgressDoc();
+  } else {
+    publishHubFlowProgress();
+  }
 }
 
 /** Stars calculation */

@@ -607,7 +607,7 @@ h1 {
 }
 
 body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
-  padding-bottom: max(var(--ex-bottom-nav-scroll-reserve), calc(72px + env(safe-area-inset-bottom)));
+  padding-bottom: max(var(--ex-bottom-nav-scroll-reserve), calc(94px + env(safe-area-inset-bottom)));
 }
 @media (max-width: 480px) {
   .scroll-body { padding: 0; }

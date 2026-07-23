@@ -213,6 +213,16 @@ h1 { display: flex; align-items: center; gap: 6px; }
   font-size: .78rem;
   white-space: nowrap;
 }
+
+@media (max-width: 768px) {
+  .ex-bottom-nav .battle-actions .lp-btn {
+    min-width: calc(var(--ex-bottom-nav-btn-size) * 1.35);
+    min-height: var(--ex-bottom-nav-btn-size);
+    height: var(--ex-bottom-nav-btn-size);
+    padding: 0 18px;
+    font-size: var(--ex-bottom-nav-battle-font-size);
+  }
+}
 .battle-instruction {
   font-size: .58rem;
   font-weight: 600;
@@ -282,9 +292,25 @@ h1 { display: flex; align-items: center; gap: 6px; }
   }
   [data-area="match"] .pair-grid { min-height: var(--lp-flashcard-mode-h); }
   .fc-count { font-size: .7rem; margin-bottom: 0; }
-  .listen-btn { width: 38px !important; height: 38px !important; font-size: 1rem !important; }
   [data-area] { gap: 2px; }
   .fc-nav { gap: 8px; }
+}
+
+/* Study / flashcard bottom bar — same size as other modes; flip is tap on card */
+@media (max-width: 768px) {
+  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) {
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+
+  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) #speakBtn,
+  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) .listen-btn {
+    width: var(--ex-bottom-nav-btn-size) !important;
+    height: var(--ex-bottom-nav-btn-size) !important;
+    min-width: var(--ex-bottom-nav-btn-size) !important;
+    min-height: var(--ex-bottom-nav-btn-size) !important;
+    font-size: var(--ex-bottom-nav-btn-font-size) !important;
+  }
 }
 
 /* ─── DUAL WORD CARD (Word Relations) ─────────────────────────────────── */
