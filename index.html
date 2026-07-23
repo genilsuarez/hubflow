@@ -2511,13 +2511,14 @@ setupSupabaseAuth({ onAfterLogin: () => publishHubFlowProgress() });
   const _isUnifiedLocal = _isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
   if (_isLocal) {
     const appPorts = { deskflow: 3000, fluentflow: 3001, lyricflow: 3003 };
+    const withTheme = (href) => (window.LPTheme ? window.LPTheme.appendThemeToHref(href) : href);
     document.querySelectorAll('.portal-link').forEach((link) => {
-      link.href = _isUnifiedLocal ? '/deskflow/' : 'http://' + _h + ':3000/';
+      link.href = withTheme(_isUnifiedLocal ? '/deskflow/' : 'http://' + _h + ':3000/');
     });
     document.querySelectorAll('[data-learnflow-app]').forEach((link) => {
       const app = link.dataset.learnflowApp;
       const port = appPorts[app];
-      if (port) link.href = _isUnifiedLocal ? '/' + app + '/' : 'http://' + _h + ':' + port + '/';
+      if (port) link.href = withTheme(_isUnifiedLocal ? '/' + app + '/' : 'http://' + _h + ':' + port + '/');
     });
 
   }

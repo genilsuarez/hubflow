@@ -41,9 +41,11 @@ import { MODULES } from '../data/catalog.js';
 
 const portalLink = document.getElementById('portalLink');
 if (portalLink) {
-  portalLink.href = '/deskflow/';
+  let href = '/deskflow/';
   portalLink.setAttribute('aria-label', 'Volver a LearnFlow');
   portalLink.title = 'Volver a LearnFlow';
+  if (window.LPTheme) href = window.LPTheme.appendThemeToHref(href);
+  portalLink.href = href;
 }
 
 const topBar = document.querySelector('.top-bar');
@@ -61,5 +63,9 @@ const _isLocal = _h === 'localhost' || _h === '127.0.0.1' || _h.startsWith('192.
 const _isUnifiedLocal = _isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
 if (_isLocal && !_isUnifiedLocal) {
   const pl = document.getElementById('portalLink');
-  if (pl) pl.href = 'http://' + _h + ':3000/';
+  if (pl) {
+    let href = 'http://' + _h + ':3000/';
+    if (window.LPTheme) href = window.LPTheme.appendThemeToHref(href);
+    pl.href = href;
+  }
 }

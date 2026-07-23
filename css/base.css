@@ -69,6 +69,13 @@
   --lp-warning: #C87D0A;
   --lp-warning-soft: #FDF5E0;
 
+  /* Exercise bottom nav — +15% vs 44px touch target; +30% more on mobile */
+  --ex-bottom-nav-btn-size: 51px;
+  --ex-bottom-nav-padding-y: 9px;
+  --ex-bottom-nav-padding-x: 12px;
+  --ex-bottom-nav-min-height: 69px;
+  --ex-bottom-nav-scroll-reserve: 83px;
+
   /* Elevation */
   --lp-shadow-xs: 0 1px 2px rgba(44, 36, 24, 0.05);
   --lp-shadow-sm: 0 2px 6px rgba(44, 36, 24, 0.06), 0 4px 14px rgba(44, 36, 24, 0.05);

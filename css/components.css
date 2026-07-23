@@ -146,7 +146,8 @@
   width: 100%;
   max-width: 720px;
   margin-inline: auto;
-  padding: 8px 12px;
+  min-height: var(--ex-bottom-nav-min-height);
+  padding: var(--ex-bottom-nav-padding-y) var(--ex-bottom-nav-padding-x);
   border-radius: var(--lp-radius-lg);
   background: var(--lp-surface);
   border: 1px solid var(--lp-border-subtle, var(--lp-border));
@@ -157,10 +158,10 @@
 /* Flashcard nav — compact icon buttons (← / → / 🔀), circular like .lp-icon-btn */
 .fc-nav .lp-btn,
 .ex-bottom-nav .lp-btn {
-  min-width: 44px;
-  width: 44px;
-  height: 44px;
-  min-height: 44px;
+  min-width: var(--ex-bottom-nav-btn-size);
+  width: var(--ex-bottom-nav-btn-size);
+  height: var(--ex-bottom-nav-btn-size);
+  min-height: var(--ex-bottom-nav-btn-size);
   padding: 0;
   font-size: 1.125rem;
   line-height: 1;
@@ -961,6 +962,14 @@
 
 /* ─── EXERCISE BOTTOM CONTROLS (mobile sticky — mirrors FluentFlow game-controls) ─── */
 @media (max-width: 768px) {
+  :root {
+    --ex-bottom-nav-btn-size: 66px;
+    --ex-bottom-nav-padding-y: 12px;
+    --ex-bottom-nav-padding-x: 16px;
+    --ex-bottom-nav-min-height: 90px;
+    --ex-bottom-nav-scroll-reserve: 108px;
+  }
+
   .battle-actions:not(.ex-bottom-nav .battle-actions),
   .result-btns {
     position: sticky;
@@ -971,7 +980,7 @@
     width: 100%;
     margin-inline: 0;
     margin-top: 0;
-    padding: 0.625rem 12px max(0.625rem, env(safe-area-inset-bottom));
+    padding: 0.8125rem 16px max(0.8125rem, env(safe-area-inset-bottom));
     background: var(--lp-surface);
     border: 1px solid var(--lp-border-subtle, var(--lp-border));
     border-bottom: none;
@@ -997,15 +1006,23 @@
     bottom: max(8px, env(safe-area-inset-bottom));
     z-index: 10;
     justify-content: center;
-    gap: 12px;
+    gap: 16px;
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
-    margin-top: 10px;
-    padding: 8px 12px;
+    flex-shrink: 0;
+    min-height: var(--ex-bottom-nav-min-height);
+    padding: var(--ex-bottom-nav-padding-y) var(--ex-bottom-nav-padding-x)
+      max(var(--ex-bottom-nav-padding-y), env(safe-area-inset-bottom));
     border-radius: var(--lp-radius-lg);
     border: 1px solid var(--lp-border-subtle, var(--lp-border));
     box-shadow: var(--lp-shadow-sm);
+  }
+
+  body.shell-ready .scroll-body > .ex-bottom-nav,
+  body.shell-ready .scroll-body > .fc-nav {
+    margin-top: 0;
+    flex-shrink: 0;
   }
 
   body.shell-ready .check-area {
