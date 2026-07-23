@@ -17,6 +17,8 @@
   <script src="js/lp-nav-icons.js"></script>
   <script src="lp-guest-reset.js"></script>
   <script src="lp-login.js"></script>
+  <script src="js/lp-about.js"></script>
+  <script src="js/lp-about.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
     // Dev utility: ?reset=full clears all HubFlow progress in the real browser
@@ -55,6 +57,9 @@
   </style>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/lp-nav-active.css">
+  <link rel="stylesheet" href="css/lp-about.css">
   <style>
     html, body { height: 100%; height: 100dvh; overflow: hidden; }
     body { max-height: 100dvh; }
@@ -930,7 +935,6 @@
       flex-shrink: 0; padding: 12px clamp(16px, 3vw, 34px); border-top: 1.5px solid var(--lp-border);
       display: flex; justify-content: space-between; align-items: center; background: var(--lp-bg);
     }
-    .foot-sig { font-family: var(--lp-font-display); font-style: italic; font-size: 13px; color: var(--lp-ink-soft); }
     .foot-meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 
     .about-overlay {
@@ -1888,90 +1892,16 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   }
 
   function showAboutLearnFlow(event) {
-    document.getElementById('aboutLearnFlow')?.remove();
-    const opener = event?.currentTarget instanceof HTMLElement ? event.currentTarget : document.activeElement;
-    const shell = document.querySelector('.shell');
-    const overlay = document.createElement('div');
-    overlay.id = 'aboutLearnFlow';
-    overlay.className = 'about-overlay';
-    overlay.innerHTML = `
-      <section class="about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutLearnFlowTitle" aria-describedby="aboutLearnFlowDescription">
-        <header class="about-header">
-          <div class="about-identity" aria-hidden="true">L</div>
-          <div class="about-header__text">
-            <p class="about-eyebrow">LearnFlow · Plataforma</p>
-            <h2 id="aboutLearnFlowTitle">About LearnFlow</h2>
-          </div>
-          <button class="about-close" id="aboutCloseBtn" type="button" aria-label="Cerrar About LearnFlow">✕</button>
-        </header>
-        <div class="about-body">
-          <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
-          <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-            <a href="${getAppHref('deskflow')}" data-learnflow-app="deskflow">
-              <span class="about-module__mark about-module__mark--portal" aria-hidden="true">L</span>
-              <span class="about-module__text"><strong>LearnFlow</strong><span>Portal</span></span>
-            </a>
-            <a href="${getAppHref('fluentflow')}" data-learnflow-app="fluentflow">
-              <span class="about-module__mark about-module__mark--fluent" aria-hidden="true">F</span>
-              <span class="about-module__text"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></span>
-            </a>
-            <a href="${getAppHref('hubflow')}" data-learnflow-app="hubflow">
-              <span class="about-module__mark about-module__mark--hub" aria-hidden="true">H</span>
-              <span class="about-module__text"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></span>
-            </a>
-            <a href="${getAppHref('lyricflow')}" data-learnflow-app="lyricflow">
-              <span class="about-module__mark about-module__mark--lyric" aria-hidden="true">LF</span>
-              <span class="about-module__text"><strong>LyricFlow</strong><span>Aprender con música</span></span>
-            </a>
-          </nav>
-        </div>
-        <footer class="about-footer">
-          <div class="about-author">
-            <div class="about-author__avatar" aria-hidden="true">GS</div>
-            <div class="about-author__info">
-              <strong>Genil Suárez</strong>
-              <span>Diseñado y desarrollado como proyecto personal</span>
-            </div>
-          </div>
-        </footer>
-      </section>
-    `;
-    shell.inert = true;
-    document.body.appendChild(overlay);
-    setNavigationDrawerOpen(false);
-
-    const focusable = [...overlay.querySelectorAll('button, a[href]')];
-    const close = () => {
-      overlay.remove();
-      shell.inert = false;
-      document.removeEventListener('keydown', onAboutKeydown);
-      if (opener instanceof HTMLElement && opener.isConnected) opener.focus();
-    };
-    const onAboutKeydown = (keyEvent) => {
-      if (keyEvent.key === 'Escape') { keyEvent.preventDefault(); close(); return; }
-      if (keyEvent.key !== 'Tab' || focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (keyEvent.shiftKey && document.activeElement === first) { keyEvent.preventDefault(); last.focus(); }
-      else if (!keyEvent.shiftKey && document.activeElement === last) { keyEvent.preventDefault(); first.focus(); }
-    };
-
-    overlay.querySelector('#aboutCloseBtn').addEventListener('click', close);
-    overlay.addEventListener('click', (clickEvent) => { if (clickEvent.target === overlay) close(); });
-    document.addEventListener('keydown', onAboutKeydown);
-    overlay.querySelector('#aboutCloseBtn').focus();
+    lpAbout.open(event, { inertElements: [document.querySelector('.shell')] });
   }
 
   document.getElementById('aboutTrigger').addEventListener('click', showAboutLearnFlow);
-  document.getElementById('loginTrigger').addEventListener('click', () => lpLogin.open());
-  lpLogin.onUpdate(function(user) {
-    const btn = document.getElementById('loginTrigger');
-    if (!btn) return;
-    const label = btn.querySelector('.sb-label');
-    if (user) { if (label) label.textContent = user.name; btn.setAttribute('aria-label', user.name + ' — perfil'); }
-    else { if (label) label.textContent = 'Iniciar Sesión'; btn.setAttribute('aria-label', 'Iniciar sesión'); }
+  lpLogin.bindNavButton('#loginTrigger', {
+    labelSelector: '.sb-label',
+    onSync(user, btn) {
+      btn.setAttribute('aria-label', user ? user.name + ' — perfil' : 'Iniciar sesión');
+    },
   });
-  (function() { var u = lpLogin.getUser(); if (u) { var l = document.querySelector('#loginTrigger .sb-label'); if (l) l.textContent = u.name; } })();
 
   // ─── RENDER MODULE CARDS FROM CATALOG (Fase 2) ───
   const CATEGORY_SPINE = { vocab: 'b-vocab', grammar: 'b-grammar', pronunciation: 'b-pron', analysis: 'b-analysis', guides: '' };
@@ -2294,10 +2224,12 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 
   function refreshHeaderStats() {
     const progressStats = getProgressStats();
-    document.getElementById('psTotal').textContent = progressStats.totalAttempts || '0';
+    document.getElementById('psTotal').textContent = String(progressStats.totalAttempts || 0);
     document.getElementById('psMastered').textContent =
-      progressStats.masteredContent + '/' + progressStats.totalContent;
+      `${progressStats.completedContent}/${progressStats.totalContent}`;
   }
+
+  window.addEventListener('hubflow-progress-updated', refreshHeaderStats);
 
   setupSupabaseAuth({
     onAfterLogin: () => {
@@ -2454,7 +2386,6 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   }
 
   // Canonical LearnFlow projection and header summary use the same explicit rules.
-  hydrateHubFlowFromCloud();
   refreshHeaderStats();
 
   // Dynamic module/guide counts
@@ -2720,10 +2651,8 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
       renderRutas();
       renderLastActivities();
       applyFilters();
-      // Refresh topbar stats
-      const ps = getProgressStats();
-      document.getElementById('psTotal').textContent = ps.totalAttempts || '0';
-      document.getElementById('psMastered').textContent = ps.masteredContent + '/' + ps.totalContent;
+      hydrateHubFlowFromCloud();
+      refreshHeaderStats();
       var s = sessionStorage.getItem('hf-back-section');
       if (s && VALID_SECTIONS.has(s)) {
         sessionStorage.removeItem('hf-back-section');

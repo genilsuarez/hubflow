@@ -1,5 +1,7 @@
 import { MODULES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT, MODULE_DEPTH } from '../data/catalog.js';
 import * as lpSupabase from './lp-supabase.js';
+import { isCloudHydrated } from './sync-engine.js';
+import { enrichHubflowContentEntry } from './lp-progress-summary.js';
 
 /* ═══════════════════════════════════════════════════════
    HubFlow — Shared Utilities
@@ -48,6 +50,7 @@ const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
 const SCORE_KEY_VERSION = ':v1';
 const MAX_SCORE_HISTORY = 20;
 const MAX_ACTIVITY_EVENTS = 200;
+let projectionDocCache = null;
 
 function readJson(key, fallback) {
   try {
@@ -146,7 +149,69 @@ function getActivityProgress(activity) {
   };
 }
 
-export function getContentProgress(contentId) {
+function invalidateProjectionCache() {
+  projectionDocCache = null;
+}
+
+function readProjectionDoc() {
+  if (projectionDocCache) return projectionDocCache;
+  const doc = readJson(PROGRESS_STORAGE_KEY, null);
+  if (!doc?.content) return null;
+  for (const item of Object.values(doc.content)) {
+    enrichHubflowContentEntry(item);
+  }
+  projectionDocCache = doc;
+  return doc;
+}
+
+function hasProgressSignal(item) {
+  if (!item) return false;
+  return Boolean(
+    item.completed
+    || (item.attempts ?? 0) > 0
+    || (item.bestScorePct ?? 0) > 0
+    || (item.progressPct ?? 0) > 0
+  );
+}
+
+function mergeHubflowProgressItem(scoreDerived, projectionItem) {
+  if (!scoreDerived && !projectionItem) return null;
+  if (!scoreDerived) return projectionItem ? { ...projectionItem } : null;
+  if (!projectionItem || !hasProgressSignal(projectionItem)) return scoreDerived;
+
+  const mergedActivities = { ...(projectionItem.activities || {}) };
+  for (const [activityId, activity] of Object.entries(scoreDerived.activities || {})) {
+    const existing = mergedActivities[activityId];
+    if (!existing) {
+      mergedActivities[activityId] = activity;
+      continue;
+    }
+    mergedActivities[activityId] = {
+      ...existing,
+      completed: Boolean(existing.completed) || Boolean(activity.completed),
+      completedKeys: Math.max(existing.completedKeys ?? 0, activity.completedKeys ?? 0),
+      totalKeys: Math.max(existing.totalKeys ?? 0, activity.totalKeys ?? 0),
+      bestScorePct: Math.max(existing.bestScorePct ?? 0, activity.bestScorePct ?? 0),
+      attempts: Math.max(existing.attempts ?? 0, activity.attempts ?? 0),
+      completedAt: existing.completedAt || activity.completedAt || null,
+      lastAttemptAt: existing.lastAttemptAt || activity.lastAttemptAt || null,
+    };
+  }
+
+  return {
+    ...projectionItem,
+    ...scoreDerived,
+    progressPct: Math.max(scoreDerived.progressPct ?? 0, projectionItem.progressPct ?? 0),
+    completed: Boolean(scoreDerived.completed) || Boolean(projectionItem.completed),
+    completedAt: scoreDerived.completedAt || projectionItem.completedAt || null,
+    bestScorePct: Math.max(scoreDerived.bestScorePct ?? 0, projectionItem.bestScorePct ?? 0),
+    attempts: Math.max(scoreDerived.attempts ?? 0, projectionItem.attempts ?? 0),
+    activities: mergedActivities,
+    title: scoreDerived.title || projectionItem.title,
+  };
+}
+
+function getContentProgressFromScoreKeys(contentId) {
   const rule = PROGRESS_RULES[contentId];
   if (!rule) return null;
 
@@ -184,6 +249,55 @@ export function getContentProgress(contentId) {
   };
 }
 
+export function getContentProgress(contentId) {
+  const fromScores = getContentProgressFromScoreKeys(contentId);
+  const projectionItem = readProjectionDoc()?.content?.[contentId] ?? null;
+  return mergeHubflowProgressItem(fromScores, projectionItem);
+}
+
+function buildHubFlowSummary(contentStates) {
+  let completedActivities = 0;
+  let totalActivities = 0;
+  let attemptedActivities = 0;
+  for (const item of contentStates) {
+    const activities = Object.values(item.activities || {});
+    totalActivities += activities.length;
+    for (const activity of activities) {
+      if (activity.completed) completedActivities++;
+      if ((activity.attempts ?? 0) > 0 || (activity.completedKeys ?? 0) > 0) attemptedActivities++;
+    }
+  }
+  return {
+    progressPct: contentStates.length
+      ? contentStates.reduce((total, item) => total + (item.progressPct ?? 0), 0) / contentStates.length
+      : 0,
+    completedContent: contentStates.filter((item) => item.completed).length,
+    totalContent: contentStates.length,
+    attemptedContent: contentStates.filter((item) => (item.attempts ?? 0) > 0).length,
+    completedActivities,
+    totalActivities,
+    attemptedActivities,
+  };
+}
+
+/** Unified summary — same rules as DeskFlow portal and learnflow:progress:hubflow:v1. */
+export function getHubFlowProgressSummary() {
+  const contentStates = MODULES.map((module) => getContentProgress(module.id)).filter(Boolean);
+  const computed = buildHubFlowSummary(contentStates);
+  const stored = readProjectionDoc()?.summary;
+  if (!stored) return computed;
+
+  return {
+    progressPct: Math.max(computed.progressPct ?? 0, stored.progressPct ?? 0),
+    completedContent: Math.max(computed.completedContent ?? 0, stored.completedContent ?? 0),
+    totalContent: Math.max(computed.totalContent ?? 0, stored.totalContent ?? 0),
+    attemptedContent: Math.max(computed.attemptedContent ?? 0, stored.attemptedContent ?? 0),
+    completedActivities: Math.max(computed.completedActivities ?? 0, stored.completedActivities ?? 0),
+    totalActivities: Math.max(computed.totalActivities ?? 0, stored.totalActivities ?? 0),
+    attemptedActivities: Math.max(computed.attemptedActivities ?? 0, stored.attemptedActivities ?? 0),
+  };
+}
+
 export function isContentCompleted(contentId) {
   return getContentProgress(contentId)?.completed || false;
 }
@@ -192,17 +306,29 @@ export function getBestScore(contentId) {
   return getContentProgress(contentId)?.bestScorePct || 0;
 }
 
-export function getProgressStats(masterScorePct = 90) {
+export function getProgressStats() {
+  const summary = getHubFlowProgressSummary();
   const uniqueScoreKeys = new Set(
     Object.values(PROGRESS_RULES).flatMap((rule) =>
       rule.requiredActivities.flatMap((activity) => activity.scoreKeys)
     )
   );
-  const content = MODULES.map((module) => getContentProgress(module.id)).filter(Boolean);
+  const scoreAttempts = [...uniqueScoreKeys].reduce(
+    (total, key) => total + readScoreHistory(key).length,
+    0
+  );
+  const activityEvents = readJson(ACTIVITY_STORAGE_KEY, null)?.events?.length ?? 0;
   return {
-    totalAttempts: [...uniqueScoreKeys].reduce((total, key) => total + readScoreHistory(key).length, 0),
-    masteredContent: content.filter((item) => item.bestScorePct >= masterScorePct).length,
-    totalContent: content.length,
+    totalAttempts: Math.max(
+      scoreAttempts,
+      summary.attemptedContent ?? 0,
+      summary.attemptedActivities ?? 0,
+      activityEvents
+    ),
+    completedContent: summary.completedContent ?? 0,
+    completedActivities: summary.completedActivities ?? 0,
+    totalActivities: summary.totalActivities ?? 0,
+    totalContent: summary.totalContent ?? MODULES.length,
   };
 }
 
@@ -213,28 +339,7 @@ export function publishHubFlowProgress() {
     getContentProgress(module.id),
   ]));
   const contentStates = Object.values(content).filter(Boolean);
-  let completedActivities = 0;
-  let totalActivities = 0;
-  let attemptedActivities = 0;
-  for (const item of contentStates) {
-    const activities = Object.values(item.activities || {});
-    totalActivities += activities.length;
-    for (const activity of activities) {
-      if (activity.completed) completedActivities++;
-      if (activity.attempts > 0 || activity.completedKeys > 0) attemptedActivities++;
-    }
-  }
-  const summary = {
-    progressPct: contentStates.length
-      ? contentStates.reduce((total, item) => total + item.progressPct, 0) / contentStates.length
-      : 0,
-    completedContent: contentStates.filter((item) => item.completed).length,
-    totalContent: contentStates.length,
-    attemptedContent: contentStates.filter((item) => item.attempts > 0).length,
-    completedActivities,
-    totalActivities,
-    attemptedActivities,
-  };
+  const summary = buildHubFlowSummary(contentStates);
   const projection = {
     schemaVersion: 1,
     app: 'hubflow',
@@ -244,14 +349,15 @@ export function publishHubFlowProgress() {
     content,
   };
   localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(projection));
+  invalidateProjectionCache();
+  notifyHubFlowProgressUpdated();
   return projection;
 }
 
 // Rebuild per-exercise score keys from the cloud projection (learnflow:progress:hubflow:v1).
-// HubFlow's score-history keys are the source of truth for the UI; downloadOnLogin only
-// merges the v1 doc — without this step, publishHubFlowProgress() would wipe remote data.
+// Score-history keys drive granular exercise UI; the v1 projection is the cross-app source.
 export function syncScoreKeysFromProgressDoc() {
-  const doc = readJson(PROGRESS_STORAGE_KEY, null);
+  const doc = readProjectionDoc();
   if (!doc?.content) return false;
 
   let changed = false;
@@ -340,6 +446,11 @@ export function hydrateHubFlowFromCloud() {
   return publishHubFlowProgress();
 }
 
+function notifyHubFlowProgressUpdated() {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new CustomEvent('hubflow-progress-updated'));
+}
+
 function resolveScoreActivity(key, context) {
   const requestedContent = context?.contentId;
   const candidates = Object.entries(PROGRESS_RULES).flatMap(([contentId, rule]) =>
@@ -415,7 +526,7 @@ function scheduleCloudSync() {
   cloudSyncTimer = setTimeout(async () => {
     cloudSyncTimer = null;
     const authed = await lpSupabase.isAuthenticated().catch(() => false);
-    if (!authed) return;
+    if (!authed || !isCloudHydrated()) return;
 
     const progressDoc = readJson(PROGRESS_STORAGE_KEY, null);
     if (progressDoc?.content) {
@@ -430,11 +541,15 @@ function scheduleCloudSync() {
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
   migrateLegacyProjectionKeys();
-  if (localStorage.getItem(PROGRESS_STORAGE_KEY)) {
+  hydrateHubFlowFromCloud();
+
+  window.addEventListener('storage', (event) => {
+    if (event.key !== PROGRESS_STORAGE_KEY && event.key !== ACTIVITY_STORAGE_KEY) return;
+    invalidateProjectionCache();
     syncScoreKeysFromProgressDoc();
-  } else {
-    publishHubFlowProgress();
-  }
+    syncScoreKeysFromActivityDoc();
+    notifyHubFlowProgressUpdated();
+  });
 }
 
 /** Stars calculation */

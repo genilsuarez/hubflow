@@ -15,47 +15,22 @@ setupSupabaseAuth({
   },
 });
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
-function themedAppHref(app) {
-  let href = window.LPPlatformUrls
-    ? window.LPPlatformUrls.appHref(app)
-    : `https://genilsuarez.github.io/${app}/`;
-  if (window.LPTheme) href = window.LPTheme.appendThemeToHref(href);
-  return href;
+if (typeof window !== 'undefined') {
+  window.addEventListener('hubflow-progress-updated', () => {
+    const contentId =
+      document.getElementById('lessonProgress')?.dataset?.contentId
+      || document.getElementById('lessonProgressBtn')?.dataset?.contentId;
+    if (contentId) renderLessonProgress(contentId);
+  });
 }
 
-function currentTheme() {
-  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-}
-
-function currentThemeIcon() {
-  if (window.LpNavIcons) return window.LpNavIcons.themeIcon(currentTheme() === 'dark');
-  return '';
-}
-
-function navIcon(name) {
-  return window.LpNavIcons ? window.LpNavIcons.svg(name) : '';
-}
-
-function toggleTheme() {
-  if (window.LPTheme) {
-    window.LPTheme.toggleTheme();
-    return;
-  }
-  const isDark = currentTheme() === 'dark';
-  const next = isDark ? 'light' : 'dark';
-  document.documentElement.classList.add('theme-transitioning');
-  if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-  else document.documentElement.removeAttribute('data-theme');
-  localStorage.setItem('lp-theme', next);
-  const url = new URL(location.href);
-  if (url.searchParams.has('theme')) {
-    url.searchParams.set('theme', next);
-    history.replaceState(null, '', url);
-  }
-  setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 350);
-}
+// ─── Shared nav helpers (lp-nav-helpers.js) ───────────────────────────────────
+const themedAppHref = (app) => window.LpNavHelpers.themedAppHref(app);
+const currentThemeIcon = () => window.LpNavHelpers.currentThemeIcon();
+const navIcon = (name) => window.LpNavHelpers.navIcon(name);
+const toggleTheme = () => {
+  window.LpNavHelpers.toggleTheme(document.getElementById('sbThemeBtn')?.querySelector('.sb-icon'));
+};
 
 // ─── Section detection (for back navigation + active sidebar item) ─────────
 
@@ -357,12 +332,7 @@ function buildSidebar() {
   });
 
   // Login trigger
-  document.getElementById('sbLoginBtn').addEventListener('click', () => {
-    if (typeof lpLogin !== 'undefined') {
-      lpLogin.open();
-      closeSidebar();
-    }
-  });
+  lpLogin.bindNavButton('#sbLoginBtn', { beforeOpen: closeSidebar, labelSelector: '#sbLoginLabel' });
 
   // Sync login label when user changes
   if (typeof lpLogin !== 'undefined') {
@@ -386,157 +356,8 @@ function buildSidebar() {
   });
 }
 
-// ─── About LearnFlow modal (exercise-page version) ─────────────────────────────
-
-function injectAboutStyles() {
-  if (document.getElementById('aboutModalCSS')) return;
-  const s = document.createElement('style');
-  s.id = 'aboutModalCSS';
-  s.textContent = `
-    .about-overlay {
-      position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
-      padding: 20px; background: color-mix(in srgb, var(--lp-ink) 45%, transparent);
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      animation: aboutFadeIn 0.2s ease-out both;
-    }
-    [data-theme="dark"] .about-overlay { background: color-mix(in srgb, #14171c 55%, transparent); }
-    .about-modal {
-      position: relative; width: min(100%, 420px); max-height: min(680px, calc(100svh - 40px));
-      display: flex; flex-direction: column; overflow: hidden;
-      border: 1px solid var(--lp-border); border-radius: var(--lp-radius-lg);
-      background: var(--lp-bg-paper, var(--lp-surface));
-      box-shadow: 0 24px 48px color-mix(in srgb, var(--lp-ink) 18%, transparent), 0 4px 12px color-mix(in srgb, var(--lp-ink) 8%, transparent);
-      color: var(--lp-ink-soft); animation: aboutSlideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .about-header { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px; border-bottom: 1px solid var(--lp-border); flex-shrink: 0; }
-    .about-header__text { flex: 1; min-width: 0; }
-    .about-identity {
-      width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%;
-      background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: 1.05rem; font-weight: 700;
-      letter-spacing: -0.03em; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
-    }
-    .about-header .about-eyebrow { margin: 0 0 2px; }
-    .about-header h2 { margin: 0; font-family: var(--lp-font-display); font-size: 18px; font-weight: 500; line-height: 1.1; color: var(--lp-ink); }
-    .about-eyebrow { color: var(--lp-muted); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-    .about-close {
-      flex: 0 0 44px; width: 44px; height: 44px; margin: -4px -6px -4px 0; padding: 0;
-      display: grid; place-items: center; border: none; border-radius: var(--lp-radius-full);
-      background: transparent; color: var(--lp-muted); cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
-    }
-    .about-close:hover { background: color-mix(in srgb, var(--lp-ink) 6%, transparent); color: var(--lp-ink); }
-    .about-close:active { transform: scale(0.97); }
-    .about-close:focus-visible, .about-modules a:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
-    .about-body { padding: 12px 10px 14px; overflow-y: auto; flex: 1; min-height: 0; }
-    .about-description { margin: 0 0 10px; padding: 0 4px; color: var(--lp-muted); font-size: .82rem; line-height: 1.6; }
-    .about-modules { display: grid; gap: 2px; margin: 0; }
-    .about-modules a {
-      display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 10px;
-      border: none; border-radius: var(--lp-radius-md); background: transparent; color: var(--lp-ink); text-decoration: none;
-      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-    }
-    .about-modules a:hover { background: var(--lp-surface); box-shadow: 0 1px 3px color-mix(in srgb, var(--lp-ink) 8%, transparent); }
-    .about-modules a:active { transform: scale(0.98); }
-    [data-theme="dark"] .about-modules a:hover { background: var(--lp-surface); }
-    .about-module__mark {
-      width: 32px; height: 32px; flex: 0 0 32px; display: grid; place-items: center; border-radius: 50%;
-      background: var(--lp-accent); color: var(--lp-ink-inverse); font-size: .68rem; font-weight: 700; letter-spacing: -0.02em;
-      box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-accent) 20%, transparent);
-    }
-    .about-module__mark--portal { background: var(--lp-accent); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-accent) 20%, transparent); }
-    .about-module__mark--fluent { background: var(--lp-cat-purple, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-purple, var(--lp-accent)) 20%, transparent); }
-    .about-module__mark--hub { background: var(--lp-cat-amber, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-amber, var(--lp-accent)) 20%, transparent); }
-    .about-module__mark--lyric { background: var(--lp-cat-teal, var(--lp-accent)); box-shadow: 0 2px 8px color-mix(in srgb, var(--lp-cat-teal, var(--lp-accent)) 20%, transparent); }
-    .about-module__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-    .about-modules strong { font-size: .82rem; font-weight: 500; color: var(--lp-ink); }
-    .about-modules .about-module__text > span { color: var(--lp-muted); font-size: .68rem; line-height: 1.35; }
-    .about-footer { display: grid; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--lp-border); flex-shrink: 0; }
-    .about-author { display: flex; align-items: center; gap: 12px; }
-    .about-author__avatar {
-      width: 36px; height: 36px; border-radius: 50%; background: var(--lp-accent); color: var(--lp-ink-inverse);
-      display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700;
-      letter-spacing: .03em; flex-shrink: 0; box-shadow: 0 4px 14px color-mix(in srgb, var(--lp-accent) 22%, transparent);
-    }
-    .about-author__info { display: flex; flex-direction: column; gap: 2px; }
-    .about-author__info strong { font-size: .78rem; color: var(--lp-ink); font-weight: 600; }
-    .about-author__info span { font-size: .68rem; color: var(--lp-muted); }
-    @keyframes aboutFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes aboutSlideUp { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @media (prefers-reduced-motion: reduce) { .about-overlay, .about-modal { animation: none; } }
-  `;
-  document.head.appendChild(s);
-}
-
 function showAboutModal(event) {
-  injectAboutStyles();
-  document.getElementById('aboutLearnFlow')?.remove();
-  const opener = event?.currentTarget instanceof HTMLElement ? event.currentTarget : document.activeElement;
-  const overlay = document.createElement('div');
-  overlay.id = 'aboutLearnFlow';
-  overlay.className = 'about-overlay';
-  overlay.innerHTML = `
-    <section class="about-modal" role="dialog" aria-modal="true" aria-labelledby="aboutLearnFlowTitle" aria-describedby="aboutLearnFlowDescription">
-      <header class="about-header">
-        <div class="about-identity" aria-hidden="true">L</div>
-        <div class="about-header__text">
-          <p class="about-eyebrow">LearnFlow · Plataforma</p>
-          <h2 id="aboutLearnFlowTitle">About LearnFlow</h2>
-        </div>
-        <button class="about-close" id="aboutCloseBtn" type="button" aria-label="Cerrar About LearnFlow">✕</button>
-      </header>
-      <div class="about-body">
-        <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
-        <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-          <a href="${themedAppHref('deskflow')}" data-learnflow-app="deskflow">
-            <span class="about-module__mark about-module__mark--portal" aria-hidden="true">L</span>
-            <span class="about-module__text"><strong>LearnFlow</strong><span>Portal</span></span>
-          </a>
-          <a href="${themedAppHref('fluentflow')}" data-learnflow-app="fluentflow">
-            <span class="about-module__mark about-module__mark--fluent" aria-hidden="true">F</span>
-            <span class="about-module__text"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></span>
-          </a>
-          <a href="${themedAppHref('hubflow')}" data-learnflow-app="hubflow">
-            <span class="about-module__mark about-module__mark--hub" aria-hidden="true">H</span>
-            <span class="about-module__text"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></span>
-          </a>
-          <a href="${themedAppHref('lyricflow')}" data-learnflow-app="lyricflow">
-            <span class="about-module__mark about-module__mark--lyric" aria-hidden="true">LF</span>
-            <span class="about-module__text"><strong>LyricFlow</strong><span>Aprender con música</span></span>
-          </a>
-        </nav>
-      </div>
-      <footer class="about-footer">
-        <div class="about-author">
-          <div class="about-author__avatar" aria-hidden="true">GS</div>
-          <div class="about-author__info">
-            <strong>Genil Suárez</strong>
-            <span>Diseñado y desarrollado como proyecto personal</span>
-          </div>
-        </div>
-      </footer>
-    </section>
-  `;
-  document.body.appendChild(overlay);
-
-  const focusable = [...overlay.querySelectorAll('button, a[href]')];
-  const close = () => {
-    overlay.remove();
-    document.removeEventListener('keydown', onAboutKeydown);
-    if (opener instanceof HTMLElement && opener.isConnected) opener.focus();
-  };
-  const onAboutKeydown = (keyEvent) => {
-    if (keyEvent.key === 'Escape') { keyEvent.preventDefault(); close(); return; }
-    if (keyEvent.key !== 'Tab' || focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (keyEvent.shiftKey && document.activeElement === first) { keyEvent.preventDefault(); last.focus(); }
-    else if (!keyEvent.shiftKey && document.activeElement === last) { keyEvent.preventDefault(); first.focus(); }
-  };
-
-  overlay.querySelector('#aboutCloseBtn').addEventListener('click', close);
-  overlay.addEventListener('click', (clickEvent) => { if (clickEvent.target === overlay) close(); });
-  document.addEventListener('keydown', onAboutKeydown);
-  overlay.querySelector('#aboutCloseBtn').focus();
+  lpAbout.open(event);
 }
 
 buildSidebar();
