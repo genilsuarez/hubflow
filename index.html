@@ -15,6 +15,7 @@
   <script src="js/lp-theme.js"></script>
   <script src="js/lp-platform-urls.js"></script>
   <script src="js/lp-nav-icons.js"></script>
+  <script src="lp-guest-reset.js"></script>
   <script src="lp-login.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
@@ -2300,6 +2301,13 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 
   setupSupabaseAuth({
     onAfterLogin: () => {
+      hydrateHubFlowFromCloud();
+      renderLastActivities();
+      renderProgressSnapshot();
+      refreshHeaderStats();
+      renderHeroCard();
+    },
+    onAfterLogout: () => {
       hydrateHubFlowFromCloud();
       renderLastActivities();
       renderProgressSnapshot();

@@ -7,7 +7,13 @@ import { MODULES, getModuleDepth } from '../data/catalog.js';
 import { initCatBarExpander, hydrateHubFlowFromCloud, renderLessonProgress, setupPracticeBottomNav } from './utils.js';
 import { setupSupabaseAuth } from './lp-auth-setup.js';
 
-setupSupabaseAuth({ onAfterLogin: () => hydrateHubFlowFromCloud() });
+setupSupabaseAuth({
+  onAfterLogin: () => hydrateHubFlowFromCloud(),
+  onAfterLogout: () => {
+    hydrateHubFlowFromCloud();
+    renderLessonProgress();
+  },
+});
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
