@@ -28,9 +28,11 @@ HubFlow/
 │   └── *-shell.css       # Estilos propios de cada familia de ejercicio
 ├── js/
 │   ├── *-engine.js       # Un motor por familia de ejercicio
-│   ├── utils.js          # shuffle, Timer, recordScore, initTheme/toggleTheme...
-│   ├── theme-init.js     # Lee ?theme=/localStorage antes del primer paint
-│   └── portal-link.js    # Botón "volver": history.back() o fallback a index
+│   ├── utils.js          # shuffle, Timer, recordScore, theme helpers...
+│   ├── exercise-shell.js # Sidebar, header homologation, back-nav (replaces portal-link.js)
+│   ├── lp-theme.js       # Lee ?theme=/localStorage antes del primer paint
+│   ├── lp-nav-helpers.js # themedAppHref, toggleTheme, navIcon
+│   └── lp-about.js       # Modal "About LearnFlow"
 ├── docs/
 │   └── mi-progreso-decisions.md  # Documento de decisiones de rutas de aprendizaje
 ├── scripts/

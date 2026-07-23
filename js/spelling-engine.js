@@ -3,7 +3,7 @@
  * Shared logic for -ing, -ed, and noun-adjuncts exercises.
  * Each exercise imports this and passes its config + data.
  */
-import { shuffle, initTheme, toggleTheme, recordScore, getStars, updateProgress, Timer, formatTime, renderLessonProgress } from './utils.js';
+import { shuffle, recordScore, getStars, updateProgress, Timer, formatTime, renderLessonProgress } from './utils.js';
 
 export class SpellingEngine {
   constructor(config) {
@@ -26,7 +26,6 @@ export class SpellingEngine {
   }
 
   init() {
-    initTheme();
     this.bindEvents();
     this.loadLevel();
     this.render();
@@ -34,9 +33,6 @@ export class SpellingEngine {
   }
 
   bindEvents() {
-    // Theme toggle
-    document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
-
     // Mode buttons
     document.querySelectorAll('[data-mode]').forEach(btn => {
       btn.addEventListener('click', () => this.setMode(btn.dataset.mode));

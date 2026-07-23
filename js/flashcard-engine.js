@@ -2,7 +2,7 @@
  * HubFlow — Flashcard/Vocabulary Engine
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
-import { shuffle, initTheme, toggleTheme, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable, renderLessonProgress } from './utils.js';
+import { shuffle, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable, renderLessonProgress } from './utils.js';
 import { initSwipe } from './swipe.js';
 
 export class FlashcardEngine {
@@ -35,7 +35,6 @@ export class FlashcardEngine {
   }
 
   init() {
-    initTheme();
     this.bindGlobal();
     this.renderCatBar();
     this.updateLessonProgress();
@@ -43,8 +42,6 @@ export class FlashcardEngine {
   }
 
   bindGlobal() {
-    document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
-
     // TTS speak button
     const speakBtn = document.getElementById('speakBtn');
     if (speakBtn && isSpeechAvailable()) {

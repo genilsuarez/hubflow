@@ -128,10 +128,8 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/listening.js';
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable } from '../js/utils.js';
 
-initTheme();
-document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 

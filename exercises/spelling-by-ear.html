@@ -71,9 +71,7 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/spelling-by-ear.js';
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable } from '../js/utils.js';
-initTheme();
-document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
+import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable } from '../js/utils.js';
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;

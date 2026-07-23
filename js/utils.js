@@ -17,34 +17,6 @@ export function shuffle(arr) {
   return a;
 }
 
-/** Theme — delegates to LPTheme (lp-theme.js) */
-export function initTheme() {
-  if (window.LPTheme) return;
-  const saved = localStorage.getItem('lp-theme');
-  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-  updateThemeButton();
-}
-
-export function toggleTheme() {
-  if (window.LPTheme) {
-    window.LPTheme.toggleTheme();
-  } else {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isDark ? 'light' : 'dark';
-    if (newTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-    else document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('lp-theme', newTheme);
-  }
-  updateThemeButton();
-}
-
-function updateThemeButton() {
-  const btn = document.getElementById('themeToggle');
-  if (!btn) return;
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  if (window.LpNavIcons) window.LpNavIcons.setTheme(btn, isDark);
-}
-
 const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
 const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
 const SCORE_KEY_VERSION = ':v1';

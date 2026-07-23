@@ -327,7 +327,7 @@ function buildSidebar() {
 
   // About LearnFlow modal
   document.getElementById('sbAboutBtn').addEventListener('click', (event) => {
-    showAboutModal(event);
+    lpAbout.open(event);
     closeSidebar();
   });
 
@@ -354,10 +354,6 @@ function buildSidebar() {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && sidebar.classList.contains('is-open')) closeSidebar();
   });
-}
-
-function showAboutModal(event) {
-  lpAbout.open(event);
 }
 
 buildSidebar();

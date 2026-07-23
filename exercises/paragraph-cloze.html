@@ -121,10 +121,8 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/paragraph-cloze.js';
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
 
-initTheme();
-document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');

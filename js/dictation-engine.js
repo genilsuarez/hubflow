@@ -5,8 +5,6 @@
 
 import {
   shuffle,
-  initTheme,
-  toggleTheme,
   isSpeechAvailable,
   Timer,
   formatTime,
@@ -31,8 +29,6 @@ export function initDictationPractice({
   scoreKeyPrefix = 'dict',
   contentId = 'dictation-sprint',
 }) {
-  initTheme();
-  document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
   renderLessonProgress(contentId);
 
   if (!isSpeechAvailable()) {

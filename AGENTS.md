@@ -16,8 +16,8 @@ Part of the Learn Platform (alongside DeskFlow, FluentFlow, and LyricFlow).
 
 ```
 index.html          — Dashboard SPA: categories + "Mi Progreso" (learning paths)
-exercises/          — 43 exercise pages, one per topic
-guides/             — 23 reference pages (rules, tables, quick lookup)
+exercises/          — 44 exercise pages, one per topic
+guides/             — 24 reference pages (rules, tables, quick lookup)
 data/
   catalog.js        — Metadata for 61 modules (title, category, CEFR, scoreKey...)
   *.js              — One data file per exercise topic
@@ -25,12 +25,26 @@ css/
   base.css          — Tokens --lp-*, reset, typography
   buttons.css       — Shared button system (.lp-btn/.lp-icon-btn/.lp-pill)
   components.css    — Top-bar, categories, progress, flashcards, .cat-btn, .word-opt
+  sidebar.css       — Sidebar drawer + index shell grid + exercise footer
+  lp-nav-active.css — Active nav item (copy of scripts/)
+  lp-about.css      — About modal styles (copy of scripts/)
+  guide-layout.css  — Shared guide footer (.guide-footer)
   *-shell.css       — Per-engine-family styles
 js/
   *-engine.js       — One engine per exercise family
-  utils.js          — shuffle, Timer, recordScore, initTheme/toggleTheme, progress tracking
-  theme-init.js     — Reads ?theme=/localStorage before first paint
-  portal-link.js    — "Back" button: history.back() or fallback to index
+  exercise-shell.js — Sidebar drawer, header restructure, footer (exercise pages)
+  utils.js          — shuffle, Timer, recordScore, progress tracking, header stats
+  lp-theme.js       — Theme init before first paint (copy of scripts/)
+  lp-platform-urls.js — Cross-app URLs (copy of scripts/)
+  lp-nav-icons.js   — Sidebar icon SVGs (copy of scripts/)
+  lp-nav-helpers.js — themedAppHref, toggleTheme, navIcon (copy of scripts/)
+  lp-about.js       — About LearnFlow modal (copy of scripts/)
+  lp-auth-setup.js  — Supabase auth wiring (copy of scripts/)
+  lp-supabase.js    — Supabase client (copy of scripts/)
+  sync-engine.js    — Cloud sync base (copy of scripts/)
+  lp-progress-summary.js — Progress summary (copy of scripts/)
+lp-login.js         — Login modal at repo root (copy of scripts/)
+lp-guest-reset.js   — Guest/logout at repo root (copy of scripts/)
 docs/
   mi-progreso-decisions.md  — Learning paths design decisions
 scripts/
@@ -39,6 +53,8 @@ scripts/
   tmp/                      — Temporary scripts (gitignored)
 build.sh            — Commit + push + wait for CI Validate/CD Deploy
 ```
+
+**Removed:** `js/theme-init.js` (all pages now use `js/lp-theme.js`), `js/portal-link.js` (back nav lives in `exercise-shell.js`).
 
 ## Serve in development
 
@@ -89,6 +105,14 @@ Each family uses `[data-color="..."]` on its wrapper to pick up category color (
 Progress calculated from `scoreKey` entries in localStorage (≥60% = completed).
 
 See `docs/mi-progreso-decisions.md` for full details.
+
+## Auth, login, and shared nav
+
+- **Index:** `lpLogin.bindNavButton('#loginTrigger')`, `lpAbout.open()` — see inline module in `index.html`
+- **Exercises:** `exercise-shell.js` builds sidebar; login via `#sbLoginBtn`, about via `lpAbout.open()`
+- **Nav helpers:** `LpNavHelpers` from `js/lp-nav-helpers.js` (not duplicated in `exercise-shell.js`)
+- **Theme:** always `js/lp-theme.js` on index, exercises, and guides — never `theme-init.js`
+- **Exercise HTML** loads: `lp-theme.js`, `lp-platform-urls.js`, `lp-nav-icons.js`, `lp-login.js`, `lp-nav-helpers.js`, `lp-about.js`, `sidebar.css`, `lp-nav-active.css`, `lp-about.css`
 
 ## Design conventions
 

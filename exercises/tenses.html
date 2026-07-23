@@ -59,10 +59,8 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/tenses.js';
-import { shuffle, initTheme, toggleTheme, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
-initTheme();
-document.getElementById('themeToggle')?.addEventListener('click', () => toggleTheme());
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null;
 function renderCatBar() { const bar = document.getElementById('catBar'); bar.innerHTML = catKeys.map(k => `<button class="cat-btn ${k===currentCat?'active':''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`).join(''); bar.querySelectorAll('[data-cat]').forEach(btn => btn.addEventListener('click', () => { currentCat = btn.dataset.cat; bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat)); startMode(); })); }
