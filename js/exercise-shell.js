@@ -4,7 +4,10 @@
 // Replaces portal-link.js for exercise pages.
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
-import { initCatBarExpander, renderLessonProgress, setupPracticeBottomNav } from './utils.js';
+import { initCatBarExpander, publishHubFlowProgress, renderLessonProgress, setupPracticeBottomNav } from './utils.js';
+import { setupSupabaseAuth } from './lp-auth-setup.js';
+
+setupSupabaseAuth({ onAfterLogin: () => publishHubFlowProgress() });
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 

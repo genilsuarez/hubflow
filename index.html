@@ -1791,6 +1791,9 @@
 <script type="module">
 import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, publishHubFlowProgress } from './js/utils.js';
+import { setupSupabaseAuth } from './js/lp-auth-setup.js';
+
+setupSupabaseAuth({ onAfterLogin: () => publishHubFlowProgress() });
 
 (function() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
