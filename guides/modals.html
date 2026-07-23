@@ -6,6 +6,14 @@
 <title>Modal Verbs Guide | HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233D7F7F'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/lp-theme.js"></script>
+<script src="../js/lp-platform-urls.js"></script>
+<script src="../js/lp-nav-icons.js"></script>
+<script src="../js/lp-guest-reset.js"></script>
+<script src="../js/lp-login.js"></script>
+<script src="../js/lp-nav-helpers.js"></script>
+<script src="../js/lp-about-content.js"></script>
+<script src="../js/lp-about.js"></script>
+<link rel="stylesheet" href="../css/lp-about.css">
 <link rel="stylesheet" href="../css/base.css">
 <style>
 :root{
@@ -67,26 +75,17 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 @media(max-width:480px){.page{padding:14px 12px 50px;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 
-/* THEME TOGGLE */
-.guide-theme-toggle{
-  width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);
-  background:var(--surface);cursor:pointer;font-size:1rem;display:flex;
-  align-items:center;justify-content:center;transition:transform .2s,border-color .2s;
-  min-width:44px;min-height:44px;
-}
-.guide-theme-toggle:hover{transform:scale(1.08);border-color:var(--blue,var(--yellow));}
-.guide-theme-toggle:focus-visible{outline:2px solid var(--blue,#2F6FD8);outline-offset:2px;}
-.nav-bar{gap:8px;}
 </style>
 <link rel="stylesheet" href="../css/guide-layout.css">
 </head>
 <body>
-<div class="page">
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
 
 <nav class="nav-bar">
   <a href="../index.html" class="nav-back">&larr; Back to HubFlow</a>
   <span class="nav-title">Reference Guide</span>
-  <button class="guide-theme-toggle" id="guideThemeToggle" aria-label="Toggle theme">🌙</button>
 </nav>
 
 <h1>Modal Verbs <span class="accent">Untangled</span></h1>
@@ -192,6 +191,6 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </footer>
 
 </div>
-<script src="../js/guide-theme-toggle.js"></script>
+<script type="module" src="../js/guide-shell.js"></script>
 </body>
 </html>

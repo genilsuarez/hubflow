@@ -18,7 +18,7 @@ Plataforma de ejercicios interactivos de inglés — vocabulario, pronunciación
 HubFlow/
 ├── index.html          # Dashboard SPA: categorías + "Mi Progreso" (rutas de aprendizaje)
 ├── exercises/           # 43 páginas de ejercicio, una por tema
-├── guides/              # 23 páginas de referencia (reglas, tablas, consulta rápida)
+├── guides/              # 24 páginas de referencia (reglas, tablas, consulta rápida)
 ├── data/                # Un archivo por tema con el contenido del ejercicio
 │   └── catalog.js       # Metadata de los 61 módulos (título, categoría, CEFR, scoreKey...)
 ├── css/
