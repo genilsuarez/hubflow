@@ -86,11 +86,13 @@ Cada familia usa `[data-color="..."]` en su wrapper para tomar el color de categ
 
 ## Desarrollo
 
+Desde el repo `Learn` (raíz de la plataforma):
+
 ```bash
-npx serve . -p 3002
-# o
-python3 -m http.server 3002
+learnctl start   # → http://localhost:3000/hubflow/
 ```
+
+No uses `npx serve` ni `python -m http.server` en puertos sueltos — el gateway en **3000** comparte `localStorage` con DeskFlow, FluentFlow y LyricFlow.
 
 ## Deploy
 

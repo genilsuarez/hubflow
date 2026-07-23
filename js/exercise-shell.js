@@ -11,11 +11,10 @@ setupSupabaseAuth({ onAfterLogin: () => hydrateHubFlowFromCloud() });
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
-function themedAppHref(path, port) {
-  const h = location.hostname;
-  const isLocal = h === 'localhost' || h === '127.0.0.1' || h.startsWith('192.168.');
-  const isUnified = isLocal && location.port === '3000';
-  let href = isUnified ? path : isLocal ? `http://${h}:${port}/` : path;
+function themedAppHref(app) {
+  let href = window.LPPlatformUrls
+    ? window.LPPlatformUrls.appHref(app)
+    : `https://genilsuarez.github.io/${app}/`;
   if (window.LPTheme) href = window.LPTheme.appendThemeToHref(href);
   return href;
 }
@@ -269,7 +268,7 @@ function buildSidebar() {
       <button class="sb-item" id="sbAboutBtn" type="button"><span class="sb-icon">${navIcon('info')}</span><span class="sb-label">About LearnFlow</span></button>
       <button class="sb-item" id="sbThemeBtn" type="button"><span class="sb-icon" id="sbThemeIcon">${currentThemeIcon()}</span><span class="sb-label" id="sbThemeLabel">${currentTheme() === 'dark' ? 'Modo claro' : 'Modo oscuro'}</span></button>
       <button class="sb-item" id="sbLoginBtn" type="button" aria-label="Iniciar sesión"><span class="sb-icon">${navIcon('user')}</span><span class="sb-label" id="sbLoginLabel">${(typeof lpLogin !== 'undefined' && lpLogin.getUser()) ? lpLogin.getUser().name : 'Iniciar Sesión'}</span></button>
-      <a class="sb-item" href="${themedAppHref('/deskflow/', 3000)}" aria-label="Volver a LearnFlow"><span class="sb-icon">${navIcon('home')}</span><span class="sb-label">Portal</span></a>
+      <a class="sb-item" href="${themedAppHref('deskflow')}" aria-label="Volver a LearnFlow"><span class="sb-icon">${navIcon('home')}</span><span class="sb-label">Portal</span></a>
     </div>
   `;
 
@@ -482,19 +481,19 @@ function showAboutModal(event) {
       <div class="about-body">
         <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
         <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-          <a href="${themedAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow">
+          <a href="${themedAppHref('deskflow')}" data-learnflow-app="deskflow">
             <span class="about-module__mark about-module__mark--portal" aria-hidden="true">L</span>
             <span class="about-module__text"><strong>LearnFlow</strong><span>Portal</span></span>
           </a>
-          <a href="${themedAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow">
+          <a href="${themedAppHref('fluentflow')}" data-learnflow-app="fluentflow">
             <span class="about-module__mark about-module__mark--fluent" aria-hidden="true">F</span>
             <span class="about-module__text"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></span>
           </a>
-          <a href="${themedAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow">
+          <a href="${themedAppHref('hubflow')}" data-learnflow-app="hubflow">
             <span class="about-module__mark about-module__mark--hub" aria-hidden="true">H</span>
             <span class="about-module__text"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></span>
           </a>
-          <a href="${themedAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow">
+          <a href="${themedAppHref('lyricflow')}" data-learnflow-app="lyricflow">
             <span class="about-module__mark about-module__mark--lyric" aria-hidden="true">LF</span>
             <span class="about-module__text"><strong>LyricFlow</strong><span>Aprender con música</span></span>
           </a>

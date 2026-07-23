@@ -42,11 +42,13 @@ build.sh            — Commit + push + wait for CI Validate/CD Deploy
 
 ## Serve in development
 
+From the `Learn` platform root (not this repo alone):
+
 ```bash
-npx serve . -p 3002
-# or
-python3 -m http.server 3002
+learnctl start   # → http://localhost:3000/hubflow/
 ```
+
+Do not use `npx serve` or `python -m http.server` on separate ports — only `localhost:3000` shares `localStorage` with the other apps.
 
 ## Script execution rules
 
@@ -54,7 +56,8 @@ python3 -m http.server 3002
 - NEVER execute inline JS/Python in the terminal
 - `scripts/tmp/` is gitignored — use for audits, QA, temporary analysis
 - Execute with: `node scripts/<name>.js` or `node scripts/tmp/<name>.js`
-- Allowed direct commands: `npx serve`, `python3 -m http.server`, `git`, simple shell utils
+- Allowed direct commands: `learnctl start` (from `Learn/` root), `git`, simple shell utils
+- Avoid `npx serve` / `python -m http.server` on per-app ports — use the gateway at `localhost:3000`
 
 ## Categories and CEFR levels
 

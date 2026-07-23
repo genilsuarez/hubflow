@@ -18,11 +18,11 @@
 // remoto requeriría mapear cada scoreKey por módulo, fuera de alcance por ahora.
 
 import * as lpSupabase from './lp-supabase.js';
+import { recomputeProgressDocumentSummary } from './lp-progress-summary.js';
 
 const APPS = ['fluentflow', 'hubflow', 'lyricflow'];
 const SYNC_INTERVAL_MS = 5 * 60 * 1000;
 const MAX_ACTIVITY_EVENTS = 200;
-const LYRICFLOW_ACTIVITY_IDS = ['listen', 'dictation', 'challenge', 'quiz'];
 
 let lastSyncAt = 0;
 let syncing = false;
@@ -86,48 +86,6 @@ function mergeContentEntry(existing, row) {
   };
 }
 
-function computeHubflowActivitySummary(content) {
-  const items = content && typeof content === 'object' ? Object.values(content) : [];
-  let completedActivities = 0;
-  let totalActivities = 0;
-  let attemptedActivities = 0;
-
-  for (const item of items) {
-    const activities = item?.activities && typeof item.activities === 'object'
-      ? Object.values(item.activities)
-      : [];
-    totalActivities += activities.length;
-    for (const activity of activities) {
-      if (activity?.completed) completedActivities++;
-      if ((activity?.attempts ?? 0) > 0 || (activity?.completedKeys ?? 0) > 0) attemptedActivities++;
-    }
-  }
-
-  return { completedActivities, totalActivities, attemptedActivities };
-}
-
-function computeLyricflowActivitySummary(content, totalSongs = null) {
-  const songs = content && typeof content === 'object' ? Object.values(content) : [];
-  const songCount = Number.isInteger(totalSongs) ? totalSongs : songs.length;
-  let completedActivities = 0;
-  let attemptedActivities = 0;
-
-  for (const song of songs) {
-    const activities = song?.activities && typeof song.activities === 'object' ? song.activities : {};
-    for (const activityId of LYRICFLOW_ACTIVITY_IDS) {
-      const activity = activities[activityId];
-      if (activity?.completed) completedActivities++;
-      if ((activity?.attempts ?? 0) > 0 || (activity?.coveredDurationSec ?? 0) > 0) attemptedActivities++;
-    }
-  }
-
-  return {
-    completedActivities,
-    totalActivities: songCount * LYRICFLOW_ACTIVITY_IDS.length,
-    attemptedActivities,
-  };
-}
-
 async function downloadApp(app) {
   const remoteRows = await lpSupabase.fetchProgress(app);
   if (remoteRows === null) return { downloaded: false, reason: 'fetch_error' };
@@ -152,26 +110,13 @@ async function downloadApp(app) {
     }
   }
 
-  if (changed) {
-    const items = Object.values(doc.content);
-    const baseSummary = {
-      progressPct: items.length
-        ? items.reduce((sum, item) => sum + item.progressPct, 0) / items.length
-        : 0,
-      completedContent: items.filter((item) => item.completed).length,
-      totalContent: items.length,
-      attemptedContent: items.filter((item) => item.attempts > 0).length,
-    };
-    doc.summary = app === 'lyricflow'
-      ? { ...baseSummary, ...computeLyricflowActivitySummary(doc.content, items.length) }
-      : app === 'hubflow'
-        ? { ...baseSummary, ...computeHubflowActivitySummary(doc.content) }
-        : baseSummary;
+  const summaryChanged = recomputeProgressDocumentSummary(doc, app);
+  if (changed || summaryChanged) {
     doc.updatedAt = new Date().toISOString();
     writeRaw(key, doc);
   }
 
-  return { downloaded: changed, count: remoteRows.length };
+  return { downloaded: changed || summaryChanged, count: remoteRows.length };
 }
 
 function emptyActivityDoc(app) {
@@ -261,12 +206,17 @@ export async function downloadOnLogin() {
 }
 
 async function syncApp(app) {
-  const progressDoc = readRaw(`learnflow:progress:${app}:v1`);
+  const progressKey = `learnflow:progress:${app}:v1`;
+  const progressDoc = readRaw(progressKey);
   const activityDoc = readRaw(`learnflow:activity:${app}:v1`);
 
   const results = {};
 
   if (progressDoc && progressDoc.content && Object.keys(progressDoc.content).length) {
+    if (recomputeProgressDocumentSummary(progressDoc, app)) {
+      progressDoc.updatedAt = new Date().toISOString();
+      writeRaw(progressKey, progressDoc);
+    }
     results.progress = await lpSupabase.syncProgress(app, { content: progressDoc.content });
   }
   if (activityDoc && Array.isArray(activityDoc.events) && activityDoc.events.length) {

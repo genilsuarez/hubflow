@@ -13,6 +13,7 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
   <script src="js/lp-theme.js"></script>
+  <script src="js/lp-platform-urls.js"></script>
   <script src="js/lp-nav-icons.js"></script>
   <script src="lp-login.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
@@ -23,7 +24,7 @@
         var keys = Object.keys(localStorage);
         for (var i = 0; i < keys.length; i++) {
           var k = keys[i];
-          if (k === 'learnflow:progress:hubflow:v2' || k === 'learnflow:activity:hubflow:v2' || k.match(/^(advcoll|art|causative|clause|cleft|coll|comp|cond|conf|dict|errhunt|ger|inver|irr|kwt|listen|madeof|modals|odd|paracloze|paraphrase|phonics|phrasal|plural|pos|pref|prep|pron-study|quant|regswitch|rs|sbe|sentcomb|stress|tense|usedto|vchunks|vocab|wf|wordorder|wr)-/)) {
+          if (k === 'learnflow:progress:hubflow:v1' || k === 'learnflow:activity:hubflow:v1' || k === 'learnflow:progress:hubflow:v2' || k === 'learnflow:activity:hubflow:v2' || k.match(/^(advcoll|art|causative|clause|cleft|coll|comp|cond|conf|dict|errhunt|ger|inver|irr|kwt|listen|madeof|modals|odd|paracloze|paraphrase|phonics|phrasal|plural|pos|pref|prep|pron-study|quant|regswitch|rs|sbe|sentcomb|stress|tense|usedto|vchunks|vocab|wf|wordorder|wr)-/)) {
             localStorage.removeItem(k);
           }
         }
@@ -1528,7 +1529,7 @@
         </span>
         <span class="lp-header-stats__divider" aria-hidden="true"></span>
         <span class="lp-header-stats__group">
-          <span class="lp-header-stats__value" id="psMastered">0/58</span>
+          <span class="lp-header-stats__value" id="psMastered">0/0</span>
           <svg class="lp-header-stats__icon lp-header-stats__icon--star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
         </span>
       </div>
@@ -1891,13 +1892,9 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   });
 
   // ─── ABOUT LEARNFLOW MODAL ───
-  function getAppHref(path, port) {
-    const host = location.hostname;
-    const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.');
-    const isUnified = isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
-    if (isUnified) return path;
-    if (isLocal) return `http://${host}:${port}/`;
-    return `https://genilsuarez.github.io${path}`;
+  function getAppHref(app) {
+    if (window.LPPlatformUrls) return window.LPPlatformUrls.appHref(app);
+    return `https://genilsuarez.github.io/${app}/`;
   }
 
   function showAboutLearnFlow(event) {
@@ -1920,19 +1917,19 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
         <div class="about-body">
           <p id="aboutLearnFlowDescription" class="about-description">Una plataforma para aprender idiomas con estructura, práctica y música.</p>
           <nav class="about-modules" aria-label="Aplicaciones de LearnFlow">
-            <a href="${getAppHref('/deskflow/', 3000)}" data-learnflow-app="deskflow">
+            <a href="${getAppHref('deskflow')}" data-learnflow-app="deskflow">
               <span class="about-module__mark about-module__mark--portal" aria-hidden="true">L</span>
               <span class="about-module__text"><strong>LearnFlow</strong><span>Portal</span></span>
             </a>
-            <a href="${getAppHref('/fluentflow/', 3001)}" data-learnflow-app="fluentflow">
+            <a href="${getAppHref('fluentflow')}" data-learnflow-app="fluentflow">
               <span class="about-module__mark about-module__mark--fluent" aria-hidden="true">F</span>
               <span class="about-module__text"><strong>FluentFlow</strong><span>Ruta de inglés por niveles CEFR</span></span>
             </a>
-            <a href="${getAppHref('/hubflow/', 3002)}" data-learnflow-app="hubflow">
+            <a href="${getAppHref('hubflow')}" data-learnflow-app="hubflow">
               <span class="about-module__mark about-module__mark--hub" aria-hidden="true">H</span>
               <span class="about-module__text"><strong>HubFlow</strong><span>Práctica flexible de gramática</span></span>
             </a>
-            <a href="${getAppHref('/lyricflow/', 3003)}" data-learnflow-app="lyricflow">
+            <a href="${getAppHref('lyricflow')}" data-learnflow-app="lyricflow">
               <span class="about-module__mark about-module__mark--lyric" aria-hidden="true">LF</span>
               <span class="about-module__text"><strong>LyricFlow</strong><span>Aprender con música</span></span>
             </a>
@@ -2517,22 +2514,16 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   }
   updateResumenSub();
 
-  // Local dev supports independent ports and the shared-origin gateway.
-  const _h = location.hostname;
-  const _isLocal = _h === 'localhost' || _h === '127.0.0.1' || _h.startsWith('192.168.');
-  const _isUnifiedLocal = _isLocal && location.port === '3000' && location.pathname.startsWith('/hubflow/');
-  if (_isLocal) {
-    const appPorts = { deskflow: 3000, fluentflow: 3001, lyricflow: 3003 };
+  // Local dev uses the same path-based routes as production (localhost:3000/<app>/).
+  if (window.LPPlatformUrls) {
     const withTheme = (href) => (window.LPTheme ? window.LPTheme.appendThemeToHref(href) : href);
     document.querySelectorAll('.portal-link').forEach((link) => {
-      link.href = withTheme(_isUnifiedLocal ? '/deskflow/' : 'http://' + _h + ':3000/');
+      link.href = withTheme(window.LPPlatformUrls.portalHref());
     });
     document.querySelectorAll('[data-learnflow-app]').forEach((link) => {
       const app = link.dataset.learnflowApp;
-      const port = appPorts[app];
-      if (port) link.href = withTheme(_isUnifiedLocal ? '/' + app + '/' : 'http://' + _h + ':' + port + '/');
+      if (app) link.href = withTheme(window.LPPlatformUrls.appHref(app));
     });
-
   }
 
   // ─── SECTION SWITCHING (SPA nav) ───
