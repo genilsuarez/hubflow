@@ -1,6 +1,11 @@
 import { MODULES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT, MODULE_DEPTH } from '../data/catalog.js';
 import * as lpSupabase from './lp-supabase.js';
-import { isCloudHydrated, reconcileHubflowProgressFromEvents } from './sync-engine.js';
+import {
+  isCloudHydrated,
+  reconcileHubflowProgressFromEvents,
+  shouldDeferStatsDisplay,
+  syncSingleApp,
+} from './sync-engine.js';
 import { enrichHubflowContentEntry, recomputeProgressDocumentSummary } from './lp-progress-summary.js';
 
 /* ═══════════════════════════════════════════════════════
@@ -127,6 +132,7 @@ function invalidateProjectionCache() {
 
 function readProjectionDoc() {
   if (projectionDocCache) return projectionDocCache;
+  reconcileHubflowProgressFromEvents();
   const doc = readJson(PROGRESS_STORAGE_KEY, null);
   if (!doc?.content) return null;
   for (const item of Object.values(doc.content)) {
@@ -222,6 +228,16 @@ function getContentProgressFromScoreKeys(contentId) {
 }
 
 export function getContentProgress(contentId) {
+  if (shouldDeferStatsDisplay()) {
+    return {
+      contentId,
+      progressPct: 0,
+      completed: false,
+      bestScorePct: 0,
+      attempts: 0,
+      activities: {},
+    };
+  }
   const fromScores = getContentProgressFromScoreKeys(contentId);
   const projectionItem = readProjectionDoc()?.content?.[contentId] ?? null;
   return mergeHubflowProgressItem(fromScores, projectionItem);
@@ -254,6 +270,9 @@ function buildHubFlowSummary(contentStates) {
 
 /** Unified summary — same rules as DeskFlow portal and learnflow:progress:hubflow:v1. */
 export function getHubFlowProgressSummary() {
+  if (reconcileHubflowProgressFromEvents()) {
+    invalidateProjectionCache();
+  }
   const contentStates = MODULES.map((module) => getContentProgress(module.id)).filter(Boolean);
   const computed = buildHubFlowSummary(contentStates);
   const stored = readProjectionDoc()?.summary;
@@ -279,6 +298,15 @@ export function getBestScore(contentId) {
 }
 
 export function getProgressStats() {
+  if (shouldDeferStatsDisplay()) {
+    return {
+      totalAttempts: 0,
+      completedContent: 0,
+      completedActivities: 0,
+      totalActivities: 0,
+      totalContent: MODULES.length,
+    };
+  }
   const summary = getHubFlowProgressSummary();
   const uniqueScoreKeys = new Set(
     Object.values(PROGRESS_RULES).flatMap((rule) =>
@@ -513,6 +541,9 @@ let pendingCloudSync = false;
 if (typeof window !== 'undefined') {
   window.addEventListener('lp-cloud-hydrated', () => {
     if (pendingCloudSync) scheduleCloudSync();
+    reconcileHubflowProgressFromEvents();
+    invalidateProjectionCache();
+    notifyHubFlowProgressUpdated();
   });
 }
 
@@ -520,8 +551,9 @@ function scheduleCloudSync() {
   if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(async () => {
     cloudSyncTimer = null;
+    if (window.lpGuestReset?.isExplicitLogout?.()) return;
     const authed = await lpSupabase.isAuthenticated().catch(() => false);
-    if (!authed) return;
+    if (!authed || window.lpGuestReset?.isExplicitLogout?.()) return;
     if (!isCloudHydrated()) {
       pendingCloudSync = true;
       return;
@@ -529,22 +561,16 @@ function scheduleCloudSync() {
     pendingCloudSync = false;
 
     publishHubFlowProgress();
-
-    const progressDoc = readJson(PROGRESS_STORAGE_KEY, null);
-    if (progressDoc?.content) {
-      if (recomputeProgressDocumentSummary(progressDoc, 'hubflow')) {
-        progressDoc.updatedAt = new Date().toISOString();
-        try {
-          localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressDoc));
-        } catch {}
-      }
-      await lpSupabase.syncProgress('hubflow', { content: progressDoc.content });
-    }
-    const activityDoc = readJson(ACTIVITY_STORAGE_KEY, null);
-    if (activityDoc?.events?.length) {
-      await lpSupabase.syncActivityEvents('hubflow', activityDoc.events);
-    }
+    await syncSingleApp('hubflow');
   }, 500);
+}
+
+function refreshHubFlowFromPeerSync() {
+  reconcileHubflowProgressFromEvents();
+  invalidateProjectionCache();
+  syncScoreKeysFromProgressDoc();
+  syncScoreKeysFromActivityDoc();
+  notifyHubFlowProgressUpdated();
 }
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
@@ -553,9 +579,19 @@ if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
 
   window.addEventListener('storage', (event) => {
     if (event.key !== PROGRESS_STORAGE_KEY && event.key !== ACTIVITY_STORAGE_KEY) return;
+    refreshHubFlowFromPeerSync();
+  });
+
+  window.addEventListener('lp-sync-peer', refreshHubFlowFromPeerSync);
+
+  window.addEventListener('lp-guest-reset', () => {
+    if (cloudSyncTimer) {
+      clearTimeout(cloudSyncTimer);
+      cloudSyncTimer = null;
+    }
+    pendingCloudSync = false;
     invalidateProjectionCache();
-    syncScoreKeysFromProgressDoc();
-    syncScoreKeysFromActivityDoc();
+    hydrateHubFlowFromCloud();
     notifyHubFlowProgressUpdated();
   });
 }

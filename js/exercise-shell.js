@@ -260,6 +260,9 @@ function buildSidebar() {
     sidebar.classList.add('is-open');
     scrim.classList.add('is-visible');
     scrim.setAttribute('aria-hidden', 'false');
+    if (typeof lpLogin !== 'undefined' && lpLogin.refreshNavLabels) {
+      lpLogin.refreshNavLabels();
+    }
   }
   function closeSidebar() {
     // In persistent mode, don't close

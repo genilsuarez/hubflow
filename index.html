@@ -186,7 +186,7 @@
 
     <main class="content" id="mainContent">
       <!-- RESUMEN -->
-      <section class="section active-section" data-key="resumen">
+      <section class="section active-section" data-key="resumen" data-lp-home>
         <!-- Hero Card — Siguiente ejercicio sugerido -->
         <div class="hero-card" id="heroCard" aria-label="Ejercicio sugerido">
           <div class="hero-card__inner">
@@ -434,6 +434,8 @@
 import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/utils.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
+import { shouldDeferStatsDisplay, consumeStatsRevealAnimation } from './js/sync-engine.js';
+import { animateText, animateWidth } from './js/lp-stats-animate.js';
 
 (function() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
@@ -473,6 +475,9 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
     sidebarScrim.setAttribute('aria-hidden', String(!open));
     navigationLauncher.setAttribute('aria-expanded', String(open));
     navigationLauncher.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación flotante');
+    if (open && typeof lpLogin !== 'undefined' && lpLogin.refreshNavLabels) {
+      lpLogin.refreshNavLabels();
+    }
   }
 
   function setNavigationMode(mode, persist = false) {
@@ -778,14 +783,15 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
     altBtn.textContent = 'Otra sugerencia';
   }
 
-  function renderProgressSnapshot() {
+  function renderProgressSnapshot(animateReveal = false) {
     const snapshot = document.getElementById('progressSnapshot');
     const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
     const total = exercises.length;
-    const completed = exercises.filter(m => isContentCompleted(m.id)).length;
-    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
-    const activePaths = LEARNING_PATHS.filter(p => p.modules.some(id => getBestScore(id) > 0) && !p.modules.every(isContentCompleted)).length;
-    const hasProgress = completed > 0 || MODULES.some(m => getBestScore(m.id) > 0);
+    const defer = shouldDeferStatsDisplay();
+    const completed = defer ? 0 : exercises.filter(m => isContentCompleted(m.id)).length;
+    const pct = defer ? 0 : (total > 0 ? Math.round((completed / total) * 100) : 0);
+    const activePaths = defer ? 0 : LEARNING_PATHS.filter(p => p.modules.some(id => getBestScore(id) > 0) && !p.modules.every(isContentCompleted)).length;
+    const hasProgress = !defer && (completed > 0 || MODULES.some(m => getBestScore(m.id) > 0));
 
     if (!hasProgress) {
       snapshot.classList.add('progress-snapshot--empty');
@@ -794,16 +800,22 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
       stats.innerHTML = '<span class="progress-snapshot__stat">0/' + total + ' completados · tu aventura empieza aquí</span><button class="progress-snapshot__link" id="snapshotLink" type="button">Ver progreso →</button>';
     } else {
       snapshot.classList.remove('progress-snapshot--empty');
-      requestAnimationFrame(() => {
-        document.getElementById('snapshotFill').style.width = pct + '%';
-      });
-      document.getElementById('snapshotPct').textContent = pct + '%';
-      document.getElementById('snapshotDone').textContent = completed;
+      const fill = document.getElementById('snapshotFill');
+      if (animateReveal && pct > 0) animateWidth(fill, pct);
+      else fill.style.width = pct + '%';
+      const pctEl = document.getElementById('snapshotPct');
+      const doneEl = document.getElementById('snapshotDone');
+      if (animateReveal && pct > 0) {
+        animateText(pctEl, 0, pct, (v) => v + '%');
+        animateText(doneEl, 0, completed);
+      } else {
+        pctEl.textContent = pct + '%';
+        doneEl.textContent = completed;
+      }
       document.getElementById('snapshotTotal').textContent = total;
       document.getElementById('snapshotPaths').textContent = activePaths;
     }
 
-    // Link to Mi Progreso
     snapshot.querySelector('#snapshotLink')?.addEventListener('click', () => setActive('mi-progreso'));
   }
 
@@ -815,6 +827,11 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   function renderLastActivities() {
     const container = document.getElementById('lastActivities');
     if (!container) return;
+
+    if (shouldDeferStatsDisplay()) {
+      container.innerHTML = '<p class="last-activities--empty">Aún no hay actividad registrada. ¡Empieza un ejercicio!</p>';
+      return;
+    }
 
     let ledger;
     try { ledger = JSON.parse(localStorage.getItem(ACTIVITY_KEY) || 'null'); } catch { ledger = null; }
@@ -858,35 +875,54 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
     `;
   }
 
-  renderHeroCard();
-  renderProgressSnapshot();
-  renderLastActivities();
-
-  function refreshHeaderStats() {
+  function refreshHeaderStats(animateReveal = false) {
     const progressStats = getProgressStats();
-    document.getElementById('psTotal').textContent = String(progressStats.totalAttempts || 0);
-    document.getElementById('psMastered').textContent =
-      `${progressStats.completedContent}/${progressStats.totalContent}`;
+    const totalEl = document.getElementById('psTotal');
+    const masteredEl = document.getElementById('psMastered');
+    const attempts = progressStats.totalAttempts || 0;
+    const completed = progressStats.completedContent || 0;
+    const total = progressStats.totalContent || 0;
+    if (animateReveal && attempts > 0) animateText(totalEl, 0, attempts);
+    else totalEl.textContent = String(attempts);
+    if (animateReveal && completed > 0) {
+      animateText(masteredEl, 0, completed, (v) => `${v}/${total}`);
+    } else {
+      masteredEl.textContent = `${completed}/${total}`;
+    }
   }
 
   window.addEventListener('hubflow-progress-updated', refreshHeaderStats);
 
+  function refreshHomeStats() {
+    const animateReveal = consumeStatsRevealAnimation();
+    hydrateHubFlowFromCloud();
+    renderAllShelves();
+    renderLastActivities();
+    renderProgressSnapshot(animateReveal);
+    refreshHeaderStats(animateReveal);
+    renderHeroCard();
+  }
+
+  let refreshHomeScheduled = false;
+  function scheduleRefreshHomeStats() {
+    if (refreshHomeScheduled) return;
+    refreshHomeScheduled = true;
+    requestAnimationFrame(() => {
+      refreshHomeScheduled = false;
+      refreshHomeStats();
+    });
+  }
+
+  scheduleRefreshHomeStats();
+  window.addEventListener('lp-stats-ready', () => scheduleRefreshHomeStats());
+
   setupSupabaseAuth({
-    onAfterLogin: () => {
-      hydrateHubFlowFromCloud();
-      renderLastActivities();
-      renderProgressSnapshot();
-      refreshHeaderStats();
-      renderHeroCard();
-    },
-    onAfterLogout: () => {
-      hydrateHubFlowFromCloud();
-      renderLastActivities();
-      renderProgressSnapshot();
-      refreshHeaderStats();
-      renderHeroCard();
-    },
+    onAfterLogin: () => scheduleRefreshHomeStats(),
+    onAfterLogout: () => scheduleRefreshHomeStats(),
   });
+
+  window.addEventListener('lp-guest-reset', () => scheduleRefreshHomeStats());
+  window.addEventListener('lp-cloud-hydrated', () => scheduleRefreshHomeStats());
 
   // "Otra sugerencia" button
   document.getElementById('heroAlt').addEventListener('click', function() {
@@ -1026,7 +1062,7 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
   }
 
   // Canonical LearnFlow projection and header summary use the same explicit rules.
-  refreshHeaderStats();
+  // refreshHeaderStats runs inside scheduleRefreshHomeStats on boot.
 
   // Dynamic module/guide counts
   const guideCount = document.querySelectorAll('.guide-link[href]').length;
