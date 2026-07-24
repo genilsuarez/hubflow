@@ -187,49 +187,50 @@
     <main class="content" id="mainContent">
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen" data-lp-home>
-        <!-- Hero Card — Siguiente ejercicio sugerido -->
-        <div class="hero-card" id="heroCard" aria-label="Ejercicio sugerido">
-          <div class="hero-card__inner">
-            <div class="hero-card__icon" id="heroIcon" aria-hidden="true"></div>
-            <div class="hero-card__body">
-              <div class="hero-card__context" id="heroContext"></div>
-              <div class="hero-card__title" id="heroTitle"></div>
-              <div class="hero-card__meta" id="heroMeta"></div>
-            </div>
-          </div>
-          <div class="hero-card__actions">
-            <a class="lp-btn lp-btn--primary hero-card__cta" id="heroCta" href="#">Empezar ahora</a>
-            <button class="hero-card__alt" id="heroAlt" type="button" aria-label="Otra sugerencia">Otra sugerencia</button>
-          </div>
+        <div class="resumen-hero" id="resumenHero">
+        <div class="hero-card" id="heroCard">
+          <a class="hero-card__launch" id="heroLaunch" href="#">
+            <span class="hero-card__icon" id="heroIcon" aria-hidden="true"></span>
+            <span class="hero-card__body">
+              <span class="hero-card__context" id="heroContext"></span>
+              <span class="hero-card__title" id="heroTitle"></span>
+              <span class="hero-card__meta" id="heroMeta"></span>
+            </span>
+            <span class="hero-card__chev" aria-hidden="true">›</span>
+          </a>
+          <button class="hero-card__alt" id="heroAlt" type="button" hidden aria-label="Otra sugerencia">Otra sugerencia</button>
           <button class="hero-card__browse" id="heroBrowse" type="button" hidden>Ver ejercicios</button>
         </div>
 
-        <!-- Progress Snapshot -->
-        <div class="progress-snapshot" id="progressSnapshot">
-          <div class="progress-snapshot__bar">
-            <div class="progress-snapshot__fill" id="snapshotFill"></div>
+        <button type="button" class="progress-snapshot" id="progressSnapshot" aria-label="Ver tu progreso">
+          <div class="progress-snapshot__visual" id="snapshotRing" style="--progress: 0" role="img" aria-hidden="true">
+            <div><strong id="snapshotPct">0%</strong></div>
           </div>
-          <div class="progress-snapshot__stats">
-            <span class="progress-snapshot__stat"><strong id="snapshotPct">0%</strong> completado</span>
-            <span class="progress-snapshot__sep" aria-hidden="true">·</span>
-            <span class="progress-snapshot__stat"><strong id="snapshotDone">0</strong>/<span id="snapshotTotal">0</span> ejercicios</span>
-            <span class="progress-snapshot__sep" aria-hidden="true">·</span>
-            <span class="progress-snapshot__stat"><strong id="snapshotPaths">0</strong> rutas activas</span>
-            <button class="progress-snapshot__link" id="snapshotLink" type="button">Ver progreso →</button>
-          </div>
+          <span class="progress-snapshot__copy">
+            <span class="progress-snapshot__line progress-snapshot__line--primary">
+              <span class="progress-snapshot__title">Tu progreso</span>
+              <span class="progress-snapshot__stat-wrap">
+                <span class="progress-snapshot__stat" id="snapshotStat">0/0</span><span class="progress-snapshot__unit"> ejercicios</span>
+              </span>
+            </span>
+            <span class="progress-snapshot__line progress-snapshot__line--meta" id="snapshotDetail">Tu aventura empieza aquí</span>
+          </span>
+          <span class="progress-snapshot__link" id="snapshotLink" aria-hidden="true">Ver progreso →</span>
+          <span class="progress-snapshot__chev" aria-hidden="true">›</span>
+        </button>
+        </div>
+
+        <div class="sec-head">Explora por tema</div>
+        <div class="tiles">
+          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><div class="tile-copy"><div class="tile-title">Vocabulary &amp; Words</div><div class="tile-count" data-count-for="vocab">0 ejercicios</div></div></button>
+          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><div class="tile-copy"><div class="tile-title">Grammar &amp; Spelling</div><div class="tile-count" data-count-for="grammar">0 ejercicios</div></div></button>
+          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><div class="tile-copy"><div class="tile-title">Pronunciation</div><div class="tile-count" data-count-for="pronunciation">0 ejercicios</div></div></button>
+          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><div class="tile-copy"><div class="tile-title">Analysis &amp; Production</div><div class="tile-count" data-count-for="analysis">0 ejercicios</div></div></button>
+          <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><div class="tile-copy"><div class="tile-title">Guías de referencia</div><div class="tile-count" data-count-for="guides">0 guías</div></div></button>
         </div>
 
         <!-- Last Activities -->
         <div class="last-activities" id="lastActivities"></div>
-
-        <div class="sec-head">Explora por tema</div>
-        <div class="tiles">
-          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><span class="tile-title">Vocabulary &amp; Words</span><span class="tile-count" data-count-for="vocab">0 ejercicios</span></button>
-          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><span class="tile-title">Grammar &amp; Spelling</span><span class="tile-count" data-count-for="grammar">0 ejercicios</span></button>
-          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><span class="tile-title">Pronunciation</span><span class="tile-count" data-count-for="pronunciation">0 ejercicios</span></button>
-          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><span class="tile-title">Analysis &amp; Production</span><span class="tile-count" data-count-for="analysis">0 ejercicios</span></button>
-          <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><span class="tile-title">Guías de referencia</span><span class="tile-count" data-count-for="guides">0 guías</span></button>
-        </div>
 
 
 
@@ -435,7 +436,7 @@ import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js'
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/utils.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 import { shouldDeferStatsDisplay, consumeStatsRevealAnimation } from './js/sync-engine.js';
-import { animateText, animateWidth } from './js/lp-stats-animate.js';
+import { animateText, animateCssVar } from './js/lp-stats-animate.js';
 
 (function() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
@@ -751,15 +752,16 @@ import { animateText, animateWidth } from './js/lp-stats-animate.js';
       // First-run welcome
       heroCard.classList.add('hero-card--welcome');
       heroCard.style.setProperty('--hero-spine', 'var(--lp-accent)');
+      document.getElementById('resumenHero')?.style.setProperty('--hero-spine', 'var(--lp-accent)');
       document.getElementById('heroIcon').textContent = '🚀';
       document.getElementById('heroContext').textContent = 'Bienvenido a HubFlow';
       document.getElementById('heroTitle').textContent = MODULES.length + ' ejercicios te esperan';
       document.getElementById('heroMeta').textContent = 'Empieza por lo que más te llame o sigue una ruta guiada.';
-      const cta = document.getElementById('heroCta');
-      cta.textContent = 'Empezar ruta guiada';
+      const launch = document.getElementById('heroLaunch');
       const firstPath = LEARNING_PATHS[0];
       const firstMod = firstPath ? moduleMap.get(firstPath.modules[0]) : MODULES[0];
-      cta.href = firstMod ? firstMod.exercise : '#';
+      launch.href = firstMod ? firstMod.exercise : '#';
+      launch.setAttribute('aria-label', 'Empezar ruta guiada');
       document.getElementById('heroAlt').hidden = true;
       return;
     }
@@ -770,14 +772,15 @@ import { animateText, animateWidth } from './js/lp-stats-animate.js';
     const { mod, reason } = suggestion;
     const color = CATEGORY_COLORS[mod.category] || 'var(--lp-accent)';
     heroCard.style.setProperty('--hero-spine', color);
+    document.getElementById('resumenHero')?.style.setProperty('--hero-spine', color);
     heroCard.classList.remove('hero-card--welcome');
     document.getElementById('heroIcon').textContent = mod.icon;
     document.getElementById('heroContext').textContent = reason;
     document.getElementById('heroTitle').textContent = mod.title;
     document.getElementById('heroMeta').textContent = mod.meta;
-    const cta = document.getElementById('heroCta');
-    cta.textContent = 'Empezar ahora';
-    cta.href = mod.exercise;
+    const launch = document.getElementById('heroLaunch');
+    launch.href = mod.exercise;
+    launch.setAttribute('aria-label', 'Empezar: ' + mod.title);
     const altBtn = document.getElementById('heroAlt');
     altBtn.hidden = false;
     altBtn.textContent = 'Otra sugerencia';
@@ -785,6 +788,10 @@ import { animateText, animateWidth } from './js/lp-stats-animate.js';
 
   function renderProgressSnapshot(animateReveal = false) {
     const snapshot = document.getElementById('progressSnapshot');
+    const ring = document.getElementById('snapshotRing');
+    const pctEl = document.getElementById('snapshotPct');
+    const statEl = document.getElementById('snapshotStat');
+    const detailEl = document.getElementById('snapshotDetail');
     const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
     const total = exercises.length;
     const defer = shouldDeferStatsDisplay();
@@ -795,28 +802,29 @@ import { animateText, animateWidth } from './js/lp-stats-animate.js';
 
     if (!hasProgress) {
       snapshot.classList.add('progress-snapshot--empty');
-      document.getElementById('snapshotFill').style.width = '0%';
-      const stats = snapshot.querySelector('.progress-snapshot__stats');
-      stats.innerHTML = '<span class="progress-snapshot__stat">0/' + total + ' completados · tu aventura empieza aquí</span><button class="progress-snapshot__link" id="snapshotLink" type="button">Ver progreso →</button>';
+      ring.style.setProperty('--progress', '0');
+      pctEl.textContent = '0%';
+      statEl.textContent = `0/${total}`;
+      detailEl.textContent = 'Tu aventura empieza aquí';
+      snapshot.setAttribute('aria-label', `Progreso HubFlow: 0 de ${total} ejercicios. Tu aventura empieza aquí`);
     } else {
       snapshot.classList.remove('progress-snapshot--empty');
-      const fill = document.getElementById('snapshotFill');
-      if (animateReveal && pct > 0) animateWidth(fill, pct);
-      else fill.style.width = pct + '%';
-      const pctEl = document.getElementById('snapshotPct');
-      const doneEl = document.getElementById('snapshotDone');
       if (animateReveal && pct > 0) {
-        animateText(pctEl, 0, pct, (v) => v + '%');
-        animateText(doneEl, 0, completed);
+        animateCssVar(ring, '--progress', pct);
+        animateText(pctEl, 0, pct, (v) => `${v}%`);
       } else {
-        pctEl.textContent = pct + '%';
-        doneEl.textContent = completed;
+        ring.style.setProperty('--progress', String(pct));
+        pctEl.textContent = `${pct}%`;
       }
-      document.getElementById('snapshotTotal').textContent = total;
-      document.getElementById('snapshotPaths').textContent = activePaths;
+      statEl.textContent = `${completed}/${total}`;
+      detailEl.textContent = `${activePaths} rutas activas`;
+      snapshot.setAttribute(
+        'aria-label',
+        `Progreso HubFlow: ${pct} por ciento, ${completed} de ${total} ejercicios, ${activePaths} rutas activas`
+      );
     }
 
-    snapshot.querySelector('#snapshotLink')?.addEventListener('click', () => setActive('mi-progreso'));
+    snapshot.onclick = () => setActive('mi-progreso');
   }
 
   // ─── LAST ACTIVITIES ───
