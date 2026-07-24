@@ -189,11 +189,11 @@
       <section class="section active-section" data-key="resumen" data-lp-home>
         <div class="resumen-hero" id="resumenHero">
         <div class="hero-card" id="heroCard">
-          <a class="hero-card__launch" id="heroLaunch" href="#">
+          <a class="hero-card__launch" id="heroLaunch" href="#" aria-disabled="true" tabindex="-1">
             <span class="hero-card__icon" id="heroIcon" aria-hidden="true"></span>
             <span class="hero-card__body">
-              <span class="hero-card__context" id="heroContext"></span>
-              <span class="hero-card__title" id="heroTitle"></span>
+              <span class="hero-card__context" id="heroContext" aria-hidden="true">&nbsp;</span>
+              <span class="hero-card__title" id="heroTitle" aria-hidden="true">&nbsp;</span>
               <span class="hero-card__meta" id="heroMeta"></span>
             </span>
             <span class="hero-card__chev" aria-hidden="true">›</span>
@@ -209,16 +209,35 @@
           <span class="progress-snapshot__copy">
             <span class="progress-snapshot__line progress-snapshot__line--primary">
               <span class="progress-snapshot__title">Tu progreso</span>
-              <span class="progress-snapshot__stat-wrap">
-                <span class="progress-snapshot__stat" id="snapshotStat">0/0</span><span class="progress-snapshot__unit"> ejercicios</span>
-              </span>
             </span>
             <span class="progress-snapshot__line progress-snapshot__line--meta" id="snapshotDetail">Tu aventura empieza aquí</span>
           </span>
+          <div class="progress-snapshot__stat-col">
+            <span class="progress-snapshot__stat-wrap">
+              <span class="progress-snapshot__stat" id="snapshotStat">0/0</span><span class="progress-snapshot__unit"> ejercicios</span>
+            </span>
+          </div>
           <span class="progress-snapshot__link" id="snapshotLink" aria-hidden="true">Ver progreso →</span>
           <span class="progress-snapshot__chev" aria-hidden="true">›</span>
         </button>
         </div>
+
+        <script>
+          // Hero skeleton while cloud stats hydrate (logged-in users)
+          (function() {
+            try {
+              for (var i = 0; i < localStorage.length; i += 1) {
+                var key = localStorage.key(i);
+                if (!/^sb-.+-auth-token$/.test(key || '')) continue;
+                var parsed = JSON.parse(localStorage.getItem(key) || 'null');
+                if (parsed?.access_token || parsed?.currentSession?.access_token) {
+                  document.getElementById('heroCard')?.classList.add('hero-card--loading');
+                  return;
+                }
+              }
+            } catch { /* noop */ }
+          })();
+        </script>
 
         <div class="sec-head">Explora por tema</div>
         <div class="tiles">
@@ -435,8 +454,8 @@
 import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/utils.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
-import { shouldDeferStatsDisplay, consumeStatsRevealAnimation } from './js/sync-engine.js';
-import { animateText, animateCssVar } from './js/lp-stats-animate.js';
+import { shouldDeferStatsDisplay, consumeStatsRevealAnimation, shouldDeferActivityDisplay, hydrateActivityFromCloud } from './js/sync-engine.js';
+import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-animate.js';
 
 (function() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
@@ -744,29 +763,72 @@ import { animateText, animateCssVar } from './js/lp-stats-animate.js';
 
   let currentSuggestion = null;
 
-  function renderHeroCard() {
+  function renderHeroCard({ animateReveal = false } = {}) {
     const heroCard = document.getElementById('heroCard');
+    const launch = document.getElementById('heroLaunch');
+    const iconEl = document.getElementById('heroIcon');
+    const contextEl = document.getElementById('heroContext');
+    const titleEl = document.getElementById('heroTitle');
+    const metaEl = document.getElementById('heroMeta');
+    const altBtn = document.getElementById('heroAlt');
+
+    function setLaunchInteractive(enabled) {
+      if (enabled) {
+        launch.removeAttribute('aria-disabled');
+        launch.removeAttribute('tabindex');
+      } else {
+        launch.setAttribute('aria-disabled', 'true');
+        launch.setAttribute('tabindex', '-1');
+      }
+    }
+
+    function revealHeroContent() {
+      heroCard.classList.remove('hero-card--pending');
+      heroCard.classList.add('hero-card--revealed');
+    }
+
+    if (shouldDeferStatsDisplay()) {
+      heroCard.classList.add('hero-card--loading');
+      heroCard.classList.remove('hero-card--welcome', 'hero-card--revealed', 'hero-card--pending');
+      heroCard.style.removeProperty('--hero-spine');
+      document.getElementById('resumenHero')?.style.removeProperty('--hero-spine');
+      iconEl.textContent = '';
+      contextEl.textContent = '\u00a0';
+      titleEl.textContent = '\u00a0';
+      metaEl.textContent = '';
+      contextEl.setAttribute('aria-hidden', 'true');
+      titleEl.setAttribute('aria-hidden', 'true');
+      launch.href = '#';
+      launch.setAttribute('aria-label', 'Cargando sugerencia');
+      setLaunchInteractive(false);
+      altBtn.hidden = true;
+      return;
+    }
+
+    heroCard.classList.remove('hero-card--loading');
     const hasAnyProgress = MODULES.some(m => getBestScore(m.id) > 0);
 
     if (!hasAnyProgress) {
-      // First-run welcome
       heroCard.classList.add('hero-card--welcome');
+      heroCard.classList.remove('hero-card--pending');
+      heroCard.classList.add('hero-card--revealed');
       heroCard.style.setProperty('--hero-spine', 'var(--lp-accent)');
       document.getElementById('resumenHero')?.style.setProperty('--hero-spine', 'var(--lp-accent)');
-      document.getElementById('heroIcon').textContent = '🚀';
-      document.getElementById('heroContext').textContent = 'Bienvenido a HubFlow';
-      document.getElementById('heroTitle').textContent = MODULES.length + ' ejercicios te esperan';
-      document.getElementById('heroMeta').textContent = 'Empieza por lo que más te llame o sigue una ruta guiada.';
-      const launch = document.getElementById('heroLaunch');
+      iconEl.textContent = '🚀';
+      contextEl.textContent = 'Bienvenido a HubFlow';
+      titleEl.textContent = MODULES.length + ' ejercicios te esperan';
+      metaEl.textContent = 'Empieza por lo que más te llame o sigue una ruta guiada.';
+      contextEl.removeAttribute('aria-hidden');
+      titleEl.removeAttribute('aria-hidden');
       const firstPath = LEARNING_PATHS[0];
       const firstMod = firstPath ? moduleMap.get(firstPath.modules[0]) : MODULES[0];
       launch.href = firstMod ? firstMod.exercise : '#';
       launch.setAttribute('aria-label', 'Empezar ruta guiada');
-      document.getElementById('heroAlt').hidden = true;
+      setLaunchInteractive(true);
+      altBtn.hidden = true;
       return;
     }
 
-    // Regular suggestion
     const suggestion = getSuggestion(currentSuggestion?.mod?.id);
     currentSuggestion = suggestion;
     const { mod, reason } = suggestion;
@@ -774,16 +836,27 @@ import { animateText, animateCssVar } from './js/lp-stats-animate.js';
     heroCard.style.setProperty('--hero-spine', color);
     document.getElementById('resumenHero')?.style.setProperty('--hero-spine', color);
     heroCard.classList.remove('hero-card--welcome');
-    document.getElementById('heroIcon').textContent = mod.icon;
-    document.getElementById('heroContext').textContent = reason;
-    document.getElementById('heroTitle').textContent = mod.title;
-    document.getElementById('heroMeta').textContent = mod.meta;
-    const launch = document.getElementById('heroLaunch');
+    iconEl.textContent = mod.icon;
+    contextEl.textContent = reason;
+    titleEl.textContent = mod.title;
+    metaEl.textContent = mod.meta;
+    contextEl.removeAttribute('aria-hidden');
+    titleEl.removeAttribute('aria-hidden');
     launch.href = mod.exercise;
     launch.setAttribute('aria-label', 'Empezar: ' + mod.title);
-    const altBtn = document.getElementById('heroAlt');
+    setLaunchInteractive(true);
     altBtn.hidden = false;
     altBtn.textContent = 'Otra sugerencia';
+
+    if (animateReveal && !prefersReducedMotion()) {
+      heroCard.classList.remove('hero-card--revealed');
+      heroCard.classList.add('hero-card--pending');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(revealHeroContent);
+      });
+    } else {
+      revealHeroContent();
+    }
   }
 
   function renderProgressSnapshot(animateReveal = false) {
@@ -836,7 +909,7 @@ import { animateText, animateCssVar } from './js/lp-stats-animate.js';
     const container = document.getElementById('lastActivities');
     if (!container) return;
 
-    if (shouldDeferStatsDisplay()) {
+    if (shouldDeferActivityDisplay('hubflow')) {
       container.innerHTML = '<p class="last-activities--empty">Aún no hay actividad registrada. ¡Empieza un ejercicio!</p>';
       return;
     }
@@ -908,7 +981,7 @@ import { animateText, animateCssVar } from './js/lp-stats-animate.js';
     renderLastActivities();
     renderProgressSnapshot(animateReveal);
     refreshHeaderStats(animateReveal);
-    renderHeroCard();
+    renderHeroCard({ animateReveal });
   }
 
   let refreshHomeScheduled = false;
@@ -922,7 +995,11 @@ import { animateText, animateCssVar } from './js/lp-stats-animate.js';
   }
 
   scheduleRefreshHomeStats();
+  void hydrateActivityFromCloud('hubflow');
   window.addEventListener('lp-stats-ready', () => scheduleRefreshHomeStats());
+  window.addEventListener('lp-activity-ready', (event) => {
+    if (event.detail?.app === 'hubflow') scheduleRefreshHomeStats();
+  });
 
   setupSupabaseAuth({
     onAfterLogin: () => scheduleRefreshHomeStats(),

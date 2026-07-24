@@ -313,7 +313,7 @@
       align-items: center;
       text-decoration: none;
       color: inherit;
-      min-height: 44px;
+      min-height: 68px;
       -webkit-tap-highlight-color: transparent;
       transition: background 0.15s ease;
     }
@@ -411,6 +411,112 @@
       font-size: 1rem;
       font-weight: var(--lp-weight-semibold);
       line-height: 1.2;
+    }
+
+    /* Loading skeleton — fixed footprint while cloud stats hydrate */
+    .hero-card--loading {
+      pointer-events: none;
+      --hero-spine: var(--lp-border);
+    }
+
+    .hero-card--loading .hero-card__launch {
+      cursor: default;
+    }
+
+    .hero-card--loading .hero-card__icon {
+      color: transparent;
+      background: var(--lp-surface-sunken);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card--loading .hero-card__context,
+    .hero-card--loading .hero-card__title {
+      color: transparent;
+      background: var(--lp-surface-sunken);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card--loading .hero-card__context {
+      width: 58%;
+      min-height: 0.7rem;
+    }
+
+    .hero-card--loading .hero-card__title {
+      width: 72%;
+      min-height: 1.05rem;
+    }
+
+    .hero-card--loading .hero-card__chev {
+      opacity: 0.35;
+    }
+
+    .hero-card--loading .hero-card__icon::after,
+    .hero-card--loading .hero-card__context::after,
+    .hero-card--loading .hero-card__title::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--lp-surface) 70%, transparent) 50%,
+        transparent 100%
+      );
+      transform: translateX(-100%);
+      animation: hero-card-shimmer 1.15s ease-in-out infinite;
+    }
+
+    @keyframes hero-card-shimmer {
+      100% { transform: translateX(100%); }
+    }
+
+    .hero-card--pending .hero-card__icon,
+    .hero-card--pending .hero-card__context,
+    .hero-card--pending .hero-card__title,
+    .hero-card--pending .hero-card__chev {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    .hero-card--revealed .hero-card__icon,
+    .hero-card--revealed .hero-card__context,
+    .hero-card--revealed .hero-card__title,
+    .hero-card--revealed .hero-card__chev {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.4s ease,
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hero-card--revealed .hero-card__context { transition-delay: 0.04s; }
+    .hero-card--revealed .hero-card__title { transition-delay: 0.08s; }
+    .hero-card--revealed .hero-card__chev { transition-delay: 0.1s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-card--loading .hero-card__icon::after,
+      .hero-card--loading .hero-card__context::after,
+      .hero-card--loading .hero-card__title::after {
+        animation: none;
+      }
+
+      .hero-card--pending .hero-card__icon,
+      .hero-card--pending .hero-card__context,
+      .hero-card--pending .hero-card__title,
+      .hero-card--pending .hero-card__chev {
+        opacity: 1;
+        transform: none;
+      }
+
+      .hero-card--revealed .hero-card__icon,
+      .hero-card--revealed .hero-card__context,
+      .hero-card--revealed .hero-card__title,
+      .hero-card--revealed .hero-card__chev {
+        transition: none;
+      }
     }
 
     @media (max-width: 640px) {
@@ -514,8 +620,7 @@
       line-height: 1.2;
     }
     .progress-snapshot__line--primary {
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
       align-items: center;
       gap: 0.5rem;
       font-size: 0.8125rem;
@@ -540,12 +645,16 @@
     }
     .progress-snapshot__stat-wrap {
       display: inline-flex;
-      align-items: center;
+      align-items: baseline;
       gap: 0.15rem;
       min-width: 0;
       white-space: nowrap;
       line-height: 1;
-      align-self: center;
+    }
+    .progress-snapshot__stat-col {
+      display: flex;
+      align-items: center;
+      min-width: 0;
     }
     .progress-snapshot__stat {
       font-size: 0.8125rem;
@@ -605,11 +714,18 @@
       .resumen-hero .progress-snapshot {
         grid-column: 2;
         grid-row: 1;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto 1fr auto;
         grid-template-rows: auto auto auto;
         padding: 14px 16px;
         gap: 0.4rem 14px;
         cursor: pointer;
+      }
+
+      .resumen-hero .progress-snapshot__stat-col {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        align-self: center;
       }
 
       .resumen-hero .progress-snapshot__copy {
@@ -668,17 +784,18 @@
       }
 
       .resumen-hero .progress-snapshot {
-        grid-template-columns: 40px 1fr auto;
-        grid-template-rows: 1fr;
+        grid-template-columns: 40px 1fr auto auto;
+        grid-template-rows: auto auto;
         align-items: center;
         gap: 0 10px;
+        row-gap: 2px;
         min-height: 52px;
         padding: 8px 12px 8px 14px;
       }
 
       .resumen-hero .progress-snapshot__visual {
         grid-column: 1;
-        grid-row: 1;
+        grid-row: 1 / -1;
         align-self: center;
         width: 40px;
         height: 40px;
@@ -694,22 +811,31 @@
       }
 
       .resumen-hero .progress-snapshot__copy {
-        grid-column: 2;
-        grid-row: 1;
-        align-self: center;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 2px;
-        justify-content: center;
-        min-height: 40px;
+        display: contents;
       }
 
       .resumen-hero .progress-snapshot__line--primary {
-        font-size: inherit;
-        align-items: center;
+        display: contents;
+      }
+
+      .resumen-hero .progress-snapshot__title {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: end;
+        font-size: 0.6rem;
+        letter-spacing: 0.08em;
+      }
+
+      .resumen-hero .progress-snapshot__stat-col {
+        grid-column: 3;
+        grid-row: 1 / -1;
+        align-self: center;
       }
 
       .resumen-hero .progress-snapshot__line--meta {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: start;
         font-size: 0.6875rem;
         color: var(--lp-muted);
       }
@@ -717,11 +843,6 @@
       .resumen-hero .progress-snapshot__line--meta::before {
         content: none;
         margin: 0;
-      }
-
-      .resumen-hero .progress-snapshot__title {
-        font-size: 0.6rem;
-        letter-spacing: 0.08em;
       }
 
       .resumen-hero .progress-snapshot__stat {
@@ -738,8 +859,8 @@
 
       .resumen-hero .progress-snapshot__chev {
         display: block;
-        grid-column: 3;
-        grid-row: 1;
+        grid-column: 4;
+        grid-row: 1 / -1;
         align-self: center;
         font-size: 1.125rem;
         color: color-mix(in srgb, var(--lp-muted) 85%, transparent);

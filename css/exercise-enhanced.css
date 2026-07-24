@@ -104,6 +104,7 @@ body > .top-bar {
   font-size: var(--lp-header-title-size);
   font-weight: var(--lp-header-title-weight);
   letter-spacing: var(--lp-header-title-tracking);
+  line-height: var(--lp-header-title-line-height);
   color: var(--lp-ink);
   white-space: nowrap;
   overflow: hidden;

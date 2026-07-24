@@ -26,6 +26,7 @@ if (typeof window !== 'undefined') {
 
 // ─── Shared nav helpers (lp-nav-helpers.js) ───────────────────────────────────
 const themedAppHref = (app) => window.LpNavHelpers.themedAppHref(app);
+const currentTheme = () => window.LpNavHelpers.currentTheme();
 const currentThemeIcon = () => window.LpNavHelpers.currentThemeIcon();
 const navIcon = (name) => window.LpNavHelpers.navIcon(name);
 const toggleTheme = () => {
