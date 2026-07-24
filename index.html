@@ -762,6 +762,49 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   }
 
   let currentSuggestion = null;
+  const SUGGESTION_ROTATE_MS = 2 * 60 * 1000;
+  let suggestionRotateTimer = null;
+
+  function isHeroSuggestionActive() {
+    const heroCard = document.getElementById('heroCard');
+    if (!heroCard) return false;
+    if (heroCard.classList.contains('hero-card--loading')) return false;
+    if (heroCard.classList.contains('hero-card--welcome')) return false;
+    const resumen = document.querySelector('.section[data-key="resumen"]');
+    if (!resumen?.classList.contains('active-section')) return false;
+    return MODULES.some(m => getBestScore(m.id) > 0);
+  }
+
+  function stopSuggestionRotation() {
+    if (!suggestionRotateTimer) return;
+    clearTimeout(suggestionRotateTimer);
+    suggestionRotateTimer = null;
+  }
+
+  function scheduleSuggestionRotation() {
+    stopSuggestionRotation();
+    if (!isHeroSuggestionActive() || document.visibilityState === 'hidden') return;
+    suggestionRotateTimer = setTimeout(() => {
+      suggestionRotateTimer = null;
+      if (!isHeroSuggestionActive()) return;
+      renderHeroCard({ animateReveal: true });
+      scheduleSuggestionRotation();
+    }, SUGGESTION_ROTATE_MS);
+  }
+
+  function ensureSuggestionRotationScheduled() {
+    if (!isHeroSuggestionActive()) {
+      stopSuggestionRotation();
+      return;
+    }
+    if (suggestionRotateTimer) return;
+    scheduleSuggestionRotation();
+  }
+
+  function restartSuggestionRotation() {
+    stopSuggestionRotation();
+    scheduleSuggestionRotation();
+  }
 
   function renderHeroCard({ animateReveal = false } = {}) {
     const heroCard = document.getElementById('heroCard');
@@ -802,6 +845,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       launch.setAttribute('aria-label', 'Cargando sugerencia');
       setLaunchInteractive(false);
       altBtn.hidden = true;
+      stopSuggestionRotation();
       return;
     }
 
@@ -826,6 +870,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       launch.setAttribute('aria-label', 'Empezar ruta guiada');
       setLaunchInteractive(true);
       altBtn.hidden = true;
+      stopSuggestionRotation();
       return;
     }
 
@@ -857,6 +902,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     } else {
       revealHeroContent();
     }
+    ensureSuggestionRotationScheduled();
   }
 
   function renderProgressSnapshot(animateReveal = false) {
@@ -1012,7 +1058,13 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   // "Otra sugerencia" button
   document.getElementById('heroAlt').addEventListener('click', function() {
     if (document.getElementById('heroCard').classList.contains('hero-card--welcome')) return;
-    renderHeroCard();
+    renderHeroCard({ animateReveal: true });
+    restartSuggestionRotation();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') stopSuggestionRotation();
+    else ensureSuggestionRotationScheduled();
   });
 
   // "Ver ejercicios" button — scrolls to category tiles
@@ -1222,6 +1274,8 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     content.scrollTop = 0;
     if (searchInput.value) { searchInput.value = ''; }
     applyFilters();
+    if (target === 'resumen') ensureSuggestionRotationScheduled();
+    else stopSuggestionRotation();
   }
 
   navButtons.forEach(b => {
