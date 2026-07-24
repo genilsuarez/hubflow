@@ -1,7 +1,7 @@
 import { MODULES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT, MODULE_DEPTH } from '../data/catalog.js';
 import * as lpSupabase from './lp-supabase.js';
 import { isCloudHydrated } from './sync-engine.js';
-import { enrichHubflowContentEntry } from './lp-progress-summary.js';
+import { enrichHubflowContentEntry, recomputeProgressDocumentSummary } from './lp-progress-summary.js';
 
 /* ═══════════════════════════════════════════════════════
    HubFlow — Shared Utilities
@@ -502,6 +502,12 @@ function scheduleCloudSync() {
 
     const progressDoc = readJson(PROGRESS_STORAGE_KEY, null);
     if (progressDoc?.content) {
+      if (recomputeProgressDocumentSummary(progressDoc, 'hubflow')) {
+        progressDoc.updatedAt = new Date().toISOString();
+        try {
+          localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressDoc));
+        } catch {}
+      }
       await lpSupabase.syncProgress('hubflow', { content: progressDoc.content });
     }
     const activityDoc = readJson(ACTIVITY_STORAGE_KEY, null);
