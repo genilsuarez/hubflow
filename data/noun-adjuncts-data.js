@@ -17,6 +17,7 @@ export const LEVELS = {
     { prompt: "children's ___",  modifier: "toys",     nucleus: "toys",     full: "children's toys",  rule: "red", why: "🔴 Genitivo 's plural irregular: children+'s", focus: "possession" },
     { prompt: "piece of ___",    modifier: "cake",     nucleus: "piece",    full: "piece of cake",    rule: "red", why: "🔴 Partitivo 'of': una porción de algo", focus: "partitive" },
     { prompt: "teacher's ___",   modifier: "desk",     nucleus: "desk",     full: "teacher's desk",   rule: "red", why: "🔴 Genitivo 's: el escritorio pertenece al profesor", focus: "possession" },
+    { prompt: "___ light",        modifier: "street",   nucleus: "light",    full: "street light",     rule: "blue",  why: "🔵 Noun+Noun: tipo de luz (ubicación)", focus: "type" },
   ],
   intermediate: [
     // 🔵 Noun + Noun (5)
@@ -54,6 +55,7 @@ export const LEVELS = {
     { prompt: "___ line",       modifier: "finishing",    nucleus: "line",        full: "finishing line",          rule: "green", why: "🟢 -ing nominal: la acción que define la línea", focus: "activity" },
     { prompt: "children's ___", modifier: "hospital",    nucleus: "hospital",    full: "children's hospital",    rule: "red",   why: "🔴 Genitivo 's plural irregular: children+'s", focus: "possession" },
     { prompt: "___ hat",        modifier: "cowboy",      nucleus: "hat",         full: "cowboy hat",             rule: "blue",  why: "🔵 Noun+Noun: tipo de persona que lo usa", focus: "type" },
+    { prompt: "___ card",       modifier: "credit",      nucleus: "card",        full: "credit card",            rule: "blue",  why: "🔵 Noun+Noun: tipo de tarjeta", focus: "type" },
   ],
   god: [
     // 🔵 Noun + Noun (6) — incluye excepciones de pluralización

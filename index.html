@@ -223,15 +223,27 @@
         </div>
 
         <script>
-          // Hero skeleton while cloud stats hydrate (logged-in users)
+          // Hero skeleton only on first cloud hydrate (logged-in, no local cache yet)
           (function() {
+            function hasLocalHubflowCache() {
+              try {
+                if (localStorage.getItem('learnflow:hubflow:local-ready:v1') === '1') return true;
+                var progress = JSON.parse(localStorage.getItem('learnflow:progress:hubflow:v1') || 'null');
+                if (progress?.content && Object.keys(progress.content).length > 0) return true;
+                var activity = JSON.parse(localStorage.getItem('learnflow:activity:hubflow:v1') || 'null');
+                if (activity?.events?.length > 0) return true;
+              } catch { /* noop */ }
+              return false;
+            }
             try {
               for (var i = 0; i < localStorage.length; i += 1) {
                 var key = localStorage.key(i);
                 if (!/^sb-.+-auth-token$/.test(key || '')) continue;
                 var parsed = JSON.parse(localStorage.getItem(key) || 'null');
                 if (parsed?.access_token || parsed?.currentSession?.access_token) {
-                  document.getElementById('heroCard')?.classList.add('hero-card--loading');
+                  if (!hasLocalHubflowCache()) {
+                    document.getElementById('heroCard')?.classList.add('hero-card--loading');
+                  }
                   return;
                 }
               }
@@ -718,7 +730,14 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
 
   renderRutas();
 
-  function getSuggestion(exclude) {
+  function getSuggestion(exclude, { refresh = false } = {}) {
+    if (!refresh) {
+      const persisted = readPersistedHeroSuggestion();
+      if (isPersistedHeroSuggestionValid(persisted)) {
+        return persisted;
+      }
+    }
+
     const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
     // Priority 1: recent attempt with score < 70%
     const needsImprovement = exercises.filter(m => {
@@ -727,8 +746,9 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       return best > 0 && best < 70;
     });
     if (needsImprovement.length) {
-      const mod = needsImprovement[Math.floor(Math.random() * needsImprovement.length)];
-      return { mod, reason: 'Mejorar tu último intento' };
+      needsImprovement.sort((a, b) => getBestScore(a.id) - getBestScore(b.id) || a.id.localeCompare(b.id));
+      const mod = needsImprovement[0];
+      return persistHeroSuggestion({ mod, reason: 'Mejorar tu último intento' });
     }
     // Priority 2: next incomplete module in most-progressed path
     const pathProgress = LEARNING_PATHS.map(path => {
@@ -739,7 +759,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     if (pathProgress.length) {
       const { path, next } = pathProgress[0];
       const mod = moduleMap.get(next);
-      if (mod) return { mod, reason: `Continúa la ruta ${path.title}` };
+      if (mod) return persistHeroSuggestion({ mod, reason: `Continúa la ruta ${path.title}` });
     }
     // Priority 3: never attempted module at lowest CEFR
     const cefrOrder = ['a1', 'a2', 'b1', 'b2', 'c1'];
@@ -747,7 +767,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     if (unattempted.length) {
       unattempted.sort((a, b) => cefrOrder.indexOf(a.cefr) - cefrOrder.indexOf(b.cefr));
       const mod = unattempted[0];
-      return { mod, reason: 'Algo nuevo para ti' };
+      return persistHeroSuggestion({ mod, reason: 'Algo nuevo para ti' });
     }
     // Priority 4: random from least-visited category
     const catCounts = {};
@@ -755,58 +775,56 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     const leastCat = Object.entries(catCounts).sort((a, b) => a[1] - b[1])[0]?.[0];
     const pool = exercises.filter(m => m.category === leastCat && m.id !== exclude);
     if (pool.length) {
-      const mod = pool[Math.floor(Math.random() * pool.length)];
-      return { mod, reason: 'Explora esta categoría' };
+      pool.sort((a, b) => a.id.localeCompare(b.id));
+      const mod = pool[0];
+      return persistHeroSuggestion({ mod, reason: 'Explora esta categoría' });
     }
-    return { mod: exercises[0], reason: 'Practica hoy' };
+    return persistHeroSuggestion({ mod: exercises[0], reason: 'Practica hoy' });
+  }
+
+  const HERO_SUGGESTION_KEY = 'learnflow:hubflow:hero-suggestion:v1';
+
+  function readPersistedHeroSuggestion() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(HERO_SUGGESTION_KEY) || 'null');
+      if (!raw?.moduleId) return null;
+      const mod = moduleMap.get(raw.moduleId);
+      if (!mod) return null;
+      return { mod, reason: raw.reason || 'Continúa practicando' };
+    } catch {
+      return null;
+    }
+  }
+
+  function persistHeroSuggestion(suggestion) {
+    try {
+      localStorage.setItem(HERO_SUGGESTION_KEY, JSON.stringify({
+        moduleId: suggestion.mod.id,
+        reason: suggestion.reason,
+        savedAt: new Date().toISOString(),
+      }));
+    } catch {
+      /* noop */
+    }
+    return suggestion;
+  }
+
+  function clearPersistedHeroSuggestion() {
+    try {
+      localStorage.removeItem(HERO_SUGGESTION_KEY);
+    } catch {
+      /* noop */
+    }
+  }
+
+  function isPersistedHeroSuggestionValid(suggestion) {
+    if (!suggestion?.mod) return false;
+    return !isContentCompleted(suggestion.mod.id);
   }
 
   let currentSuggestion = null;
-  const SUGGESTION_ROTATE_MS = 2 * 60 * 1000;
-  let suggestionRotateTimer = null;
 
-  function isHeroSuggestionActive() {
-    const heroCard = document.getElementById('heroCard');
-    if (!heroCard) return false;
-    if (heroCard.classList.contains('hero-card--loading')) return false;
-    if (heroCard.classList.contains('hero-card--welcome')) return false;
-    const resumen = document.querySelector('.section[data-key="resumen"]');
-    if (!resumen?.classList.contains('active-section')) return false;
-    return MODULES.some(m => getBestScore(m.id) > 0);
-  }
-
-  function stopSuggestionRotation() {
-    if (!suggestionRotateTimer) return;
-    clearTimeout(suggestionRotateTimer);
-    suggestionRotateTimer = null;
-  }
-
-  function scheduleSuggestionRotation() {
-    stopSuggestionRotation();
-    if (!isHeroSuggestionActive() || document.visibilityState === 'hidden') return;
-    suggestionRotateTimer = setTimeout(() => {
-      suggestionRotateTimer = null;
-      if (!isHeroSuggestionActive()) return;
-      renderHeroCard({ animateReveal: true });
-      scheduleSuggestionRotation();
-    }, SUGGESTION_ROTATE_MS);
-  }
-
-  function ensureSuggestionRotationScheduled() {
-    if (!isHeroSuggestionActive()) {
-      stopSuggestionRotation();
-      return;
-    }
-    if (suggestionRotateTimer) return;
-    scheduleSuggestionRotation();
-  }
-
-  function restartSuggestionRotation() {
-    stopSuggestionRotation();
-    scheduleSuggestionRotation();
-  }
-
-  function renderHeroCard({ animateReveal = false } = {}) {
+  function renderHeroCard({ animateReveal = false, refreshSuggestion = false } = {}) {
     const heroCard = document.getElementById('heroCard');
     const launch = document.getElementById('heroLaunch');
     const iconEl = document.getElementById('heroIcon');
@@ -845,7 +863,6 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       launch.setAttribute('aria-label', 'Cargando sugerencia');
       setLaunchInteractive(false);
       altBtn.hidden = true;
-      stopSuggestionRotation();
       return;
     }
 
@@ -870,11 +887,13 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       launch.setAttribute('aria-label', 'Empezar ruta guiada');
       setLaunchInteractive(true);
       altBtn.hidden = true;
-      stopSuggestionRotation();
       return;
     }
 
-    const suggestion = getSuggestion(currentSuggestion?.mod?.id);
+    const suggestion = getSuggestion(
+      refreshSuggestion ? currentSuggestion?.mod?.id : undefined,
+      { refresh: refreshSuggestion }
+    );
     currentSuggestion = suggestion;
     const { mod, reason } = suggestion;
     const color = CATEGORY_COLORS[mod.category] || 'var(--lp-accent)';
@@ -902,7 +921,6 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     } else {
       revealHeroContent();
     }
-    ensureSuggestionRotationScheduled();
   }
 
   function renderProgressSnapshot(animateReveal = false) {
@@ -1018,21 +1036,30 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     }
   }
 
-  window.addEventListener('hubflow-progress-updated', refreshHeaderStats);
+  window.addEventListener('hubflow-progress-updated', () => {
+    scheduleRefreshHomeStats();
+  });
 
+  let refreshingHomeStats = false;
   function refreshHomeStats() {
-    const animateReveal = consumeStatsRevealAnimation();
-    hydrateHubFlowFromCloud();
-    renderAllShelves();
-    renderLastActivities();
-    renderProgressSnapshot(animateReveal);
-    refreshHeaderStats(animateReveal);
-    renderHeroCard({ animateReveal });
+    if (refreshingHomeStats) return;
+    refreshingHomeStats = true;
+    try {
+      const animateReveal = consumeStatsRevealAnimation();
+      hydrateHubFlowFromCloud();
+      renderAllShelves();
+      renderLastActivities();
+      renderProgressSnapshot(animateReveal);
+      refreshHeaderStats(animateReveal);
+      renderHeroCard({ animateReveal });
+    } finally {
+      refreshingHomeStats = false;
+    }
   }
 
   let refreshHomeScheduled = false;
   function scheduleRefreshHomeStats() {
-    if (refreshHomeScheduled) return;
+    if (refreshHomeScheduled || refreshingHomeStats) return;
     refreshHomeScheduled = true;
     requestAnimationFrame(() => {
       refreshHomeScheduled = false;
@@ -1052,19 +1079,18 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     onAfterLogout: () => scheduleRefreshHomeStats(),
   });
 
-  window.addEventListener('lp-guest-reset', () => scheduleRefreshHomeStats());
+  window.addEventListener('lp-guest-reset', () => {
+    clearPersistedHeroSuggestion();
+    scheduleRefreshHomeStats();
+  });
   window.addEventListener('lp-cloud-hydrated', () => scheduleRefreshHomeStats());
 
-  // "Otra sugerencia" button
+  // "Otra sugerencia" button — única forma de cambiar la sugerencia manualmente
   document.getElementById('heroAlt').addEventListener('click', function() {
     if (document.getElementById('heroCard').classList.contains('hero-card--welcome')) return;
-    renderHeroCard({ animateReveal: true });
-    restartSuggestionRotation();
-  });
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') stopSuggestionRotation();
-    else ensureSuggestionRotationScheduled();
+    clearPersistedHeroSuggestion();
+    currentSuggestion = null;
+    renderHeroCard({ animateReveal: true, refreshSuggestion: true });
   });
 
   // "Ver ejercicios" button — scrolls to category tiles
@@ -1274,8 +1300,6 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     content.scrollTop = 0;
     if (searchInput.value) { searchInput.value = ''; }
     applyFilters();
-    if (target === 'resumen') ensureSuggestionRotationScheduled();
-    else stopSuggestionRotation();
   }
 
   navButtons.forEach(b => {

@@ -14,6 +14,7 @@ export const LEVELS = {
     { verb: "plan",  ans: "planned",  rule: "green", why: "Short vowel + one consonant at the end — double that last letter" },
     { verb: "drop",  ans: "dropped",  rule: "green", why: "Short vowel + one consonant at the end — double that last letter" },
     { verb: "hug",   ans: "hugged",   rule: "green", why: "Short vowel + one consonant at the end — double that last letter" },
+    { verb: "jump",  ans: "jumped",   rule: "green", why: "Short vowel + one consonant at the end — double that last letter" },
   ],
   intermediate: [
     { verb: "prefer",  ans: "preferred",  rule: "green", why: "Stress on the last syllable + CVC — double the final consonant" },
@@ -30,6 +31,7 @@ export const LEVELS = {
     { verb: "escape",  ans: "escaped",    rule: "blue",  why: "Silent -e at the end — drop it, then add -ed" },
     { verb: "invite",  ans: "invited",    rule: "blue",  why: "Silent -e at the end — drop it, then add -ed" },
     { verb: "create",  ans: "created",    rule: "blue",  why: "Silent -e at the end — drop it, then add -ed" },
+    { verb: "control", ans: "controlled", rule: "green", why: "Stress on the last syllable + CVC — double the final consonant" },
   ],
   exceptions: [
     { verb: "fix",    ans: "fixed",     rule: "red",   why: "-x sounds like two letters (ks) — never doubled, just add -ed" },

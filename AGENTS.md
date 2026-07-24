@@ -24,7 +24,8 @@ data/
 css/
   base.css          — Tokens --lp-*, reset, typography
   buttons.css       — Shared button system (.lp-btn/.lp-icon-btn/.lp-pill)
-  components.css    — Top-bar, categories, progress, flashcards, .cat-btn, .word-opt
+  components.css    — Top-bar, categories, progress; imports ex-bottom-nav.css
+  ex-bottom-nav.css — Bottom control bar (canonical, mirrors FluentFlow game-controls)
   sidebar.css       — Sidebar drawer + index shell grid + exercise footer
   lp-nav-active.css — Active nav item (copy of scripts/)
   lp-about.css      — About modal styles (copy of scripts/)
@@ -32,7 +33,8 @@ css/
   *-shell.css       — Per-engine-family styles
 js/
   *-engine.js       — One engine per exercise family
-  exercise-shell.js — Sidebar drawer, header restructure, footer (exercise pages)
+  exercise-shell.js — Sidebar drawer, header; calls ex-bottom-nav.js
+  ex-bottom-nav.js    — Bottom nav canonical (mirrors FluentFlow game-controls)
   utils.js          — shuffle, Timer, recordScore, progress tracking, header stats
   lp-theme.js       — Theme init before first paint (copy of scripts/)
   lp-platform-urls.js — Cross-app URLs (copy of scripts/)
@@ -128,6 +130,50 @@ See `docs/mi-progreso-decisions.md` for full details.
 `css/buttons.css` defines the 3 shared primitives: `.lp-btn` (action), `.lp-icon-btn` (circular icon), `.lp-pill` (tab). Min hit-area 44×44px.
 
 Legacy: ~~34 exercises still use `.btn` class~~ — migrated to `.lp-btn` (July 2026).
+
+## Exercise bottom nav (mirrors FluentFlow `game-controls`)
+
+Canonical files — edit visibility/order here, not per exercise HTML:
+
+| File | Role |
+|------|------|
+| `js/ex-bottom-nav.js` | `BOTTOM_NAV` config, `resolveBottomNavProfile()`, hoist/reorder/sync |
+| `css/ex-bottom-nav.css` | Bar layout, mobile sticky, `.ex-bottom-nav__desktop-only` hide rule |
+
+Imported via `@import` in `css/components.css` (all exercise pages load it).
+
+**Profiles** (`resolveBottomNavProfile()`):
+
+| Profile | When | Mobile bar |
+|---------|------|------------|
+| `study` | Flashcard/sentence-quiz study area | 📊 · ← · → |
+| `practice` | Pages with `#checkBtn` (typed-answer, dictation, spelling, error-hunt, paragraph-cloze) | 📊 · ✓ · → |
+| `battle` | Flashcard battle mode | 📊 · battle actions |
+| `minimal` | Tap-to-answer practice/timed (sentence-quiz, listening, spelling-by-ear, odd-one-out) | 📊 only |
+| `hidden` | Flashcard quiz/match areas | bar hidden |
+
+**Canonical order (desktop, left → right):**
+
+1. Progress detail (📊) — always visible (except `hidden`)
+2. Secondary icons (🔀 shuffle, 🔊 speak, 💡 hint, ⏭ skip) — **desktop only** (`.ex-bottom-nav__desktop-only`)
+3. Prev (←) — study modes
+4. Primary (✓ check / battle claim)
+5. Next (→)
+
+**Per-engine matrix:**
+
+| Engine / family | Exercises | Bottom nav |
+|-----------------|-----------|------------|
+| `flashcard-engine.js` | vocabulary, opposites, pronunciation-study | study: fc-nav hoisted · quiz/match: hidden · battle: claim/judge/next |
+| `sentence-quiz-engine.js` | articles, conditionals, clauses, … (13) | study: shuffle/prev/next · practice/timed: minimal (tap options) |
+| `typed-answer-engine.js` | paraphrasing, word-order, register-switch, sentence-combining, key-word-transformation | practice: check/next/hint hoisted |
+| `spelling-engine.js` | ed-spelling, ing-spelling, noun-adjuncts | practice: check hoisted (`setupSpellingBottomNav`) |
+| `dictation-engine.js` | dictation-sprint | practice: check/next/skip hoisted |
+| Standalone inline | error-hunt, paragraph-cloze | practice: auto-hoist via `setupContentBottomNav()` |
+| Standalone inline | listening, spelling-by-ear, odd-one-out | minimal (no check button) |
+| Standalone + fc-nav | confusing-words, irregular-verbs, phonics, phrasal-verbs, prepositions, tenses, verb-chunks, word-formation | study fc-nav hoisted; mode-specific profile |
+
+`exercise-shell.js` calls `initBottomNav()` on load; engines call `window.__syncBottomNavMode?.()` on mode switches. Typed/dictation engines also call `setupPracticeBottomNav()` / `setPracticeBottomNav()`.
 
 ## Deploy
 

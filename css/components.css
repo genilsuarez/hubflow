@@ -4,22 +4,9 @@
    editorial flashcards, hand-crafted details
    ═══════════════════════════════════════════════════════ */
 
-/* ─── TOP BAR ─── */
-.top-bar {
-  width: 100%; display: flex; justify-content: space-between; align-items: center;
-  padding: 6px 0; margin-bottom: 8px;
-}
-.tb-actions { display: flex; align-items: center; gap: 4px; }
-.learnflow-signature {
-  margin: 0 10px; color: var(--lp-muted); font-family: var(--lp-font-mono);
-  font-size: .58rem; font-weight: var(--lp-weight-bold); letter-spacing: .03em;
-  text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-@media (max-width: 420px) {
-  .learnflow-signature { max-width: 132px; font-size: .52rem; white-space: normal; line-height: 1.2; }
-}
-/* Volver y tema usan el primitivo compartido .lp-icon-btn (buttons.css) —
-   .back-link y .theme-toggle quedaron sin uso tras unificar sobre esa clase. */
+@import url('./ex-bottom-nav.css');
+
+/* Top bar + learnflow-signature: exercise-enhanced.css (shell-ready / top-bar--secondary) */
 
 /* ─── BUTTONS ───
    Legacy .btn block removed — all exercises migrated to .lp-btn (buttons.css).
@@ -137,51 +124,6 @@
   white-space: pre-line; max-width: 320px;
 }
 .fc-hint { font-size: .62rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); margin-top: 4px; font-style: italic; }
-.fc-nav,
-.ex-bottom-nav {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 720px;
-  margin-inline: auto;
-  min-height: var(--ex-bottom-nav-min-height);
-  padding: var(--ex-bottom-nav-padding-y) var(--ex-bottom-nav-padding-x);
-  border-radius: var(--lp-radius-lg);
-  background: var(--lp-surface);
-  border: 1px solid var(--lp-border-subtle, var(--lp-border));
-  box-shadow: var(--lp-shadow-xs);
-  box-sizing: border-box;
-}
-
-/* Flashcard nav — compact icon buttons (← / → / 🔀), circular like .lp-icon-btn */
-.fc-nav .lp-btn,
-.ex-bottom-nav .lp-btn {
-  min-width: var(--ex-bottom-nav-btn-size);
-  width: var(--ex-bottom-nav-btn-size);
-  height: var(--ex-bottom-nav-btn-size);
-  min-height: var(--ex-bottom-nav-btn-size);
-  padding: 0;
-  font-size: 1.125rem;
-  line-height: 1;
-  flex-shrink: 0;
-  border-radius: var(--lp-navbtn-radius);
-}
-
-.fc-nav .lp-btn--ghost,
-.ex-bottom-nav .lp-btn--ghost {
-  font-size: 1rem;
-}
-
-.fc-nav .lp-btn--primary,
-.fc-nav .lp-btn--success,
-.fc-nav .lp-btn--purple,
-.ex-bottom-nav .lp-btn--primary,
-.ex-bottom-nav .lp-btn--success,
-.ex-bottom-nav .lp-btn--purple {
-  color: #fff;
-}
 .fc-count {
   font-family: var(--lp-font-mono); font-size: .65rem;
   color: var(--lp-muted); font-weight: var(--lp-weight-bold); letter-spacing: 1px;
@@ -200,7 +142,7 @@
 .quiz-prompt__text { font-family: var(--lp-font-display); font-size: 1.25rem; font-weight: var(--lp-weight-medium); color: var(--lp-ink); line-height: 1.3; }
 .quiz-prompt__emoji { font-size: 1.8rem; margin-bottom: 4px; }
 .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 440px; }
-@media(max-width:400px) { .quiz-options { grid-template-columns: 1fr; } }
+@media (max-width: 639px) { .quiz-options { grid-template-columns: 1fr; } }
 
 .quiz-opt {
   font-family: var(--lp-font-body); font-weight: var(--lp-weight-bold); font-size: .8rem;
@@ -219,7 +161,7 @@
 
 /* ─── PAIR MATCH ─── */
 .pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; width: 100%; max-width: 720px; }
-@media(max-width:480px) { .pair-grid { gap: 6px 8px; } }
+@media (max-width: 639px) { .pair-grid { gap: 6px 8px; } }
 .pair-col-label {
   font-size: .6rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted);
   text-transform: uppercase; letter-spacing: .05em; text-align: center; padding-bottom: 4px;
@@ -351,7 +293,7 @@
 .color-dot.green { background: var(--lp-success); }
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 480px) {
+@media (max-width: 639px) {
   .wrap { padding: 0 10px; }
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 5px; }
   .fc-card { height: 220px; }
@@ -395,6 +337,11 @@
   background: var(--lp-chip-active-bg-hover);
   color: var(--lp-chip-active-text);
   border-color: var(--lp-chip-active-border);
+}
+.cat-btn.locked {
+  opacity: .4;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Cat-bar pills (vocabulary, opposites, etc.) — mismo chip que .cat-btn */
@@ -605,13 +552,13 @@
 .word-opt.disabled { cursor: default; opacity: .7; }
 [data-theme="dark"] .word-opt.correct { color: color-mix(in srgb, var(--lp-success) 55%, white); }
 [data-theme="dark"] .word-opt.wrong { color: color-mix(in srgb, var(--lp-error) 45%, white); }
-@media (max-width: 480px) { .word-opt { min-width: 50px; padding: 10px 14px; font-size: .8rem; } }
+@media (max-width: 639px) { .word-opt { min-width: 50px; padding: 10px 14px; font-size: .8rem; } }
 
 /* Header de ejercicio: acciones agrupadas a la derecha (portal + tema) — Fase E */
 .tb-actions { display: flex; align-items: center; gap: 8px; }
 
 /* ─── PILL BAR MOBILE: scroll when tabs don't fit (e.g. 5 modes) ─── */
-@media (max-width: 480px) {
+@media (max-width: 639px) {
   .pill-bar {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -683,42 +630,6 @@
 
 .lesson-progress--anchor {
   display: none !important;
-}
-
-.fc-nav .lesson-progress__detail {
-  font-size: 1rem;
-}
-
-.ex-bottom-nav {
-  margin-top: 12px;
-  align-self: stretch;
-}
-
-.ex-bottom-nav .lesson-progress__detail {
-  font-size: 1rem;
-}
-
-.lesson-progress__detail {
-  border: 1.5px solid var(--lp-border);
-  border-radius: 50%;
-  background: var(--lp-surface);
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s, border-color 0.15s, transform 0.15s;
-  flex-shrink: 0;
-}
-
-.lesson-progress__detail:hover {
-  background: var(--lp-accent-soft, color-mix(in srgb, var(--lp-accent) 12%, transparent));
-  border-color: var(--lp-accent);
-  transform: scale(1.08);
-}
-
-.lesson-progress__detail:active {
-  transform: scale(0.95);
 }
 
 /* ═══ PROGRESS DETAIL MODAL ═══ */
@@ -973,7 +884,7 @@
   font-size: 0.58rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .pg-modal {
     align-items: flex-end;
     padding: 0;
@@ -996,181 +907,5 @@
   .pg-modal,
   .pg-modal__panel {
     transition: none;
-  }
-}
-
-/* ─── EXERCISE BOTTOM CONTROLS (mobile sticky — mirrors FluentFlow game-controls) ─── */
-@media (max-width: 768px) {
-  :root {
-    /* Fit up to 5 icon controls edge-to-edge; touch targets stay ≥ 44px */
-    --ex-bottom-nav-gap: 8px;
-    --ex-bottom-nav-padding-y: 13px;
-    --ex-bottom-nav-padding-x: 12px;
-    --ex-bottom-nav-btn-size: clamp(
-      44px,
-      calc((100vw - 2 * var(--ex-bottom-nav-padding-x) - 4 * var(--ex-bottom-nav-gap)) / 5),
-      60px
-    );
-    --ex-bottom-nav-min-height: calc(var(--ex-bottom-nav-btn-size) + 2 * var(--ex-bottom-nav-padding-y));
-    --ex-bottom-nav-scroll-reserve: calc(var(--ex-bottom-nav-min-height) + 8px);
-    --ex-bottom-nav-btn-font-size: 1.17rem;
-    --ex-bottom-nav-btn-ghost-font-size: 1.04rem;
-    --ex-bottom-nav-detail-font-size: 1.04rem;
-    --ex-bottom-nav-battle-font-size: 1.04rem;
-    --ex-bottom-nav-practice-hint-font-size: 1.09rem;
-    --ex-bottom-nav-practice-skip-font-size: 1.04rem;
-  }
-
-  .battle-actions:not(.ex-bottom-nav .battle-actions),
-  .result-btns {
-    position: sticky;
-    bottom: 0;
-    z-index: 10;
-    flex-shrink: 0;
-    max-width: none;
-    width: 100%;
-    margin-inline: 0;
-    margin-top: 0;
-    padding: 1.05625rem 21px max(1.05625rem, env(safe-area-inset-bottom));
-    font-size: var(--ex-bottom-nav-battle-font-size);
-    background: var(--lp-surface);
-    border: 1px solid var(--lp-border-subtle, var(--lp-border));
-    border-bottom: none;
-    border-radius: var(--lp-radius-lg) var(--lp-radius-lg) 0 0;
-    box-shadow: 0 -4px 16px color-mix(in srgb, var(--lp-ink) 6%, transparent);
-  }
-
-  .ex-bottom-nav .battle-actions {
-    position: static;
-    width: auto;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-  }
-
-  .fc-nav,
-  .ex-bottom-nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 20;
-    justify-content: space-between;
-    gap: var(--ex-bottom-nav-gap);
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    flex-shrink: 0;
-    min-height: var(--ex-bottom-nav-min-height);
-    padding:
-      var(--ex-bottom-nav-padding-y)
-      max(var(--ex-bottom-nav-padding-x), env(safe-area-inset-right))
-      max(var(--ex-bottom-nav-padding-y), env(safe-area-inset-bottom))
-      max(var(--ex-bottom-nav-padding-x), env(safe-area-inset-left));
-    border-radius: var(--lp-radius-lg) var(--lp-radius-lg) 0 0;
-    border: 1px solid var(--lp-border-subtle, var(--lp-border));
-    border-bottom: none;
-    box-shadow: 0 -4px 16px color-mix(in srgb, var(--lp-ink) 6%, transparent);
-    overflow: hidden;
-    flex-wrap: nowrap;
-    box-sizing: border-box;
-  }
-
-  .fc-nav::-webkit-scrollbar,
-  .ex-bottom-nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .fc-nav .lp-btn,
-  .ex-bottom-nav .lp-btn {
-    font-size: var(--ex-bottom-nav-btn-font-size);
-  }
-
-  .fc-nav .lp-btn--ghost,
-  .ex-bottom-nav .lp-btn--ghost {
-    font-size: var(--ex-bottom-nav-btn-ghost-font-size);
-  }
-
-  /* Every control in the bottom bar — same touch height as prev/next */
-  .ex-bottom-nav .lp-btn,
-  .ex-bottom-nav .lesson-progress__detail,
-  .ex-bottom-nav .typed-hint-btn,
-  .ex-bottom-nav .typed-action-btn,
-  .ex-bottom-nav #speakBtn,
-  .ex-bottom-nav #listenBtn,
-  .ex-bottom-nav #studySpeakBtn,
-  .ex-bottom-nav #shuffleBtn,
-  .ex-bottom-nav #prevBtn,
-  .ex-bottom-nav #nextBtn {
-    min-width: var(--ex-bottom-nav-btn-size);
-    width: var(--ex-bottom-nav-btn-size);
-    height: var(--ex-bottom-nav-btn-size);
-    min-height: var(--ex-bottom-nav-btn-size);
-    padding: 0;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .fc-nav .lesson-progress__detail,
-  .ex-bottom-nav .lesson-progress__detail {
-    font-size: var(--ex-bottom-nav-detail-font-size);
-  }
-
-  /* Text labels inside battle / result strips */
-  .ex-bottom-nav .battle-actions .lp-btn,
-  .result-btns .lp-btn {
-    width: auto;
-    min-width: calc(var(--ex-bottom-nav-btn-size) * 1.1);
-    min-height: var(--ex-bottom-nav-btn-size);
-    height: var(--ex-bottom-nav-btn-size);
-    padding: 0 14px;
-    font-size: var(--ex-bottom-nav-battle-font-size);
-    white-space: nowrap;
-  }
-
-  .ex-bottom-nav--practice .typed-hint-btn,
-  .ex-bottom-nav--practice .typed-action-btn--skip {
-    font-size: var(--ex-bottom-nav-practice-hint-font-size);
-  }
-
-  .ex-bottom-nav--practice .typed-action-btn--check,
-  .ex-bottom-nav--practice .typed-action-btn--next {
-    font-size: var(--ex-bottom-nav-btn-font-size);
-  }
-
-  body.shell-ready .scroll-body > .ex-bottom-nav,
-  body.shell-ready .scroll-body > .fc-nav {
-    margin-top: 0;
-    flex-shrink: 0;
-  }
-
-  body.shell-ready .check-area {
-    margin-top: 0;
-    padding-top: 0.5rem;
-    border-top: none;
-  }
-}
-
-@media (max-width: 390px) {
-  :root {
-    --ex-bottom-nav-gap: 6px;
-    --ex-bottom-nav-padding-x: 10px;
-  }
-
-  .fc-nav,
-  .ex-bottom-nav {
-    gap: var(--ex-bottom-nav-gap);
-    padding-left: var(--ex-bottom-nav-padding-x);
-    padding-right: var(--ex-bottom-nav-padding-x);
-  }
-
-  .ex-bottom-nav .battle-actions .lp-btn,
-  .result-btns .lp-btn {
-    min-width: auto;
-    padding: 0 10px;
   }
 }

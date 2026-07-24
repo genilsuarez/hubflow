@@ -143,50 +143,6 @@ body { min-height: 100vh; padding: 0 14px; }
 
 .scroll-body { padding: 4px 0 30px; }
 
-.ex-bottom-nav--practice {
-  justify-content: center;
-  gap: 12px;
-}
-
-.ex-bottom-nav--practice .lesson-progress__detail,
-.ex-bottom-nav--practice .typed-action-btn--check,
-.ex-bottom-nav--practice .typed-action-btn--next {
-  margin: 0;
-}
-
-.ex-bottom-nav--practice .typed-hint-btn {
-  font-size: 1.05rem;
-}
-
-@media (max-width: 768px) {
-  .ex-bottom-nav--practice {
-    gap: 10px;
-  }
-
-  .ex-bottom-nav--practice .typed-hint-btn {
-    font-size: var(--ex-bottom-nav-practice-hint-font-size);
-  }
-
-  .ex-bottom-nav--practice .typed-action-btn--skip {
-    font-size: var(--ex-bottom-nav-practice-skip-font-size);
-  }
-
-  .ex-bottom-nav--practice .typed-action-btn--check,
-  .ex-bottom-nav--practice .typed-action-btn--next {
-    font-size: var(--ex-bottom-nav-btn-font-size);
-  }
-}
-
-.ex-bottom-nav--practice .typed-hint-btn.active {
-  border-color: var(--lp-accent);
-  background: color-mix(in srgb, var(--lp-accent) 12%, transparent);
-  color: var(--lp-accent-dark);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lp-accent) 18%, transparent);
-}
-
-.ex-bottom-nav--practice .typed-action-btn--skip {
-  font-size: 1rem;
-}
 
 [data-color="teal"] .progress__fill { background: var(--lp-cat-teal); }
 [data-color="teal"] .answer-input:focus { border-color: var(--lp-cat-teal); }
@@ -199,3 +155,4 @@ body { min-height: 100vh; padding: 0 14px; }
    as found rather than silently normalized to one of those. */
 [data-color="blue"] .progress__fill { background: var(--lp-cat-blue); }
 [data-color="blue"] .answer-input:focus { border-color: var(--lp-cat-blue); }
+/* Bottom nav — css/ex-bottom-nav.css */

@@ -238,7 +238,7 @@
       background: var(--lp-accent-soft); border-color: color-mix(in srgb, #60a5fa 40%, transparent);
       color: #93c5fd;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 639px) {
       .tagbar {
         position: fixed; top: auto; bottom: 0; left: 0; right: 0; z-index: 9999;
         width: 100%; min-width: 0; max-width: 100%; max-height: min(78dvh, 100%);
@@ -519,7 +519,7 @@
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 639px) {
       .hero-card { margin-bottom: 0; }
       .hero-card__launch { padding: 12px 14px; }
       .hero-card__title { font-size: .95rem; }
@@ -527,7 +527,7 @@
       .hero-card--welcome .hero-card__launch { padding: 10px 12px; }
       .hero-card--welcome .hero-card__title { font-size: 1rem; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 639px) {
       .hero-card--welcome .hero-card__title { font-size: .98rem; }
       .hero-card__title { font-size: .9rem; }
     }
@@ -691,7 +691,7 @@
       font-style: italic;
     }
 
-    @media (min-width: 641px) {
+    @media (min-width: 640px) {
       .resumen-hero {
         grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
         gap: 12px;
@@ -761,7 +761,7 @@
       .resumen-hero .progress-snapshot__line--meta { font-size: 0.8125rem; }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 639px) {
       .resumen-hero {
         display: flex;
         flex-direction: column;
@@ -871,7 +871,7 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 639px) {
       .resumen-hero .hero-card__title { font-size: 0.94rem; }
     }
 
@@ -908,7 +908,7 @@
     @media (max-width: 860px) {
       #lastActivities:has(.last-activities--empty) { display: none; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 639px) {
       /* Last-activity cards: fixed footprint, larger type via tighter grid */
       .la-card {
         width: 110px;
@@ -1035,8 +1035,8 @@
 
     /* ─── MODULE CARDS (compact grid) ─── */
     .shelf { display: grid; grid-template-columns: 1fr; gap: 7px; }
-    @media (min-width: 720px) { .shelf { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1150px) { .shelf { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 768px) { .shelf { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .shelf { grid-template-columns: repeat(3, 1fr); } }
     .book {
       --spine: var(--lp-cat-blue);
       display: grid; grid-template-columns: 6px 40px 1fr; align-items: center;
@@ -1112,7 +1112,7 @@
 
     /* Rutas guiadas section */
     .rutas-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 720px) { .rutas-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 768px) { .rutas-grid { grid-template-columns: repeat(2, 1fr); } }
     .ruta-card {
       --ruta-color: var(--lp-accent);
       display: flex; flex-direction: column; gap: 6px;
@@ -1169,7 +1169,7 @@
     /* ─── GUIDES ─── */
     .guides { display: grid; grid-template-columns: 1fr; gap: 11px; }
     @media (min-width: 640px) { .guides { grid-template-columns: 1fr 1fr; } }
-    @media (min-width: 1150px) { .guides { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .guides { grid-template-columns: repeat(3, 1fr); } }
     .guide-link {
       --guide-color: var(--lp-accent);
       display: flex; align-items: center; gap: 0; padding: 0; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
@@ -1283,7 +1283,7 @@
     }
     /* Topbar angosta: el buscador manda — las stats se ocultan en pantallas chicas.
        min-width evita que flex lo aplaste a un ancho inusable. */
-    @media (max-width: 640px) {
+    @media (max-width: 639px) {
       .search-bar { min-width: 130px; }
 
       /* Topic tiles — compact height, larger type on mobile */
@@ -1322,7 +1322,7 @@
         font-weight: var(--lp-weight-bold);
       }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 639px) {
       .topbar { height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); min-height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); max-height: none; padding: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px)) var(--lp-header-pad-x-compact) var(--lp-header-pad-y-compact) var(--lp-header-floating-pad-left-compact); }
       .navigation-launcher { top: calc(var(--lp-navbtn-offset-top-compact) + env(safe-area-inset-top, 0px)); }
       .search-bar { min-width: 90px; }
@@ -1385,7 +1385,7 @@
       /* Rutas guiadas: la descripción larga no aporta en pantalla estrecha */
       .ruta-card__desc { display: none; }
     }
-    @media (max-width: 330px) {
+    @media (max-width: 639px) {
       .topbar-greeting-title { font-size: .95rem; }
     }
 
@@ -1503,7 +1503,7 @@
        tarjetas deben caber sin scroll en un iPhone en Safari (viewport
        reducido por barra de URL). El texto "Empezar/Siguiente: ..." se
        oculta porque forzaba un salto de línea extra en cada tarjeta. */
-    @media (max-width: 480px) {
+    @media (max-width: 639px) {
       .paths-head-row { margin-bottom: 8px; }
       .paths-full { gap: 6px; }
       /* Expandir/Colapsar todo: a 30px + padding del contenedor, el bloque

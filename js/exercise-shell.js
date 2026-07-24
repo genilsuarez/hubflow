@@ -4,7 +4,14 @@
 // Replaces portal-link.js for exercise pages.
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
-import { initCatBarExpander, hydrateHubFlowFromCloud, renderLessonProgress, setupPracticeBottomNav } from './utils.js';
+import { initCatBarExpander, hydrateHubFlowFromCloud, renderLessonProgress } from './utils.js';
+import {
+  ensureBottomNav,
+  finalizeBottomNavLayout,
+  initBottomNav,
+  relocateProgressButton,
+  syncBottomNavMode,
+} from './ex-bottom-nav.js';
 import { setupSupabaseAuth } from './lp-auth-setup.js';
 
 setupSupabaseAuth({
@@ -48,18 +55,20 @@ const section = currentModule?.category || 'vocab';
 // (counter stays in the right cluster on desktop; hidden in header on mobile)
 
 const topBar = document.querySelector('.top-bar');
-const originalBackLink = topBar?.querySelector('a[href*="../index.html"]');
 
 let hamburgerBtn;
-if (topBar && originalBackLink) {
-  originalBackLink.innerHTML = navIcon('arrow-left') || '<span aria-hidden="true">←</span>';
-  if (!originalBackLink.getAttribute('aria-label')) {
-    originalBackLink.setAttribute('aria-label', 'Volver');
+if (topBar) {
+  const backLink = topBar.querySelector('a[href*="../index.html"]');
+  if (backLink) {
+    backLink.innerHTML = navIcon('arrow-left') || '<span aria-hidden="true">←</span>';
+    if (!backLink.getAttribute('aria-label')) {
+      backLink.setAttribute('aria-label', 'Volver');
+    }
   }
 
   hamburgerBtn = document.createElement('button');
   hamburgerBtn.type = 'button';
-  hamburgerBtn.className = originalBackLink.className; // keeps lp-icon-btn
+  hamburgerBtn.className = backLink?.className || 'lp-icon-btn';
   hamburgerBtn.innerHTML = navIcon('menu') || '<span aria-hidden="true">☰</span>';
   hamburgerBtn.setAttribute('aria-label', 'Abrir navegación');
   hamburgerBtn.setAttribute('aria-controls', 'exerciseSidebar');
@@ -126,15 +135,19 @@ if (topBar) {
   const menuEl = hamburgerBtn || topBar.querySelector('[aria-controls="exerciseSidebar"]');
   const sigEl = topBar.querySelector('.learnflow-signature');
   const counterEl = topBar.querySelector('.tb-counter');
-  if (backEl && sigEl) {
+  if (sigEl) {
     preserveTopBarTimer();
+    const start = document.createElement('div');
+    start.className = 'top-bar__start';
+    if (backEl) start.appendChild(backEl);
     const end = document.createElement('div');
     end.className = 'top-bar__end';
     if (menuEl) end.appendChild(menuEl);
-    const layout = [backEl, sigEl];
+    const layout = [start, sigEl];
     if (counterEl) layout.push(counterEl);
     layout.push(end);
     topBar.replaceChildren(...layout);
+    topBar.classList.add('top-bar--secondary');
   }
 
   // Hide the original counters visually (they're mirrored in top-bar)
@@ -368,7 +381,7 @@ buildSidebar();
 
 const HEADER_ORPHAN_SEL = [
   '.progress', '#progressWrap', '.timer-bar', '#timerBar',
-  '#catBar', '.cat-bar', '.cat-bar-wrap', '.cat-scroll-wrapper', '#catWrapper', '.level-bar',
+  '#catBar', '.cat-bar', '#levelBar', '.cat-bar-wrap', '.cat-scroll-wrapper', '#catWrapper', '.level-bar',
 ].join(', ');
 
 function hoistHeaderOrphans(header) {
@@ -399,12 +412,14 @@ function restructureExerciseHeader() {
   preserveTopBarTimer(header);
   header.dataset.exHomologated = '1';
 
-  const scopeEl = header.querySelector('.cat-bar-wrap, .cat-scroll-wrapper, #catWrapper, .level-bar')
+  const scopeEl = header.querySelector('.cat-bar-wrap, .cat-scroll-wrapper, #catWrapper, #levelBar, .level-bar')
     || header.querySelector('#catBar, .cat-bar');
   const pillBar = header.querySelector('.pill-bar, .pill-bar--scroll');
   const timerBar = header.querySelector('.timer-bar, #timerBar');
   const sessionProg = header.querySelector('.progress, #progressWrap');
   const pairScore = document.getElementById('pairScore');
+  const livesBar = header.querySelector('#livesBar');
+  const streakBar = header.querySelector('#streakBar');
 
   const parts = [];
 
@@ -422,13 +437,15 @@ function restructureExerciseHeader() {
     parts.push(modes);
   }
 
-  if (sessionProg || timerBar || pairScore) {
+  if (sessionProg || timerBar || pairScore || livesBar || streakBar) {
     const progress = document.createElement('div');
     progress.className = 'ex-header__progress';
     const row = document.createElement('div');
     row.className = 'ex-progress-row ex-progress-row--session';
     if (timerBar) row.appendChild(timerBar);
     if (pairScore) row.appendChild(pairScore);
+    if (livesBar) row.appendChild(livesBar);
+    if (streakBar) row.appendChild(streakBar);
     if (sessionProg) row.appendChild(sessionProg);
     progress.appendChild(row);
     parts.push(progress);
@@ -437,125 +454,6 @@ function restructureExerciseHeader() {
   header.querySelector('h1')?.remove();
   header.classList.add('ex-control-panel');
   header.replaceChildren(...parts);
-}
-
-const STUDY_NAV_IDS = ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn'];
-const BATTLE_ACTION_IDS = ['battleClaim', 'battleJudge', 'battleNext'];
-
-function getActiveExerciseMode() {
-  return document.querySelector('.ex-header__modes [data-mode].active')?.dataset.mode
-    || document.querySelector('.pill-btn.active[data-mode]')?.dataset.mode
-    || document.querySelector('[data-mode].active')?.dataset.mode
-    || 'study';
-}
-
-function syncBottomNavMode() {
-  const mode = getActiveExerciseMode();
-  const nav = document.getElementById('exBottomNav');
-  if (nav) {
-    nav.hidden = false;
-    nav.classList.remove('is-battle-hidden');
-    nav.classList.toggle('ex-bottom-nav--battle', mode === 'battle');
-  }
-
-  const hideStudyNav = mode === 'battle';
-
-  STUDY_NAV_IDS.forEach((id) => {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.hidden = hideStudyNav;
-    if (hideStudyNav) {
-      btn.style.display = 'none';
-    } else {
-      btn.style.removeProperty('display');
-    }
-  });
-
-  BATTLE_ACTION_IDS.forEach((id) => {
-    const group = document.getElementById(id);
-    if (!group) return;
-    if (mode !== 'battle') {
-      group.style.display = 'none';
-    }
-  });
-}
-
-function relocateBattleActionsToBottomNav() {
-  const nav = setupPersistentBottomNav({ force: true }) || document.getElementById('exBottomNav');
-  if (!nav) return;
-
-  let insertAfter = document.getElementById('lessonProgressBtn');
-  BATTLE_ACTION_IDS.forEach((id) => {
-    const group = document.getElementById(id);
-    if (!group) return;
-    group.classList.add('battle-actions--nav');
-    if (group.parentElement === nav) return;
-    if (insertAfter?.parentElement === nav) {
-      insertAfter.insertAdjacentElement('afterend', group);
-    } else {
-      nav.appendChild(group);
-    }
-    insertAfter = group;
-  });
-}
-
-/** Hoist .fc-nav out of mode-specific areas so the bar stays visible in practice/timed. */
-function setupPersistentBottomNav({ force = false } = {}) {
-  const anchor = document.querySelector('.scroll-body') || document.querySelector('.wrap');
-  if (!anchor) return null;
-
-  const legacyNav = document.querySelector('.fc-nav:not(#exBottomNav)');
-  let bottomNav = document.getElementById('exBottomNav');
-  if (!bottomNav && !legacyNav && !force) return null;
-
-  if (!bottomNav) {
-    bottomNav = document.createElement('div');
-    bottomNav.id = 'exBottomNav';
-    bottomNav.className = 'ex-bottom-nav fc-nav';
-    anchor.appendChild(bottomNav);
-  }
-
-  if (legacyNav) {
-    while (legacyNav.firstChild) bottomNav.appendChild(legacyNav.firstChild);
-    legacyNav.remove();
-  }
-
-  // Normalize legacy listen/speak buttons hoisted from .fc-nav
-  bottomNav.querySelectorAll('#speakBtn, #listenBtn, .listen-btn').forEach((btn) => {
-    btn.classList.add('lp-btn', 'lp-btn--ghost');
-    btn.classList.remove('listen-btn');
-    btn.style.cssText = '';
-  });
-
-  return bottomNav;
-}
-
-function relocateLessonProgressButton() {
-  const btn = document.getElementById('lessonProgressBtn');
-  if (!btn) return;
-
-  let nav = setupPersistentBottomNav();
-  if (!nav) nav = setupPersistentBottomNav({ force: true });
-  if (!nav) return;
-
-  btn.classList.add('lp-btn', 'lp-btn--ghost', 'lesson-progress__detail');
-  if (btn.parentElement !== nav || btn !== nav.firstElementChild) {
-    nav.insertBefore(btn, nav.firstChild);
-  }
-  syncBottomNavMode();
-  relocateBattleActionsToBottomNav();
-  setupPracticeBottomNav();
-  reorderStudySpeakButton();
-}
-
-function reorderStudySpeakButton() {
-  const speakBtn = document.getElementById('studySpeakBtn');
-  const progressBtn = document.getElementById('lessonProgressBtn');
-  const nav = document.getElementById('exBottomNav');
-  if (!speakBtn || speakBtn.hidden || !nav || speakBtn.parentElement !== nav) return;
-  if (progressBtn?.parentElement === nav) {
-    progressBtn.insertAdjacentElement('afterend', speakBtn);
-  }
 }
 
 function wrapModeStage() {
@@ -656,7 +554,7 @@ function setupModeTabIndicator() {
   });
 }
 
-window.__relocateLessonProgressBtn = relocateLessonProgressButton;
+window.__relocateLessonProgressBtn = relocateProgressButton;
 window.__syncBattleProgressPlacement = syncBattleProgressPlacement;
 window.__syncBottomNavMode = syncBottomNavMode;
 window.__resetModeStageScroll = resetModeStageScroll;
@@ -676,17 +574,12 @@ document.addEventListener('click', (e) => {
 restructureExerciseHeader();
 setupModeTabIndicator();
 wrapModeStage();
-setupPersistentBottomNav();
-
+ensureBottomNav();
 if (currentModule) {
   renderLessonProgress(currentModule.id);
 }
-relocateLessonProgressButton();
-relocateBattleActionsToBottomNav();
-syncBottomNavMode();
+initBottomNav();
 syncBattleProgressPlacement();
-
-// ─── Depth banner (shows module scale on entry) ────────────────────────────────
 
 function buildDepthBanner() {
   if (!currentModule) return;
@@ -760,3 +653,4 @@ initCatBarExpander({ hintOnLoad: false });
 
 // Reveal the page now that DOM restructuring is done
 document.body.classList.add('shell-ready');
+finalizeBottomNavLayout();

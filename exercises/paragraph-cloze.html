@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
 <style>
-  body { min-height: 100vh; padding: 0 14px; }
+  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-purple); }
 
   .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
@@ -122,7 +122,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/paragraph-cloze.js';
-import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, setPracticeBottomNav } from '../js/utils.js';
 
 
 function normalize(s) {
@@ -210,8 +210,7 @@ function renderPassage() {
 
   updateStatus(item);
 
-  document.getElementById('checkBtn').style.display = '';
-  document.getElementById('nextBtn').style.display = 'none';
+  setPracticeBottomNav({ check: true, next: false });
 
   const firstBlank = document.querySelector('.pc-blank[data-n="1"]');
   if (firstBlank) firstBlank.focus();
@@ -262,8 +261,7 @@ function checkAll() {
   finalEl.textContent = item.explain;
   finalEl.style.display = 'block';
 
-  document.getElementById('checkBtn').style.display = 'none';
-  document.getElementById('nextBtn').style.display = '';
+  setPracticeBottomNav({ check: false, next: true });
 }
 
 document.getElementById('checkBtn').addEventListener('click', checkAll);

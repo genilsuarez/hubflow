@@ -5,6 +5,8 @@ import {
   reconcileHubflowProgressFromEvents,
   shouldDeferStatsDisplay,
   syncSingleApp,
+  markLocalCacheBootstrapped,
+  HUBFLOW_LOCAL_READY_KEY,
 } from './sync-engine.js';
 import { enrichHubflowContentEntry, recomputeProgressDocumentSummary } from './lp-progress-summary.js';
 
@@ -332,8 +334,33 @@ export function getProgressStats() {
   };
 }
 
+function hasAnyLocalHubflowProgress() {
+  const activity = readJson(ACTIVITY_STORAGE_KEY, null);
+  if (activity?.events?.length) return true;
+  const doc = readJson(PROGRESS_STORAGE_KEY, null);
+  if (doc?.content && Object.values(doc.content).some((item) => hasProgressSignal(item))) return true;
+  for (const module of MODULES) {
+    const rule = PROGRESS_RULES[module.id];
+    if (!rule) continue;
+    for (const activityRule of rule.requiredActivities) {
+      for (const key of activityRule.scoreKeys) {
+        if (readScoreHistory(key).length > 0) return true;
+      }
+    }
+  }
+  return false;
+}
+
+function projectionFingerprint(projection) {
+  return JSON.stringify({
+    schemaVersion: projection.schemaVersion,
+    catalogVersion: projection.catalogVersion,
+    summary: projection.summary,
+    content: projection.content,
+  });
+}
+
 export function publishHubFlowProgress() {
-  const updatedAt = new Date().toISOString();
   const content = Object.fromEntries(MODULES.map((module) => [
     module.id,
     getContentProgress(module.id),
@@ -343,14 +370,27 @@ export function publishHubFlowProgress() {
   const projection = {
     schemaVersion: 1,
     app: 'hubflow',
-    updatedAt,
+    updatedAt: new Date().toISOString(),
     catalogVersion: 'hubflow-catalog-v1',
     summary,
     content,
   };
-  localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(projection));
-  invalidateProjectionCache();
-  notifyHubFlowProgressUpdated();
+
+  const existing = readJson(PROGRESS_STORAGE_KEY, null);
+  const changed = !existing || projectionFingerprint(existing) !== projectionFingerprint(projection);
+
+  if (changed) {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(projection));
+    invalidateProjectionCache();
+    notifyHubFlowProgressUpdated();
+  }
+
+  try {
+    localStorage.setItem(HUBFLOW_LOCAL_READY_KEY, '1');
+  } catch {
+    /* ignore quota errors */
+  }
+
   return projection;
 }
 
@@ -576,6 +616,9 @@ function refreshHubFlowFromPeerSync() {
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
   migrateLegacyProjectionKeys();
   hydrateHubFlowFromCloud();
+  if (hasAnyLocalHubflowProgress()) {
+    markLocalCacheBootstrapped();
+  }
 
   window.addEventListener('storage', (event) => {
     if (event.key !== PROGRESS_STORAGE_KEY && event.key !== ACTIVITY_STORAGE_KEY) return;
@@ -591,6 +634,11 @@ if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     }
     pendingCloudSync = false;
     invalidateProjectionCache();
+    try {
+      localStorage.removeItem(HUBFLOW_LOCAL_READY_KEY);
+    } catch {
+      /* ignore */
+    }
     hydrateHubFlowFromCloud();
     notifyHubFlowProgressUpdated();
   });
@@ -822,96 +870,22 @@ export function makeTimerState() {
   };
 }
 
-/** Hoist practice action buttons into the shared #exBottomNav (stats + ✓ / → / ⏭). */
-export function setupPracticeBottomNav(attempt = 0) {
-  const checkBtn = document.getElementById('checkBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  if (!checkBtn || !nextBtn) return;
+/** @deprecated Import from `./ex-bottom-nav.js` */
+export {
+  setupPracticeBottomNav,
+  setupSpellingBottomNav,
+  setupContentBottomNav,
+  setPracticeBottomNav,
+  applyRoleClasses as markDesktopOnlyBottomNavControls,
+} from './ex-bottom-nav.js';
 
-  const nav = document.getElementById('exBottomNav');
-  if (!nav) {
-    if (attempt < 40) setTimeout(() => setupPracticeBottomNav(attempt + 1), 50);
-    return;
-  }
-
-  const hintBtn = document.getElementById('hintBtn');
-  const skipBtn = document.getElementById('skipBtn');
-  const progressBtn = document.getElementById('lessonProgressBtn');
-
-  checkBtn.className = 'lp-btn lp-btn--primary typed-action-btn typed-action-btn--check';
-  checkBtn.textContent = '✓';
-  checkBtn.setAttribute('aria-label', 'Comprobar respuesta');
-  checkBtn.title = 'Comprobar';
-
-  nextBtn.className = 'lp-btn lp-btn--primary typed-action-btn typed-action-btn--next';
-  nextBtn.textContent = '→';
-  nextBtn.setAttribute('aria-label', 'Siguiente');
-  nextBtn.title = 'Siguiente';
-  nextBtn.hidden = true;
-
-  if (hintBtn) {
-    hintBtn.className = 'lp-btn lp-btn--ghost typed-hint-btn';
-    hintBtn.textContent = '💡';
-    hintBtn.setAttribute('aria-label', 'Mostrar pista');
-    hintBtn.setAttribute('aria-pressed', 'false');
-    hintBtn.title = 'Pista';
-  }
-
-  if (skipBtn) {
-    skipBtn.className = 'lp-btn lp-btn--ghost typed-action-btn typed-action-btn--skip';
-    skipBtn.textContent = '⏭';
-    skipBtn.setAttribute('aria-label', 'Saltar');
-    skipBtn.title = 'Saltar';
-  }
-
-  const wrapper = checkBtn.parentElement;
-  let insertAfter = progressBtn?.parentElement === nav ? progressBtn : null;
-
-  if (hintBtn && hintBtn.parentElement !== nav) {
-    if (insertAfter) insertAfter.insertAdjacentElement('afterend', hintBtn);
-    else nav.insertBefore(hintBtn, nav.firstChild);
-    insertAfter = hintBtn;
-  }
-
-  if (checkBtn.parentElement !== nav) {
-    if (insertAfter?.parentElement === nav) insertAfter.insertAdjacentElement('afterend', checkBtn);
-    else nav.appendChild(checkBtn);
-    insertAfter = checkBtn;
-  }
-
-  if (nextBtn.parentElement !== nav) {
-    if (insertAfter?.parentElement === nav) insertAfter.insertAdjacentElement('afterend', nextBtn);
-    else nav.appendChild(nextBtn);
-    insertAfter = nextBtn;
-  }
-
-  if (skipBtn && skipBtn.parentElement !== nav) {
-    if (insertAfter?.parentElement === nav) insertAfter.insertAdjacentElement('afterend', skipBtn);
-    else nav.appendChild(skipBtn);
-  }
-
-  const meta = document.querySelector('.typed-answer-meta');
-  if (meta && hintBtn && !meta.contains(hintBtn)) {
-    const counter = meta.querySelector('.item-counter');
-    if (counter) meta.parentElement?.insertBefore(counter, meta);
-    meta.remove();
-  }
-
-  if (wrapper && wrapper !== nav && wrapper.tagName === 'DIV' && !wrapper.id && !wrapper.classList.length) {
-    wrapper.remove();
-  }
-
-  nav.classList.add('ex-bottom-nav--practice');
-}
-
-export function setPracticeBottomNav({ check = true, next = false, skip = true } = {}) {
-  const checkBtn = document.getElementById('checkBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const skipBtn = document.getElementById('skipBtn');
-  if (checkBtn) checkBtn.hidden = !check;
-  if (nextBtn) nextBtn.hidden = !next;
-  if (skipBtn) skipBtn.hidden = !skip;
-}
+/** @deprecated Use BOTTOM_NAV.ROLES in ex-bottom-nav.js */
+export const DESKTOP_ONLY_BOTTOM_NAV_IDS = [
+  'shuffleBtn',
+  'speakBtn',
+  'listenBtn',
+  'studySpeakBtn',
+];
 
 /** Progress bar update */
 export function updateProgress(current, total, fillEl, txtEl, pctEl) {

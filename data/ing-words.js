@@ -14,6 +14,7 @@ export const LEVELS = {
     { verb: "study", ans: "studying", rule: "red",   why: "consonant+y → keep y" },
     { verb: "cook",  ans: "cooking",  rule: "red",   why: "2 vowels → +ing" },
     { verb: "swim",  ans: "swimming", rule: "green", why: "CVC → double" },
+    { verb: "jump",  ans: "jumping",  rule: "green", why: "CVC → double" },
   ],
   intermediate: [
     { verb: "prefer",  ans: "preferring", rule: "green", why: "stress last + CVC → double" },
@@ -30,6 +31,7 @@ export const LEVELS = {
     { verb: "open",    ans: "opening",    rule: "red",   why: "stress 1st → no double" },
     { verb: "plan",    ans: "planning",   rule: "green", why: "CVC → double" },
     { verb: "enjoy",   ans: "enjoying",   rule: "red",   why: "vowel+y → +ing" },
+    { verb: "control", ans: "controlling", rule: "green", why: "stress last + CVC → double" },
   ],
   exceptions: [
     { verb: "fix",     ans: "fixing",     rule: "red",   why: "-x = 2 sounds, no double" },

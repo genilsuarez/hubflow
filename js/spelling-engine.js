@@ -4,6 +4,13 @@
  * Each exercise imports this and passes its config + data.
  */
 import { shuffle, recordScore, getStars, updateProgress, Timer, formatTime, renderLessonProgress } from './utils.js';
+import { setupPracticeBottomNav } from './ex-bottom-nav.js';
+
+/** Max cards per session — random subset + shuffle on each level load / restart. */
+const ITEMS_PER_SESSION = 12;
+/** Mobile viewport: show this many spelling cards per page (session total stays ITEMS_PER_SESSION). */
+const MOBILE_CARDS_PER_PAGE = 6;
+const MOBILE_BREAKPOINT_PX = 767;
 
 export class SpellingEngine {
   constructor(config) {
@@ -21,6 +28,8 @@ export class SpellingEngine {
     this.timer = null;
     this.timeLeft = 0;
     this.checked = false;
+    this.pageIndex = 0;
+    this._wasMobilePaginated = this.isMobilePaginated();
 
     this.init();
   }
@@ -30,6 +39,20 @@ export class SpellingEngine {
     this.loadLevel();
     this.render();
     renderLessonProgress(this.config.contentId);
+    this.mountBottomNavCheck();
+  }
+
+  /** Hoist check-all into centralized bottom nav once shell is ready. */
+  mountBottomNavCheck() {
+    const run = () => {
+      setupPracticeBottomNav();
+      window.__finalizeBottomNavLayout?.();
+      window.__syncBottomNavMode?.();
+    };
+    run();
+    requestAnimationFrame(run);
+    setTimeout(run, 0);
+    setTimeout(run, 120);
   }
 
   bindEvents() {
@@ -60,10 +83,55 @@ export class SpellingEngine {
           const nextIdx = +active.dataset.idx + 1;
           const next = grid.querySelector(`.word-card__input[data-idx="${nextIdx}"], .word-card__select[data-idx="${nextIdx}"]`);
           if (next) { next.focus(); return; }
+          if (this.isMobilePaginated() && this.pageIndex < this.getPageCount() - 1) {
+            this.goToPage(this.pageIndex + 1, { focusFirst: true });
+            return;
+          }
         }
         this.checkAll();
       }
     });
+
+    window.addEventListener('resize', () => {
+      const paginated = this.isMobilePaginated();
+      if (paginated !== this._wasMobilePaginated) {
+        this.pageIndex = 0;
+        this.render();
+      }
+      this._wasMobilePaginated = paginated;
+    }, { passive: true });
+  }
+
+  isMobilePaginated() {
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX}px)`).matches
+      && this.words.length > MOBILE_CARDS_PER_PAGE;
+  }
+
+  getPageCount() {
+    if (!this.isMobilePaginated()) return 1;
+    return Math.ceil(this.words.length / MOBILE_CARDS_PER_PAGE);
+  }
+
+  getVisibleRange() {
+    if (!this.isMobilePaginated()) {
+      return { start: 0, end: this.words.length };
+    }
+    const start = this.pageIndex * MOBILE_CARDS_PER_PAGE;
+    return { start, end: Math.min(start + MOBILE_CARDS_PER_PAGE, this.words.length) };
+  }
+
+  goToPage(page, { focusFirst = false } = {}) {
+    const maxPage = this.getPageCount() - 1;
+    this.pageIndex = Math.max(0, Math.min(page, maxPage));
+    this.renderCards();
+    this.renderPageNav();
+    if (focusFirst) {
+      requestAnimationFrame(() => {
+        document.getElementById('cardGrid')
+          ?.querySelector('.word-card__input, .word-card__select')
+          ?.focus();
+      });
+    }
   }
 
   setMode(mode) {
@@ -73,6 +141,7 @@ export class SpellingEngine {
     });
     this.livesEnabled = (this.level === 'god' && mode === 'challenge');
     this.resetExercise();
+    window.__syncBottomNavMode?.();
   }
 
   setLevel(level) {
@@ -85,16 +154,15 @@ export class SpellingEngine {
   }
 
   loadLevel() {
-    const data = this.levels[this.level] || [];
-    this.words = shuffle(data);
-    if (this.mode === 'timed') {
-      this.words = this.words.slice(0, Math.min(this.words.length, 16));
-    }
+    const pool = this.levels[this.level] || [];
+    const cap = this.config.itemsPerSession ?? ITEMS_PER_SESSION;
+    this.words = shuffle(pool).slice(0, Math.min(pool.length, cap));
     this.state = {};
     this.streak = 0;
     this.lives = 3;
     this.gameOver = false;
     this.checked = false;
+    this.pageIndex = 0;
   }
 
   resetExercise() {
@@ -106,8 +174,45 @@ export class SpellingEngine {
 
   render() {
     this.renderCards();
+    this.renderPageNav();
     this.renderModeUI();
     this.updateProgressBar();
+  }
+
+  renderPageNav() {
+    const scrollBody = document.querySelector('.scroll-body');
+    const grid = document.getElementById('cardGrid');
+    let nav = document.getElementById('spellPageNav');
+
+    if (!this.isMobilePaginated()) {
+      nav?.remove();
+      return;
+    }
+
+    if (!nav && scrollBody && grid) {
+      nav = document.createElement('div');
+      nav.id = 'spellPageNav';
+      nav.className = 'spell-page-nav';
+      scrollBody.insertBefore(nav, grid);
+      nav.addEventListener('click', (e) => {
+        const prev = e.target.closest('#spellPagePrev');
+        const next = e.target.closest('#spellPageNext');
+        if (prev && !prev.disabled) this.goToPage(this.pageIndex - 1, { focusFirst: true });
+        if (next && !next.disabled) this.goToPage(this.pageIndex + 1, { focusFirst: true });
+      });
+    }
+    if (!nav) return;
+
+    const { start, end } = this.getVisibleRange();
+    const pageCount = this.getPageCount();
+    const atStart = this.pageIndex === 0;
+    const atEnd = this.pageIndex >= pageCount - 1;
+
+    nav.innerHTML = `
+      <button type="button" class="lp-btn lp-btn--ghost spell-page-nav__btn" id="spellPagePrev" aria-label="Tarjetas anteriores" ${atStart ? 'disabled' : ''}>←</button>
+      <span class="spell-page-nav__label" aria-live="polite">${start + 1}–${end} de ${this.words.length}</span>
+      <button type="button" class="lp-btn lp-btn--ghost spell-page-nav__btn" id="spellPageNext" aria-label="Siguientes tarjetas" ${atEnd ? 'disabled' : ''}>→</button>
+    `;
   }
 
   renderCards() {
@@ -115,8 +220,10 @@ export class SpellingEngine {
     if (!grid) return;
 
     const useSelect = this.config.inputType === 'select';
+    const { start, end } = this.getVisibleRange();
 
-    grid.innerHTML = this.words.map((item, i) => {
+    grid.innerHTML = this.words.slice(start, end).map((item, localIdx) => {
+      const i = start + localIdx;
       const prompt = this.config.getPrompt(item);
       const stateItem = this.state[i] || {};
       const inputHtml = useSelect
@@ -280,7 +387,6 @@ export class SpellingEngine {
 
     this.words.forEach((item, i) => {
       const card = document.getElementById(`card-${i}`);
-      if (!card) return;
 
       const userSpelling = (this.state[i]?.spelling || '').toLowerCase();
       const userColor = this.state[i]?.color || '';
@@ -295,7 +401,12 @@ export class SpellingEngine {
       if (spellingCorrect) spellingOk++;
       if (colorCorrect) colorOk++;
 
-      // Visual feedback
+      if (!card) {
+        if (!(spellingCorrect && colorCorrect)) failed.push(item);
+        return;
+      }
+
+      // Visual feedback (current page only)
       if (spellingCorrect && colorCorrect) {
         card.classList.add('correct');
       } else {

@@ -172,7 +172,7 @@ body { min-height: 100vh; padding: 0 14px; }
 
 .scroll-body { padding: 4px 0 24px; }
 
-@media (max-width: 480px) {
+@media (max-width: 639px) {
   [data-area].show { gap: 6px; }
   .dict-card { padding: 10px 12px; }
   .dict-input textarea { min-height: 48px; padding: 8px 10px; }

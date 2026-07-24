@@ -148,7 +148,7 @@ body { min-height: 100vh; padding: 0 14px; }
 
 .scroll-body { padding: 8px 0 30px; }
 
-@media (max-width: 480px) {
+@media (max-width: 639px) {
   .wrap:has(.ex-mode-stage) {
     --lp-mcq-mode-h: 165px;
     --lp-mcq-prompt-h: 102px;

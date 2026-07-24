@@ -9,6 +9,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, speak } from './utils.js';
+import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 
 const SPEAK_ICON = '🔊';
 
@@ -45,6 +46,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     else if (mode === 'timed') initPractice(true);
     else if (mode === 'study') initStudy();
     syncSpeakNavUI();
+    window.__syncBottomNavMode?.();
   }
 
   function getData() { return categories[currentCat].items; }
@@ -86,37 +88,16 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     if (autoSpeak && usesSpeakNav()) speakCurrentItem();
   }
 
-  function insertSpeakInNav(btn, attempt = 0) {
-    const nav = document.getElementById('exBottomNav') || document.querySelector('.fc-nav');
-    if (!nav) {
-      if (attempt < 24) setTimeout(() => insertSpeakInNav(btn, attempt + 1), 50);
-      return;
-    }
-    const progressBtn = document.getElementById('lessonProgressBtn');
-    const shuffleBtn = document.getElementById('shuffleBtn');
-    if (btn.parentElement !== nav) {
-      if (progressBtn?.parentElement === nav) progressBtn.insertAdjacentElement('afterend', btn);
-      else if (shuffleBtn?.parentElement === nav) nav.insertBefore(btn, shuffleBtn);
-      else nav.insertBefore(btn, nav.firstChild);
-    }
-  }
-
   function ensureSpeakButton() {
     let btn = document.getElementById('studySpeakBtn');
     if (!btn) {
-      btn = document.createElement('button');
-      btn.id = 'studySpeakBtn';
-      btn.type = 'button';
-      btn.className = 'lp-btn lp-btn--ghost';
-      btn.textContent = SPEAK_ICON;
-      btn.setAttribute('aria-label', 'Activar auto-pronunciación');
-      btn.setAttribute('aria-pressed', 'false');
-      btn.title = 'Activar auto-pronunciación';
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        setAutoSpeak(!autoSpeak);
+      btn = createStudySpeakButton({
+        onClick: (e) => {
+          e.stopPropagation();
+          setAutoSpeak(!autoSpeak);
+        },
       });
-      insertSpeakInNav(btn);
+      insertInBottomNav(btn);
     }
     btn.hidden = !usesSpeakNav();
     btn.classList.toggle('active', autoSpeak && usesSpeakNav());

@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
 <style>
-  body { min-height: 100vh; padding: 0 14px; }
+  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-purple); }
 
   /* Category pills */
@@ -172,7 +172,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/error-hunt.js';
-import { shuffle, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
+import { shuffle, Timer, formatTime, showResult, recordScore, setPracticeBottomNav } from '../js/utils.js';
 
 
 const catKeys = Object.keys(CATEGORIES);
@@ -243,8 +243,7 @@ function loadText() {
   checked = false;
 
   document.getElementById('huntCounter').textContent = `Text ${idx + 1} / ${deck.length}`;
-  document.getElementById('checkBtn').style.display = '';
-  document.getElementById('nextBtn').style.display = 'none';
+  setPracticeBottomNav({ check: true, next: false });
   document.getElementById('huntExplanations').classList.remove('show');
   document.getElementById('correctionPanel').classList.remove('show');
 
@@ -371,8 +370,7 @@ function checkText() {
   }).join('');
   expContainer.classList.add('show');
 
-  document.getElementById('checkBtn').style.display = 'none';
-  document.getElementById('nextBtn').style.display = '';
+  setPracticeBottomNav({ check: false, next: true });
 }
 
 // ─── Next ───
