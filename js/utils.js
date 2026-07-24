@@ -716,10 +716,14 @@ export function initCatBarExpander({
     }
 
     const barRect = bar.getBoundingClientRect();
+    const expandReserve = (expandBtn?.offsetWidth || 36) + 8;
+    const visibleLeft = barRect.left + 4;
+    const visibleRight = barRect.right - expandReserve;
     let hidden = 0;
     getPills().forEach((pill) => {
       const rect = pill.getBoundingClientRect();
-      if (rect.right < barRect.left + 4 || rect.left > barRect.right - 36) hidden++;
+      const fullyVisible = rect.left >= visibleLeft - 1 && rect.right <= visibleRight + 1;
+      if (!fullyVisible) hidden++;
     });
 
     const hasOverflow = bar.scrollWidth > bar.clientWidth + 20;
@@ -788,7 +792,8 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
   const pills = catKeys.map((k) => {
     const cat = categories[k];
     const label = formatLabel ? formatLabel(k, cat) : `${cat.icon} ${cat.label}`;
-    return `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}">${label}</button>`;
+    const pillTitle = cat.label || k;
+    return `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}" title="${pillTitle}" aria-label="${pillTitle}">${label}</button>`;
   }).join('');
   bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
   if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);

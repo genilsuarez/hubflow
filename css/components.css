@@ -560,6 +560,31 @@
 .cat-scroll-wrapper.expanded::before,
 .cat-scroll-wrapper.expanded::after { opacity: 0 !important; }
 
+/* Icon-only category pills (phonics — 4 distinct emojis fit on mobile) */
+.cat-scroll-wrapper--icon-pills .cat-btn {
+  font-size: 1.05rem;
+  padding: 8px 12px;
+  min-width: 44px;
+  text-align: center;
+}
+.cat-scroll-wrapper--icon-pills.expanded .cat-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 1rem;
+  padding: 8px 10px;
+  min-width: 52px;
+}
+.cat-scroll-wrapper--icon-pills.expanded .cat-btn::after {
+  content: attr(aria-label);
+  font-size: .56rem;
+  font-family: var(--lp-font-body);
+  font-weight: var(--lp-weight-bold);
+  line-height: 1.1;
+  color: inherit;
+}
+
 .cat-bar {
   overflow-x: auto; scrollbar-width: none;
   scroll-snap-type: x proximity;

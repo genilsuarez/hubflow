@@ -6,7 +6,7 @@
 
 export const CATEGORIES = {
   'vowel-pairs': {
-    label: 'Vowel Pairs',
+    label: 'Vowels',
     icon: '🔊',
     description: 'Distinguish similar vowel sounds',
     items: [
@@ -18,7 +18,7 @@ export const CATEGORIES = {
     ]
   },
   'consonant-pairs': {
-    label: 'Consonant Pairs',
+    label: 'Consonants',
     icon: '👂',
     description: 'Distinguish voiced/voiceless consonants',
     items: [
@@ -30,7 +30,7 @@ export const CATEGORIES = {
     ]
   },
   'word-stress': {
-    label: 'Word Stress',
+    label: 'Stress',
     icon: '💪',
     description: 'Identify which syllable is stressed',
     items: [
@@ -42,7 +42,7 @@ export const CATEGORIES = {
     ]
   },
   'silent-letters': {
-    label: 'Silent Letters',
+    label: 'Silent',
     icon: '🤫',
     description: 'Identify letters that are not pronounced',
     items: [
