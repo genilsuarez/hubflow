@@ -621,6 +621,16 @@ h1 {
   padding-bottom: 0;
 }
 
+@media (max-width: 768px) {
+  .scroll-body:has(.ex-bottom-nav:not([hidden])),
+  .scroll-body:has(.fc-nav:not([hidden])) {
+    padding-bottom: max(
+      var(--ex-bottom-nav-scroll-reserve),
+      calc(var(--ex-bottom-nav-min-height) + env(safe-area-inset-bottom))
+    );
+  }
+}
+
 body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
   padding-bottom: max(var(--ex-bottom-nav-scroll-reserve), calc(var(--ex-bottom-nav-min-height) + env(safe-area-inset-bottom)));
 }
@@ -713,7 +723,10 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding-top: 0;
-    padding-bottom: 0;
+    padding-bottom: max(
+      var(--ex-bottom-nav-scroll-reserve),
+      calc(var(--ex-bottom-nav-min-height) + env(safe-area-inset-bottom))
+    );
     display: flex;
     flex-direction: column;
     align-items: stretch;

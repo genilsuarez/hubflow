@@ -296,20 +296,11 @@ h1 { display: flex; align-items: center; gap: 6px; }
   .fc-nav { gap: 8px; }
 }
 
-/* Study / flashcard bottom bar — same size as other modes; flip is tap on card */
+/* Study / flashcard bottom bar — flex distribution handled in components.css */
 @media (max-width: 768px) {
   body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) {
     flex-wrap: nowrap;
-    justify-content: center;
-  }
-
-  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) #speakBtn,
-  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) .listen-btn {
-    width: var(--ex-bottom-nav-btn-size) !important;
-    height: var(--ex-bottom-nav-btn-size) !important;
-    min-width: var(--ex-bottom-nav-btn-size) !important;
-    min-height: var(--ex-bottom-nav-btn-size) !important;
-    font-size: var(--ex-bottom-nav-btn-font-size) !important;
+    justify-content: space-between;
   }
 }
 
