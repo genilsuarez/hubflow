@@ -1,6 +1,6 @@
 import { MODULES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT, MODULE_DEPTH } from '../data/catalog.js';
 import * as lpSupabase from './lp-supabase.js';
-import { isCloudHydrated } from './sync-engine.js';
+import { isCloudHydrated, reconcileHubflowProgressFromEvents } from './sync-engine.js';
 import { enrichHubflowContentEntry, recomputeProgressDocumentSummary } from './lp-progress-summary.js';
 
 /* ═══════════════════════════════════════════════════════
@@ -244,7 +244,7 @@ function buildHubFlowSummary(contentStates) {
       ? contentStates.reduce((total, item) => total + (item.progressPct ?? 0), 0) / contentStates.length
       : 0,
     completedContent: contentStates.filter((item) => item.completed).length,
-    totalContent: contentStates.length,
+    totalContent: MODULES.length,
     attemptedContent: contentStates.filter((item) => (item.attempts ?? 0) > 0).length,
     completedActivities,
     totalActivities,
@@ -262,7 +262,7 @@ export function getHubFlowProgressSummary() {
   return {
     progressPct: Math.max(computed.progressPct ?? 0, stored.progressPct ?? 0),
     completedContent: Math.max(computed.completedContent ?? 0, stored.completedContent ?? 0),
-    totalContent: Math.max(computed.totalContent ?? 0, stored.totalContent ?? 0),
+    totalContent: MODULES.length,
     attemptedContent: Math.max(computed.attemptedContent ?? 0, stored.attemptedContent ?? 0),
     completedActivities: Math.max(computed.completedActivities ?? 0, stored.completedActivities ?? 0),
     totalActivities: Math.max(computed.totalActivities ?? 0, stored.totalActivities ?? 0),
@@ -384,35 +384,47 @@ export function syncScoreKeysFromActivityDoc() {
       rule.requiredActivities[0];
     if (!activityRule) continue;
 
-    const scoreKey =
-      activityRule.scoreKeys.find((key) => readScoreHistory(key).length === 0) ||
-      activityRule.scoreKeys[0];
-    if (!scoreKey || readScoreHistory(scoreKey).length > 0) continue;
+    const metricKey = typeof event.metrics?.scoreKey === 'string' ? event.metrics.scoreKey : null;
+    const scoreKeysToFill = metricKey
+      ? [metricKey]
+      : activityRule.scoreKeys.filter((key) => readScoreHistory(key).length === 0);
+
+    if (!scoreKeysToFill.length) {
+      const fallback =
+        activityRule.scoreKeys.find((key) => readScoreHistory(key).length === 0) ||
+        activityRule.scoreKeys[0];
+      if (fallback) scoreKeysToFill.push(fallback);
+    }
 
     const timestamp = event.occurredAt || doc.updatedAt || new Date().toISOString();
     const pct = Math.max(0, Math.min(100, Number(event.scorePct) || 0));
 
-    try {
-      localStorage.setItem(
-        versionedKey(scoreKey),
-        JSON.stringify([
-          {
-            pct,
-            date: timestamp,
-            timestamp,
-            context: { contentId: event.contentId, activity: event.activity },
-          },
-        ])
-      );
-      changed = true;
-    } catch {
-      /* ignore quota errors */
+    for (const scoreKey of scoreKeysToFill) {
+      if (!scoreKey || readScoreHistory(scoreKey).length > 0) continue;
+
+      try {
+        localStorage.setItem(
+          versionedKey(scoreKey),
+          JSON.stringify([
+            {
+              pct,
+              date: timestamp,
+              timestamp,
+              context: { contentId: event.contentId, activity: event.activity, scoreKey },
+            },
+          ])
+        );
+        changed = true;
+      } catch {
+        /* ignore quota errors */
+      }
     }
   }
   return changed;
 }
 
 export function hydrateHubFlowFromCloud() {
+  reconcileHubflowProgressFromEvents();
   syncScoreKeysFromProgressDoc();
   syncScoreKeysFromActivityDoc();
   return publishHubFlowProgress();
@@ -456,7 +468,10 @@ function recordActivityEvent(key, pct, timestamp, context) {
     occurredAt: timestamp,
     scorePct: pct,
     passed: pct >= match.activity.passScorePct,
-    metrics: context?.metrics && typeof context.metrics === 'object' ? context.metrics : {},
+    metrics: {
+      ...(context?.metrics && typeof context.metrics === 'object' ? context.metrics : {}),
+      scoreKey: key,
+    },
   };
   if (Number.isFinite(context?.durationMs)) event.durationMs = Math.max(0, context.durationMs);
   localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify({
@@ -493,12 +508,27 @@ export function recordScore(key, pct, context = {}) {
 // Debounced porque recordScore puede dispararse varias veces seguidas
 // (p.ej. quiz de varias preguntas registrando cada intento).
 let cloudSyncTimer = null;
+let pendingCloudSync = false;
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('lp-cloud-hydrated', () => {
+    if (pendingCloudSync) scheduleCloudSync();
+  });
+}
+
 function scheduleCloudSync() {
   if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(async () => {
     cloudSyncTimer = null;
     const authed = await lpSupabase.isAuthenticated().catch(() => false);
-    if (!authed || !isCloudHydrated()) return;
+    if (!authed) return;
+    if (!isCloudHydrated()) {
+      pendingCloudSync = true;
+      return;
+    }
+    pendingCloudSync = false;
+
+    publishHubFlowProgress();
 
     const progressDoc = readJson(PROGRESS_STORAGE_KEY, null);
     if (progressDoc?.content) {
