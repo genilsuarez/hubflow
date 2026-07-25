@@ -1247,8 +1247,10 @@
         padding-top: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px));
         padding-left: var(--lp-header-floating-pad-left-compact);
         background: var(--lp-bg);
+        position: relative;
+        justify-content: center;
       }
-      /* Overview: marca centrada en app bar (☰ flotante a la izquierda) */
+      /* L1 overview: marca centrada (☰ flotante a la izquierda) */
       body[data-active="resumen"] .topbar,
       body[data-active="mi-progreso"] .topbar,
       body[data-active="rutas"] .topbar { justify-content: center; }
@@ -1262,6 +1264,71 @@
         align-items: center;
         max-width: calc(100% - 88px);
         pointer-events: none;
+      }
+      body[data-active="resumen"] .tg-topic,
+      body[data-active="mi-progreso"] .tg-topic,
+      body[data-active="rutas"] .tg-topic { display: none !important; }
+      /* L2 catálogo: [←] título [☰] — homologado DeskFlow */
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar {
+        display: grid;
+        grid-template-columns: var(--lp-navbtn-size, 44px) minmax(0, 1fr) var(--lp-navbtn-size, 44px);
+        align-items: center;
+        gap: 0;
+        padding-top: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px));
+        padding-right: max(var(--lp-header-pad-x-compact, 12px), env(safe-area-inset-right, 0px));
+        padding-bottom: var(--lp-header-pad-y-compact);
+        padding-left: max(var(--lp-header-pad-x-compact, 12px), env(safe-area-inset-left, 0px));
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-back {
+        display: flex;
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        align-self: center;
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-menu {
+        display: flex;
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        align-self: center;
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .navigation-launcher {
+        display: none !important;
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-greeting {
+        grid-column: 2;
+        grid-row: 1;
+        position: static;
+        transform: none;
+        justify-content: center;
+        text-align: center;
+        max-width: 100%;
+        pointer-events: none;
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .tg-resumen,
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .tg-progreso,
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .tg-rutas,
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-greeting-sub {
+        display: none !important;
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .tg-topic {
+        display: block !important;
+        font-family: var(--lp-font-display);
+        font-size: var(--lp-header-title-size);
+        font-weight: var(--lp-header-title-weight);
+        letter-spacing: var(--lp-header-title-tracking);
+        line-height: var(--lp-header-title-line-height);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .search-bar,
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .filter-menu,
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .lp-header-stats,
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .paths-actions--topbar {
+        display: none !important;
       }
       .topbar-greeting-sub { display: none; }
       .topbar-greeting-sub .tgs-full { display: none; }
@@ -1384,9 +1451,6 @@
 
       /* Rutas guiadas: la descripción larga no aporta en pantalla estrecha */
       .ruta-card__desc { display: none; }
-    }
-    @media (max-width: 639px) {
-      .topbar-greeting-title { font-size: .95rem; }
     }
 
     /* ═══ MI PROGRESO — COLLAPSIBLE PATH CARDS ═══ */

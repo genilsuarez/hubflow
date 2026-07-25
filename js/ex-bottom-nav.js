@@ -16,6 +16,11 @@ export const BOTTOM_NAV = {
   LEGACY_NAV_SELECTOR: '.fc-nav:not(#exBottomNav)',
 
   BATTLE_ACTION_IDS: ['battleClaim', 'battleJudge', 'battleNext'],
+  BATTLE_PHASE_BY_ID: {
+    battleClaim: 'claim',
+    battleJudge: 'judge',
+    battleNext: 'next',
+  },
 
   /** Study-mode nav hidden entirely in battle. */
   STUDY_NAV_IDS: ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn'],
@@ -51,6 +56,25 @@ export const BOTTOM_NAV = {
 };
 
 const DESKTOP_ONLY_CLASS = 'ex-bottom-nav__desktop-only';
+
+/** Active battle button group — owned by flashcard-engine phase transitions. */
+let battleActionPhase = null;
+
+function applyBattleActionVisibility() {
+  BOTTOM_NAV.BATTLE_ACTION_IDS.forEach((id) => {
+    const group = document.getElementById(id);
+    if (!group) return;
+    const visible = battleActionPhase === BOTTOM_NAV.BATTLE_PHASE_BY_ID[id];
+    group.hidden = !visible;
+    group.style.setProperty('display', visible ? 'flex' : 'none');
+  });
+}
+
+/** Show one battle action group (claim | judge | next). */
+export function syncBattleActionVisibility(phase) {
+  battleActionPhase = phase;
+  applyBattleActionVisibility();
+}
 
 export function getBottomNav() {
   return document.getElementById(BOTTOM_NAV.NAV_ID);
@@ -219,12 +243,17 @@ export function syncBottomNavMode() {
     else btn.style.removeProperty('display');
   });
 
-  BOTTOM_NAV.BATTLE_ACTION_IDS.forEach((id) => {
-    const group = document.getElementById(id);
-    if (!group) return;
-    if (profile !== 'battle') group.style.display = 'none';
-    else group.style.removeProperty('display');
-  });
+  if (profile !== 'battle') {
+    battleActionPhase = null;
+    BOTTOM_NAV.BATTLE_ACTION_IDS.forEach((id) => {
+      const group = document.getElementById(id);
+      if (!group) return;
+      group.hidden = true;
+      group.style.display = 'none';
+    });
+  } else if (battleActionPhase) {
+    applyBattleActionVisibility();
+  }
 
   applyRoleClasses();
   reorderBottomNav(profile);
@@ -419,6 +448,7 @@ export function finalizeBottomNavLayout() {
 if (typeof window !== 'undefined') {
   window.__relocateLessonProgressBtn = relocateProgressButton;
   window.__syncBottomNavMode = syncBottomNavMode;
+  window.__syncBattleActionVisibility = syncBattleActionVisibility;
   window.__setupPracticeBottomNav = setupPracticeBottomNav;
   window.__finalizeBottomNavLayout = finalizeBottomNavLayout;
 }

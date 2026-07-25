@@ -54,6 +54,29 @@ const section = currentModule?.category || 'vocab';
 // LyricFlow player pattern: [← back] · [title centered] · [☰ menu]
 // (counter stays in the right cluster on desktop; hidden in header on mobile)
 
+const VALID_BACK_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+
+function getExerciseBackUrl() {
+  const stored = sessionStorage.getItem('hf-back-section');
+  const target = (stored && VALID_BACK_SECTIONS.has(stored))
+    ? stored
+    : (section && VALID_BACK_SECTIONS.has(section) ? section : 'resumen');
+  return `../index.html?section=${target}`;
+}
+
+function setupExerciseBackLink(link) {
+  if (!link || link.dataset.backBound) return;
+  link.dataset.backBound = '1';
+  const url = getExerciseBackUrl();
+  link.href = url;
+  link.setAttribute('aria-label', 'Volver');
+  link.setAttribute('title', 'Volver');
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    location.assign(getExerciseBackUrl());
+  });
+}
+
 const topBar = document.querySelector('.top-bar');
 
 let hamburgerBtn;
@@ -61,9 +84,7 @@ if (topBar) {
   const backLink = topBar.querySelector('a[href*="../index.html"]');
   if (backLink) {
     backLink.innerHTML = navIcon('arrow-left') || '<span aria-hidden="true">←</span>';
-    if (!backLink.getAttribute('aria-label')) {
-      backLink.setAttribute('aria-label', 'Volver');
-    }
+    setupExerciseBackLink(backLink);
   }
 
   hamburgerBtn = document.createElement('button');

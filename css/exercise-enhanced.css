@@ -155,29 +155,103 @@ body > .top-bar {
   color: var(--lp-score-icon-color);
 }
 
-@media (max-width: 860px) {
+/* Mobile-first L2: [←] título centrado [☰] — grid homologado DeskFlow */
+.top-bar.top-bar--secondary {
+  height: var(--lp-header-height-compact);
+  min-height: var(--lp-header-height-compact);
+  padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact);
+  gap: 0;
+  display: grid;
+  grid-template-columns: var(--lp-navbtn-size, 44px) minmax(0, 1fr) var(--lp-navbtn-size, 44px);
+  align-items: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.top-bar.top-bar--secondary .top-bar__start,
+.top-bar.top-bar--secondary .top-bar__end {
+  width: var(--lp-navbtn-size);
+  height: var(--lp-navbtn-size);
+  min-width: var(--lp-navbtn-size);
+  min-height: var(--lp-navbtn-size);
+  margin-left: 0;
+  z-index: 2;
+}
+
+.top-bar.top-bar--secondary .top-bar__start {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+
+.top-bar.top-bar--secondary .top-bar__end {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  justify-content: flex-end;
+}
+
+.top-bar.top-bar--secondary .learnflow-signature {
+  grid-column: 2;
+  grid-row: 1;
+  position: static;
+  transform: none;
+  text-align: center;
+  align-self: center;
+  flex: unset;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 2px;
+  font-family: var(--lp-font-display);
+  font-size: var(--lp-header-title-size);
+  font-weight: var(--lp-header-title-weight);
+  letter-spacing: var(--lp-header-title-tracking);
+  line-height: var(--lp-header-title-line-height);
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-bar.top-bar--secondary .tb-counter {
+  display: none !important;
+}
+
+@media (min-width: 861px) {
   .top-bar.top-bar--secondary {
-    height: var(--lp-header-height-compact);
-    min-height: var(--lp-header-height-compact);
-    padding: var(--lp-header-pad-y-compact) var(--lp-header-pad-x-compact);
-    gap: 0;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
+    height: var(--lp-header-height);
+    min-height: var(--lp-header-height);
+    padding: var(--lp-header-pad-y) var(--lp-header-pad-x);
+    gap: 10px;
   }
 
   .top-bar.top-bar--secondary .top-bar__start,
-  .top-bar.top-bar--secondary .top-bar__end {
-    flex: 0 0 var(--lp-navbtn-size);
-    width: var(--lp-navbtn-size);
-    height: var(--lp-navbtn-size);
-    min-width: var(--lp-navbtn-size);
-    min-height: var(--lp-navbtn-size);
-    margin-left: 0;
-    z-index: 2;
+  .top-bar.top-bar--secondary .top-bar__end,
+  .top-bar.top-bar--secondary .learnflow-signature {
+    grid-column: auto;
+    grid-row: auto;
   }
 
+  .top-bar.top-bar--secondary .learnflow-signature {
+    position: static;
+    transform: none;
+    text-align: left;
+    flex: 1;
+    max-width: none;
+    pointer-events: auto;
+    font-size: var(--lp-header-title-size);
+  }
+
+  .top-bar.top-bar--secondary .tb-counter {
+    display: inline-flex !important;
+  }
+}
+
+@media (max-width: 860px) {
   .top-bar.top-bar--secondary .top-bar__start .lp-icon-btn,
   .top-bar.top-bar--secondary .top-bar__end .lp-icon-btn,
   .top-bar.top-bar--secondary .top-bar__end button.lp-icon-btn {
@@ -185,24 +259,6 @@ body > .top-bar {
     height: var(--lp-navbtn-size);
     min-width: var(--lp-navbtn-size);
     min-height: var(--lp-navbtn-size);
-  }
-
-  .top-bar.top-bar--secondary .learnflow-signature {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    flex: unset;
-    width: auto;
-    max-width: calc(100% - (var(--lp-navbtn-size) * 2 + var(--lp-header-pad-x-compact) * 2));
-    padding: 0 2px;
-    font-size: 1rem;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .top-bar.top-bar--secondary .top-bar__end {
-    justify-content: flex-end;
   }
 
   /* Counter vive en el área de juego en mobile — header solo [←] título [☰] */
@@ -359,7 +415,7 @@ h1 {
 }
 .ex-progress-row--session {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: 10px;
@@ -419,15 +475,7 @@ h1 {
 }
 .ex-progress-row--session #progPct,
 .ex-progress-row--session .progress__labels > :last-child {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: end;
-  font-family: var(--lp-font-mono);
-  font-size: 0.68rem;
-  font-weight: var(--lp-weight-bold);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-  color: var(--lp-muted);
+  display: none;
 }
 .ex-progress-row--session .progress__track {
   grid-column: 1 / -1;
@@ -582,9 +630,7 @@ h1 {
   }
   .ex-progress-row--session::before { font-size: .54rem; }
   .ex-progress-row--session #progTxt,
-  .ex-progress-row--session #progPct,
-  .ex-progress-row--session .progress__labels > :first-child,
-  .ex-progress-row--session .progress__labels > :last-child {
+  .ex-progress-row--session .progress__labels > :first-child {
     font-size: 0.64rem;
   }
   .ex-progress-row--session:has(#pairScore.show) {
@@ -758,7 +804,6 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
 @media (max-width: 639px) {
   .scroll-body { padding: 0; }
   .top-bar.top-bar--secondary { margin-bottom: 4px; gap: 0; }
-  .top-bar.top-bar--secondary .learnflow-signature { font-size: 0.9375rem; }
   .tb-counter { height: 32px; padding: 0 8px; border-width: 1px; box-shadow: none; }
   .tb-counter .tb-counter__text { font-size: 0.8125rem; }
   .header { padding: 0; margin-bottom: 6px; }

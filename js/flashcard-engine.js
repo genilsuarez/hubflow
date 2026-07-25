@@ -667,9 +667,7 @@ export class FlashcardEngine {
   }
 
   showBattleActions(phase) {
-    document.getElementById('battleClaim')?.style.setProperty('display', phase === 'claim' ? 'flex' : 'none');
-    document.getElementById('battleJudge')?.style.setProperty('display', phase === 'judge' ? 'flex' : 'none');
-    document.getElementById('battleNext')?.style.setProperty('display', phase === 'next' ? 'flex' : 'none');
+    window.__syncBattleActionVisibility?.(phase);
   }
 
   updateBattleUI() {

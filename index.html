@@ -113,6 +113,7 @@
   <!-- MAIN COLUMN -->
   <div class="main-col">
     <div class="topbar">
+      <button class="lp-icon-btn topbar-back" id="topbarBackBtn" type="button" aria-label="Volver al inicio" hidden><span data-lp-icon="arrow-left" aria-hidden="true"></span></button>
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
         <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos</p>
@@ -123,6 +124,7 @@
           <span class="tgs-full">Secuencias de ejercicios, de lo básico a lo avanzado.</span>
           <span class="tgs-short">De básico a avanzado.</span>
         </p>
+        <span class="topbar-greeting-title tg-topic" id="topbarTopicTitle" hidden></span>
       </div>
       <div class="search-bar">
         <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
@@ -182,6 +184,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
         </button>
       </div>
+      <button class="lp-icon-btn topbar-menu" id="topbarMenuToggle" type="button" aria-label="Abrir navegación" aria-controls="sidebar" aria-expanded="false" hidden><span data-lp-icon="menu" aria-hidden="true"></span></button>
     </div>
 
     <main class="content" id="mainContent">
@@ -500,13 +503,25 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   const sidebarScrim = document.getElementById('sidebarScrim');
   const navigationLauncher = document.getElementById('navigationLauncher');
   const navigationModeToggle = document.getElementById('navigationModeToggle');
+  const topbar = document.querySelector('.topbar');
+  const topbarBackBtn = document.getElementById('topbarBackBtn');
+  const topbarMenuToggle = document.getElementById('topbarMenuToggle');
+  const OVERVIEW_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas']);
 
   function setNavigationDrawerOpen(open) {
     sidebar.classList.toggle('is-open', open);
     sidebarScrim.classList.toggle('is-visible', open);
     sidebarScrim.setAttribute('aria-hidden', String(!open));
-    navigationLauncher.setAttribute('aria-expanded', String(open));
-    navigationLauncher.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación flotante');
+    const openLabel = 'Cerrar navegación';
+    const closedLabel = 'Abrir navegación';
+    if (navigationLauncher) {
+      navigationLauncher.setAttribute('aria-expanded', String(open));
+      navigationLauncher.setAttribute('aria-label', open ? openLabel : 'Abrir navegación flotante');
+    }
+    if (topbarMenuToggle) {
+      topbarMenuToggle.setAttribute('aria-expanded', String(open));
+      topbarMenuToggle.setAttribute('aria-label', open ? openLabel : closedLabel);
+    }
     if (open && typeof lpLogin !== 'undefined' && lpLogin.refreshNavLabels) {
       lpLogin.refreshNavLabels();
     }
@@ -531,6 +546,12 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     setNavigationMode(nextMode, true);
   });
   navigationLauncher.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
+  if (topbarMenuToggle) {
+    topbarMenuToggle.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
+  }
+  if (topbarBackBtn) {
+    topbarBackBtn.addEventListener('click', () => setActive('resumen'));
+  }
   sidebarScrim.addEventListener('click', () => setNavigationDrawerOpen(false));
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') setNavigationDrawerOpen(false);
@@ -1291,10 +1312,21 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
     if (typeof syncSidebarTopicGroup === 'function') syncSidebarTopicGroup();
-    const isOverview = target === 'resumen' || target === 'mi-progreso' || target === 'rutas';
+    const isOverview = OVERVIEW_SECTIONS.has(target);
+    const isSecondaryTopbar = !isOverview;
+    if (topbar) topbar.classList.toggle('topbar--secondary', isSecondaryTopbar);
+    if (topbarBackBtn) topbarBackBtn.hidden = !isSecondaryTopbar;
+    if (topbarMenuToggle) topbarMenuToggle.hidden = !isSecondaryTopbar;
+    if (navigationLauncher) navigationLauncher.hidden = isSecondaryTopbar;
+    const topicTitle = document.getElementById('topbarTopicTitle');
+    const activeLabel = document.querySelector(`.sb-item[data-target="${target}"] .sb-label`);
+    if (topicTitle) {
+      topicTitle.textContent = !isOverview && activeLabel ? activeLabel.textContent.trim() : '';
+      topicTitle.hidden = isOverview || !activeLabel;
+    }
+    topbarGreeting.style.display = 'flex';
     topbarSearch.style.display = isOverview ? 'none' : '';
-    topbarStats.style.display = '';
-    topbarGreeting.style.display = isOverview ? 'flex' : 'none';
+    topbarStats.style.display = isOverview ? 'none' : '';
     if (filterMenu) filterMenu.style.display = isOverview ? 'none' : '';
     if (tagBar) closeFilterPanel();
     content.scrollTop = 0;
@@ -1471,7 +1503,18 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     });
   });
 
-  const VALID_SECTIONS = new Set(['resumen', 'mi-progreso', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+  const VALID_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+
+  // Remember active HubFlow section when opening an exercise (PWA — no history.back).
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href') || '';
+    if (!/(?:^|\/)exercises\//.test(href)) return;
+    const active = document.body.dataset.active;
+    if (active) sessionStorage.setItem('hf-back-section', active);
+  }, true);
+
   const paramSection = new URLSearchParams(location.search).get('section');
   const storedSection = sessionStorage.getItem('hf-back-section');
   const initSection = paramSection || storedSection;
