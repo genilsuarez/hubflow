@@ -60,6 +60,7 @@
   <link rel="stylesheet" href="css/buttons.css">
   <link rel="stylesheet" href="css/sidebar.css">
   <link rel="stylesheet" href="css/lp-nav-active.css">
+  <link rel="stylesheet" href="css/lp-tinted-surface.css">
   <link rel="stylesheet" href="css/lp-about.css">
   <link rel="stylesheet" href="css/index-shell.css">
 
@@ -718,6 +719,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   const moduleMap = new Map(MODULES.map(m => [m.id, m]));
 
   const CATEGORY_COLORS = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
+  const CATEGORY_SOFT = { vocab: 'var(--lp-cat-purple-soft)', grammar: 'var(--lp-cat-amber-soft)', pronunciation: 'var(--lp-cat-blue-soft)', analysis: 'var(--lp-cat-teal-soft)' };
 
   function renderRutas() {
     const grid = document.getElementById('rutasGrid');
@@ -904,7 +906,9 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       heroCard.classList.remove('hero-card--pending');
       heroCard.classList.add('hero-card--revealed');
       heroCard.style.setProperty('--hero-spine', 'var(--lp-accent)');
+      heroCard.style.setProperty('--card-soft', 'var(--lp-accent-soft)');
       document.getElementById('resumenHero')?.style.setProperty('--hero-spine', 'var(--lp-accent)');
+      document.getElementById('resumenHero')?.style.setProperty('--card-soft', 'var(--lp-accent-soft)');
       iconEl.textContent = '🚀';
       contextEl.textContent = 'Bienvenido a HubFlow';
       titleEl.textContent = MODULES.length + ' ejercicios te esperan';
@@ -927,8 +931,11 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     currentSuggestion = suggestion;
     const { mod, reason } = suggestion;
     const color = CATEGORY_COLORS[mod.category] || 'var(--lp-accent)';
+    const soft = CATEGORY_SOFT[mod.category] || 'var(--lp-accent-soft)';
     heroCard.style.setProperty('--hero-spine', color);
+    heroCard.style.setProperty('--card-soft', soft);
     document.getElementById('resumenHero')?.style.setProperty('--hero-spine', color);
+    document.getElementById('resumenHero')?.style.setProperty('--card-soft', soft);
     heroCard.classList.remove('hero-card--welcome');
     iconEl.textContent = mod.icon;
     contextEl.textContent = reason;

@@ -20,10 +20,11 @@ body > .shell { flex: 1 1 auto; min-height: 0; width: 100%; }
   position: static;
   inset: auto;
   width: auto;
-  transform: none;
   box-shadow: none;
   height: 100%;
 }
+/* Desktop persistent column: lp-drawer.is-persistent handles transform.
+   Never set transform:none here — it overrides off-canvas slide on mobile. */
 .navigation-launcher {
   display: none;
   position: fixed;
