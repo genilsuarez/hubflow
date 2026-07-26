@@ -248,12 +248,12 @@ function setupSidebarMobileNav(sidebar) {
 
 function buildSidebar() {
   const scrim = document.createElement('div');
-  scrim.className = 'sidebar-scrim';
+  scrim.className = 'lp-drawer-scrim';
   scrim.id = 'exerciseSidebarScrim';
   scrim.setAttribute('aria-hidden', 'true');
 
   const sidebar = document.createElement('aside');
-  sidebar.className = 'sidebar';
+  sidebar.className = 'sidebar lp-drawer';
   sidebar.id = 'exerciseSidebar';
   sidebar.setAttribute('aria-label', 'Navegación HubFlow');
 
@@ -293,7 +293,7 @@ function buildSidebar() {
 
   function openSidebar() {
     sidebar.classList.add('is-open');
-    scrim.classList.add('is-visible');
+    scrim.classList.add('is-open');
     scrim.setAttribute('aria-hidden', 'false');
     if (typeof lpLogin !== 'undefined' && lpLogin.refreshNavLabels) {
       lpLogin.refreshNavLabels();
@@ -303,7 +303,7 @@ function buildSidebar() {
     // In persistent mode, don't close
     if (isPersistent()) return;
     sidebar.classList.remove('is-open');
-    scrim.classList.remove('is-visible');
+    scrim.classList.remove('is-open');
     scrim.setAttribute('aria-hidden', 'true');
   }
 
@@ -312,7 +312,7 @@ function buildSidebar() {
       // Persistent: sidebar always visible, body shifted right
       sidebar.classList.add('is-open');
       sidebar.classList.add('is-persistent');
-      scrim.classList.remove('is-visible');
+      scrim.classList.remove('is-open');
       scrim.setAttribute('aria-hidden', 'true');
       document.body.classList.add('has-sidebar');
       if (hamburgerBtn) hamburgerBtn.style.display = 'none';
@@ -321,7 +321,7 @@ function buildSidebar() {
       sidebar.classList.remove('is-open');
       sidebar.classList.remove('is-persistent');
       document.body.classList.remove('has-sidebar');
-      scrim.classList.remove('is-visible');
+      scrim.classList.remove('is-open');
       scrim.setAttribute('aria-hidden', 'true');
       if (hamburgerBtn) hamburgerBtn.style.display = '';
     }
@@ -349,7 +349,7 @@ function buildSidebar() {
     if (nextMode === 'floating') {
       // When switching to floating, close the sidebar
       sidebar.classList.remove('is-open');
-      scrim.classList.remove('is-visible');
+      scrim.classList.remove('is-open');
       scrim.setAttribute('aria-hidden', 'true');
     }
   });

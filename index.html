@@ -68,13 +68,13 @@
   <a class="skip-link" href="#mainContent">Saltar al contenido</a>
 
 <button class="lp-icon-btn navigation-launcher" id="navigationLauncher" type="button" aria-label="Abrir navegación flotante" aria-controls="sidebar" aria-expanded="false"><span data-lp-icon="menu" aria-hidden="true"></span></button>
-<div class="sidebar-scrim" id="sidebarScrim" aria-hidden="true"></div>
+<div class="lp-drawer-scrim" id="sidebarScrim" aria-hidden="true"></div>
 <button type="button" class="filter-backdrop" id="filterBackdrop" hidden aria-label="Cerrar filtros"></button>
 
 <div class="shell">
 
   <!-- SIDEBAR (desktop) -->
-  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+  <aside class="sidebar lp-drawer" id="sidebar" aria-label="Navegación principal">
     <div class="sb-brand">
       <span class="sb-mark" aria-hidden="true">H</span>
       <div>
@@ -508,10 +508,16 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   const topbarMenuToggle = document.getElementById('topbarMenuToggle');
   const OVERVIEW_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas']);
 
+  function syncDrawerPersistent() {
+    const persistent = window.innerWidth >= 861 && document.documentElement.dataset.navigationMode === 'sidebar';
+    sidebar.classList.toggle('is-persistent', persistent);
+  }
+
   function setNavigationDrawerOpen(open) {
     sidebar.classList.toggle('is-open', open);
-    sidebarScrim.classList.toggle('is-visible', open);
+    sidebarScrim.classList.toggle('is-open', open);
     sidebarScrim.setAttribute('aria-hidden', String(!open));
+    document.body.classList.toggle('lp-drawer-open', open);
     const openLabel = 'Cerrar navegación';
     const closedLabel = 'Abrir navegación';
     if (navigationLauncher) {
@@ -537,9 +543,12 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     const icon = navigationModeToggle.querySelector('span');
     if (icon) icon.textContent = isFloating ? '▣' : '◫';
     if (persist) localStorage.setItem(NAVIGATION_MODE_KEY, resolvedMode);
+    syncDrawerPersistent();
     setNavigationDrawerOpen(false);
   }
 
+  syncDrawerPersistent();
+  window.addEventListener('resize', syncDrawerPersistent);
   setNavigationMode(localStorage.getItem(NAVIGATION_MODE_KEY));
   navigationModeToggle.addEventListener('click', () => {
     const nextMode = document.documentElement.dataset.navigationMode === 'floating' ? 'sidebar' : 'floating';
