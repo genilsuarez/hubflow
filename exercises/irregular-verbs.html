@@ -266,7 +266,7 @@
 
 <script type="module">
 import { VERBS } from '../data/irregular-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -294,13 +294,7 @@ document.querySelectorAll('[data-cat]').forEach(btn => {
 });
 
 // ─── Mode ───
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    startMode();
-  });
-});
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
 function startMode() {
   stopTimer();
@@ -447,7 +441,7 @@ function finishQuiz() {
     correct: quizScore, total: quizTotal,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
     elapsedSeconds: elapsed
   });
   recordScore(`irr-${currentCat}-quiz`, pct);
@@ -514,7 +508,7 @@ function checkMatchPair() {
         correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
         containerEl: document.getElementById('resultOverlay'),
         onRestart: () => startMode(),
-        onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+        onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
       }), 500);
     }
   } else {
@@ -596,7 +590,7 @@ function finishWrite() {
     correct: writeScore, total: writeTotal,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
   });
   recordScore(`irr-${currentCat}-write`, pct);
 }
@@ -669,7 +663,7 @@ function showBattleResult() {
   </div>`;
   overlay.classList.add('show');
   overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); initBattle(); });
-  overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode==='study')); startMode(); });
+  overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; syncModeTabsActive('study'); startMode(); });
 }
 
 // Battle button handlers

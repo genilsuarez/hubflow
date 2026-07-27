@@ -126,7 +126,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/odd-one-out.js';
-import { shuffle, Timer, formatTime, showResult, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress } from '../js/utils.js';
+import { shuffle, Timer, formatTime, showResult, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../js/utils.js';
 
 
 const catKeys = Object.keys(CATEGORIES);
@@ -146,13 +146,7 @@ sharedRenderCatBar({
 });
 
 // ─── Mode switching ───
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    startMode();
-  });
-});
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
 function startMode() {
   stopTimer();

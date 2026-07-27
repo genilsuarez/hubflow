@@ -105,7 +105,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/confusing-words.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -124,16 +124,15 @@ sharedRenderCatBar({
 });
 
 // ─── Mode switching ───
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+wireModeTabs({
+  getMode: () => mode, setMode: v => mode = v,
+  onChange: () => {
     startMode();
     setTimeout(() => {
       if (mode === 'practice' || mode === 'timed') syncPracticeNav({ showNext: !!practiceAdvance });
       else if (mode === 'study') restoreStudyNav();
     }, 10);
-  });
+  },
 });
 
 function startMode() {
@@ -286,7 +285,7 @@ function finishPractice() {
     correct: score, total,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
     elapsedSeconds: elapsed
   });
   requestAnimationFrame(() => recordScore(`conf-${currentCat}`, pct));

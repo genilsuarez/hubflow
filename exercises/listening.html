@@ -129,7 +129,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/listening.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/utils.js';
 
 
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
@@ -150,13 +150,7 @@ sharedRenderCatBar({
   onChange: startMode,
 });
 
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    startMode();
-  });
-});
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
 function startMode() {
   stopTimer();

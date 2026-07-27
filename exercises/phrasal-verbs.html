@@ -297,7 +297,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phrasal-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -316,13 +316,7 @@ sharedRenderCatBar({
 });
 
 // ─── Mode switching ───
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    startMode();
-  });
-});
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
 function startMode() {
   stopTimer();
@@ -470,7 +464,7 @@ function finishQuiz() {
     correct: score, total,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
     elapsedSeconds: elapsed
   });
   recordScore(`phrasal-${currentCat}-quiz`, pct);
@@ -555,7 +549,7 @@ function finishWrite() {
     correct: writeScore, total: writeTotal,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
   });
   recordScore(`phrasal-${currentCat}-write`, pct);
 }
@@ -621,7 +615,7 @@ function checkMatchPair() {
         correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
         containerEl: document.getElementById('resultOverlay'),
         onRestart: () => startMode(),
-        onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+        onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
       }), 500);
     }
   } else {
@@ -789,7 +783,7 @@ function checkSort() {
     correct, total: sortState.total,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
   });
   recordScore(`phrasal-${currentCat}-sort`, pct);
 }
@@ -887,7 +881,7 @@ function showBattleResult() {
   </div>`;
   overlay.classList.add('show');
   overlay.querySelector('#rr').addEventListener('click', () => { overlay.classList.remove('show'); initBattle(); });
-  overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode==='study')); startMode(); });
+  overlay.querySelector('#rs').addEventListener('click', () => { overlay.classList.remove('show'); mode='study'; syncModeTabsActive('study'); startMode(); });
 }
 
 // Battle button handlers

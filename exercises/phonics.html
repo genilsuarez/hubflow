@@ -172,7 +172,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phonics.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, speak, renderCatBar as sharedRenderCatBar } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, speak, renderCatBar as sharedRenderCatBar, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -199,13 +199,7 @@ sharedRenderCatBar({
 });
 
 // Mode switching
-document.querySelectorAll('[data-mode]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-    startMode();
-  });
-});
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
 function startMode() {
   stopTimer();
@@ -495,7 +489,7 @@ function checkMatchPair() {
         correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
         containerEl: document.getElementById('resultOverlay'),
         onRestart: () => startMode(),
-        onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+        onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
       }), 500);
     }
   } else {
@@ -513,7 +507,7 @@ function finishQuiz() {
     correct: score, total,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
+    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
     elapsedSeconds: elapsed
   });
   recordScore(`phonics-${currentCat}`, pct);

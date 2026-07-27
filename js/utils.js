@@ -872,6 +872,25 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
   initCatBarExpander({ barId: containerId });
 }
 
+/** Toggles `.active` on the `[data-mode]` pill matching `mode` — shared by
+ *  wireModeTabs() and by exercises that switch mode programmatically (e.g.
+ *  an onStudy callback jumping back to Study). */
+export function syncModeTabsActive(mode) {
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+}
+
+/** Wires click handlers on every `[data-mode]` pill: sets the mode, syncs the
+ *  active state, and calls onChange() to (re)start the exercise. */
+export function wireModeTabs({ getMode, setMode, onChange }) {
+  document.querySelectorAll('[data-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setMode(btn.dataset.mode);
+      syncModeTabsActive(getMode());
+      onChange();
+    });
+  });
+}
+
 /** Groups a Timer instance with its total duration so both can be reset in
  *  one call (used by sentence-quiz-engine and typed-answer-engine). */
 export function makeTimerState() {

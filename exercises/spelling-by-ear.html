@@ -72,7 +72,7 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/spelling-by-ear.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/utils.js';
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
@@ -81,7 +81,7 @@ sharedRenderCatBar({
   getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
   onChange: startMode,
 });
-document.querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => { mode = btn.dataset.mode; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode)); startMode(); }));
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 function startMode() { stopTimer(); document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show')); document.getElementById('timerBar').classList.remove('show'); initPractice(mode === 'timed'); }
 function stopTimer() { if (timer) { timer.stop(); timer = null; } }
 function getData() { return CATEGORIES[currentCat].items; }
