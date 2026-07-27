@@ -178,7 +178,7 @@
 @media (max-width: 767px) {
   body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) {
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: center;
   }
 }
 
@@ -256,7 +256,7 @@
     right: 0;
     bottom: 0;
     z-index: 30;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--ex-bottom-nav-gap);
     width: 100%;
     max-width: none;
