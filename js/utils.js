@@ -846,10 +846,25 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
   bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
   if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
   else bar.innerHTML = pills;
+  // Double-click detection: persist the tracker on the bar element itself so it
+  // survives rebuilds (renderCatBar is called on every category switch).
+  if (!bar._lastCatClick) bar._lastCatClick = { key: null, time: 0 };
   bar.querySelectorAll('[data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
-      setCurrentCat(btn.dataset.cat);
+      const key = btn.dataset.cat;
+      const now = Date.now();
+      const isDoubleClick = bar._lastCatClick.key === key && (now - bar._lastCatClick.time) < 400;
+      bar._lastCatClick = { key, time: now };
+      setCurrentCat(key);
       bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === getCurrentCat()));
+      // Double-click: collapse the expanded panel
+      if (isDoubleClick) {
+        const wrapper = document.getElementById('catWrapper');
+        if (wrapper?.classList.contains('expanded')) {
+          wrapper.classList.remove('expanded');
+          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
+        }
+      }
       onChange();
     });
   });

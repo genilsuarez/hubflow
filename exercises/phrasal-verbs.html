@@ -148,6 +148,20 @@
     .quiz-opt { min-width: 55px; padding: 9px 14px; }
     .write-input-row input { width: 90px; }
   }
+
+  /* Match mode */
+  .pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 560px; }
+  .pair-col-label { font-size: .62rem; font-weight: 800; text-transform: uppercase; color: var(--lp-muted); text-align: center; padding-bottom: 4px; }
+  .pair-item {
+    padding: 10px 12px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
+    background: var(--lp-surface); color: var(--lp-ink); cursor: pointer; text-align: center;
+    font-size: .82rem; font-weight: 600; transition: all .2s; user-select: none; line-height: 1.3;
+  }
+  .pair-item:hover:not(.matched):not(.wrong-flash) { border-color: var(--lp-cat-teal); background: rgba(61,127,127,.08); transform: translateY(-1px); }
+  .pair-item.selected { border-color: var(--lp-cat-teal); background: rgba(61,127,127,.12); box-shadow: 0 0 0 2px rgba(61,127,127,.25); }
+  .pair-item.matched { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); cursor: default; pointer-events: none; }
+  .pair-item.wrong-flash { border-color: var(--lp-error); background: var(--lp-error-soft); }
+  [data-theme="dark"] .pair-item.matched { color: #6FE8A8; }
 </style>
 </head>
 <body>
@@ -168,6 +182,7 @@
       <button class="pill-btn" data-mode="quiz">🎯 Quiz</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
       <button class="pill-btn" data-mode="write">✍️ Write</button>
+      <button class="pill-btn" data-mode="match">🔗 Match</button>
       <button class="pill-btn" data-mode="sort">🗂️ Sort</button>
       <button class="pill-btn" data-mode="battle">⚔️ Battle</button>
     </div>
@@ -226,6 +241,11 @@
       </div>
       <button class="lp-btn lp-btn--primary" id="checkBtn">Check ✓</button>
       <button class="lp-btn lp-btn--ghost" id="skipBtn" style="font-size:.72rem;">Skip →</button>
+    </div>
+
+    <!-- MATCH -->
+    <div data-area="match">
+      <div class="pair-grid" id="pairGrid"></div>
     </div>
 
     <!-- SORT -->
@@ -289,6 +309,7 @@ let timer = null;
 let timedSeconds = 0;
 
 // ─── Category bar ───
+let _lastCatClick = { key: null, time: 0 };
 function renderCatBar() {
   const bar = document.getElementById('catBar');
   bar.innerHTML = catKeys.map(k =>
@@ -296,8 +317,20 @@ function renderCatBar() {
   ).join('');
   bar.querySelectorAll('[data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
-      currentCat = btn.dataset.cat;
+      const key = btn.dataset.cat;
+      currentCat = key;
       bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      const now = Date.now();
+      const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400;
+      _lastCatClick = { key, time: now };
+      // Double-click: select and collapse the expanded panel
+      if (isDoubleClick) {
+        const wrapper = document.getElementById('catWrapper');
+        if (wrapper?.classList.contains('expanded')) {
+          wrapper.classList.remove('expanded');
+          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
+        }
+      }
       startMode();
     });
   });
@@ -322,6 +355,7 @@ function startMode() {
   window.__syncBottomNavMode?.();
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
+  else if (mode === 'match') initMatch();
   else if (mode === 'write') initWrite();
   else if (mode === 'sort') initSort();
   else if (mode === 'battle') initBattle();
@@ -550,6 +584,78 @@ function finishWrite() {
     onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
   });
   recordScore(`phrasal-${currentCat}-write`, pct);
+}
+
+// ═══ MATCH (verb ↔ translation) ═══
+let matchState = { leftSel: null, rightSel: null, matched: 0, total: 0, errors: 0, pairs: [] };
+
+function initMatch() {
+  const items = shuffle(getData());
+  const COUNT = Math.min(6, items.length);
+  matchState = { leftSel: null, rightSel: null, matched: 0, total: COUNT, errors: 0, pairs: items.slice(0, COUNT) };
+  document.querySelector('[data-area="match"]').classList.add('show');
+  updProgress(0, COUNT);
+  renderMatchGrid();
+}
+
+function renderMatchGrid() {
+  const grid = document.getElementById('pairGrid');
+  const leftItems = shuffle([...matchState.pairs]);
+  const rightItems = shuffle([...matchState.pairs]);
+
+  grid.innerHTML = `
+    <div class="pair-col-label">🇬🇧 Phrasal Verb</div>
+    <div class="pair-col-label">🇪🇸 Significado</div>
+    ${leftItems.map((item, i) => {
+      const right = rightItems[i];
+      return `
+        <div class="pair-item pair-left" data-term="${item.verb}">${item.verb}</div>
+        <div class="pair-item pair-right" data-term="${right.verb}">${right.es}</div>
+      `;
+    }).join('')}
+  `;
+
+  grid.querySelectorAll('.pair-left').forEach(el => el.addEventListener('click', () => selectMatchItem(el, 'left')));
+  grid.querySelectorAll('.pair-right').forEach(el => el.addEventListener('click', () => selectMatchItem(el, 'right')));
+}
+
+function selectMatchItem(el, side) {
+  if (el.classList.contains('matched')) return;
+  if (side === 'left') {
+    if (matchState.leftSel) matchState.leftSel.classList.remove('selected');
+    matchState.leftSel = el;
+  } else {
+    if (matchState.rightSel) matchState.rightSel.classList.remove('selected');
+    matchState.rightSel = el;
+  }
+  el.classList.add('selected');
+  if (matchState.leftSel && matchState.rightSel) checkMatchPair();
+}
+
+function checkMatchPair() {
+  const left = matchState.leftSel;
+  const right = matchState.rightSel;
+  if (left.dataset.term === right.dataset.term) {
+    left.classList.remove('selected'); right.classList.remove('selected');
+    left.classList.add('matched'); right.classList.add('matched');
+    matchState.matched++;
+    updProgress(matchState.matched, matchState.total);
+    if (matchState.matched === matchState.total) {
+      const pct = Math.round((matchState.total - matchState.errors) / matchState.total * 100);
+      recordScore(`phrasal-${currentCat}-match`, Math.max(0, pct));
+      setTimeout(() => showResult({
+        correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
+        containerEl: document.getElementById('resultOverlay'),
+        onRestart: () => startMode(),
+        onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); }
+      }), 500);
+    }
+  } else {
+    matchState.errors++;
+    left.classList.add('wrong-flash'); right.classList.add('wrong-flash');
+    setTimeout(() => { left.classList.remove('wrong-flash', 'selected'); right.classList.remove('wrong-flash', 'selected'); }, 500);
+  }
+  matchState.leftSel = null; matchState.rightSel = null;
 }
 
 // ═══ SORT (classify by meaning) ═══

@@ -141,6 +141,7 @@ let checked = false;
 let timer = null;
 let timedSeconds = 0;
 
+let _lastCatClick = { key: null, time: 0 };
 function renderCatBar() {
   const bar = document.getElementById('catBar');
   bar.innerHTML = catKeys.map(k =>
@@ -148,8 +149,20 @@ function renderCatBar() {
   ).join('');
   bar.querySelectorAll('[data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
-      currentCat = btn.dataset.cat;
+      const key = btn.dataset.cat;
+      currentCat = key;
       bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
+      const now = Date.now();
+      const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400;
+      _lastCatClick = { key, time: now };
+      // Double-click: select and collapse the expanded panel
+      if (isDoubleClick) {
+        const wrapper = document.getElementById('catWrapper');
+        if (wrapper?.classList.contains('expanded')) {
+          wrapper.classList.remove('expanded');
+          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
+        }
+      }
       startMode();
     });
   });
