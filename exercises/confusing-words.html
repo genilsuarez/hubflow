@@ -257,7 +257,7 @@ function renderPractice() {
       const chosen = btn.dataset.val;
       const correct = item.correct.toLowerCase();
       // Match base form to conjugated: do→did/does/done/doing, make→made/makes/making
-      const baseMap = { 'do': /^(do|did|does|done|doing)$/i, 'make': /^(make|made|makes|making)$/i, 'say': /^(say|said|says|saying)$/i, 'tell': /^(tell|told|tells|telling)$/i, 'bring': /^(bring|brought|brings|bringing)$/i, 'take': /^(take|took|takes|taken|taking)$/i, 'borrow': /^(borrow|borrowed|borrows|borrowing)$/i, 'lend': /^(lend|lent|lends|lending)$/i, 'watch': /^(watch|watched|watches|watching)$/i, 'look': /^(look|looked|looks|looking)$/i, 'see': /^(see|saw|sees|seen|seeing)$/i };
+      const baseMap = { 'do': /^(do|did|does|done|doing)$/i, 'make': /^(make|made|makes|making)$/i, 'say': /^(say|said|says|saying)$/i, 'tell': /^(tell|told|tells|telling)$/i, 'bring': /^(bring|brought|brings|bringing)$/i, 'take': /^(take|took|takes|taken|taking)$/i, 'borrow': /^(borrow|borrowed|borrows|borrowing)$/i, 'lend': /^(lend|lent|lends|lending)$/i, 'watch': /^(watch|watched|watches|watching)$/i, 'look': /^(look|looked|looks|looking)$/i, 'see': /^(see|saw|sees|seen|seeing)$/i, 'affect': /^(affect|affects|affected|affecting)$/i, 'effect': /^(effect|effects|effected|effecting)$/i, 'complement': /^(complement|complements|complemented|complementing)$/i, 'compliment': /^(compliment|compliments|complimented|complimenting)$/i };
       const isCorrect = chosen === correct || chosen === item.correct || (baseMap[chosen] && baseMap[chosen].test(correct));
 
       if (isCorrect) { btn.classList.add('correct'); score++; }

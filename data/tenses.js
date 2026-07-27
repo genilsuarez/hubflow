@@ -18,8 +18,7 @@ export const CATEGORIES = {
       { sentence: 'Water ___ at 100 degrees Celsius.', correct: 'boils', options: ['boils', 'is boiling', 'boil', 'boiled'], explain: 'Present simple for scientific facts / permanent truths.' },
       { sentence: 'We ___ a meeting at 3 pm today.', correct: 'are having', options: ['are having', 'have', 'has', 'had'], explain: 'Present continuous for scheduled future arrangements.' },
       { sentence: 'The train ___ at 9:15 every morning.', correct: 'leaves', options: ['leaves', 'is leaving', 'leave', 'left'], explain: 'Present simple for timetables and schedules.' },
-      { sentence: 'She ___ like vegetables.', correct: "doesn't", options: ["doesn't", "don't", "isn't", "not"], explain: "Negative present simple, 3rd person: doesn't + base verb." },
-      { sentence: 'What ___ you doing here?', correct: 'are', options: ['are', 'do', 'is', 'does'], explain: 'Present continuous question: What are you doing?' }
+      { sentence: 'She ___ like vegetables.', correct: "doesn't", options: ["doesn't", "don't", "isn't", "not"], explain: "Negative present simple, 3rd person: doesn't + base verb." }
     ]
   },
   past: {
@@ -36,8 +35,7 @@ export const CATEGORIES = {
       { sentence: 'She ___ born in 1990.', correct: 'was', options: ['was', 'is', 'has been', 'were'], explain: 'Past simple passive: was born (fixed expression).' },
       { sentence: 'I ___ already finished when he arrived.', correct: 'had', options: ['had', 'have', 'was', 'did'], explain: 'Past perfect: had + past participle (before another past event).' },
       { sentence: 'He ___ his homework and then went out.', correct: 'did', options: ['did', 'does', 'was doing', 'has done'], explain: 'Past simple: did (completed action in sequence).' },
-      { sentence: 'While I ___ for the bus, it started to rain.', correct: 'was waiting', options: ['was waiting', 'waited', 'wait', 'am waiting'], explain: 'Past continuous: background action interrupted by another event.' },
-      { sentence: 'She ___ never been to Asia before that trip.', correct: 'had', options: ['had', 'has', 'was', 'did'], explain: 'Past perfect: had never been (experience before a past reference point).' }
+      { sentence: 'While I ___ for the bus, it started to rain.', correct: 'was waiting', options: ['was waiting', 'waited', 'wait', 'am waiting'], explain: 'Past continuous: background action interrupted by another event.' }
     ]
   },
   future: {
@@ -48,7 +46,6 @@ export const CATEGORIES = {
       { sentence: 'I ___ help you with that.', correct: 'will', options: ['will', 'going to', 'am', 'do'], explain: 'Spontaneous decision / offer: will + base verb.' },
       { sentence: 'She ___ visit her parents next weekend.', correct: 'is going to', options: ['is going to', 'will', 'does', 'has'], explain: 'Planned intention: be going to + base verb.' },
       { sentence: 'Look at those clouds! It ___ rain.', correct: 'is going to', options: ['is going to', 'will', 'shall', 'does'], explain: 'Prediction based on evidence: be going to.' },
-      { sentence: 'I think he ___ pass the exam.', correct: 'will', options: ['will', 'is going to', 'does', 'shall'], explain: 'Opinion/prediction without evidence: will.' },
       { sentence: 'The plane ___ at 6:30 tomorrow morning.', correct: 'leaves', options: ['leaves', 'will leave', 'is leaving', 'left'], explain: 'Present simple for scheduled/timetabled events.' },
       { sentence: 'We ___ dinner at that new restaurant tonight.', correct: "are having", options: ['are having', 'will have', 'have', 'had'], explain: 'Present continuous for personal arrangements.' },
       { sentence: 'Don\'t worry, I ___ forget.', correct: "won't", options: ["won't", "don't", "am not", "haven't"], explain: "Promise/assurance: won't (will not) + base verb." },
@@ -71,7 +68,6 @@ export const CATEGORIES = {
       { sentence: 'She ___ been working here for three years.', correct: 'has', options: ['has', 'have', 'had', 'is'], explain: 'Present perfect continuous: has been + -ing (duration up to now).' },
       { sentence: 'We ___ visited that museum twice.', correct: 'have', options: ['have', 'has', 'had', 'are'], explain: 'Present perfect for number of times: We have visited.' },
       { sentence: 'By 2030, they ___ completed the project.', correct: 'will have', options: ['will have', 'have', 'had', 'will'], explain: 'Future perfect: will have + past participle.' },
-      { sentence: 'I ___ known him since childhood.', correct: 'have', options: ['have', 'has', 'had', 'am'], explain: 'Present perfect for duration from past to now: have known since.' },
       { sentence: 'She ___ lost her keys — she can\'t find them anywhere.', correct: 'has', options: ['has', 'have', 'had', 'is'], explain: 'Present perfect: result visible now (she has lost → still lost).' },
       { sentence: 'After he ___ eaten, he went for a walk.', correct: 'had', options: ['had', 'has', 'have', 'was'], explain: 'Past perfect: action completed before another past action.' }
     ]
@@ -88,7 +84,9 @@ export const CATEGORIES = {
       { sentence: "He ___ (paint) the fence — look, it's done!", correct: 'has painted', options: ['has painted', 'has been painting'], explain: 'Present perfect SIMPLE: the action is complete, with a visible result.' },
       { sentence: "He ___ (paint) the fence all day — that's why he's covered in paint.", correct: 'has been painting', options: ['has painted', 'has been painting'], explain: 'Present perfect CONTINUOUS: duration + visible evidence of the activity itself.' },
       { sentence: "We ___ (wait) for two hours!", correct: 'have been waiting', options: ['have waited', 'have been waiting'], explain: 'Present perfect CONTINUOUS: emphasizes duration, often with frustration.' },
-      { sentence: "We ___ (finish) the project already.", correct: 'have finished', options: ['have finished', 'have been finishing'], explain: 'Present perfect SIMPLE: a completed action/result ("already" signals completion).' }
+      { sentence: "We ___ (finish) the project already.", correct: 'have finished', options: ['have finished', 'have been finishing'], explain: 'Present perfect SIMPLE: a completed action/result ("already" signals completion).' },
+      { sentence: "They ___ (learn) all the irregular verbs — they know them now.", correct: 'have learned', options: ['have learned', 'have been learning'], explain: 'Present perfect SIMPLE: the focus is the completed result.' },
+      { sentence: "They ___ (learn) Spanish for two years — they're almost fluent.", correct: 'have been learning', options: ['have learned', 'have been learning'], explain: 'Present perfect CONTINUOUS: the focus is the duration of the activity.' },
     ]
   },
   haveHasHad: {
@@ -103,7 +101,9 @@ export const CATEGORIES = {
       { sentence: 'He ___ just left when the phone rang.', correct: 'had', explain: 'Past perfect: "just left" happened before "the phone rang" → had left.' },
       { sentence: 'My sister ___ finish her degree last year.', correct: 'did', options: ['have', 'has', 'had', 'did'], explain: '"Last year" is a finished time reference → past simple "did", not a perfect form.' },
       { sentence: 'We ___ been friends since childhood.', correct: 'have', explain: '"We" (plural) + present perfect → have been.' },
-      { sentence: 'By 2020, she ___ already retired.', correct: 'had', explain: 'Past perfect: an action completed before a specific past point ("by 2020") → had retired.' }
+      { sentence: 'By 2020, she ___ already retired.', correct: 'had', explain: 'Past perfect: an action completed before a specific past point ("by 2020") → had retired.' },
+      { sentence: '___ you finished your homework yet?', correct: 'Have', options: ['Have', 'Has', 'Had', 'Did'], explain: '"Yet" with a present result → present perfect question with Have + you.' },
+      { sentence: 'The team ___ won three matches in a row this season.', correct: 'has', options: ['have', 'has', 'had', 'did'], explain: 'Singular collective subject + unfinished period ("this season") → has won.' },
     ]
   }
 };

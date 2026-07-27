@@ -118,7 +118,6 @@
       </div>
       <div class="word-options" id="wordOptions"></div>
       <div class="explain-box" id="explainBox"></div>
-      <button class="lp-btn lp-btn--primary practice-next-btn" id="practiceNextBtn" style="display:none;">Next →</button>
     </div>
 
     <!-- STUDY -->
@@ -189,7 +188,10 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
+  const pn = document.getElementById('practiceNextBtn');
+  if (pn) pn.style.display = 'none';
   document.getElementById('timerBar').classList.remove('show');
+  window.__syncBottomNavMode?.();
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
@@ -213,6 +215,7 @@ function initPractice(timed) {
   idx = 0; score = 0;
   total = Math.min(timed ? 12 : deck.length, deck.length);
   document.querySelector('[data-area="practice"]').classList.add('show');
+  ensurePracticeNextInNav();
 
   if (timed) {
     document.getElementById('timerBar').classList.add('show');
@@ -282,10 +285,29 @@ function finishPractice() {
 }
 
 // ─── Practice Next button ───
-document.getElementById('practiceNextBtn').addEventListener('click', () => {
+/** El "siguiente" de práctica va en la barra, no suelto en el área. No puede
+ *  llamarse #nextBtn: ese id ya es el de la navegación de Study. */
+function ensurePracticeNextInNav() {
+  let btn = document.getElementById('practiceNextBtn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'practiceNextBtn';
+    btn.type = 'button';
+    btn.className = 'lp-btn lp-btn--primary ex-bottom-nav__nav-btn';
+    btn.textContent = '→';
+    btn.setAttribute('aria-label', 'Siguiente');
+    btn.title = 'Siguiente';
+    btn.style.display = 'none';
+    btn.addEventListener('click', onPracticeNext);
+    document.body.appendChild(btn);
+  }
+  window.__insertInBottomNav?.(btn);
+}
+
+function onPracticeNext() {
   document.getElementById('practiceNextBtn').style.display = 'none';
   renderPractice();
-});
+}
 
 // ═══ STUDY ═══
 function initStudy() {

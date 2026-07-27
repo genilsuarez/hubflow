@@ -21,6 +21,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Bloqueante: protege el contrato entre data/*.js y catalog.js. Sin esto,
+      # renombrar una subcategoría rompe el progreso guardado de los usuarios y
+      # llega a producción sin que nada avise.
+      - name: Validate content (data/*.js ↔ catalog.js)
+        run: node scripts/validate-content.js
+
       - name: Verify structure
         run: |
           FAIL=0

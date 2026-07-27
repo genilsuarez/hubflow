@@ -26,6 +26,13 @@ export const BOTTOM_NAV = {
   STUDY_NAV_IDS: ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn'],
 
   /**
+   * Simétrico de STUDY_NAV_IDS: botones de práctica que se ocultan fuera del
+   * perfil `practice`. Necesario en páginas multi-modo (phrasal-verbs,
+   * verb-chunks, irregular-verbs), donde Write comparte barra con Study.
+   */
+  PRACTICE_NAV_IDS: ['checkBtn', 'skipBtn', 'hintBtn'],
+
+  /**
    * Button roles — id, desktopOnly, and BEM role class applied by applyRoleClasses().
    * Order within each mode is defined in ORDER.
    */
@@ -110,6 +117,31 @@ export function getVisibleExerciseArea() {
 }
 
 /**
+ * ¿El botón de comprobar pertenece al área que se está viendo?
+ *
+ * En páginas de un solo modo (spelling, dictation) #checkBtn siempre está
+ * activo. En las multi-modo (phrasal-verbs, verb-chunks, irregular-verbs) vive
+ * dentro de `[data-area="write"]`: si se mirara solo su existencia, el perfil
+ * sería `practice` también en Study y se ocultaría la navegación de tarjetas.
+ */
+function isCheckBtnActive() {
+  const checkBtn = document.getElementById('checkBtn');
+  if (!checkBtn) return false;
+  // Se iza a la barra (fuera de [data-area]), así que el área de origen se
+  // memoriza la primera vez, mientras el botón sigue en su sitio.
+  const owner = checkBtn.dataset.ownerArea ?? rememberCheckBtnArea(checkBtn);
+  if (!owner) return true;
+  return document.querySelector(`[data-area="${owner}"]`)?.classList.contains('show') ?? true;
+}
+
+/** Guarda en el botón el `data-area` en el que nació, si lo hay. */
+function rememberCheckBtnArea(checkBtn) {
+  const area = checkBtn.closest('[data-area]')?.dataset.area;
+  if (area) checkBtn.dataset.ownerArea = area;
+  return area ?? '';
+}
+
+/**
  * Map engine + mode + visible area → bottom-nav profile.
  * See AGENTS.md "Exercise bottom nav" for the per-engine matrix.
  */
@@ -120,7 +152,7 @@ export function resolveBottomNavProfile() {
   if (mode === 'battle') return 'battle';
   if (area && BOTTOM_NAV.HIDDEN_AREAS.includes(area)) return 'hidden';
 
-  if (document.getElementById('checkBtn')) return 'practice';
+  if (isCheckBtnActive()) return 'practice';
 
   if (area === 'practice' || mode === 'practice' || mode === 'timed') return 'minimal';
 
@@ -234,14 +266,16 @@ export function syncBottomNavMode() {
     nav.classList.toggle('ex-bottom-nav--minimal', profile === 'minimal');
   }
 
-  const hideStudyNav = profile !== 'study';
-  BOTTOM_NAV.STUDY_NAV_IDS.forEach((id) => {
+  const toggleGroup = (ids, hide) => ids.forEach((id) => {
     const btn = document.getElementById(id);
     if (!btn) return;
-    btn.hidden = hideStudyNav;
-    if (hideStudyNav) btn.style.display = 'none';
+    btn.hidden = hide;
+    if (hide) btn.style.display = 'none';
     else btn.style.removeProperty('display');
   });
+
+  toggleGroup(BOTTOM_NAV.STUDY_NAV_IDS, profile !== 'study');
+  toggleGroup(BOTTOM_NAV.PRACTICE_NAV_IDS, profile !== 'practice');
 
   if (profile !== 'battle') {
     battleActionPhase = null;
@@ -322,9 +356,21 @@ export function setupPracticeBottomNav(attempt = 0) {
     return;
   }
 
-  const nextBtn = document.getElementById('nextBtn');
-  const hintBtn = document.getElementById('hintBtn');
-  const skipBtn = document.getElementById('skipBtn');
+  // El área de origen decide qué botones son "de esta práctica": en páginas
+  // multi-modo, #nextBtn puede ser el de Study y no debe reestilizarse.
+  const ownerArea = rememberCheckBtnArea(checkBtn) || checkBtn.dataset.ownerArea || '';
+  const sameArea = (btn) => {
+    if (!btn) return null;
+    // se memoriza igual que en checkBtn, porque el hoist los saca del área
+    if (btn.dataset.ownerArea === undefined) {
+      btn.dataset.ownerArea = btn.closest('[data-area]')?.dataset.area ?? '';
+    }
+    return btn.dataset.ownerArea === ownerArea ? btn : null;
+  };
+
+  const nextBtn = sameArea(document.getElementById('nextBtn'));
+  const hintBtn = sameArea(document.getElementById('hintBtn'));
+  const skipBtn = sameArea(document.getElementById('skipBtn'));
   const progressBtn = document.getElementById('lessonProgressBtn');
   const checkOnly = !nextBtn;
 
@@ -450,5 +496,6 @@ if (typeof window !== 'undefined') {
   window.__syncBottomNavMode = syncBottomNavMode;
   window.__syncBattleActionVisibility = syncBattleActionVisibility;
   window.__setupPracticeBottomNav = setupPracticeBottomNav;
+  window.__insertInBottomNav = insertInBottomNav;
   window.__finalizeBottomNavLayout = finalizeBottomNavLayout;
 }

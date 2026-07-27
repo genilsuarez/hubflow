@@ -17,6 +17,7 @@
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { fileURLToPath, pathToFileURL } from 'url';
 import path from 'path';
+import { deriveEmittedScoreKeys, deriveModuleFacts } from './lib/derive-catalog.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
@@ -158,6 +159,172 @@ const SPECIAL = {
 };
 
 /**
+ * Todo `correct` tiene que ser alcanzable desde las opciones que el engine
+ * pinta, o el item es imposible de acertar y ni siquiera se resalta la
+ * respuesta buena al fallar.
+ *
+ * Las opciones salen de item.options, cat.options o cat.pairs según el engine;
+ * confusing-words además acepta formas conjugadas vía un baseMap de regex en su
+ * HTML, así que se lee y se respeta. Sin lista de opciones (respuesta escrita)
+ * no aplica.
+ */
+function parseBaseMap(html) {
+  const raw = html.match(/const baseMap = \{([\s\S]*?)\};/)?.[1];
+  if (!raw) return null;
+  const map = new Map();
+  for (const m of raw.matchAll(/'([^']+)':\s*\/\^\(([^)]*)\)\$\/i/g)) {
+    map.set(m[1].toLowerCase(), new Set(m[2].toLowerCase().split('|')));
+  }
+  return map.size ? map : null;
+}
+
+async function validateAnswerable(MODULES) {
+  for (const m of MODULES) {
+    if (m.wip || !m.dataFile) continue;
+
+    const dataPath = path.join(ROOT_DIR, m.dataFile.split('#')[0]);
+    if (!existsSync(dataPath)) continue;
+    const mod = await import(pathToFileURL(dataPath).href);
+    const CATS = mod.CATEGORIES || mod.LEVELS;
+    if (!CATS) continue;
+
+    const exercisePath = path.join(ROOT_DIR, m.exercise.split('#')[0].split('?')[0]);
+    const baseMap = existsSync(exercisePath) ? parseBaseMap(readFileSync(exercisePath, 'utf8')) : null;
+
+    for (const [key, cat] of Object.entries(CATS)) {
+      const items = Array.isArray(cat) ? cat : (cat.items || []);
+      for (const [i, it] of items.entries()) {
+        if (!it || it.correct == null) continue;
+        const opts = Array.isArray(it.options) ? it.options
+          : Array.isArray(cat.options) ? cat.options
+          : Array.isArray(cat.pairs) ? cat.pairs
+          : null;
+        if (!opts) continue;
+
+        for (const c of (Array.isArray(it.correct) ? it.correct : [it.correct])) {
+          const target = String(c).toLowerCase();
+          const alcanzable = opts.some((o) => {
+            if (o === c || String(o).toLowerCase() === target) return true;
+            return baseMap?.get(String(o).toLowerCase())?.has(target) ?? false;
+          });
+          if (!alcanzable) {
+            err('DATA-ANSWER', `${m.dataFile}[${key}#${i}]: correct "${c}" no está entre las opciones [${opts.join(', ')}] — el item es inacertable`);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Los botones de acción van en #exBottomNav, no sueltos en el contenido.
+ * ex-bottom-nav.js solo iza ids concretos, así que un id propio deja el botón
+ * flotando — es lo que pasaba con `writeCheck` y con `battleActions`.
+ */
+function validateBottomNavContract() {
+  const CANON_BATTLE = ['battleClaim', 'battleJudge', 'battleNext'];
+  // ids de acción que ex-bottom-nav.js reconoce y coloca en la barra
+  const CANON_BTN = new Set(['checkBtn', 'nextBtn', 'prevBtn', 'hintBtn', 'skipBtn',
+    'shuffleBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn', 'lessonProgressBtn']);
+
+  for (const file of readdirSync(EXERCISES_DIR).filter((f) => f.endsWith('.html'))) {
+    const html = readFileSync(path.join(EXERCISES_DIR, file), 'utf8');
+
+    // 1) grupos .battle-actions con id no canónico
+    for (const m of html.matchAll(/<div[^>]*class="[^"]*battle-actions[^"]*"[^>]*id="([^"]+)"/g)) {
+      if (!CANON_BATTLE.includes(m[1])) {
+        err('NAV-BTN', `exercises/${file}: grupo battle "${m[1]}" no es ${CANON_BATTLE.join('/')} — se quedará fuera de la barra`);
+      }
+    }
+
+    // 2) botón de comprobar con id propio dentro de un [data-area]
+    for (const m of html.matchAll(/<button[^>]*\bid="(\w*[Cc]heck\w*)"/g)) {
+      if (!CANON_BTN.has(m[1]) && !/insertInBottomNav/.test(html)) {
+        err('NAV-BTN', `exercises/${file}: botón "${m[1]}" no es #checkBtn ni se coloca con __insertInBottomNav — quedará fuera de la barra`);
+      }
+    }
+  }
+}
+
+/**
+ * El sidebar de index.html es HTML estático (se pinta antes de que corra el JS),
+ * así que no puede generarse desde js/nav-sections.js. Aquí se comprueba que no
+ * haya derivado: es lo que dejó "Rutas guiadas" en el dashboard pero fuera del
+ * sidebar de los ejercicios.
+ */
+async function validateNavSections() {
+  const navPath = path.join(ROOT_DIR, 'js', 'nav-sections.js');
+  const indexPath = path.join(ROOT_DIR, 'index.html');
+  if (!existsSync(navPath) || !existsSync(indexPath)) return;
+
+  const { NAV_SECTIONS, NAV_SECTION_KEYS } = await import(pathToFileURL(navPath).href);
+  const html = readFileSync(indexPath, 'utf8');
+
+  // 1) Sidebar estático: mismas secciones y mismas etiquetas.
+  const sidebar = html.match(/<nav class="sb-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  if (!sidebar) {
+    err('NAV-SYNC', 'index.html: no se encontró <nav class="sb-nav"> para validar');
+  } else {
+    const rendered = new Map(
+      [...sidebar.matchAll(/data-target="([^"]+)"[\s\S]*?<span class="sb-label">([^<]*)<\/span>/g)]
+        .map(([, key, label]) => [key, label.replace(/&amp;/g, '&').trim()]),
+    );
+    for (const s of NAV_SECTIONS) {
+      if (!rendered.has(s.key)) {
+        err('NAV-SYNC', `index.html: falta la sección "${s.key}" (${s.label}) en el sidebar estático`);
+      } else if (rendered.get(s.key) !== s.label) {
+        err('NAV-SYNC', `index.html: sección "${s.key}" dice "${rendered.get(s.key)}", nav-sections.js dice "${s.label}"`);
+      }
+    }
+    for (const key of rendered.keys()) {
+      if (!NAV_SECTION_KEYS.includes(key)) {
+        err('NAV-SYNC', `index.html: sección "${key}" en el sidebar no existe en js/nav-sections.js`);
+      }
+    }
+  }
+
+  // 2) Estanterías del dashboard: el <div class="sec-head"> de cada sección de
+  //    categoría debe decir lo mismo que CATEGORIES.
+  const { CATEGORIES, SUBCATEGORIES } = await import(pathToFileURL(path.join(DATA_DIR, 'catalog.js')).href);
+  for (const [key, cat] of Object.entries(CATEGORIES)) {
+    const section = html.match(
+      new RegExp(`<section class="section" data-key="${key}">\\s*<div class="sec-head">([^<]*)</div>`),
+    );
+    if (section && section[1].replace(/&amp;/g, '&').trim() !== cat.label) {
+      err('NAV-SYNC', `index.html: sección "${key}" titula "${section[1].trim()}", CATEGORIES dice "${cat.label}"`);
+    }
+  }
+
+  // Y las subsecciones de grammar contra SUBCATEGORIES.
+  for (const [key, label] of Object.entries(SUBCATEGORIES)) {
+    const sub = html.match(
+      new RegExp(`data-subcat="${key}">\\s*<div class="sec-head sec-head--sub">([^<]*)</div>`),
+    );
+    if (!sub) {
+      err('NAV-SYNC', `index.html: falta la subsección "${key}" (${label})`);
+    } else if (sub[1].replace(/&amp;/g, '&').trim() !== label) {
+      err('NAV-SYNC', `index.html: subsección "${key}" titula "${sub[1].trim()}", SUBCATEGORIES dice "${label}"`);
+    }
+  }
+
+  // 3) Espejo del script inline pre-paint (no puede importar módulos).
+  const inline = html.match(/var vs = \[([^\]]+)\]/)?.[1];
+  if (!inline) {
+    err('NAV-SYNC', 'index.html: no se encontró el array "vs" del script de early section detection');
+  } else {
+    const keys = [...inline.matchAll(/'([^']+)'/g)].map((m) => m[1]);
+    const missing = NAV_SECTION_KEYS.filter((k) => !keys.includes(k));
+    const extra = keys.filter((k) => !NAV_SECTION_KEYS.includes(k));
+    if (missing.length || extra.length) {
+      err('NAV-SYNC', `index.html "var vs": desincronizado con nav-sections.js${missing.length ? ` — falta [${missing}]` : ''}${extra.length ? ` — sobra [${extra}]` : ''}`);
+    }
+    if (keys[0] !== 'resumen') {
+      err('NAV-SYNC', `index.html "var vs": 'resumen' debe ir primero (el filtro usa indexOf > 0), va "${keys[0]}"`);
+    }
+  }
+}
+
+/**
  * Catálogo central (data/catalog.js, Fase 0 del plan de recategorización).
  * Valida integridad de rutas, unicidad de ids, y que los 34 ejercicios en
  * exercises/*.html tengan una entrada — sin huérfanos en ningún sentido.
@@ -166,7 +333,7 @@ async function validateCatalog() {
   const catalogPath = path.join(DATA_DIR, 'catalog.js');
   if (!existsSync(catalogPath)) return;
 
-  const { MODULES, TAGS, SUBCATEGORIES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT } = await import(pathToFileURL(catalogPath).href);
+  const { MODULES, TAGS, CATEGORIES, SUBCATEGORIES, PROGRESS_RULES, HUBFLOW_PASS_SCORE_PCT } = await import(pathToFileURL(catalogPath).href);
   const allTags = new Set([...TAGS.skill, ...TAGS.cefr, ...TAGS.mechanic, ...TAGS.theme]);
 
   const seenIds = new Set();
@@ -189,10 +356,17 @@ async function validateCatalog() {
     for (const t of m.tags || []) {
       if (!allTags.has(t)) err('CAT-TAG', `catalog.js[${m.id}]: tag "${t}" not in closed vocabulary`);
     }
+    // Sin esto, un typo en `category` deja el módulo sin estantería: no aparece
+    // en ninguna sección del dashboard y nadie se entera.
+    if (!CATEGORIES[m.category]) {
+      err('CAT-CATEGORY', `catalog.js[${m.id}]: category "${m.category}" no existe en CATEGORIES`);
+    }
     if (m.subcategory && !SUBCATEGORIES[m.subcategory]) {
       err('CAT-SUBCAT', `catalog.js[${m.id}]: unknown subcategory "${m.subcategory}"`);
     }
   }
+
+  await validateAnswerable(MODULES);
 
   const moduleIds = new Set(MODULES.map((module) => module.id));
   for (const module of MODULES) {
@@ -224,35 +398,9 @@ async function validateCatalog() {
     if (!moduleIds.has(contentId)) err('CAT-PROGRESS', `progress rule references unknown content "${contentId}"`);
   }
 
-  const emittedScoreKeys = new Set();
-  const exercisePaths = new Set(MODULES.filter((m) => !m.wip).map((module) => module.exercise.split('#')[0]));
-  for (const exercisePath of exercisePaths) {
-    const html = readFileSync(path.join(ROOT_DIR, exercisePath), 'utf8');
-    const dataImport = html.match(/import\s+\{[^}]*\b(?:CATEGORIES|LEVELS)\b[^}]*\}\s+from\s+['"]\.\.\/data\/([^'"]+)['"]/);
-    let categoryKeys = [];
-    if (dataImport) {
-      const dataModule = await import(pathToFileURL(path.join(DATA_DIR, dataImport[1])).href);
-      categoryKeys = Object.keys(dataModule.CATEGORIES || dataModule.LEVELS || {});
-    }
-    if (categoryKeys.length === 0) {
-      categoryKeys = [...html.matchAll(/data-cat=["']([^"']+)["']/g)].map((match) => match[1]);
-    }
-
-    for (const match of html.matchAll(/recordScore\(\s*`([^`]*\$\{currentCat\}[^`]*)`/g)) {
-      categoryKeys.forEach((category) => emittedScoreKeys.add(match[1].replace('${currentCat}', category)));
-    }
-
-    const scorePrefix = html.match(/scoreKeyPrefix:\s*['"]([^'"]+)['"]/)?.[1];
-    if (scorePrefix) categoryKeys.forEach((category) => emittedScoreKeys.add(`${scorePrefix}-${category}`));
-
-    const storagePrefix = html.match(/storagePrefix:\s*['"]([^'"]+)['"]/)?.[1];
-    if (storagePrefix && html.includes('SpellingEngine')) {
-      const modes = [...html.matchAll(/data-mode=["']([^"']+)["']/g)].map((match) => match[1]);
-      categoryKeys.forEach((category) => modes.forEach((mode) => emittedScoreKeys.add(`${storagePrefix}-${category}-${mode}`)));
-    } else if (storagePrefix && html.includes('FlashcardEngine')) {
-      categoryKeys.forEach((category) => emittedScoreKeys.add(`${storagePrefix}-${category}-quiz`));
-    }
-  }
+  // La derivación vive en scripts/lib/derive-catalog.mjs — la comparte
+  // sync-catalog.mjs, que además sabe corregir lo que aquí solo se reporta.
+  const emittedScoreKeys = await deriveEmittedScoreKeys(MODULES);
 
   const wipIds = new Set(MODULES.filter((m) => m.wip).map((m) => m.id));
   const declaredScoreKeys = new Set(Object.entries(PROGRESS_RULES)
@@ -264,6 +412,47 @@ async function validateCatalog() {
   }
   for (const key of declaredScoreKeys) {
     if (!emittedScoreKeys.has(key)) err('CAT-SCOREKEY', `progress score key "${key}" is not emitted by any exercise`);
+  }
+
+  // MODULE_DEPTH alimenta el "20 items · 2 categorías" que ve el usuario. Es
+  // auto-corregible, así que el error apunta al script en vez de pedir edición
+  // a mano (un conteo en duro ya se desincronizó en silencio antes — ver el
+  // comentario de vocabDepth() en catalog.js).
+  const { MODULE_DEPTH } = await import(pathToFileURL(catalogPath).href);
+  const facts = await deriveModuleFacts(MODULES);
+  for (const [id, fact] of facts) {
+    const depth = MODULE_DEPTH[id];
+    if (!fact.derivable || !depth) continue;
+    if (depth.items !== fact.items || depth.categories !== fact.categories) {
+      err('CAT-DEPTH', `catalog.js MODULE_DEPTH[${id}]: declara ${depth.items} items/${depth.categories} cats, data/*.js tiene ${fact.items}/${fact.categories} — corregir con "node scripts/sync-catalog.mjs"`);
+    }
+  }
+
+  // Los modos salen de los [data-mode] del ejercicio, no del engine: dentro de
+  // un mismo engine varían (flashcard va de 3 a 6), y en spelling los 4 niveles
+  // son [data-cat] — contarlos como modos duplicaba la cifra de categorías.
+  for (const [id, fact] of facts) {
+    if (fact.modes == null) continue;
+    const declarado = MODULE_DEPTH[id]?.modes;
+    if (declarado !== fact.modes) {
+      err('CAT-DEPTH', `catalog.js MODULE_DEPTH[${id}]: declara ${declarado ?? '(heredado del engine)'} modos, el ejercicio tiene ${fact.modes} — corregir con "node scripts/sync-catalog.mjs"`);
+    }
+  }
+
+  // LEARNING_PATHS (index.html) referencia ids de módulo a mano. Si se renombra
+  // o borra un módulo, la ruta apunta al vacío sin ruido en consola.
+  const indexHtml = readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
+  const pathsBlock = indexHtml.match(/const LEARNING_PATHS = \[([\s\S]*?)\n {2}\];/)?.[1];
+  if (!pathsBlock) {
+    err('CAT-PATHS', 'index.html: no se encontró LEARNING_PATHS para validar');
+  } else {
+    for (const entry of pathsBlock.matchAll(/modules:\s*\[([^\]]*)\]/g)) {
+      for (const [, id] of entry[1].matchAll(/'([^']+)'/g)) {
+        if (!moduleIds.has(id)) {
+          err('CAT-PATHS', `index.html LEARNING_PATHS: módulo "${id}" no existe en catalog.js`);
+        }
+      }
+    }
   }
 
   // Every exercises/*.html must have a catalog entry (no orphans in either direction).
@@ -284,6 +473,8 @@ async function run() {
   }
 
   await validateCatalog();
+  await validateNavSections();
+  validateBottomNavContract();
 
   console.log('============================================================');
   console.log('📊 HubFlow — CONTENT VALIDATION REPORT');

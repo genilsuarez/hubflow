@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natural Speech &amp; Listening Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.js"></script>
+<script src="../js/lp-platform-urls.js"></script>
+<script src="../js/lp-nav-icons.js"></script>
+<script src="../js/lp-guest-reset.js"></script>
+<script src="../js/lp-login.js"></script>
+<script src="../js/lp-nav-helpers.js"></script>
+<script src="../js/lp-about-content.js"></script>
+<script src="../js/lp-about.js"></script>
+<link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
+  --yellow-light:#2D2510;--purple-light:#221A30;--orange-light:#2D2510;--teal-light:#1A2D2D;
+--ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:var(--bg);
+}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.nav-back{font-weight:700;font-size:.85rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;min-height:44px;}
+.nav-back:hover{opacity:.7;}
+.nav-title{font-weight:800;font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--blue);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+.section-note{font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;line-height:1.5;}
+
+/* GENERIC PRONUNCIATION CARD (term + rule + example) */
+.pz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin:12px 0;}
+.pz-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:12px 14px;transition:border-color .2s;
+}
+.pz-card:hover{border-color:var(--blue);}
+.pz-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.pz-emoji{font-size:1.1rem;}
+.pz-term{font-weight:800;font-size:.86rem;}
+.pz-rule{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:6px;line-height:1.4;}
+.pz-example{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text);line-height:1.5;}
+
+/* Color accents by section */
+.pz-card.c-blue .pz-term{color:var(--blue-dark);}
+[data-theme="dark"] .pz-card.c-blue .pz-term{color:#7AC7FF;}
+.pz-card.c-teal .pz-term{color:var(--teal);}
+.pz-card.c-purple .pz-term{color:var(--purple);}
+.pz-card.c-green .pz-term{color:var(--green-dark);}
+[data-theme="dark"] .pz-card.c-green .pz-term{color:#6FE8A8;}
+.pz-card.c-yellow .pz-term{color:#8a6508;}
+[data-theme="dark"] .pz-card.c-yellow .pz-term{color:#E8C468;}
+.pz-card.c-red .pz-term{color:var(--red-dark);}
+.pz-card.c-orange .pz-term{color:var(--orange);}
+
+/* VOWEL CHART */
+.vowel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0;}
+.vowel-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;
+  padding:14px;text-align:center;
+}
+.vowel-ipa{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:1.15rem;color:var(--green-dark);margin-bottom:2px;}
+[data-theme="dark"] .vowel-ipa{color:#6FE8A8;}
+.vowel-key{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.vowel-examples{font-size:.74rem;line-height:1.5;color:var(--text);}
+
+/* INTONATION PATTERNS */
+.into-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0;}
+.into-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;}
+.into-arrow{font-size:1.3rem;margin-bottom:4px;}
+.into-label{font-weight:800;font-size:.8rem;color:var(--purple);margin-bottom:4px;}
+.into-rule{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:6px;line-height:1.4;}
+.into-example{font-size:.76rem;line-height:1.5;}
+
+/* -ED SOUND RULE BOX */
+.ed-box{background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:18px;margin:14px 0;}
+.ed-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.ed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.ed-card{padding:12px;border-radius:12px;border:1.5px solid var(--border);text-align:center;}
+.ed-sound{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:800;color:var(--orange);margin-bottom:4px;}
+.ed-after{font-size:.68rem;color:var(--muted);font-weight:600;margin-bottom:8px;}
+.ed-words{font-size:.72rem;line-height:1.6;}
+
+/* WORD LIST (tricky 50 style) */
+.word-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.word-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:12px 14px;}
+.word-card .wc-term{font-weight:800;font-size:.82rem;margin-bottom:2px;}
+.word-card .wc-ipa{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--red-dark);margin-bottom:4px;}
+.word-card .wc-note{font-size:.7rem;color:var(--muted);line-height:1.4;}
+
+/* TIP BOX */
+.tip-box{
+  background:var(--green-light);border:1.5px solid color-mix(in srgb, var(--green) 30%, transparent);
+  border-radius:12px;padding:14px 16px;margin:14px 0;
+}
+.tip-box .tp-title{font-weight:800;font-size:.76rem;color:var(--green-dark);margin-bottom:4px;}
+[data-theme="dark"] .tip-box .tp-title{color:#6FE8A8;}
+.tip-box .tp-body{font-size:.74rem;line-height:1.5;color:var(--text);}
+.tip-box.blue{background:var(--blue-light);border-color:color-mix(in srgb, var(--blue) 30%, transparent);}
+.tip-box.blue .tp-title{color:var(--blue-dark);}
+[data-theme="dark"] .tip-box.blue .tp-title{color:#7AC7FF;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .pz-grid{grid-template-columns:1fr 1fr;}
+  .vowel-grid{grid-template-columns:1fr 1fr;}
+  .into-grid{grid-template-columns:1fr;}
+  .ed-grid{grid-template-columns:1fr;}
+  .word-grid{grid-template-columns:1fr;}
+}
+@media(max-width:400px){
+  .pz-grid,.vowel-grid{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+
+</style>
+<link rel="stylesheet" href="../css/guide-layout.css">
+</head>
+<body>
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
+
+<nav class="nav-bar">
+  <a href="../index.html" class="nav-back">&larr; Back to HubFlow</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Natural Speech <span class="accent">&amp; Listening</span></h1>
+<p class="intro">How words blend, rise and fall in real conversation &mdash; connected speech, intonation, vowels, clusters, and the listening ear you need to catch it all.</p>
+
+<!-- CONNECTED SPEECH -->
+<h2 id="pron-connected">&#128279; Connected Speech &amp; Linking</h2>
+<p class="section-note">In fast, natural speech, words blend into each other. These reductions and links are everywhere in spoken English &mdash; even though we rarely write them this way.</p>
+<div class="pz-grid">
+  <div class="pz-card c-blue"><div class="pz-head"><span class="pz-emoji">🗣️</span><span class="pz-term">Wanna</span></div><div class="pz-rule">want to &rarr; /wɒnə/</div><div class="pz-example">I wanna go home.</div></div>
+  <div class="pz-card c-blue"><div class="pz-head"><span class="pz-emoji">🏃</span><span class="pz-term">Gonna</span></div><div class="pz-rule">going to &rarr; /ɡʌnə/</div><div class="pz-example">I'm gonna call her.</div></div>
+  <div class="pz-card c-blue"><div class="pz-head"><span class="pz-emoji">💪</span><span class="pz-term">Gotta</span></div><div class="pz-rule">got to / have to &rarr; /ɡɒtə/</div><div class="pz-example">I gotta leave now.</div></div>
+  <div class="pz-card c-blue"><div class="pz-head"><span class="pz-emoji">🤔</span><span class="pz-term">Shoulda / Coulda / Woulda</span></div><div class="pz-rule">should/could/would have &rarr; /-ə/</div><div class="pz-example">I shoulda known.</div></div>
+  <div class="pz-card c-blue"><div class="pz-head"><span class="pz-emoji">✋</span><span class="pz-term">Lemme / Gimme</span></div><div class="pz-rule">let me / give me &rarr; linked</div><div class="pz-example">Lemme think. Gimme a sec.</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">💡</span><span class="pz-term">Turn‿off</span></div><div class="pz-rule">consonant links to vowel</div><div class="pz-example">/tɜː.nɒf/ &mdash; sounds like "tur-noff"</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">🌙</span><span class="pz-term">Las(t) night</span></div><div class="pz-rule">elision: /t/ drops between consonants</div><div class="pz-example">/lɑːs naɪt/</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">🚫</span><span class="pz-term">Don'(t) be</span></div><div class="pz-rule">assimilation: /t/ &rarr; /p/ before /b/</div><div class="pz-example">/dəʊm biː/</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">🌄</span><span class="pz-term">Far‿away</span></div><div class="pz-rule">intrusive /r/ between vowels</div><div class="pz-example">/fɑː.rə.weɪ/ &mdash; "far-raway"</div></div>
+</div>
+
+<!-- INTONATION, STRESS & RHYTHM -->
+<h2 id="pron-intonation">&#128200; Intonation, Stress &amp; Rhythm</h2>
+<p class="section-note">Pitch carries meaning: the same words can sound like a question, a statement, or a surprise depending on how the voice moves.</p>
+<div class="into-grid">
+  <div class="into-card"><div class="into-arrow">&#8600;</div><div class="into-label">Falling</div><div class="into-rule">Statements &amp; wh-questions</div><div class="into-example">I'm going HOME. &#8595;<br>WHERE do you live? &#8595;</div></div>
+  <div class="into-card"><div class="into-arrow">&#8599;</div><div class="into-label">Rising</div><div class="into-rule">Yes/no questions</div><div class="into-example">Are you COMING? &#8593;<br>Is this YOURS? &#8593;</div></div>
+  <div class="into-card"><div class="into-arrow">&#8601;&#8599;</div><div class="into-label">Fall-rise</div><div class="into-rule">Uncertainty, "but&hellip;" implied</div><div class="into-example">I LIKE it&hellip; &#8595;&#8593; (but I'm not sure)</div></div>
+  <div class="into-card"><div class="into-arrow">&#8599;&#8601;</div><div class="into-label">Rise-fall</div><div class="into-rule">Surprise or strong feeling</div><div class="into-example">Really?! &#8593;&#8595; That's AMAZING!</div></div>
+  <div class="into-card"><div class="into-arrow">&#9989;</div><div class="into-label">Tag question (sure)</div><div class="into-rule">Falling tag = you expect agreement</div><div class="into-example">Nice day, ISN'T it? &#8595;</div></div>
+  <div class="into-card"><div class="into-arrow">&#128257;</div><div class="into-label">Echo question</div><div class="into-rule">Rising repeat = surprise/disbelief</div><div class="into-example">He did WHAT? &#8593;</div></div>
+</div>
+<div class="tip-box blue">
+  <div class="tp-title">&#128170; Content words vs function words</div>
+  <div class="tp-body">Nouns, main verbs, adjectives and adverbs carry the stress &mdash; articles, prepositions and pronouns stay weak and fast. <strong>I BOUGHT a NEW CAR today.</strong> English is <em>stress-timed</em>: the time between stressed syllables stays roughly equal, so unstressed syllables get squeezed in between.</div>
+</div>
+
+<!-- VOWELS & SCHWA -->
+<h2 id="pron-vowels">&#128266; Vowel Sounds &amp; the Schwa</h2>
+<p class="section-note">English has 12 pure vowel sounds &mdash; far more than the 5 Spanish vowels. The schwa /ə/ is the most common sound in the language.</p>
+<div class="vowel-grid">
+  <div class="vowel-card"><div class="vowel-ipa">/iː/</div><div class="vowel-key">fleece</div><div class="vowel-examples">see, tea, machine</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ɪ/</div><div class="vowel-key">kit</div><div class="vowel-examples">sit, gym, busy</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/e/</div><div class="vowel-key">dress</div><div class="vowel-examples">bed, head, said</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/æ/</div><div class="vowel-key">trap</div><div class="vowel-examples">cat, bad, have</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ɑː/</div><div class="vowel-key">palm</div><div class="vowel-examples">car, father, heart</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ɒ/</div><div class="vowel-key">lot</div><div class="vowel-examples">hot, dog, what</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ɔː/</div><div class="vowel-key">thought</div><div class="vowel-examples">law, door, more</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ʊ/</div><div class="vowel-key">foot</div><div class="vowel-examples">put, book, could</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/uː/</div><div class="vowel-key">goose</div><div class="vowel-examples">food, blue, shoe</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ʌ/</div><div class="vowel-key">strut</div><div class="vowel-examples">cup, love, blood</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ɜː/</div><div class="vowel-key">nurse</div><div class="vowel-examples">bird, word, learn</div></div>
+  <div class="vowel-card"><div class="vowel-ipa">/ə/</div><div class="vowel-key">schwa</div><div class="vowel-examples">about, banana</div></div>
+</div>
+<div class="pz-grid">
+  <div class="pz-card c-yellow"><div class="pz-head"><span class="pz-emoji">📖</span><span class="pz-term">About</span></div><div class="pz-rule">/ə&#712;baʊt/ &mdash; the "a" is barely there</div><div class="pz-example">a-BOUT</div></div>
+  <div class="pz-card c-yellow"><div class="pz-head"><span class="pz-emoji">🍌</span><span class="pz-term">Banana</span></div><div class="pz-rule">TWO schwas &mdash; first and last "a"</div><div class="pz-example">buh-NAH-nuh</div></div>
+  <div class="pz-card c-yellow"><div class="pz-head"><span class="pz-emoji">👨‍⚕️</span><span class="pz-term">Doctor</span></div><div class="pz-rule">the "or" becomes schwa</div><div class="pz-example">DOK-tuh, not dock-TOR</div></div>
+  <div class="pz-card c-yellow"><div class="pz-head"><span class="pz-emoji">🍫</span><span class="pz-term">Chocolate</span></div><div class="pz-rule">2 syllables &mdash; the "o" vanishes</div><div class="pz-example">CHOK-lit</div></div>
+  <div class="pz-card c-yellow"><div class="pz-head"><span class="pz-emoji">🤔</span><span class="pz-term">Interesting</span></div><div class="pz-rule">3 syllables, not 4</div><div class="pz-example">IN-truh-sting</div></div>
+  <div class="pz-card c-yellow"><div class="pz-head"><span class="pz-emoji">📸</span><span class="pz-term">Camera</span></div><div class="pz-rule">2 syllables &mdash; not "ca-me-ra"</div><div class="pz-example">CAM-ruh</div></div>
+</div>
+
+<!-- CONSONANT CLUSTERS & -ED -->
+<h2 id="pron-consonants">&#128292; Consonant Clusters &amp; -ED Endings</h2>
+<p class="section-note">English stacks consonants in ways Spanish doesn't &mdash; and the -ED ending never adds an extra syllable unless the verb already ends in /t/ or /d/.</p>
+<div class="pz-grid">
+  <div class="pz-card c-orange"><div class="pz-head"><span class="pz-emoji">🛣️</span><span class="pz-term">/str/</span></div><div class="pz-rule">3 consonants before a vowel</div><div class="pz-example">street, strong, struggle</div></div>
+  <div class="pz-card c-orange"><div class="pz-head"><span class="pz-emoji">🌸</span><span class="pz-term">/spr/</span></div><div class="pz-rule">lips move from /s/ to rounded /r/</div><div class="pz-example">spring, spray, sprout</div></div>
+  <div class="pz-card c-orange"><div class="pz-head"><span class="pz-emoji">3️⃣</span><span class="pz-term">/θr/</span></div><div class="pz-rule">tongue between teeth, then /r/</div><div class="pz-example">three, throw, threat</div></div>
+  <div class="pz-card c-orange"><div class="pz-head"><span class="pz-emoji">💰</span><span class="pz-term">/sts/</span></div><div class="pz-rule">3 final consonants &mdash; no extra vowel</div><div class="pz-example">costs, lists, tests</div></div>
+  <div class="pz-card c-orange"><div class="pz-head"><span class="pz-emoji">🧠</span><span class="pz-term">/ŋk/</span></div><div class="pz-rule">the "n" is actually /ŋ/</div><div class="pz-example">think, bank, drink</div></div>
+  <div class="pz-card c-orange"><div class="pz-head"><span class="pz-emoji">🥤</span><span class="pz-term">/dr/</span></div><div class="pz-rule">often sounds like /dʒr/ &mdash; "jrink"</div><div class="pz-example">drink, dream, drive</div></div>
+</div>
+<div class="ed-box">
+  <div class="ed-title">-ED Ending: 3 Sounds, Never a New Rule</div>
+  <div class="ed-grid">
+    <div class="ed-card"><div class="ed-sound">/t/</div><div class="ed-after">after voiceless p, k, f, s, sh, ch</div><div class="ed-words">walked, helped, washed</div></div>
+    <div class="ed-card"><div class="ed-sound">/d/</div><div class="ed-after">after vowels &amp; voiced consonants</div><div class="ed-words">played, called, lived</div></div>
+    <div class="ed-card"><div class="ed-sound">/ɪd/</div><div class="ed-after">only after /t/ or /d/ &mdash; extra syllable</div><div class="ed-words">wanted, needed, started</div></div>
+  </div>
+</div>
+
+<!-- TRICKY PRONUNCIATION -->
+<h2 id="pron-mispronunciations">&#9888;&#65039; Tricky Pronunciation</h2>
+<p class="section-note">These common words trip up learners because the spelling suggests one pronunciation and the spoken word does something else entirely.</p>
+<div class="pz-grid">
+  <div class="pz-card c-red"><div class="pz-head"><span class="pz-emoji">🛋️</span><span class="pz-term">Comfortable</span></div><div class="pz-rule">3 syllables, NOT 4</div><div class="pz-example">COMF-tuh-bul</div></div>
+  <div class="pz-card c-red"><div class="pz-head"><span class="pz-emoji">📅</span><span class="pz-term">Wednesday</span></div><div class="pz-rule">2 syllables &mdash; first D is silent</div><div class="pz-example">WENZ-day</div></div>
+  <div class="pz-card c-red"><div class="pz-head"><span class="pz-emoji">❄️</span><span class="pz-term">February</span></div><div class="pz-rule">first R often dropped</div><div class="pz-example">FEB-yoo-ree</div></div>
+  <div class="pz-card c-red"><div class="pz-head"><span class="pz-emoji">🤝</span><span class="pz-term">Colleague</span></div><div class="pz-rule">2 syllables, NOT 3</div><div class="pz-example">KOL-eeg</div></div>
+  <div class="pz-card c-red"><div class="pz-head"><span class="pz-emoji">🧍</span><span class="pz-term">Queue</span></div><div class="pz-rule">1 syllable &mdash; sounds like "cue"</div><div class="pz-example">kyoo</div></div>
+  <div class="pz-card c-red"><div class="pz-head"><span class="pz-emoji">🌪️</span><span class="pz-term">Chaos</span></div><div class="pz-rule">starts with /k/, not "ch"</div><div class="pz-example">KAY-oss</div></div>
+</div>
+<div class="word-grid">
+  <div class="word-card"><div class="wc-term">Clothes</div><div class="wc-ipa">/kləʊðz/</div><div class="wc-note">1 syllable &mdash; sounds like "cloze"</div></div>
+  <div class="word-card"><div class="wc-term">World</div><div class="wc-ipa">/wɜːld/</div><div class="wc-note">don't add an extra syllable</div></div>
+  <div class="word-card"><div class="wc-term">Iron</div><div class="wc-ipa">/ˈaɪən/</div><div class="wc-note">2 syllables &mdash; "EYE-un", R is silent</div></div>
+  <div class="word-card"><div class="wc-term">Bury</div><div class="wc-ipa">/ˈberi/</div><div class="wc-note">sounds like "berry"</div></div>
+  <div class="word-card"><div class="wc-term">Subtle</div><div class="wc-ipa">/ˈsʌtəl/</div><div class="wc-note">the B is silent &mdash; "SUT-ul"</div></div>
+  <div class="word-card"><div class="wc-term">Stomach</div><div class="wc-ipa">/ˈstʌmək/</div><div class="wc-note">"ch" is /k/ &mdash; "STUM-uk"</div></div>
+</div>
+
+<!-- LISTENING & SPELLING BY EAR -->
+<h2 id="listening">&#127911; Listening: Catching Near-Homophones</h2>
+<p class="section-note">Most listening mistakes aren't about vocabulary &mdash; they're about two words that sound almost identical. Train your ear on these traps first.</p>
+<div class="pz-grid">
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">🐑</span><span class="pz-term">Ship / Sheep</span></div><div class="pz-rule">/ɪ/ vs /iː/ &mdash; short vs long</div><div class="pz-example">I can see the ship on the horizon.</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">🍰</span><span class="pz-term">Three / Free / Tree</span></div><div class="pz-rule">/θ/ vs /f/ vs /t/</div><div class="pz-example">He ate three pieces of cake.</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">🏜️</span><span class="pz-term">Desert / Dessert</span></div><div class="pz-rule">stress moves: DES-ert vs des-SERT</div><div class="pz-example">The desert is very hot and dry.</div></div>
+  <div class="pz-card c-teal"><div class="pz-head"><span class="pz-emoji">👜</span><span class="pz-term">Employees / Employers</span></div><div class="pz-rule">same root, opposite meaning</div><div class="pz-example">Our department is hiring new employees.</div></div>
+</div>
+
+<h2 id="spelling-by-ear">&#9997;&#65039; Spelling by Ear: -ing / -ed</h2>
+<p class="section-note">Once you can hear a verb clearly, the spelling follows the same rules every time: double the final consonant, drop the silent -e, or just add the ending.</p>
+<div class="pz-grid">
+  <div class="pz-card c-purple"><div class="pz-head"><span class="pz-emoji">🏃</span><span class="pz-term">run &rarr; running</span></div><div class="pz-rule">CVC word: double the final consonant</div><div class="pz-example">run + n + ing</div></div>
+  <div class="pz-card c-purple"><div class="pz-head"><span class="pz-emoji">✍️</span><span class="pz-term">make &rarr; making</span></div><div class="pz-rule">silent -e: drop it before -ing</div><div class="pz-example">mak(e) + ing</div></div>
+  <div class="pz-card c-purple"><div class="pz-head"><span class="pz-emoji">😵</span><span class="pz-term">die &rarr; dying</span></div><div class="pz-rule">-ie ending: ie &rarr; y</div><div class="pz-example">d(ie&rarr;y) + ing</div></div>
+  <div class="pz-card c-purple"><div class="pz-head"><span class="pz-emoji">🎮</span><span class="pz-term">play &rarr; playing</span></div><div class="pz-rule">just add -ing, no change</div><div class="pz-example">play + ing</div></div>
+</div>
+<div class="tip-box">
+  <div class="tp-title">&#128161; Full spelling rules</div>
+  <div class="tp-body">For the complete -ED / -ING / -S spelling rule set (doubling, silent -e, y&rarr;i, exceptions), see the <a href="ed-rules.html" style="color:inherit;text-decoration:underline;">Word Endings guide</a>.</div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/pronunciation-study.html#pack=connected">&larr; Practice connected speech</a><br>
+  <a href="../exercises/pronunciation-study.html#pack=intonation">&larr; Practice intonation &amp; rhythm</a><br>
+  <a href="../exercises/pronunciation-study.html#pack=vowels">&larr; Practice vowels &amp; schwa</a><br>
+  <a href="../exercises/pronunciation-study.html#pack=consonants">&larr; Practice clusters &amp; -ED</a><br>
+  <a href="../exercises/pronunciation-study.html#pack=mispronunciations">&larr; Practice tricky words</a><br>
+  <a href="../exercises/listening.html">&larr; Practice listening</a><br>
+  <a href="../exercises/spelling-by-ear.html">&larr; Practice spelling by ear</a>
+</footer>
+
+</div>
+<script type="module" src="../js/guide-shell.js"></script>
+</body>
+</html>

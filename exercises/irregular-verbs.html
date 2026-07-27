@@ -198,8 +198,8 @@
         </div>
         <div class="write-feedback" id="writeFeedback"></div>
       </div>
-      <button class="lp-btn lp-btn--primary" id="writeCheck">Check ✓</button>
-      <button class="lp-btn lp-btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+      <button class="lp-btn lp-btn--primary" id="checkBtn">Check ✓</button>
+      <button class="lp-btn lp-btn--ghost" id="skipBtn" style="font-size:.72rem;">Skip →</button>
     </div>
 
     <!-- BATTLE -->
@@ -226,7 +226,7 @@
           </div>
         </div>
       </div>
-      <div class="battle-actions" id="battleActions">
+      <div class="battle-actions" id="battleClaim">
         <button class="lp-btn lp-btn--primary" id="bClaim1">1️⃣ P1</button>
         <button class="lp-btn lp-btn--ghost" id="bSkip">⏭️ Skip</button>
         <button class="lp-btn lp-btn--primary" id="bClaim2">2️⃣ P2</button>
@@ -286,6 +286,7 @@ function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
+  window.__syncBottomNavMode?.();
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'write') initWrite();
@@ -437,6 +438,7 @@ function initWrite() {
   writeIdx = 0; writeScore = 0;
   writeTotal = Math.min(10, writeDeck.length);
   document.querySelector('[data-area="write"]').classList.add('show');
+  window.__setupPracticeBottomNav?.();
   renderWrite();
 }
 
@@ -463,8 +465,8 @@ function checkAnswer(input, correct) {
   return acceptables.includes(norm) || norm === normalize(correct);
 }
 
-document.getElementById('writeCheck').addEventListener('click', doWriteCheck);
-document.getElementById('writeSkip').addEventListener('click', () => { writeIdx++; renderWrite(); });
+document.getElementById('checkBtn').addEventListener('click', doWriteCheck);
+document.getElementById('skipBtn').addEventListener('click', () => { writeIdx++; renderWrite(); });
 
 // Submit on Enter in last field
 document.getElementById('writePP').addEventListener('keydown', e => { if (e.key === 'Enter') doWriteCheck(); });
@@ -534,9 +536,8 @@ function showBattleCard() {
 
 function setBattlePhase(phase) {
   battle.phase = phase;
-  document.getElementById('battleActions').style.display = phase === 'claim' ? 'flex' : 'none';
-  document.getElementById('battleJudge').style.display = phase === 'judge' ? 'flex' : 'none';
-  document.getElementById('battleNext').style.display = phase === 'next' ? 'flex' : 'none';
+  // Canónico: ex-bottom-nav.js muestra el grupo de la fase y oculta los otros
+  window.__syncBattleActionVisibility?.(phase);
 
   const instructions = { claim: 'Press 1 or 2 to claim · S to skip', judge: `Player ${battle.claimer} says past & participle — correct?`, next: 'Press Space or → to continue' };
   document.getElementById('battleInstruction').textContent = instructions[phase] || '';

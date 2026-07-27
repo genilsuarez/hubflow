@@ -3,8 +3,8 @@
  */
 
 export const CATEGORIES = {
-  stress: {
-    label: 'Which syllable is stressed?',
+  commonWords: {
+    label: 'Everyday Words',
     icon: '🗣️',
     options: ['1st syllable', '2nd syllable', '3rd syllable'],
     items: [
@@ -28,6 +28,33 @@ export const CATEGORIES = {
       { sentence: 'establish', correct: '2nd syllable', explain: 'es-TAB-lish.' },
       { sentence: 'recommend', correct: '3rd syllable', explain: 're-com-MEND.' },
       { sentence: 'disagree', correct: '3rd syllable', explain: 'dis-a-GREE.' }
+    ]
+  },
+  shiftingStress: {
+    label: 'Stress-Shifting Families',
+    icon: '🔀',
+    options: ['1st syllable', '2nd syllable', '3rd syllable'],
+    items: [
+      { sentence: 'photograph', correct: '1st syllable', explain: 'PHO-to-graph — the root keeps the stress.' },
+      { sentence: 'photographic', correct: '3rd syllable', explain: 'pho-to-GRAPH-ic — the "-ic" suffix pulls the stress onto itself.' },
+      { sentence: 'economy', correct: '2nd syllable', explain: 'e-CON-o-my.' },
+      { sentence: 'economic', correct: '3rd syllable', explain: 'e-co-NOM-ic — "-ic" shifts the stress forward.' },
+      { sentence: 'democracy', correct: '2nd syllable', explain: 'de-MOC-ra-cy.' },
+      { sentence: 'democratic', correct: '3rd syllable', explain: 'de-mo-CRAT-ic — "-ic" shifts the stress forward.' },
+      { sentence: 'history', correct: '1st syllable', explain: 'HIS-to-ry.' },
+      { sentence: 'historic', correct: '2nd syllable', explain: 'his-TOR-ic — "-ic" shifts the stress forward.' },
+      { sentence: 'politics', correct: '1st syllable', explain: 'POL-i-tics.' },
+      { sentence: 'political', correct: '2nd syllable', explain: 'po-LIT-i-cal — "-ical" shifts the stress forward.' },
+      { sentence: 'industry', correct: '1st syllable', explain: 'IN-dus-try.' },
+      { sentence: 'industrial', correct: '2nd syllable', explain: 'in-DUS-tri-al — "-ial" shifts the stress forward.' },
+      { sentence: 'origin', correct: '1st syllable', explain: 'OR-i-gin.' },
+      { sentence: 'original', correct: '2nd syllable', explain: 'o-RIG-i-nal — "-al" shifts the stress forward.' },
+      { sentence: 'advantage', correct: '2nd syllable', explain: 'ad-VAN-tage.' },
+      { sentence: 'advantageous', correct: '3rd syllable', explain: 'ad-van-TA-geous — "-eous" shifts the stress forward.' },
+      { sentence: 'magic', correct: '1st syllable', explain: 'MA-gic.' },
+      { sentence: 'magician', correct: '2nd syllable', explain: 'ma-GI-cian — "-ian" shifts the stress forward.' },
+      { sentence: 'product', correct: '1st syllable', explain: 'PROD-uct.' },
+      { sentence: 'production', correct: '2nd syllable', explain: 'pro-DUC-tion — "-ion" shifts the stress forward.' }
     ]
   }
 };

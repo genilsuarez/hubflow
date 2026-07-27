@@ -33,6 +33,7 @@ css/
   *-shell.css       — Per-engine-family styles
 js/
   *-engine.js       — One engine per exercise family
+  nav-sections.js   — Secciones de nav (fuente única: index.html + exercise-shell.js)
   exercise-shell.js — Sidebar drawer, header; calls ex-bottom-nav.js
   ex-bottom-nav.js    — Bottom nav canonical (mirrors FluentFlow game-controls)
   utils.js          — shuffle, Timer, recordScore, progress tracking, header stats
@@ -50,7 +51,9 @@ lp-guest-reset.js   — Guest/logout at repo root (copy of scripts/)
 docs/
   mi-progreso-decisions.md  — Learning paths design decisions
 scripts/
-  validate-content.js       — Validates data/*.js before deploy (blocking)
+  validate-content.js       — Validates data/*.js before deploy (blocking, runs in CI)
+  sync-catalog.mjs          — Recomputes catalog.js derived values from data/*.js
+  lib/derive-catalog.mjs    — Shared derivation logic (used by both of the above)
   analyze-content.mjs       — Content analysis
   tmp/                      — Temporary scripts (gitignored)
 build.sh            — Commit + push + wait for CI Validate/CD Deploy
@@ -76,6 +79,60 @@ Do not use `npx serve` or `python -m http.server` on separate ports — only `lo
 - Execute with: `node scripts/<name>.js` or `node scripts/tmp/<name>.js`
 - Allowed direct commands: `learnctl start` (from `Learn/` root), `git`, simple shell utils
 - Avoid `npx serve` / `python -m http.server` on per-app ports — use the gateway at `localhost:3000`
+
+## catalog.js — qué es derivado y qué es a mano
+
+`data/catalog.js` es el índice (metadata, navegación, contrato de progreso). El
+contenido real vive en `data/<ejercicio>.js` (`export const CATEGORIES`).
+
+Dos valores de catalog.js **no se editan a mano** — se calculan desde `data/*.js`:
+
+| Valor | Qué es |
+|---|---|
+| `MODULE_DEPTH[id].items` / `.categories` | el "20 items · 2 categorías" que ve el usuario |
+| nombres de subcategoría en `PROGRESS_RULES` | claves de `localStorage` que definen si el módulo está completado |
+
+**Al renombrar, dividir o agregar una subcategoría en un data file:**
+
+```bash
+node scripts/sync-catalog.mjs
+```
+
+`validate-content.js` falla con `CAT-DEPTH` / `CAT-SCOREKEY` si quedan
+desfasados, y corre bloqueante en CI y en `build.sh`. Sin ese paso, renombrar una
+categoría rompe en silencio el progreso guardado de los usuarios.
+
+No derivable (se mantiene a mano): `engine`, `hasBattle`, `modes`, y los módulos
+cuyo data file no expone `CATEGORIES`/`LEVELS` (hoy solo `irregular-verbs`).
+
+## Categorías
+
+`CATEGORIES` en `data/catalog.js` es el registro de las 4 categorías top-level
+(el valor de `category` en cada módulo): label, clase de spine y token de color.
+Usar el helper `catColor(key, soft?)` en vez de escribir `var(--lp-cat-*)`.
+
+Antes el label estaba en 3 sitios y los colores en 4 mapas de `index.html` (dos
+de ellos copia literal uno del otro). Guards: `CAT-CATEGORY` valida el `category`
+de cada módulo; `NAV-SYNC` valida los títulos de estantería y subsección contra
+`CATEGORIES` / `SUBCATEGORIES`.
+
+## Secciones de navegación
+
+`js/nav-sections.js` es la fuente única de las 8 secciones del sidebar; las 4 de
+categoría toman su label de `CATEGORIES`. La consumen `index.html`
+(`VALID_SECTIONS`, `CATALOG_SECTIONS`, `OVERVIEW_SECTIONS`) y
+`js/exercise-shell.js` (render + `VALID_BACK_SECTIONS`).
+
+Dos sitios **no** pueden importarla y son espejos obligados — ambos validados
+con `NAV-SYNC`, que falla el build si divergen:
+
+| Sitio | Por qué es espejo |
+|---|---|
+| Sidebar estático de `index.html` | se pinta antes de que corra el JS |
+| `var vs = [...]` en el script inline | corre antes de los módulos ES (evita el flash de sección) |
+
+Al agregar/renombrar una sección: editar `nav-sections.js` **y** los dos espejos.
+`node scripts/validate-content.js` dice exactamente cuál quedó desfasado.
 
 ## Categories and CEFR levels
 
@@ -174,6 +231,28 @@ Imported via `@import` in `css/components.css` (all exercise pages load it).
 | Standalone + fc-nav | confusing-words, irregular-verbs, phonics, phrasal-verbs, prepositions, tenses, verb-chunks, word-formation | study fc-nav hoisted; mode-specific profile |
 
 `exercise-shell.js` calls `initBottomNav()` on load; engines call `window.__syncBottomNavMode?.()` on mode switches. Typed/dictation engines also call `setupPracticeBottomNav()` / `setPracticeBottomNav()`.
+
+### Botones de acción: siempre en la barra, nunca en el contenido
+
+Un botón de acción (comprobar / saltar / siguiente) **no se deja suelto dentro de
+`[data-area]`** — se iza a `#exBottomNav`. Dos formas:
+
+| Caso | Cómo |
+|---|---|
+| Modo de práctica con IDs canónicos | usar `checkBtn` / `nextBtn` / `hintBtn` / `skipBtn` y llamar `window.__setupPracticeBottomNav?.()` al mostrar el área |
+| Botón propio de un modo (ej. `sortCheck`) | crearlo fuera de `[data-area]` y colocarlo con `window.__insertInBottomNav?.(btn)` |
+| Battle | los 3 grupos **deben** llamarse `battleClaim` / `battleJudge` / `battleNext`, y la fase se cambia con `window.__syncBattleActionVisibility?.(phase)` — no togglear `style.display` a mano |
+
+El guard `NAV-BTN` falla si un grupo de battle usa otro id o si aparece un botón
+de comprobar con id propio sin `__insertInBottomNav`.
+
+En páginas **multi-modo** (phrasal-verbs, verb-chunks, irregular-verbs) el
+`#checkBtn` vive dentro de `[data-area="write"]`. `ex-bottom-nav.js` memoriza esa
+área en `data-owner-area` la primera vez, porque el hoist saca el botón de ahí:
+
+- `resolveBottomNavProfile()` solo devuelve `practice` si el área de origen está visible — si no, Study perdería su navegación de tarjetas.
+- `PRACTICE_NAV_IDS` oculta check/skip/hint fuera de `practice` (simétrico de `STUDY_NAV_IDS`).
+- `setupPracticeBottomNav()` solo adopta los botones de la **misma** área, para no reestilizar el `#nextBtn` de Study.
 
 ## Deploy
 

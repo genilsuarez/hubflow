@@ -12,10 +12,7 @@ export const CATEGORIES = {
       { verb: "wake up", ipa: "/weɪk ʌp/",     particle: "up",    base: "wake",    es: "despertarse",         example: "I wake up at 7 every morning.",            gap: "I ___ ___ at 7 every morning." },
       { verb: "clean up", ipa: "/kliːn ʌp/",    particle: "up",    base: "clean",   es: "limpiar",             example: "She cleans up her room every weekend.",    gap: "She ___ ___ her room every weekend." },
       { verb: "turn on", ipa: "/tɜːrn ɒn/",     particle: "on",    base: "turn",    es: "encender",            example: "Can you turn on the lights?",              gap: "Can you ___ ___ the lights?" },
-      { verb: "turn off", ipa: "/tɜːrn ɒf/",    particle: "off",   base: "turn",    es: "apagar",              example: "Turn off the TV before bed.",              gap: "___ ___ the TV before bed." },
-      { verb: "pick up", ipa: "/pɪk ʌp/",     particle: "up",    base: "pick",    es: "recoger / levantar",  example: "I'll pick up the kids from school.",       gap: "I'll ___ ___ the kids from school." },
       { verb: "put on", ipa: "/pʊt ɒn/",      particle: "on",    base: "put",     es: "ponerse (ropa)",      example: "Put on your jacket, it's cold.",           gap: "___ ___ your jacket, it's cold." },
-      { verb: "take off", ipa: "/teɪk ɒf/",    particle: "off",   base: "take",    es: "quitarse (ropa)",     example: "Take off your shoes at the door.",         gap: "___ ___ your shoes at the door." },
       { verb: "throw away", ipa: "/θroʊ əˈweɪ/",  particle: "away",  base: "throw",   es: "tirar / botar",       example: "Don't throw away that box.",               gap: "Don't ___ ___ that box." },
       { verb: "look for", ipa: "/lʊk fɔːr/",    particle: "for",   base: "look",    es: "buscar",              example: "I'm looking for my keys.",                 gap: "I'm ___ ___ my keys." },
       { verb: "find out", ipa: "/faɪnd aʊt/",    particle: "out",   base: "find",    es: "descubrir / enterarse", example: "I found out the truth yesterday.",       gap: "I ___ ___ the truth yesterday." },
@@ -25,6 +22,13 @@ export const CATEGORIES = {
       { verb: "stand up", ipa: "/stænd ʌp/",    particle: "up",    base: "stand",   es: "ponerse de pie",      example: "Stand up when the teacher enters.",        gap: "___ ___ when the teacher enters." },
       { verb: "go out", ipa: "/ɡoʊ aʊt/",      particle: "out",   base: "go",      es: "salir",               example: "We're going out tonight.",                 gap: "We're ___ ___ tonight." },
       { verb: "run out", ipa: "/rʌn aʊt/",     particle: "out",   base: "run",     es: "quedarse sin",        example: "We've run out of milk.",                   gap: "We've ___ ___ of milk." },
+      { verb: "wash up", ipa: "/wɒʃ ʌp/", particle: "up", base: "wash", es: "fregar los platos", example: "I always wash up after dinner.", gap: "I always ___ ___ after dinner." },
+      { verb: "tidy up", ipa: "/ˈtaɪdi ʌp/", particle: "up", base: "tidy", es: "ordenar / recoger", example: "Please tidy up your room before we leave.", gap: "Please ___ ___ your room before we leave." },
+      { verb: "put away", ipa: "/pʊt əˈweɪ/", particle: "away", base: "put", es: "guardar en su sitio", example: "Put away the clean clothes, please.", gap: "___ ___ the clean clothes, please." },
+      { verb: "hang up", ipa: "/hæŋ ʌp/", particle: "up", base: "hang", es: "colgar (el teléfono)", example: "She hung up before I could explain.", gap: "She hung ___ before I could explain." },
+      { verb: "lie down", ipa: "/laɪ daʊn/", particle: "down", base: "lie", es: "tumbarse", example: "I need to lie down for ten minutes.", gap: "I need to ___ ___ for ten minutes." },
+      { verb: "take out", ipa: "/teɪk aʊt/", particle: "out", base: "take", es: "sacar (la basura)", example: "Don't forget to take out the rubbish.", gap: "Don't forget to ___ ___ the rubbish." },
+      { verb: "switch on", ipa: "/swɪtʃ ɒn/", particle: "on", base: "switch", es: "encender (un aparato)", example: "Switch on the heating, it is freezing.", gap: "___ ___ the heating, it is freezing." }
     ]
   },
   work: {
@@ -43,9 +47,14 @@ export const CATEGORIES = {
       { verb: "bring up", ipa: "/brɪŋ ʌp/",    particle: "up",    base: "bring",   es: "mencionar / plantear", example: "He brought up an interesting point.",     gap: "He ___ ___ an interesting point." },
       { verb: "come up with", ipa: "/kʌm ʌp wɪð/", particle: "up with", base: "come", es: "idear / proponer",    example: "She came up with a great idea.",           gap: "She ___ ___ ___ a great idea." },
       { verb: "keep up with", ipa: "/kiːp ʌp wɪð/", particle: "up with", base: "keep", es: "mantenerse al día",   example: "It's hard to keep up with the news.",     gap: "It's hard to ___ ___ ___ the news." },
-      { verb: "go over", ipa: "/ɡoʊ ˈoʊvər/",     particle: "over",  base: "go",      es: "repasar / revisar",   example: "Let's go over the plan again.",            gap: "Let's ___ ___ the plan again." },
-      { verb: "work out", ipa: "/wɜːrk aʊt/",    particle: "out",   base: "work",    es: "resolver / funcionar", example: "It'll work out in the end.",              gap: "It'll ___ ___ in the end." },
       { verb: "call off", ipa: "/kɔːl ɒf/",    particle: "off",   base: "call",    es: "cancelar",            example: "They called off the event.",               gap: "They ___ ___ the event." },
+      { verb: "draw up", ipa: "/drɔː ʌp/", particle: "up", base: "draw", es: "redactar (un documento)", example: "Legal will draw up the contract tomorrow.", gap: "Legal will ___ ___ the contract tomorrow." },
+      { verb: "fill in", ipa: "/fɪl ɪn/", particle: "in", base: "fill", es: "rellenar (un formulario)", example: "Fill in this form before the interview.", gap: "___ ___ this form before the interview." },
+      { verb: "follow up", ipa: "/ˈfɒloʊ ʌp/", particle: "up", base: "follow", es: "dar seguimiento", example: "I'll follow up with the client on Monday.", gap: "I'll ___ ___ with the client on Monday." },
+      { verb: "lay off", ipa: "/leɪ ɒf/", particle: "off", base: "lay", es: "despedir (por recorte)", example: "The company laid off thirty people.", gap: "The company laid ___ thirty people." },
+      { verb: "scale up", ipa: "/skeɪl ʌp/", particle: "up", base: "scale", es: "escalar / ampliar", example: "We need to scale up production this quarter.", gap: "We need to ___ ___ production this quarter." },
+      { verb: "sign off", ipa: "/saɪn ɒf/", particle: "off", base: "sign", es: "dar el visto bueno", example: "The director has to sign off on the budget.", gap: "The director has to ___ ___ on the budget." },
+      { verb: "run by", ipa: "/rʌn baɪ/", particle: "by", base: "run", es: "consultar con alguien", example: "Let me run this by my manager first.", gap: "Let me ___ this ___ my manager first." }
     ]
   },
   relationships: {
@@ -65,6 +74,13 @@ export const CATEGORIES = {
       { verb: "hang out", ipa: "/hæŋ aʊt/",    particle: "out",   base: "hang",    es: "pasar el rato",       example: "We hang out every weekend.",               gap: "We ___ ___ every weekend." },
       { verb: "put up with", ipa: "/pʊt ʌp wɪð/", particle: "up with", base: "put",   es: "aguantar / tolerar",  example: "I can't put up with this noise.",          gap: "I can't ___ ___ ___ this noise." },
       { verb: "show off", ipa: "/ʃoʊ ɒf/",    particle: "off",   base: "show",    es: "presumir / lucirse",  example: "He's always showing off.",                 gap: "He's always ___ ___." },
+      { verb: "settle down", ipa: "/ˈsɛtəl daʊn/", particle: "down", base: "settle", es: "sentar cabeza", example: "They settled down after twenty years of travelling.", gap: "They ___ ___ after twenty years of travelling." },
+      { verb: "take after", ipa: "/teɪk ˈɑːftər/", particle: "after", base: "take", es: "parecerse a (un familiar)", example: "She takes after her grandmother.", gap: "She ___ ___ her grandmother." },
+      { verb: "open up", ipa: "/ˈoʊpən ʌp/", particle: "up", base: "open", es: "abrirse / sincerarse", example: "It took him months to open up about it.", gap: "It took him months to ___ ___ about it." },
+      { verb: "drift apart", ipa: "/drɪft əˈpɑːrt/", particle: "apart", base: "drift", es: "distanciarse poco a poco", example: "We drifted apart after university.", gap: "We ___ ___ after university." },
+      { verb: "fall for", ipa: "/fɔːl fɔːr/", particle: "for", base: "fall", es: "enamorarse de", example: "He fell for her the moment they met.", gap: "He fell ___ her the moment they met." },
+      { verb: "stand by", ipa: "/stænd baɪ/", particle: "by", base: "stand", es: "apoyar incondicionalmente", example: "She stood by him through everything.", gap: "She stood ___ him through everything." },
+      { verb: "split up", ipa: "/splɪt ʌp/", particle: "up", base: "split", es: "separarse (pareja)", example: "They split up last spring.", gap: "They ___ ___ last spring." }
     ]
   },
   travel: {
@@ -84,6 +100,13 @@ export const CATEGORIES = {
       { verb: "pull over", ipa: "/pʊl ˈoʊvər/",   particle: "over",  base: "pull",    es: "orillarse / detenerse", example: "The police told him to pull over.",      gap: "The police told him to ___ ___." },
       { verb: "look around", ipa: "/lʊk əˈraʊnd/", particle: "around", base: "look",   es: "mirar alrededor / recorrer", example: "Let's look around the city.",      gap: "Let's ___ ___ the city." },
       { verb: "head off", ipa: "/hɛd ɒf/",    particle: "off",   base: "head",    es: "irse / dirigirse",    example: "We should head off before dark.",           gap: "We should ___ ___ before dark." },
+      { verb: "set out", ipa: "/sɛt aʊt/", particle: "out", base: "set", es: "ponerse en camino", example: "We set out before sunrise.", gap: "We ___ ___ before sunrise." },
+      { verb: "stop over", ipa: "/stɒp ˈoʊvər/", particle: "over", base: "stop", es: "hacer escala", example: "We stopped over in Lisbon for a night.", gap: "We ___ ___ in Lisbon for a night." },
+      { verb: "get in", ipa: "/ɡɛt ɪn/", particle: "in", base: "get", es: "llegar (un transporte)", example: "The train gets in at 9:15.", gap: "The train ___ ___ at 9:15." },
+      { verb: "see off", ipa: "/siː ɒf/", particle: "off", base: "see", es: "despedir en la estación", example: "They came to see us off at the airport.", gap: "They came to ___ us ___ at the airport." },
+      { verb: "pull in", ipa: "/pʊl ɪn/", particle: "in", base: "pull", es: "entrar y parar (vehículo)", example: "The bus pulled in ten minutes late.", gap: "The bus ___ ___ ten minutes late." },
+      { verb: "put up", ipa: "/pʊt ʌp/", particle: "up", base: "put", es: "alojar a alguien", example: "My cousin can put us up for a week.", gap: "My cousin can ___ us ___ for a week." },
+      { verb: "touch down", ipa: "/tʌtʃ daʊn/", particle: "down", base: "touch", es: "aterrizar", example: "The flight touched down at midnight.", gap: "The flight ___ ___ at midnight." }
     ]
   },
   getVerbs: {
@@ -102,6 +125,14 @@ export const CATEGORIES = {
       { verb: "get out of", ipa: "/ɡɛt aʊt ɒv/",  particle: "out of", base: "get", es: "librarse de (una obligación)", example: "He got out of doing the dishes.",     gap: "He ___ ___ ___ doing the dishes." },
       { verb: "get across", ipa: "/ɡɛt əˈkrɒs/",  particle: "across", base: "get", es: "hacer entender (una idea)", example: "I couldn't get my point across.",       gap: "I couldn't ___ my point ___." },
       { verb: "get together", ipa: "/ɡɛt təˈɡɛðər/",particle: "together",base: "get",es: "reunirse",                 example: "Let's get together this weekend.",      gap: "Let's ___ ___ this weekend." },
+      { verb: "get ahead", ipa: "/ɡɛt əˈhɛd/", particle: "ahead", base: "get", es: "progresar / avanzar", example: "She works late to get ahead at work.", gap: "She works late to ___ ___ at work." },
+      { verb: "get at", ipa: "/ɡɛt æt/", particle: "at", base: "get", es: "insinuar / dar a entender", example: "What exactly are you getting at?", gap: "What exactly are you ___ ___?" },
+      { verb: "get behind", ipa: "/ɡɛt bɪˈhaɪnd/", particle: "behind", base: "get", es: "retrasarse", example: "I got behind with the reading.", gap: "I got ___ with the reading." },
+      { verb: "get into", ipa: "/ɡɛt ˈɪntuː/", particle: "into", base: "get", es: "aficionarse a", example: "She got into rock climbing last year.", gap: "She got ___ rock climbing last year." },
+      { verb: "get round to", ipa: "/ɡɛt raʊnd tuː/", particle: "round to", base: "get", es: "encontrar el momento de", example: "I must get round to calling him.", gap: "I must ___ ___ ___ calling him." },
+      { verb: "get away with", ipa: "/ɡɛt əˈweɪ wɪð/", particle: "away with", base: "get", es: "salirse con la suya", example: "You can't get away with cheating here.", gap: "You can't ___ ___ ___ cheating here." },
+      { verb: "get on with", ipa: "/ɡɛt ɒn wɪð/", particle: "on with", base: "get", es: "seguir con (una tarea)", example: "Let me get on with my work.", gap: "Let me ___ ___ ___ my work." },
+      { verb: "get down", ipa: "/ɡɛt daʊn/", particle: "down", base: "get", es: "deprimir a alguien", example: "This grey weather really gets me down.", gap: "This grey weather really ___ me ___." }
     ]
   },
   food: {
@@ -118,14 +149,24 @@ export const CATEGORIES = {
       { verb: "polish off", ipa: "/ˈpɒlɪʃ ɒf/",  particle: "off",   base: "polish",  es: "terminarse (comida) rápido", example: "They polished off the whole pizza.",   gap: "They ___ ___ the whole pizza." },
       { verb: "live on", ipa: "/lɪv ɒn/",     particle: "on",    base: "live",    es: "alimentarse principalmente de", example: "Students often live on instant noodles.", gap: "Students often ___ ___ instant noodles." },
       { verb: "whip up", ipa: "/wɪp ʌp/",     particle: "up",    base: "whip",    es: "preparar algo rápido",      example: "She whipped up a quick dinner.",        gap: "She ___ ___ a quick dinner." },
+      { verb: "pig out", ipa: "/pɪɡ aʊt/",     particle: "out",   base: "pig",   es: "comer en exceso",     example: "We pigged out on pizza last night.", gap: "We pigged ___ on pizza last night." },
+      { verb: "wash down", ipa: "/wɒʃ daʊn/",  particle: "down",  base: "wash",  es: "tragar con bebida",   example: "He washed the sandwich down with coffee.", gap: "He washed the sandwich ___ with coffee." },
+      { verb: "tuck in", ipa: "/tʌk ɪn/", particle: "in", base: "tuck", es: "empezar a comer con ganas", example: "Tuck in before it gets cold!", gap: "___ ___ before it gets cold!" },
+      { verb: "dig in", ipa: "/dɪɡ ɪn/", particle: "in", base: "dig", es: "atacar la comida", example: "Everyone dug in as soon as it arrived.", gap: "Everyone dug ___ as soon as it arrived." },
+      { verb: "pick at", ipa: "/pɪk æt/", particle: "at", base: "pick", es: "picotear sin ganas", example: "She just picked at her salad.", gap: "She just ___ ___ her salad." },
+      { verb: "knock back", ipa: "/nɒk bæk/", particle: "back", base: "knock", es: "beberse de un trago", example: "He knocked back his coffee and left.", gap: "He ___ ___ his coffee and left." },
+      { verb: "snack on", ipa: "/snæk ɒn/", particle: "on", base: "snack", es: "picar entre horas", example: "I snack on almonds in the afternoon.", gap: "I ___ ___ almonds in the afternoon." },
+      { verb: "boil over", ipa: "/bɔɪl ˈoʊvər/", particle: "over", base: "boil", es: "rebosar al hervir", example: "Watch the milk — it will boil over.", gap: "Watch the milk — it will ___ ___." },
+      { verb: "throw together", ipa: "/θroʊ təˈɡɛðər/", particle: "together", base: "throw", es: "improvisar (una comida)", example: "I threw together a pasta in ten minutes.", gap: "I threw ___ a pasta in ten minutes." },
+      { verb: "chop up", ipa: "/tʃɒp ʌp/", particle: "up", base: "chop", es: "trocear", example: "Chop up the onions first.", gap: "___ ___ the onions first." }
     ]
   },
   turn: {
     label: "'Turn' Verbs",
     icon: '🔄',
     items: [
-      { verb: "turn up", ipa: "/tɜːrn ʌp/",     particle: "up",   base: "turn", es: "aparecer / subir volumen",     example: "Turn up the music!",                 gap: "___ ___ the music!" },
-      { verb: "turn down", ipa: "/tɜːrn daʊn/",   particle: "down", base: "turn", es: "rechazar / bajar volumen",     example: "Turn down the TV, please.",          gap: "___ ___ the TV, please." },
+      { verb: "turn up", ipa: "/tɜːrn ʌp/",     particle: "up",   base: "turn", es: "subir el volumen",     example: "Turn up the music!",                 gap: "___ ___ the music!" },
+      { verb: "turn down", ipa: "/tɜːrn daʊn/",   particle: "down", base: "turn", es: "bajar el volumen",     example: "Turn down the TV, please.",          gap: "___ ___ the TV, please." },
       { verb: "turn into", ipa: "/tɜːrn ˈɪntuː/",   particle: "into", base: "turn", es: "convertirse en",               example: "The caterpillar turned into a butterfly.", gap: "The caterpillar ___ ___ a butterfly." },
       { verb: "turn out", ipa: "/tɜːrn aʊt/",    particle: "out",  base: "turn", es: "resultar (ser)",               example: "The party turned out great.",        gap: "The party ___ ___ great." },
       { verb: "turn back", ipa: "/tɜːrn bæk/",   particle: "back", base: "turn", es: "regresar / dar la vuelta",     example: "It's too dangerous, let's turn back.", gap: "It's too dangerous, let's ___ ___." },
@@ -134,6 +175,16 @@ export const CATEGORIES = {
       { verb: "turn against", ipa: "/tɜːrn əˈɡɛnst/", particle: "against", base: "turn", es: "ponerse en contra de",   example: "His friends turned against him.",    gap: "His friends ___ ___ him." },
       { verb: "turn off", ipa: "/tɜːrn ɒf/",    particle: "off",  base: "turn", es: "apagar / desagradar",          example: "That comment really turned me off.", gap: "That comment really ___ me ___." },
       { verb: "turn to", ipa: "/tɜːrn tuː/",     particle: "to",   base: "turn", es: "recurrir a",                   example: "She turned to her sister for advice.", gap: "She ___ ___ her sister for advice." },
+      { verb: "turn in", ipa: "/tɜːrn ɪn/",       particle: "in",   base: "turn", es: "entregar (un trabajo)",     example: "Please turn in your essay by Friday.", gap: "Please turn ___ your essay by Friday." },
+      { verb: "turn around", ipa: "/tɜːrn əˈraʊnd/", particle: "around", base: "turn", es: "dar la vuelta / enderezar", example: "The new manager turned the company around.", gap: "The new manager turned the company ___." },
+      { verb: "turn up", ipa: "/tɜːrn ʌp/", particle: "up", base: "turn", es: "aparecer (sin avisar)", example: "He turned up two hours late.", gap: "He ___ ___ two hours late." },
+      { verb: "turn down", ipa: "/tɜːrn daʊn/", particle: "down", base: "turn", es: "rechazar (una oferta)", example: "She turned down the job offer.", gap: "She ___ ___ the job offer." },
+      { verb: "turn out", ipa: "/tɜːrn aʊt/", particle: "out", base: "turn", es: "acudir / presentarse", example: "Hundreds turned out for the march.", gap: "Hundreds ___ ___ for the march." },
+      { verb: "turn off", ipa: "/tɜːrn ɒf/", particle: "off", base: "turn", es: "desviarse (de una vía)", example: "Turn off at the next junction.", gap: "___ ___ at the next junction." },
+      { verb: "turn over", ipa: "/tɜːrn ˈoʊvər/", particle: "over", base: "turn", es: "facturar (negocio)", example: "The firm turns over two million a year.", gap: "The firm ___ ___ two million a year." },
+      { verb: "turn in", ipa: "/tɜːrn ɪn/", particle: "in", base: "turn", es: "delatar / entregar a la policía", example: "He turned himself in the next morning.", gap: "He ___ himself ___ the next morning." },
+      { verb: "turn to", ipa: "/tɜːrn tuː/", particle: "to", base: "turn", es: "pasar a (una página)", example: "Turn to page forty, please.", gap: "___ ___ page forty, please." },
+      { verb: "turn back", ipa: "/tɜːrn bæk/", particle: "back", base: "turn", es: "hacer retroceder a alguien", example: "The guards turned back the crowd.", gap: "The guards ___ ___ the crowd." }
     ]
   },
   advanced: {
@@ -150,7 +201,16 @@ export const CATEGORIES = {
       { verb: "single out", ipa: "/ˈsɪŋɡəl aʊt/",    particle: "out",     base: "single",es: "señalar / destacar a alguien", example: "The teacher singled her out for praise.", gap: "The teacher ___ her ___ for praise." },
       { verb: "weigh up", ipa: "/weɪ ʌp/",      particle: "up",      base: "weigh", es: "sopesar (opciones)",          example: "We need to weigh up our options.",    gap: "We need to ___ ___ our options." },
       { verb: "branch out", ipa: "/brɑːntʃ aʊt/",    particle: "out",     base: "branch",es: "diversificarse / expandirse", example: "The company is branching out into new markets.", gap: "The company is ___ ___ into new markets." },
+      { verb: "gloss over", ipa: "/ɡlɒs ˈoʊvər/",  particle: "over",    base: "gloss", es: "pasar por alto",              example: "The report glosses over the main risks.", gap: "The report glosses ___ the main risks." },
       { verb: "hold back", ipa: "/hoʊld bæk/",     particle: "back",    base: "hold",  es: "contenerse / reprimir",       example: "She held back her tears.",            gap: "She ___ ___ her tears." },
+      { verb: "bank on", ipa: "/bæŋk ɒn/", particle: "on", base: "bank", es: "contar con (algo seguro)", example: "Don't bank on the funding arriving early.", gap: "Don't ___ ___ the funding arriving early." },
+      { verb: "bear out", ipa: "/bɛər aʊt/", particle: "out", base: "bear", es: "corroborar", example: "The data bears out her theory.", gap: "The data ___ ___ her theory." },
+      { verb: "factor in", ipa: "/ˈfæktər ɪn/", particle: "in", base: "factor", es: "tener en cuenta", example: "Factor in the shipping costs before deciding.", gap: "___ ___ the shipping costs before deciding." },
+      { verb: "gear up for", ipa: "/ɡɪər ʌp fɔːr/", particle: "up for", base: "gear", es: "prepararse para", example: "The team is gearing up for the launch.", gap: "The team is ___ ___ for the launch." },
+      { verb: "hinge on", ipa: "/hɪndʒ ɒn/", particle: "on", base: "hinge", es: "depender enteramente de", example: "The whole plan hinges on one supplier.", gap: "The whole plan ___ ___ one supplier." },
+      { verb: "level with", ipa: "/ˈlɛvəl wɪð/", particle: "with", base: "level", es: "hablar con franqueza", example: "Let me level with you about the budget.", gap: "Let me ___ ___ you about the budget." },
+      { verb: "pare down", ipa: "/pɛər daʊn/", particle: "down", base: "pare", es: "recortar al mínimo", example: "We pared down the list to five names.", gap: "We ___ ___ the list to five names." },
+      { verb: "ramp up", ipa: "/ræmp ʌp/", particle: "up", base: "ramp", es: "intensificar", example: "They ramped up production before Christmas.", gap: "They ___ ___ production before Christmas." }
     ]
   }
 };

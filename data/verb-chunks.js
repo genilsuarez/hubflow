@@ -26,16 +26,12 @@ export const CATEGORIES = {
       { verb: "agree", ipa: "/əˈɡriː/",     prep: "with",  es: "estar de acuerdo con",  example: "I agree with you completely.",                   gap: "I agree ___ you completely." },
       { verb: "think", ipa: "/θɪŋk/",     prep: "about", es: "pensar en",             example: "I'm thinking about the problem.",                gap: "I'm thinking ___ the problem." },
       { verb: "ask", ipa: "/æsk/",       prep: "for",   es: "pedir",                 example: "He asked for a glass of water.",                 gap: "He asked ___ a glass of water." },
-      { verb: "pay", ipa: "/peɪ/",       prep: "for",   es: "pagar por",             example: "Who's going to pay for dinner?",                 gap: "Who's going to pay ___ dinner?" },
-      { verb: "apologize", ipa: "/əˈpɒlədʒaɪz/", prep: "for",   es: "disculparse por",       example: "She apologized for being late.",                 gap: "She apologized ___ being late." },
       { verb: "dream", ipa: "/driːm/",     prep: "about", es: "soñar con",             example: "I dream about travelling the world.",            gap: "I dream ___ travelling the world." },
       { verb: "believe", ipa: "/bɪˈliːv/",   prep: "in",    es: "creer en",              example: "Do you believe in ghosts?",                      gap: "Do you believe ___ ghosts?" },
       { verb: "laugh", ipa: "/lɑːf/",     prep: "at",    es: "reírse de",             example: "Don't laugh at him.",                            gap: "Don't laugh ___ him." },
       { verb: "suffer", ipa: "/ˈsʌfər/",    prep: "from",  es: "sufrir de",             example: "She suffers from headaches.",                    gap: "She suffers ___ headaches." },
       { verb: "consist", ipa: "/kənˈsɪst/",   prep: "of",    es: "consistir en",          example: "The team consists of five people.",              gap: "The team consists ___ five people." },
-      { verb: "spend", ipa: "/spɛnd/",     prep: "on",    es: "gastar en",             example: "He spends too much on clothes.",                 gap: "He spends too much ___ clothes." },
       { verb: "complain", ipa: "/kəmˈpleɪn/",  prep: "about", es: "quejarse de",           example: "Stop complaining about the food.",               gap: "Stop complaining ___ the food." },
-      { verb: "concentrate", ipa: "/ˈkɒnsəntreɪt/", prep: "on",  es: "concentrarse en",       example: "I can't concentrate on my work.",                gap: "I can't concentrate ___ my work." },
       { verb: "insist", ipa: "/ɪnˈsɪst/",    prep: "on",    es: "insistir en",           example: "She insisted on paying.",                        gap: "She insisted ___ paying." },
     ]
   },
@@ -59,6 +55,10 @@ export const CATEGORIES = {
       { pattern: "What … with",    prep: "with",  es: "¿Con qué…?",             example: "What did you open it with?",              gap: "What did you open it ___?" },
       { pattern: "Who … from",     prep: "from",  es: "¿De quién…?",            example: "Who did you get this from?",              gap: "Who did you get this ___?" },
       { pattern: "Where … at",     prep: "at",    es: "¿En dónde…?",            example: "Where are you staying at?",               gap: "Where are you staying ___?" },
+      { pattern: "What … to",      prep: "to",    es: "¿A qué…?",               example: "What are you listening to?",              gap: "What are you listening ___?" },
+      { pattern: "Who … of",       prep: "of",    es: "¿De quién…?",            example: "Who does this remind you of?",            gap: "Who does this remind you ___?" },
+      { pattern: "What … for",     prep: "for",   es: "¿Por qué…? (motivo)",    example: "What did you apologize for?",             gap: "What did you apologize ___?" },
+      { pattern: "Who … with",     prep: "with",  es: "¿Con quién…?",           example: "Who did you agree with?",                 gap: "Who did you agree ___?" }
     ]
   }
 };

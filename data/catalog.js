@@ -1,15 +1,22 @@
 /**
  * HubFlow — Catálogo central de módulos (ejercicios + guías)
  *
- * Fase 0 del plan de recategorización (ver scripts/doc/plan-hubflow-categorias-tags.md).
  * Fuente única de verdad para: título, categoría/subcategoría, tags, CEFR,
- * ruta de ejercicio/guía/datos, y el prefijo real de localStorage (scoreKey).
+ * ruta de ejercicio/guía/datos, y el contrato de progreso.
+ * Lo consumen index.html, js/exercise-shell.js y js/utils.js.
  *
- * NO se consume todavía desde index.html (eso es Fase 2) — este archivo es
- * la fundación sobre la que se construye el index dinámico y el filtro por tags.
+ * OJO — este archivo es el índice, no el contenido. Las oraciones, respuestas y
+ * explicaciones viven en data/<ejercicio>.js (export CATEGORIES). Aquí solo hay
+ * metadata; se mantiene así a propósito para que el dashboard no cargue los
+ * ~616 KB de data/ nada más entrar.
  *
- * scoreKey verificado contra el código real de cada ejercicio (recordScore()
- * o storagePrefix en SpellingEngine/FlashcardEngine), no adivinado.
+ * VALORES DERIVADOS — no editar a mano:
+ *   - MODULE_DEPTH.items / .categories  (desde data/*.js)
+ *   - MODULE_DEPTH.modes                (desde los [data-mode] del ejercicio)
+ *   - los nombres de subcategoría dentro de PROGRESS_RULES
+ * Se calculan con `node scripts/sync-catalog.mjs`.
+ * validate-content.js falla (CAT-DEPTH / CAT-SCOREKEY) si quedan desfasados,
+ * y corre bloqueante en CI.
  */
 
 import { CATEGORIES as VOCAB_CATEGORIES, PACKS as VOCAB_PACKS } from './vocabulary.js';
@@ -25,6 +32,28 @@ export const TAGS = {
     'confusable-words', 'collocations', 'error-correction', 'dictation',
     'register',
   ],
+};
+
+/**
+ * Categorías top-level — el valor de `category` en cada módulo.
+ *
+ * Registro único: antes el label vivía en js/nav-sections.js y en index.html, y
+ * los tokens de color estaban en cuatro mapas sueltos de index.html (dos de
+ * ellos copia literal el uno del otro). validate-content.js comprueba que
+ * `category` de cada módulo exista aquí (CAT-CATEGORY).
+ */
+export const CATEGORIES = {
+  vocab:         { label: 'Vocabulary & Words',    spine: 'b-vocab',    color: 'purple' },
+  grammar:       { label: 'Grammar & Spelling',    spine: 'b-grammar',  color: 'amber' },
+  pronunciation: { label: 'Pronunciation',         spine: 'b-pron',     color: 'blue' },
+  analysis:      { label: 'Analysis & Production', spine: 'b-analysis', color: 'teal' },
+};
+
+/** Token CSS de categoría: `catColor('vocab')` → var(--lp-cat-purple). */
+export const catColor = (key, soft = false) => {
+  const c = CATEGORIES[key]?.color;
+  if (!c) return soft ? 'var(--lp-accent-soft)' : 'var(--lp-accent)';
+  return `var(--lp-cat-${c}${soft ? '-soft' : ''})`;
 };
 
 export const SUBCATEGORIES = {
@@ -325,7 +354,7 @@ export const MODULES = [
     icon: '🎧',
     meta: 'Escucha (TTS) y elige la palabra · Everyday · Travel & Work · Tricky Pairs',
     exercise: 'exercises/listening.html',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#listening',
     dataFile: 'data/listening.js',
     scoreKey: 'listen',
   },
@@ -338,7 +367,7 @@ export const MODULES = [
     icon: '👂',
     meta: 'Hear the verb (TTS) → write the -ing or -ed form',
     exercise: 'exercises/spelling-by-ear.html',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#spelling-by-ear',
     dataFile: 'data/spelling-by-ear.js',
     scoreKey: 'sbe',
   },
@@ -353,7 +382,7 @@ export const MODULES = [
     icon: '🔗',
     meta: 'Wanna · Gonna · Linking · Elision · Assimilation',
     exercise: 'exercises/pronunciation-study.html#pack=connected',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#pron-connected',
     dataFile: 'data/pronunciation-extra.js',
     scoreKey: 'pron-study',
   },
@@ -366,7 +395,7 @@ export const MODULES = [
     icon: '📈',
     meta: 'Rising · Falling · Stress-timed · Weak forms · Thought groups',
     exercise: 'exercises/pronunciation-study.html#pack=intonation',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#pron-intonation',
     dataFile: 'data/pronunciation-extra.js',
     scoreKey: 'pron-study',
   },
@@ -379,7 +408,7 @@ export const MODULES = [
     icon: '⚠️',
     meta: 'Comfortable · Wednesday · Queue · Colonel — Common Mispronunciations & Tricky Words',
     exercise: 'exercises/pronunciation-study.html#pack=mispronunciations',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#pron-mispronunciations',
     dataFile: 'data/pronunciation-extra.js',
     scoreKey: 'pron-study',
   },
@@ -392,7 +421,7 @@ export const MODULES = [
     icon: '🗣️',
     meta: 'English Vowels · The Schwa /ə/ — with IPA transcription',
     exercise: 'exercises/pronunciation-study.html#pack=vowels',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#pron-vowels',
     dataFile: 'data/pronunciation-extra.js',
     scoreKey: 'pron-study',
   },
@@ -405,7 +434,7 @@ export const MODULES = [
     icon: '🔤',
     meta: 'Consonant clusters (str, spr, θr) · -ED pronunciation (/t/ /d/ /ɪd/)',
     exercise: 'exercises/pronunciation-study.html#pack=consonants',
-    guide: null,
+    guide: 'guides/pronunciation-deep-dive.html#pron-consonants',
     dataFile: 'data/pronunciation-extra.js',
     scoreKey: 'pron-study',
   },
@@ -973,8 +1002,8 @@ export const PROGRESS_RULES = {
   'confusing-words': practiceRule(scoreKeys('conf', ['make-do', 'say-tell', 'bring-take', 'borrow-lend', 'watch-look-see', 'less-fewer', 'me-i', 'who-whom', 'affect-effect', 'still-already-just-yet', 'is-are', 'there-their-theyre', 'your-youre', 'its-its', 'principal-principle', 'complement-compliment', 'desert-dessert', 'weather-whether'])),
   'phrasal-verbs': practiceRule(scoreKeys('phrasal', ['everyday', 'work', 'relationships', 'travel', 'getVerbs', 'food', 'turn', 'advanced'], ['quiz', 'write', 'sort'])),
   phonics: practiceRule(scoreKeys('phonics', ['vowel-pairs', 'consonant-pairs', 'word-stress', 'silent-letters'])),
-  'plural-endings': practiceRule(scoreKeys('plural', ['pluralSound'])),
-  'word-stress-quiz': practiceRule(scoreKeys('stress', ['stress'])),
+  'plural-endings': practiceRule(scoreKeys('plural', ['pluralNouns', 'thirdPersonVerbs', 'possessives'])),
+  'word-stress-quiz': practiceRule(scoreKeys('stress', ['commonWords', 'shiftingStress'])),
   listening: practiceRule(scoreKeys('listen', ['everyday', 'travelwork', 'tricky'])),
   'spelling-by-ear': practiceRule(scoreKeys('sbe', ['ing', 'ed', 'mixed'])),
   'pron-connected': practiceRule(scoreKeys('pron-study', ['connectedSpeech', 'linking'], ['quiz'])),
@@ -990,15 +1019,15 @@ export const PROGRESS_RULES = {
   'reported-speech': practiceRule(scoreKeys('rs', ['backshift', 'timePlace'])),
   conditionals: practiceRule(scoreKeys('cond', ['identifyType', 'connectors'])),
   'used-to': practiceRule(scoreKeys('usedto', ['stateException', 'accustomed'])),
-  'gerunds-infinitives': practiceRule(scoreKeys('ger', ['gerundOrInfinitive'])),
+  'gerunds-infinitives': practiceRule(scoreKeys('ger', ['gerundVerbs', 'infinitiveVerbs'])),
   articles: practiceRule(scoreKeys('art', ['basics', 'geographic', 'expressions', 'context', 'noThe'])),
   prepositions: practiceRule(scoreKeys('prep', ['time', 'place', 'movement', 'dependent', 'duration'])),
   'verb-chunks': practiceRule(scoreKeys('vchunks', ['prepositional', 'questions'], ['', 'write'])),
   quantifiers: practiceRule(scoreKeys('quant', ['someany', 'muchmany', 'fewlittle', 'general'])),
   modals: practiceRule(scoreKeys('modals', ['meaning', 'obligation', 'supposedTo'])),
-  'parts-of-speech': practiceRule(scoreKeys('pos', ['identify'])),
-  clauses: practiceRule(scoreKeys('clause', ['relativePronoun'])),
-  'made-of': practiceRule(scoreKeys('madeof', ['madeOf'])),
+  'parts-of-speech': practiceRule(scoreKeys('pos', ['contentWords', 'functionWords'])),
+  clauses: practiceRule(scoreKeys('clause', ['people', 'things', 'placeTime', 'thatOrWhich'])),
+  'made-of': practiceRule(scoreKeys('madeof', ['materialVsTransformed', 'ingredientsVsCreative'])),
   comparisons: practiceRule(scoreKeys('comp', ['structure', 'irregular'])),
   'causative-verbs': practiceRule(scoreKeys('causative', ['chooseVerb', 'passive'])),
   preferences: practiceRule(scoreKeys('pref', ['expression', 'structure'])),
@@ -1040,75 +1069,82 @@ function vocabDepth(keys) {
 }
 
 export const MODULE_DEPTH = {
-  vocabulary:        { engine: 'flashcard', ...vocabDepth(Object.keys(VOCAB_CATEGORIES)), hasBattle: true },
-  opposites:         { engine: 'flashcard', items: 80,  categories: 2,  hasBattle: true },
+  vocabulary:        { engine: 'flashcard', ...vocabDepth(Object.keys(VOCAB_CATEGORIES)), modes: 5, hasBattle: true },
+  opposites:         { engine: 'flashcard', items: 160, categories: 2,  modes: 5, hasBattle: true },
   'confusing-words': { engine: 'custom',    items: 180, categories: 18, modes: 3, hasBattle: false },
-  'phrasal-verbs':   { engine: 'flashcard', items: 100, categories: 8,  hasBattle: true },
-  'vocab-pack-everyday':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.everyday.keys), hasBattle: true },
-  'vocab-pack-c1':           { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.c1.keys), hasBattle: true },
-  'vocab-pack-idioms':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.idioms.keys), hasBattle: true },
-  'vocab-pack-sound-natural':{ engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.soundNatural.keys), hasBattle: true },
-  'vocab-pack-home':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.home.keys), hasBattle: true },
-  'vocab-pack-shopping':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.shopping.keys), hasBattle: true },
-  'vocab-pack-fitness':      { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.fitness.keys), hasBattle: true },
-  'vocab-pack-travel':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.travel.keys), hasBattle: true },
-  'vocab-pack-work':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.work.keys), hasBattle: true },
-  'vocab-pack-education':    { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.education.keys), hasBattle: true },
-  'vocab-pack-money':        { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.money.keys), hasBattle: true },
-  'vocab-pack-tech':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.tech.keys), hasBattle: true },
-  'vocab-pack-emotions':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.emotions.keys), hasBattle: true },
-  'vocab-pack-nature':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.nature.keys), hasBattle: true },
-  articles:          { engine: 'flashcard', items: 60,  categories: 5,  hasBattle: true },
-  prepositions:      { engine: 'flashcard', items: 60,  categories: 5,  hasBattle: true },
-  quantifiers:       { engine: 'flashcard', items: 40,  categories: 4,  hasBattle: true },
-  collocations:      { engine: 'flashcard', items: 40,  categories: 4,  hasBattle: true },
-  'ing-spelling':    { engine: 'spelling',  items: 60,  categories: 4,  hasBattle: false },
-  'ed-spelling':     { engine: 'spelling',  items: 60,  categories: 4,  hasBattle: false },
-  'noun-adjuncts':   { engine: 'spelling',  items: 60,  categories: 4,  hasBattle: false },
-  'irregular-verbs': { engine: 'custom',    items: 60,  categories: 3,  hasBattle: false },
-  'word-formation':  { engine: 'custom',    items: 40,  categories: 4,  hasBattle: false },
-  tenses:            { engine: 'custom',    items: 60,  categories: 6,  hasBattle: false },
-  'reported-speech': { engine: 'custom',    items: 20,  categories: 2,  hasBattle: false },
-  conditionals:      { engine: 'custom',    items: 20,  categories: 2,  hasBattle: false },
-  'used-to':         { engine: 'custom',    items: 20,  categories: 2,  hasBattle: false },
-  'gerunds-infinitives': { engine: 'custom', items: 20, categories: 1, hasBattle: false },
-  'verb-chunks':     { engine: 'custom',    items: 40,  categories: 2,  hasBattle: false },
-  modals:            { engine: 'custom',    items: 20,  categories: 3,  hasBattle: false },
-  'parts-of-speech': { engine: 'custom',    items: 20,  categories: 1,  hasBattle: false },
-  clauses:           { engine: 'custom',    items: 20,  categories: 1,  hasBattle: false },
-  'made-of':         { engine: 'custom',    items: 20,  categories: 1,  hasBattle: false },
-  comparisons:       { engine: 'custom',    items: 20,  categories: 2,  hasBattle: false },
-  'causative-verbs': { engine: 'custom',    items: 20,  categories: 2,  hasBattle: false },
-  preferences:       { engine: 'custom',    items: 20,  categories: 2,  hasBattle: false },
-  phonics:           { engine: 'tts',       items: 20,  categories: 4,  hasBattle: false },
-  'plural-endings':  { engine: 'tts',       items: 20,  categories: 1,  hasBattle: false },
-  'word-stress-quiz':{ engine: 'tts',       items: 20,  categories: 1,  hasBattle: false },
-  listening:         { engine: 'tts',       items: 20,  categories: 3,  hasBattle: false },
-  'spelling-by-ear': { engine: 'tts',       items: 20,  categories: 3,  hasBattle: false },
-  'pron-connected':  { engine: 'tts',       items: 20,  categories: 2,  hasBattle: false },
-  'pron-intonation': { engine: 'tts',       items: 20,  categories: 3,  hasBattle: false },
-  'pron-mispronunciations': { engine: 'tts', items: 20, categories: 2, hasBattle: false },
-  'pron-vowels':     { engine: 'tts',       items: 20,  categories: 2,  hasBattle: false },
-  'pron-consonants': { engine: 'tts',       items: 20,  categories: 2,  hasBattle: false },
-  'error-hunt':      { engine: 'analysis',  items: 40,  categories: 4,  hasBattle: false },
-  'odd-one-out':     { engine: 'analysis',  items: 40,  categories: 4,  hasBattle: false },
-  'dictation-sprint':{ engine: 'tts',       items: 40,  categories: 4,  hasBattle: false },
-  'sentence-combining': { engine: 'analysis', items: 40, categories: 4, hasBattle: false },
-  'register-switch': { engine: 'analysis',  items: 20,  categories: 2,  hasBattle: false },
-  'paragraph-cloze': { engine: 'analysis',  items: 20,  categories: 3,  hasBattle: false },
-  'word-order':      { engine: 'custom',    items: 40,  categories: 4,  hasBattle: false },
-  paraphrasing:      { engine: 'analysis',  items: 40,  categories: 4,  hasBattle: false },
-  inversions:        { engine: 'custom',    items: 20,  categories: 3,  hasBattle: false },
-  'advanced-collocations': { engine: 'flashcard', items: 20, categories: 3, hasBattle: true },
-  'cleft-emphasis':  { engine: 'analysis',  items: 20,  categories: 3,  hasBattle: false },
-  'key-word-transformation': { engine: 'analysis', items: 40, categories: 4, hasBattle: false },
+  'phrasal-verbs':   { engine: 'flashcard', items: 160, categories: 8,  modes: 6, hasBattle: true },
+  'vocab-pack-everyday':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.everyday.keys), modes: 5, hasBattle: true },
+  'vocab-pack-c1':           { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.c1.keys), modes: 5, hasBattle: true },
+  'vocab-pack-idioms':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.idioms.keys), modes: 5, hasBattle: true },
+  'vocab-pack-sound-natural':{ engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.soundNatural.keys), modes: 5, hasBattle: true },
+  'vocab-pack-home':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.home.keys), modes: 5, hasBattle: true },
+  'vocab-pack-shopping':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.shopping.keys), modes: 5, hasBattle: true },
+  'vocab-pack-fitness':      { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.fitness.keys), modes: 5, hasBattle: true },
+  'vocab-pack-travel':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.travel.keys), modes: 5, hasBattle: true },
+  'vocab-pack-work':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.work.keys), modes: 5, hasBattle: true },
+  'vocab-pack-education':    { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.education.keys), modes: 5, hasBattle: true },
+  'vocab-pack-money':        { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.money.keys), modes: 5, hasBattle: true },
+  'vocab-pack-tech':         { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.tech.keys), modes: 5, hasBattle: true },
+  'vocab-pack-emotions':     { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.emotions.keys), modes: 5, hasBattle: true },
+  'vocab-pack-nature':       { engine: 'flashcard', ...vocabDepth(VOCAB_PACKS.nature.keys), modes: 5, hasBattle: true },
+  articles:          { engine: 'flashcard', items: 60,  categories: 5,  modes: 3, hasBattle: true },
+  prepositions:      { engine: 'flashcard', items: 60,  categories: 5,  modes: 3, hasBattle: true },
+  quantifiers:       { engine: 'flashcard', items: 40,  categories: 4,  modes: 3, hasBattle: true },
+  collocations:      { engine: 'flashcard', items: 40,  categories: 4,  modes: 3, hasBattle: true },
+  'ing-spelling':    { engine: 'spelling',  items: 60,  categories: 4,  modes: 3, hasBattle: false },
+  'ed-spelling':     { engine: 'spelling',  items: 60,  categories: 4,  modes: 3, hasBattle: false },
+  'noun-adjuncts':   { engine: 'spelling',  items: 60,  categories: 4,  modes: 3, hasBattle: false },
+  'irregular-verbs': { engine: 'custom',    items: 60,  categories: 3,  modes: 5, hasBattle: false },
+  'word-formation':  { engine: 'custom',    items: 40,  categories: 4,  modes: 3, hasBattle: false },
+  tenses:            { engine: 'custom',    items: 60,  categories: 6,  modes: 3, hasBattle: false },
+  'reported-speech': { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  conditionals:      { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  'used-to':         { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  'gerunds-infinitives': { engine: 'custom', items: 20, categories: 2, modes: 3, hasBattle: false },
+  'verb-chunks':     { engine: 'custom',    items: 40,  categories: 2,  modes: 4, hasBattle: false },
+  modals:            { engine: 'custom',    items: 30,  categories: 3,  modes: 3, hasBattle: false },
+  'parts-of-speech': { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  clauses:           { engine: 'custom',    items: 40,  categories: 4,  modes: 3, hasBattle: false },
+  'made-of':         { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  comparisons:       { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  'causative-verbs': { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  preferences:       { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
+  phonics:           { engine: 'tts',       items: 20,  categories: 4,  modes: 3, hasBattle: false },
+  'plural-endings':  { engine: 'tts',       items: 60,  categories: 3,  modes: 3, hasBattle: false },
+  'word-stress-quiz':{ engine: 'tts',       items: 40,  categories: 2,  modes: 3, hasBattle: false },
+  listening:         { engine: 'tts',       items: 20,  categories: 3,  modes: 2, hasBattle: false },
+  'spelling-by-ear': { engine: 'tts',       items: 20,  categories: 3,  modes: 2, hasBattle: false },
+  'pron-connected':  { engine: 'tts',       items: 20,  categories: 2,  modes: 5, hasBattle: false },
+  'pron-intonation': { engine: 'tts',       items: 20,  categories: 3,  modes: 5, hasBattle: false },
+  'pron-mispronunciations': { engine: 'tts', items: 20, categories: 2, modes: 5, hasBattle: false },
+  'pron-vowels':     { engine: 'tts',       items: 20,  categories: 2,  modes: 5, hasBattle: false },
+  'pron-consonants': { engine: 'tts',       items: 20,  categories: 2,  modes: 5, hasBattle: false },
+  'error-hunt':      { engine: 'analysis',  items: 40,  categories: 4,  modes: 2, hasBattle: false },
+  'odd-one-out':     { engine: 'analysis',  items: 40,  categories: 4,  modes: 2, hasBattle: false },
+  'dictation-sprint':{ engine: 'tts',       items: 40,  categories: 4,  modes: 2, hasBattle: false },
+  'sentence-combining': { engine: 'analysis', items: 40, categories: 4, modes: 2, hasBattle: false },
+  'register-switch': { engine: 'analysis',  items: 20,  categories: 2,  modes: 2, hasBattle: false },
+  'paragraph-cloze': { engine: 'analysis',  items: 20,  categories: 3,  modes: 2, hasBattle: false },
+  'word-order':      { engine: 'custom',    items: 40,  categories: 4,  modes: 2, hasBattle: false },
+  paraphrasing:      { engine: 'analysis',  items: 40,  categories: 4,  modes: 2, hasBattle: false },
+  inversions:        { engine: 'custom',    items: 30,  categories: 3,  modes: 3, hasBattle: false },
+  'advanced-collocations': { engine: 'flashcard', items: 20, categories: 3, modes: 3, hasBattle: true },
+  'cleft-emphasis':  { engine: 'analysis',  items: 30,  categories: 3,  modes: 3, hasBattle: false },
+  'key-word-transformation': { engine: 'analysis', items: 40, categories: 4, modes: 2, hasBattle: false },
 };
 
-const ENGINE_MODES = { flashcard: 5, spelling: 12, tts: 2, analysis: 2, custom: 2 };
+/**
+ * Fallback si un módulo no declarara `modes` — hoy los declaran los 62, porque
+ * el número real varía dentro de un mismo engine (los flashcard van de 3 a 6
+ * modos). Antes se infería de aquí, y `spelling: 12` contaba 3 modos × 4
+ * niveles: los niveles ya se muestran como "4 cat", así que el tile decía
+ * "12 modos" duplicando la cifra.
+ */
+const ENGINE_MODES_FALLBACK = 2;
 
 /** Helper para UI: devuelve { items, categories, modes, hasBattle } o null */
 export function getModuleDepth(moduleId) {
   const depth = MODULE_DEPTH[moduleId];
   if (!depth) return null;
-  return { ...depth, modes: depth.modes || ENGINE_MODES[depth.engine] || 2 };
+  return { ...depth, modes: depth.modes || ENGINE_MODES_FALLBACK };
 }

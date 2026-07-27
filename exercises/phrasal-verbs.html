@@ -224,8 +224,8 @@
         <div class="write-input-row" id="writeInputs"></div>
         <div class="write-feedback" id="writeFeedback"></div>
       </div>
-      <button class="lp-btn lp-btn--primary" id="writeCheck">Check ✓</button>
-      <button class="lp-btn lp-btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+      <button class="lp-btn lp-btn--primary" id="checkBtn">Check ✓</button>
+      <button class="lp-btn lp-btn--ghost" id="skipBtn" style="font-size:.72rem;">Skip →</button>
     </div>
 
     <!-- SORT -->
@@ -234,7 +234,6 @@
       <div class="sort-score" id="sortScore">0 / 8</div>
       <div class="sort-pool" id="sortPool"></div>
       <div class="sort-categories" id="sortCategories"></div>
-      <button class="lp-btn lp-btn--primary" id="sortCheck" style="display:none;">✓ Verify</button>
     </div>
 
     <!-- BATTLE -->
@@ -258,7 +257,7 @@
           </div>
         </div>
       </div>
-      <div class="battle-actions" id="battleActions">
+      <div class="battle-actions" id="battleClaim">
         <button class="lp-btn lp-btn--primary" id="bClaim1">1️⃣ P1</button>
         <button class="lp-btn lp-btn--ghost" id="bSkip">⏭️ Skip</button>
         <button class="lp-btn lp-btn--primary" id="bClaim2">2️⃣ P2</button>
@@ -318,6 +317,9 @@ function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
+  const sortBtn = document.getElementById('sortCheck');
+  if (sortBtn && mode !== 'sort') sortBtn.style.display = 'none';
+  window.__syncBottomNavMode?.();
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'write') initWrite();
@@ -474,6 +476,7 @@ function initWrite() {
   writeIdx = 0; writeScore = 0;
   writeTotal = Math.min(10, writeDeck.length);
   document.querySelector('[data-area="write"]').classList.add('show');
+  window.__setupPracticeBottomNav?.();
   renderWrite();
 }
 
@@ -536,8 +539,8 @@ function doWriteCheck() {
   setTimeout(renderWrite, 1200);
 }
 
-document.getElementById('writeCheck').addEventListener('click', doWriteCheck);
-document.getElementById('writeSkip').addEventListener('click', () => { writeIdx++; renderWrite(); });
+document.getElementById('checkBtn').addEventListener('click', doWriteCheck);
+document.getElementById('skipBtn').addEventListener('click', () => { writeIdx++; renderWrite(); });
 
 function finishWrite() {
   const pct = showResult({
@@ -567,6 +570,7 @@ let sortState = { selected: null, placements: {}, correctMap: {}, total: 0, scor
 
 function initSort() {
   document.querySelector('[data-area="sort"]').classList.add('show');
+  ensureSortCheckInNav();
   sortState = { selected: null, placements: {}, correctMap: {}, total: 0, score: 0, checked: false };
 
   // Pick 4 random themes
@@ -657,7 +661,7 @@ function initSort() {
     });
   });
 
-  document.getElementById('sortCheck').style.display = 'none';
+  const sc = document.getElementById('sortCheck'); if (sc) sc.style.display = 'none';
   updateSortProgress();
 }
 
@@ -669,7 +673,8 @@ function updateSortProgress() {
 
 function toggleSortCheck() {
   const placed = Object.keys(sortState.placements).length;
-  document.getElementById('sortCheck').style.display = placed === sortState.total ? '' : 'none';
+  const sc = document.getElementById('sortCheck');
+  if (sc) sc.style.display = placed === sortState.total ? '' : 'none';
 }
 
 function checkSort() {
@@ -709,7 +714,22 @@ function checkSort() {
   recordScore(`phrasal-${currentCat}-sort`, pct);
 }
 
-document.getElementById('sortCheck').addEventListener('click', checkSort);
+function ensureSortCheckInNav() {
+  let btn = document.getElementById('sortCheck');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'sortCheck';
+    btn.type = 'button';
+    btn.className = 'lp-btn lp-btn--primary ex-bottom-nav__primary-btn';
+    btn.textContent = '✓';
+    btn.setAttribute('aria-label', 'Verificar clasificación');
+    btn.title = 'Verificar';
+    btn.style.display = 'none';
+    btn.addEventListener('click', checkSort);
+    document.body.appendChild(btn);
+  }
+  window.__insertInBottomNav?.(btn);
+}
 
 // ═══ BATTLE ═══
 let battle = { p1: 0, p2: 0, round: 0, total: 10, claimer: null, deck: [], phase: 'claim' };
@@ -739,9 +759,8 @@ function showBattleCard() {
 
 function setBattlePhase(phase) {
   battle.phase = phase;
-  document.getElementById('battleActions').style.display = phase === 'claim' ? 'flex' : 'none';
-  document.getElementById('battleJudge').style.display = phase === 'judge' ? 'flex' : 'none';
-  document.getElementById('battleNext').style.display = phase === 'next' ? 'flex' : 'none';
+  // Canónico: ex-bottom-nav.js muestra el grupo de la fase y oculta los otros
+  window.__syncBattleActionVisibility?.(phase);
 
   const instructions = { claim: 'Press 1 or 2 to claim · S to skip', judge: `Player ${battle.claimer} answers — was it correct?`, next: 'Press Space or → to continue' };
   document.getElementById('battleInstruction').textContent = instructions[phase] || '';

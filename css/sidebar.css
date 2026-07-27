@@ -151,13 +151,15 @@ body > .shell { flex: 1 1 auto; min-height: 0; width: 100%; }
 .exercise-foot {
   position: relative; z-index: 1;
   width: 100%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: flex-start;
   padding: 12px clamp(16px, 3vw, 34px);
   border-top: 1.5px solid var(--lp-border);
   background: var(--lp-bg);
   margin-top: auto;
 }
 .foot-meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
+.exercise-foot .depth-bell { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.exercise-foot .depth-bell:hover { transform: translate(-50%, -50%) scale(1.15); }
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar { transition: none; }

@@ -11,7 +11,6 @@ export const CATEGORIES = {
       { term: "Neck",     ipa: "/nɛk/", es: "Cuello",      meaning: "Connects your head to your body",        emoji: "🦒" },
       { term: "Chin",     ipa: "/tʃɪn/", es: "Mentón",      meaning: "Bottom part of your face",               emoji: "🧔" },
       { term: "Teeth",    ipa: "/tiːθ/", es: "Dientes",     meaning: "Hard white structures for chewing",      emoji: "🦷" },
-      { term: "Forehead", ipa: "/ˈfɔːrɪd/", es: "Frente",      meaning: "The flat area above your eyebrows",      emoji: "🧠" },
       { term: "Cheek",   ipa: "/tʃiːk/", es: "Mejilla",     meaning: "The soft sides of your face below the eyes", emoji: "😊" },
       { term: "Lip",     ipa: "/lɪp/", es: "Labio",       meaning: "The edges of your mouth",                emoji: "💋" },
       { term: "Tongue",  ipa: "/tʌŋ/", es: "Lengua",      meaning: "The muscle inside your mouth for tasting", emoji: "👅" },
@@ -69,6 +68,7 @@ export const CATEGORIES = {
       { term: "Knead",    ipa: "/niːd/", es: "Amasar",              meaning: "Press and fold dough with your hands",      emoji: "🍞", example: "Knead the dough for 10 minutes." },
       { term: "Toss",     ipa: "/tɒs/", es: "Mezclar suavemente",  meaning: "Mix lightly by lifting and turning",        emoji: "🥗", example: "Toss the salad with dressing." },
       { term: "Marinate", ipa: "/ˈmærɪneɪt/", es: "Marinar",             meaning: "Soak food in seasoned liquid for flavor",   emoji: "🫕", example: "Marinate the chicken overnight." },
+      { term: "Sift", ipa: "/sɪft/", es: "Tamizar / cerner", meaning: "Pass flour or powder through a sieve to remove lumps", emoji: "🌾", example: "Sift the flour before adding the eggs." }
     ]
   },
   cookingMethods: {
@@ -93,15 +93,11 @@ export const CATEGORIES = {
     label: "💬 Idioms",
     items: [
       { term: "Beat Around the Bush", ipa: "/biːt əˈraʊnd ðə bʊʃ/", es: "Andarse con rodeos",  meaning: "Avoid getting to the point directly",     emoji: "🌳", example: "Stop beating around the bush and tell me." },
-      { term: "Hang in There",      ipa: "/hæŋ ɪn ðɛr/", es: "No rendirse",           meaning: "Don't give up, be patient",               emoji: "🧗", example: "I know it's tough, but hang in there!" },
       { term: "Cut to the Chase",   ipa: "/kʌt tuː ðə tʃeɪs/", es: "Ir al grano",           meaning: "Get to the point, skip details",          emoji: "🎯", example: "Stop rambling and cut to the chase." },
-      { term: "Under the Weather",  ipa: "/ˈʌndər ðə ˈwɛðər/", es: "Sentirse mal",          meaning: "Feeling sick or unwell",                   emoji: "🤒", example: "I'm under the weather today." },
       { term: "Piece of Cake",      ipa: "/piːs əv keɪk/", es: "Pan comido",            meaning: "Something very easy",                      emoji: "🍰", example: "That exam was a piece of cake!" },
       { term: "Kill Two Birds with One Stone", ipa: "/kɪl tuː bɜːrdz wɪθ wʌn stoʊn/", es: "Matar dos pájaros de un tiro", meaning: "Achieve two things with a single action", emoji: "🎯", example: "I killed two birds with one stone and did both errands." },
-      { term: "On the Ball",        ipa: "/ɒn ðə bɔːl/", es: "Estar atento",          meaning: "Alert, efficient, quick to understand",    emoji: "💡", example: "She's really on the ball." },
       { term: "Pull Someone's Leg", ipa: "/pʊl ˈsʌmwʌnz lɛɡ/", es: "Tomarle el pelo",       meaning: "Joke with someone, tease them",            emoji: "😂", example: "Relax, I'm pulling your leg!" },
       { term: "Call It a Day",      ipa: "/kɔːl ɪt ə deɪ/", es: "Dar por terminado",     meaning: "Stop working, decide to finish",           emoji: "🏁", example: "Let's call it a day." },
-      { term: "Miss the Boat",     ipa: "/mɪs ðə boʊt/", es: "Perder la oportunidad", meaning: "Miss an opportunity, be too late",         emoji: "🚢", example: "Apply now or miss the boat." },
       { term: "Break the Ice",      ipa: "/breɪk ðiː aɪs/", es: "Romper el hielo",       meaning: "Start conversation in awkward situation",  emoji: "🧊", example: "Tell a joke to break the ice." },
       { term: "Spill the Beans",    ipa: "/spɪl ðə biːnz/", es: "Soltar la sopa",        meaning: "Reveal a secret",                          emoji: "🫘", example: "Come on, spill the beans!" },
       { term: "Bite the Bullet",    ipa: "/baɪt ðə ˈbʊlɪt/", es: "Apretar los dientes",   meaning: "Endure pain bravely",                      emoji: "😬", example: "I bit the bullet and went to the dentist." },
@@ -123,6 +119,7 @@ export const CATEGORIES = {
       { term: "Evening",   ipa: "/ˈiːvnɪŋ/", time: "8:00–10:00 PM",  meaning: "Late part of the day",               emoji: "🌃", order: 9 },
       { term: "Night",     ipa: "/naɪt/", time: "10:00 PM–12 AM", meaning: "Dark hours, most people sleep",      emoji: "🌙", order: 10 },
       { term: "Midnight",  ipa: "/ˈmɪdnaɪt/", time: "12:00–4:00 AM",  meaning: "Middle of the night",                emoji: "🌑", order: 11 },
+      { term: "The Small Hours", ipa: "/ðə smɔːl ˈaʊərz/", es: "La madrugada", meaning: "The hours just after midnight", emoji: "🕐", example: "We talked into the small hours." }
     ]
   },
   weather: {
@@ -132,7 +129,6 @@ export const CATEGORIES = {
       { term: "Cloudy",    ipa: "/ˈklaʊdi/", es: "Nublado",    meaning: "Sky covered with clouds, no rain",            emoji: "☁️",  example: "A cloudy afternoon with no sun." },
       { term: "Overcast",  ipa: "/ˌoʊvərˈkæst/", es: "Cubierto",   meaning: "Completely covered by thick grey clouds",     emoji: "🌥️", example: "The sky is overcast — looks like rain." },
       { term: "Foggy",     ipa: "/ˈfɒɡi/", es: "Con niebla", meaning: "Low visibility due to thick mist",            emoji: "🌫️", example: "Be careful driving, it's very foggy." },
-      { term: "Misty",     ipa: "/ˈmɪsti/", es: "Brumoso",    meaning: "Light fog, slightly reduced visibility",      emoji: "🌫️", example: "A misty morning in the mountains." },
       { term: "Rainy",     ipa: "/ˈreɪni/", es: "Lluvioso",   meaning: "Water falling from clouds",                   emoji: "🌧️", example: "It's been rainy all week." },
       { term: "Drizzle",   ipa: "/ˈdrɪzəl/", es: "Llovizna",   meaning: "Very light, fine rain",                       emoji: "🌦️", example: "Just a drizzle, no umbrella needed." },
       { term: "Stormy",    ipa: "/ˈstɔːrmi/", es: "Tormentoso", meaning: "Heavy rain with thunder and lightning",       emoji: "⛈️", example: "A stormy night with loud thunder." },
@@ -231,6 +227,8 @@ export const CATEGORIES = {
       { term: "Come Down With Something", ipa: "/kʌm daʊn wɪð ˈsʌmθɪŋ/", es: "Enfermarse de algo",        meaning: "Start to suffer from an illness",                emoji: "🤒", example: "I think I'm coming down with a cold." },
       { term: "Laid Up",                  ipa: "/leɪd ʌp/", es: "Postrado en cama",          meaning: "Confined to bed due to illness or injury",       emoji: "🛌", example: "He's been laid up with a bad back all week." },
       { term: "A Bitter Pill to Swallow", ipa: "/ə ˈbɪtər pɪl tuː ˈswɒloʊ/", es: "Una mala noticia difícil de aceptar", meaning: "Something unpleasant that must be accepted", emoji: "💊", example: "Losing the final was a bitter pill to swallow." },
+      { term: "Pull Through", ipa: "/pʊl θruː/", es: "Salir adelante", meaning: "Recover from a serious illness", emoji: "🏥", example: "It was touch and go, but he pulled through." },
+      { term: "Nurse Someone Back to Health", ipa: "/nɜːrs ˈsʌmwʌn bæk tuː hɛlθ/", es: "Cuidar hasta la recuperación", meaning: "Care for someone until they recover", emoji: "🧑‍⚕️", example: "His sister nursed him back to health." }
     ]
   },
   natureIdioms: {
@@ -244,6 +242,8 @@ export const CATEGORIES = {
       { term: "Spring to Mind",     ipa: "/sprɪŋ tuː maɪnd/", es: "Venir a la mente",           meaning: "Come immediately into your thoughts",           emoji: "💭", example: "Her name didn't spring to mind at first." },
       { term: "No Spring Chicken",  ipa: "/noʊ sprɪŋ ˈtʃɪkɪn/", es: "No ser joven",               meaning: "No longer young",                               emoji: "🐔", example: "I'm no spring chicken, but I can still run 5k." },
       { term: "Come Up Roses",      ipa: "/kʌm ʌp ˈroʊzɪz/", es: "Salir todo bien",            meaning: "Everything turns out very well",                emoji: "🌹", example: "After a rough start, things came up roses for the team." },
+      { term: "Barking Up the Wrong Tree", ipa: "/ˈbɑːrkɪŋ ʌp ðə rɒŋ triː/", es: "Ir por mal camino", meaning: "Pursue a mistaken line of thought or action", emoji: "🌳", example: "If you think I broke it, you're barking up the wrong tree." },
+      { term: "Grasp at Straws", ipa: "/ɡrɑːsp æt strɔːz/", es: "Agarrarse a un clavo ardiendo", meaning: "Try anything desperate when out of options", emoji: "🌾", example: "He's grasping at straws with that excuse." }
     ]
   },
   soundNative: {
@@ -299,6 +299,7 @@ export const CATEGORIES = {
       { term: "Well Done!",              ipa: "/wɛl dʌn/", es: "¡Bien hecho!",            meaning: "Alternative for 'congratulations'",               emoji: "👏", example: "Well done on passing your exam!" },
       { term: "Long Time No See",        ipa: "/lɒŋ taɪm noʊ siː/", es: "Cuánto tiempo sin verte", meaning: "A casual greeting after not seeing someone for a while", emoji: "👋", example: "Hey! Long time no see!" },
       { term: "Bless You!",              ipa: "/blɛs juː/", es: "¡Salud!",                 meaning: "What you say after someone sneezes",              emoji: "🤧", example: "Bless you! Do you have a cold?" },
+      { term: "Speak of the Devil", ipa: "/spiːk ɒv ðə ˈdɛvəl/", es: "Hablando del rey de Roma", meaning: "Said when the person you were talking about appears", emoji: "😈", example: "Speak of the devil — here she comes!" }
     ]
   },
   personalityAdjectives: {
@@ -332,6 +333,7 @@ export const CATEGORIES = {
       { term: "Super-Duper",   ipa: "/ˌsuːpər ˈduːpər/", es: "Sensacional",           meaning: "Excellent, very good (informal/playful)", emoji: "🌟" },
       { term: "Fuddy-Duddy",   ipa: "/ˌfʌdi ˈdʌdi/", es: "Anticuado (persona)",   meaning: "An old-fashioned, unadventurous person", emoji: "👴" },
       { term: "Okey-Dokey",    ipa: "/ˌoʊki ˈdoʊki/", es: "Vale, de acuerdo",       meaning: "A playful way to say 'okay'",           emoji: "👌" },
+      { term: "Riff-Raff", ipa: "/ˈrɪf ræf/", es: "Chusma / gentuza", meaning: "Disreputable or undesirable people", emoji: "🎭", example: "The club keeps the riff-raff out." }
     ]
   },
   sameWordDifferentMeaning: {
@@ -347,11 +349,9 @@ export const CATEGORIES = {
       { term: "Left",   ipa: "/lɛft/", es: "Izquierda / se fue",  meaning: "A direction, OR the past tense of 'leave'",                emoji: "⬅️", example: "She left and turned left at the corner." },
       { term: "Park",   ipa: "/pɑːrk/", es: "Parque / estacionar", meaning: "A green public space, OR to stop a vehicle",              emoji: "🌳", example: "I'll park the car near the park." },
       { term: "Watch",  ipa: "/wɒtʃ/", es: "Reloj / observar",    meaning: "A wrist clock, OR to look at something carefully",        emoji: "⌚", example: "I checked my watch while I watched the game." },
-      { term: "Current", ipa: "/ˈkʌrənt/", es: "Corriente / actual", meaning: "A flow of water/electricity, OR happening now",           emoji: "⚡", example: "The current news mentioned a strong ocean current." },
       { term: "Fine",   ipa: "/faɪn/", es: "Bien / multa",        meaning: "Good/okay, OR a penalty payment",                         emoji: "💵", example: "I'm fine, but I have to pay a parking fine." },
       { term: "Story",  ipa: "/ˈstɔːri/", es: "Historia / piso",     meaning: "A narrative, OR a floor of a building",                   emoji: "📖", example: "She told a story about a three-story house." },
       { term: "Bat",    ipa: "/bæt/", es: "Murciélago / bate",   meaning: "A flying mammal, OR sports equipment",                    emoji: "🦇", example: "A bat flew past while he held the baseball bat." },
-      { term: "Tender", ipa: "/ˈtɛndər/", es: "Tierno / oferta legal", meaning: "Soft/gentle, OR a formal legal offer of payment",       emoji: "🤗", example: "The meat was tender, and legal tender means official money." },
     ]
   },
   clothingAppearance: {
@@ -386,8 +386,6 @@ export const CATEGORIES = {
       { term: "A whole nother story", ipa: "/ə hoʊl ˈnʌðər ˈstɔːri/", es: "Incorrecto (eggcorn)", meaning: "A common (informal) mishearing",                     emoji: "❌" },
       { term: "Moot point",          ipa: "/muːt pɔɪnt/", es: "Correcto",   meaning: "The correct phrase — a debatable/irrelevant point (NOT 'mute')", emoji: "✅" },
       { term: "Mute point",          ipa: "/mjuːt pɔɪnt/", es: "Incorrecto (eggcorn)", meaning: "A common mishearing of 'moot point'",                 emoji: "❌" },
-      { term: "Beyond the pale",     ipa: "/bɪˈjɒnd ðə peɪl/", es: "Correcto",   meaning: "The correct phrase — unacceptable behaviour (NOT 'pail')",      emoji: "✅" },
-      { term: "Beyond the pail",     ipa: "/bɪˈjɒnd ðə peɪl/", es: "Incorrecto (eggcorn)", meaning: "A common mishearing of 'beyond the pale'",            emoji: "❌" },
     ]
   },
   dailyRoutineC1: {
@@ -419,6 +417,7 @@ export const CATEGORIES = {
       { term: "Geocaching",         ipa: "/ˈdʒiːoʊˌkæʃɪŋ/", es: "Geocaching (caza de tesoros con GPS)", meaning: "An outdoor treasure-hunting game using GPS", emoji: "🧭" },
       { term: "Woodworking",        ipa: "/ˈwʊdˌwɜːrkɪŋ/", es: "Carpintería (como hobby)", meaning: "Making things out of wood as a hobby",       emoji: "🪵" },
       { term: "Bird watching",      ipa: "/bɜːrd ˈwɒtʃɪŋ/", es: "Observación de aves",  meaning: "The hobby of observing birds in nature",         emoji: "🦜" },
+      { term: "Green-Fingered", ipa: "/ɡriːn ˈfɪŋɡərd/", es: "Con buena mano para las plantas", meaning: "Naturally good at gardening", emoji: "🪴", example: "She's very green-fingered — look at that balcony." }
     ]
   },
   foodDrinkC1: {
@@ -450,6 +449,7 @@ export const CATEGORIES = {
       { term: "Could you hold the line?",   ipa: "/kʊd juː hoʊld ðə laɪn/", es: "¿Podría esperar en línea?",    meaning: "Asking someone to wait during a call",            emoji: "⏸️" },
       { term: "I'll call you back",         ipa: "/aɪl kɔːl juː bæk/", es: "Le devuelvo la llamada",        meaning: "I will phone you again later",                    emoji: "🔙" },
       { term: "You're breaking up",         ipa: "/jʊr ˈbreɪkɪŋ ʌp/", es: "Se corta la llamada",           meaning: "The phone connection is bad, the voice is unclear", emoji: "📶" },
+      { term: "Speaking", ipa: "/ˈspiːkɪŋ/", es: "Al habla / soy yo", meaning: "Formal reply confirming you are the person asked for", emoji: "☎️", example: "'Is that Ms Lee?' — 'Speaking.'" }
     ]
   },
   soundingNatural: {
@@ -474,11 +474,9 @@ export const CATEGORIES = {
       { term: "Carry-on",         ipa: "/ˈkæri ɒn/", es: "Equipaje de mano",       meaning: "A small bag you take on the plane with you",    emoji: "🎒", example: "My carry-on fits under the seat." },
       { term: "Departure gate",   ipa: "/dɪˈpɑːrtʃər ɡeɪt/", es: "Puerta de embarque",     meaning: "The area where you wait to board your flight",  emoji: "🚪", example: "Flight 302 departs from gate B7." },
       { term: "Jet lag",          ipa: "/ˈdʒɛt læɡ/", es: "Desfase horario",        meaning: "Tiredness after flying across time zones",       emoji: "😵", example: "I always get jet lag flying to Asia." },
-      { term: "Round trip",       ipa: "/raʊnd trɪp/", es: "Viaje de ida y vuelta",  meaning: "A journey going somewhere and coming back",      emoji: "🔄", example: "A round trip to London costs £200." },
       { term: "Itinerary",        ipa: "/aɪˈtɪnərɛri/", es: "Itinerario",             meaning: "A plan listing all the places to visit",         emoji: "🗺️", example: "Check the itinerary for tomorrow's activities." },
       { term: "Accommodation",    ipa: "/əˌkɒməˈdeɪʃən/", es: "Alojamiento",            meaning: "A place where you stay when travelling",         emoji: "🏨", example: "We booked accommodation near the beach." },
       { term: "Baggage claim",    ipa: "/ˈbæɡɪdʒ kleɪm/", es: "Reclamo de equipaje",    meaning: "The area where you collect your luggage after a flight", emoji: "🧳", example: "Meet me at baggage claim after you land." },
-      { term: "Turbulence",       ipa: "/ˈtɜːrbjʊləns/", es: "Turbulencia",            meaning: "Rough, shaky air movement during a flight",      emoji: "🌊", example: "Please stay seated during turbulence." },
       { term: "Currency exchange", ipa: "/ˈkʌrənsi ɪksˈtʃeɪndʒ/", es: "Cambio de moneda",      meaning: "A place to convert money to another currency",   emoji: "💱", example: "Find a currency exchange at the airport." },
     ]
   },
@@ -508,6 +506,8 @@ export const CATEGORIES = {
       { term: "In the Same Boat",      ipa: "/ɪn ðə seɪm boʊt/", es: "En la misma situación",   meaning: "In the same difficult situation as others",     emoji: "⛵", example: "We're all in the same boat here." },
       { term: "On the Right Track",    ipa: "/ɒn ðə raɪt træk/", es: "Por buen camino",         meaning: "Making progress in the right direction",        emoji: "🛤️", example: "You're on the right track — keep going." },
       { term: "Hit the Road",          ipa: "/hɪt ðə roʊd/", es: "Ponerse en marcha",       meaning: "To begin a journey or leave",                   emoji: "🚗", example: "Let's hit the road before traffic starts." },
+      { term: "Live Out of a Suitcase", ipa: "/lɪv aʊt ɒv ə ˈsuːtkeɪs/", es: "Vivir de maleta en maleta", meaning: "Travel so often you never fully unpack", emoji: "🧳", example: "Consultants often live out of a suitcase." },
+      { term: "Catch the Travel Bug", ipa: "/kætʃ ðə ˈtrævəl bʌɡ/", es: "Picarle el gusanillo de viajar", meaning: "Develop a strong desire to keep travelling", emoji: "🦟", example: "After Peru she really caught the travel bug." }
     ]
   },
   travelPhrasals: {
@@ -541,9 +541,13 @@ export const CATEGORIES = {
       { term: "Restless",      ipa: "/ˈrɛstləs/", es: "Inquieto",          meaning: "Unable to relax, feeling the need to move",         emoji: "🦶", example: "The kids get restless on long drives." },
       { term: "Indifferent",   ipa: "/ɪnˈdɪfərənt/", es: "Indiferente",       meaning: "Not caring one way or the other",                   emoji: "🤷", example: "She seemed indifferent to the result." },
       { term: "Devastated",    ipa: "/ˈdɛvəsteɪtɪd/", es: "Devastado",         meaning: "Extremely upset or shocked",                        emoji: "💔", example: "He was devastated by the news." },
-      { term: "Euphoric",      ipa: "/juːˈfɒrɪk/", es: "Eufórico",          meaning: "Feeling intense happiness or excitement",           emoji: "🤩", example: "The crowd was euphoric after the goal." },
-      { term: "Melancholic",   ipa: "/ˌmɛlənˈkɒlɪk/", es: "Melancólico",       meaning: "Feeling a deep, thoughtful sadness",                emoji: "🌧️", example: "Rainy days make her melancholic." },
       { term: "Homesick",      ipa: "/ˈhoʊmsɪk/", es: "Nostálgico del hogar", meaning: "Feeling sad because you miss home",                 emoji: "🏠", example: "She felt homesick during her first week abroad." },
+      { term: "Startled", ipa: "/ˈstɑːrtəld/", es: "Sobresaltado", meaning: "Suddenly surprised or frightened", emoji: "😲", example: "I was startled by the noise behind me." },
+      { term: "Reluctant", ipa: "/rɪˈlʌktənt/", es: "Reacio", meaning: "Unwilling and hesitating to do something", emoji: "😕", example: "He was reluctant to admit the mistake." },
+      { term: "Smug", ipa: "/smʌɡ/", es: "Petulante / satisfecho de sí", meaning: "Too pleased with your own cleverness", emoji: "😏", example: "Stop looking so smug about it." },
+      { term: "Uneasy", ipa: "/ʌnˈiːzi/", es: "Intranquilo", meaning: "Slightly worried without knowing exactly why", emoji: "😬", example: "I felt uneasy walking home that night." },
+      { term: "Flustered", ipa: "/ˈflʌstərd/", es: "Aturullado", meaning: "Confused and agitated under pressure", emoji: "😰", example: "She got flustered during the interview." },
+      { term: "Touched", ipa: "/tʌtʃt/", es: "Conmovido", meaning: "Emotionally moved by kindness", emoji: "🥹", example: "I was really touched by their message." }
     ]
   },
   emotionsAdvanced: {
@@ -562,6 +566,13 @@ export const CATEGORIES = {
       { term: "Vindictive",    ipa: "/vɪnˈdɪktɪv/", es: "Vengativo",         meaning: "Wanting to get revenge",                            emoji: "😈", example: "His vindictive nature ruined friendships." },
       { term: "Compassionate", ipa: "/kəmˈpæʃənət/", es: "Compasivo",         meaning: "Feeling deep sympathy for others' suffering",       emoji: "💛", example: "A compassionate teacher changes lives." },
       { term: "Disillusioned", ipa: "/ˌdɪsɪˈluːʒənd/", es: "Desilusionado",     meaning: "Disappointed that something isn't as good as believed", emoji: "😔", example: "He became disillusioned with politics." },
+      { term: "Crestfallen", ipa: "/ˈkrɛstfɔːlən/", es: "Cabizbajo", meaning: "Sad and disappointed after a failure", emoji: "😔", example: "He looked crestfallen when the results came out." },
+      { term: "Indignant", ipa: "/ɪnˈdɪɡnənt/", es: "Indignado", meaning: "Angry at something unfair", emoji: "😤", example: "She was indignant at the accusation." },
+      { term: "Nonplussed", ipa: "/nɒnˈplʌst/", es: "Perplejo", meaning: "So surprised you do not know how to react", emoji: "😐", example: "I was completely nonplussed by his answer." },
+      { term: "Jubilant", ipa: "/ˈdʒuːbɪlənt/", es: "Jubiloso", meaning: "Openly and loudly happy after a success", emoji: "🎉", example: "The jubilant crowd filled the square." },
+      { term: "Forlorn", ipa: "/fərˈlɔːrn/", es: "Desamparado", meaning: "Lonely and unhappy, with little hope", emoji: "🥀", example: "The empty house looked forlorn." },
+      { term: "Vindicated", ipa: "/ˈvɪndɪkeɪtɪd/", es: "Reivindicado", meaning: "Proved right after being doubted", emoji: "✅", example: "She felt vindicated when the report came out." },
+      { term: "Disconcerted", ipa: "/ˌdɪskənˈsɜːrtɪd/", es: "Desconcertado", meaning: "Unsettled and slightly confused", emoji: "🫤", example: "He seemed disconcerted by the question." }
     ]
   },
   emotionsIdioms: {
@@ -578,6 +589,15 @@ export const CATEGORIES = {
       { term: "Beside Yourself",       ipa: "/bɪˈsaɪd jɔːrˈsɛlf/", es: "Fuera de sí",              meaning: "Extremely emotional (with joy, anger, grief)", emoji: "🤯", example: "He was beside himself with worry." },
       { term: "Keep a Stiff Upper Lip", ipa: "/kiːp ə stɪf ˈʌpər lɪp/", es: "Mantener la compostura", meaning: "Not show emotions, stay calm (British)",      emoji: "🇬🇧", example: "The British keep a stiff upper lip in crises." },
       { term: "Jump for Joy",          ipa: "/dʒʌmp fɔːr dʒɔɪ/", es: "Saltar de alegría",         meaning: "Be extremely happy about something",           emoji: "🤸", example: "She jumped for joy when she got the acceptance letter." },
+      { term: "Bite Your Tongue", ipa: "/baɪt jɔːr tʌŋ/", es: "Morderse la lengua", meaning: "Stop yourself from saying what you think", emoji: "🤐", example: "I bit my tongue during the whole meeting." },
+      { term: "A Weight Off Your Shoulders", ipa: "/ə weɪt ɒf jɔːr ˈʃoʊldərz/", es: "Un peso de encima", meaning: "Great relief after a worry is resolved", emoji: "🪶", example: "Handing in the thesis was a weight off my shoulders." },
+      { term: "Hit Rock Bottom", ipa: "/hɪt rɒk ˈbɒtəm/", es: "Tocar fondo", meaning: "Reach the lowest possible point", emoji: "🪨", example: "He hit rock bottom before asking for help." },
+      { term: "Head Over Heels", ipa: "/hɛd ˈoʊvər hiːlz/", es: "Locamente enamorado", meaning: "Completely in love", emoji: "💘", example: "They're head over heels for each other." },
+      { term: "Lose Your Cool", ipa: "/luːz jɔːr kuːl/", es: "Perder los nervios", meaning: "Stop being calm and get angry", emoji: "🥵", example: "He lost his cool during the meeting." },
+      { term: "On Edge", ipa: "/ɒn ɛdʒ/", es: "Con los nervios de punta", meaning: "Tense and easily irritated", emoji: "⚡", example: "Everyone's on edge before results day." },
+      { term: "Walking on Air", ipa: "/ˈwɔːkɪŋ ɒn ɛər/", es: "Como en una nube", meaning: "Extremely happy about something", emoji: "☁️", example: "She's been walking on air since the offer." },
+      { term: "Have a Chip on Your Shoulder", ipa: "/hæv ə tʃɪp ɒn jɔːr ˈʃoʊldər/", es: "Tener un resentimiento", meaning: "Be resentful about a past injustice", emoji: "🪵", example: "He has a chip on his shoulder about not going to university." },
+      { term: "Choked Up", ipa: "/tʃoʊkt ʌp/", es: "Con un nudo en la garganta", meaning: "Too emotional to speak properly", emoji: "😢", example: "I got choked up during the speech." }
     ]
   },
   workOffice: {
@@ -592,8 +612,6 @@ export const CATEGORIES = {
       { term: "Workload",      ipa: "/ˈwɜːrkloʊd/", es: "Carga de trabajo",     meaning: "The amount of work you have to do",               emoji: "📚", example: "The workload has doubled this month." },
       { term: "To delegate",   ipa: "/tuː ˈdɛlɪɡeɪt/", es: "Delegar",              meaning: "To give tasks to others",                         emoji: "👉", example: "A good manager knows how to delegate." },
       { term: "Burnout",       ipa: "/ˈbɜːrnaʊt/", es: "Agotamiento laboral",  meaning: "Extreme tiredness from working too much",         emoji: "🔥", example: "She took a break to avoid burnout." },
-      { term: "Brainstorm",    ipa: "/ˈbreɪnstɔːrm/", es: "Lluvia de ideas",      meaning: "A group session to generate ideas",               emoji: "🧠", example: "Let's brainstorm solutions for this." },
-      { term: "KPI",           ipa: "/ˌkeɪ piː ˈaɪ/", es: "Indicador clave",      meaning: "Key Performance Indicator — a measurable goal",   emoji: "🎯", example: "We need to meet our quarterly KPIs." },
       { term: "Networking",    ipa: "/ˈnɛtwɜːrkɪŋ/", es: "Hacer contactos",      meaning: "Meeting people to build professional connections", emoji: "🌐", example: "Networking events can help your career." },
     ]
   },
@@ -623,6 +641,8 @@ export const CATEGORIES = {
       { term: "Cut Corners",           ipa: "/kʌt ˈkɔːrnərz/", es: "Tomar atajos",             meaning: "Do something poorly to save time/money",    emoji: "✂️", example: "Never cut corners on safety." },
       { term: "Wear Many Hats",        ipa: "/wɛr ˈmɛni hæts/", es: "Tener muchos roles",       meaning: "Have many different responsibilities",       emoji: "🎩", example: "In a startup you wear many hats." },
       { term: "Touch Base",            ipa: "/tʌtʃ beɪs/", es: "Ponerse en contacto",      meaning: "Make brief contact with someone",           emoji: "📞", example: "Let's touch base next week about the project." },
+      { term: "Raise the Bar", ipa: "/reɪz ðə bɑːr/", es: "Subir el listón", meaning: "Set a higher standard than before", emoji: "📊", example: "Their launch really raised the bar for us." },
+      { term: "In the Loop", ipa: "/ɪn ðə luːp/", es: "Al tanto", meaning: "Kept informed about something", emoji: "🔄", example: "Keep me in the loop on the client feedback." }
     ]
   },
   workPhrasals: {
@@ -651,10 +671,8 @@ export const CATEGORIES = {
       { term: "Glitch",        ipa: "/ɡlɪtʃ/", es: "Fallo técnico",        meaning: "A small temporary problem in technology",         emoji: "🐛", example: "There's a glitch in the app — it keeps crashing." },
       { term: "To buffer",     ipa: "/tuː ˈbʌfər/", es: "Estar cargando",       meaning: "When a video pauses to load more data",           emoji: "⏳", example: "The video keeps buffering due to slow Wi-Fi." },
       { term: "Algorithm",     ipa: "/ˈælɡərɪðəm/", es: "Algoritmo",            meaning: "A set of rules a computer follows",               emoji: "🤖", example: "The algorithm suggests content you might like." },
-      { term: "Encryption",    ipa: "/ɪnˈkrɪpʃən/", es: "Encriptación",         meaning: "Converting data into a secret code for security", emoji: "🔒", example: "End-to-end encryption keeps messages private." },
       { term: "Phishing",      ipa: "/ˈfɪʃɪŋ/", es: "Suplantación (fraude)", meaning: "Fake emails/sites trying to steal your information", emoji: "🎣", example: "That email looks like a phishing attempt." },
       { term: "To bookmark",   ipa: "/tuː ˈbʊkmɑːrk/", es: "Guardar en favoritos", meaning: "To save a web page for quick access later",       emoji: "🔖", example: "I bookmarked that article to read later." },
-      { term: "Notification",  ipa: "/ˌnoʊtɪfɪˈkeɪʃən/", es: "Notificación",         meaning: "An alert from an app or device",                  emoji: "🔔", example: "I turned off notifications to focus." },
     ]
   },
   techAdvanced: {
@@ -683,6 +701,8 @@ export const CATEGORIES = {
       { term: "Down the Rabbit Hole", ipa: "/daʊn ðə ˈræbɪt hoʊl/", es: "En un agujero sin fin", meaning: "Getting lost in a complex topic",               emoji: "🐇", example: "I went down the rabbit hole debugging this." },
       { term: "Plug and Play",     ipa: "/plʌɡ ənd pleɪ/", es: "Listo para usar",          meaning: "Something that works immediately without setup", emoji: "🔌", example: "The integration is plug and play." },
       { term: "Byte-Sized",        ipa: "/baɪt saɪzd/", es: "En pequeñas dosis",        meaning: "Small and easy to consume (like information)",   emoji: "🍪", example: "Byte-sized tutorials are easier to follow." },
+      { term: "Ahead of the Curve", ipa: "/əˈhɛd ɒv ðə kɜːrv/", es: "Ir por delante", meaning: "More advanced than current trends", emoji: "📈", example: "Their design team is ahead of the curve." },
+      { term: "Bells and Whistles", ipa: "/bɛlz ænd ˈwɪsəlz/", es: "Florituras / extras", meaning: "Extra features that are not essential", emoji: "🔔", example: "I want a simple phone without the bells and whistles." }
     ]
   },
   techPhrasals: {
@@ -709,12 +729,10 @@ export const CATEGORIES = {
       { term: "To invest",     ipa: "/tuː ɪnˈvɛst/", es: "Invertir",            meaning: "To put money into something to make more money",  emoji: "📈", example: "She invests in stocks and bonds." },
       { term: "Debt",          ipa: "/dɛt/", es: "Deuda",               meaning: "Money that you owe to someone",                   emoji: "💳", example: "He's trying to pay off his credit card debt." },
       { term: "Income",        ipa: "/ˈɪnkʌm/", es: "Ingresos",            meaning: "Money you earn from work or investments",          emoji: "💵", example: "Her monthly income covers all expenses." },
-      { term: "Expense",       ipa: "/ɪkˈspɛns/", es: "Gasto",               meaning: "Money spent on something",                         emoji: "🧾", example: "Travel is my biggest monthly expense." },
       { term: "Savings",       ipa: "/ˈseɪvɪŋz/", es: "Ahorros",             meaning: "Money put aside for later use",                    emoji: "🐷", example: "I'm building up my savings for a holiday." },
       { term: "Invoice",       ipa: "/ˈɪnvɔɪs/", es: "Factura",             meaning: "A document requesting payment for services",       emoji: "📄", example: "Please send the invoice by email." },
       { term: "Tax return",    ipa: "/tæks rɪˈtɜːrn/", es: "Declaración de impuestos", meaning: "A form reporting your income to the government", emoji: "🏛️", example: "I filed my tax return before the deadline." },
       { term: "Withdrawal",    ipa: "/wɪðˈdrɔːəl/", es: "Retiro (de dinero)",  meaning: "Taking money out of a bank account",               emoji: "🏧", example: "There's a fee for ATM withdrawals abroad." },
-      { term: "Inflation",     ipa: "/ɪnˈfleɪʃən/", es: "Inflación",           meaning: "A general increase in prices over time",           emoji: "📈", example: "Inflation has made groceries more expensive." },
     ]
   },
   moneyAdvanced: {
@@ -743,6 +761,8 @@ export const CATEGORIES = {
       { term: "In the Red",           ipa: "/ɪn ðə rɛd/", es: "En números rojos",         meaning: "Owing more money than you have",            emoji: "🔴", example: "The company has been in the red for months." },
       { term: "In the Black",         ipa: "/ɪn ðə blæk/", es: "Con ganancias",            meaning: "Making profit, financially positive",       emoji: "⚫", example: "We're finally back in the black." },
       { term: "Nest Egg",             ipa: "/nɛst ɛɡ/", es: "Ahorros para el futuro",   meaning: "Savings kept for a special future purpose", emoji: "🥚", example: "They're building a nest egg for retirement." },
+      { term: "Live Beyond Your Means", ipa: "/lɪv bɪˈjɒnd jɔːr miːnz/", es: "Vivir por encima de tus posibilidades", meaning: "Spend more than you earn", emoji: "💸", example: "They were living beyond their means for years." },
+      { term: "Foot the Bill", ipa: "/fʊt ðə bɪl/", es: "Pagar la cuenta", meaning: "Pay for something, often on behalf of others", emoji: "🧾", example: "The company footed the bill for the trip." }
     ]
   },
   moneyPhrasals: {
@@ -766,14 +786,12 @@ export const CATEGORIES = {
       { term: "Warm up",       ipa: "/wɔːrm ʌp/", es: "Calentamiento",        meaning: "Light exercise before the main workout",          emoji: "🔥", example: "Always warm up before running." },
       { term: "Cool down",     ipa: "/kuːl daʊn/", es: "Enfriamiento",         meaning: "Gentle exercise after a workout to recover",      emoji: "❄️", example: "Don't skip the cool down — it prevents injury." },
       { term: "Stamina",       ipa: "/ˈstæmɪnə/", es: "Resistencia / aguante", meaning: "The ability to keep doing something for a long time", emoji: "🫀", example: "Swimming builds stamina." },
-      { term: "Reps",          ipa: "/rɛps/", es: "Repeticiones",         meaning: "The number of times you do an exercise",          emoji: "🔁", example: "Do 3 sets of 12 reps." },
       { term: "Flexibility",   ipa: "/ˌflɛksɪˈbɪlɪti/", es: "Flexibilidad",        meaning: "The ability to bend your body easily",            emoji: "🧘", example: "Yoga improves your flexibility." },
       { term: "Core",          ipa: "/kɔːr/", es: "Zona central (abdomen)", meaning: "The muscles of your stomach and lower back",    emoji: "💪", example: "Planks are great for your core." },
       { term: "Balanced diet",  ipa: "/ˈbælənst ˈdaɪət/", es: "Dieta equilibrada",   meaning: "Eating the right amounts of different foods",     emoji: "🥗", example: "A balanced diet includes fruit and vegetables." },
       { term: "Dehydrated",    ipa: "/diːˈhaɪdreɪtɪd/", es: "Deshidratado",         meaning: "Not having enough water in your body",            emoji: "💧", example: "Drink water — you look dehydrated." },
       { term: "Supplement",    ipa: "/ˈsʌplɪmənt/", es: "Suplemento",           meaning: "Extra vitamins or nutrients taken as pills",      emoji: "💊", example: "She takes vitamin D supplements in winter." },
       { term: "Rest day",      ipa: "/rɛst deɪ/", es: "Día de descanso",      meaning: "A day without exercise to let muscles recover",   emoji: "🛌", example: "Your body needs a rest day between workouts." },
-      { term: "Personal best", ipa: "/ˈpɜːrsənəl bɛst/", es: "Marca personal",       meaning: "Your own best performance or record",             emoji: "🏆", example: "She beat her personal best in the 5k run." },
       { term: "Soreness",      ipa: "/ˈsɔːrnəs/", es: "Dolor muscular",       meaning: "Pain in muscles after intense exercise",          emoji: "😣", example: "Some soreness after leg day is normal." },
     ]
   },
@@ -803,6 +821,8 @@ export const CATEGORIES = {
       { term: "Go Cold Turkey",           ipa: "/ɡoʊ koʊld ˈtɜːrki/", es: "Dejarlo de golpe",          meaning: "Quit a bad habit suddenly and completely",         emoji: "🦃", example: "He went cold turkey on caffeine." },
       { term: "A Dose of Your Own Medicine", ipa: "/ə doʊs ɒv jɔːr oʊn ˈmɛdɪsɪn/", es: "Probar tu propia medicina", meaning: "Experience the same bad treatment you gave others", emoji: "💊", example: "Now he knows how it feels — a dose of his own medicine." },
       { term: "Feel Under the Weather",   ipa: "/fiːl ˈʌndər ðə ˈwɛðər/", es: "Sentirse mal",              meaning: "Feel slightly ill",                               emoji: "🌧️", example: "I'm feeling under the weather today." },
+      { term: "Back on Your Feet", ipa: "/bæk ɒn jɔːr fiːt/", es: "Recuperado", meaning: "Healthy again after an illness or setback", emoji: "🦵", example: "She was back on her feet a week after surgery." },
+      { term: "Get Into Shape", ipa: "/ɡɛt ˈɪntuː ʃeɪp/", es: "Ponerse en forma", meaning: "Become physically fit through exercise", emoji: "🏋️", example: "I'm trying to get into shape before summer." }
     ]
   },
   healthPhrasals: {
@@ -823,7 +843,6 @@ export const CATEGORIES = {
   homeFurniture: {
     label: "🏠 Home & Furniture",
     items: [
-      { term: "Cushion",       ipa: "/ˈkʊʃən/", es: "Cojín",               meaning: "A soft pad placed on a sofa or chair",            emoji: "🛋️", example: "The cushions on the sofa are very soft." },
       { term: "Drawer",        ipa: "/drɔːr/", es: "Cajón",               meaning: "A box-shaped container that slides in and out",   emoji: "🗄️", example: "The keys are in the top drawer." },
       { term: "Shelf",         ipa: "/ʃɛlf/", es: "Estante / repisa",    meaning: "A flat board fixed to a wall for placing things", emoji: "📚", example: "Put the books back on the shelf." },
       { term: "Curtains",      ipa: "/ˈkɜːrtənz/", es: "Cortinas",            meaning: "Fabric that covers a window",                     emoji: "🪟", example: "Close the curtains — it's getting dark." },
@@ -833,7 +852,6 @@ export const CATEGORIES = {
       { term: "Renovate",      ipa: "/ˈrɛnəveɪt/", es: "Renovar / remodelar", meaning: "To improve a building by repairing or updating it", emoji: "🔨", example: "They renovated the kitchen last summer." },
       { term: "Basement",      ipa: "/ˈbeɪsmənt/", es: "Sótano",              meaning: "A room below ground level in a building",          emoji: "⬇️", example: "The washing machine is in the basement." },
       { term: "Attic",         ipa: "/ˈætɪk/", es: "Ático / desván",      meaning: "A space or room at the top of a house, under the roof", emoji: "🏚️", example: "Old suitcases are stored in the attic." },
-      { term: "Hallway",       ipa: "/ˈhɔːlweɪ/", es: "Pasillo / recibidor", meaning: "A corridor or entrance area in a house",           emoji: "🚪", example: "Leave your shoes in the hallway." },
       { term: "Appliance",     ipa: "/əˈplaɪəns/", es: "Electrodoméstico",    meaning: "A machine used in the home (fridge, washing machine)", emoji: "🧊", example: "The kitchen has all modern appliances." },
     ]
   },
@@ -863,6 +881,8 @@ export const CATEGORIES = {
       { term: "House of Cards",        ipa: "/haʊs ɒv kɑːrdz/", es: "Castillo de naipes",      meaning: "Something fragile that could collapse easily",  emoji: "🃏", example: "Their business model is a house of cards." },
       { term: "A Roof Over Your Head", ipa: "/ə ruːf ˈoʊvər jɔːr hɛd/", es: "Un techo donde vivir",    meaning: "Basic housing or shelter",                      emoji: "🏠", example: "Everyone deserves a roof over their head." },
       { term: "Get on Like a House on Fire", ipa: "/ɡɛt ɒn laɪk ə haʊs ɒn ˈfaɪər/", es: "Llevarse genial",   meaning: "Become very good friends quickly",              emoji: "🔥", example: "They got on like a house on fire." },
+      { term: "Eat Someone Out of House and Home", ipa: "/iːt ˈsʌmwʌn aʊt ɒv haʊs ænd hoʊm/", es: "Dejar la despensa vacía", meaning: "Eat so much you use up all of someone's food", emoji: "🍽️", example: "The kids ate us out of house and home." },
+      { term: "Get Your House in Order", ipa: "/ɡɛt jɔːr haʊs ɪn ˈɔːrdər/", es: "Poner la casa en orden", meaning: "Sort out your own problems before criticising others", emoji: "🧹", example: "Get your house in order before blaming the team." }
     ]
   },
   homePhrasals: {
@@ -886,9 +906,7 @@ export const CATEGORIES = {
       { term: "Carbon footprint", ipa: "/ˈkɑːrbən ˈfʊtprɪnt/", es: "Huella de carbono",   meaning: "The amount of CO₂ produced by your activities", emoji: "👣", example: "Flying increases your carbon footprint." },
       { term: "Renewable energy", ipa: "/rɪˈnjuːəbəl ˈɛnərdʒi/", es: "Energía renovable",   meaning: "Energy from sources that won't run out (solar, wind)", emoji: "♻️", example: "The country is investing in renewable energy." },
       { term: "Drought",       ipa: "/draʊt/", es: "Sequía",               meaning: "A long period without rain",                     emoji: "🏜️", example: "The drought destroyed the crops." },
-      { term: "Ecosystem",     ipa: "/ˈiːkoʊˌsɪstəm/", es: "Ecosistema",           meaning: "A community of living things in an environment", emoji: "🌳", example: "Coral reefs are fragile ecosystems." },
       { term: "Deforestation", ipa: "/diːˌfɒrɪˈsteɪʃən/", es: "Deforestación",        meaning: "Cutting down large areas of forest",             emoji: "🪓", example: "Deforestation is a major cause of climate change." },
-      { term: "Biodiversity",  ipa: "/ˌbaɪoʊdaɪˈvɜːrsɪti/", es: "Biodiversidad",        meaning: "The variety of plant and animal life in an area", emoji: "🦋", example: "The rainforest has incredible biodiversity." },
       { term: "Pollution",     ipa: "/pəˈluːʃən/", es: "Contaminación",        meaning: "Harmful substances released into the environment", emoji: "🏭", example: "Air pollution is a problem in big cities." },
       { term: "Sustainable",   ipa: "/səˈsteɪnəbəl/", es: "Sostenible",           meaning: "Able to continue without damaging the environment", emoji: "🌱", example: "We need more sustainable farming practices." },
       { term: "Wildlife",      ipa: "/ˈwaɪldlaɪf/", es: "Fauna silvestre",      meaning: "Animals living in their natural environment",     emoji: "🦌", example: "The reserve protects local wildlife." },
@@ -899,6 +917,12 @@ export const CATEGORIES = {
       { term: "Flood",         ipa: "/flʌd/", es: "Inundación",           meaning: "An overflow of water onto normally dry land",     emoji: "🌊", example: "Heavy rain caused floods in the area." },
       { term: "Fossil fuels",  ipa: "/ˈfɒsəl fjuːəlz/", es: "Combustibles fósiles", meaning: "Coal, oil and gas formed from ancient organisms", emoji: "⛽", example: "We must reduce our dependence on fossil fuels." },
       { term: "Extinction",    ipa: "/ɪkˈstɪŋkʃən/", es: "Extinción",            meaning: "When a species stops existing completely",        emoji: "🦕", example: "Poaching pushed the species toward extinction." },
+      { term: "Landfill", ipa: "/ˈlændfɪl/", es: "Vertedero", meaning: "A site where rubbish is buried", emoji: "🗑️", example: "Most of that packaging ends up in landfill." },
+      { term: "Compost", ipa: "/ˈkɒmpɒst/", es: "Compost / abono", meaning: "Decayed organic matter used to enrich soil", emoji: "🍂", example: "We compost all our vegetable peelings." },
+      { term: "Wetland", ipa: "/ˈwɛtlənd/", es: "Humedal", meaning: "Land where the soil is saturated with water", emoji: "🦆", example: "Wetlands filter water and store carbon." },
+      { term: "Erosion", ipa: "/ɪˈroʊʒən/", es: "Erosión", meaning: "The gradual wearing away of soil or rock", emoji: "🏜️", example: "Tree roots slow down soil erosion." },
+      { term: "Litter", ipa: "/ˈlɪtər/", es: "Basura (tirada en la calle)", meaning: "Rubbish left lying in a public place", emoji: "🥤", example: "Please take your litter home with you." },
+      { term: "Solar panel", ipa: "/ˈsoʊlər ˈpænəl/", es: "Panel solar", meaning: "A device that converts sunlight into electricity", emoji: "🔆", example: "They fitted solar panels on the roof." }
     ]
   },
   natureAdvanced: {
@@ -917,6 +941,13 @@ export const CATEGORIES = {
       { term: "Ozone layer",    ipa: "/ˈoʊzoʊn ˈleɪər/", es: "Capa de ozono",        meaning: "Part of the atmosphere that blocks UV radiation", emoji: "🛡️", example: "The ozone layer protects us from the sun." },
       { term: "Desertification", ipa: "/dɪˌzɜːrtɪfɪˈkeɪʃən/", es: "Desertificación",     meaning: "Land becoming desert due to climate or overuse",  emoji: "🏜️", example: "Desertification threatens millions in Africa." },
       { term: "Rewilding",      ipa: "/riːˈwaɪldɪŋ/", es: "Restauración ecológica", meaning: "Restoring land to its natural, wild state",     emoji: "🐺", example: "Rewilding projects reintroduced wolves in parts of Europe." },
+      { term: "Carbon offset", ipa: "/ˈkɑːrbən ˈɒfsɛt/", es: "Compensación de carbono", meaning: "An action that balances out emissions produced elsewhere", emoji: "♻️", example: "The airline sells carbon offsets at checkout." },
+      { term: "Carbon sink", ipa: "/ˈkɑːrbən sɪŋk/", es: "Sumidero de carbono", meaning: "A natural store that absorbs more carbon than it releases", emoji: "🌳", example: "Peatlands are a major carbon sink." },
+      { term: "Fracking", ipa: "/ˈfrækɪŋ/", es: "Fracturación hidráulica", meaning: "Extracting gas by injecting liquid into rock at high pressure", emoji: "🛢️", example: "Fracking was banned in several regions." },
+      { term: "Circular economy", ipa: "/ˈsɜːrkjələr ɪˈkɒnəmi/", es: "Economía circular", meaning: "A system where materials are reused instead of discarded", emoji: "🔁", example: "Their packaging is designed for a circular economy." },
+      { term: "Bycatch", ipa: "/ˈbaɪkætʃ/", es: "Captura accidental", meaning: "Sea creatures caught unintentionally in fishing nets", emoji: "🐬", example: "New nets cut bycatch by half." },
+      { term: "Monoculture", ipa: "/ˈmɒnoʊkʌltʃər/", es: "Monocultivo", meaning: "Growing a single crop over a large area", emoji: "🌾", example: "Monoculture leaves crops open to disease." },
+      { term: "Keystone species", ipa: "/ˈkiːstoʊn ˈspiːʃiːz/", es: "Especie clave", meaning: "A species an entire ecosystem depends on", emoji: "🔑", example: "Wolves are a keystone species in that park." }
     ]
   },
   environmentIdioms: {
@@ -933,6 +964,15 @@ export const CATEGORIES = {
       { term: "Break New Ground",      ipa: "/breɪk njuː ɡraʊnd/", es: "Abrir nuevos caminos",     meaning: "Do something innovative and original",          emoji: "⛏️", example: "Their research broke new ground in genetics." },
       { term: "Plant the Seed",        ipa: "/plænt ðə siːd/", es: "Sembrar la semilla",       meaning: "Introduce an idea that may develop later",      emoji: "🌱", example: "She planted the seed for the new strategy." },
       { term: "A Drop in the Ocean",   ipa: "/ə drɒp ɪn ðiː ˈoʊʃən/", es: "Una gota en el océano", meaning: "A very small amount compared to what's needed", emoji: "🌊", example: "Our donation is just a drop in the ocean." },
+      { term: "Come Rain or Shine", ipa: "/kʌm reɪn ɔːr ʃaɪn/", es: "Llueva o truene", meaning: "Whatever the circumstances", emoji: "🌦️", example: "She runs every morning, come rain or shine." },
+      { term: "Every Cloud Has a Silver Lining", ipa: "/ˈɛvri klaʊd hæz ə ˈsɪlvər ˈlaɪnɪŋ/", es: "No hay mal que por bien no venga", meaning: "Every bad situation has some good in it", emoji: "☁️", example: "He lost the job but found a better one — every cloud has a silver lining." },
+      { term: "Go With the Flow", ipa: "/ɡoʊ wɪð ðə floʊ/", es: "Dejarse llevar", meaning: "Accept things as they happen without resisting", emoji: "🌊", example: "Don't over-plan — just go with the flow." },
+      { term: "A Storm in a Teacup", ipa: "/ə stɔːrm ɪn ə ˈtiːkʌp/", es: "Una tormenta en un vaso de agua", meaning: "A lot of fuss about something unimportant", emoji: "🫖", example: "The whole argument was a storm in a teacup." },
+      { term: "Test the Waters", ipa: "/tɛst ðə ˈwɔːtərz/", es: "Tantear el terreno", meaning: "Try something cautiously before committing", emoji: "🌡️", example: "We tested the waters with a small pilot." },
+      { term: "Down to Earth", ipa: "/daʊn tuː ɜːrθ/", es: "Con los pies en la tierra", meaning: "Practical and unpretentious", emoji: "🌍", example: "Despite the fame, she's very down to earth." },
+      { term: "Take Root", ipa: "/teɪk ruːt/", es: "Arraigar", meaning: "Become established and start to grow", emoji: "🌱", example: "The idea took root across the company." },
+      { term: "In Full Bloom", ipa: "/ɪn fʊl bluːm/", es: "En pleno apogeo", meaning: "At the peak of development or beauty", emoji: "🌸", example: "The garden is in full bloom in May." },
+      { term: "Clear the Air", ipa: "/klɪər ðə ɛər/", es: "Aclarar las cosas", meaning: "Resolve a tense misunderstanding by talking", emoji: "💨", example: "Let's clear the air before the meeting." }
     ]
   },
   educationStudy: {
@@ -946,14 +986,18 @@ export const CATEGORIES = {
       { term: "Dropout",       ipa: "/ˈdrɒpaʊt/", es: "Desertor escolar",     meaning: "Someone who leaves school/university early",      emoji: "🚪", example: "The dropout rate has decreased this year." },
       { term: "Thesis",        ipa: "/ˈθiːsɪs/", es: "Tesis",                meaning: "A long written work for a degree",                emoji: "📖", example: "She's writing her thesis on climate change." },
       { term: "Lecture",       ipa: "/ˈlɛktʃər/", es: "Clase magistral",      meaning: "A talk given to a large group of students",       emoji: "🎤", example: "The lecture starts at 9 AM." },
-      { term: "GPA",           ipa: "/ˌdʒiː piː ˈeɪ/", es: "Promedio de notas",    meaning: "Grade Point Average — your overall academic score", emoji: "📊", example: "You need a 3.5 GPA to apply." },
       { term: "Curriculum",    ipa: "/kəˈrɪkjʊləm/", es: "Plan curricular",      meaning: "The full set of courses offered by a school",     emoji: "📚", example: "They updated the curriculum this year." },
       { term: "Peer review",   ipa: "/pɪr rɪˈvjuː/", es: "Revisión entre pares", meaning: "Feedback from classmates or colleagues",          emoji: "👥", example: "Peer review improves essay quality." },
       { term: "Plagiarism",    ipa: "/ˈpleɪdʒərɪzəm/", es: "Plagio",               meaning: "Copying someone's work and saying it's yours",    emoji: "🚫", example: "Plagiarism can result in expulsion." },
       { term: "To enrol",      ipa: "/tuː ɪnˈroʊl/", es: "Inscribirse / matricularse", meaning: "To officially register for a course",       emoji: "✍️", example: "You can enrol online starting March 1." },
       { term: "Extracurricular", ipa: "/ˌɛkstrəkəˈrɪkjʊlər/", es: "Extracurricular",    meaning: "Activities done outside normal lessons",          emoji: "🎭", example: "She does theatre as an extracurricular activity." },
-      { term: "Valedictorian", ipa: "/ˌvælɪdɪkˈtɔːriən/", es: "Mejor promedio de la clase", meaning: "The student with the highest grades in a graduating class", emoji: "🏅", example: "The valedictorian gave the graduation speech." },
       { term: "Semester",      ipa: "/sɪˈmɛstər/", es: "Semestre",             meaning: "Half of an academic year",                        emoji: "📅", example: "Registration for next semester starts soon." },
+      { term: "Transcript", ipa: "/ˈtrænskrɪpt/", es: "Expediente académico", meaning: "Official record of the courses and grades you have taken", emoji: "📜", example: "Universities ask for a transcript with your application." },
+      { term: "Undergraduate", ipa: "/ˌʌndərˈɡrædʒuət/", es: "Estudiante de grado", meaning: "A student doing a first university degree", emoji: "🎒", example: "She's an undergraduate in her second year." },
+      { term: "Postgraduate", ipa: "/ˌpoʊstˈɡrædʒuət/", es: "De posgrado", meaning: "Study done after a first degree", emoji: "🎓", example: "He went straight into postgraduate research." },
+      { term: "To revise", ipa: "/tuː rɪˈvaɪz/", es: "Repasar (¡no «revisar»!)", meaning: "Study material again before an exam (British English)", emoji: "📖", example: "I'm revising for my chemistry exam." },
+      { term: "Coursework", ipa: "/ˈkɔːrswɜːrk/", es: "Trabajo de curso", meaning: "Work assessed during the course, not in a final exam", emoji: "📁", example: "Coursework counts for 40% of the final mark." },
+      { term: "To sit an exam", ipa: "/tuː sɪt æn ɪɡˈzæm/", es: "Presentarse a un examen", meaning: "Take an exam (British English)", emoji: "🪑", example: "You sit the final exam in June." }
     ]
   },
   educationAdvanced: {
@@ -972,6 +1016,13 @@ export const CATEGORIES = {
       { term: "Magna cum laude", ipa: "/ˈmæɡnə kʌm ˈlɔːdi/", es: "Con grandes honores", meaning: "High academic distinction at graduation",         emoji: "🌟", example: "She graduated magna cum laude." },
       { term: "Adjunct professor", ipa: "/ˈædʒʌŋkt prəˈfɛsər/", es: "Profesor adjunto",  meaning: "A part-time university teacher",                  emoji: "👩‍🏫", example: "He works as an adjunct professor at two colleges." },
       { term: "Cohort",         ipa: "/ˈkoʊhɔːrt/", es: "Cohorte / generación", meaning: "A group of students who start a programme together", emoji: "👥", example: "Our cohort had 30 students." },
+      { term: "Faculty", ipa: "/ˈfækəlti/", es: "Profesorado (¡no «facultad»!)", meaning: "The teaching staff of a university", emoji: "👩‍🏫", example: "The faculty voted against the proposal." },
+      { term: "Viva", ipa: "/ˈvaɪvə/", es: "Defensa oral", meaning: "Oral examination of a thesis", emoji: "🗣️", example: "She passed her viva with minor corrections." },
+      { term: "Bursary", ipa: "/ˈbɜːrsəri/", es: "Beca de ayuda económica", meaning: "A grant given to a student based on financial need", emoji: "💰", example: "She applied for a bursary to cover her fees." },
+      { term: "Pedagogy", ipa: "/ˈpɛdəɡɒdʒi/", es: "Pedagogía", meaning: "The method and practice of teaching", emoji: "🧑‍🏫", example: "The course rethinks pedagogy for online classes." },
+      { term: "Rubric", ipa: "/ˈruːbrɪk/", es: "Rúbrica de evaluación", meaning: "The criteria used to grade a piece of work", emoji: "📋", example: "Check the rubric before you submit." },
+      { term: "Attrition", ipa: "/əˈtrɪʃən/", es: "Abandono / deserción", meaning: "The rate at which students drop out", emoji: "📉", example: "Attrition is highest in the first term." },
+      { term: "Capstone", ipa: "/ˈkæpstoʊn/", es: "Proyecto final", meaning: "A final project that brings a degree together", emoji: "🏗️", example: "Her capstone was a working prototype." }
     ]
   },
   educationIdioms: {
@@ -988,6 +1039,15 @@ export const CATEGORIES = {
       { term: "Know Something Inside Out", ipa: "/noʊ ˈsʌmθɪŋ ɪnˈsaɪd aʊt/", es: "Conocer algo al dedillo", meaning: "Know something extremely well",            emoji: "🧠", example: "She knows the topic inside out." },
       { term: "School of Hard Knocks", ipa: "/skuːl ɒv hɑːrd nɒks/", es: "Universidad de la vida",  meaning: "Learning from difficult life experiences",      emoji: "🥊", example: "He graduated from the school of hard knocks." },
       { term: "Learn by Heart",        ipa: "/lɜːrn baɪ hɑːrt/", es: "Aprender de memoria",     meaning: "Memorize something completely",                emoji: "❤️", example: "We had to learn the poem by heart." },
+      { term: "Pull an All-Nighter", ipa: "/pʊl æn ˈɔːlnaɪtər/", es: "Pasar la noche en vela", meaning: "Stay up all night studying or working", emoji: "🌙", example: "He pulled an all-nighter before the exam." },
+      { term: "Put Your Thinking Cap On", ipa: "/pʊt jɔːr ˈθɪŋkɪŋ kæp ɒn/", es: "Ponerse a pensar", meaning: "Start thinking hard about a problem", emoji: "🎓", example: "Put your thinking cap on — this one is tricky." },
+      { term: "Bookworm", ipa: "/ˈbʊkwɜːrm/", es: "Ratón de biblioteca", meaning: "Someone who loves reading", emoji: "🐛", example: "He's been a bookworm since he was six." },
+      { term: "A Quick Study", ipa: "/ə kwɪk ˈstʌdi/", es: "Que aprende rápido", meaning: "Someone who learns new things fast", emoji: "⚡", example: "Don't worry — she's a quick study." },
+      { term: "Ace an Exam", ipa: "/eɪs æn ɪɡˈzæm/", es: "Bordar un examen", meaning: "Do extremely well in a test", emoji: "🅰️", example: "He aced the exam without revising." },
+      { term: "Scrape Through", ipa: "/skreɪp θruː/", es: "Aprobar por los pelos", meaning: "Just barely pass", emoji: "😅", example: "I scraped through with 51%." },
+      { term: "Rack Your Brains", ipa: "/ræk jɔːr breɪnz/", es: "Devanarse los sesos", meaning: "Think very hard to remember or solve something", emoji: "🧠", example: "I racked my brains but couldn't recall her name." },
+      { term: "Get to Grips With", ipa: "/ɡɛt tuː ɡrɪps wɪð/", es: "Hacerse con (un tema)", meaning: "Start to understand and control something difficult", emoji: "🤝", example: "I'm still getting to grips with statistics." },
+      { term: "Food for Thought", ipa: "/fuːd fɔːr θɔːt/", es: "Algo en lo que pensar", meaning: "Something worth thinking about seriously", emoji: "🍎", example: "That lecture gave us plenty of food for thought." }
     ]
   },
   shoppingRetail: {
@@ -998,13 +1058,11 @@ export const CATEGORIES = {
       { term: "Out of stock",  ipa: "/aʊt ɒv stɒk/", es: "Agotado",              meaning: "Not available to buy at the moment",              emoji: "❌", example: "Sorry, that size is out of stock." },
       { term: "Browse",        ipa: "/braʊz/", es: "Mirar / curiosear",    meaning: "To look at things in a shop without buying",      emoji: "👀", example: "I'm just browsing, thanks." },
       { term: "Checkout",      ipa: "/ˈtʃɛkaʊt/", es: "Caja / punto de pago", meaning: "The place where you pay in a shop",               emoji: "🛒", example: "There's a long queue at the checkout." },
-      { term: "Loyalty card",  ipa: "/ˈlɔɪəlti kɑːrd/", es: "Tarjeta de fidelidad", meaning: "A card that gives you rewards for shopping",      emoji: "💳", example: "Do you have a loyalty card with us?" },
       { term: "Window shopping", ipa: "/ˈwɪndoʊ ˈʃɒpɪŋ/", es: "Mirar escaparates",  meaning: "Looking at things in shop windows without buying", emoji: "🪟", example: "We went window shopping on Saturday." },
       { term: "To splurge",    ipa: "/tuː splɜːrdʒ/", es: "Darse un lujo",        meaning: "To spend a lot of money on something special",    emoji: "💎", example: "I splurged on a new watch for my birthday." },
       { term: "Discount",      ipa: "/ˈdɪskaʊnt/", es: "Descuento",            meaning: "A reduction in the normal price",                 emoji: "🔖", example: "Students get a 10% discount." },
       { term: "To queue",      ipa: "/tuː kjuː/", es: "Hacer cola / fila",    meaning: "To wait in a line for your turn",                 emoji: "🧍", example: "We queued for 30 minutes to get in." },
       { term: "Warranty",      ipa: "/ˈwɒrənti/", es: "Garantía",             meaning: "A promise to repair/replace a product if it breaks", emoji: "🛡️", example: "The laptop comes with a 2-year warranty." },
-      { term: "Aisle",         ipa: "/aɪl/", es: "Pasillo (de tienda)",  meaning: "A passage between rows of shelves in a shop",     emoji: "🏪", example: "You'll find pasta in aisle 5." },
     ]
   },
   shoppingAdvanced: {
@@ -1033,6 +1091,8 @@ export const CATEGORIES = {
       { term: "Get More Bang for Your Buck", ipa: "/ɡɛt mɔːr bæŋ fɔːr jɔːr bʌk/", es: "Sacar más provecho al dinero", meaning: "Get better value for what you pay", emoji: "💥", example: "Buy in bulk to get more bang for your buck." },
       { term: "Cut-Price",             ipa: "/kʌt praɪs/", es: "A precio rebajado",       meaning: "Sold at a lower price than usual",              emoji: "✂️", example: "I found cut-price flights for next week." },
       { term: "Cost a Pretty Penny",   ipa: "/kɒst ə ˈprɪti ˈpɛni/", es: "Costar un dineral",       meaning: "Be expensive",                                  emoji: "💸", example: "That handbag cost a pretty penny." },
+      { term: "Buyer's Remorse", ipa: "/ˈbaɪərz rɪˈmɔːrs/", es: "Arrepentimiento del comprador", meaning: "Regret felt after making a purchase", emoji: "😩", example: "I had buyer's remorse the moment I left the shop." },
+      { term: "Tighten Your Belt", ipa: "/ˈtaɪtən jɔːr bɛlt/", es: "Apretarse el cinturón", meaning: "Spend less because you have less money", emoji: "🎽", example: "We had to tighten our belts after the move." }
     ]
   },
   shoppingPhrasals: {

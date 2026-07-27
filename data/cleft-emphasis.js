@@ -13,10 +13,12 @@ export const CATEGORIES = {
       { sentence: 'What I need is a good night\'s sleep.', correct: 'Wh-cleft', explain: '"What + subject + verb + is..." — emphasises the thing needed.' },
       { sentence: 'All I want is a cup of coffee.', correct: 'All-cleft', explain: '"All + subject + verb + is..." — emphasises that it\'s ONLY this, nothing more.' },
       { sentence: 'A good night\'s sleep is what I need.', correct: 'Reverse wh-cleft', explain: 'Focused element first + "is what..." — reverses the wh-cleft for different emphasis.' },
-      { sentence: 'It was in 2019 that the company went public.', correct: 'It-cleft', explain: '"It + was + time expression + that..." — emphasises WHEN something happened.' },
       { sentence: 'What bothers me is his complete lack of effort.', correct: 'Wh-cleft', explain: '"What + verb + is..." — emphasises the cause of the feeling.' },
       { sentence: 'All they did was complain about the food.', correct: 'All-cleft', explain: '"All + subject + did + was..." — emphasises the ONLY action taken (often critical).' },
       { sentence: 'The lack of communication is what caused the problem.', correct: 'Reverse wh-cleft', explain: 'Focused element first + "is what..." — useful in arguments to pinpoint a cause.' },
+      { sentence: 'It was the manager who approved the budget.', correct: 'It-cleft', explain: '"It + be + foco + who/that" → It-cleft.' },
+      { sentence: 'It is trust that holds a team together.', correct: 'It-cleft', explain: '"It is + foco + that" → It-cleft en presente.' },
+      { sentence: 'What surprised everyone was the final score.', correct: 'Wh-cleft', explain: '"What + oración + be" → Wh-cleft.' }
     ]
   },
   complete: {
@@ -28,10 +30,12 @@ export const CATEGORIES = {
       { sentence: '___ better communication between departments.', correct: 'What we need is', explain: 'Wh-cleft: "What + subject + verb + is..." emphasises the solution needed.' },
       { sentence: '___ stare at her phone during the entire meeting.', correct: 'All she did was', explain: 'All-cleft: emphasises the ONLY thing done (critical tone).' },
       { sentence: '___ concerns most investors, not the timeline.', correct: 'It is the cost that', explain: 'It-cleft: emphasises WHAT concerns them (present tense for current situation).' },
-      { sentence: '___ recommended the restaurant, so blame him.', correct: 'It was John who', explain: 'It-cleft: assigns responsibility/blame to a specific person.' },
       { sentence: '___ a clear strategy going forward.', correct: 'What we need is', explain: 'Wh-cleft: highlights the requirement/solution.' },
       { sentence: '___ apologise without offering any explanation.', correct: 'All she did was', explain: 'All-cleft: the "only thing" she did, implying it wasn\'t enough.' },
       { sentence: '___ worries me about the plan, not the feasibility.', correct: 'It is the cost that', explain: 'It-cleft: isolates the specific concern from other possible objections.' },
+      { sentence: '___ suggested the idea in the first place.', correct: 'It was John who', explain: 'It-cleft: pone a la persona en foco.' },
+      { sentence: '___ signed the contract, not the director.', correct: 'It was John who', explain: 'It-cleft: contrasta quién lo hizo con quién no.' },
+      { sentence: '___ nod and say nothing.', correct: 'All she did was', explain: 'All-cleft: reduce la acción a una sola cosa.' }
     ]
   },
   transform: {
@@ -41,13 +45,20 @@ export const CATEGORIES = {
       'It was the noise that kept me awake.',
       'What she really wants is recognition.',
       'All I ask is that you listen.',
-      'It was in Paris that they first met.'
-    ],
+      'It was in Paris that they first met.',
+      'What they need is more time.',
+      'All he wanted was an apology.', 'It was the rain that ruined the picnic.', 'What we want is honesty.', 'All he said was sorry.', 'It was on Sunday that they arrived.'],
     items: [
       { sentence: 'The noise kept me awake. (It-cleft: emphasise "the noise")', correct: 'It was the noise that kept me awake.', explain: 'Move "the noise" into focus position: It + was + focus + that + rest.' },
       { sentence: 'She really wants recognition. (Wh-cleft: emphasise "recognition")', correct: 'What she really wants is recognition.', explain: '"What + subject + verb + is + focused element" — puts the desire in end-focus.' },
       { sentence: 'I only ask that you listen. (All-cleft: emphasise simplicity of request)', correct: 'All I ask is that you listen.', explain: '"All + subject + verb + is + minimal request" — stresses how little is being asked.' },
+      { sentence: 'They need more time. (Wh-cleft: emphasise "more time")', correct: 'What they need is more time.', explain: '"What + subject + verb + is" pone el objeto en foco.' },
+      { sentence: 'He only wanted an apology. (All-cleft: emphasise the single thing wanted)', correct: 'All he wanted was an apology.', explain: '"All + subject + verb + was" reduce la petición a una sola cosa.' },
       { sentence: 'They first met in Paris. (It-cleft: emphasise "in Paris")', correct: 'It was in Paris that they first met.', explain: 'Move the place into focus: It + was + place + that + event.' },
+      { sentence: 'The rain ruined the picnic. (It-cleft: emphasise "the rain")', correct: 'It was the rain that ruined the picnic.', explain: 'El sujeto pasa al foco: It + was + sujeto + that.' },
+      { sentence: 'We want honesty. (Wh-cleft: emphasise "honesty")', correct: 'What we want is honesty.', explain: '"What + sujeto + verbo + is" pone el objeto en foco.' },
+      { sentence: 'He only said sorry. (All-cleft: emphasise how little he said)', correct: 'All he said was sorry.', explain: '"All + sujeto + verbo + was" marca que no hubo nada más.' },
+      { sentence: 'They arrived on Sunday. (It-cleft: emphasise "on Sunday")', correct: 'It was on Sunday that they arrived.', explain: 'El complemento de tiempo pasa al foco.' }
     ]
   }
 };

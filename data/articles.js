@@ -9,7 +9,6 @@ export const CATEGORIES = {
     icon: '📘',
     options: ['a', 'an', 'the', '∅'],
     items: [
-      { sentence: 'I have ___ cat.', correct: 'a', explain: 'Use "a" before consonant sounds (cat).' },
       { sentence: 'She is ___ honest person.', correct: 'an', explain: 'Use "an" before silent "h" (honest → vowel sound).' },
       { sentence: 'I saw ___ elephant at the zoo.', correct: 'an', explain: 'Use "an" before vowel sounds (elephant).' },
       { sentence: 'Can you close ___ door?', correct: 'the', explain: 'Both people know which door → "the".' },
@@ -20,9 +19,7 @@ export const CATEGORIES = {
       { sentence: 'We live in ___ small flat.', correct: 'a', explain: 'First mention, non-specific → "a".' },
       { sentence: '___ book you lent me is great.', correct: 'the', explain: 'Specific book (you lent me) → "the".' },
       { sentence: 'He is ___ best player in the team.', correct: 'the', explain: 'Superlatives always use "the".' },
-      { sentence: 'She is ___ first person to arrive.', correct: 'the', explain: 'Ordinal numbers use "the".' },
       { sentence: 'I love ___ chocolate.', correct: '∅', explain: 'General uncountable nouns (likes/dislikes) take no article.' },
-      { sentence: 'She speaks ___ French fluently.', correct: '∅', explain: 'Language names never take an article.' },
       { sentence: '___ life is short.', correct: '∅', explain: 'Abstract nouns used in a general sense take no article.' }
     ]
   },
@@ -39,7 +36,10 @@ export const CATEGORIES = {
       { sentence: '___ Sahara Desert is very hot.', correct: 'the', explain: 'Deserts → "the".' },
       { sentence: 'She swam across ___ English Channel.', correct: 'the', explain: 'Channels and canals → "the".' },
       { sentence: '___ Philippines has many islands.', correct: 'the', explain: 'Plural country names → "the".' },
-      { sentence: 'I live in ___ Madrid.', correct: '∅', explain: 'City names → no article.' }
+      { sentence: 'I live in ___ Madrid.', correct: '∅', explain: 'City names → no article.' },
+      { sentence: 'We flew over ___ Alps.', correct: 'the', explain: 'Mountain RANGES take "the" — but single peaks do not (Mount Everest).' },
+      { sentence: "She's from ___ South America.", correct: '∅', explain: 'Continents take no article.' },
+      { sentence: '___ Lake Geneva is beautiful.', correct: '∅', explain: 'Lakes named "Lake X" take no article (compare: the Amazon).' }
     ]
   },
   expressions: {
@@ -57,7 +57,8 @@ export const CATEGORIES = {
       { sentence: 'She went to ___ hospital to visit her friend.', correct: 'the', explain: 'Visiting (not as patient) → "the hospital".' },
       { sentence: 'He is in ___ prison for theft.', correct: '∅', explain: '"In prison" (as prisoner) → no article.' },
       { sentence: 'I have ___ headache.', correct: 'a', explain: 'Ailments: "a headache", "a cold", "a fever".' },
-      { sentence: 'Let\'s go for ___ walk.', correct: 'a', explain: '"Go for a walk/swim/drive" → "a".' }
+      { sentence: 'Let\'s go for ___ walk.', correct: 'a', explain: '"Go for a walk/swim/drive" → "a".' },
+      { sentence: 'I listen to ___ radio in the morning.', correct: 'the', explain: '"The radio" is fixed — but note: watch ∅ television.' }
     ]
   },
   context: {
@@ -75,7 +76,8 @@ export const CATEGORIES = {
       { sentence: 'I went to ___ cinema last night.', correct: 'the', explain: 'Shared knowledge (the usual cinema) → "the".' },
       { sentence: 'She is reading ___ interesting book.', correct: 'an', explain: 'First mention + vowel sound → "an".' },
       { sentence: 'They went to ___ same school.', correct: 'the', explain: '"Same" always takes "the".' },
-      { sentence: '___ rich should help ___ poor.', correct: 'the', explain: '"The" + adjective = group of people (the rich, the poor).' }
+      { sentence: '___ rich should help ___ poor.', correct: 'the', explain: '"The" + adjective = group of people (the rich, the poor).' },
+      { sentence: "I need ___ umbrella — it's raining.", correct: 'an', explain: '"An" before a vowel sound (umbrella).' }
     ]
   },
   noThe: {
@@ -85,7 +87,6 @@ export const CATEGORIES = {
     items: [
       { sentence: '___ Sarah is my best friend.', correct: '∅', explain: 'Personal names never take "the".' },
       { sentence: 'They moved to ___ Germany.', correct: '∅', explain: 'Most country names take no article.' },
-      { sentence: '___ Tokyo is my favourite city.', correct: '∅', explain: 'Towns and cities take no article.' },
       { sentence: 'She loves playing ___ tennis.', correct: '∅', explain: 'Sports and games take no article.' },
       { sentence: '___ Mandarin is spoken by over a billion people.', correct: '∅', explain: 'Language names take no article.' },
       { sentence: 'We\'re having ___ Christmas dinner at my parents\'.', correct: '∅', explain: 'Meal names, even festive ones, take no article.' },
@@ -93,7 +94,6 @@ export const CATEGORIES = {
       { sentence: '___ Maths is my favourite subject.', correct: '∅', explain: 'Academic subjects take no article.' },
       { sentence: 'We\'re meeting on ___ Monday.', correct: '∅', explain: 'Days, months, and holidays take no article.' },
       { sentence: '___ President Biden gave a speech.', correct: '∅', explain: 'Title + name never takes "the" ("President Biden", not "the President Biden").' },
-      { sentence: 'He\'s from ___ Texas.', correct: '∅', explain: 'US states and UK counties take no article.' },
       { sentence: 'We invited ___ Hammonds to the party.', correct: 'the', explain: 'Exception: plural family surnames DO take "the" ("the Hammonds" = the Hammond family).' },
       { sentence: 'She works in ___ Hague.', correct: 'the', explain: 'Exception: "The Hague" keeps "the" even though city names normally don\'t.' },
       { sentence: 'Do you mean ___ Andy who lives down the road?', correct: 'the', explain: 'Exception: "the" + name distinguishes one specific person from others sharing that name.' }

@@ -186,8 +186,8 @@
         <div class="write-feedback" id="writeFeedback"></div>
       </div>
       <div style="display:flex;gap:8px;justify-content:center;">
-        <button class="lp-btn lp-btn--primary" id="writeCheck">Check ✓</button>
-        <button class="lp-btn lp-btn--ghost" id="writeSkip" style="font-size:.72rem;">Skip →</button>
+        <button class="lp-btn lp-btn--primary" id="checkBtn">Check ✓</button>
+        <button class="lp-btn lp-btn--ghost" id="skipBtn" style="font-size:.72rem;">Skip →</button>
       </div>
     </div>
   </div>
@@ -238,6 +238,7 @@ function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
+  window.__syncBottomNavMode?.();
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
@@ -398,6 +399,7 @@ function initWrite() {
   deck = shuffle(getData());
   idx = 0; score = 0; total = deck.length;
   document.querySelector('[data-area="write"]').classList.add('show');
+  window.__setupPracticeBottomNav?.();
   renderWrite();
 }
 
@@ -462,8 +464,8 @@ function finishWrite() {
   recordScore(`vchunks-${currentCat}-write`, pct);
 }
 
-document.getElementById('writeCheck').addEventListener('click', checkWrite);
-document.getElementById('writeSkip').addEventListener('click', skipWrite);
+document.getElementById('checkBtn').addEventListener('click', checkWrite);
+document.getElementById('skipBtn').addEventListener('click', skipWrite);
 document.getElementById('writeInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') { e.preventDefault(); checkWrite(); }
 });

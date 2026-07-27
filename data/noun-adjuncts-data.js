@@ -69,8 +69,6 @@ export const LEVELS = {
     { prompt: "___ board",            modifier: "diving",      nucleus: "board",       full: "diving board",                rule: "green", why: "🟢 -ing nominal: actividad del trampolín", focus: "activity" },
     { prompt: "___ director",         modifier: "engineering", nucleus: "director",    full: "engineering director",        rule: "green", why: "🟢 -ing nominal: la disciplina lidera el rol", focus: "title" },
     { prompt: "___ list",             modifier: "waiting",     nucleus: "list",        full: "waiting list",                rule: "green", why: "🟢 -ing nominal: actividad que define la lista", focus: "activity" },
-    { prompt: "___ system",           modifier: "heating",     nucleus: "system",      full: "heating system",              rule: "green", why: "🟢 -ing nominal: función que define el sistema", focus: "function" },
-    { prompt: "___ rod",              modifier: "fishing",     nucleus: "rod",         full: "fishing rod",                 rule: "green", why: "🟢 -ing nominal: actividad para la que se usa", focus: "activity" },
     // 🔴 Genitivo 's / of (6) — títulos ejecutivos y expresiones formales
     { prompt: "head of ___",          modifier: "engineering", nucleus: "head",        full: "head of engineering",         rule: "red",   why: "🔴 'of' para jefatura+disciplina abstracta (formal)", focus: "hierarchy" },
     { prompt: "VP of ___",            modifier: "product",     nucleus: "VP",          full: "VP of product",               rule: "red",   why: "🔴 'of' en títulos ejecutivos con dominio abstracto", focus: "title" },

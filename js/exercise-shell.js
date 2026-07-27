@@ -4,6 +4,7 @@
 // Replaces portal-link.js for exercise pages.
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
+import { NAV_SECTIONS, NAV_SECTION_KEYS } from './nav-sections.js';
 import { initCatBarExpander, hydrateHubFlowFromCloud, renderLessonProgress } from './utils.js';
 import {
   ensureBottomNav,
@@ -54,7 +55,7 @@ const section = currentModule?.category || 'vocab';
 // LyricFlow player pattern: [← back] · [title centered] · [☰ menu]
 // (counter stays in the right cluster on desktop; hidden in header on mobile)
 
-const VALID_BACK_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+const VALID_BACK_SECTIONS = new Set(NAV_SECTION_KEYS);
 
 function getExerciseBackUrl() {
   const stored = sessionStorage.getItem('hf-back-section');
@@ -200,17 +201,9 @@ function isPersistent() {
   return window.innerWidth >= 861 && navigationMode() === 'sidebar';
 }
 
-const SECTIONS = [
-  { key: 'resumen', icon: 'home', label: 'Inicio', cls: '' },
-  { key: 'mi-progreso', icon: 'progress', label: 'Mi Progreso', cls: 'path' },
-  { key: 'vocab', icon: 'diamond', label: 'Vocabulary & Words', cls: 'v' },
-  { key: 'grammar', icon: 'diamond', label: 'Grammar & Spelling', cls: 'g' },
-  { key: 'pronunciation', icon: 'diamond', label: 'Pronunciation', cls: 'p' },
-  { key: 'analysis', icon: 'diamond', label: 'Analysis & Production', cls: 'a' },
-  { key: 'guides', icon: 'diamond', label: 'Guías de referencia', cls: 'r' },
-];
-
-const SIDEBAR_PRIMARY_KEYS = new Set(['resumen', 'mi-progreso']);
+const SIDEBAR_PRIMARY_KEYS = new Set(
+  NAV_SECTIONS.filter((s) => s.primary).map((s) => s.key),
+);
 
 function renderSidebarItem(s) {
   const active = s.key === section ? ' active' : '';
@@ -257,8 +250,8 @@ function buildSidebar() {
   sidebar.id = 'exerciseSidebar';
   sidebar.setAttribute('aria-label', 'Navegación HubFlow');
 
-  const primaryItems = SECTIONS.filter(s => SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
-  const topicItems = SECTIONS.filter(s => !SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
+  const primaryItems = NAV_SECTIONS.filter(s => SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
+  const topicItems = NAV_SECTIONS.filter(s => !SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
 
   sidebar.innerHTML = `
     <div class="sb-brand">
@@ -614,18 +607,24 @@ function buildDepthBanner() {
 
   const bannerHTML = parts.join('<span class="depth-banner__sep">·</span>');
 
-  const banner = document.createElement('div');
-  banner.className = 'depth-banner';
-  banner.innerHTML = bannerHTML +
-    '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
-  banner.setAttribute('role', 'status');
+  showBanner(bannerHTML);
 
-  document.body.appendChild(banner);
+  function showBanner(html) {
+    const banner = document.createElement('div');
+    banner.className = 'depth-banner';
+    banner.innerHTML = html +
+      '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
+    banner.setAttribute('role', 'status');
+    document.body.appendChild(banner);
 
-  banner.querySelector('.depth-banner__close').addEventListener('click', () => {
-    banner.classList.add('depth-banner--fade');
-    setTimeout(() => { banner.remove(); showDepthBell(bannerHTML); }, 600);
-  });
+    const dismiss = () => {
+      clearTimeout(autoDismiss);
+      banner.classList.add('depth-banner--fade');
+      setTimeout(() => { banner.remove(); showDepthBell(html); }, 600);
+    };
+    const autoDismiss = setTimeout(dismiss, 5000);
+    banner.querySelector('.depth-banner__close').addEventListener('click', dismiss);
+  }
 
   function showDepthBell(html) {
     const footer = document.querySelector('.exercise-foot');
@@ -635,21 +634,12 @@ function buildDepthBanner() {
     bell.className = 'depth-bell';
     bell.setAttribute('aria-label', 'Mostrar información del módulo');
     bell.textContent = '🔔';
-    if (meta) meta.parentNode.insertBefore(bell, meta);
+    if (meta) meta.after(bell);
     else footer.appendChild(bell);
 
     bell.addEventListener('click', () => {
       bell.remove();
-      const b = document.createElement('div');
-      b.className = 'depth-banner';
-      b.innerHTML = html +
-        '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
-      b.setAttribute('role', 'status');
-      document.body.appendChild(b);
-      b.querySelector('.depth-banner__close').addEventListener('click', () => {
-        b.classList.add('depth-banner--fade');
-        setTimeout(() => { b.remove(); showDepthBell(html); }, 600);
-      });
+      showBanner(html);
     });
   }
 }

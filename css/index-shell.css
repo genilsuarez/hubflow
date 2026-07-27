@@ -25,6 +25,24 @@
     }
     .search-bar .clear-btn.visible { display: flex; align-items: center; justify-content: center; }
 
+    /* Buscador + filtros — centrados en el área de contenido (secciones de catálogo) */
+    .catalog-toolbar {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 28rem;
+      margin: 0 auto 16px;
+    }
+    body[data-active="vocab"] .catalog-toolbar,
+    body[data-active="grammar"] .catalog-toolbar,
+    body[data-active="pronunciation"] .catalog-toolbar,
+    body[data-active="analysis"] .catalog-toolbar,
+    body[data-active="guides"] .catalog-toolbar {
+      display: flex;
+    }
+
     .lp-header-stats {
       display: flex; align-items: center; gap: 0; height: var(--lp-score-height); min-width: 180px; padding: 0 var(--lp-score-padding-x);
       background: var(--lp-score-bg); border: var(--lp-score-border-width) solid var(--lp-score-border); border-radius: var(--lp-score-radius);
@@ -173,7 +191,12 @@
       display: flex; flex-wrap: wrap; justify-content: center; gap: 0.375rem;
     }
     .tagbar__chips--cefr {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-content: center;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.375rem;
+    }
+    .tagbar__chips--cefr .filter-chip {
+      flex: 0 1 calc((100% - 0.75rem) / 3);
+      width: auto;
+      max-width: calc((100% - 0.75rem) / 3);
     }
     .tagbar__chips--skills {
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-content: center;
@@ -959,6 +982,67 @@
     body[data-active="rutas"] .tg-resumen { display: none; }
     body[data-active="rutas"] .tg-rutas { display: block; }
 
+    /* Catálogo: título + subtítulo en topbar (debajo del nombre de sección) */
+    body[data-active="vocab"] .topbar-greeting-title.tg-resumen,
+    body[data-active="grammar"] .topbar-greeting-title.tg-resumen,
+    body[data-active="pronunciation"] .topbar-greeting-title.tg-resumen,
+    body[data-active="analysis"] .topbar-greeting-title.tg-resumen,
+    body[data-active="guides"] .topbar-greeting-title.tg-resumen { display: none !important; }
+
+    body[data-active="vocab"] .tg-topic,
+    body[data-active="grammar"] .tg-topic,
+    body[data-active="pronunciation"] .tg-topic,
+    body[data-active="analysis"] .tg-topic,
+    body[data-active="guides"] .tg-topic {
+      display: block !important;
+      font-family: var(--lp-font-display);
+      font-size: var(--lp-header-title-size);
+      font-weight: var(--lp-header-title-weight);
+      letter-spacing: var(--lp-header-title-tracking);
+      line-height: var(--lp-header-title-line-height);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    body[data-active="vocab"] .topbar-greeting,
+    body[data-active="grammar"] .topbar-greeting,
+    body[data-active="pronunciation"] .topbar-greeting,
+    body[data-active="analysis"] .topbar-greeting,
+    body[data-active="guides"] .topbar-greeting {
+      align-items: flex-start;
+      text-align: left;
+      max-width: min(380px, calc(50% - 5rem));
+    }
+
+    #resumenSub.catalog-meta {
+      display: none;
+      text-align: left;
+      font-size: var(--lp-header-sub-size);
+      font-weight: var(--lp-header-sub-weight);
+      line-height: var(--lp-header-sub-line-height);
+      color: var(--lp-ink-soft);
+      margin: 0;
+      padding: 0 2px;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body[data-active="vocab"] #resumenSub.catalog-meta,
+    body[data-active="grammar"] #resumenSub.catalog-meta,
+    body[data-active="pronunciation"] #resumenSub.catalog-meta,
+    body[data-active="analysis"] #resumenSub.catalog-meta,
+    body[data-active="guides"] #resumenSub.catalog-meta {
+      display: block;
+    }
+    #resumenSub.catalog-meta .tgs-short { display: none; }
+    @media (max-width: 480px) {
+      #resumenSub.catalog-meta .tgs-full { display: none; }
+      #resumenSub.catalog-meta .tgs-short { display: inline; }
+    }
+
     .tiles {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1197,23 +1281,21 @@
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-    /* Hide search bar & stats on resumen (greeting takes their slot instead) to
+    /* Hide stats on resumen (greeting takes their slot instead) to
        prevent flash on first load. Once JS sets body[data-active], display is
        controlled imperatively. */
-    body:not([data-active]) .search-bar,
-    body:not([data-active]) .filter-menu,
     body:not([data-active]) .lp-header-stats { display: none; }
     body:not([data-active]) .topbar-greeting,
     body[data-active="resumen"] .topbar-greeting,
     body[data-active="mi-progreso"] .topbar-greeting,
     body[data-active="rutas"] .topbar-greeting { display: flex; }
-    body[data-active="rutas"] .search-bar,
-    body[data-active="rutas"] .filter-menu { display: none; }
 
     /* Expand/Collapse en topbar: solo visible en desktop + sección mi-progreso */
     @media (min-width: 861px) {
       body[data-active="mi-progreso"] .paths-actions.paths-actions--topbar { display: flex; }
       body[data-active="mi-progreso"] .paths-head-row { display: none; }
+      /* Menú ☰ del topbar: solo mobile; en web la sidebar es persistente o el launcher flotante */
+      .topbar-menu { display: none !important; }
     }
 
     @media (max-width: 860px) {
@@ -1277,10 +1359,12 @@
         grid-row: 1;
         position: static;
         transform: none;
-        justify-content: center;
-        text-align: center;
+        justify-content: flex-start;
+        text-align: left;
         max-width: 100%;
         pointer-events: none;
+        align-self: center;
+        align-items: flex-start;
       }
       body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .tg-resumen,
       body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .tg-progreso,
@@ -1300,8 +1384,6 @@
         text-overflow: ellipsis;
         max-width: 100%;
       }
-      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .search-bar,
-      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .filter-menu,
       body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .lp-header-stats,
       body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .paths-actions--topbar {
         display: none !important;
@@ -1317,8 +1399,7 @@
         padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));
       }
     }
-    /* El pill centrado necesita el ancho completo de desktop (sidebar fija) para
-       no pisar el buscador/filtro — se oculta desde el mismo quiebre en que el
+    /* El pill centrado se oculta en mobile desde el mismo quiebre en que el
        shell colapsa a sidebar flotante (860px, ver arriba). */
     @media (max-width: 860px) {
       .lp-header-stats { display: none; }
@@ -1326,7 +1407,8 @@
     /* Topbar angosta: el buscador manda — las stats se ocultan en pantallas chicas.
        min-width evita que flex lo aplaste a un ancho inusable. */
     @media (max-width: 639px) {
-      .search-bar { min-width: 130px; }
+      .catalog-toolbar { max-width: none; }
+      .catalog-toolbar .search-bar { min-width: 130px; }
 
       /* Topic tiles — 2 per row on mobile */
       .tiles { gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1371,8 +1453,8 @@
     @media (max-width: 639px) {
       .topbar { height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); min-height: calc(var(--lp-header-height-compact) + env(safe-area-inset-top, 0px)); max-height: none; padding: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px)) var(--lp-header-pad-x-compact) var(--lp-header-pad-y-compact) var(--lp-header-floating-pad-left-compact); }
       .navigation-launcher { top: calc(var(--lp-navbtn-offset-top-compact) + env(safe-area-inset-top, 0px)); }
-      .search-bar { min-width: 90px; }
-      .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
+      .catalog-toolbar .search-bar { min-width: 90px; }
+      .catalog-toolbar .search-bar input { padding: 8px 10px 8px 30px; font-size: .72rem; }
       .content { padding: 14px 12px max(20px, env(safe-area-inset-bottom, 0px)); }
       body[data-active="mi-progreso"] .content {
         padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));

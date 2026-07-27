@@ -40,9 +40,12 @@
     })();
   </script>
   <script>
-    // Early section detection: prevent flash of resumen when returning from exercise
+    // Early section detection: prevent flash of resumen when returning from exercise.
+    // Corre antes de los módulos ES, así que no puede importar js/nav-sections.js:
+    // esta lista es un espejo obligado de NAV_SECTIONS. validate-content.js falla
+    // (NAV-SYNC) si divergen. 'resumen' debe seguir primero — el filtro es `> 0`.
     (function() {
-      var vs = ['resumen','mi-progreso','rutas','vocab','grammar','pronunciation','analysis','guides'];
+      var vs = ['resumen','rutas','mi-progreso','vocab','grammar','pronunciation','analysis','guides'];
       var p = new URLSearchParams(location.search).get('section');
       var s = sessionStorage.getItem('hf-back-section');
       var target = p || s;
@@ -86,8 +89,8 @@
     </div>
     <nav class="sb-nav" id="sbNav">
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Inicio</span></button>
-      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="progress" aria-hidden="true"></span><span class="sb-label">Mi Progreso</span></button>
       <button class="sb-item path" data-target="rutas"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="route" aria-hidden="true"></span><span class="sb-label">Rutas guiadas</span></button>
+      <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="chart" aria-hidden="true"></span><span class="sb-label">Mis estadísticas</span></button>
       <div class="sb-nav-group" id="sbNavTopics">
         <button type="button" class="sb-nav-group__toggle" id="sbNavTopicsToggle" aria-expanded="false" aria-controls="sbNavTopicsList">
           <span class="sb-icon" data-lp-icon="book" aria-hidden="true"></span>
@@ -117,7 +120,8 @@
       <button class="lp-icon-btn topbar-back" id="topbarBackBtn" type="button" aria-label="Volver al inicio" hidden><span data-lp-icon="arrow-left" aria-hidden="true"></span></button>
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
-        <p class="topbar-greeting-sub tg-resumen" id="resumenSub">55 ejercicios · 5 modos</p>
+        <span id="resumenSubHome" hidden aria-hidden="true"></span>
+        <p class="topbar-greeting-sub tg-resumen" id="resumenSub"></p>
         <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
         <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
         <span class="topbar-greeting-title tg-rutas">Rutas <em>guiadas</em></span>
@@ -126,44 +130,7 @@
           <span class="tgs-short">De básico a avanzado.</span>
         </p>
         <span class="topbar-greeting-title tg-topic" id="topbarTopicTitle" hidden></span>
-      </div>
-      <div class="search-bar">
-        <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
-        <button class="clear-btn" id="clearSearch" aria-label="Clear search">✕</button>
-      </div>
-      <div class="filter-menu" id="filterMenu">
-        <button type="button" class="filter-toggle" id="filterToggle" aria-label="Filtros" aria-expanded="false" title="Filtros">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></svg>
-          <span class="filter-badge" id="filterBadge" hidden>0</span>
-        </button>
-        <div class="tagbar" id="tagBar" role="dialog" aria-label="Filtros" aria-modal="true">
-          <div class="tagbar__handle" aria-hidden="true"></div>
-          <div class="tagbar__header">
-            <div class="tagbar__tabs" role="tablist" aria-label="Secciones de filtro">
-              <button type="button" class="tagbar__tab tagbar__tab--active" id="filterTabCefr" data-filter-tab="cefr" role="tab" aria-selected="true" aria-controls="tagBarPanelCefr">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
-                <span class="tagbar__tab-label">Nivel</span>
-                <span class="tagbar__tab-count" id="filterTabCountCefr" hidden>0</span>
-              </button>
-              <button type="button" class="tagbar__tab" id="filterTabSkill" data-filter-tab="skill" role="tab" aria-selected="false" aria-controls="tagBarPanelSkills">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
-                <span class="tagbar__tab-label">Habilidad</span>
-                <span class="tagbar__tab-count" id="filterTabCountSkill" hidden>0</span>
-              </button>
-            </div>
-            <button type="button" class="tagbar__close" id="filterClose" aria-label="Cerrar filtros">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            </button>
-          </div>
-          <div class="tagbar__content">
-            <div class="tagbar__panel" id="tagBarPanelCefr" data-filter-panel="cefr" role="tabpanel" aria-labelledby="filterTabCefr">
-              <div class="tagbar__chips tagbar__chips--cefr" id="tagBarCefr"></div>
-            </div>
-            <div class="tagbar__panel" id="tagBarPanelSkills" data-filter-panel="skill" role="tabpanel" aria-labelledby="filterTabSkill" hidden>
-              <div class="tagbar__chips tagbar__chips--skills" id="tagBarSkills"></div>
-            </div>
-          </div>
-        </div>
+        <span id="resumenSubCatalogHome" hidden aria-hidden="true"></span>
       </div>
       <div class="lp-header-stats" role="status" aria-label="Progress summary">
         <span class="lp-header-stats__group">
@@ -189,6 +156,46 @@
     </div>
 
     <main class="content" id="mainContent">
+      <div class="catalog-toolbar" id="catalogToolbar" aria-label="Buscar y filtrar módulos">
+        <div class="search-bar">
+          <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
+          <button class="clear-btn" id="clearSearch" aria-label="Clear search">✕</button>
+        </div>
+        <div class="filter-menu" id="filterMenu">
+          <button type="button" class="filter-toggle" id="filterToggle" aria-label="Filtros" aria-expanded="false" title="Filtros">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></svg>
+            <span class="filter-badge" id="filterBadge" hidden>0</span>
+          </button>
+          <div class="tagbar" id="tagBar" role="dialog" aria-label="Filtros" aria-modal="true">
+            <div class="tagbar__handle" aria-hidden="true"></div>
+            <div class="tagbar__header">
+              <div class="tagbar__tabs" role="tablist" aria-label="Secciones de filtro">
+                <button type="button" class="tagbar__tab tagbar__tab--active" id="filterTabCefr" data-filter-tab="cefr" role="tab" aria-selected="true" aria-controls="tagBarPanelCefr">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+                  <span class="tagbar__tab-label">Nivel</span>
+                  <span class="tagbar__tab-count" id="filterTabCountCefr" hidden>0</span>
+                </button>
+                <button type="button" class="tagbar__tab" id="filterTabSkill" data-filter-tab="skill" role="tab" aria-selected="false" aria-controls="tagBarPanelSkills">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                  <span class="tagbar__tab-label">Habilidad</span>
+                  <span class="tagbar__tab-count" id="filterTabCountSkill" hidden>0</span>
+                </button>
+              </div>
+              <button type="button" class="tagbar__close" id="filterClose" aria-label="Cerrar filtros">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <div class="tagbar__content">
+              <div class="tagbar__panel" id="tagBarPanelCefr" data-filter-panel="cefr" role="tabpanel" aria-labelledby="filterTabCefr">
+                <div class="tagbar__chips tagbar__chips--cefr" id="tagBarCefr"></div>
+              </div>
+              <div class="tagbar__panel" id="tagBarPanelSkills" data-filter-panel="skill" role="tabpanel" aria-labelledby="filterTabSkill" hidden>
+                <div class="tagbar__chips tagbar__chips--skills" id="tagBarSkills"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen" data-lp-home>
         <div class="resumen-hero" id="resumenHero">
@@ -389,6 +396,11 @@
             <div class="guide-icon">🔊</div>
             <div class="guide-body"><div class="guide-title">Phonics, Pronunciation &amp; Word Stress</div><div class="guide-tag">Sound</div></div>
           </a>
+          <a class="guide-link g-sound" href="guides/pronunciation-deep-dive.html" data-tags="pronunciation,listening,b1,b2">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🎧</div>
+            <div class="guide-body"><div class="guide-title">Natural Speech &amp; Listening</div><div class="guide-tag">Sound</div></div>
+          </a>
           <a class="guide-link g-words" href="guides/opposites-synonyms.html" data-tags="vocabulary,a2,b1">
             <div class="guide-spine"></div>
             <div class="guide-icon">🔄</div>
@@ -466,7 +478,8 @@
 </div>
 
 <script type="module">
-import { MODULES, TAGS, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
+import { MODULES, TAGS, CATEGORIES, catColor, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
+import { NAV_SECTION_KEYS } from './js/nav-sections.js';
 import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/utils.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 import { shouldDeferStatsDisplay, consumeStatsRevealAnimation, shouldDeferActivityDisplay, hydrateActivityFromCloud } from './js/sync-engine.js';
@@ -506,7 +519,11 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   const topbar = document.querySelector('.topbar');
   const topbarBackBtn = document.getElementById('topbarBackBtn');
   const topbarMenuToggle = document.getElementById('topbarMenuToggle');
-  const OVERVIEW_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas']);
+  // Las secciones de catálogo son las 4 categorías + la de guías; las de
+  // resumen son el resto. Derivadas para que agregar una categoría no exija
+  // acordarse de tocar esta línea.
+  const CATALOG_SECTIONS = new Set([...Object.keys(CATEGORIES), 'guides']);
+  const OVERVIEW_SECTIONS = new Set(NAV_SECTION_KEYS.filter((k) => !CATALOG_SECTIONS.has(k)));
 
   function syncDrawerPersistent() {
     const persistent = window.innerWidth >= 861 && document.documentElement.dataset.navigationMode === 'sidebar';
@@ -545,10 +562,26 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     if (persist) localStorage.setItem(NAVIGATION_MODE_KEY, resolvedMode);
     syncDrawerPersistent();
     setNavigationDrawerOpen(false);
+    const active = document.body.dataset.active;
+    if (active) syncTopbarNavButtons(!OVERVIEW_SECTIONS.has(active));
   }
 
   syncDrawerPersistent();
   window.addEventListener('resize', syncDrawerPersistent);
+
+  function syncTopbarNavButtons(isSecondaryTopbar) {
+    const isDesktop = window.innerWidth >= 861;
+    const isFloating = document.documentElement.dataset.navigationMode === 'floating';
+    if (topbarMenuToggle) topbarMenuToggle.hidden = !isSecondaryTopbar || isDesktop;
+    if (navigationLauncher) {
+      navigationLauncher.hidden = isSecondaryTopbar ? !(isDesktop && isFloating) : false;
+    }
+  }
+
+  window.addEventListener('resize', () => {
+    const active = document.body.dataset.active;
+    if (active) syncTopbarNavButtons(!OVERVIEW_SECTIONS.has(active));
+  });
   setNavigationMode(localStorage.getItem(NAVIGATION_MODE_KEY));
   navigationModeToggle.addEventListener('click', () => {
     const nextMode = document.documentElement.dataset.navigationMode === 'floating' ? 'sidebar' : 'floating';
@@ -611,7 +644,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   });
 
   // ─── RENDER MODULE CARDS FROM CATALOG (Fase 2) ───
-  const CATEGORY_SPINE = { vocab: 'b-vocab', grammar: 'b-grammar', pronunciation: 'b-pron', analysis: 'b-analysis', guides: '' };
+  const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
   const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
   const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
 
@@ -717,8 +750,6 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
 
   const moduleMap = new Map(MODULES.map(m => [m.id, m]));
 
-  const CATEGORY_COLORS = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
-  const CATEGORY_SOFT = { vocab: 'var(--lp-cat-purple-soft)', grammar: 'var(--lp-cat-amber-soft)', pronunciation: 'var(--lp-cat-blue-soft)', analysis: 'var(--lp-cat-teal-soft)' };
 
   function renderRutas() {
     const grid = document.getElementById('rutasGrid');
@@ -793,7 +824,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       if (mod) return persistHeroSuggestion({ mod, reason: `Continúa la ruta ${path.title}` });
     }
     // Priority 3: never attempted module at lowest CEFR
-    const cefrOrder = ['a1', 'a2', 'b1', 'b2', 'c1'];
+    const cefrOrder = TAGS.cefr;
     const unattempted = exercises.filter(m => m.id !== exclude && getBestScore(m.id) === 0 && !isContentCompleted(m.id));
     if (unattempted.length) {
       unattempted.sort((a, b) => cefrOrder.indexOf(a.cefr) - cefrOrder.indexOf(b.cefr));
@@ -929,8 +960,8 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     );
     currentSuggestion = suggestion;
     const { mod, reason } = suggestion;
-    const color = CATEGORY_COLORS[mod.category] || 'var(--lp-accent)';
-    const soft = CATEGORY_SOFT[mod.category] || 'var(--lp-accent-soft)';
+    const color = catColor(mod.category);
+    const soft = catColor(mod.category, true);
     heroCard.style.setProperty('--hero-spine', color);
     heroCard.style.setProperty('--card-soft', soft);
     document.getElementById('resumenHero')?.style.setProperty('--hero-spine', color);
@@ -1002,7 +1033,6 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
 
   // ─── LAST ACTIVITIES ───
   const ACTIVITY_KEY = 'learnflow:activity:hubflow:v1';
-  const CATEGORY_COLOR_MAP = { vocab: 'var(--lp-cat-purple)', grammar: 'var(--lp-cat-amber)', pronunciation: 'var(--lp-cat-blue)', analysis: 'var(--lp-cat-teal)' };
   const MAX_LAST_ACTIVITIES = 5;
 
   function renderLastActivities() {
@@ -1036,7 +1066,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     const cards = unique.map(ev => {
       const mod = moduleMap.get(ev.contentId);
       if (!mod) return '';
-      const color = CATEGORY_COLOR_MAP[mod.category] || 'var(--lp-accent)';
+      const color = catColor(mod.category);
       const scoreClass = ev.passed ? 'la-card__score--pass' : 'la-card__score--fail';
       const scoreLabel = Math.round(ev.scorePct) + '%';
       return `<a class="la-card" href="${mod.exercise}" style="--la-color: ${color}">
@@ -1297,8 +1327,12 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     }, 0);
     const roundedItems = Math.floor(allItems / 100) * 100;
     const itemsK = formatItemsK(roundedItems);
-    const full = `${n} ejercicios · ${itemsK} items · 5 modos, incl. Battle 2P.`;
-    const short = `${n} ejercicios · 5 modos`;
+    // derivado: el máximo real de modos y si algún módulo tiene Battle
+    const maxModes = MODULES.reduce((max, m) => Math.max(max, getModuleDepth(m.id)?.modes || 0), 0);
+    const conBattle = MODULES.some((m) => getModuleDepth(m.id)?.hasBattle);
+    const battle = conBattle ? ', incl. Battle 2P' : '';
+    const full = `${n} ejercicios · ${itemsK} items · hasta ${maxModes} modos${battle}.`;
+    const short = `${n} ejercicios · hasta ${maxModes} modos`;
     el.innerHTML = `<span class="tgs-full">${full}</span><span class="tgs-short">${short}</span>`;
   }
   updateResumenSub();
@@ -1319,9 +1353,31 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   const sections = document.querySelectorAll('.section');
   const navButtons = document.querySelectorAll('.sb-item, .tile');
   const content = document.querySelector('.content');
-  const topbarSearch = document.querySelector('.search-bar');
   const topbarStats = document.querySelector('.lp-header-stats');
   const topbarGreeting = document.querySelector('.topbar-greeting');
+
+  function syncResumenSubPlacement(target) {
+    const sub = document.getElementById('resumenSub');
+    const home = document.getElementById('resumenSubHome');
+    const catalogHome = document.getElementById('resumenSubCatalogHome');
+    if (!sub) return;
+    if (CATALOG_SECTIONS.has(target) && catalogHome) {
+      catalogHome.insertAdjacentElement('afterend', sub);
+      sub.classList.add('catalog-meta', 'tg-topic-sub');
+      sub.classList.remove('topbar-greeting-sub', 'tg-resumen');
+      sub.hidden = false;
+      return;
+    }
+    if (target === 'resumen' && home) {
+      home.insertAdjacentElement('afterend', sub);
+      sub.classList.remove('catalog-meta', 'tg-topic-sub');
+      sub.classList.add('topbar-greeting-sub', 'tg-resumen');
+      sub.hidden = false;
+      return;
+    }
+    sub.hidden = true;
+  }
+
   function setActive(target) {
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && b.classList.contains('sb-item')));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
@@ -1331,8 +1387,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     const isSecondaryTopbar = !isOverview;
     if (topbar) topbar.classList.toggle('topbar--secondary', isSecondaryTopbar);
     if (topbarBackBtn) topbarBackBtn.hidden = !isSecondaryTopbar;
-    if (topbarMenuToggle) topbarMenuToggle.hidden = !isSecondaryTopbar;
-    if (navigationLauncher) navigationLauncher.hidden = isSecondaryTopbar;
+    syncTopbarNavButtons(isSecondaryTopbar);
     const topicTitle = document.getElementById('topbarTopicTitle');
     const activeLabel = document.querySelector(`.sb-item[data-target="${target}"] .sb-label`);
     if (topicTitle) {
@@ -1340,13 +1395,12 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       topicTitle.hidden = isOverview || !activeLabel;
     }
     topbarGreeting.style.display = 'flex';
-    topbarSearch.style.display = isOverview ? 'none' : '';
     topbarStats.style.display = isOverview ? 'none' : '';
-    if (filterMenu) filterMenu.style.display = isOverview ? 'none' : '';
     if (tagBar) closeFilterPanel();
     content.scrollTop = 0;
     if (searchInput.value) { searchInput.value = ''; }
     applyFilters();
+    syncResumenSubPlacement(target);
   }
 
   navButtons.forEach(b => {
@@ -1518,7 +1572,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     });
   });
 
-  const VALID_SECTIONS = new Set(['resumen', 'mi-progreso', 'rutas', 'vocab', 'grammar', 'pronunciation', 'analysis', 'guides']);
+  const VALID_SECTIONS = new Set(NAV_SECTION_KEYS);
 
   // Remember active HubFlow section when opening an exercise (PWA — no history.back).
   document.addEventListener('click', (e) => {
