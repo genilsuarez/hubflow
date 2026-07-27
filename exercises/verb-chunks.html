@@ -251,11 +251,11 @@ function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
-  window.__syncBottomNavMode?.();
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
   else if (mode === 'write') initWrite();
+  window.__syncBottomNavMode?.();
 }
 
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }

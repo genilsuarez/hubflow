@@ -204,10 +204,10 @@ function startMode() {
   const pn = document.getElementById('practiceNextBtn');
   if (pn) pn.style.display = 'none';
   document.getElementById('timerBar').classList.remove('show');
-  window.__syncBottomNavMode?.();
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
+  window.__syncBottomNavMode?.();
 }
 
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }

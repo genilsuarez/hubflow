@@ -306,13 +306,13 @@ function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
-  window.__syncBottomNavMode?.();
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'match') initMatch();
   else if (mode === 'write') initWrite();
   else if (mode === 'battle') initBattle();
   else if (mode === 'timed') initQuiz(true);
+  window.__syncBottomNavMode?.();
 }
 
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }

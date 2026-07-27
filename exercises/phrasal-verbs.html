@@ -352,7 +352,6 @@ function startMode() {
   document.getElementById('timerBar').classList.remove('show');
   const sortBtn = document.getElementById('sortCheck');
   if (sortBtn && mode !== 'sort') sortBtn.style.display = 'none';
-  window.__syncBottomNavMode?.();
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'match') initMatch();
@@ -360,6 +359,7 @@ function startMode() {
   else if (mode === 'sort') initSort();
   else if (mode === 'battle') initBattle();
   else if (mode === 'timed') initQuiz(true);
+  window.__syncBottomNavMode?.();
 }
 
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
