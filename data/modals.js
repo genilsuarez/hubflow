@@ -54,5 +54,22 @@ export const CATEGORIES = {
       { sentence: 'This door ___ be locked during opening hours.', correct: 'isn\'t supposed to', explain: '"Isn\'t supposed to" = contrario a la norma.' },
       { sentence: 'The software ___ crash every time you save.', correct: 'isn\'t supposed to', explain: '"Isn\'t supposed to" = no es el comportamiento esperado.' }
     ]
+  },
+  pastDeduction: {
+    label: 'Past Deduction',
+    icon: '🔍',
+    options: ['must have', 'can\'t have', 'might have', 'should have'],
+    items: [
+      { sentence: 'She\'s not answering — she ___ gone to bed already.', correct: 'must have', explain: '"Must have" = strong certainty about the past based on evidence.' },
+      { sentence: 'He ___ forgotten — he never misses a birthday.', correct: 'can\'t have', explain: '"Can\'t have" = certainty that something was NOT possible.' },
+      { sentence: 'They ___ left already; their car isn\'t outside.', correct: 'must have', explain: '"Must have" = the only logical conclusion given the evidence.' },
+      { sentence: 'I ___ studied harder — I only just scraped a pass.', correct: 'should have', explain: '"Should have" + past participle = regret about a past action (or inaction).' },
+      { sentence: 'She ___ taken the wrong bus; that would explain the delay.', correct: 'might have', explain: '"Might have" = a possible, uncertain explanation.' },
+      { sentence: 'He ___ heard the news already — look how shocked he is.', correct: 'must have', explain: '"Must have" = near-certain deduction from visible evidence.' },
+      { sentence: 'You ___ told me sooner! I could have helped.', correct: 'should have', explain: '"Should have" expresses a reproach about something that didn\'t happen.' },
+      { sentence: 'It ___ rained last night — the ground is soaking wet.', correct: 'must have', explain: '"Must have" = confident deduction from clear evidence.' },
+      { sentence: 'She ___ seen you — she was looking the other way the whole time.', correct: 'can\'t have', explain: '"Can\'t have" = the speaker is sure this was impossible.' },
+      { sentence: 'We ___ booked earlier — the tickets are sold out now.', correct: 'should have', explain: '"Should have" here criticises a missed opportunity.' }
+    ]
   }
 };

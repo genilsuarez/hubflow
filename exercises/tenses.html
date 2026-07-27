@@ -60,18 +60,20 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/tenses.js';
-import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null;
-let _lastCatClick = { key: null, time: 0 };
-function renderCatBar() { const bar = document.getElementById('catBar'); bar.innerHTML = catKeys.map(k => `<button class="cat-btn ${k===currentCat?'active':''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`).join(''); bar.querySelectorAll('[data-cat]').forEach(btn => btn.addEventListener('click', () => { const key = btn.dataset.cat; const now = Date.now(); const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400; _lastCatClick = { key, time: now }; currentCat = key; bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat)); if (isDoubleClick) { const w = document.getElementById('catWrapper'); if (w?.classList.contains('expanded')) { w.classList.remove('expanded'); bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false'); } } startMode(); })); }
-renderCatBar();
+sharedRenderCatBar({
+  containerId: 'catBar', categories: CATEGORIES,
+  getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
+  onChange: startMode,
+});
 document.querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => { mode = btn.dataset.mode; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode)); startMode(); }));
 function startMode() { stopTimer(); document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show')); document.getElementById('timerBar').classList.remove('show'); if (mode === 'practice') initPractice(false); else if (mode === 'timed') initPractice(true); else initStudy(); }
 function stopTimer() { if (timer) { timer.stop(); timer = null; } }
 function getData() { return CATEGORIES[currentCat].items; }
-function updProgress(c, t) { const p = Math.round((c/t)*100); document.getElementById('progFill').style.width = p+'%'; document.getElementById('progTxt').textContent = `${c} / ${t}`; document.getElementById('progPct').textContent = p+'%'; }
+const updProgress = (c, t) => updateProgress(c, t, document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 function initPractice(timed) { deck = shuffle(getData()); idx = 0; score = 0; total = Math.min(timed ? 10 : deck.length, deck.length); document.querySelector('[data-area="practice"]').classList.add('show'); if (timed) { document.getElementById('timerBar').classList.add('show'); timer = new Timer(total*7, r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r<=10); }, () => finishPractice()); timer.start(); } renderPractice(); }
 function renderPractice() { if (idx >= total) { stopTimer(); finishPractice(); return; } const item = deck[idx]; document.getElementById('scIcon').textContent = CATEGORIES[currentCat].icon; document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>'); document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; const opts = shuffle([...item.options]); const optsEl = document.getElementById('wordOptions'); optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join(''); optsEl.querySelectorAll('.word-opt').forEach(btn => btn.addEventListener('click', () => { optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; }); if (btn.dataset.val === item.correct) { btn.classList.add('correct'); score++; } else { btn.classList.add('wrong'); optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); }); } document.getElementById('scText').innerHTML = item.sentence.replace('___', `<span class="blank">${item.correct}</span>`); document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); setTimeout(renderPractice, 1400); })); updProgress(idx, total); }
 function finishPractice() { const pct = showResult({ correct: score, total, containerEl: document.getElementById('resultOverlay'), onRestart: () => startMode(), onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); } }); recordScore(`tense-${currentCat}`, pct); }

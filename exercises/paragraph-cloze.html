@@ -122,7 +122,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/paragraph-cloze.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, setPracticeBottomNav } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, setPracticeBottomNav, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
 
 
 function normalize(s) {
@@ -141,33 +141,11 @@ let checked = false;
 let timer = null;
 let timedSeconds = 0;
 
-let _lastCatClick = { key: null, time: 0 };
-function renderCatBar() {
-  const bar = document.getElementById('catBar');
-  bar.innerHTML = catKeys.map(k =>
-    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
-  ).join('');
-  bar.querySelectorAll('[data-cat]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.cat;
-      currentCat = key;
-      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-      const now = Date.now();
-      const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400;
-      _lastCatClick = { key, time: now };
-      // Double-click: select and collapse the expanded panel
-      if (isDoubleClick) {
-        const wrapper = document.getElementById('catWrapper');
-        if (wrapper?.classList.contains('expanded')) {
-          wrapper.classList.remove('expanded');
-          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
-        }
-      }
-      startMode();
-    });
-  });
-}
-renderCatBar();
+sharedRenderCatBar({
+  containerId: 'catBar', categories: CATEGORIES,
+  getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
+  onChange: startMode,
+});
 
 document.querySelectorAll('[data-mode]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -198,12 +176,8 @@ function startMode() {
   renderPassage();
 }
 
-function updProgress() {
-  const pct = total > 0 ? Math.round((idx / total) * 100) : 0;
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progTxt').textContent = `${idx} / ${total}`;
-  document.getElementById('progPct').textContent = pct + '%';
-}
+const updProgress = () => updateProgress(idx, total,
+  document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 
 function renderPassage() {
   if (idx >= total) { stopTimer(); finish(); return; }

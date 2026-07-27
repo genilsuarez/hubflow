@@ -60,5 +60,22 @@ export const CATEGORIES = {
       { sentence: 'He only said sorry. (All-cleft: emphasise how little he said)', correct: 'All he said was sorry.', explain: '"All + sujeto + verbo + was" marca que no hubo nada más.' },
       { sentence: 'They arrived on Sunday. (It-cleft: emphasise "on Sunday")', correct: 'It was on Sunday that they arrived.', explain: 'El complemento de tiempo pasa al foco.' }
     ]
+  },
+  emphaticDo: {
+    label: 'Emphatic Do',
+    icon: '❗',
+    options: ['do', 'does', 'did'],
+    items: [
+      { sentence: 'I ___ love this song!', correct: 'do', explain: 'Emphatic "do" before the base verb stresses a true present feeling.' },
+      { sentence: 'She ___ call you — I heard her on the phone.', correct: 'did', explain: 'Emphatic "did" + base verb insists a past action really happened.' },
+      { sentence: "He ___ know the answer, he's just too shy to say it.", correct: 'does', explain: 'Emphatic "does" (3rd person) insists something is true despite appearances.' },
+      { sentence: "We ___ try to warn you, but you wouldn't listen.", correct: 'did', explain: 'Emphatic "did" insists the action was genuinely attempted.' },
+      { sentence: "I ___ want to help, I just don't have time.", correct: 'do', explain: 'Emphatic "do" contradicts an assumption that you don\'t want to help.' },
+      { sentence: 'She ___ enjoy the film, even though she said she didn\'t.', correct: 'did', explain: 'Emphatic "did" contradicts what she claimed.' },
+      { sentence: 'They ___ care about the result, despite acting indifferent.', correct: 'do', explain: 'Emphatic "do" insists on a true feeling that contrasts with appearances.' },
+      { sentence: 'He ___ finish the report — I saw it on his desk.', correct: 'did', explain: 'Emphatic "did" confirms the action really took place.' },
+      { sentence: 'It ___ make sense once you think about it.', correct: 'does', explain: 'Emphatic "does" insists something is true, against initial doubt.' },
+      { sentence: 'I ___ believe you, honestly.', correct: 'do', explain: 'Emphatic "do" reinforces a sincere present statement.' }
+    ]
   }
 };

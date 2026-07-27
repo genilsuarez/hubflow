@@ -14,7 +14,7 @@ body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; padding: 0 14p
 h1 { display: flex; align-items: center; gap: 6px; }
 
 /* Category selector — pill sizing (wrapper/expander → components.css) */
-#catBar .pill-btn {
+#catBar :is(.pill-btn, .lp-pill) {
   flex: 0 0 auto;
   padding: 5px 11px;
   font-size: .64rem;
@@ -24,7 +24,7 @@ h1 { display: flex; align-items: center; gap: 6px; }
 
 /* Mode bar */
 .header .pill-bar:not(.pill-bar--scroll) { padding: 2px; gap: 1px; margin-bottom: 2px; }
-.header .pill-bar:not(.pill-bar--scroll) .pill-btn { padding: 3px 8px; font-size: .65rem; min-height: unset; }
+.header .pill-bar:not(.pill-bar--scroll) :is(.pill-btn, .lp-pill) { padding: 3px 8px; font-size: .65rem; min-height: unset; }
 
 /* Compact progress */
 #progressWrap { margin-bottom: 0; }

@@ -25,45 +25,45 @@
 .pill-bar--scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .pill-bar--scroll::-webkit-scrollbar { display: none; }
 
-.pill-btn {
+:is(.pill-btn, .lp-pill) {
   flex: 1 0 auto; font-family: var(--lp-font-body); font-size: .7rem; font-weight: var(--lp-weight-bold);
   padding: 7px 10px; border-radius: var(--lp-radius-full); border: none; cursor: pointer;
   transition: all .2s var(--lp-ease); color: var(--lp-muted); background: transparent;
   text-align: center; min-height: 36px; white-space: nowrap; position: relative;
 }
 /* Área táctil extendida a 44px sin alterar el tamaño visual */
-.pill-btn::after {
+:is(.pill-btn, .lp-pill)::after {
   content: ''; position: absolute; left: 0; right: 0; top: 50%;
   transform: translateY(-50%); height: 44px; min-height: 44px;
 }
-.pill-btn:hover { color: var(--lp-ink-soft); background: var(--lp-surface); }
+:is(.pill-btn, .lp-pill):hover { color: var(--lp-ink-soft); background: var(--lp-surface); }
 
 /* Mode pills — chip azul discreto homologado (Study/Practice/Timed/etc.) */
-.pill-bar .pill-btn.active,
-.pill-bar .pill-btn.active:is(.purple, .green, .red, .orange, .teal),
-.ex-header__modes .pill-btn.active,
-.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal),
-.wrap[data-color] .pill-bar .pill-btn.active,
-.wrap[data-color] .pill-bar .pill-btn.active:is(.purple, .green, .red, .orange, .teal),
-.wrap[data-color] .ex-header__modes .pill-btn.active,
-.wrap[data-color] .ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal) {
+.pill-bar :is(.pill-btn, .lp-pill).active,
+.pill-bar :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal),
+.ex-header__modes :is(.pill-btn, .lp-pill).active,
+.ex-header__modes :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal),
+.wrap[data-color] .pill-bar :is(.pill-btn, .lp-pill).active,
+.wrap[data-color] .pill-bar :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal),
+.wrap[data-color] .ex-header__modes :is(.pill-btn, .lp-pill).active,
+.wrap[data-color] .ex-header__modes :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal) {
   background: var(--lp-chip-active-bg);
   color: var(--lp-chip-active-text);
   border: 1.5px solid var(--lp-chip-active-border);
   box-shadow: var(--lp-chip-active-shadow);
   font-weight: var(--lp-weight-extrabold);
 }
-.pill-bar .pill-btn.active:hover,
-.pill-bar .pill-btn.active:is(.purple, .green, .red, .orange, .teal):hover,
-.ex-header__modes .pill-btn.active:hover,
-.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal):hover {
+.pill-bar :is(.pill-btn, .lp-pill).active:hover,
+.pill-bar :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal):hover,
+.ex-header__modes :is(.pill-btn, .lp-pill).active:hover,
+.ex-header__modes :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal):hover {
   background: var(--lp-chip-active-bg-hover);
   color: var(--lp-chip-active-text);
   border-color: var(--lp-chip-active-border);
 }
 
 /* Fallback fuera de .pill-bar (legacy) */
-.pill-btn.active {
+:is(.pill-btn, .lp-pill).active {
   background: var(--lp-chip-active-bg);
   color: var(--lp-chip-active-text);
   border: 1.5px solid var(--lp-chip-active-border);
@@ -304,7 +304,7 @@
 /* ═══ Category pills + Word options — centralizado (INFORME-BOTONES Fase D) ═══
    Antes duplicados inline en ~30/21 ejercicios. Colores tokenizados. */
 
-.cat-btn {
+:is(.cat-btn, .lp-pill) {
   font-family: var(--lp-font-body);
   font-size: .68rem; font-weight: var(--lp-weight-bold);
   padding: 8px 12px; border-radius: var(--lp-radius-md);
@@ -313,53 +313,53 @@
   min-height: 36px; position: relative; scroll-snap-align: start; flex-shrink: 0;
 }
 /* Hit-area táctil 44px sin agrandar el visual (INFORME-BOTONES §3.4 rec.6) */
-.cat-btn::after {
+:is(.cat-btn, .lp-pill)::after {
   content: ''; position: absolute; left: 0; right: 0; top: 50%;
   transform: translateY(-50%); height: 44px; min-height: 44px;
 }
-.cat-btn:hover {
+:is(.cat-btn, .lp-pill):hover {
   border-color: color-mix(in srgb, var(--lp-accent) 40%, var(--lp-border));
   color: var(--lp-accent-text);
   background: color-mix(in srgb, var(--lp-accent) 6%, var(--lp-surface));
 }
-.cat-btn:focus-visible {
+:is(.cat-btn, .lp-pill):focus-visible {
   outline: 2px solid var(--lp-accent);
   outline-offset: 2px;
 }
-.cat-btn.active {
+:is(.cat-btn, .lp-pill).active {
   background: var(--lp-chip-active-bg);
   color: var(--lp-chip-active-text);
   border-color: var(--lp-chip-active-border);
   box-shadow: var(--lp-chip-active-shadow);
   font-weight: var(--lp-weight-extrabold);
 }
-.cat-btn.active:hover {
+:is(.cat-btn, .lp-pill).active:hover {
   background: var(--lp-chip-active-bg-hover);
   color: var(--lp-chip-active-text);
   border-color: var(--lp-chip-active-border);
 }
-.cat-btn.locked {
+:is(.cat-btn, .lp-pill).locked {
   opacity: .4;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* Cat-bar pills (vocabulary, opposites, etc.) — mismo chip que .cat-btn */
-.cat-scroll-wrapper .pill-btn {
+.cat-scroll-wrapper :is(.pill-btn, .lp-pill) {
   border: 1.5px solid var(--lp-border);
   background: var(--lp-surface);
   color: var(--lp-muted);
 }
-.cat-scroll-wrapper .pill-btn.active,
-.cat-scroll-wrapper #catBar .pill-btn.active {
+.cat-scroll-wrapper :is(.pill-btn, .lp-pill).active,
+.cat-scroll-wrapper #catBar :is(.pill-btn, .lp-pill).active {
   background: var(--lp-chip-active-bg);
   color: var(--lp-chip-active-text);
   border-color: var(--lp-chip-active-border);
   box-shadow: var(--lp-chip-active-shadow);
   font-weight: var(--lp-weight-extrabold);
 }
-.cat-scroll-wrapper .pill-btn.active:hover,
-.cat-scroll-wrapper #catBar .pill-btn.active:hover {
+.cat-scroll-wrapper :is(.pill-btn, .lp-pill).active:hover,
+.cat-scroll-wrapper #catBar :is(.pill-btn, .lp-pill).active:hover {
   background: var(--lp-chip-active-bg-hover);
   color: var(--lp-chip-active-text);
   border-color: var(--lp-chip-active-border);
@@ -508,13 +508,13 @@
 .cat-scroll-wrapper.expanded::after { opacity: 0 !important; }
 
 /* Icon-only category pills (phonics — 4 distinct emojis fit on mobile) */
-.cat-scroll-wrapper--icon-pills .cat-btn {
+.cat-scroll-wrapper--icon-pills :is(.cat-btn, .lp-pill) {
   font-size: 1.05rem;
   padding: 8px 12px;
   min-width: 44px;
   text-align: center;
 }
-.cat-scroll-wrapper--icon-pills.expanded .cat-btn {
+.cat-scroll-wrapper--icon-pills.expanded :is(.cat-btn, .lp-pill) {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -523,7 +523,7 @@
   padding: 8px 10px;
   min-width: 52px;
 }
-.cat-scroll-wrapper--icon-pills.expanded .cat-btn::after {
+.cat-scroll-wrapper--icon-pills.expanded :is(.cat-btn, .lp-pill)::after {
   content: attr(aria-label);
   font-size: .56rem;
   font-family: var(--lp-font-body);
@@ -568,7 +568,7 @@
     padding: 2px;
   }
   .pill-bar::-webkit-scrollbar { display: none; }
-  .pill-btn {
+  :is(.pill-btn, .lp-pill) {
     flex: 0 0 auto;
     padding: 5px 7px;
     font-size: 0.56rem;

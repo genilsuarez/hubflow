@@ -105,7 +105,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/confusing-words.js';
-import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -117,38 +117,11 @@ let timer = null;
 let timedSeconds = 0;
 
 // ─── Category bar ───
-let _lastCatClick = { key: null, time: 0 };
-function renderCatBar() {
-  const bar = document.getElementById('catBar');
-  if (!bar) return;
-  const expandBtn = bar.querySelector('.cat-expand-btn');
-  const pills = catKeys.map(k =>
-    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
-  ).join('');
-  bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
-  if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
-  else bar.innerHTML = pills;
-  bar.querySelectorAll('[data-cat]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.cat;
-      const now = Date.now();
-      const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400;
-      _lastCatClick = { key, time: now };
-      currentCat = key;
-      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-      // Double-click: select and collapse the expanded panel
-      if (isDoubleClick) {
-        const wrapper = document.getElementById('catWrapper');
-        if (wrapper?.classList.contains('expanded')) {
-          wrapper.classList.remove('expanded');
-          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
-        }
-      }
-      startMode();
-    });
-  });
-}
-renderCatBar();
+sharedRenderCatBar({
+  containerId: 'catBar', categories: CATEGORIES,
+  getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
+  onChange: startMode,
+});
 
 // ─── Mode switching ───
 document.querySelectorAll('[data-mode]').forEach(btn => {
@@ -221,12 +194,8 @@ function installBottomNavHook(attempt = 0) {
   window.__syncBottomNavMode();
 }
 
-function updProgress(current, t) {
-  const pct = Math.round((current / t) * 100);
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progTxt').textContent = `${current} / ${t}`;
-  document.getElementById('progPct').textContent = pct + '%';
-}
+const updProgress = (current, t) => updateProgress(current, t,
+  document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 
 // ═══ PRACTICE / TIMED ═══
 function initPractice(timed) {

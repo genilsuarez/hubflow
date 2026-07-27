@@ -126,7 +126,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/odd-one-out.js';
-import { shuffle, Timer, formatTime, showResult, recordScore } from '../js/utils.js';
+import { shuffle, Timer, formatTime, showResult, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress } from '../js/utils.js';
 
 
 const catKeys = Object.keys(CATEGORIES);
@@ -138,33 +138,12 @@ let timer = null;
 let timedSeconds = 0;
 
 // ─── Category bar ───
-let _lastCatClick = { key: null, time: 0 };
-function renderCatBar() {
-  const bar = document.getElementById('catBar');
-  bar.innerHTML = catKeys.map(k =>
-    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label} <span style="font-size:.6rem;opacity:.7">${CATEGORIES[k].level}</span></button>`
-  ).join('');
-  bar.querySelectorAll('[data-cat]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.cat;
-      currentCat = key;
-      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-      const now = Date.now();
-      const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400;
-      _lastCatClick = { key, time: now };
-      // Double-click: select and collapse the expanded panel
-      if (isDoubleClick) {
-        const wrapper = document.getElementById('catWrapper');
-        if (wrapper?.classList.contains('expanded')) {
-          wrapper.classList.remove('expanded');
-          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
-        }
-      }
-      startMode();
-    });
-  });
-}
-renderCatBar();
+sharedRenderCatBar({
+  containerId: 'catBar', categories: CATEGORIES,
+  getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
+  onChange: startMode,
+  formatLabel: (k, cat) => `${cat.icon} ${cat.label} <span style="font-size:.6rem;opacity:.7">${cat.level}</span>`,
+});
 
 // ─── Mode switching ───
 document.querySelectorAll('[data-mode]').forEach(btn => {
@@ -240,10 +219,8 @@ function handleAnswer(chosen, item) {
 }
 
 function updateProgress() {
-  const pct = deck.length > 0 ? Math.round((idx / deck.length) * 100) : 0;
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progTxt').textContent = `${idx} / ${deck.length}`;
-  document.getElementById('progPct').textContent = pct + '%';
+  sharedUpdateProgress(idx, deck.length,
+    document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 }
 
 function finish() {

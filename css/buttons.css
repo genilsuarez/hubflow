@@ -62,7 +62,11 @@
   color: var(--lp-accent-dark);
 }
 
-/* 3. Píldora / tab segmentada */
+/* 3. Píldora / tab segmentada
+   Los selectores de .pill-btn (mode tabs) y .cat-btn (category chips) en
+   components.css/exercise-enhanced.css/flashcard-shell.css usan :is(.pill-btn, .lp-pill)
+   / :is(.cat-btn, .lp-pill) — .lp-pill es un alias válido en cualquiera de esos
+   contextos sin necesidad de tocar el HTML existente. */
 .lp-pill {
   font-family: var(--lp-font-body);
   font-size: 0.7rem;

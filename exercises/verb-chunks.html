@@ -197,7 +197,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/verb-chunks.js';
-import { shuffle, recordScore, Timer, formatTime, showResult } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -210,33 +210,11 @@ let timer = null;
 let timedSeconds = 0;
 
 // ─── Category bar ───
-let _lastCatClick = { key: null, time: 0 };
-function renderCatBar() {
-  const bar = document.getElementById('catBar');
-  bar.innerHTML = catKeys.map(k =>
-    `<button class="cat-btn ${k === currentCat ? 'active' : ''}" data-cat="${k}">${CATEGORIES[k].icon} ${CATEGORIES[k].label}</button>`
-  ).join('');
-  bar.querySelectorAll('[data-cat]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.cat;
-      currentCat = key;
-      bar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
-      const now = Date.now();
-      const isDoubleClick = _lastCatClick.key === key && (now - _lastCatClick.time) < 400;
-      _lastCatClick = { key, time: now };
-      // Double-click: select and collapse the expanded panel
-      if (isDoubleClick) {
-        const wrapper = document.getElementById('catWrapper');
-        if (wrapper?.classList.contains('expanded')) {
-          wrapper.classList.remove('expanded');
-          bar.querySelector('.cat-expand-btn')?.setAttribute('aria-expanded', 'false');
-        }
-      }
-      startMode();
-    });
-  });
-}
-renderCatBar();
+sharedRenderCatBar({
+  containerId: 'catBar', categories: CATEGORIES,
+  getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
+  onChange: startMode,
+});
 
 // ─── Mode switching ───
 document.querySelectorAll('[data-mode]').forEach(btn => {
@@ -276,12 +254,8 @@ function getHint(item) {
     : item.es;
 }
 
-function updProgress(current, t) {
-  const pct = Math.round((current / t) * 100);
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progTxt').textContent = `${current} / ${t}`;
-  document.getElementById('progPct').textContent = pct + '%';
-}
+const updProgress = (current, t) => updateProgress(current, t,
+  document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 
 function buildOptions(correct) {
   const distractors = ALL_PREPS.filter(p => p !== correct);

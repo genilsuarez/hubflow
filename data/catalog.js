@@ -1024,7 +1024,7 @@ export const PROGRESS_RULES = {
   prepositions: practiceRule(scoreKeys('prep', ['time', 'place', 'movement', 'dependent', 'duration'])),
   'verb-chunks': practiceRule(scoreKeys('vchunks', ['prepositional', 'questions'], ['', 'write'])),
   quantifiers: practiceRule(scoreKeys('quant', ['someany', 'muchmany', 'fewlittle', 'general'])),
-  modals: practiceRule(scoreKeys('modals', ['meaning', 'obligation', 'supposedTo'])),
+  modals: practiceRule(scoreKeys('modals', ['meaning', 'obligation', 'supposedTo', 'pastDeduction'])),
   'parts-of-speech': practiceRule(scoreKeys('pos', ['contentWords', 'functionWords'])),
   clauses: practiceRule(scoreKeys('clause', ['people', 'things', 'placeTime', 'thatOrWhich'])),
   'made-of': practiceRule(scoreKeys('madeof', ['materialVsTransformed', 'ingredientsVsCreative'])),
@@ -1041,9 +1041,9 @@ export const PROGRESS_RULES = {
   'paragraph-cloze': practiceRule(scoreKeys('paracloze', ['a2', 'b1', 'b2'])),
   'word-order': practiceRule(scoreKeys('wordorder', ['statements', 'questions', 'adverbs', 'complex'])),
   paraphrasing: practiceRule(scoreKeys('paraphrase', ['grammarTransform', 'vocabTransform', 'linkers', 'sentenceTransform'])),
-  inversions: practiceRule(scoreKeys('inver', ['identify', 'complete', 'rewrite'])),
+  inversions: practiceRule(scoreKeys('inver', ['identify', 'complete', 'rewrite', 'conditional'])),
   'advanced-collocations': practiceRule(scoreKeys('advcoll', ['academic', 'hedging', 'reporting'])),
-  'cleft-emphasis': practiceRule(scoreKeys('cleft', ['identify', 'complete', 'transform'])),
+  'cleft-emphasis': practiceRule(scoreKeys('cleft', ['identify', 'complete', 'transform', 'emphaticDo'])),
   'key-word-transformation': practiceRule(scoreKeys('kwt', ['grammar', 'vocabulary', 'connectors', 'mixed'])),
 };
 
@@ -1102,7 +1102,7 @@ export const MODULE_DEPTH = {
   'used-to':         { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
   'gerunds-infinitives': { engine: 'custom', items: 20, categories: 2, modes: 3, hasBattle: false },
   'verb-chunks':     { engine: 'custom',    items: 40,  categories: 2,  modes: 4, hasBattle: false },
-  modals:            { engine: 'custom',    items: 30,  categories: 3,  modes: 3, hasBattle: false },
+  modals:            { engine: 'custom',    items: 40,  categories: 4,  modes: 3, hasBattle: false },
   'parts-of-speech': { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
   clauses:           { engine: 'custom',    items: 40,  categories: 4,  modes: 3, hasBattle: false },
   'made-of':         { engine: 'custom',    items: 20,  categories: 2,  modes: 3, hasBattle: false },
@@ -1127,9 +1127,9 @@ export const MODULE_DEPTH = {
   'paragraph-cloze': { engine: 'analysis',  items: 20,  categories: 3,  modes: 2, hasBattle: false },
   'word-order':      { engine: 'custom',    items: 40,  categories: 4,  modes: 2, hasBattle: false },
   paraphrasing:      { engine: 'analysis',  items: 40,  categories: 4,  modes: 2, hasBattle: false },
-  inversions:        { engine: 'custom',    items: 30,  categories: 3,  modes: 3, hasBattle: false },
+  inversions:        { engine: 'custom',    items: 40,  categories: 4,  modes: 3, hasBattle: false },
   'advanced-collocations': { engine: 'flashcard', items: 20, categories: 3, modes: 3, hasBattle: true },
-  'cleft-emphasis':  { engine: 'analysis',  items: 30,  categories: 3,  modes: 3, hasBattle: false },
+  'cleft-emphasis':  { engine: 'analysis',  items: 40,  categories: 4,  modes: 3, hasBattle: false },
   'key-word-transformation': { engine: 'analysis', items: 40, categories: 4, modes: 2, hasBattle: false },
 };
 

@@ -54,5 +54,22 @@ export const CATEGORIES = {
       { sentence: 'They did not know what was coming. (Little...)', correct: 'Little did they know what was coming.', explain: '"Little" al inicio → did + sujeto + infinitivo.' },
       { sentence: 'She has rarely spoken in public. (Rarely...)', correct: 'Rarely has she spoken in public.', explain: '"Rarely" al inicio → has + sujeto + participio.' }
     ]
+  },
+  conditional: {
+    label: 'Conditional Inversion',
+    icon: '🎩',
+    options: ['Were', 'Had', 'Should'],
+    items: [
+      { sentence: '___ I in your shoes, I would take the job.', correct: 'Were', explain: 'Formal inversion of "If I were" — Were + subject + complement.' },
+      { sentence: '___ we known about the strike, we would have taken the train.', correct: 'Had', explain: 'Formal inversion of a third conditional: "If we had known..."' },
+      { sentence: '___ you have any questions, feel free to email me.', correct: 'Should', explain: 'Formal inversion of "If you should have..." — common in business writing.' },
+      { sentence: '___ she more experienced, she would be promoted.', correct: 'Were', explain: 'Formal inversion of "If she were more experienced..."' },
+      { sentence: "___ they arrived earlier, they wouldn't have missed the flight.", correct: 'Had', explain: 'Formal inversion of a third conditional: "If they had arrived..."' },
+      { sentence: "___ the weather improve, we'll go hiking tomorrow.", correct: 'Should', explain: 'Formal inversion of "If the weather should improve..."' },
+      { sentence: "___ he been more careful, the accident wouldn't have happened.", correct: 'Had', explain: 'Formal inversion of a third conditional: "If he had been..."' },
+      { sentence: '___ I to win the lottery, I would travel the world.', correct: 'Were', explain: '"Were + subject + to-infinitive" for a hypothetical future.' },
+      { sentence: "___ you require further assistance, don't hesitate to contact us.", correct: 'Should', explain: 'Formal inversion of "If you should require..." — typical of formal letters.' },
+      { sentence: '___ it not for your help, I would have failed.', correct: 'Were', explain: '"Were it not for" = fixed formal expression for "if it weren\'t for."' }
+    ]
   }
 };

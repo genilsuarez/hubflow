@@ -375,7 +375,7 @@ h1 {
 .ex-mode-indicator.is-ready {
   opacity: 1;
 }
-.ex-header__modes .pill-btn {
+.ex-header__modes :is(.pill-btn, .lp-pill) {
   position: relative;
   z-index: 1;
   flex: 1 1 0;
@@ -389,16 +389,16 @@ h1 {
   box-shadow: none !important;
   transition: color 0.22s ease, font-weight 0.22s ease;
 }
-.ex-header__modes .pill-btn.active,
-.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal) {
+.ex-header__modes :is(.pill-btn, .lp-pill).active,
+.ex-header__modes :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal) {
   background: transparent !important;
   color: var(--lp-chip-active-text);
   border-color: transparent !important;
   box-shadow: none !important;
   font-weight: var(--lp-weight-extrabold);
 }
-.ex-header__modes .pill-btn.active:hover,
-.ex-header__modes .pill-btn.active:is(.purple, .green, .red, .orange, .teal):hover {
+.ex-header__modes :is(.pill-btn, .lp-pill).active:hover,
+.ex-header__modes :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal):hover {
   background: transparent !important;
   color: var(--lp-chip-active-text);
   border-color: transparent !important;
@@ -611,13 +611,13 @@ h1 {
     gap: 3px;
     padding: 3px;
   }
-  .ex-header__modes .pill-btn {
+  .ex-header__modes :is(.pill-btn, .lp-pill) {
     flex: 1 1 0;
     min-height: 44px;
     padding: 8px 6px;
     font-size: clamp(0.62rem, 2.6vw, 0.7rem);
   }
-  .ex-header__scope .cat-btn {
+  .ex-header__scope :is(.cat-btn, .lp-pill) {
     font-size: clamp(0.62rem, 2.6vw, 0.68rem);
     padding: 8px 10px;
     min-height: 44px;
@@ -660,10 +660,10 @@ h1 {
   box-shadow: var(--lp-shadow-sm);
   margin-bottom: 10px;
 }
-.pill-btn.active {
+:is(.pill-btn, .lp-pill).active {
   box-shadow: var(--lp-chip-active-shadow);
 }
-[data-theme="dark"] .pill-btn.active {
+[data-theme="dark"] :is(.pill-btn, .lp-pill).active {
   box-shadow: var(--lp-chip-active-shadow);
 }
 
@@ -809,14 +809,14 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
   .header { padding: 0; margin-bottom: 6px; }
   h1 { margin-bottom: 4px; }
   .ex-header__modes .pill-bar { margin-bottom: 0; }
-  .ex-header__modes .pill-btn {
+  .ex-header__modes :is(.pill-btn, .lp-pill) {
     flex: 1 1 0;
     min-height: 44px;
     padding: 8px 6px;
     font-size: clamp(0.62rem, 2.6vw, 0.7rem);
   }
   /* Legacy headers not homologated via exercise-shell */
-  .header:not(.ex-control-panel) .pill-btn {
+  .header:not(.ex-control-panel) :is(.pill-btn, .lp-pill) {
     font-size: 0.52rem;
     padding: 5px 6px;
     min-height: 32px;
