@@ -635,16 +635,7 @@
       display: none;
     }
     .progress-snapshot__link {
-      grid-column: 2;
-      grid-row: 3;
-      justify-self: start;
-      margin: 0;
-      background: none;
-      border: none;
-      color: var(--lp-accent);
-      font-size: 0.65rem;
-      font-weight: var(--lp-weight-bold);
-      pointer-events: none;
+      display: none;
     }
 
     .progress-snapshot--empty .progress-snapshot__line--meta {
@@ -675,39 +666,17 @@
       .resumen-hero .progress-snapshot {
         grid-column: 2;
         grid-row: 1;
-        grid-template-columns: auto 1fr auto;
-        grid-template-rows: auto auto auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
         padding: 14px 16px;
-        gap: 0.4rem 14px;
+        gap: 0.35rem 12px;
         cursor: pointer;
       }
 
-      .resumen-hero .progress-snapshot__stat-col {
-        grid-column: 2;
-        grid-row: 1;
-        justify-self: end;
-        align-self: center;
-      }
-
-      .resumen-hero .progress-snapshot__copy {
-        flex-direction: column;
-        gap: 0.15rem;
-      }
-
-      .resumen-hero .progress-snapshot__line--meta::before {
-        content: none;
-        margin: 0;
-      }
-
-      .resumen-hero .progress-snapshot__link {
-        display: inline;
-      }
-
-      .resumen-hero .progress-snapshot__chev {
-        display: none;
-      }
-
       .resumen-hero .progress-snapshot__visual {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        align-self: center;
         width: 52px;
         height: 52px;
       }
@@ -718,8 +687,48 @@
       }
 
       .resumen-hero .progress-snapshot__visual strong { font-size: 0.875rem; }
+
+      .resumen-hero .progress-snapshot__copy {
+        display: contents;
+      }
+
+      .resumen-hero .progress-snapshot__line--primary {
+        display: contents;
+      }
+
+      .resumen-hero .progress-snapshot__title {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+        min-width: 0;
+      }
+
+      .resumen-hero .progress-snapshot__stat-col {
+        grid-column: 3;
+        grid-row: 1 / -1;
+        justify-self: end;
+        align-self: center;
+      }
+
+      .resumen-hero .progress-snapshot__line--meta {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: start;
+        min-width: 0;
+        font-size: 0.8125rem;
+        white-space: normal;
+      }
+
+      .resumen-hero .progress-snapshot__line--meta::before {
+        content: none;
+        margin: 0;
+      }
+
       .resumen-hero .progress-snapshot__line--primary { font-size: 0.875rem; }
-      .resumen-hero .progress-snapshot__line--meta { font-size: 0.8125rem; }
+
+      .resumen-hero .progress-snapshot__chev {
+        display: none;
+      }
     }
 
     @media (max-width: 639px) {
@@ -745,26 +754,26 @@
       }
 
       .resumen-hero .progress-snapshot {
-        grid-template-columns: 40px 1fr auto auto;
+        grid-template-columns: 44px minmax(0, 1fr) auto auto;
         grid-template-rows: auto auto;
         align-items: center;
-        gap: 0 10px;
-        row-gap: 2px;
-        min-height: 52px;
-        padding: 8px 12px 8px 14px;
+        gap: 0 12px;
+        row-gap: 4px;
+        min-height: 68px;
+        padding: 12px 14px;
       }
 
       .resumen-hero .progress-snapshot__visual {
         grid-column: 1;
         grid-row: 1 / -1;
         align-self: center;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
       }
 
       .resumen-hero .progress-snapshot__visual > div {
-        width: 30px;
-        height: 30px;
+        width: 33px;
+        height: 33px;
       }
 
       .resumen-hero .progress-snapshot__visual strong {
@@ -950,13 +959,20 @@
     body[data-active="rutas"] .tg-resumen { display: none; }
     body[data-active="rutas"] .tg-rutas { display: block; }
 
-    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
     .tiles--guides { grid-template-columns: minmax(150px, 1fr); max-width: calc((100% - 30px) / 4); }
     .tile {
       --spine: var(--lp-accent);
       display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
       border-radius: var(--lp-radius-lg);
       padding: 16px; cursor: pointer; text-align: left; font-family: inherit; color: var(--lp-ink);
+      min-width: 0;
+      width: 100%;
     }
     .tile .tile-icon {
       font-size: 1.3rem; width: 40px; height: 40px;
@@ -988,6 +1004,18 @@
     .tile.g { --spine: var(--lp-cat-amber); }
     .tile.a { --spine: var(--lp-cat-teal); }
     .tile.r { --spine: var(--lp-cat-green); }
+
+    /* Guías — categoría aparte: siempre fila propia (ejercicios arriba, referencia abajo) */
+    .tiles > .tile[data-target="guides"] {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+    }
+
+    @media (min-width: 640px) {
+      .tiles > .tile[data-target="guides"] {
+        max-width: calc((100% - 30px) / 4);
+      }
+    }
 
     /* ─── MODULE CARDS (compact grid) ─── */
     .shelf { display: grid; grid-template-columns: 1fr; gap: 7px; }
@@ -1294,15 +1322,18 @@
        shell colapsa a sidebar flotante (860px, ver arriba). */
     @media (max-width: 860px) {
       .lp-header-stats { display: none; }
-      .tile.r[data-target="guides"] { display: none; }
     }
     /* Topbar angosta: el buscador manda — las stats se ocultan en pantallas chicas.
        min-width evita que flex lo aplaste a un ancho inusable. */
     @media (max-width: 639px) {
       .search-bar { min-width: 130px; }
 
-      /* Topic tiles — compact height, larger type on mobile */
-      .tiles { gap: 8px; }
+      /* Topic tiles — 2 per row on mobile */
+      .tiles { gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tiles--guides { grid-template-columns: 1fr; max-width: none; }
+      .tiles > .tile[data-target="guides"] {
+        max-width: none;
+      }
       .tile {
         display: grid;
         grid-template-columns: 36px 1fr;

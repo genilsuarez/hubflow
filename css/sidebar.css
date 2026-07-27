@@ -233,7 +233,6 @@ body.has-sidebar {
     color: var(--lp-accent-text);
     font-weight: 600;
   }
-  .sb-item[data-target="guides"] { display: none; }
 }
 
 /* ─── Depth banner (toast — bottom center, manual dismiss) ─── */
