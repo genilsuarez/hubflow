@@ -72,7 +72,7 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/spelling-by-ear.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 const catKeys = Object.keys(CATEGORIES);
 let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
@@ -92,7 +92,7 @@ function initPractice(timed) { deck = shuffle(getData()); idx = 0; score = 0; an
 function renderItem() { if (idx >= total) { stopTimer(); finishPractice(); return; } answered = false; const item = deck[idx]; document.getElementById('formLabel').textContent = `Write the ${item.form} form`; document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; const input = document.getElementById('answerInput'); input.value = ''; input.className = 'answer-input'; input.disabled = false; input.focus(); updProgress(idx, total); setTimeout(playBase, 300); }
 function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); input.value = `${val} → ${item.correct}`; } document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); setTimeout(renderItem, 1600); }
 document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
-function finishPractice() { const pct = showResult({ correct: score, total, containerEl: document.getElementById('resultOverlay'), onRestart: () => startMode(), onStudy: null }); recordScore(`sbe-${currentCat}`, pct); }
+function finishPractice() { const pct = finishExercise({ correct: score, total, startMode }); recordScore(`sbe-${currentCat}`, pct); }
 startMode();
 </script>
 

@@ -60,6 +60,22 @@ export class FlashcardEngine {
     // Flashcard flip on click/tap
     document.getElementById('fcCard')?.addEventListener('click', () => this.flipCard());
 
+    // Study nav + battle actions — same canonical ids across every FlashcardEngine consumer
+    document.getElementById('shuffleBtn')?.addEventListener('click', () => this.shuffleDeck());
+    document.getElementById('prevBtn')?.addEventListener('click', () => this.navCard(-1));
+    document.getElementById('nextBtn')?.addEventListener('click', () => this.navCard(1));
+    document.getElementById('battleClaimP1')?.addEventListener('click', () => this.battleClaim(1));
+    document.getElementById('battleSkipBtn')?.addEventListener('click', () => this.battleSkip());
+    document.getElementById('battleClaimP2')?.addEventListener('click', () => this.battleClaim(2));
+    document.getElementById('battleJudgeCorrect')?.addEventListener('click', () => this.battleJudge(true));
+    document.getElementById('battleJudgeWrong')?.addEventListener('click', () => this.battleJudge(false));
+    document.getElementById('battleNextBtn')?.addEventListener('click', () => this.battleNext());
+
+    // Battle card tap-to-flip (mobile) — mirrors the Space/Enter peek shortcut above
+    document.getElementById('battleCard')?.addEventListener('click', () => {
+      document.getElementById('battleCard')?.classList.toggle('flipped');
+    });
+
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       if (e.key === ' ' || e.key === 'Enter') {

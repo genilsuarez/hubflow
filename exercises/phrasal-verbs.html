@@ -297,7 +297,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phrasal-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive, finishExercise } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -460,12 +460,9 @@ function renderQuiz() {
 function finishQuiz() {
   const elapsed = timedSeconds ? timedSeconds - (timer?.remaining ?? 0) : null;
   stopTimer();
-  const pct = showResult({
-    correct: score, total,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
-    elapsedSeconds: elapsed
+  const pct = finishExercise({
+    correct: score, total, startMode, setMode: v => mode = v,
+    elapsedSeconds: elapsed,
   });
   recordScore(`phrasal-${currentCat}-quiz`, pct);
 }
@@ -545,12 +542,7 @@ document.getElementById('checkBtn').addEventListener('click', doWriteCheck);
 document.getElementById('skipBtn').addEventListener('click', () => { writeIdx++; renderWrite(); });
 
 function finishWrite() {
-  const pct = showResult({
-    correct: writeScore, total: writeTotal,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
-  });
+  const pct = finishExercise({ correct: writeScore, total: writeTotal, startMode, setMode: v => mode = v });
   recordScore(`phrasal-${currentCat}-write`, pct);
 }
 
@@ -611,11 +603,9 @@ function checkMatchPair() {
     if (matchState.matched === matchState.total) {
       const pct = Math.round((matchState.total - matchState.errors) / matchState.total * 100);
       recordScore(`phrasal-${currentCat}-match`, Math.max(0, pct));
-      setTimeout(() => showResult({
+      setTimeout(() => finishExercise({
         correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
-        containerEl: document.getElementById('resultOverlay'),
-        onRestart: () => startMode(),
-        onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
+        startMode, setMode: v => mode = v,
       }), 500);
     }
   } else {
@@ -779,12 +769,7 @@ function checkSort() {
 
   sortState.score = correct;
 
-  const pct = showResult({
-    correct, total: sortState.total,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
-  });
+  const pct = finishExercise({ correct, total: sortState.total, startMode, setMode: v => mode = v });
   recordScore(`phrasal-${currentCat}-sort`, pct);
 }
 

@@ -1014,6 +1014,21 @@ export function showResult({ correct, total, containerEl, onRestart, onStudy, el
   return pct;
 }
 
+/** Wraps showResult() with the containerEl/onRestart/onStudy boilerplate every standalone
+ *  exercise repeats at its finish*() call sites. Pass `setMode` only for exercises that have
+ *  a Study mode to jump back to — omit it (or pass nothing) to get onStudy: null, same as
+ *  showResult(). recordScore() stays the caller's responsibility since its key/timing varies
+ *  per exercise (some record before this call, some wrap it in requestAnimationFrame). */
+export function finishExercise({ correct, total, startMode, setMode, elapsedSeconds }) {
+  return showResult({
+    correct, total,
+    containerEl: document.getElementById('resultOverlay'),
+    onRestart: () => startMode(),
+    onStudy: setMode ? () => { setMode('study'); syncModeTabsActive('study'); startMode(); } : null,
+    elapsedSeconds,
+  });
+}
+
 /* ═══════════════════════════════════════════════════════
    Text-to-Speech (Web Speech API) — shared TTS helper
    ═══════════════════════════════════════════════════════ */

@@ -197,7 +197,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/verb-chunks.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -318,12 +318,9 @@ function renderPractice() {
 function finishPractice() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
   stopTimer();
-  const pct = showResult({
-    correct: score, total,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
-    elapsedSeconds: elapsed
+  const pct = finishExercise({
+    correct: score, total, startMode, setMode: v => mode = v,
+    elapsedSeconds: elapsed,
   });
   recordScore(`vchunks-${currentCat}`, pct);
 }
@@ -436,12 +433,7 @@ function skipWrite() {
 }
 
 function finishWrite() {
-  const pct = showResult({
-    correct: score, total,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
-  });
+  const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v });
   recordScore(`vchunks-${currentCat}-write`, pct);
 }
 

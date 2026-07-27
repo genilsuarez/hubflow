@@ -172,7 +172,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/error-hunt.js';
-import { shuffle, Timer, formatTime, showResult, recordScore, setPracticeBottomNav, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../js/utils.js';
+import { shuffle, Timer, formatTime, recordScore, setPracticeBottomNav, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 
 
 const catKeys = Object.keys(CATEGORIES);
@@ -366,13 +366,9 @@ function finishAll() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
   stopTimer();
   const pct = totalErrors > 0 ? Math.round((score / totalErrors) * 100) : 0;
-  showResult({
-    correct: Math.round(score),
-    total: totalErrors,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: null,
-    elapsedSeconds: elapsed
+  finishExercise({
+    correct: Math.round(score), total: totalErrors, startMode,
+    elapsedSeconds: elapsed,
   });
   recordScore(`errhunt-${currentCat}`, pct);
   // Update progress to 100

@@ -266,7 +266,7 @@
 
 <script type="module">
 import { VERBS } from '../data/irregular-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, wireModeTabs, syncModeTabsActive, finishExercise } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -437,12 +437,9 @@ function renderQuiz() {
 function finishQuiz() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
   stopTimer();
-  const pct = showResult({
-    correct: quizScore, total: quizTotal,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
-    elapsedSeconds: elapsed
+  const pct = finishExercise({
+    correct: quizScore, total: quizTotal, startMode, setMode: v => mode = v,
+    elapsedSeconds: elapsed,
   });
   recordScore(`irr-${currentCat}-quiz`, pct);
 }
@@ -504,11 +501,9 @@ function checkMatchPair() {
     if (matchState.matched === matchState.total) {
       const pct = Math.round((matchState.total - matchState.errors) / matchState.total * 100);
       recordScore(`irr-${currentCat}-match`, Math.max(0, pct));
-      setTimeout(() => showResult({
+      setTimeout(() => finishExercise({
         correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
-        containerEl: document.getElementById('resultOverlay'),
-        onRestart: () => startMode(),
-        onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
+        startMode, setMode: v => mode = v,
       }), 500);
     }
   } else {
@@ -586,12 +581,7 @@ function doWriteCheck() {
 }
 
 function finishWrite() {
-  const pct = showResult({
-    correct: writeScore, total: writeTotal,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
-  });
+  const pct = finishExercise({ correct: writeScore, total: writeTotal, startMode, setMode: v => mode = v });
   recordScore(`irr-${currentCat}-write`, pct);
 }
 

@@ -126,7 +126,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/odd-one-out.js';
-import { shuffle, Timer, formatTime, showResult, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../js/utils.js';
+import { shuffle, Timer, formatTime, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 
 
 const catKeys = Object.keys(CATEGORIES);
@@ -220,13 +220,7 @@ function updateProgress() {
 function finish() {
   stopTimer();
   const pct = Math.round((score / deck.length) * 100);
-  showResult({
-    correct: score,
-    total: deck.length,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: null
-  });
+  finishExercise({ correct: score, total: deck.length, startMode });
   recordScore(`odd-${currentCat}`, pct);
   document.getElementById('progFill').style.width = '100%';
   document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;

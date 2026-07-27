@@ -129,7 +129,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/listening.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 
 
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
@@ -233,13 +233,7 @@ function renderQuestion() {
 function finishPractice() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
   stopTimer();
-  const pct = showResult({
-    correct: score, total,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: null,
-    elapsedSeconds: elapsed
-  });
+  const pct = finishExercise({ correct: score, total, startMode, elapsedSeconds: elapsed });
   recordScore(`listen-${currentCat}`, pct);
 }
 

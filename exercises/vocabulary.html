@@ -188,21 +188,6 @@ const engine = new FlashcardEngine({
   getActivityId: (category) => pack ? 'practice' : `pack-${CATEGORY_PACKS[category]}`,
   defaultCategory: Object.keys(activeCategories)[0],
 });
-
-document.getElementById('shuffleBtn').addEventListener('click', () => engine.shuffleDeck());
-document.getElementById('prevBtn').addEventListener('click', () => engine.navCard(-1));
-document.getElementById('nextBtn').addEventListener('click', () => engine.navCard(1));
-document.getElementById('battleClaimP1').addEventListener('click', () => engine.battleClaim(1));
-document.getElementById('battleSkipBtn').addEventListener('click', () => engine.battleSkip());
-document.getElementById('battleClaimP2').addEventListener('click', () => engine.battleClaim(2));
-document.getElementById('battleJudgeCorrect').addEventListener('click', () => engine.battleJudge(true));
-document.getElementById('battleJudgeWrong').addEventListener('click', () => engine.battleJudge(false));
-document.getElementById('battleNextBtn').addEventListener('click', () => engine.battleNext());
-
-// Battle card flip on click
-document.getElementById('battleCard')?.addEventListener('click', () => {
-  document.getElementById('battleCard').classList.toggle('flipped');
-});
 </script>
 
 <script type="module" src="../js/exercise-shell.js"></script>

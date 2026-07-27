@@ -172,7 +172,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phonics.js';
-import { shuffle, recordScore, Timer, formatTime, showResult, speak, renderCatBar as sharedRenderCatBar, wireModeTabs, syncModeTabsActive } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, speak, renderCatBar as sharedRenderCatBar, wireModeTabs, finishExercise } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -485,11 +485,9 @@ function checkMatchPair() {
     if (matchState.matched === matchState.total) {
       const pct = Math.round((matchState.total - matchState.errors) / matchState.total * 100);
       recordScore(`phonics-${currentCat}-match`, Math.max(0, pct));
-      setTimeout(() => showResult({
+      setTimeout(() => finishExercise({
         correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
-        containerEl: document.getElementById('resultOverlay'),
-        onRestart: () => startMode(),
-        onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); }
+        startMode, setMode: v => mode = v,
       }), 500);
     }
   } else {
@@ -503,12 +501,9 @@ function checkMatchPair() {
 function finishQuiz() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
   stopTimer();
-  const pct = showResult({
-    correct: score, total,
-    containerEl: document.getElementById('resultOverlay'),
-    onRestart: () => startMode(),
-    onStudy: () => { mode = 'study'; syncModeTabsActive('study'); startMode(); },
-    elapsedSeconds: elapsed
+  const pct = finishExercise({
+    correct: score, total, startMode, setMode: v => mode = v,
+    elapsedSeconds: elapsed,
   });
   recordScore(`phonics-${currentCat}`, pct);
 }
