@@ -37,6 +37,8 @@ js/
   exercise-shell.js — Sidebar drawer, header; calls ex-bottom-nav.js
   ex-bottom-nav.js    — Bottom nav canonical (mirrors FluentFlow game-controls)
   utils.js          — shuffle, Timer, recordScore, progress tracking, header stats
+                      + helpers de UI compartidos: renderCatBar, wireModeTabs,
+                      syncModeTabsActive, finishExercise, updateProgress
   lp-theme.js       — Theme init before first paint (copy of scripts/)
   lp-platform-urls.js — Cross-app URLs (copy of scripts/)
   lp-nav-icons.js   — Sidebar icon SVGs (copy of scripts/)
@@ -59,7 +61,7 @@ scripts/
 build.sh            — Commit + push + wait for CI Validate/CD Deploy
 ```
 
-**Removed:** `js/theme-init.js` (all pages now use `js/lp-theme.js`), `js/portal-link.js` (back nav lives in `exercise-shell.js`).
+**Removed:** `js/theme-init.js` (all pages now use `js/lp-theme.js`), `js/portal-link.js` (back nav lives in `exercise-shell.js`), `js/lp-stats-pending-init.js` (huérfano: nadie lo cargaba y ningún CSS/JS leía su flag `data-stats-pending`).
 
 ## Serve in development
 
@@ -224,7 +226,7 @@ Imported via `@import` in `css/components.css` (all exercise pages load it).
 | `flashcard-engine.js` | vocabulary, opposites, pronunciation-study | study: fc-nav hoisted · quiz/match: hidden · battle: claim/judge/next |
 | `sentence-quiz-engine.js` | articles, conditionals, clauses, … (13) | study: shuffle/prev/next · practice/timed: minimal (tap options) |
 | `typed-answer-engine.js` | paraphrasing, word-order, register-switch, sentence-combining, key-word-transformation | practice: check/next/hint hoisted |
-| `spelling-engine.js` | ed-spelling, ing-spelling, noun-adjuncts | practice: check hoisted (`setupSpellingBottomNav`) |
+| `spelling-engine.js` | ed-spelling, ing-spelling, noun-adjuncts | practice: check hoisted (`setupPracticeBottomNav`) |
 | `dictation-engine.js` | dictation-sprint | practice: check/next/skip hoisted |
 | Standalone inline | error-hunt, paragraph-cloze | practice: auto-hoist via `setupContentBottomNav()` |
 | Standalone inline | listening, spelling-by-ear, odd-one-out | minimal (no check button) |

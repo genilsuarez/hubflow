@@ -11,7 +11,8 @@
    current category passed to renderPrompt (for a category badge).
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, setupPracticeBottomNav, setPracticeBottomNav } from './utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, wireModeTabs, finishExercise } from './utils.js';
+import { setupPracticeBottomNav, setPracticeBottomNav } from './ex-bottom-nav.js';
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');
@@ -66,13 +67,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     onChange: startMode,
   });
 
-  document.querySelectorAll('[data-mode]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      mode = btn.dataset.mode;
-      document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-      startMode();
-    });
-  });
+  wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
   function startMode() {
     timerState.stop();
@@ -183,12 +178,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
   function finish() {
     timerState.stop();
     const pct = total > 0 ? Math.round((score / total) * 100) : 0;
-    showResult({
-      correct: score, total,
-      containerEl: document.getElementById('resultOverlay'),
-      onRestart: () => startMode(),
-      onStudy: null,
-    });
+    finishExercise({ correct: score, total, startMode });
     recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
     renderLessonProgress(contentId);
   }

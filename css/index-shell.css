@@ -654,13 +654,6 @@
       color: var(--lp-ink-soft);
       line-height: 1;
     }
-    .progress-snapshot__sep {
-      display: none;
-    }
-    .progress-snapshot__link {
-      display: none;
-    }
-
     .progress-snapshot--empty .progress-snapshot__line--meta {
       color: var(--lp-muted);
       font-style: italic;
@@ -844,10 +837,6 @@
 
       .resumen-hero .progress-snapshot__unit {
         font-size: 0.6875rem;
-      }
-
-      .resumen-hero .progress-snapshot__link {
-        display: none;
       }
 
       .resumen-hero .progress-snapshot__chev {
@@ -1049,7 +1038,6 @@
       gap: 10px;
       margin-bottom: 16px;
     }
-    .tiles--guides { grid-template-columns: minmax(150px, 1fr); max-width: calc((100% - 30px) / 4); }
     .tile {
       --spine: var(--lp-accent);
       display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
@@ -1222,8 +1210,6 @@
     }
     .ruta-step.current .ruta-step__items { background: color-mix(in srgb, var(--lp-ink) 10%, transparent); color: var(--lp-muted); }
     .ruta-step.done .ruta-step__items { background: color-mix(in srgb, var(--lp-ink) 6%, transparent); color: var(--lp-muted); }
-    .ruta-card__complete { margin-top: 10px; font-size: .68rem; font-weight: var(--lp-weight-bold); color: var(--lp-success); }
-
     .book.b-vocab { --spine: var(--lp-cat-purple); }
     .book.b-grammar { --spine: var(--lp-cat-amber); }
     .book.b-pron { --spine: var(--lp-cat-blue); }
@@ -1412,7 +1398,6 @@
 
       /* Topic tiles — 2 per row on mobile */
       .tiles { gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .tiles--guides { grid-template-columns: 1fr; max-width: none; }
       .tiles > .tile[data-target="guides"] {
         max-width: none;
       }

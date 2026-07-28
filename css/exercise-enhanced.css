@@ -667,7 +667,6 @@ h1 {
   box-shadow: var(--lp-chip-active-shadow);
 }
 
-/* ─── LEVEL BAR ENHANCED (legacy — spelling now uses .cat-bar + .cat-btn) ─── */
 /* ─── PROGRESS BAR ENHANCED (legacy headers only — not .ex-control-panel) ─── */
 .header:not(.ex-control-panel) .progress,
 .wrap > .progress {

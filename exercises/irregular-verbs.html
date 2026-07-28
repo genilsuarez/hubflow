@@ -272,7 +272,6 @@ import { initSwipe } from '../js/swipe.js';
 
 let currentCat = 'all';
 let mode = 'study';
-let data = VERBS;
 let deck = [], cardIdx = 0;
 let quizDeck = [], quizIdx = 0, quizScore = 0, quizTotal = 15;
 let writeDeck = [], writeIdx = 0, writeScore = 0, writeTotal = 10;
@@ -287,7 +286,6 @@ function filteredData() {
 document.querySelectorAll('[data-cat]').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCat = btn.dataset.cat;
-    data = filteredData();
     document.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCat));
     startMode();
   });

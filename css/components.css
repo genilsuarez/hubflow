@@ -554,9 +554,6 @@
 [data-theme="dark"] .word-opt.wrong { color: color-mix(in srgb, var(--lp-error) 45%, white); }
 @media (max-width: 639px) { .word-opt { min-width: 50px; padding: 10px 14px; font-size: .8rem; } }
 
-/* Header de ejercicio: acciones agrupadas a la derecha (portal + tema) — Fase E */
-.tb-actions { display: flex; align-items: center; gap: 8px; }
-
 /* ─── PILL BAR MOBILE: scroll when tabs don't fit (e.g. 5 modes) ─── */
 @media (max-width: 639px) {
   .pill-bar {

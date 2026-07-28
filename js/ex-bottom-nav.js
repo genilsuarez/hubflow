@@ -337,11 +337,6 @@ export function setupContentBottomNav(attempt = 0) {
   setupPracticeBottomNav(attempt);
 }
 
-/** @deprecated Use setupPracticeBottomNav — kept for imports. */
-export function setupSpellingBottomNav(attempt = 0) {
-  setupPracticeBottomNav(attempt);
-}
-
 /**
  * Hoist #checkBtn (and optional #nextBtn, #hintBtn, #skipBtn) into #exBottomNav.
  * Spelling exercises only have checkBtn; typed-answer/dictation add next/hint/skip.

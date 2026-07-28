@@ -904,23 +904,6 @@ export function makeTimerState() {
   };
 }
 
-/** @deprecated Import from `./ex-bottom-nav.js` */
-export {
-  setupPracticeBottomNav,
-  setupSpellingBottomNav,
-  setupContentBottomNav,
-  setPracticeBottomNav,
-  applyRoleClasses as markDesktopOnlyBottomNavControls,
-} from './ex-bottom-nav.js';
-
-/** @deprecated Use BOTTOM_NAV.ROLES in ex-bottom-nav.js */
-export const DESKTOP_ONLY_BOTTOM_NAV_IDS = [
-  'shuffleBtn',
-  'speakBtn',
-  'listenBtn',
-  'studySpeakBtn',
-];
-
 /** Progress bar update */
 export function updateProgress(current, total, fillEl, txtEl, pctEl) {
   const pct = Math.round((current / total) * 100);

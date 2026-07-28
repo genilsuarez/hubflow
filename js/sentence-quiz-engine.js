@@ -8,7 +8,7 @@
    13 near-identical copies inline in each exercises/*.html file.
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, recordScore, Timer, formatTime, showResult, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, speak } from './utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, speak, wireModeTabs, finishExercise } from './utils.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 
 const SPEAK_ICON = '🔊';
@@ -30,13 +30,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     onChange: startMode,
   });
 
-  document.querySelectorAll('[data-mode]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      mode = btn.dataset.mode;
-      document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-      startMode();
-    });
-  });
+  wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
   function startMode() {
     timerState.stop();
@@ -195,12 +189,9 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   function finishPractice() {
     const elapsed = timerState.timedSeconds ? timerState.timedSeconds - (timerState.timer && timerState.timer.remaining != null ? timerState.timer.remaining : 0) : null;
     timerState.stop();
-    const pct = showResult({
-      correct: score, total,
-      containerEl: document.getElementById('resultOverlay'),
-      onRestart: () => startMode(),
-      onStudy: () => { mode = 'study'; document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === 'study')); startMode(); },
-      elapsedSeconds: elapsed
+    const pct = finishExercise({
+      correct: score, total, startMode, setMode: v => mode = v,
+      elapsedSeconds: elapsed,
     });
     recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
     renderLessonProgress(contentId);

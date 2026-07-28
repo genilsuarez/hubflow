@@ -8,13 +8,12 @@ import {
   isSpeechAvailable,
   Timer,
   formatTime,
-  showResult,
   recordScore,
   renderCatBar as sharedRenderCatBar,
   renderLessonProgress,
-  setupPracticeBottomNav,
-  setPracticeBottomNav,
+  finishExercise,
 } from './utils.js';
+import { setupPracticeBottomNav, setPracticeBottomNav } from './ex-bottom-nav.js';
 
 function normalize(text) {
   return text.toLowerCase()
@@ -241,13 +240,7 @@ export function initDictationPractice({
   function finish() {
     stopTimer();
     const pct = totalWords > 0 ? Math.round((totalScore / totalWords) * 100) : 0;
-    showResult({
-      correct: totalScore,
-      total: totalWords,
-      containerEl: document.getElementById('resultOverlay'),
-      onRestart: () => startMode(),
-      onStudy: null,
-    });
+    finishExercise({ correct: totalScore, total: totalWords, startMode });
     recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
     renderLessonProgress(contentId);
     document.getElementById('progFill').style.width = '100%';
