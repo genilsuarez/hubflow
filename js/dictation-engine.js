@@ -34,8 +34,7 @@ export function initDictationPractice({
     document.getElementById('noTtsWarning')?.classList.add('show');
   }
 
-  const catKeys = Object.keys(categories);
-  let currentCat = catKeys[0];
+  let currentCat = Object.keys(categories)[0];
   let mode = 'practice';
   let deck = [];
   let idx = 0;

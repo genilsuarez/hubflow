@@ -53,8 +53,7 @@ function isMatch(userAnswer, correctArray) {
 export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   renderLessonProgress(contentId);
 
-  const catKeys = Object.keys(categories);
-  let currentCat = catKeys[0];
+  let currentCat = Object.keys(categories)[0];
   let mode = 'practice';
   let deck = [], idx = 0, score = 0, total = 0;
   let answered = false;

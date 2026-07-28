@@ -176,8 +176,7 @@ import { shuffle, Timer, formatTime, recordScore, renderCatBar as sharedRenderCa
 import { setPracticeBottomNav } from '../js/ex-bottom-nav.js';
 
 
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0];
+let currentCat = Object.keys(CATEGORIES)[0];
 let mode = 'hunt';
 let deck = [], idx = 0, score = 0, totalErrors = 0;
 let selectedWords = new Set();

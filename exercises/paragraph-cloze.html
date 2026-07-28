@@ -134,8 +134,7 @@ function isMatch(userAnswer, correctArray) {
   return n.length > 0 && correctArray.some(c => normalize(c) === n);
 }
 
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0];
+let currentCat = Object.keys(CATEGORIES)[0];
 let mode = 'practice';
 let deck = [], idx = 0, blanksCorrect = 0, blanksTotal = 0, total = 0;
 let checked = false;

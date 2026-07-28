@@ -62,8 +62,7 @@
 import { CATEGORIES } from '../data/tenses.js';
 import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null;
+let currentCat = Object.keys(CATEGORIES)[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null;
 sharedRenderCatBar({
   containerId: 'catBar', categories: CATEGORIES,
   getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,

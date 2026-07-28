@@ -271,7 +271,7 @@ function buildHubFlowSummary(contentStates) {
 }
 
 /** Unified summary — same rules as DeskFlow portal and learnflow:progress:hubflow:v1. */
-export function getHubFlowProgressSummary() {
+function getHubFlowProgressSummary() {
   if (reconcileHubflowProgressFromEvents()) {
     invalidateProjectionCache();
   }
@@ -360,7 +360,7 @@ function projectionFingerprint(projection) {
   });
 }
 
-export function publishHubFlowProgress() {
+function publishHubFlowProgress() {
   const content = Object.fromEntries(MODULES.map((module) => [
     module.id,
     getContentProgress(module.id),
@@ -396,7 +396,7 @@ export function publishHubFlowProgress() {
 
 // Rebuild per-exercise score keys from the cloud projection (learnflow:progress:hubflow:v1).
 // Score-history keys drive granular exercise UI; the v1 projection is the cross-app source.
-export function syncScoreKeysFromProgressDoc() {
+function syncScoreKeysFromProgressDoc() {
   const doc = readProjectionDoc();
   if (!doc?.content) return false;
 
@@ -436,7 +436,7 @@ export function syncScoreKeysFromProgressDoc() {
   return changed;
 }
 
-export function syncScoreKeysFromActivityDoc() {
+function syncScoreKeysFromActivityDoc() {
   const doc = readJson(ACTIVITY_STORAGE_KEY, null);
   if (!doc?.events?.length) return false;
 
@@ -948,7 +948,7 @@ export function formatTime(seconds) {
 }
 
 /** Show result overlay */
-export function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSeconds }) {
+function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSeconds }) {
   const pct = Math.round((correct / total) * 100);
   const stars = getStars(pct);
   const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
@@ -1100,7 +1100,7 @@ export function renderLessonProgress(contentId) {
  * Shows columns for each tracked mode (quiz, match, etc.) per category.
  * @param {string} contentId
  */
-export function openProgressDetail(contentId) {
+function openProgressDetail(contentId) {
   if (!contentId) return;
   const rule = PROGRESS_RULES[contentId];
   if (!rule) return;

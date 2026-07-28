@@ -129,8 +129,7 @@ import { CATEGORIES } from '../data/odd-one-out.js';
 import { shuffle, Timer, formatTime, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 
 
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0];
+let currentCat = Object.keys(CATEGORIES)[0];
 let mode = 'quiz';
 let deck = [], idx = 0, score = 0;
 let answered = false;

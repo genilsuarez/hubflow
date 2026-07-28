@@ -16,8 +16,7 @@ const SPEAK_ICON = '🔊';
 export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   renderLessonProgress(contentId);
 
-  const catKeys = Object.keys(categories);
-  let currentCat = catKeys[0];
+  let currentCat = Object.keys(categories)[0];
   let mode = 'study';
   let deck = [], idx = 0, score = 0, total = 0;
   let autoSpeak = false;

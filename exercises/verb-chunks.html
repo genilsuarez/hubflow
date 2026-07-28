@@ -202,8 +202,7 @@ import { initSwipe } from '../js/swipe.js';
 
 
 const ALL_PREPS = ['to', 'at', 'for', 'from', 'with', 'about', 'on', 'of', 'in', 'after'];
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0];
+let currentCat = Object.keys(CATEGORIES)[0];
 let mode = 'study';
 let deck = [], idx = 0, score = 0, total = 0;
 let timer = null;

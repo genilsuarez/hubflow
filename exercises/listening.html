@@ -134,8 +134,7 @@ import { shuffle, recordScore, Timer, formatTime, speak, isSpeechAvailable, rend
 
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0];
+let currentCat = Object.keys(CATEGORIES)[0];
 let mode = 'practice';
 let deck = [], idx = 0, score = 0, total = 0;
 let timer = null;

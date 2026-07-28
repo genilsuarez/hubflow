@@ -22,8 +22,6 @@
   overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .pill-bar::-webkit-scrollbar { display: none; }
-.pill-bar--scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.pill-bar--scroll::-webkit-scrollbar { display: none; }
 
 :is(.pill-btn, .lp-pill) {
   flex: 1 0 auto; font-family: var(--lp-font-body); font-size: .7rem; font-weight: var(--lp-weight-bold);

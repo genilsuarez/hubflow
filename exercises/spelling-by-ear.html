@@ -74,8 +74,7 @@
 import { CATEGORIES } from '../data/spelling-by-ear.js';
 import { shuffle, recordScore, Timer, formatTime, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
-const catKeys = Object.keys(CATEGORIES);
-let currentCat = catKeys[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
+let currentCat = Object.keys(CATEGORIES)[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
 sharedRenderCatBar({
   containerId: 'catBar', categories: CATEGORIES,
   getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
