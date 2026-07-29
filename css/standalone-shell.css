@@ -1,0 +1,15 @@
+/* ─── Standalone exercise shell ───
+   Mirrors sentence-quiz.css / typed-answer-shell.css / flashcard-shell.css /
+   spelling-shell.css / dictation-shell.css for the 11 exercises that manage
+   their own state without a shared engine (confusing-words, error-hunt,
+   irregular-verbs, listening, odd-one-out, paragraph-cloze, phonics,
+   phrasal-verbs, prepositions, spelling-by-ear, tenses, verb-chunks,
+   word-formation). Extracted from ~215 duplicated inline lines. Each page
+   keeps its own `[data-area] { gap: … }` value inline — it's the one property
+   that legitimately varies (10-14px) and isn't a shared default. */
+body { min-height: 100vh; }
+.cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
+.cat-bar::-webkit-scrollbar { display: none; }
+.scroll-body { padding: 8px 0 30px; }
+[data-area] { display: none; flex-direction: column; align-items: center; width: 100%; }
+[data-area].show { display: flex; }

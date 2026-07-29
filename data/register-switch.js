@@ -10,7 +10,6 @@ export const CATEGORIES = {
   toFormal: {
     label: 'Informal → Formal',
     icon: '🎩',
-    level: 'B1–B2',
     items: [
       { source: "Can you send me the file?", correct: ["Could you please send me the file?", "Would you mind sending me the file?"], hint: "Use a polite modal instead of 'can'", explain: "Formal requests avoid direct 'can' and use 'could' or 'would you mind'." },
       { source: "I wanna ask you something.", correct: ["I would like to ask you something.", "I'd like to ask you something."], hint: "Avoid contractions like 'wanna'", explain: "'Wanna' is informal; formal register uses 'would like to'." },
@@ -27,7 +26,6 @@ export const CATEGORIES = {
   toInformal: {
     label: 'Formal → Informal',
     icon: '👋',
-    level: 'B1–B2',
     items: [
       { source: "I would be grateful if you could assist me.", correct: ["Could you help me out?", "Can you give me a hand?"], hint: "Use a casual request", explain: "Informal English prefers short, direct requests like 'help me out'." },
       { source: "I regret to inform you that the meeting has been cancelled.", correct: ["Sorry, but the meeting's off.", "Bad news — the meeting got cancelled."], hint: "Use everyday, direct phrasing", explain: "'I regret to inform you' is formal; informally we just say 'sorry, but...'." },

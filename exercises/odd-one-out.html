@@ -22,15 +22,11 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/standalone-shell.css">
 <style>
-  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-teal); }
 
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
-  [data-area].show { display: flex; }
+  [data-area] { gap: 14px; }
 
   /* Question card */
   .ooo-card {
@@ -75,7 +71,6 @@
   .ooo-explanation strong { color: var(--lp-cat-teal); }
   .ooo-explanation .ooo-group { color: var(--lp-muted); font-weight: 600; font-size: .7rem; margin-top: 4px; }
 
-  .scroll-body { padding: 8px 0 30px; }
 
   @media (max-width: 400px) {
     .ooo-options { grid-template-columns: 1fr; }

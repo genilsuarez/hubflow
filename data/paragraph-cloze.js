@@ -9,7 +9,6 @@ export const CATEGORIES = {
   a2: {
     label: 'A2 — Past & Future Basics',
     icon: '📗',
-    level: 'A2',
     items: [
       {
         title: 'A Trip to London',
@@ -100,7 +99,6 @@ export const CATEGORIES = {
   b1: {
     label: 'B1 — Modals, Passive & Reported Speech',
     icon: '📘',
-    level: 'B1',
     items: [
       {
         title: 'Choosing a Career',
@@ -191,7 +189,6 @@ export const CATEGORIES = {
   b2: {
     label: 'B2 — Conditionals, Reported Speech & Passive',
     icon: '📙',
-    level: 'B2',
     items: [
       {
         title: 'The Future of Work',

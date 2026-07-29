@@ -10,7 +10,6 @@ export const CATEGORIES = {
   grammarTransform: {
     label: 'Grammar Transformations',
     icon: '🔄',
-    level: 'B1–B2',
     items: [
       { source: "I started learning English five years ago.", keyword: "BEEN", correct: ["I have been learning English for five years."], hint: "Change to present perfect continuous", explain: "'Started X ago' = 'have been doing X for' (duration until now)." },
       { source: "They built this castle in 1450.", keyword: "BUILT", correct: ["This castle was built in 1450."], hint: "Change to passive voice", explain: "Active → Passive: object becomes subject + was/were + past participle." },
@@ -27,7 +26,6 @@ export const CATEGORIES = {
   vocabTransform: {
     label: 'Vocabulary Rewrites',
     icon: '📝',
-    level: 'B2',
     items: [
       { source: "The meeting has been postponed.", keyword: "PUT", correct: ["The meeting has been put off."], hint: "phrasal verb with PUT meaning 'delay'", explain: "'Postpone' = 'put off' in everyday English." },
       { source: "I can't stand this noise.", keyword: "BEAR", correct: ["I can't bear this noise."], hint: "BEAR is a direct synonym for 'stand' here", explain: "'Stand' and 'bear' both mean 'tolerate'." },
@@ -44,7 +42,6 @@ export const CATEGORIES = {
   linkers: {
     label: 'Linkers & Cohesion',
     icon: '🔗',
-    level: 'B1–B2',
     items: [
       { source: "She was tired. She kept working.", keyword: "DESPITE", correct: ["Despite being tired, she kept working.", "She kept working despite being tired."], hint: "Despite + -ing = contrast", explain: "'Despite' + noun/-ing shows contrast between two facts." },
       { source: "He studied hard. He passed the exam.", keyword: "AS A RESULT", correct: ["He studied hard. As a result, he passed the exam."], hint: "'As a result' links cause → effect", explain: "'As a result' introduces a consequence of the previous statement." },
@@ -61,7 +58,6 @@ export const CATEGORIES = {
   sentenceTransform: {
     label: 'Sentence Transformations',
     icon: '🔀',
-    level: 'B2–C1',
     items: [
       { source: "People believe he is innocent.", keyword: "BELIEVED", correct: ["He is believed to be innocent."], hint: "impersonal passive: subject + is believed + to-infinitive", explain: "'People believe X' → 'X is believed to be' (passive reporting)." },
       { source: "It was such a good film that I watched it twice.", keyword: "SO", correct: ["The film was so good that I watched it twice."], hint: "such a + noun → so + adjective + that", explain: "'Such a good film' = 'so good that' — the emphasis shifts." },

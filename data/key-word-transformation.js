@@ -8,7 +8,6 @@ export const CATEGORIES = {
   grammar: {
     label: "Grammar Transforms",
     icon: "🔄",
-    level: "B1–B2",
     items: [
       {
         original: "They built this bridge in 1990.",
@@ -105,7 +104,6 @@ export const CATEGORIES = {
   vocabulary: {
     label: "Vocabulary Swaps",
     icon: "📝",
-    level: "B1–B2",
     items: [
       {
         original: "She resembles her mother.",
@@ -202,7 +200,6 @@ export const CATEGORIES = {
   connectors: {
     label: "Linkers & Contrast",
     icon: "⚡",
-    level: "B2",
     items: [
       {
         original: "He was tired. He finished the work.",
@@ -303,7 +300,6 @@ export const CATEGORIES = {
   mixed: {
     label: "Mixed Challenge",
     icon: "🎯",
-    level: "B2–C1",
     items: [
       {
         original: "I've never tasted such delicious food.",

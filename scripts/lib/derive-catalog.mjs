@@ -126,6 +126,12 @@ export async function deriveEmittedScoreKeys(modules) {
     } else if (storagePrefix && html.includes('FlashcardEngine')) {
       categoryKeys.forEach((cat) => emitted.add(`${storagePrefix}-${cat}-quiz`));
     }
+
+    // Shared Match mode (js/utils.js createMatchMode) — recordScore() lives in
+    // utils.js, not in the exercise HTML, so it can't match the generic
+    // recordScore(`...${currentCat}...`) scan above.
+    const matchScoreKey = html.match(/matchScoreKey:\s*['"]([^'"]+)['"]/)?.[1];
+    if (matchScoreKey) categoryKeys.forEach((cat) => emitted.add(`${matchScoreKey}-${cat}-match`));
   }
   return emitted;
 }

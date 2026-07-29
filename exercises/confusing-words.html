@@ -105,7 +105,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/confusing-words.js';
-import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise, advanceStudyCard } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -319,30 +319,7 @@ document.getElementById('shuffleBtn').addEventListener('click', () => { deck = s
 initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
 function advanceCard(dir) {
-  const card = document.getElementById('fcCard');
-  const inner = card.querySelector('.fc-inner');
-  if (card.classList.contains('flip') && inner) {
-    inner.style.transition = 'opacity .15s ease, transform .2s ease';
-    inner.style.opacity = '0';
-    card.classList.remove('flip');
-    let done = false;
-    const onDone = () => {
-      if (done) return; done = true;
-      inner.removeEventListener('transitionend', onDone);
-      inner.style.transition = 'none';
-      idx = (idx + dir + deck.length) % deck.length;
-      renderStudyCard();
-      void inner.offsetHeight;
-      inner.style.transition = 'opacity .15s ease';
-      inner.style.opacity = '1';
-      setTimeout(() => { inner.style.transition = ''; }, 170);
-    };
-    inner.addEventListener('transitionend', onDone, { once: true });
-    setTimeout(onDone, 250);
-    return;
-  }
-  idx = (idx + dir + deck.length) % deck.length;
-  renderStudyCard();
+  advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
 }
 
 document.addEventListener('keydown', e => {

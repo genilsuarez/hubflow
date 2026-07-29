@@ -10,7 +10,6 @@ export const CATEGORIES = {
   relative: {
     label: 'Relative Clauses',
     icon: '🧩',
-    level: 'B1',
     items: [
       { sentences: ["The man is my neighbor.", "He lives next door."], correct: ["The man who lives next door is my neighbor.", "The man that lives next door is my neighbor."], hint: "Use a relative pronoun for people", explain: "'Who'/'that' introduces a relative clause describing the man." },
       { sentences: ["This is the restaurant.", "We had our first date there."], correct: ["This is the restaurant where we had our first date."], hint: "Use 'where' for places", explain: "'Where' replaces 'there' when combining a place with a relative clause." },
@@ -27,7 +26,6 @@ export const CATEGORIES = {
   connectors: {
     label: 'Connectors',
     icon: '🔗',
-    level: 'B1–B2',
     items: [
       { sentences: ["It was raining.", "We went for a walk."], correct: ["Although it was raining, we went for a walk.", "We went for a walk although it was raining.", "Despite the rain, we went for a walk."], hint: "Use a contrast connector", explain: "'Although'/'despite' link two contrasting ideas." },
       { sentences: ["She studied hard.", "She passed the exam."], correct: ["She studied hard, so she passed the exam.", "Because she studied hard, she passed the exam."], hint: "Use a cause/result connector", explain: "'So'/'because' link a cause to its result." },
@@ -44,7 +42,6 @@ export const CATEGORIES = {
   participles: {
     label: 'Participle Clauses',
     icon: '✂️',
-    level: 'B2–C1',
     items: [
       { sentences: ["She opened the door.", "She saw the surprise party."], correct: ["Opening the door, she saw the surprise party."], hint: "Use an -ing participle clause", explain: "'Opening the door' replaces 'she opened the door' as an -ing clause." },
       { sentences: ["He was exhausted after the race.", "He went straight to bed."], correct: ["Exhausted after the race, he went straight to bed."], hint: "Use a past participle", explain: "'Exhausted' (past participle) starts the sentence, describing 'he'." },
@@ -61,7 +58,6 @@ export const CATEGORIES = {
   mixed: {
     label: 'Mixed Practice',
     icon: '🎲',
-    level: 'B2',
     items: [
       { sentences: ["The scientist discovered a new species.", "She had been researching for years."], correct: ["Having researched for years, the scientist discovered a new species."], hint: "Use 'having' + past participle", explain: "The years of research happened before the discovery." },
       { sentences: ["The car broke down.", "It was very old."], correct: ["The car, which was very old, broke down.", "Being very old, the car broke down."], hint: "Non-defining clause or participle clause", explain: "Both a relative clause and a participle clause work here." },

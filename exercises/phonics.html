@@ -172,7 +172,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phonics.js';
-import { shuffle, recordScore, Timer, formatTime, speak, renderCatBar as sharedRenderCatBar, wireModeTabs, finishExercise } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, speak, renderCatBar as sharedRenderCatBar, wireModeTabs, finishExercise, advanceStudyCard, createMatchMode } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -277,16 +277,7 @@ document.getElementById('shuffleBtn').addEventListener('click', () => { deck = s
 initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
 function advanceCard(dir) {
-  const card = document.getElementById('fcCard');
-  const inner = card.querySelector('.fc-inner');
-  if (card.classList.contains('flip')) {
-    inner.style.transition = 'none';
-    card.classList.remove('flip');
-    void inner.offsetHeight;
-    inner.style.transition = '';
-  }
-  idx = (idx + dir + deck.length) % deck.length;
-  renderStudyCard();
+  advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
 }
 
 document.addEventListener('keydown', e => {
@@ -416,86 +407,17 @@ document.getElementById('quizListenBtn').addEventListener('click', () => {
 });
 
 // ═══ MATCH (word_a ↔ word_b — only for minimal pairs) ═══
-let matchState = { leftSel: null, rightSel: null, matched: 0, total: 0, errors: 0, pairs: [] };
-
-function initMatch() {
-  const matchArea = document.querySelector('[data-area="match"]');
-  const grid = document.getElementById('pairGrid');
-  const cat = currentCat;
-
-  // Match only makes sense for minimal pairs (vowel-pairs / consonant-pairs)
-  if (cat !== 'vowel-pairs' && cat !== 'consonant-pairs') {
-    matchArea.classList.add('show');
-    grid.innerHTML = `<div class="match-unavail" style="grid-column:1/-1">🔗 Match mode is only available for Minimal Pairs categories.<br>Switch to Vowels or Consonants.</div>`;
-    updProgress(0, 1);
-    return;
-  }
-
-  const items = shuffle(getData());
-  const COUNT = Math.min(5, items.length);
-  matchState = { leftSel: null, rightSel: null, matched: 0, total: COUNT, errors: 0, pairs: items.slice(0, COUNT) };
-  matchArea.classList.add('show');
-  updProgress(0, COUNT);
-  renderMatchGrid();
-}
-
-function renderMatchGrid() {
-  const grid = document.getElementById('pairGrid');
-  const leftItems = shuffle([...matchState.pairs]);
-  const rightItems = shuffle([...matchState.pairs]);
-
-  grid.innerHTML = `
-    <div class="pair-col-label">Word A</div>
-    <div class="pair-col-label">Word B (pair)</div>
-    ${leftItems.map((item, i) => {
-      const right = rightItems[i];
-      return `
-        <div class="pair-item pair-left" data-term="${item.word_a}">${item.word_a}<br><small style="font-family:var(--lp-font-mono);font-size:.65rem;opacity:.7">${item.ipa_a}</small></div>
-        <div class="pair-item pair-right" data-term="${right.word_a}">${right.word_b}<br><small style="font-family:var(--lp-font-mono);font-size:.65rem;opacity:.7">${right.ipa_b}</small></div>
-      `;
-    }).join('')}
-  `;
-
-  grid.querySelectorAll('.pair-left').forEach(el => el.addEventListener('click', () => selectMatchItem(el, 'left')));
-  grid.querySelectorAll('.pair-right').forEach(el => el.addEventListener('click', () => selectMatchItem(el, 'right')));
-}
-
-function selectMatchItem(el, side) {
-  if (el.classList.contains('matched')) return;
-  if (side === 'left') {
-    if (matchState.leftSel) matchState.leftSel.classList.remove('selected');
-    matchState.leftSel = el;
-  } else {
-    if (matchState.rightSel) matchState.rightSel.classList.remove('selected');
-    matchState.rightSel = el;
-  }
-  el.classList.add('selected');
-  if (matchState.leftSel && matchState.rightSel) checkMatchPair();
-}
-
-function checkMatchPair() {
-  const left = matchState.leftSel;
-  const right = matchState.rightSel;
-  if (left.dataset.term === right.dataset.term) {
-    left.classList.remove('selected'); right.classList.remove('selected');
-    left.classList.add('matched'); right.classList.add('matched');
-    matchState.matched++;
-    updProgress(matchState.matched, matchState.total);
-    if (matchState.matched === matchState.total) {
-      const pct = Math.round((matchState.total - matchState.errors) / matchState.total * 100);
-      recordScore(`phonics-${currentCat}-match`, Math.max(0, pct));
-      setTimeout(() => finishExercise({
-        correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
-        startMode, setMode: v => mode = v,
-      }), 500);
-    }
-  } else {
-    matchState.errors++;
-    left.classList.add('wrong-flash'); right.classList.add('wrong-flash');
-    setTimeout(() => { left.classList.remove('wrong-flash', 'selected'); right.classList.remove('wrong-flash', 'selected'); }, 500);
-  }
-  matchState.leftSel = null; matchState.rightSel = null;
-}
+const matchMode = createMatchMode({
+  getData, pairCount: 5, matchScoreKey: 'phonics',
+  getCurrentCat: () => currentCat, startMode, setMode: v => mode = v, updProgress,
+  leftLabel: 'Word A', rightLabel: 'Word B (pair)',
+  matchKey: item => item.word_a,
+  renderLeft: item => `${item.word_a}<br><small style="font-family:var(--lp-font-mono);font-size:.65rem;opacity:.7">${item.ipa_a}</small>`,
+  renderRight: item => `${item.word_b}<br><small style="font-family:var(--lp-font-mono);font-size:.65rem;opacity:.7">${item.ipa_b}</small>`,
+  canRun: () => currentCat === 'vowel-pairs' || currentCat === 'consonant-pairs',
+  unavailableMessage: `<div class="match-unavail" style="grid-column:1/-1">🔗 Match mode is only available for Minimal Pairs categories.<br>Switch to Vowels or Consonants.</div>`,
+});
+function initMatch() { matchMode.init(); }
 
 function finishQuiz() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;

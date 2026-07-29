@@ -22,16 +22,12 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/standalone-shell.css">
 <style>
-  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-teal); }
 
   /* Category pills */
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
-  [data-area].show { display: flex; }
+  [data-area] { gap: 12px; }
 
   /* Flashcard for study */
   .fc-card { max-width: 720px; height: 220px; }
@@ -81,7 +77,6 @@
   .write-feedback.ok { color: var(--lp-success); }
   .write-feedback.err { color: var(--lp-error); }
 
-  .scroll-body { padding: 8px 0 30px; }
 
   /* Battle */
   .battle-scores { display: flex; gap: 12px; justify-content: center; align-items: center; width: 100%; }
@@ -297,7 +292,7 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phrasal-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive, finishExercise } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive, finishExercise, advanceStudyCard, createMatchMode } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -368,16 +363,7 @@ document.getElementById('shuffleBtn').addEventListener('click', () => { deck = s
 initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
 function advanceCard(dir) {
-  const card = document.getElementById('fcCard');
-  const inner = card.querySelector('.fc-inner');
-  if (card.classList.contains('flip')) {
-    inner.style.transition = 'none';
-    card.classList.remove('flip');
-    void inner.offsetHeight;
-    inner.style.transition = '';
-  }
-  idx = (idx + dir + deck.length) % deck.length;
-  renderStudyCard();
+  advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
 }
 
 document.addEventListener('keydown', e => {
@@ -546,74 +532,13 @@ function finishWrite() {
 }
 
 // ═══ MATCH (verb ↔ translation) ═══
-let matchState = { leftSel: null, rightSel: null, matched: 0, total: 0, errors: 0, pairs: [] };
-
-function initMatch() {
-  const items = shuffle(getData());
-  const COUNT = Math.min(6, items.length);
-  matchState = { leftSel: null, rightSel: null, matched: 0, total: COUNT, errors: 0, pairs: items.slice(0, COUNT) };
-  document.querySelector('[data-area="match"]').classList.add('show');
-  updProgress(0, COUNT);
-  renderMatchGrid();
-}
-
-function renderMatchGrid() {
-  const grid = document.getElementById('pairGrid');
-  const leftItems = shuffle([...matchState.pairs]);
-  const rightItems = shuffle([...matchState.pairs]);
-
-  grid.innerHTML = `
-    <div class="pair-col-label">🇬🇧 Phrasal Verb</div>
-    <div class="pair-col-label">🇪🇸 Significado</div>
-    ${leftItems.map((item, i) => {
-      const right = rightItems[i];
-      return `
-        <div class="pair-item pair-left" data-term="${item.verb}">${item.verb}</div>
-        <div class="pair-item pair-right" data-term="${right.verb}">${right.es}</div>
-      `;
-    }).join('')}
-  `;
-
-  grid.querySelectorAll('.pair-left').forEach(el => el.addEventListener('click', () => selectMatchItem(el, 'left')));
-  grid.querySelectorAll('.pair-right').forEach(el => el.addEventListener('click', () => selectMatchItem(el, 'right')));
-}
-
-function selectMatchItem(el, side) {
-  if (el.classList.contains('matched')) return;
-  if (side === 'left') {
-    if (matchState.leftSel) matchState.leftSel.classList.remove('selected');
-    matchState.leftSel = el;
-  } else {
-    if (matchState.rightSel) matchState.rightSel.classList.remove('selected');
-    matchState.rightSel = el;
-  }
-  el.classList.add('selected');
-  if (matchState.leftSel && matchState.rightSel) checkMatchPair();
-}
-
-function checkMatchPair() {
-  const left = matchState.leftSel;
-  const right = matchState.rightSel;
-  if (left.dataset.term === right.dataset.term) {
-    left.classList.remove('selected'); right.classList.remove('selected');
-    left.classList.add('matched'); right.classList.add('matched');
-    matchState.matched++;
-    updProgress(matchState.matched, matchState.total);
-    if (matchState.matched === matchState.total) {
-      const pct = Math.round((matchState.total - matchState.errors) / matchState.total * 100);
-      recordScore(`phrasal-${currentCat}-match`, Math.max(0, pct));
-      setTimeout(() => finishExercise({
-        correct: Math.max(0, matchState.total - matchState.errors), total: matchState.total,
-        startMode, setMode: v => mode = v,
-      }), 500);
-    }
-  } else {
-    matchState.errors++;
-    left.classList.add('wrong-flash'); right.classList.add('wrong-flash');
-    setTimeout(() => { left.classList.remove('wrong-flash', 'selected'); right.classList.remove('wrong-flash', 'selected'); }, 500);
-  }
-  matchState.leftSel = null; matchState.rightSel = null;
-}
+const matchMode = createMatchMode({
+  getData, pairCount: 6, matchScoreKey: 'phrasal',
+  getCurrentCat: () => currentCat, startMode, setMode: v => mode = v, updProgress,
+  leftLabel: '🇬🇧 Phrasal Verb', rightLabel: '🇪🇸 Significado',
+  matchKey: item => item.verb, renderLeft: item => item.verb, renderRight: item => item.es,
+});
+function initMatch() { matchMode.init(); }
 
 // ═══ SORT (classify by meaning) ═══
 const SORT_THEMES = [

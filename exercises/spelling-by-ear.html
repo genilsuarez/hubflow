@@ -22,13 +22,10 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/standalone-shell.css">
 <style>
-  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-blue); }
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
-  [data-area].show { display: flex; }
+  [data-area] { gap: 14px; }
   .listen-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--lp-cat-blue); background: rgba(59,130,246,.08); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: all .2s; }
   .listen-btn:hover { background: rgba(59,130,246,.15); transform: scale(1.06); }
   .listen-btn:active { transform: scale(.95); }
@@ -42,7 +39,6 @@
   .answer-input.wrong { border-color: var(--lp-error); }
   .no-tts { max-width: 720px; font-size: .8rem; color: var(--lp-error-dark); background: var(--lp-error-soft); border: 1px solid var(--lp-error); border-radius: var(--lp-radius-sm); padding: 12px 16px; text-align: center; display: none; }
   .no-tts.show { display: block; }
-  .scroll-body { padding: 8px 0 30px; }
 </style>
 </head>
 <body>

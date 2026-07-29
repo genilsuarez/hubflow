@@ -22,15 +22,11 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/standalone-shell.css">
 <style>
-  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-purple); }
 
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
-  [data-area].show { display: flex; }
+  [data-area] { gap: 14px; }
 
   .pc-card {
     width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
@@ -70,8 +66,6 @@
     background: var(--lp-bg-paper); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
     padding: 10px 14px; text-align: center; line-height: 1.5;
   }
-
-  .scroll-body { padding: 8px 0 30px; }
 </style>
 </head>
 <body>

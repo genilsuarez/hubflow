@@ -9,7 +9,6 @@ export const CATEGORIES = {
   statements: {
     label: 'Statements',
     icon: '📝',
-    level: 'A2',
     items: [
       { words: ["always", "she", "coffee", "drinks", "morning", "in", "the"], correct: ["She always drinks coffee in the morning."], hint: "Subject + adverb + verb + object + time", explain: "Frequency adverbs go between the subject and main verb." },
       { words: ["yesterday", "went", "to", "we", "cinema", "the"], correct: ["We went to the cinema yesterday.", "Yesterday we went to the cinema."], hint: "Subject + verb + place + time", explain: "Time expressions can go at the start or end of a sentence." },
@@ -26,7 +25,6 @@ export const CATEGORIES = {
   questions: {
     label: 'Questions',
     icon: '❓',
-    level: 'A2–B1',
     items: [
       { words: ["do", "how", "often", "you", "exercise"], correct: ["How often do you exercise?"], hint: "Wh- + do/does + subject + base verb", explain: "'How often' asks about frequency." },
       { words: ["been", "have", "long", "how", "waiting", "you"], correct: ["How long have you been waiting?"], hint: "How long + have + subject + been + -ing", explain: "Present perfect continuous for duration of an ongoing action." },
@@ -43,7 +41,6 @@ export const CATEGORIES = {
   adverbs: {
     label: 'Adverb Position',
     icon: '📍',
-    level: 'B1',
     items: [
       { words: ["hardly", "she", "could", "speak"], correct: ["She could hardly speak."], hint: "Adverb goes after the modal verb", explain: "'Hardly' (= almost not) goes after the auxiliary." },
       { words: ["always", "not", "you", "are", "right"], correct: ["You are not always right."], hint: "Frequency adverb after 'not'", explain: "With negatives, frequency adverbs go after 'not'." },
@@ -60,7 +57,6 @@ export const CATEGORIES = {
   complex: {
     label: 'Complex Structures',
     icon: '🧠',
-    level: 'B2',
     items: [
       { words: ["not", "only", "intelligent", "is", "she", "but", "also", "kind"], correct: ["Not only is she intelligent, but also kind.", "Not only is she intelligent but she is also kind."], hint: "Not only + inversion + but also", explain: "'Not only' at the start triggers subject-verb inversion." },
       { words: ["had", "I", "known", "told", "would", "you", "I", "have"], correct: ["Had I known, I would have told you."], hint: "Third conditional with inversion (no 'if')", explain: "Had + subject = formal version of 'If I had...'" },

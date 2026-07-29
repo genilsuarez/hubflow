@@ -22,13 +22,10 @@
 <link rel="stylesheet" href="../css/sidebar.css">
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/standalone-shell.css">
 <style>
-  body { min-height: 100vh; }
   .progress__fill { background: var(--lp-cat-amber); }
-  .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-  .cat-bar::-webkit-scrollbar { display: none; }
-  [data-area] { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
-  [data-area].show { display: flex; }
+  [data-area] { gap: 12px; }
   .sentence-card { width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 22px 20px; text-align: center; box-shadow: var(--lp-shadow-sm); }
   .sentence-card .sc-icon { font-size: 1.6rem; margin-bottom: 6px; }
   .sentence-card .sc-text { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 500; color: var(--lp-ink); line-height: 1.5; }
@@ -43,7 +40,6 @@
   .wf-front .fc-term { font-size: 1.1rem; color: var(--lp-cat-amber); line-height: 1.4; }
   .wf-front .fc-detail { font-size: .82rem; color: var(--lp-ink-soft); margin-top: 4px; }
   .fc-back { background: color-mix(in srgb, var(--lp-cat-amber) 10%, var(--lp-surface)); border-color: var(--lp-cat-amber); }
-  .scroll-body { padding: 8px 0 30px; }
   @media (max-width: 480px) { .answer-input { max-width: 240px; } }
 </style>
 </head>
@@ -66,7 +62,7 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/word-formation.js';
-import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
+import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise, advanceStudyCard } from '../js/utils.js';
 import { initSwipe } from '../js/swipe.js';
 let currentCat = Object.keys(CATEGORIES)[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
 sharedRenderCatBar({
@@ -93,30 +89,7 @@ document.getElementById('shuffleBtn').addEventListener('click', () => { deck = s
 initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
 function advanceCard(dir) {
-  const card = document.getElementById('fcCard');
-  const inner = card.querySelector('.fc-inner');
-  if (card.classList.contains('flip') && inner) {
-    inner.style.transition = 'opacity .15s ease, transform .2s ease';
-    inner.style.opacity = '0';
-    card.classList.remove('flip');
-    let done = false;
-    const onDone = () => {
-      if (done) return; done = true;
-      inner.removeEventListener('transitionend', onDone);
-      inner.style.transition = 'none';
-      idx = (idx + dir + deck.length) % deck.length;
-      renderStudyCard();
-      void inner.offsetHeight;
-      inner.style.transition = 'opacity .15s ease';
-      inner.style.opacity = '1';
-      setTimeout(() => { inner.style.transition = ''; }, 170);
-    };
-    inner.addEventListener('transitionend', onDone, { once: true });
-    setTimeout(onDone, 250);
-    return;
-  }
-  idx = (idx + dir + deck.length) % deck.length;
-  renderStudyCard();
+  advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
 }
 
 // Keyboard: Enter/Space = flip or advance, Arrows = navigate
