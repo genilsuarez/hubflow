@@ -53,11 +53,24 @@ function loadHtml(relPath) {
  * No se infiere del engine: dentro de un mismo engine el número varía (los
  * flashcard van de 3 a 6 modos). Y para spelling, los 4 niveles son [data-cat],
  * no modos — contarlos como 3×4=12 los duplicaba con la cifra de categorías.
+ *
+ * Las páginas que usan FlashcardEngine.renderShell() no tienen [data-mode]
+ * estático en el HTML — el shell los inyecta en runtime desde `modes: [...]`
+ * en el config de la página. Ese array sigue siendo el ejercicio declarando
+ * sus propios modos, solo que en JS en vez de en el markup.
  */
 function countModes(html) {
   if (!html) return null;
   const modos = new Set([...html.matchAll(/data-mode="([^"]+)"/g)].map((m) => m[1]));
-  return modos.size || null;
+  if (modos.size) return modos.size;
+
+  const modesConfig = html.match(/modes:\s*\[([^\]]*)\]/);
+  if (modesConfig) {
+    const names = new Set([...modesConfig[1].matchAll(/['"]([^'"]+)['"]/g)].map((m) => m[1]));
+    if (names.size) return names.size;
+  }
+
+  return null;
 }
 
 /** Nombre del data file importado por un ejercicio, o null. */

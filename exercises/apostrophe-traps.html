@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Confusing Words — HubFlow</title>
+<title>Apostrophe Traps — HubFlow</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <script src="../js/lp-theme.js"></script>
 <script src="../js/lp-input-zoom.js"></script>
@@ -41,7 +41,7 @@
   </div>
 
   <div class="header">
-    <h1>🔀 Confusing Words</h1>
+    <h1>🔤 Apostrophe Traps</h1>
 
     <!-- Category -->
     <div class="cat-bar" id="catBar"></div>
@@ -104,7 +104,7 @@
 </div>
 
 <script type="module">
-import { CATEGORIES } from '../data/confusing-words.js';
+import { CATEGORIES } from '../data/apostrophe-traps.js';
 import { shuffle } from '../js/array-utils.js';
 import { recordScore } from '../js/progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/exercise-ui.js';
@@ -240,7 +240,7 @@ function renderPractice() {
       const chosen = btn.dataset.val;
       const correct = item.correct.toLowerCase();
       // Match base form to conjugated: do→did/does/done/doing, make→made/makes/making
-      const baseMap = { 'do': /^(do|did|does|done|doing)$/i, 'make': /^(make|made|makes|making)$/i, 'say': /^(say|said|says|saying)$/i, 'tell': /^(tell|told|tells|telling)$/i, 'bring': /^(bring|brought|brings|bringing)$/i, 'take': /^(take|took|takes|taken|taking)$/i, 'borrow': /^(borrow|borrowed|borrows|borrowing)$/i, 'lend': /^(lend|lent|lends|lending)$/i, 'watch': /^(watch|watched|watches|watching)$/i, 'look': /^(look|looked|looks|looking)$/i, 'see': /^(see|saw|sees|seen|seeing)$/i, 'affect': /^(affect|affects|affected|affecting)$/i, 'effect': /^(effect|effects|effected|effecting)$/i, 'complement': /^(complement|complements|complemented|complementing)$/i, 'compliment': /^(compliment|compliments|complimented|complimenting)$/i };
+      const baseMap = {  };
       const isCorrect = chosen === correct || chosen === item.correct || (baseMap[chosen] && baseMap[chosen].test(correct));
 
       if (isCorrect) { btn.classList.add('correct'); score++; }

@@ -8,7 +8,147 @@ import { Timer, formatTime } from './exercise-ui.js';
 import { speak, isSpeechAvailable } from './speech.js';
 import { initSwipe } from './swipe.js';
 
+const MODE_META = {
+  study: '📖 Study',
+  quiz: '⚡ Quiz',
+  timed: '⏱️ Timed',
+  match: '🔀 Match',
+  battle: '⚔️ Battle',
+};
+
+// Solo 'purple' tiene modificadores CSS de primera clase (.lp-btn--purple,
+// .progress__fill--purple). 'blue' replica exactamente el patrón que ya usaba
+// pronunciation-study.html a mano: clase genérica + var(--lp-cat-blue) inline.
+const COLOR_VARIANTS = {
+  purple: {
+    pillActiveClass: 'active purple',
+    progressFillClass: 'progress__fill progress__fill--purple',
+    progressFillStyle: '',
+    accentBtnClass: 'lp-btn lp-btn--purple',
+    speakBtnStyle: 'border:2px solid var(--purple);background:rgba(147,51,234,.08);',
+    battleBackTermStyle: 'color:var(--purple);',
+  },
+  blue: {
+    pillActiveClass: 'active',
+    progressFillClass: 'progress__fill',
+    progressFillStyle: 'background:var(--lp-cat-blue);',
+    accentBtnClass: 'lp-btn lp-btn--primary',
+    speakBtnStyle: 'border:2px solid var(--lp-cat-blue);background:rgba(59,130,246,.08);',
+    battleBackTermStyle: 'color:var(--lp-cat-blue);',
+  },
+};
+
 export class FlashcardEngine {
+  /**
+   * Inyecta el markup canónico (fcCard, pill-bar, áreas study/quiz/match/battle)
+   * que hoy cada página de FlashcardEngine copiaba a mano. `modes` se declara
+   * explícito (no default) para que derive-catalog.mjs pueda seguir contando
+   * modos desde el HTML/config de la página, no desde el engine — ver countModes()
+   * en scripts/lib/derive-catalog.mjs.
+   */
+  static renderShell({ color = 'purple', titleHtml, modes }) {
+    const v = COLOR_VARIANTS[color] || COLOR_VARIANTS.purple;
+    const pillsHtml = modes
+      .map((m, i) => `<button class="pill-btn ${i === 0 ? v.pillActiveClass : ''}" data-mode="${m}">${MODE_META[m]}</button>`)
+      .join('');
+
+    document.body.insertAdjacentHTML('afterbegin', `
+<div class="wrap" data-color="${color}">
+  <div class="top-bar">
+    <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
+  </div>
+  <div class="header">
+    <h1>${titleHtml}</h1>
+    <div class="cat-scroll-wrapper" id="catWrapper">
+      <div id="catBar">
+        <button class="cat-expand-btn" id="catExpandBtn" aria-label="Expandir categorías" aria-expanded="false" title="Ver todas"><span class="expand-count"></span><span class="expand-icon">▼</span></button>
+      </div>
+    </div>
+    <div class="pill-bar">${pillsHtml}</div>
+    <div class="timer-bar" id="timerBar">
+      <span class="timer-display" id="timerDisplay">1:00</span>
+    </div>
+    <div class="progress" id="progressWrap">
+      <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+      <div class="progress__track"><div class="${v.progressFillClass}" id="progFill" style="${v.progressFillStyle}"></div></div>
+    </div>
+  </div>
+  <div class="scroll-body">
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 25</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face">
+            <div class="fc-emoji" id="fcEmoji"></div>
+            <div class="fc-term" id="fcWord"></div>
+            <div class="fc-ipa" id="fcIpa"></div>
+            <div class="fc-hint">tap to flip</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-emoji" id="fcBackEmoji" style="font-size:2rem;"></div>
+            <div class="fc-term" id="fcBackWord"></div>
+            <div class="fc-ipa" id="fcBackIpa"></div>
+            <div class="fc-detail" id="fcBackMeaning"></div>
+            <div class="fc-detail" id="fcBackExtra" style="font-size:.72rem;margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="listen-btn" id="speakBtn" aria-label="Listen to pronunciation" style="width:44px;height:44px;border-radius:50%;${v.speakBtnStyle}font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;">🔊</button>
+        <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
+        <button class="${v.accentBtnClass}" id="nextBtn">→</button>
+      </div>
+    </div>
+    <div data-area="quiz">
+      <div class="quiz-prompt">
+        <div class="quiz-prompt__emoji" id="quizEmoji"></div>
+        <div class="quiz-prompt__label" id="quizLabel"></div>
+        <div class="quiz-prompt__text" id="quizText"></div>
+      </div>
+      <div class="quiz-options" id="quizOptions"></div>
+    </div>
+    <div data-area="match">
+      <div class="pair-grid" id="pairGrid"></div>
+      <div id="pairScore"></div>
+    </div>
+    <div data-area="battle">
+      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
+      <div class="battle-scores">
+        <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
+        <span class="vs-badge">vs</span>
+        <div class="player-score p2"><span class="p-label">P2</span><span class="p-points" id="p2Score">0</span></div>
+      </div>
+      <div class="battle-card" id="battleCard">
+        <div class="fc-inner">
+          <div class="fc-face">
+            <div class="fc-emoji" id="battleEmoji"></div>
+            <div class="fc-detail" id="battleHint" style="font-size:.78rem;font-family:'Manrope',sans-serif;text-align:center;color:var(--text);margin-top:4px;"></div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-term" id="battleBackTerm" style="font-size:1.3rem;font-weight:700;${v.battleBackTermStyle}"></div>
+            <div class="fc-detail" id="battleBackSpanish" style="font-size:.7rem;margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="battle-actions" id="battleClaim">
+        <button class="lp-btn lp-btn--ghost" id="battleClaimP1">🙋 P1</button>
+        <button class="lp-btn lp-btn--ghost" id="battleSkipBtn">⏭ Skip</button>
+        <button class="lp-btn lp-btn--ghost" id="battleClaimP2">🙋 P2</button>
+      </div>
+      <div class="battle-actions" id="battleJudge" style="display:none;">
+        <button class="lp-btn lp-btn--primary" id="battleJudgeCorrect">✓ Correct</button>
+        <button class="lp-btn lp-btn--danger" id="battleJudgeWrong">✗ Wrong</button>
+      </div>
+      <div class="battle-actions" id="battleNext" style="display:none;">
+        <button class="${v.accentBtnClass}" id="battleNextBtn">Next →</button>
+      </div>
+    </div>
+  </div>
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>`);
+  }
+
   constructor(config) {
     // config: { categories, storagePrefix, defaultCategory, el (root element) }
     this.config = config;

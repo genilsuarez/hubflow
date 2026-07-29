@@ -68,10 +68,10 @@ function renderShelf(containerId, modules, category) {
 }
 
 export function renderAllShelves() {
-  renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'), 'vocab');
   renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'), 'pronunciation');
   renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'), 'analysis');
   Object.keys(SUBCATEGORIES).forEach(sub => {
     renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub), 'grammar');
+    renderShelf(`shelf-vocab-${sub}`, MODULES.filter(m => m.category === 'vocab' && m.subcategory === sub), 'vocab');
   });
 }
