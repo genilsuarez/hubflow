@@ -56,7 +56,10 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/tenses.js';
-import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise, advanceStudyCard } from '../js/utils.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/exercise-ui.js';
+import { finishExercise, advanceStudyCard } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
 let currentCat = Object.keys(CATEGORIES)[0], mode = 'study', deck = [], idx = 0, score = 0, total = 0, timer = null;
 sharedRenderCatBar({

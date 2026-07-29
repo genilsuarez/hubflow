@@ -68,7 +68,11 @@
 </div>
 <script type="module">
 import { CATEGORIES } from '../data/spelling-by-ear.js';
-import { shuffle, recordScore, Timer, formatTime, speak, isSpeechAvailable, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/exercise-ui.js';
+import { finishExercise } from '../js/exercise-flow.js';
+import { speak, isSpeechAvailable } from '../js/speech.js';
 if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 let currentCat = Object.keys(CATEGORIES)[0], mode = 'practice', deck = [], idx = 0, score = 0, total = 0, timer = null, answered = false;
 sharedRenderCatBar({

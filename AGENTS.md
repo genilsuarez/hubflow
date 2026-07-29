@@ -36,9 +36,12 @@ js/
   nav-sections.js   — Secciones de nav (fuente única: index.html + exercise-shell.js)
   exercise-shell.js — Sidebar drawer, header; calls ex-bottom-nav.js
   ex-bottom-nav.js    — Bottom nav canonical (mirrors FluentFlow game-controls)
-  utils.js          — shuffle, Timer, recordScore, progress tracking, header stats
-                      + helpers de UI compartidos: renderCatBar, wireModeTabs,
-                      syncModeTabsActive, finishExercise, updateProgress
+  array-utils.js    — shuffle
+  progress-store.js — recordScore, progress tracking, header stats, cloud sync
+  exercise-ui.js    — renderCatBar, wireModeTabs, syncModeTabsActive,
+                      updateProgress, Timer, formatTime, makeTimerState
+  exercise-flow.js  — finishExercise, advanceStudyCard, createMatchMode
+  speech.js         — Web Speech API (speak, isSpeechAvailable)
   lp-theme.js       — Theme init before first paint (copy of scripts/)
   lp-platform-urls.js — Cross-app URLs (copy of scripts/)
   lp-nav-icons.js   — Sidebar icon SVGs (copy of scripts/)

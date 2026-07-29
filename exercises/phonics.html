@@ -172,7 +172,11 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phonics.js';
-import { shuffle, recordScore, Timer, formatTime, speak, renderCatBar as sharedRenderCatBar, wireModeTabs, finishExercise, advanceStudyCard, createMatchMode } from '../js/utils.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, wireModeTabs } from '../js/exercise-ui.js';
+import { finishExercise, advanceStudyCard, createMatchMode } from '../js/exercise-flow.js';
+import { speak } from '../js/speech.js';
 import { initSwipe } from '../js/swipe.js';
 
 
@@ -183,12 +187,12 @@ let timer = null;
 let timedSeconds = 0;
 let currentWord = null;
 
-// TTS — uses shared speak() from utils.js (object opts signature)
+// TTS — uses shared speak() from speech.js (object opts signature)
 function speakWord(text, rate = 0.85) {
   speak(text, { rate, lang: 'en-GB' });
 }
 
-// Category bar — uses shared renderCatBar from utils.js
+// Category bar — uses shared renderCatBar from exercise-ui.js
 sharedRenderCatBar({
   categories: CATEGORIES,
   getCurrentCat: () => currentCat,

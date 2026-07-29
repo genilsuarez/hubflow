@@ -299,7 +299,10 @@
 
 <script type="module">
 import { VERBS } from '../data/irregular-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, wireModeTabs, syncModeTabsActive, finishExercise, advanceStudyCard, createMatchMode } from '../js/utils.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, wireModeTabs, syncModeTabsActive } from '../js/exercise-ui.js';
+import { finishExercise, advanceStudyCard, createMatchMode } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
 
 

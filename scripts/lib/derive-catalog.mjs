@@ -127,9 +127,9 @@ export async function deriveEmittedScoreKeys(modules) {
       categoryKeys.forEach((cat) => emitted.add(`${storagePrefix}-${cat}-quiz`));
     }
 
-    // Shared Match mode (js/utils.js createMatchMode) — recordScore() lives in
-    // utils.js, not in the exercise HTML, so it can't match the generic
-    // recordScore(`...${currentCat}...`) scan above.
+    // Shared Match mode (js/exercise-flow.js createMatchMode) — recordScore()
+    // lives in exercise-flow.js, not in the exercise HTML, so it can't match
+    // the generic recordScore(`...${currentCat}...`) scan above.
     const matchScoreKey = html.match(/matchScoreKey:\s*['"]([^'"]+)['"]/)?.[1];
     if (matchScoreKey) categoryKeys.forEach((cat) => emitted.add(`${matchScoreKey}-${cat}-match`));
   }

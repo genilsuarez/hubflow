@@ -4,7 +4,7 @@
  *           lp-nav-helpers, lp-about (+ css), lp-about-content.js
  */
 import { setupSupabaseAuth } from './lp-auth-setup.js';
-import { hydrateHubFlowFromCloud } from './utils.js';
+import { hydrateHubFlowFromCloud } from './progress-store.js';
 
 setupSupabaseAuth({
   onAfterLogin: () => hydrateHubFlowFromCloud(),

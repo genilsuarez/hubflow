@@ -3,7 +3,9 @@
  * Shared logic for -ing, -ed, and noun-adjuncts exercises.
  * Each exercise imports this and passes its config + data.
  */
-import { shuffle, recordScore, getStars, updateProgress, Timer, formatTime, renderLessonProgress } from './utils.js';
+import { shuffle } from './array-utils.js';
+import { recordScore, getStars, renderLessonProgress } from './progress-store.js';
+import { updateProgress, Timer, formatTime } from './exercise-ui.js';
 import { setupPracticeBottomNav } from './ex-bottom-nav.js';
 
 /** Max cards per session — random subset + shuffle on each level load / restart. */

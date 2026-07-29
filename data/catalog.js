@@ -3,7 +3,7 @@
  *
  * Fuente única de verdad para: título, categoría/subcategoría, tags, CEFR,
  * ruta de ejercicio/guía/datos, y el contrato de progreso.
- * Lo consumen index.html, js/exercise-shell.js y js/utils.js.
+ * Lo consumen index.html, js/exercise-shell.js y js/progress-store.js.
  *
  * OJO — este archivo es el índice, no el contenido. Las oraciones, respuestas y
  * explicaciones viven en data/<ejercicio>.js (export CATEGORIES). Aquí solo hay

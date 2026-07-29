@@ -2,7 +2,10 @@
  * HubFlow — Flashcard/Vocabulary Engine
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
-import { shuffle, recordScore, getStars, Timer, formatTime, speak, isSpeechAvailable, renderLessonProgress } from './utils.js';
+import { shuffle } from './array-utils.js';
+import { recordScore, getStars, renderLessonProgress } from './progress-store.js';
+import { Timer, formatTime } from './exercise-ui.js';
+import { speak, isSpeechAvailable } from './speech.js';
 import { initSwipe } from './swipe.js';
 
 export class FlashcardEngine {

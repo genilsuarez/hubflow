@@ -5,7 +5,8 @@
 
 import { MODULES, getModuleDepth } from '../data/catalog.js';
 import { NAV_SECTIONS, NAV_SECTION_KEYS } from './nav-sections.js';
-import { initCatBarExpander, hydrateHubFlowFromCloud, renderLessonProgress } from './utils.js';
+import { initCatBarExpander } from './exercise-ui.js';
+import { hydrateHubFlowFromCloud, renderLessonProgress } from './progress-store.js';
 import {
   ensureBottomNav,
   finalizeBottomNavLayout,

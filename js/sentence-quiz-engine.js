@@ -8,7 +8,11 @@
    13 near-identical copies inline in each exercises/*.html file.
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, renderLessonProgress, speak, wireModeTabs, finishExercise } from './utils.js';
+import { shuffle } from './array-utils.js';
+import { recordScore, renderLessonProgress } from './progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs } from './exercise-ui.js';
+import { finishExercise } from './exercise-flow.js';
+import { speak } from './speech.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 
 const SPEAK_ICON = '🔊';

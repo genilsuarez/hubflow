@@ -28,7 +28,11 @@ HubFlow/
 │   └── *-shell.css       # Estilos propios de cada familia de ejercicio
 ├── js/
 │   ├── *-engine.js       # Un motor por familia de ejercicio
-│   ├── utils.js          # shuffle, Timer, recordScore, theme helpers...
+│   ├── array-utils.js    # shuffle
+│   ├── progress-store.js # recordScore, progress tracking, cloud sync
+│   ├── exercise-ui.js    # renderCatBar, mode tabs, Timer, progress bar
+│   ├── exercise-flow.js  # finishExercise, advanceStudyCard, createMatchMode
+│   ├── speech.js         # Web Speech API (speak, isSpeechAvailable)
 │   ├── exercise-shell.js # Sidebar, header homologation, back-nav (replaces portal-link.js)
 │   ├── lp-theme.js       # Lee ?theme=/localStorage antes del primer paint
 │   ├── lp-nav-helpers.js # themedAppHref, toggleTheme, navIcon

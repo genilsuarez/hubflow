@@ -121,7 +121,10 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/odd-one-out.js';
-import { shuffle, Timer, formatTime, recordScore, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs, finishExercise } from '../js/utils.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../js/exercise-ui.js';
+import { finishExercise } from '../js/exercise-flow.js';
 
 
 let currentCat = Object.keys(CATEGORIES)[0];

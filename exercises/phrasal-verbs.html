@@ -292,7 +292,10 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/phrasal-verbs.js';
-import { shuffle, recordScore, Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive, finishExercise, advanceStudyCard, createMatchMode } from '../js/utils.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../js/exercise-ui.js';
+import { finishExercise, advanceStudyCard, createMatchMode } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
 
 
