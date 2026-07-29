@@ -521,7 +521,7 @@ import { initDashboardNav } from './js/dashboard-nav.js';
       hydrateHubFlowFromCloud();
       renderAllShelves();
       renderLastActivities();
-      renderProgressSnapshot(animateReveal, { onOpenProgress: () => setActive('mi-progreso') });
+      renderProgressSnapshot(animateReveal, { onOpenProgress: () => setActive('all') });
       refreshHeaderStats(animateReveal);
       renderHeroCard({ animateReveal });
     } finally {
@@ -758,7 +758,7 @@ import { initDashboardNav } from './js/dashboard-nav.js';
       // Re-render cards so progress checks reflect latest localStorage data
       renderAllShelves();
       renderHeroCard();
-      renderProgressSnapshot(undefined, { onOpenProgress: () => setActive('mi-progreso') });
+      renderProgressSnapshot(undefined, { onOpenProgress: () => setActive('all') });
       renderRutas();
       renderLastActivities();
       filters.applyFilters();
