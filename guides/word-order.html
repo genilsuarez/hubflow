@@ -14,6 +14,12 @@
 <script src="../js/lp-about-content.js"></script>
 <script src="../js/lp-about.js"></script>
 <link rel="stylesheet" href="../css/lp-about.css">
+<script src="../js/lp-input-zoom.js"></script>
+<script src="../js/guide-shell.js" defer></script>
+<link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/base.css">
 <style>
 :root{
@@ -38,7 +44,6 @@ body{
 }
 .page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
 
-.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
 
 h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
 h1 .accent{font-style:italic;color:var(--blue);}
@@ -73,10 +78,10 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 
 <div class="page" id="guideMain">
 
-<nav class="nav-bar">
+<div class="top-bar">
   <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
   <span class="nav-title">Reference Guide</span>
-</nav>
+</div>
 
 <h1>Word Order <span class="accent">Untangled</span></h1>
 <p class="intro">English word order is far stricter than Spanish — here's the skeleton every sentence hangs on.</p>

@@ -1,5 +1,29 @@
 /* HubFlow guide pages — shared layout (footer, back-link icon) */
 
+/* Override sidebar.css which sets overflow:hidden for the exercise shell */
+html:has(.page) {
+  height: auto !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+body:has(.page) {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Ocultar h1 del cuerpo — el título ya aparece en el nav-title del header */
+.page > h1:first-of-type {
+  display: none;
+}
+
+/* Alinear padding horizontal del .page con el del top-bar */
+.page {
+  padding-left: var(--lp-header-pad-x) !important;
+  padding-right: var(--lp-header-pad-x) !important;
+}
+
 .nav-back .lp-nav-svg {
   width: 16px;
   height: 16px;
@@ -7,24 +31,38 @@
 }
 
 .guide-footer {
-  margin-top: 32px;
-  padding-top: 16px;
-  border-top: 2px solid var(--border);
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-.guide-footer a {
-  color: var(--blue);
-  text-decoration: none;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
+  display: none;
 }
 
-.nav-bar {
-  gap: 8px;
+/* nav-title: centrado absoluto con fuente de títulos secundarios */
+.nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--text, var(--lp-ink));
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Header de guías: fijo en la parte superior, mismo fondo que el cuerpo */
+body > .top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg, var(--lp-bg)) !important;
+  border-bottom-color: var(--border, var(--lp-border)) !important;
+}
+
+/* Hamburger en guías: al extremo derecho */
+.top-bar > button.lp-icon-btn[aria-controls="guideSidebar"] {
+  margin-left: auto;
 }
 
 .skip-link {
@@ -44,4 +82,3 @@
   left: 12px;
   top: 12px;
 }
-
