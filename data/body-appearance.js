@@ -12,9 +12,6 @@ export const CATEGORIES = {
       { term: "Chin", ipa: "/tʃɪn/", es: "Mentón", meaning: "Bottom part of your face", emoji: "🧔" },
       { term: "Teeth", ipa: "/tiːθ/", es: "Dientes", meaning: "Hard white structures for chewing", emoji: "🦷" },
       { term: "Cheek", ipa: "/tʃiːk/", es: "Mejilla", meaning: "The soft sides of your face below the eyes", emoji: "😊" },
-      { term: "Lip", ipa: "/lɪp/", es: "Labio", meaning: "The edges of your mouth", emoji: "💋" },
-      { term: "Tongue", ipa: "/tʌŋ/", es: "Lengua", meaning: "The muscle inside your mouth for tasting", emoji: "👅" },
-      { term: "Eyebrow", ipa: "/ˈaɪbraʊ/", es: "Ceja", meaning: "The line of hair above each eye", emoji: "🤨" },
     ]
   },
   bodyArms: {
@@ -30,9 +27,6 @@ export const CATEGORIES = {
       { term: "Back", ipa: "/bæk/", es: "Espalda", meaning: "Rear side of your torso", emoji: "🧘" },
       { term: "Thumb", ipa: "/θʌm/", es: "Pulgar", meaning: "The short thick finger on each hand", emoji: "👍" },
       { term: "Palm", ipa: "/pɑːm/", es: "Palma", meaning: "The flat inner surface of your hand", emoji: "🤚" },
-      { term: "Rib", ipa: "/rɪb/", es: "Costilla", meaning: "Curved bones protecting your lungs", emoji: "🦴" },
-      { term: "Armpit", ipa: "/ˈɑːrmpɪt/", es: "Axila", meaning: "The hollow area under your shoulder", emoji: "💪" },
-      { term: "Nail", ipa: "/neɪl/", es: "Uña", meaning: "The hard covering on the tip of each finger", emoji: "💅" },
     ]
   },
   bodyLegs: {
@@ -48,9 +42,6 @@ export const CATEGORIES = {
       { term: "Toe", ipa: "/toʊ/", es: "Dedo (pie)", meaning: "You have five on each foot", emoji: "🩴" },
       { term: "Thigh", ipa: "/θaɪ/", es: "Muslo", meaning: "The upper part of your leg above the knee", emoji: "🦵" },
       { term: "Calf", ipa: "/kæf/", es: "Pantorrilla", meaning: "The back part of your lower leg", emoji: "🏃" },
-      { term: "Shin", ipa: "/ʃɪn/", es: "Espinilla", meaning: "The front of your leg below the knee", emoji: "⚽" },
-      { term: "Heel", ipa: "/hiːl/", es: "Talón", meaning: "The back part of your foot", emoji: "👟" },
-      { term: "Sole", ipa: "/soʊl/", es: "Planta", meaning: "The bottom surface of your foot", emoji: "🦶" },
     ]
   },
   clothingAppearance: {
@@ -66,8 +57,6 @@ export const CATEGORIES = {
       { term: "Complexion", ipa: "/kəmˈplɛkʃən/", es: "Tez / cutis", meaning: "The natural colour/texture of facial skin", emoji: "😊" },
       { term: "Scruffy", ipa: "/ˈskrʌfi/", es: "Desaliñado", meaning: "Untidy or messy in appearance", emoji: "🧦" },
       { term: "Impeccable", ipa: "/ɪmˈpɛkəbəl/", es: "Impecable", meaning: "Perfect, without any flaws (often about style)", emoji: "✨" },
-      { term: "Baggy", ipa: "/ˈbæɡi/", es: "Holgado", meaning: "Loose-fitting clothing", emoji: "👖" },
-      { term: "Chic", ipa: "/ʃiːk/", es: "Elegante / chic", meaning: "Stylish and fashionable", emoji: "💃" },
     ]
   },
 };

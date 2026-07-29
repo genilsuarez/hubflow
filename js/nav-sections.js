@@ -30,7 +30,7 @@ const SIDEBAR_CLS = { vocab: 'v', grammar: 'g', pronunciation: 'p', analysis: 'a
 
 export const NAV_SECTIONS = [
   { key: 'resumen',     icon: 'home',  label: 'Inicio',            cls: '',     primary: true },
-  { key: 'all',         icon: 'book',  label: 'Todos los módulos', cls: '',     primary: true },
+  { key: 'all',         icon: 'book',  label: 'Ejercicios', cls: '',     primary: true },
   { key: 'rutas',       icon: 'route', label: 'Rutas guiadas',     cls: 'path', primary: true },
   { key: 'mi-progreso', icon: 'chart', label: 'Mis estadísticas',  cls: 'path', primary: true },
   // Las 4 categorías salen de catalog.js — su label es el mismo que el de las

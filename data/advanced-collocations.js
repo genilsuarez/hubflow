@@ -15,6 +15,10 @@ export const CATEGORIES = {
       { sentence: 'Rising sea levels ___ to coastal communities worldwide.', correct: 'pose a threat', explain: '"Pose a threat/risk/challenge" — formal way to describe a danger.' },
       { sentence: 'Social media has helped ___ about environmental destruction.', correct: 'raise awareness', explain: '"Raise awareness about/of" — "about" introduces the topic.' },
       { sentence: 'Antibiotic resistance could ___ to public health in the coming decades.', correct: 'pose a threat', explain: '"Pose a threat to..." — "to" introduces what is threatened.' },
+      { sentence: 'The team will ___ a series of experiments before publishing the results.', correct: 'carry out', explain: '"Carry out an experiment/trial" — standard collocation for conducting research.' },
+      { sentence: 'It would be premature to ___ from such a small sample size.', correct: 'draw conclusions', explain: '"Draw conclusions from" — introduces the evidence a conclusion is based on.' },
+      { sentence: 'Invasive species can ___ to local ecosystems.', correct: 'pose a threat', explain: '"Pose a threat to" — formal register, common in academic and environmental writing.' },
+      { sentence: 'The documentary succeeded in helping to ___ of the refugee crisis.', correct: 'raise awareness', explain: '"Raise awareness of" — "of" also works alongside "about" to introduce the topic.' },
     ]
   },
   hedging: {
@@ -29,6 +33,9 @@ export const CATEGORIES = {
       { sentence: '___ automation will transform the job market significantly.', correct: 'it would appear that', explain: 'Hedged prediction — avoids definitive claims about the future.' },
       { sentence: '___ that climate change disproportionately affects developing nations.', correct: 'it is widely acknowledged', explain: 'References broad scientific/academic consensus.' },
       { sentence: 'Among younger voters, ___ prioritise social issues over economic ones.', correct: 'there is a tendency to', explain: 'Describes a general trend without claiming it is universal.' },
+      { sentence: 'The proposal addresses the problem, ___, though significant gaps remain.', correct: 'to a certain extent', explain: '"To a certain extent" — partial agreement, softened right before a contrast.' },
+      { sentence: '___ the market has begun to stabilise after months of volatility.', correct: 'it would appear that', explain: 'Hedged observation — avoids stating the trend as a certain fact.' },
+      { sentence: '___ that early intervention leads to better long-term outcomes.', correct: 'it is widely acknowledged', explain: 'Attributes the claim to general consensus rather than the writer alone.' },
     ]
   },
   reporting: {
@@ -43,6 +50,9 @@ export const CATEGORIES = {
       { sentence: 'Some economists ___ that inflation is primarily driven by supply-side factors.', correct: 'contend', explain: '"Contend" signals a debatable position, not consensus.' },
       { sentence: 'New evidence has been presented that appears to ___ the original theory.', correct: 'refute', explain: '"Refute" = disprove with evidence (stronger than simply disagreeing).' },
       { sentence: 'The report ___ increased investment in early childhood education.', correct: 'advocate', explain: '"Advocate (for)" = recommend as a policy position.' },
+      { sentence: 'The committee ___ that more resources are needed to address the backlog.', correct: 'acknowledge', explain: '"Acknowledge" = admit as true, often conceding a shortcoming.' },
+      { sentence: 'Environmental groups continue to ___ stricter emissions regulations.', correct: 'advocate', explain: '"Advocate" = publicly support a policy or course of action.' },
+      { sentence: "The study's authors were quick to ___ claims that their methodology was flawed.", correct: 'refute', explain: '"Refute" = disprove with evidence, stronger than simply disagreeing.' },
     ]
   }
 };

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punctuation Fix — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.js"></script>
+<script src="../js/lp-input-zoom.js"></script>
+<script src="../js/lp-nav-icons.js"></script>
+<script src="../js/lp-platform-urls.js"></script>
+<script src="../js/lp-guest-reset.js"></script>
+<script src="../js/lp-login.js"></script>
+<script src="../js/lp-nav-helpers.js"></script>
+<script src="../js/lp-about-content.js"></script>
+<script src="../js/lp-about.js"></script>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/lp-nav-active.css">
+<link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/standalone-shell.css">
+<style>
+  .progress__fill { background: var(--lp-cat-purple); }
+
+  /* Category pills */
+  [data-area] { gap: 14px; }
+
+  /* Text display */
+  .hunt-card {
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 24px; box-shadow: var(--lp-shadow-md);
+  }
+  .hunt-card__counter {
+    font-size: .65rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: 12px;
+  }
+  .hunt-text {
+    font-size: 1.05rem; line-height: 2; font-family: var(--lp-font-body); color: var(--lp-ink);
+  }
+  .hunt-word {
+    display: inline; padding: 2px 4px; border-radius: 4px; cursor: pointer;
+    transition: background .2s, color .2s, box-shadow .2s;
+    border-bottom: 2px solid transparent;
+  }
+  .hunt-word:hover { background: rgba(123,94,167,.08); }
+  .hunt-word.selected {
+    background: rgba(123,94,167,.12); border-bottom-color: var(--lp-cat-purple);
+    color: var(--lp-cat-purple); font-weight: 600;
+  }
+  .hunt-word.correct {
+    background: var(--lp-success-soft); border-bottom-color: var(--lp-success);
+    color: var(--lp-success-dark); font-weight: 600;
+  }
+  .hunt-word.missed {
+    background: var(--lp-error-soft); border-bottom-color: var(--lp-error);
+    color: var(--lp-error-dark); font-weight: 600; text-decoration: line-through;
+  }
+  .hunt-word.false-positive {
+    background: var(--lp-warning-soft); border-bottom-color: var(--lp-warning);
+    color: var(--lp-warning); font-weight: 600;
+  }
+
+  /* Errors found counter */
+  .hunt-status {
+    font-size: .75rem; font-weight: 700; color: var(--lp-muted); text-align: center;
+  }
+  .hunt-status em { color: var(--lp-cat-purple); font-style: normal; }
+
+  /* Correction input */
+  .correction-panel {
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-md); padding: 14px 18px; box-shadow: var(--lp-shadow-sm);
+    display: none; gap: 8px; flex-direction: column;
+  }
+  .correction-panel.show { display: flex; }
+  .correction-panel__label {
+    font-size: .7rem; font-weight: 700; color: var(--lp-muted);
+  }
+  .correction-panel__word {
+    font-family: var(--lp-font-display); font-size: 1.1rem; color: var(--lp-cat-purple); font-weight: 600;
+  }
+  .correction-panel__input {
+    font-family: var(--lp-font-mono); font-size: .9rem; padding: 8px 12px;
+    border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    background: var(--lp-bg-paper); color: var(--lp-ink); outline: none;
+    transition: border-color .2s;
+  }
+  .correction-panel__input:focus { border-color: var(--lp-cat-purple); }
+
+  /* Explanations after check */
+  .hunt-explanations {
+    width: 100%; max-width: 720px; display: none; flex-direction: column; gap: 8px;
+  }
+  .hunt-explanations.show { display: flex; }
+  .hunt-exp-item {
+    background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+    padding: 10px 14px; font-size: .75rem; line-height: 1.5;
+  }
+  .hunt-exp-item strong { color: var(--lp-error); }
+  .hunt-exp-item em { color: var(--lp-success); font-style: normal; font-weight: 700; }
+
+  /* Modes */
+  .mode-desc {
+    font-size: .68rem; color: var(--lp-muted); font-weight: 600; text-align: center; margin-top: -6px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
+  </div>
+
+  <header class="header">
+    <h1>✏️ Punctuation Fix</h1>
+    <div class="pill-bar pill-bar--scroll" role="tablist">
+      <button class="pill-btn active" data-mode="hunt" role="tab">🎯 Hunt</button>
+      <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
+    </div>
+  </header>
+
+  <div class="cat-bar" id="catBar"></div>
+  <p class="mode-desc" id="modeDesc">Tap the incorrect words, then type the correction</p>
+
+  <div class="progress">
+    <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+    <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+  </div>
+
+  <div class="timer-bar" id="timerBar">
+    <span class="timer-display" id="timerDisplay">2:00</span>
+  </div>
+
+  <div class="scroll-body">
+    <div data-area="hunt" class="show">
+      <div class="hunt-card">
+        <div class="hunt-card__counter" id="huntCounter">Text 1 / 10</div>
+        <div class="hunt-text" id="huntText"></div>
+      </div>
+
+      <div class="hunt-status" id="huntStatus">Found: <em>0</em> / ? errors</div>
+
+      <div class="correction-panel" id="correctionPanel">
+        <div class="correction-panel__label">Correct this word:</div>
+        <div class="correction-panel__word" id="corrWord"></div>
+        <input class="correction-panel__input" id="corrInput" placeholder="Type correction..." autocomplete="off" autocapitalize="off" spellcheck="false">
+        <button class="lp-btn lp-btn--purple" id="corrSubmit">Submit ✓</button>
+      </div>
+
+      <div class="hunt-explanations" id="huntExplanations"></div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="lp-btn lp-btn--primary" id="checkBtn">Check All ✓</button>
+        <button class="lp-btn lp-btn--ghost" id="nextBtn" style="display:none">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/punctuation-fix.js';
+import { shuffle } from '../js/array-utils.js';
+import { recordScore } from '../js/progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../js/exercise-ui.js';
+import { finishExercise } from '../js/exercise-flow.js';
+import { setPracticeBottomNav } from '../js/ex-bottom-nav.js';
+
+
+let currentCat = Object.keys(CATEGORIES)[0];
+let mode = 'hunt';
+let deck = [], idx = 0, score = 0, totalErrors = 0;
+let selectedWords = new Set();
+let corrections = {};
+let currentSelectedIdx = null;
+let checked = false;
+let timer = null;
+let timedSeconds = 0;
+
+// ─── Category bar ───
+sharedRenderCatBar({
+  containerId: 'catBar', categories: CATEGORIES,
+  getCurrentCat: () => currentCat, setCurrentCat: v => currentCat = v,
+  onChange: startMode,
+  formatLabel: (k, cat) => `${cat.icon} ${cat.label} <span style="font-size:.6rem;opacity:.7">${cat.level}</span>`,
+});
+
+// ─── Mode switching ───
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
+
+function startMode() {
+  stopTimer();
+  deck = shuffle(CATEGORIES[currentCat].items);
+  idx = 0; score = 0; totalErrors = 0;
+  document.getElementById('timerBar').classList.toggle('show', mode === 'timed');
+  document.getElementById('modeDesc').textContent = mode === 'timed'
+    ? 'Find errors before time runs out!'
+    : 'Tap the incorrect words, then type the correction';
+
+  if (mode === 'timed') {
+    timedSeconds = 120;
+
+    timer = new Timer(timedSeconds,
+      r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 15); },
+      () => finishAll()
+    );
+    timer.start();
+  }
+  loadText();
+}
+
+function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
+
+function loadText() {
+  if (idx >= deck.length) { finishAll(); return; }
+  const item = deck[idx];
+  selectedWords = new Set();
+  corrections = {};
+  currentSelectedIdx = null;
+  checked = false;
+
+  document.getElementById('huntCounter').textContent = `Text ${idx + 1} / ${deck.length}`;
+  setPracticeBottomNav({ check: true, next: false });
+  document.getElementById('huntExplanations').classList.remove('show');
+  document.getElementById('correctionPanel').classList.remove('show');
+
+  renderText(item);
+  updateStatus(item);
+  updateProgress();
+}
+
+function renderText(item) {
+  const words = item.text.split(' ');
+  const container = document.getElementById('huntText');
+  container.innerHTML = words.map((w, i) =>
+    `<span class="hunt-word" data-idx="${i}">${w}</span> `
+  ).join('');
+
+  container.querySelectorAll('.hunt-word').forEach(el => {
+    el.addEventListener('click', () => {
+      if (checked) return;
+      const wi = parseInt(el.dataset.idx);
+      if (selectedWords.has(wi)) {
+        selectedWords.delete(wi);
+        delete corrections[wi];
+        el.classList.remove('selected');
+        if (currentSelectedIdx === wi) hideCorrection();
+      } else {
+        selectedWords.add(wi);
+        el.classList.add('selected');
+        showCorrection(wi, words[wi]);
+      }
+      updateStatus(item);
+    });
+  });
+}
+
+function showCorrection(wordIdx, word) {
+  currentSelectedIdx = wordIdx;
+  const panel = document.getElementById('correctionPanel');
+  panel.classList.add('show');
+  document.getElementById('corrWord').textContent = `"${word}"`;
+  const input = document.getElementById('corrInput');
+  input.value = corrections[wordIdx] || '';
+  input.focus();
+}
+
+function hideCorrection() {
+  currentSelectedIdx = null;
+  document.getElementById('correctionPanel').classList.remove('show');
+}
+
+// Correction submit
+document.getElementById('corrSubmit').addEventListener('click', submitCorrection);
+document.getElementById('corrInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitCorrection();
+});
+
+function submitCorrection() {
+  if (currentSelectedIdx === null) return;
+  const val = document.getElementById('corrInput').value.trim();
+  if (val) corrections[currentSelectedIdx] = val;
+  hideCorrection();
+}
+
+function updateStatus(item) {
+  const found = selectedWords.size;
+  const total = item.errors.length;
+  document.getElementById('huntStatus').innerHTML = `Found: <em>${found}</em> / ${total} errors`;
+}
+
+const updateProgress = () => sharedUpdateProgress(idx, deck.length,
+  document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
+
+// ─── Check ───
+document.getElementById('checkBtn').addEventListener('click', checkText);
+
+function checkText() {
+  if (checked) return;
+  checked = true;
+  hideCorrection();
+
+  const item = deck[idx];
+  const errorIndices = new Set(item.errors.map(e => e.index));
+  let correct = 0;
+
+  // Mark words
+  document.querySelectorAll('.hunt-word').forEach(el => {
+    const wi = parseInt(el.dataset.idx);
+    const isError = errorIndices.has(wi);
+    const wasSelected = selectedWords.has(wi);
+
+    if (isError && wasSelected) {
+      // Check correction
+      const err = item.errors.find(e => e.index === wi);
+      const userCorr = (corrections[wi] || '').toLowerCase().trim();
+      const expected = err.correction.toLowerCase().trim();
+      if (expected === '' || userCorr === expected || expected.includes(userCorr) || userCorr.includes(expected)) {
+        el.classList.add('correct');
+        correct++;
+      } else {
+        el.classList.add('correct'); // still found it
+        correct += 0.5; // partial credit
+      }
+    } else if (isError && !wasSelected) {
+      el.classList.add('missed');
+    } else if (!isError && wasSelected) {
+      el.classList.add('false-positive');
+    }
+    el.style.cursor = 'default';
+  });
+
+  score += correct;
+  totalErrors += item.errors.length;
+
+  // Show explanations
+  const expContainer = document.getElementById('huntExplanations');
+  expContainer.innerHTML = item.errors.map(err => {
+    const words = item.text.split(' ');
+    return `<div class="hunt-exp-item">
+      <strong>${words[err.index]}</strong> → <em>${err.correction || '(remove)'}</em> — ${err.rule}
+    </div>`;
+  }).join('');
+  expContainer.classList.add('show');
+
+  setPracticeBottomNav({ check: false, next: true });
+}
+
+// ─── Next ───
+document.getElementById('nextBtn').addEventListener('click', () => {
+  idx++;
+  loadText();
+});
+
+// ─── Finish ───
+function finishAll() {
+  const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
+  stopTimer();
+  const pct = totalErrors > 0 ? Math.round((score / totalErrors) * 100) : 0;
+  finishExercise({
+    correct: Math.round(score), total: totalErrors, startMode,
+    elapsedSeconds: elapsed,
+  });
+  recordScore(`punct-${currentCat}`, pct);
+  // Update progress to 100
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;
+  document.getElementById('progPct').textContent = '100%';
+}
+
+// ─── Keyboard: Enter to check ───
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && !checked && currentSelectedIdx === null) {
+    e.preventDefault();
+    checkText();
+  }
+});
+
+// Start
+startMode();
+</script>
+
+<script type="module" src="../js/exercise-shell.js"></script>
+</body>
+</html>

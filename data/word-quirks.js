@@ -12,8 +12,6 @@ export const CATEGORIES = {
       { term: "Namby-Pamby", ipa: "/ˌnæmbi ˈpæmbi/", es: "Blandengue", meaning: "Weak, lacking courage or strength", emoji: "😩" },
       { term: "Super-Duper", ipa: "/ˌsuːpər ˈduːpər/", es: "Sensacional", meaning: "Excellent, very good (informal/playful)", emoji: "🌟" },
       { term: "Fuddy-Duddy", ipa: "/ˌfʌdi ˈdʌdi/", es: "Anticuado (persona)", meaning: "An old-fashioned, unadventurous person", emoji: "👴" },
-      { term: "Okey-Dokey", ipa: "/ˌoʊki ˈdoʊki/", es: "Vale, de acuerdo", meaning: "A playful way to say 'okay'", emoji: "👌" },
-      { term: "Riff-Raff", ipa: "/ˈrɪf ræf/", es: "Chusma / gentuza", meaning: "Disreputable or undesirable people", emoji: "🎭", example: "The club keeps the riff-raff out." },
     ]
   },
   sameWordDifferentMeaning: {
@@ -29,9 +27,6 @@ export const CATEGORIES = {
       { term: "Left", ipa: "/lɛft/", es: "Izquierda / se fue", meaning: "A direction, OR the past tense of 'leave'", emoji: "⬅️", example: "She left and turned left at the corner." },
       { term: "Park", ipa: "/pɑːrk/", es: "Parque / estacionar", meaning: "A green public space, OR to stop a vehicle", emoji: "🌳", example: "I'll park the car near the park." },
       { term: "Watch", ipa: "/wɒtʃ/", es: "Reloj / observar", meaning: "A wrist clock, OR to look at something carefully", emoji: "⌚", example: "I checked my watch while I watched the game." },
-      { term: "Fine", ipa: "/faɪn/", es: "Bien / multa", meaning: "Good/okay, OR a penalty payment", emoji: "💵", example: "I'm fine, but I have to pay a parking fine." },
-      { term: "Story", ipa: "/ˈstɔːri/", es: "Historia / piso", meaning: "A narrative, OR a floor of a building", emoji: "📖", example: "She told a story about a three-story house." },
-      { term: "Bat", ipa: "/bæt/", es: "Murciélago / bate", meaning: "A flying mammal, OR sports equipment", emoji: "🦇", example: "A bat flew past while he held the baseball bat." },
     ]
   },
   eggcorns: {
@@ -47,8 +42,6 @@ export const CATEGORIES = {
       { term: "Doggy-dog world", ipa: "/ˈdɒɡi dɒɡ wɜːrld/", es: "Incorrecto (eggcorn)", meaning: "A common mishearing of 'dog-eat-dog world'", emoji: "❌" },
       { term: "A whole other story", ipa: "/ə hoʊl ˈʌðər ˈstɔːri/", es: "Correcto", meaning: "The correct phrase (NOT 'a whole nother story')", emoji: "✅" },
       { term: "A whole nother story", ipa: "/ə hoʊl ˈnʌðər ˈstɔːri/", es: "Incorrecto (eggcorn)", meaning: "A common (informal) mishearing", emoji: "❌" },
-      { term: "Moot point", ipa: "/muːt pɔɪnt/", es: "Correcto", meaning: "The correct phrase — a debatable/irrelevant point (NOT 'mute')", emoji: "✅" },
-      { term: "Mute point", ipa: "/mjuːt pɔɪnt/", es: "Incorrecto (eggcorn)", meaning: "A common mishearing of 'moot point'", emoji: "❌" },
     ]
   },
 };

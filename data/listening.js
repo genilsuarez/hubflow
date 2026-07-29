@@ -16,6 +16,9 @@ export const CATEGORIES = {
       { text: 'He forgot his keys at the office.', blank: 'keys', options: ['keys', 'cheese', 'case', 'ease'] },
       { text: 'I would like a cup of coffee, please.', blank: 'cup', options: ['cup', 'cap', 'cop', 'cape'] },
       { text: 'The weather is very cold today.', blank: 'cold', options: ['cold', 'called', 'gold', 'coal'] },
+      { text: 'I need to buy some bread and milk.', blank: 'bread', options: ['bread', 'bred', 'bright', 'breed'] },
+      { text: 'The children are playing in the park.', blank: 'children', options: ['children', 'chicken', 'kitchen', 'kitten'] },
+      { text: "Let's meet at the bus stop tomorrow.", blank: 'bus stop', options: ['bus stop', 'bus shop', 'bust stop', 'bus top'] },
     ]
   },
   travelwork: {
@@ -28,7 +31,10 @@ export const CATEGORIES = {
       { text: 'Please send me the report by email.', blank: 'report', options: ['report', 'resort', 'rapport', 'reward'] },
       { text: 'We should arrive at the airport early.', blank: 'airport', options: ['airport', 'aeroplane', 'airline', 'harbour'] },
       { text: 'The deadline for the project is Friday.', blank: 'deadline', options: ['deadline', 'headline', 'dateline', 'redline'] },
-      { text: 'She works as a software engineer.', blank: 'engineer', options: ['engineer', 'engine ear', 'engineered', 'engineering'] }
+      { text: 'She works as a software engineer.', blank: 'engineer', options: ['engineer', 'engine ear', 'engineered', 'engineering'] },
+      { text: 'The manager will attend the conference.', blank: 'conference', options: ['conference', 'confidence', 'conferred', 'conform'] },
+      { text: 'I forgot to renew my passport.', blank: 'passport', options: ['passport', 'password', 'passage', 'past sport'] },
+      { text: 'The company announced a new policy.', blank: 'policy', options: ['policy', 'police', 'polish', 'apology'] },
     ]
   },
   tricky: {
@@ -40,7 +46,11 @@ export const CATEGORIES = {
       { text: 'The desert is very hot and dry.', blank: 'desert', options: ['desert', 'dessert', 'deserve', 'decent'] },
       { text: 'Please write your name here.', blank: 'write', options: ['write', 'right', 'rite', 'ride'] },
       { text: 'I bought a new pair of shoes.', blank: 'pair', options: ['pair', 'pear', 'pare', 'peer'] },
-      { text: 'We need to accept the new terms.', blank: 'accept', options: ['accept', 'except', 'expect', 'access'] }
+      { text: 'We need to accept the new terms.', blank: 'accept', options: ['accept', 'except', 'expect', 'access'] },
+      { text: 'The weather affects my mood.', blank: 'affects', options: ['affects', 'effects', 'infects', 'expects'] },
+      { text: 'I saw a bat flying near the barn.', blank: 'bat', options: ['bat', 'bad', 'back', 'bath'] },
+      { text: 'The coach gave us some advice.', blank: 'coach', options: ['coach', 'couch', 'coast', 'coax'] },
+      { text: 'Please close the door quietly.', blank: 'close', options: ['close', 'clothes', 'cloze', 'clause'] },
     ]
   }
 };

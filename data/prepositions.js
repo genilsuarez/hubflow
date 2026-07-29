@@ -20,8 +20,6 @@ export const CATEGORIES = {
       { sentence: "I'll see you ___ the morning.", correct: "in", explain: "'In' para partes del día: in the morning, in the evening." },
       { sentence: "My birthday is ___ the 5th of July.", correct: "on", explain: "'On' para fechas: on the 5th of July." },
       { sentence: "She called me ___ lunchtime.", correct: "at", explain: "'At' para periodos breves: at lunchtime, at Christmas." },
-      { sentence: "It happened ___ the 21st century.", correct: "in", explain: "'In' para siglos y periodos largos." },
-      { sentence: "We arrived ___ the same time.", correct: "at", explain: "'At the same time' = al mismo tiempo. Expresión fija." },
     ]
   },
   place: {
@@ -39,8 +37,6 @@ export const CATEGORIES = {
       { sentence: "They live ___ the second floor.", correct: "on", explain: "'On' para pisos: on the second floor." },
       { sentence: "She's studying ___ university.", correct: "at", explain: "'At' para instituciones: at university, at school." },
       { sentence: "The cat is sleeping ___ the bed.", correct: "on", explain: "'On' para superficie: on the bed (encima)." },
-      { sentence: "I'll be ___ home all day.", correct: "at", explain: "'At home' = en casa. Expresión fija con at." },
-      { sentence: "We swam ___ the sea.", correct: "in", explain: "'In' para cuerpos de agua: in the sea, in the pool." },
     ]
   },
   movement: {
@@ -58,8 +54,6 @@ export const CATEGORIES = {
       { sentence: "The dog walked ___ me slowly.", correct: "towards", explain: "'Towards' = en dirección a, acercándose." },
       { sentence: "We walked ___ the park to get home.", correct: "through", explain: "'Through' = atravesar un espacio abierto." },
       { sentence: "She got ___ the car quickly.", correct: "into", explain: "'Get into' = entrar (en un coche, una habitación)." },
-      { sentence: "I'm going ___ work now.", correct: "to", explain: "'To' + destino habitual: to work, to school." },
-      { sentence: "She poured the milk ___ the glass.", correct: "into", explain: "'Into' = movimiento hacia el interior de un recipiente." },
     ]
   },
   dependent: {
@@ -77,8 +71,6 @@ export const CATEGORIES = {
       { sentence: "I depend ___ my parents.", correct: "on", explain: "'Depend on' = depender de. Verbo + prep fija." },
       { sentence: "She apologized ___ being late.", correct: "for", explain: "'Apologize for' = disculparse por. Verbo + prep." },
       { sentence: "She dreams ___ traveling the world.", correct: "of", explain: "'Dream of/about' = soñar con. Verbo + prep." },
-      { sentence: "He insisted ___ paying the bill.", correct: "on", explain: "'Insist on' = insistir en. Verbo + prep fija." },
-      { sentence: "I believe ___ hard work.", correct: "in", explain: "'Believe in' = creer en. Verbo + prep fija." },
     ]
   },
   duration: {
@@ -96,8 +88,6 @@ export const CATEGORIES = {
       { sentence: "The shop is closed ___ renovations.", correct: "during", explain: "'During' + a noun naming the period/event." },
       { sentence: "The essay must be submitted ___ midnight.", correct: "by", explain: "'By' = fecha límite: no más tarde de." },
       { sentence: "I'll be at the office ___ 6pm, then I'm leaving.", correct: "until", explain: "'Until' = hasta cuándo continúa la situación." },
-      { sentence: "She had learned to drive ___ the age of 18.", correct: "by", explain: "'By' + momento en que algo ya está completado." },
-      { sentence: "We can't start ___ everyone arrives.", correct: "until", explain: "'Until' + oración: el punto en que algo cambia." }
     ]
   }
 };

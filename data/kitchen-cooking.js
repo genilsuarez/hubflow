@@ -12,9 +12,6 @@ export const CATEGORIES = {
       { term: "Slice", ipa: "/slaɪs/", es: "Rebanar", meaning: "Cut into thin flat pieces", emoji: "🍞", example: "Slice the bread evenly." },
       { term: "Dice", ipa: "/daɪs/", es: "Cortar en cubos", meaning: "Cut into small cube-shaped pieces", emoji: "🎲", example: "Dice the tomatoes for salsa." },
       { term: "Knead", ipa: "/niːd/", es: "Amasar", meaning: "Press and fold dough with your hands", emoji: "🍞", example: "Knead the dough for 10 minutes." },
-      { term: "Toss", ipa: "/tɒs/", es: "Mezclar suavemente", meaning: "Mix lightly by lifting and turning", emoji: "🥗", example: "Toss the salad with dressing." },
-      { term: "Marinate", ipa: "/ˈmærɪneɪt/", es: "Marinar", meaning: "Soak food in seasoned liquid for flavor", emoji: "🫕", example: "Marinate the chicken overnight." },
-      { term: "Sift", ipa: "/sɪft/", es: "Tamizar / cerner", meaning: "Pass flour or powder through a sieve to remove lumps", emoji: "🌾", example: "Sift the flour before adding the eggs." },
     ]
   },
   cookingMethods: {
@@ -30,9 +27,6 @@ export const CATEGORIES = {
       { term: "Broil", ipa: "/brɔɪl/", es: "Gratinar", meaning: "Cook under direct high heat from above", emoji: "🔥", example: "Broil the steak for 4 minutes." },
       { term: "Poach", ipa: "/poʊtʃ/", es: "Escalfar", meaning: "Cook gently in simmering liquid", emoji: "🥚", example: "Poach the eggs in vinegar water." },
       { term: "Grill", ipa: "/ɡrɪl/", es: "Asar a la parrilla", meaning: "Cook on a rack over direct flame", emoji: "🥩", example: "Grill burgers for 5 min each side." },
-      { term: "Season", ipa: "/ˈsiːzən/", es: "Sazonar", meaning: "Add salt, pepper or spices for flavor", emoji: "🧂", example: "Season the steak generously." },
-      { term: "Serve", ipa: "/sɜːrv/", es: "Servir", meaning: "Present the finished food to eat", emoji: "🍽️", example: "Serve the dish while hot." },
-      { term: "Garnish", ipa: "/ˈɡɑːrnɪʃ/", es: "Decorar", meaning: "Add a finishing decorative touch", emoji: "🌿", example: "Garnish with fresh parsley." },
     ]
   },
 };

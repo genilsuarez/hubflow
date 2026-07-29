@@ -13,8 +13,6 @@ export const CATEGORIES = {
       { term: "Twilight", ipa: "/ˈtwaɪlaɪt/", time: "6:00–8:00 PM", meaning: "Faint light after sunset", emoji: "🌇", order: 8 },
       { term: "Evening", ipa: "/ˈiːvnɪŋ/", time: "8:00–10:00 PM", meaning: "Late part of the day", emoji: "🌃", order: 9 },
       { term: "Night", ipa: "/naɪt/", time: "10:00 PM–12 AM", meaning: "Dark hours, most people sleep", emoji: "🌙", order: 10 },
-      { term: "Midnight", ipa: "/ˈmɪdnaɪt/", time: "12:00–4:00 AM", meaning: "Middle of the night", emoji: "🌑", order: 11 },
-      { term: "The Small Hours", ipa: "/ðə smɔːl ˈaʊərz/", es: "La madrugada", meaning: "The hours just after midnight", emoji: "🕐", example: "We talked into the small hours." },
     ]
   },
   weather: {
@@ -30,9 +28,6 @@ export const CATEGORIES = {
       { term: "Windy", ipa: "/ˈwɪndi/", es: "Ventoso", meaning: "Strong air movement", emoji: "💨", example: "Hold your hat — it's really windy!" },
       { term: "Breezy", ipa: "/ˈbriːzi/", es: "Con brisa", meaning: "Light, pleasant wind", emoji: "🍃", example: "A breezy afternoon by the coast." },
       { term: "Snowy", ipa: "/ˈsnoʊi/", es: "Nevado", meaning: "Snow falling from the sky", emoji: "🌨️", example: "It's snowy — let's make a snowman!" },
-      { term: "Humid", ipa: "/ˈhjuːmɪd/", es: "Húmedo", meaning: "A lot of moisture in the air, feels sticky", emoji: "💧", example: "It's so humid I'm sweating." },
-      { term: "Freezing", ipa: "/ˈfriːzɪŋ/", es: "Helado", meaning: "Extremely cold, below 0°C", emoji: "🥶", example: "It's freezing — the pond has ice!" },
-      { term: "Scorching", ipa: "/ˈskɔːrtʃɪŋ/", es: "Abrasador", meaning: "Extremely hot", emoji: "🔥", example: "A scorching 40°C day in August." },
     ]
   },
   seasons: {
@@ -48,9 +43,6 @@ export const CATEGORIES = {
       { term: "Equinox", ipa: "/ˈiːkwɪnɒks/", es: "Equinoccio", meaning: "Day and night are equal length", emoji: "⚖️", extra: "~Mar 20 / ~Sep 22" },
       { term: "Harvest", ipa: "/ˈhɑːrvɪst/", es: "Cosecha", meaning: "The time when crops are gathered", emoji: "🌾", extra: "Late summer/autumn" },
       { term: "Frost", ipa: "/frɒst/", es: "Escarcha", meaning: "Thin ice crystals that form on cold surfaces", emoji: "🥶", extra: "Winter mornings" },
-      { term: "Bloom", ipa: "/bluːm/", es: "Floración", meaning: "When flowers open in spring", emoji: "🌸", extra: "Spring event" },
-      { term: "Heatwave", ipa: "/ˈhiːtweɪv/", es: "Ola de calor", meaning: "A prolonged period of abnormally hot weather", emoji: "🥵", extra: "Summer extreme" },
-      { term: "Monsoon", ipa: "/mɒnˈsuːn/", es: "Monzón", meaning: "Seasonal wind bringing heavy rain", emoji: "🌧️", extra: "Tropical regions" },
     ]
   },
 };

@@ -101,7 +101,7 @@
     </div>
     <nav class="sb-nav" id="sbNav">
       <button class="sb-item active" data-target="resumen"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Inicio</span></button>
-      <button class="sb-item" data-target="all"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="book" aria-hidden="true"></span><span class="sb-label">Todos los módulos</span></button>
+      <button class="sb-item" data-target="all"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="book" aria-hidden="true"></span><span class="sb-label">Ejercicios</span></button>
       <button class="sb-item path" data-target="rutas"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="route" aria-hidden="true"></span><span class="sb-label">Rutas guiadas</span></button>
       <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="chart" aria-hidden="true"></span><span class="sb-label">Mis estadísticas</span></button>
     </nav>
@@ -489,6 +489,31 @@
             <div class="guide-icon">🔄</div>
             <div class="guide-body"><div class="guide-title">Inversions</div><div class="guide-tag">Grammar</div></div>
           </a>
+          <a class="guide-link g-grammar" href="guides/passive-voice.html" data-tags="grammar,b1,b2">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🎭</div>
+            <div class="guide-body"><div class="guide-title">Passive Voice Made Clear</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/linking-words.html" data-tags="grammar,writing,b1,b2">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔗</div>
+            <div class="guide-body"><div class="guide-title">Linking Words &amp; Connectors</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/punctuation-fix.html" data-tags="grammar,writing,spelling,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">✏️</div>
+            <div class="guide-body"><div class="guide-title">Punctuation Cheat Sheet</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/text-cohesion.html" data-tags="grammar,writing,b2,c1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧵</div>
+            <div class="guide-body"><div class="guide-title">Text Cohesion</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/word-order.html" data-tags="grammar,a2,b1,b2">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧩</div>
+            <div class="guide-body"><div class="guide-title">Word Order Untangled</div><div class="guide-tag">Structure</div></div>
+          </a>
         </div>
       </section>
 
@@ -622,12 +647,8 @@ import { initDashboardNav } from './js/dashboard-nav.js';
     }, 0);
     const roundedItems = Math.floor(allItems / 100) * 100;
     const itemsK = formatItemsK(roundedItems);
-    // derivado: el máximo real de modos y si algún módulo tiene Battle
-    const maxModes = MODULES.reduce((max, m) => Math.max(max, getModuleDepth(m.id)?.modes || 0), 0);
-    const conBattle = MODULES.some((m) => getModuleDepth(m.id)?.hasBattle);
-    const battle = conBattle ? ', incl. Battle 2P' : '';
-    const full = `${n} ejercicios · ${itemsK} items · hasta ${maxModes} modos${battle}.`;
-    const short = `${n} ejercicios · hasta ${maxModes} modos`;
+    const full = `${n} ejercicios · ${itemsK} items.`;
+    const short = `${n} ejercicios · ${itemsK} items`;
     el.innerHTML = `<span class="tgs-full">${full}</span><span class="tgs-short">${short}</span>`;
   }
   updateResumenSub();

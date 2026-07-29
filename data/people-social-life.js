@@ -12,8 +12,6 @@ export const CATEGORIES = {
       { term: "Fingers Crossed", ipa: "/ˈfɪŋɡərz krɒst/", es: "Ojalá / con los dedos cruzados", meaning: "Hoping for good luck", emoji: "🤞", example: "Fingers crossed it goes well!" },
       { term: "Well Done!", ipa: "/wɛl dʌn/", es: "¡Bien hecho!", meaning: "Alternative for 'congratulations'", emoji: "👏", example: "Well done on passing your exam!" },
       { term: "Long Time No See", ipa: "/lɒŋ taɪm noʊ siː/", es: "Cuánto tiempo sin verte", meaning: "A casual greeting after not seeing someone for a while", emoji: "👋", example: "Hey! Long time no see!" },
-      { term: "Bless You!", ipa: "/blɛs juː/", es: "¡Salud!", meaning: "What you say after someone sneezes", emoji: "🤧", example: "Bless you! Do you have a cold?" },
-      { term: "Speak of the Devil", ipa: "/spiːk ɒv ðə ˈdɛvəl/", es: "Hablando del rey de Roma", meaning: "Said when the person you were talking about appears", emoji: "😈", example: "Speak of the devil — here she comes!" },
     ]
   },
   personalityAdjectives: {
@@ -29,8 +27,6 @@ export const CATEGORIES = {
       { term: "Ambitious", ipa: "/æmˈbɪʃəs/", es: "Ambicioso", meaning: "Strongly determined to succeed", emoji: "🚀" },
       { term: "Reserved", ipa: "/rɪˈzɜːrvd/", es: "Reservado", meaning: "Quiet, not sharing feelings easily", emoji: "🤐" },
       { term: "Impulsive", ipa: "/ɪmˈpʌlsɪv/", es: "Impulsivo", meaning: "Acting without thinking things through", emoji: "⚡" },
-      { term: "Diplomatic", ipa: "/ˌdɪpləˈmætɪk/", es: "Diplomático", meaning: "Tactful when dealing with sensitive issues", emoji: "🕊️" },
-      { term: "Assertive", ipa: "/əˈsɜːrtɪv/", es: "Asertivo", meaning: "Confident and direct without being aggressive", emoji: "💪" },
     ]
   },
   hobbies: {
@@ -46,8 +42,6 @@ export const CATEGORIES = {
       { term: "Collector", ipa: "/kəˈlɛktər/", es: "Coleccionista", meaning: "Someone who collects a particular type of item", emoji: "🗃️" },
       { term: "Geocaching", ipa: "/ˈdʒiːoʊˌkæʃɪŋ/", es: "Geocaching (caza de tesoros con GPS)", meaning: "An outdoor treasure-hunting game using GPS", emoji: "🧭" },
       { term: "Woodworking", ipa: "/ˈwʊdˌwɜːrkɪŋ/", es: "Carpintería (como hobby)", meaning: "Making things out of wood as a hobby", emoji: "🪵" },
-      { term: "Bird watching", ipa: "/bɜːrd ˈwɒtʃɪŋ/", es: "Observación de aves", meaning: "The hobby of observing birds in nature", emoji: "🦜" },
-      { term: "Green-Fingered", ipa: "/ɡriːn ˈfɪŋɡərd/", es: "Con buena mano para las plantas", meaning: "Naturally good at gardening", emoji: "🪴", example: "She's very green-fingered — look at that balcony." },
     ]
   },
   telephoneEnglish: {
@@ -63,8 +57,6 @@ export const CATEGORIES = {
       { term: "Let me transfer you", ipa: "/lɛt miː ˈtrænsfɜːr juː/", es: "Le transfiero la llamada", meaning: "I'll connect you to another person/department", emoji: "🔁" },
       { term: "Could you hold the line?", ipa: "/kʊd juː hoʊld ðə laɪn/", es: "¿Podría esperar en línea?", meaning: "Asking someone to wait during a call", emoji: "⏸️" },
       { term: "I'll call you back", ipa: "/aɪl kɔːl juː bæk/", es: "Le devuelvo la llamada", meaning: "I will phone you again later", emoji: "🔙" },
-      { term: "You're breaking up", ipa: "/jʊr ˈbreɪkɪŋ ʌp/", es: "Se corta la llamada", meaning: "The phone connection is bad, the voice is unclear", emoji: "📶" },
-      { term: "Speaking", ipa: "/ˈspiːkɪŋ/", es: "Al habla / soy yo", meaning: "Formal reply confirming you are the person asked for", emoji: "☎️", example: "'Is that Ms Lee?' — 'Speaking.'" },
     ]
   },
 };

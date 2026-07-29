@@ -1,4 +1,10 @@
-/* HubFlow guide pages — shared layout (footer, nav actions, theme toggle) */
+/* HubFlow guide pages — shared layout (footer, back-link icon) */
+
+.nav-back .lp-nav-svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
 
 .guide-footer {
   margin-top: 32px;
@@ -15,57 +21,6 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-}
-
-.guide-nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.guide-theme-toggle,
-.guide-login-btn,
-.guide-about-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s, border-color 0.2s;
-  position: relative;
-  color: inherit;
-  padding: 0;
-}
-.guide-theme-toggle::after,
-.guide-login-btn::after,
-.guide-about-btn::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-}
-.guide-theme-toggle:hover,
-.guide-login-btn:hover,
-.guide-about-btn:hover {
-  transform: scale(1.08);
-  border-color: var(--blue, var(--yellow));
-}
-.guide-theme-toggle:focus-visible,
-.guide-login-btn:focus-visible,
-.guide-about-btn:focus-visible {
-  outline: 2px solid var(--blue, #2F6FD8);
-  outline-offset: 2px;
-}
-
-.guide-login-btn {
-  font-size: 0.72rem;
-  font-weight: 700;
-  min-width: 36px;
 }
 
 .nav-bar {
@@ -90,10 +45,3 @@
   top: 12px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .guide-theme-toggle,
-  .guide-login-btn,
-  .guide-about-btn {
-    transition: none;
-  }
-}

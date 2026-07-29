@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Cohesion Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.js"></script>
+<script src="../js/lp-platform-urls.js"></script>
+<script src="../js/lp-nav-icons.js"></script>
+<script src="../js/lp-guest-reset.js"></script>
+<script src="../js/lp-login.js"></script>
+<script src="../js/lp-nav-helpers.js"></script>
+<script src="../js/lp-about-content.js"></script>
+<script src="../js/lp-about.js"></script>
+<link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#B8860B;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
+  --yellow-light:#2D2510;--purple-light:#221A30;--orange-light:#2D2510;--teal-light:#1A2D2D;
+--ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  background:var(--bg);
+}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--teal);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-card.warn{border-left:4px solid var(--teal);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:#0D6E64;}
+[data-theme="dark"] .rule-desc strong{color:#5ED4CC;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--teal-light);color:#0D6E64;}
+[data-theme="dark"] .ex{color:#5ED4CC;}
+
+.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
+.sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.sum-table tr:last-child td{border-bottom:none;}
+.sum-table .q{font-family:'JetBrains Mono',monospace;font-weight:700;color:#0D6E64;}
+[data-theme="dark"] .sum-table .q{color:#5ED4CC;}
+.sum-table .usage{font-size:.7rem;color:var(--muted);}
+
+@media(max-width:480px){.page{padding:14px 12px 50px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+<link rel="stylesheet" href="../css/guide-layout.css">
+</head>
+<body>
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
+
+<nav class="nav-bar">
+  <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
+  <span class="nav-title">Reference Guide</span>
+</nav>
+
+<h1>Text <span class="accent">Cohesion</span></h1>
+<p class="intro">The small words that stop a text from repeating itself — and what exactly they point back to.</p>
+
+<h2>&#128204; Reference Words</h2>
+<div class="rule-card">
+  <div class="rule-title">it / this / these</div>
+  <div class="rule-desc"><strong>It</strong> refers back to one thing already named. <strong>This</strong> can refer to a whole previous idea, not just one noun. <strong>These</strong> refers back to two or more things.</div>
+  <div class="examples">
+    <span class="ex">I bought a phone. It is very fast.</span>
+    <span class="ex">The team lost. This surprised everyone.</span>
+  </div>
+</div>
+<div class="rule-card">
+  <div class="rule-title">The former / the latter</div>
+  <div class="rule-desc">When two options were just mentioned, <strong>the former</strong> = the first one, <strong>the latter</strong> = the second one. Formal, mostly written English.</div>
+  <div class="examples"><span class="ex">He was offered two jobs; the former paid more.</span></div>
+</div>
+
+<h2>&#128260; Substitution Words</h2>
+<div class="rule-card">
+  <div class="rule-title">so / one</div>
+  <div class="rule-desc"><strong>So</strong> replaces a whole clause after verbs like think/hope/believe. <strong>One</strong> replaces a singular countable noun already mentioned.</div>
+  <div class="examples">
+    <span class="ex">Is he coming? I hope so.</span>
+    <span class="ex">I need a phone — mine is an old one.</span>
+  </div>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; either / neither</div>
+  <div class="rule-desc"><strong>Either</strong> agrees with a negative statement. <strong>Neither</strong> means "not one nor the other" — referring back to two things.</div>
+  <div class="examples">
+    <span class="ex">I don't like coffee. My brother doesn't either.</span>
+    <span class="ex">Neither of them called.</span>
+  </div>
+</div>
+
+<h2>Quick Reference</h2>
+<table class="sum-table">
+  <thead><tr><th>Word</th><th>Refers back to</th></tr></thead>
+  <tbody>
+    <tr><td class="q">it</td><td class="usage">one thing already mentioned</td></tr>
+    <tr><td class="q">this</td><td class="usage">a whole idea or situation</td></tr>
+    <tr><td class="q">these</td><td class="usage">two or more things mentioned</td></tr>
+    <tr><td class="q">the former / the latter</td><td class="usage">the first / second of two options</td></tr>
+    <tr><td class="q">one</td><td class="usage">a singular countable noun</td></tr>
+  </tbody>
+</table>
+
+<footer class="guide-footer">
+  <a href="../exercises/text-cohesion.html">&larr; Practice text cohesion</a>
+</footer>
+
+</div>
+<script type="module" src="../js/guide-shell.js"></script>
+</body>
+</html>
