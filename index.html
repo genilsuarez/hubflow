@@ -157,7 +157,7 @@
     <main class="content" id="mainContent">
       <div class="catalog-toolbar" id="catalogToolbar" aria-label="Buscar y filtrar módulos">
         <div class="catalog-chips" id="catalogChips" aria-label="Cambiar de categoría">
-          <button type="button" class="catalog-chip" data-target="all">All</button>
+          <button type="button" class="catalog-chip" data-target="all">Browse</button>
           <button type="button" class="catalog-chip v" data-target="vocab">Vocabulary &amp; Words</button>
           <button type="button" class="catalog-chip g" data-target="grammar">Grammar &amp; Spelling</button>
           <button type="button" class="catalog-chip p" data-target="pronunciation">Pronunciation</button>
@@ -168,8 +168,8 @@
         <div class="search-bar">
           <input type="search" id="searchInput" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
           <button class="clear-btn" id="clearSearch" aria-label="Clear search">✕</button>
-        </div>
-        <div class="filter-menu" id="filterMenu">
+          <div class="search-bar__filter-divider" aria-hidden="true"></div>
+          <div class="filter-menu" id="filterMenu">
           <button type="button" class="filter-toggle" id="filterToggle" aria-label="Filtros" aria-expanded="false" title="Filtros">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></svg>
             <span class="filter-badge" id="filterBadge" hidden>0</span>
@@ -202,6 +202,7 @@
               </div>
             </div>
           </div>
+          </div>
         </div>
         </div>
       </div>
@@ -228,7 +229,7 @@
           </div>
           <span class="progress-snapshot__copy">
             <span class="progress-snapshot__line progress-snapshot__line--primary">
-              <span class="progress-snapshot__title">Tu progreso</span>
+              <span class="progress-snapshot__title"></span>
             </span>
             <span class="progress-snapshot__line progress-snapshot__line--meta" id="snapshotDetail">Tu aventura empieza aquí</span>
           </span>
@@ -684,7 +685,7 @@ import { initDashboardNav } from './js/dashboard-nav.js';
     const home = document.getElementById('resumenSubHome');
     const catalogHome = document.getElementById('resumenSubCatalogHome');
     if (!sub) return;
-    if (CATALOG_SECTIONS.has(target) && catalogHome) {
+    if (CATALOG_SECTIONS.has(target) && catalogHome && target !== 'all') {
       catalogHome.insertAdjacentElement('afterend', sub);
       sub.classList.add('catalog-meta', 'tg-topic-sub');
       sub.classList.remove('topbar-greeting-sub', 'tg-resumen');
