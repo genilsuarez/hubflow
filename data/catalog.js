@@ -1349,7 +1349,7 @@ export const MODULE_DEPTH = {
   'emotions-feelings': { engine: 'flashcard', items: 60, categories: 3, modes: 5, hasBattle: true },
   'nature-environment': { engine: 'flashcard', items: 60, categories: 3, modes: 5, hasBattle: true },
   'education-study': { engine: 'flashcard', items: 60, categories: 3, modes: 5, hasBattle: true },
-  articles:          { engine: 'flashcard', items: 60,  categories: 5,  modes: 3, hasBattle: true },
+  articles:          { engine: 'flashcard', items: 100, categories: 5,  modes: 3, hasBattle: true },
   prepositions:      { engine: 'flashcard', items: 50,  categories: 5,  modes: 3, hasBattle: true },
   quantifiers:       { engine: 'flashcard', items: 40,  categories: 4,  modes: 3, hasBattle: true },
   collocations:      { engine: 'flashcard', items: 40,  categories: 4,  modes: 3, hasBattle: true },

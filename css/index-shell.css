@@ -17,6 +17,7 @@
     }
     .search-bar input:focus { outline: none; border-color: var(--lp-accent); box-shadow: var(--lp-shadow-md); }
     .search-bar input::placeholder { color: var(--lp-muted); }
+    .search-bar input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
     .search-bar::before { content: '🔍'; position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: .76rem; pointer-events: none; }
     .search-bar .clear-btn {
       position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
