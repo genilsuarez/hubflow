@@ -930,6 +930,9 @@ export const MODULES = [
 /** Todas las guías registradas van 1:1 con un módulo salvo excepciones documentadas. */
 export const GUIDE_COUNT = MODULES.filter((m) => m.guide).length;
 
+/** Índice id → módulo, para lookups O(1) (dashboard: rutas, hero, actividad reciente). */
+export const moduleMap = new Map(MODULES.map((m) => [m.id, m]));
+
 export const HUBFLOW_PASS_SCORE_PCT = 60;
 
 const scoreKeys = (prefix, categories, modes = ['']) => categories.flatMap((category) =>

@@ -490,630 +490,27 @@
 </div>
 
 <script type="module">
-import { MODULES, TAGS, CATEGORIES, catColor, SUBCATEGORIES, getModuleDepth } from './data/catalog.js';
+import { MODULES, CATEGORIES, getModuleDepth } from './data/catalog.js';
 import { NAV_SECTION_KEYS } from './js/nav-sections.js';
-import { getBestScore, getProgressStats, isContentCompleted, getContentProgress, hydrateHubFlowFromCloud } from './js/progress-store.js';
+import { hydrateHubFlowFromCloud } from './js/progress-store.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
-import { shouldDeferStatsDisplay, consumeStatsRevealAnimation, shouldDeferActivityDisplay, hydrateActivityFromCloud } from './js/sync-engine.js';
-import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-animate.js';
+import { consumeStatsRevealAnimation, hydrateActivityFromCloud } from './js/sync-engine.js';
+import { renderAllShelves } from './js/dashboard-shelves.js';
+import { renderHeroCard, refreshHeroSuggestion, clearPersistedHeroSuggestion } from './js/dashboard-hero.js';
+import { renderRutas, renderProgressSnapshot, renderLastActivities, refreshHeaderStats, renderPaths } from './js/dashboard-stats.js';
+import { initDashboardFilters } from './js/dashboard-filters.js';
+import { initDashboardNav } from './js/dashboard-nav.js';
 
 (function() {
-  const themeBtns = [...document.querySelectorAll('.theme-toggle')];
-  function upd() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    themeBtns.forEach((button) => {
-      const icon = button.querySelector('.sb-icon');
-      const label = button.querySelector('.sb-label');
-      if (icon) {
-        if (window.LpNavIcons) window.LpNavIcons.setTheme(icon, isDark);
-      } else {
-        button.textContent = isDark ? '☀️' : '🌙';
-      }
-      if (label) label.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
-      button.setAttribute('aria-label', isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro');
-    });
-  }
-  upd();
-  themeBtns.forEach((b) => {
-    b.onclick = () => {
-      window.LpNavHelpers?.toggleTheme(b.querySelector('.sb-icon'));
-      upd();
-    };
-  });
+  const nav = initDashboardNav({ onBackToOverview: () => setActive('resumen') });
 
-  // Unified navigation mode
-  const NAVIGATION_MODE_KEY = 'lp-navigation-mode';
-  const NAVIGATION_MODES = new Set(['sidebar', 'floating']);
-  const sidebar = document.getElementById('sidebar');
-  const sidebarScrim = document.getElementById('sidebarScrim');
-  const navigationLauncher = document.getElementById('navigationLauncher');
-  const navigationModeToggle = document.getElementById('navigationModeToggle');
-  const topbar = document.querySelector('.topbar');
-  const topbarBackBtn = document.getElementById('topbarBackBtn');
-  const topbarMenuToggle = document.getElementById('topbarMenuToggle');
-  // Las secciones de catálogo son las 4 categorías + la de guías; las de
-  // resumen son el resto. Derivadas para que agregar una categoría no exija
-  // acordarse de tocar esta línea.
-  const CATALOG_SECTIONS = new Set([...Object.keys(CATEGORIES), 'guides']);
-  const OVERVIEW_SECTIONS = new Set(NAV_SECTION_KEYS.filter((k) => !CATALOG_SECTIONS.has(k)));
-
-  function syncDrawerPersistent() {
-    const persistent = window.innerWidth >= 861 && document.documentElement.dataset.navigationMode === 'sidebar';
-    sidebar.classList.toggle('is-persistent', persistent);
-  }
-
-  function setNavigationDrawerOpen(open) {
-    sidebar.classList.toggle('is-open', open);
-    sidebarScrim.classList.toggle('is-open', open);
-    sidebarScrim.setAttribute('aria-hidden', String(!open));
-    document.body.classList.toggle('lp-drawer-open', open);
-    const openLabel = 'Cerrar navegación';
-    const closedLabel = 'Abrir navegación';
-    if (navigationLauncher) {
-      navigationLauncher.setAttribute('aria-expanded', String(open));
-      navigationLauncher.setAttribute('aria-label', open ? openLabel : 'Abrir navegación flotante');
-    }
-    if (topbarMenuToggle) {
-      topbarMenuToggle.setAttribute('aria-expanded', String(open));
-      topbarMenuToggle.setAttribute('aria-label', open ? openLabel : closedLabel);
-    }
-    if (open && typeof lpLogin !== 'undefined' && lpLogin.refreshNavLabels) {
-      lpLogin.refreshNavLabels();
-    }
-  }
-
-  function setNavigationMode(mode, persist = false) {
-    const resolvedMode = NAVIGATION_MODES.has(mode) ? mode : 'sidebar';
-    const isFloating = resolvedMode === 'floating';
-    document.documentElement.dataset.navigationMode = resolvedMode;
-    navigationModeToggle.setAttribute('aria-pressed', String(isFloating));
-    navigationModeToggle.setAttribute('aria-label', isFloating ? 'Usar barra lateral fija' : 'Usar navegación flotante');
-    navigationModeToggle.title = isFloating ? 'Muestra la barra lateral fija' : 'Oculta la barra lateral y usa un menú flotante';
-    const icon = navigationModeToggle.querySelector('span');
-    if (icon) icon.textContent = isFloating ? '▣' : '◫';
-    if (persist) localStorage.setItem(NAVIGATION_MODE_KEY, resolvedMode);
-    syncDrawerPersistent();
-    setNavigationDrawerOpen(false);
-    const active = document.body.dataset.active;
-    if (active) syncTopbarNavButtons(!OVERVIEW_SECTIONS.has(active));
-  }
-
-  syncDrawerPersistent();
-  window.addEventListener('resize', syncDrawerPersistent);
-
-  function syncTopbarNavButtons(isSecondaryTopbar) {
-    const isDesktop = window.innerWidth >= 861;
-    const isFloating = document.documentElement.dataset.navigationMode === 'floating';
-    if (topbarMenuToggle) topbarMenuToggle.hidden = !isSecondaryTopbar || isDesktop;
-    if (navigationLauncher) {
-      navigationLauncher.hidden = isSecondaryTopbar ? !(isDesktop && isFloating) : false;
-    }
-  }
-
-  window.addEventListener('resize', () => {
-    const active = document.body.dataset.active;
-    if (active) syncTopbarNavButtons(!OVERVIEW_SECTIONS.has(active));
-  });
-  setNavigationMode(localStorage.getItem(NAVIGATION_MODE_KEY));
-  navigationModeToggle.addEventListener('click', () => {
-    const nextMode = document.documentElement.dataset.navigationMode === 'floating' ? 'sidebar' : 'floating';
-    setNavigationMode(nextMode, true);
-  });
-  navigationLauncher.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
-  if (topbarMenuToggle) {
-    topbarMenuToggle.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
-  }
-  if (topbarBackBtn) {
-    topbarBackBtn.addEventListener('click', () => setActive('resumen'));
-  }
-  sidebarScrim.addEventListener('click', () => setNavigationDrawerOpen(false));
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setNavigationDrawerOpen(false);
-  });
-
-  function setupSidebarMobileNav() {
-    const group = document.getElementById('sbNavTopics');
-    const toggle = document.getElementById('sbNavTopicsToggle');
-    const nav = document.getElementById('sbNav');
-    if (!group || !toggle || !nav) return;
-
-    function syncTopicGroupState() {
-      const open = group.classList.contains('is-open') || !!group.querySelector('.sb-item.active');
-      toggle.setAttribute('aria-expanded', String(open));
-    }
-
-    toggle.addEventListener('click', () => {
-      group.classList.toggle('is-open');
-      syncTopicGroupState();
-    });
-
-    function syncNavScrollHint() {
-      const atEnd = nav.scrollHeight - nav.scrollTop <= nav.clientHeight + 2;
-      nav.classList.toggle('is-scroll-end', atEnd);
-    }
-
-    nav.addEventListener('scroll', syncNavScrollHint, { passive: true });
-    window.addEventListener('resize', syncNavScrollHint);
-    group.addEventListener('transitionend', syncNavScrollHint);
-    syncNavScrollHint();
-    syncTopicGroupState();
-    return syncTopicGroupState;
-  }
-
-  const syncSidebarTopicGroup = setupSidebarMobileNav();
-  window.addEventListener('storage', (event) => {
-    if (event.key === NAVIGATION_MODE_KEY) setNavigationMode(event.newValue);
-  });
-
-  document.getElementById('aboutTrigger').addEventListener('click', (event) => {
-    lpAbout.open(event, { inertElements: [document.querySelector('.shell')] });
-  });
-  lpLogin.bindNavButton('#loginTrigger', {
-    labelSelector: '.sb-label',
-    onSync(user, btn) {
-      btn.setAttribute('aria-label', user ? user.name + ' — perfil' : 'Iniciar sesión');
-    },
-  });
-
-  // ─── RENDER MODULE CARDS FROM CATALOG (Fase 2) ───
-  const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
-  const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
-  const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
-
-  function pillsHTML(mod) {
-    const pills = [`<span class="pill lvl">${mod.cefr.toUpperCase()}</span>`];
-    const mechanics = mod.tags.filter(t => MECHANIC_PRIORITY.includes(t))
-      .sort((a, b) => MECHANIC_PRIORITY.indexOf(a) - MECHANIC_PRIORITY.indexOf(b))
-      .slice(0, 2);
-    mechanics.forEach(t => pills.push(`<span class="pill">${MECHANIC_LABEL[t]}</span>`));
-    return pills.join('');
-  }
-
-  function titleHTML(mod) {
-    return mod.title;
-  }
-
-  function depthHTML(mod) {
-    const depth = getModuleDepth(mod.id);
-    if (!depth) return '';
-    const parts = [];
-    parts.push(`<span class="book-depth__stat"><strong>${depth.items}</strong> items</span>`);
-    if (depth.categories > 1) parts.push(`<span class="book-depth__stat"><strong>${depth.categories}</strong> cat</span>`);
-    parts.push(`<span class="book-depth__stat"><strong>${depth.modes}</strong> modos</span>`);
-    const battle = depth.hasBattle ? `<span class="book-depth__battle">⚔️ 2P</span>` : '';
-    return `<div class="book-depth">${parts.join('<span style="opacity:.4">·</span>')}${battle}</div>`;
-  }
-
-  function progressHTML(mod) {
-    const progress = getContentProgress(mod.id);
-    if (!progress) return '';
-    const pct = Math.round(progress.progressPct);
-    if (progress.completed) {
-      return `<div class="book-progress book-progress--done" aria-label="Completado"><span class="book-progress__check">✓</span><span class="book-progress__bar"><span class="book-progress__fill" style="width:100%"></span></span></div>`;
-    }
-    return `<div class="book-progress" aria-label="${pct}% completado"><span class="book-progress__bar"><span class="book-progress__fill" style="width:${pct}%"></span></span><span class="book-progress__pct">${pct}%</span></div>`;
-  }
-
-  function bookCardHTML(mod, spineClass) {
-    return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}">
-      <div class="book-spine"></div>
-      <div class="book-icon">${mod.icon}</div>
-      <div class="book-body">
-        <div class="book-title">${titleHTML(mod)}</div>
-        <div class="book-meta">${mod.meta}</div>
-        ${depthHTML(mod)}
-        <div class="book-pills">${pillsHTML(mod)}</div>
-        ${progressHTML(mod)}
-      </div>
-    </a>`;
-  }
-
-  function renderShelf(containerId, modules, category) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    const cls = CATEGORY_SPINE[category] || '';
-    el.innerHTML = modules.map(mod => bookCardHTML(mod, cls)).join('');
-  }
-
-  function renderAllShelves() {
-    renderShelf('shelf-vocab', MODULES.filter(m => m.category === 'vocab'), 'vocab');
-    renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'), 'pronunciation');
-    renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'), 'analysis');
-    Object.keys(SUBCATEGORIES).forEach(sub => {
-      renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub), 'grammar');
-    });
-  }
-
+  // ─── RENDER MODULE CARDS FROM CATALOG ───
   renderAllShelves();
 
-  // ─── HERO CARD + PROGRESS SNAPSHOT (dashboard activo) ───
-  const LEARNING_PATHS = [
-    {
-      id: 'spell-it-right', title: 'Spell It Right', icon: '✏️', color: 'spell', cefr: 'A1 → B1',
-      description: 'De la regla al oído al texto: domina la ortografía del inglés cruzando gramática, pronunciación y producción escrita.',
-      modules: ['plural-endings', 'ing-spelling', 'ed-spelling', 'spelling-by-ear', 'confusing-words', 'paragraph-cloze', 'word-formation'],
-    },
-    {
-      id: 'build-sentences', title: 'Build Sentences', icon: '🧱', color: 'build', cefr: 'A1 → B1',
-      description: 'De piezas sueltas a oraciones completas: aprende las partes, combínalas, y verifica que el orden sea correcto.',
-      modules: ['parts-of-speech', 'articles', 'tenses', 'prepositions', 'vocabulary', 'word-order', 'collocations', 'sentence-combining'],
-    },
-    {
-      id: 'decode-speech', title: 'Decode Speech', icon: '👂', color: 'decode', cefr: 'A2 → B1',
-      description: 'Del fonema al párrafo completo: entrena a decodificar el inglés hablado combinando sonido, vocabulario y transcripción.',
-      modules: ['phonics', 'pron-vowels', 'confusing-words', 'listening', 'dictation-sprint', 'word-stress-quiz', 'pron-connected', 'phrasal-verbs'],
-    },
-    {
-      id: 'sound-natural', title: 'Sound Natural', icon: '🗣️', color: 'natural', cefr: 'A2 → B1',
-      description: 'De correcto a fluido: colocaciones naturales, connected speech, registro y las estructuras que usan los nativos.',
-      modules: ['confusing-words', 'phrasal-verbs', 'collocations', 'pron-intonation', 'pron-connected', 'causative-verbs', 'preferences', 'register-switch'],
-    },
-    {
-      id: 'transform-produce', title: 'Transform & Produce', icon: '🔄', color: 'transform', cefr: 'A2 → B1',
-      description: 'Expresar lo mismo de formas distintas: transformaciones gramaticales, paráfrasis y producción activa.',
-      modules: ['comparisons', 'opposites', 'odd-one-out', 'gerunds-infinitives', 'reported-speech', 'noun-adjuncts', 'paraphrasing', 'register-switch'],
-    },
-    {
-      id: 'advanced-mastery', title: 'Advanced Mastery', icon: '🏆', color: 'advanced', cefr: 'B2 → C1',
-      description: 'Domina las estructuras avanzadas del inglés: inversiones, colocaciones académicas, cleft sentences y vocabulario C1.',
-      modules: ['advanced-collocations', 'inversions', 'vocab-pack-sound-natural', 'paraphrasing', 'register-switch', 'vocab-pack-c1', 'cleft-emphasis'],
-    },
-  ];
-
-  const moduleMap = new Map(MODULES.map(m => [m.id, m]));
-
-
-  function renderRutas() {
-    const grid = document.getElementById('rutasGrid');
-    if (!grid) return;
-    grid.innerHTML = LEARNING_PATHS.map(path => {
-      const done = path.modules.filter(isContentCompleted).length;
-      const total = path.modules.length;
-      const nextIdx = path.modules.findIndex(id => !isContentCompleted(id));
-      const steps = path.modules.map((id, i) => {
-        const mod = moduleMap.get(id);
-        const label = mod ? mod.title : id;
-        const href = mod ? mod.exercise : '#';
-        const isDone = isContentCompleted(id);
-        const isCurrent = i === nextIdx;
-        const cls = isDone ? 'done' : isCurrent ? 'current' : '';
-        const depth = getModuleDepth(id);
-        const itemsBadge = depth ? `<span class="ruta-step__items">${depth.items}</span>` : '';
-        return `<a class="ruta-step ${cls}" href="${href}" title="${label}">${label}${itemsBadge}</a>`;
-      }).join('');
-      const color = 'var(--lp-accent)';
-      const totalItems = path.modules.reduce((sum, id) => {
-        const d = getModuleDepth(id);
-        return sum + (d ? d.items : 0);
-      }, 0);
-      const totalTooltip = `${totalItems} items de práctica en ${total} ejercicios — cada uno con múltiples categorías y modos`;
-      return `<div class="ruta-card" style="--ruta-color: ${color}">
-        <div class="ruta-card__header">
-          <span class="ruta-card__icon">${path.icon}</span>
-          <div>
-            <div class="ruta-card__title">${path.title} <span class="ruta-card__total" title="${totalTooltip}" aria-label="${totalTooltip}">${totalItems} items</span></div>
-            <div class="ruta-card__cefr">${path.cefr}</div>
-          </div>
-          <span class="ruta-card__progress"><strong>${done}/${total}</strong> completados</span>
-        </div>
-        <p class="ruta-card__desc">${path.description}</p>
-        <div class="ruta-card__steps">${steps}</div>
-      </div>`;
-    }).join('');
-  }
-
+  // ─── RUTAS (dashboard summary card) ───
   renderRutas();
 
-  function getSuggestion(exclude, { refresh = false } = {}) {
-    if (!refresh) {
-      const persisted = readPersistedHeroSuggestion();
-      if (isPersistedHeroSuggestionValid(persisted)) {
-        return persisted;
-      }
-    }
-
-    const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
-    // Priority 1: recent attempt with score < 70%
-    const needsImprovement = exercises.filter(m => {
-      if (m.id === exclude) return false;
-      const best = getBestScore(m.id);
-      return best > 0 && best < 70;
-    });
-    if (needsImprovement.length) {
-      needsImprovement.sort((a, b) => getBestScore(a.id) - getBestScore(b.id) || a.id.localeCompare(b.id));
-      const mod = needsImprovement[0];
-      return persistHeroSuggestion({ mod, reason: 'Mejorar tu último intento' });
-    }
-    // Priority 2: next incomplete module in most-progressed path
-    const pathProgress = LEARNING_PATHS.map(path => {
-      const done = path.modules.filter(isContentCompleted).length;
-      const next = path.modules.find(id => id !== exclude && !isContentCompleted(id));
-      return { path, done, next, pct: done / path.modules.length };
-    }).filter(p => p.next && p.done > 0).sort((a, b) => b.pct - a.pct);
-    if (pathProgress.length) {
-      const { path, next } = pathProgress[0];
-      const mod = moduleMap.get(next);
-      if (mod) return persistHeroSuggestion({ mod, reason: `Continúa la ruta ${path.title}` });
-    }
-    // Priority 3: never attempted module at lowest CEFR
-    const cefrOrder = TAGS.cefr;
-    const unattempted = exercises.filter(m => m.id !== exclude && getBestScore(m.id) === 0 && !isContentCompleted(m.id));
-    if (unattempted.length) {
-      unattempted.sort((a, b) => cefrOrder.indexOf(a.cefr) - cefrOrder.indexOf(b.cefr));
-      const mod = unattempted[0];
-      return persistHeroSuggestion({ mod, reason: 'Algo nuevo para ti' });
-    }
-    // Priority 4: random from least-visited category
-    const catCounts = {};
-    exercises.forEach(m => { catCounts[m.category] = (catCounts[m.category] || 0) + (getBestScore(m.id) > 0 ? 1 : 0); });
-    const leastCat = Object.entries(catCounts).sort((a, b) => a[1] - b[1])[0]?.[0];
-    const pool = exercises.filter(m => m.category === leastCat && m.id !== exclude);
-    if (pool.length) {
-      pool.sort((a, b) => a.id.localeCompare(b.id));
-      const mod = pool[0];
-      return persistHeroSuggestion({ mod, reason: 'Explora esta categoría' });
-    }
-    return persistHeroSuggestion({ mod: exercises[0], reason: 'Practica hoy' });
-  }
-
-  const HERO_SUGGESTION_KEY = 'learnflow:hubflow:hero-suggestion:v1';
-
-  function readPersistedHeroSuggestion() {
-    try {
-      const raw = JSON.parse(localStorage.getItem(HERO_SUGGESTION_KEY) || 'null');
-      if (!raw?.moduleId) return null;
-      const mod = moduleMap.get(raw.moduleId);
-      if (!mod) return null;
-      return { mod, reason: raw.reason || 'Continúa practicando' };
-    } catch {
-      return null;
-    }
-  }
-
-  function persistHeroSuggestion(suggestion) {
-    try {
-      localStorage.setItem(HERO_SUGGESTION_KEY, JSON.stringify({
-        moduleId: suggestion.mod.id,
-        reason: suggestion.reason,
-        savedAt: new Date().toISOString(),
-      }));
-    } catch {
-      /* noop */
-    }
-    return suggestion;
-  }
-
-  function clearPersistedHeroSuggestion() {
-    try {
-      localStorage.removeItem(HERO_SUGGESTION_KEY);
-    } catch {
-      /* noop */
-    }
-  }
-
-  function isPersistedHeroSuggestionValid(suggestion) {
-    if (!suggestion?.mod) return false;
-    return !isContentCompleted(suggestion.mod.id);
-  }
-
-  let currentSuggestion = null;
-
-  function renderHeroCard({ animateReveal = false, refreshSuggestion = false } = {}) {
-    const heroCard = document.getElementById('heroCard');
-    const launch = document.getElementById('heroLaunch');
-    const iconEl = document.getElementById('heroIcon');
-    const contextEl = document.getElementById('heroContext');
-    const titleEl = document.getElementById('heroTitle');
-    const metaEl = document.getElementById('heroMeta');
-    const altBtn = document.getElementById('heroAlt');
-
-    function setLaunchInteractive(enabled) {
-      if (enabled) {
-        launch.removeAttribute('aria-disabled');
-        launch.removeAttribute('tabindex');
-      } else {
-        launch.setAttribute('aria-disabled', 'true');
-        launch.setAttribute('tabindex', '-1');
-      }
-    }
-
-    function revealHeroContent() {
-      heroCard.classList.remove('hero-card--pending');
-      heroCard.classList.add('hero-card--revealed');
-    }
-
-    if (shouldDeferStatsDisplay()) {
-      heroCard.classList.add('hero-card--loading');
-      heroCard.classList.remove('hero-card--welcome', 'hero-card--revealed', 'hero-card--pending');
-      heroCard.style.removeProperty('--hero-spine');
-      document.getElementById('resumenHero')?.style.removeProperty('--hero-spine');
-      iconEl.textContent = '';
-      contextEl.textContent = '\u00a0';
-      titleEl.textContent = '\u00a0';
-      metaEl.textContent = '';
-      contextEl.setAttribute('aria-hidden', 'true');
-      titleEl.setAttribute('aria-hidden', 'true');
-      launch.href = '#';
-      launch.setAttribute('aria-label', 'Cargando sugerencia');
-      setLaunchInteractive(false);
-      altBtn.hidden = true;
-      return;
-    }
-
-    heroCard.classList.remove('hero-card--loading');
-    const hasAnyProgress = MODULES.some(m => getBestScore(m.id) > 0);
-
-    if (!hasAnyProgress) {
-      heroCard.classList.add('hero-card--welcome');
-      heroCard.classList.remove('hero-card--pending');
-      heroCard.classList.add('hero-card--revealed');
-      heroCard.style.setProperty('--hero-spine', 'var(--lp-accent)');
-      heroCard.style.setProperty('--card-soft', 'var(--lp-accent-soft)');
-      document.getElementById('resumenHero')?.style.setProperty('--hero-spine', 'var(--lp-accent)');
-      document.getElementById('resumenHero')?.style.setProperty('--card-soft', 'var(--lp-accent-soft)');
-      iconEl.textContent = '🚀';
-      contextEl.textContent = 'Bienvenido a HubFlow';
-      titleEl.textContent = MODULES.length + ' ejercicios te esperan';
-      metaEl.textContent = 'Empieza por lo que más te llame o sigue una ruta guiada.';
-      contextEl.removeAttribute('aria-hidden');
-      titleEl.removeAttribute('aria-hidden');
-      const firstPath = LEARNING_PATHS[0];
-      const firstMod = firstPath ? moduleMap.get(firstPath.modules[0]) : MODULES[0];
-      launch.href = firstMod ? firstMod.exercise : '#';
-      launch.setAttribute('aria-label', 'Empezar ruta guiada');
-      setLaunchInteractive(true);
-      altBtn.hidden = true;
-      return;
-    }
-
-    const suggestion = getSuggestion(
-      refreshSuggestion ? currentSuggestion?.mod?.id : undefined,
-      { refresh: refreshSuggestion }
-    );
-    currentSuggestion = suggestion;
-    const { mod, reason } = suggestion;
-    const color = catColor(mod.category);
-    const soft = catColor(mod.category, true);
-    heroCard.style.setProperty('--hero-spine', color);
-    heroCard.style.setProperty('--card-soft', soft);
-    document.getElementById('resumenHero')?.style.setProperty('--hero-spine', color);
-    document.getElementById('resumenHero')?.style.setProperty('--card-soft', soft);
-    heroCard.classList.remove('hero-card--welcome');
-    iconEl.textContent = mod.icon;
-    contextEl.textContent = reason;
-    titleEl.textContent = mod.title;
-    metaEl.textContent = mod.meta;
-    contextEl.removeAttribute('aria-hidden');
-    titleEl.removeAttribute('aria-hidden');
-    launch.href = mod.exercise;
-    launch.setAttribute('aria-label', 'Empezar: ' + mod.title);
-    setLaunchInteractive(true);
-    altBtn.hidden = false;
-    altBtn.textContent = 'Otra sugerencia';
-
-    if (animateReveal && !prefersReducedMotion()) {
-      heroCard.classList.remove('hero-card--revealed');
-      heroCard.classList.add('hero-card--pending');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(revealHeroContent);
-      });
-    } else {
-      revealHeroContent();
-    }
-  }
-
-  function renderProgressSnapshot(animateReveal = false) {
-    const snapshot = document.getElementById('progressSnapshot');
-    const ring = document.getElementById('snapshotRing');
-    const pctEl = document.getElementById('snapshotPct');
-    const statEl = document.getElementById('snapshotStat');
-    const detailEl = document.getElementById('snapshotDetail');
-    const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
-    const total = exercises.length;
-    const defer = shouldDeferStatsDisplay();
-    const completed = defer ? 0 : exercises.filter(m => isContentCompleted(m.id)).length;
-    const pct = defer ? 0 : (total > 0 ? Math.round((completed / total) * 100) : 0);
-    const activePaths = defer ? 0 : LEARNING_PATHS.filter(p => p.modules.some(id => getBestScore(id) > 0) && !p.modules.every(isContentCompleted)).length;
-    const hasProgress = !defer && (completed > 0 || MODULES.some(m => getBestScore(m.id) > 0));
-
-    if (!hasProgress) {
-      snapshot.classList.add('progress-snapshot--empty');
-      ring.style.setProperty('--progress', '0');
-      pctEl.textContent = '0%';
-      statEl.textContent = `0/${total}`;
-      detailEl.textContent = 'Tu aventura empieza aquí';
-      snapshot.setAttribute('aria-label', `Progreso HubFlow: 0 de ${total} ejercicios. Tu aventura empieza aquí`);
-    } else {
-      snapshot.classList.remove('progress-snapshot--empty');
-      if (animateReveal && pct > 0) {
-        animateCssVar(ring, '--progress', pct);
-        animateText(pctEl, 0, pct, (v) => `${v}%`);
-      } else {
-        ring.style.setProperty('--progress', String(pct));
-        pctEl.textContent = `${pct}%`;
-      }
-      statEl.textContent = `${completed}/${total}`;
-      detailEl.textContent = `${activePaths} rutas activas`;
-      snapshot.setAttribute(
-        'aria-label',
-        `Progreso HubFlow: ${pct} por ciento, ${completed} de ${total} ejercicios, ${activePaths} rutas activas`
-      );
-    }
-
-    snapshot.onclick = () => setActive('mi-progreso');
-  }
-
-  // ─── LAST ACTIVITIES ───
-  const ACTIVITY_KEY = 'learnflow:activity:hubflow:v1';
-  const MAX_LAST_ACTIVITIES = 5;
-
-  function renderLastActivities() {
-    const container = document.getElementById('lastActivities');
-    if (!container) return;
-
-    if (shouldDeferActivityDisplay('hubflow')) {
-      container.innerHTML = '<p class="last-activities--empty">Aún no hay actividad registrada. ¡Empieza un ejercicio!</p>';
-      return;
-    }
-
-    let ledger;
-    try { ledger = JSON.parse(localStorage.getItem(ACTIVITY_KEY) || 'null'); } catch { ledger = null; }
-    const events = Array.isArray(ledger?.events) ? ledger.events : [];
-
-    // Deduplicate: keep only the most recent event per contentId
-    const seen = new Set();
-    const unique = [];
-    for (const ev of events) {
-      if (!ev.contentId || seen.has(ev.contentId)) continue;
-      seen.add(ev.contentId);
-      unique.push(ev);
-      if (unique.length >= MAX_LAST_ACTIVITIES) break;
-    }
-
-    if (!unique.length) {
-      container.innerHTML = '<p class="last-activities--empty">Aún no hay actividad registrada. ¡Empieza un ejercicio!</p>';
-      return;
-    }
-
-    const cards = unique.map(ev => {
-      const mod = moduleMap.get(ev.contentId);
-      if (!mod) return '';
-      const color = catColor(mod.category);
-      const scoreClass = ev.passed ? 'la-card__score--pass' : 'la-card__score--fail';
-      const scoreLabel = Math.round(ev.scorePct) + '%';
-      return `<a class="la-card" href="${mod.exercise}" style="--la-color: ${color}">
-        <div class="la-card__icon">${mod.icon}</div>
-        <div class="la-card__body">
-          <div class="la-card__name">${mod.title}</div>
-        </div>
-        <span class="la-card__score ${scoreClass}">${scoreLabel}</span>
-      </a>`;
-    }).join('');
-
-    container.innerHTML = `
-      <div class="last-activities__header">
-        <span class="last-activities__title">Última actividad</span>
-      </div>
-      <div class="last-activities__list">${cards}</div>
-    `;
-  }
-
-  function refreshHeaderStats(animateReveal = false) {
-    const progressStats = getProgressStats();
-    const totalEl = document.getElementById('psTotal');
-    const masteredEl = document.getElementById('psMastered');
-    const attempts = progressStats.totalAttempts || 0;
-    const completed = progressStats.completedContent || 0;
-    const total = progressStats.totalContent || 0;
-    if (animateReveal && attempts > 0) animateText(totalEl, 0, attempts);
-    else totalEl.textContent = String(attempts);
-    if (animateReveal && completed > 0) {
-      animateText(masteredEl, 0, completed, (v) => `${v}/${total}`);
-    } else {
-      masteredEl.textContent = `${completed}/${total}`;
-    }
-  }
-
+  // ─── HEADER STATS / HOME REFRESH ORCHESTRATOR ───
   window.addEventListener('hubflow-progress-updated', () => {
     scheduleRefreshHomeStats();
   });
@@ -1127,7 +524,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       hydrateHubFlowFromCloud();
       renderAllShelves();
       renderLastActivities();
-      renderProgressSnapshot(animateReveal);
+      renderProgressSnapshot(animateReveal, { onOpenProgress: () => setActive('mi-progreso') });
       refreshHeaderStats(animateReveal);
       renderHeroCard({ animateReveal });
     } finally {
@@ -1166,9 +563,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   // "Otra sugerencia" button — única forma de cambiar la sugerencia manualmente
   document.getElementById('heroAlt').addEventListener('click', function() {
     if (document.getElementById('heroCard').classList.contains('hero-card--welcome')) return;
-    clearPersistedHeroSuggestion();
-    currentSuggestion = null;
-    renderHeroCard({ animateReveal: true, refreshSuggestion: true });
+    refreshHeroSuggestion();
   });
 
   // "Ver ejercicios" button — scrolls to category tiles
@@ -1176,131 +571,8 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     document.querySelector('.tiles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  // ─── FILTER MENU (homologado con FluentFlow UnifiedFilter) ───
-  const filterMenu = document.getElementById('filterMenu');
-  const filterToggle = document.getElementById('filterToggle');
-  const filterBadge = document.getElementById('filterBadge');
-  const filterBackdrop = document.getElementById('filterBackdrop');
-  const filterClose = document.getElementById('filterClose');
-  const tagBar = document.getElementById('tagBar');
-  const tagBarCefr = document.getElementById('tagBarCefr');
-  const tagBarSkills = document.getElementById('tagBarSkills');
-  const filterTabCefr = document.getElementById('filterTabCefr');
-  const filterTabSkill = document.getElementById('filterTabSkill');
-  const filterTabCountCefr = document.getElementById('filterTabCountCefr');
-  const filterTabCountSkill = document.getElementById('filterTabCountSkill');
-  const tagBarPanelCefr = document.getElementById('tagBarPanelCefr');
-  const tagBarPanelSkills = document.getElementById('tagBarPanelSkills');
-  const activeTags = new Set((new URLSearchParams(location.search).get('tag') || '').split(',').filter(Boolean));
-  const LEVEL_COLORS = { a1: '#22c55e', a2: '#eab308', b1: '#f97316', b2: '#ef4444', c1: '#a855f7', c2: '#374151' };
-  let activeFilterTab = 'cefr';
-
-  function usedTags(list) {
-    const used = new Set();
-    MODULES.forEach(m => m.tags.forEach(t => { if (list.includes(t)) used.add(t); }));
-    return list.filter(t => used.has(t));
-  }
-
-  function countActiveIn(list) {
-    return list.filter(t => activeTags.has(t)).length;
-  }
-
-  function setFilterTab(tab) {
-    activeFilterTab = tab;
-    filterTabCefr?.classList.toggle('tagbar__tab--active', tab === 'cefr');
-    filterTabSkill?.classList.toggle('tagbar__tab--active', tab === 'skill');
-    filterTabCefr?.setAttribute('aria-selected', tab === 'cefr');
-    filterTabSkill?.setAttribute('aria-selected', tab === 'skill');
-    if (tagBarPanelCefr) tagBarPanelCefr.hidden = tab !== 'cefr';
-    if (tagBarPanelSkills) tagBarPanelSkills.hidden = tab !== 'skill';
-  }
-
-  function updateFilterTabCounts() {
-    const cefrCount = countActiveIn(usedTags(TAGS.cefr));
-    const skillCount = countActiveIn(usedTags(TAGS.skill));
-    if (filterTabCountCefr) {
-      filterTabCountCefr.hidden = cefrCount === 0;
-      filterTabCountCefr.textContent = cefrCount;
-    }
-    if (filterTabCountSkill) {
-      filterTabCountSkill.hidden = skillCount === 0;
-      filterTabCountSkill.textContent = skillCount;
-    }
-  }
-
-  function tagChipHTML(t, group) {
-    const isActive = activeTags.has(t);
-    const isLevel = group === 'cefr';
-    const label = t.length <= 2 ? t.toUpperCase() : t.charAt(0).toUpperCase() + t.slice(1);
-    const levelStyle = isLevel ? ` style="--level-color:${LEVEL_COLORS[t] || 'var(--lp-accent)'}"` : '';
-    const classes = ['filter-chip', isLevel ? 'filter-chip--level' : '', isActive ? 'filter-chip--active' : ''].filter(Boolean).join(' ');
-    return `<button type="button" class="${classes}" data-tag="${t}"${levelStyle}>${label}</button>`;
-  }
-
-  function updateFilterBadge() {
-    filterBadge.hidden = activeTags.size === 0;
-    filterBadge.textContent = activeTags.size;
-    filterToggle.classList.toggle('filter-toggle--active', activeTags.size > 0);
-    updateFilterTabCounts();
-  }
-
-  const FILTER_MOBILE_MQ = window.matchMedia('(max-width: 639px)');
-  function isFilterMobile() { return FILTER_MOBILE_MQ.matches; }
-
-  function closeFilterPanel() {
-    tagBar.classList.remove('open');
-    if (filterBackdrop) filterBackdrop.hidden = true;
-    filterToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  function openFilterPanel() {
-    tagBar.classList.add('open');
-    if (filterBackdrop && isFilterMobile()) filterBackdrop.hidden = false;
-    filterToggle.setAttribute('aria-expanded', 'true');
-    if (isFilterMobile()) document.body.style.overflow = 'hidden';
-  }
-
-  function toggleFilterPanel() {
-    if (tagBar.classList.contains('open')) closeFilterPanel();
-    else openFilterPanel();
-  }
-
-  if (tagBar && tagBarCefr && tagBarSkills) {
-    tagBarCefr.innerHTML = usedTags(TAGS.cefr).map(t => tagChipHTML(t, 'cefr')).join('');
-    tagBarSkills.innerHTML = usedTags(TAGS.skill).map(t => tagChipHTML(t, 'skill')).join('');
-    updateFilterBadge();
-    setFilterTab(activeFilterTab);
-
-    filterToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleFilterPanel(); });
-    filterClose?.addEventListener('click', closeFilterPanel);
-    filterBackdrop?.addEventListener('click', closeFilterPanel);
-    tagBar.querySelector('.tagbar__tabs')?.addEventListener('click', (e) => {
-      const tabBtn = e.target.closest('[data-filter-tab]');
-      if (!tabBtn) return;
-      setFilterTab(tabBtn.dataset.filterTab);
-    });
-    document.addEventListener('click', (e) => {
-      if (!tagBar.classList.contains('open') || isFilterMobile()) return;
-      if (!filterMenu.contains(e.target)) closeFilterPanel();
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && tagBar.classList.contains('open')) { closeFilterPanel(); filterToggle.focus(); }
-    });
-
-    tagBar.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-tag]');
-      if (!btn) return;
-      const t = btn.dataset.tag;
-      if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
-      btn.classList.toggle('filter-chip--active', activeTags.has(t));
-      updateFilterBadge();
-      applyFilters();
-      const u = new URL(location.href);
-      if (activeTags.size) u.searchParams.set('tag', [...activeTags].join(',')); else u.searchParams.delete('tag');
-      history.replaceState(null, '', u);
-    });
-  }
+  // ─── FILTER MENU + SEARCH ───
+  const filters = initDashboardFilters();
 
   // Canonical LearnFlow projection and header summary use the same explicit rules.
   // refreshHeaderStats runs inside scheduleRefreshHomeStats on boot.
@@ -1367,6 +639,13 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   const content = document.querySelector('.content');
   const topbarStats = document.querySelector('.lp-header-stats');
   const topbarGreeting = document.querySelector('.topbar-greeting');
+  // Las secciones de catálogo son las 4 categorías + la de guías; las de
+  // resumen son el resto. Derivadas para que agregar una categoría no exija
+  // acordarse de tocar esta línea. (Espejo del mismo cálculo en dashboard-nav.js
+  // — ambos son triviales de recalcular a partir de CATEGORIES/NAV_SECTION_KEYS,
+  // más simple que compartir el Set entre módulos.)
+  const CATALOG_SECTIONS = new Set([...Object.keys(CATEGORIES), 'guides']);
+  const OVERVIEW_SECTIONS = new Set(NAV_SECTION_KEYS.filter((k) => !CATALOG_SECTIONS.has(k)));
 
   function syncResumenSubPlacement(target) {
     const sub = document.getElementById('resumenSub');
@@ -1394,12 +673,10 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && b.classList.contains('sb-item')));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
-    if (typeof syncSidebarTopicGroup === 'function') syncSidebarTopicGroup();
+    nav.syncSidebarTopicGroup?.();
     const isOverview = OVERVIEW_SECTIONS.has(target);
     const isSecondaryTopbar = !isOverview;
-    if (topbar) topbar.classList.toggle('topbar--secondary', isSecondaryTopbar);
-    if (topbarBackBtn) topbarBackBtn.hidden = !isSecondaryTopbar;
-    syncTopbarNavButtons(isSecondaryTopbar);
+    nav.syncTopbarNavButtons(isSecondaryTopbar);
     const topicTitle = document.getElementById('topbarTopicTitle');
     const activeLabel = document.querySelector(`.sb-item[data-target="${target}"] .sb-label`);
     if (topicTitle) {
@@ -1408,10 +685,10 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     }
     topbarGreeting.style.display = 'flex';
     topbarStats.style.display = isOverview ? 'none' : '';
-    if (tagBar) closeFilterPanel();
+    filters.closeFilterPanel();
     content.scrollTop = 0;
-    if (searchInput.value) { searchInput.value = ''; }
-    applyFilters();
+    filters.clearSearch();
+    filters.applyFilters();
     syncResumenSubPlacement(target);
   }
 
@@ -1419,136 +696,11 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
     if (!b.dataset.target) return;
     b.addEventListener('click', () => {
       setActive(b.dataset.target);
-      setNavigationDrawerOpen(false);
+      nav.setNavigationDrawerOpen(false);
     });
-  });
-
-  // ─── SEARCH + TAG FILTER (combinados: AND entre texto y tags activos) ───
-  const searchInput = document.getElementById('searchInput');
-  const clearBtn = document.getElementById('clearSearch');
-  const noResults = document.getElementById('noResults');
-
-  function applyFilters() {
-    const q = searchInput.value.trim().toLowerCase();
-    clearBtn.classList.toggle('visible', q.length > 0);
-    const filtering = q.length > 0 || activeTags.size > 0;
-    // Cross-section search only when there is a text query — tag-only filtering
-    // stays within the current active section to avoid breaking category context.
-    const crossSection = q.length > 0;
-    let anyVisible = false;
-
-    sections.forEach(sec => {
-      if (sec.dataset.key === 'resumen') { sec.classList.toggle('search-visible', false); return; }
-      const isActive = sec.classList.contains('active-section');
-      const shelfOrGuides = sec.querySelectorAll('.shelf, .guides');
-      if (!shelfOrGuides.length) return;
-      let sectionVisible = false;
-      shelfOrGuides.forEach(container => {
-        let containerVisible = false;
-        container.querySelectorAll('.book, .guide-link').forEach(card => {
-          // When not cross-section and this section isn't active, skip filtering
-          // (cards stay in their default hidden/visible state via active-section CSS)
-          if (!crossSection && !isActive) return;
-          const text = card.textContent.toLowerCase();
-          const textMatch = !q || text.includes(q);
-          const cardTags = card.dataset.tags ? card.dataset.tags.split(',') : [];
-          const tagMatch = activeTags.size === 0 || [...activeTags].every(t => cardTags.includes(t));
-          const match = textMatch && tagMatch;
-          card.classList.toggle('hidden', !match);
-          if (match && filtering) { containerVisible = true; sectionVisible = true; }
-        });
-        // Oculta la subsección entera (ej. "Morfología y ortografía") si ninguna de
-        // sus tarjetas pasa el filtro — evita encabezados huérfanos sin tarjetas debajo.
-        const subsec = container.closest('.subsec');
-        if (subsec && (crossSection || isActive)) subsec.classList.toggle('hidden', filtering && !containerVisible);
-      });
-      // Only promote non-active sections to visible during cross-section (text) search
-      if (crossSection) {
-        sec.classList.toggle('search-visible', filtering && sectionVisible);
-        if (sectionVisible) anyVisible = true;
-      } else {
-        sec.classList.remove('search-visible');
-        if (isActive && sectionVisible) anyVisible = true;
-      }
-    });
-
-    noResults.style.display = (filtering && !anyVisible) ? 'block' : 'none';
-  }
-
-  searchInput.addEventListener('input', applyFilters);
-  clearBtn.addEventListener('click', () => { searchInput.value = ''; applyFilters(); searchInput.focus(); });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
-    if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value = ''; applyFilters(); searchInput.blur(); }
   });
 
   // ─── MI PROGRESO — LEARNING PATHS ───
-
-  const isPathModuleCompleted = isContentCompleted;
-
-  function renderPaths() {
-    const container = document.getElementById('pathsContainer');
-    if (!container) return;
-    container.innerHTML = LEARNING_PATHS.map(path => {
-      const completed = path.modules.filter(isPathModuleCompleted);
-      const completedCount = completed.length;
-      const total = path.modules.length;
-      const pct = Math.round((completedCount / total) * 100);
-      const allDone = completedCount === total;
-      const nextModule = path.modules.find(id => !isPathModuleCompleted(id));
-      const nextMod = nextModule ? moduleMap.get(nextModule) : null;
-      const statusLabel = allDone ? '✓ Completada' : completedCount > 0 ? 'En progreso' : 'Sin empezar';
-      const statusClass = allDone ? ' completed' : completedCount > 0 ? ' in-progress' : '';
-      const nextText = allDone ? '' : nextMod ? (completedCount > 0 ? 'Siguiente: ' : 'Empezar: ') + nextMod.title : '';
-
-      const modulesHTML = path.modules.map((id, i) => {
-        const mod = moduleMap.get(id);
-        if (!mod) return '';
-        const done = isPathModuleCompleted(id);
-        const isNext = id === nextModule;
-        const cls = done ? 'completed' : isNext ? 'current' : '';
-        const step = done ? '✓' : String(i + 1);
-        const best = done ? getBestScore(id) : 0;
-        const statusHTML = done ? `<span class="pm-status done">⭐ ${best}%</span>`
-          : isNext ? `<span class="pm-status next">${completedCount > 0 ? 'Siguiente →' : 'Empezar →'}</span>`
-          : `<span class="pm-status locked">Pendiente</span>`;
-        const canOpen = done || isNext;
-        const tag = canOpen ? 'a' : 'div';
-        const hrefAttr = canOpen ? ` href="${mod.exercise}"` : '';
-        return `<${tag} class="path-module ${cls}"${hrefAttr}${canOpen ? '' : ' aria-disabled="true"'}>
-          <div class="pm-step">${step}</div>
-          <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta">${mod.meta}</div></div>
-          ${statusHTML}
-        </${tag}>`;
-      }).join('');
-
-      return `<details class="path-accordion">
-        <summary class="path-summary">
-          <div class="path-summary-icon">${path.icon}</div>
-          <div class="path-summary-body">
-            <div class="path-summary-top">
-              <span class="path-summary-title">${path.title}</span>
-              <span class="path-summary-cefr">${path.cefr}</span>
-              ${nextText ? `<span class="path-summary-next">${nextText}</span>` : ''}
-            </div>
-            <div class="path-summary-bar">
-              <div class="path-summary-bar-track"><div class="path-summary-bar-fill" style="width:${pct}%"></div></div>
-              <span class="path-summary-frac">${completedCount}/${total}</span>
-            </div>
-          </div>
-          <div class="path-summary-right">
-            <span class="path-summary-status${statusClass}">${statusLabel}</span>
-            <span class="path-chevron">▼</span>
-          </div>
-        </summary>
-        <div class="path-content">
-          <p class="path-content-desc">${path.description}</p>
-          <div class="path-modules">${modulesHTML}</div>
-        </div>
-      </details>`;
-    }).join('');
-  }
-
   renderPaths();
 
   document.getElementById('pathExpandAll')?.addEventListener('click', () => {
@@ -1602,7 +754,7 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
   if (storedSection) sessionStorage.removeItem('hf-back-section');
   setActive(VALID_SECTIONS.has(initSection) ? initSection : 'resumen');
   delete document.documentElement.dataset.initSection;
-  if (activeTags.size) applyFilters();
+  filters.applyFilters();
 
   // Handle bfcache restore (history.back from exercise)
   window.addEventListener('pageshow', function(e) {
@@ -1610,10 +762,10 @@ import { animateText, animateCssVar, prefersReducedMotion } from './js/lp-stats-
       // Re-render cards so progress checks reflect latest localStorage data
       renderAllShelves();
       renderHeroCard();
-      renderProgressSnapshot();
+      renderProgressSnapshot(undefined, { onOpenProgress: () => setActive('mi-progreso') });
       renderRutas();
       renderLastActivities();
-      applyFilters();
+      filters.applyFilters();
       hydrateHubFlowFromCloud();
       refreshHeaderStats();
       var s = sessionStorage.getItem('hf-back-section');

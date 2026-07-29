@@ -439,17 +439,17 @@ async function validateCatalog() {
     }
   }
 
-  // LEARNING_PATHS (index.html) referencia ids de módulo a mano. Si se renombra
-  // o borra un módulo, la ruta apunta al vacío sin ruido en consola.
-  const indexHtml = readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
-  const pathsBlock = indexHtml.match(/const LEARNING_PATHS = \[([\s\S]*?)\n {2}\];/)?.[1];
+  // LEARNING_PATHS (data/learning-paths.js) referencia ids de módulo a mano. Si
+  // se renombra o borra un módulo, la ruta apunta al vacío sin ruido en consola.
+  const learningPathsSrc = readFileSync(path.join(ROOT_DIR, 'data', 'learning-paths.js'), 'utf8');
+  const pathsBlock = learningPathsSrc.match(/export const LEARNING_PATHS = \[([\s\S]*?)\n\];/)?.[1];
   if (!pathsBlock) {
-    err('CAT-PATHS', 'index.html: no se encontró LEARNING_PATHS para validar');
+    err('CAT-PATHS', 'data/learning-paths.js: no se encontró LEARNING_PATHS para validar');
   } else {
     for (const entry of pathsBlock.matchAll(/modules:\s*\[([^\]]*)\]/g)) {
       for (const [, id] of entry[1].matchAll(/'([^']+)'/g)) {
         if (!moduleIds.has(id)) {
-          err('CAT-PATHS', `index.html LEARNING_PATHS: módulo "${id}" no existe en catalog.js`);
+          err('CAT-PATHS', `data/learning-paths.js LEARNING_PATHS: módulo "${id}" no existe en catalog.js`);
         }
       }
     }
