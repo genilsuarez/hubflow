@@ -39,4 +39,20 @@ export const CATEGORIES = {
       { source: "We regret any inconvenience this may cause.", correct: ["Sorry about any trouble this causes.", "My apologies for any hassle."], hint: "Use everyday vocabulary for 'inconvenience'", explain: "'Inconvenience' becomes 'trouble' or 'hassle' in informal speech." },
     ],
   },
+  toNeutral: {
+    label: 'Adjust the Tone',
+    icon: '⚖️',
+    items: [
+      { source: "You're totally wrong about this.", correct: ["I think there may be a misunderstanding.", "I believe your information might be incorrect."], hint: "Soften the accusation — use hedging", explain: "'Totally wrong' is blunt; neutral register hedges with 'may be' or 'I believe'." },
+      { source: "I hereby request the immediate resolution of the aforementioned matter.", correct: ["I am writing to ask you to resolve this matter.", "I would like this matter resolved as soon as possible."], hint: "Remove legal-sounding words", explain: "'Hereby', 'aforementioned' are very formal/legal; standard professional writing avoids them." },
+      { source: "Yo, can you hook me up with those docs?", correct: ["Could you please send me those documents?", "Would it be possible to share those documents with me?"], hint: "Replace slang with standard phrasing", explain: "'Yo' and 'hook me up' are informal slang; professional tone uses polite requests." },
+      { source: "The team must comply with all regulations henceforth.", correct: ["From now on, the team should follow all regulations.", "The team is expected to follow all regulations going forward."], hint: "Replace 'henceforth' with everyday phrasing", explain: "'Henceforth' is archaic; modern professional writing uses 'from now on' or 'going forward'." },
+      { source: "She literally died of embarrassment in the meeting.", correct: ["She was very embarrassed in the meeting.", "She found the meeting extremely embarrassing."], hint: "Remove the literal hyperbole", explain: "'Literally died' is colloquial hyperbole; neutral register describes the feeling directly." },
+      { source: "Pursuant to your request, please find enclosed the relevant documentation.", correct: ["As requested, please find the relevant documents attached.", "I've attached the documents you asked for."], hint: "Replace the legal phrase 'pursuant to'", explain: "'Pursuant to' is overly legalistic; 'as requested' works for all professional contexts." },
+      { source: "Sounds good! I'll totally get that sorted ASAP.", correct: ["I will take care of this as soon as possible.", "I'll address this promptly."], hint: "Remove 'totally' and 'ASAP' from professional writing", explain: "'Totally' and 'ASAP' are too casual; neutral register uses 'will' and 'as soon as possible'." },
+      { source: "Your proposal is fundamentally flawed and fails to address key considerations.", correct: ["Your proposal has some areas that could be strengthened.", "There are a few aspects of your proposal that may benefit from further consideration."], hint: "Soften the criticism with constructive framing", explain: "Direct criticism becomes softer, constructive feedback in neutral/diplomatic register." },
+      { source: "It has come to our attention that you have failed to fulfil your contractual obligations.", correct: ["We have noticed that some aspects of the agreement have not been met.", "We wanted to flag that the agreed terms have not been fully fulfilled."], hint: "Replace 'failed to fulfil' with less accusatory phrasing", explain: "Legal language ('failed to fulfil contractual obligations') becomes more collaborative in standard professional tone." },
+      { source: "This is a massive opportunity — we'd be crazy to pass it up!", correct: ["This is a significant opportunity that we should seriously consider.", "This opportunity has considerable potential and deserves our attention."], hint: "Remove the exclamation and casual intensifiers", explain: "'Massive' and 'crazy' are casual; neutral register uses 'significant' and measured language." },
+    ],
+  },
 };

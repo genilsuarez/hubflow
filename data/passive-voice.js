@@ -36,5 +36,22 @@ export const CATEGORIES = {
       { sentence: 'Millions of copies ___ sold worldwide.', correct: 'have been', explain: 'Plural subject, present perfect passive: "have been sold".' },
       { sentence: 'The tickets ___ bought last week.', correct: 'were', explain: 'Plural subject, past simple passive: "were bought".' },
     ]
+  },
+  byAgent: {
+    label: 'By + Agent',
+    icon: '🕵️',
+    options: ['by', 'with', 'through', 'by being'],
+    items: [
+      { sentence: 'The painting was created ___ a local artist.', correct: 'by', explain: '"By" introduces the agent (the doer) in a passive sentence.' },
+      { sentence: 'The door was opened ___ a key.', correct: 'with', explain: '"With" introduces the instrument/tool, not the agent (the key did not act independently).' },
+      { sentence: 'The report was written ___ the research team.', correct: 'by', explain: '"By" introduces the agent performing the action.' },
+      { sentence: 'The problem was solved ___ careful analysis.', correct: 'through', explain: '"Through" = by means of a process or method (not a person).' },
+      { sentence: 'She was surprised ___ the announcement.', correct: 'by', explain: '"By" is used after passive verbs of emotion to introduce the cause.' },
+      { sentence: 'The cake was cut ___ a sharp knife.', correct: 'with', explain: '"With" introduces the tool or instrument used.' },
+      { sentence: 'The fire was started ___ a lit match.', correct: 'with', explain: '"With" = the instrument used to cause the action.' },
+      { sentence: 'Success is achieved ___ persistence.', correct: 'through', explain: '"Through" introduces the means/process by which something is achieved.' },
+      { sentence: 'The candidate was chosen ___ the committee.', correct: 'by', explain: '"By" introduces the agent — the group who performed the selection.' },
+      { sentence: 'The child was embarrassed ___ praised publicly.', correct: 'by being', explain: '"By being + past participle" — the agent of the embarrassment was the act itself.' },
+    ]
   }
 };

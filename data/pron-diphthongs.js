@@ -29,4 +29,19 @@ export const CATEGORIES = {
       { term: "pure", ipa: "/pjʊər/", es: "puro", meaning: "/ʊə/ — same glide as 'cure'", emoji: "✨" },
     ]
   },
+  diphthongMinimalPairs: {
+    label: "🎯 Diphthong Minimal Pairs",
+    items: [
+      { term: "sail vs sell", ipa: "/seɪl/ vs /sel/", es: "navegar vs vender", meaning: "/eɪ/ vs /e/ — the glide makes all the difference", emoji: "⛵" },
+      { term: "oil vs all", ipa: "/ɔɪl/ vs /ɔːl/", es: "aceite vs todo", meaning: "/ɔɪ/ starts with rounding then glides; /ɔː/ stays long and steady", emoji: "🫙" },
+      { term: "out vs oat", ipa: "/aʊt/ vs /oʊt/", es: "fuera vs avena", meaning: "/aʊ/ starts open; /oʊ/ starts mid-back — different starting points", emoji: "🌾" },
+      { term: "time vs tame", ipa: "/taɪm/ vs /teɪm/", es: "tiempo vs manso", meaning: "/aɪ/ starts fully open; /eɪ/ starts at mid position", emoji: "⏰" },
+      { term: "coin vs cone", ipa: "/kɔɪn/ vs /koʊn/", es: "moneda vs cono", meaning: "/ɔɪ/ starts back-rounded; /oʊ/ starts mid-back", emoji: "🪙" },
+      { term: "dear vs dare", ipa: "/dɪər/ vs /deər/", es: "querido vs atreverse", meaning: "/ɪə/ starts high; /eə/ starts mid — both centre on schwa", emoji: "💌" },
+      { term: "tour vs tore", ipa: "/tʊər/ vs /tɔːr/", es: "viaje vs rasgó", meaning: "/ʊə/ is a centering diphthong; /ɔː/ is a long monophthong", emoji: "🗺️" },
+      { term: "high vs hay", ipa: "/haɪ/ vs /heɪ/", es: "alto vs heno", meaning: "/aɪ/ starts open; /eɪ/ starts at mid-front — both glide to /ɪ/", emoji: "🌾" },
+      { term: "boy vs bay", ipa: "/bɔɪ/ vs /beɪ/", es: "niño vs bahía", meaning: "/ɔɪ/ starts back-rounded; /eɪ/ starts front — same endpoint /ɪ/", emoji: "👦" },
+      { term: "now vs know", ipa: "/naʊ/ vs /noʊ/", es: "ahora vs saber", meaning: "/aʊ/ starts fully open; /oʊ/ starts mid-back — clear contrast", emoji: "💡" },
+    ]
+  },
 };

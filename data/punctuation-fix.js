@@ -143,5 +143,72 @@ export const CATEGORIES = {
         ]
       }
     ]
+  },
+  semicolonsColons: {
+    label: 'Semicolons & Colons',
+    icon: '⚡',
+    level: 'B1–B2',
+    items: [
+      {
+        text: "I have visited three countries France Italy and Spain.",
+        errors: [
+          { word: "countries", index: 4, correction: "countries:", rule: "Use a colon before a list that follows a complete statement." }
+        ]
+      },
+      {
+        text: "She was exhausted however she finished the report.",
+        errors: [
+          { word: "exhausted", index: 2, correction: "exhausted;", rule: "Use a semicolon before 'however' when joining two independent clauses." }
+        ]
+      },
+      {
+        text: "There is only one solution work harder.",
+        errors: [
+          { word: "solution", index: 4, correction: "solution:", rule: "Use a colon to introduce a conclusion or explanation that follows a complete clause." }
+        ]
+      },
+      {
+        text: "He loves cooking his hobbies include baking, grilling and experimenting with spices.",
+        errors: [
+          { word: "cooking", index: 2, correction: "cooking;", rule: "Use a semicolon to separate two closely related independent clauses without a conjunction." }
+        ]
+      },
+      {
+        text: "The instructions were clear clean the surface wait ten minutes apply the glue.",
+        errors: [
+          { word: "clear", index: 3, correction: "clear:", rule: "Use a colon before a list of instructions that follows a complete statement." }
+        ]
+      },
+      {
+        text: "She has three goals improve her fitness, read more books and learn to code.",
+        errors: [
+          { word: "goals", index: 3, correction: "goals:", rule: "Use a colon before a list." }
+        ]
+      },
+      {
+        text: "The meeting was long nevertheless, everyone left feeling motivated.",
+        errors: [
+          { word: "long", index: 3, correction: "long;", rule: "Use a semicolon before a conjunctive adverb like 'nevertheless'." }
+        ]
+      },
+      {
+        text: "There are two options stay and fight, or leave quietly.",
+        errors: [
+          { word: "options", index: 3, correction: "options:", rule: "Use a colon before options or alternatives listed after a complete clause." }
+        ]
+      },
+      {
+        text: "The café was packed as a result, we decided to eat outside.",
+        errors: [
+          { word: "packed", index: 3, correction: "packed;", rule: "Use a semicolon before 'as a result' when connecting two independent clauses." }
+        ]
+      },
+      {
+        text: "The rule is simple never leave a door unlocked.",
+        errors: [
+          { word: "simple", index: 3, correction: "simple:", rule: "Use a colon to introduce a rule or principle that follows a complete clause." }
+        ]
+      }
+    ]
   }
 };

@@ -37,5 +37,22 @@ export const CATEGORIES = {
       { sentence: 'The refund is available ___ you return the item within 30 days.', correct: 'provided that', explain: '"Provided that" sets a formal requirement.' },
       { sentence: 'I never eat dessert ___ it\'s a special occasion.', correct: 'unless', explain: '"Unless" = the only exception when the action happens.' }
     ]
+  },
+  mixedConditionals: {
+    label: 'Mixed Conditionals',
+    icon: '🔀',
+    options: ['would have', 'would', 'had', 'were'],
+    items: [
+      { sentence: 'If I ___ studied law, I would be a lawyer now.', correct: 'had', explain: 'Mixed conditional: past perfect in the if-clause (unreal past action) + would + base for present result.' },
+      { sentence: 'If she ___ more patient, she would have finished the project.', correct: 'were', explain: 'Mixed conditional: unreal present character + would have for a past consequence.' },
+      { sentence: 'If I had slept better last night, I ___ feel so tired now.', correct: 'would', explain: 'Unreal past cause → present result: "would + base" in the result clause (contracted: wouldn\'t feel).' },
+      { sentence: 'If he ___ taken the job offer, he would be living abroad now.', correct: 'had', explain: 'Past perfect in the if-clause; "would + be + -ing" for the present state.' },
+      { sentence: 'If I ___ braver, I would have asked for the promotion.', correct: 'were', explain: 'Unreal present quality → missed past opportunity.' },
+      { sentence: 'She ___ been able to help if she had known about the problem.', correct: 'would have', explain: 'Unreal past: "would have + past participle" in the result clause.' },
+      { sentence: 'If I ___ a morning person, I would have caught that flight.', correct: 'were', explain: 'Present character (I am not a morning person) → past missed event.' },
+      { sentence: 'If they ___ invested earlier, they would be wealthy now.', correct: 'had', explain: 'Past perfect in if-clause + "would be" for present result.' },
+      { sentence: 'I ___ passed the exam if I had started revising earlier.', correct: 'would have', explain: '"Would have + past participle" in the result clause of a third conditional.' },
+      { sentence: 'If he ___ more disciplined, he would have met his deadline.', correct: 'were', explain: 'Present character flaw → unreal past result.' },
+    ]
   }
 };

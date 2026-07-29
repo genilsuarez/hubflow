@@ -29,4 +29,19 @@ export const CATEGORIES = {
       { term: "some", ipa: "/səm/", es: "algo/algunos (débil)", meaning: "Weak form before nouns (strong form /sʌm/ for emphasis)", emoji: "🧃", example: "I need some /səm/ water." },
     ]
   },
+  pronounWeakForms: {
+    label: "🙋 Pronoun Weak Forms",
+    items: [
+      { term: "him", ipa: "/ɪm/", es: "lo / le (débil)", meaning: "Weak form: /h/ drops mid-sentence — 'tell 'im'", emoji: "👨", example: "I told him /ɪm/ to go." },
+      { term: "her", ipa: "/ər/", es: "la / le (débil)", meaning: "Weak form: /h/ drops — 'give 'er a hand'", emoji: "👩", example: "Ask her /ər/ about it." },
+      { term: "them", ipa: "/ðəm/", es: "los / les (débil)", meaning: "Weak form (strong form: /ðɛm/)", emoji: "👥", example: "I saw them /ðəm/ yesterday." },
+      { term: "us", ipa: "/əs/", es: "nos (débil)", meaning: "Weak form (strong form: /ʌs/)", emoji: "🤝", example: "Tell us /əs/ the answer." },
+      { term: "you", ipa: "/jə/", es: "te / os (débil)", meaning: "Weak form — reduced before a consonant in fast speech", emoji: "👆", example: "Can you /jə/ help me?" },
+      { term: "he", ipa: "/iː/ → /ɪ/", es: "él (débil)", meaning: "Weak form: /h/ drops mid-sentence", emoji: "👦", example: "Where does he /ɪ/ live?" },
+      { term: "she", ipa: "/ʃɪ/", es: "ella (débil)", meaning: "Weak form (strong form: /ʃiː/) — shortened in flow", emoji: "👧", example: "I think she /ʃɪ/ knows." },
+      { term: "they", ipa: "/ðə/", es: "ellos (débil)", meaning: "Weak form (strong form: /ðeɪ/) — often reduced", emoji: "👪", example: "Do they /ðə/ know yet?" },
+      { term: "we", ipa: "/wɪ/", es: "nosotros (débil)", meaning: "Weak form (strong form: /wiː/) — shortened in flow", emoji: "🫂", example: "Can we /wɪ/ go now?" },
+      { term: "your", ipa: "/jər/", es: "tu / vuestro (débil)", meaning: "Weak form (strong form: /jɔːr/) — very commonly reduced", emoji: "🏷️", example: "What's your /jər/ name?" },
+    ]
+  },
 };

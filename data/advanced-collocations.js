@@ -54,5 +54,39 @@ export const CATEGORIES = {
       { sentence: 'Environmental groups continue to ___ stricter emissions regulations.', correct: 'advocate', explain: '"Advocate" = publicly support a policy or course of action.' },
       { sentence: "The study's authors were quick to ___ claims that their methodology was flawed.", correct: 'refute', explain: '"Refute" = disprove with evidence, stronger than simply disagreeing.' },
     ]
-  }
+  },
+  causeEffect: {
+    label: 'Cause & Effect',
+    icon: '⚙️',
+    options: ['give rise to', 'stem from', 'bring about', 'have implications for'],
+    items: [
+      { sentence: 'Rapid urbanisation can ___ significant pressure on public infrastructure.', correct: 'give rise to', explain: '"Give rise to" — formal way to say "cause/produce", especially for problems or consequences.' },
+      { sentence: 'Many of the social inequalities observed today ___ historical injustice.', correct: 'stem from', explain: '"Stem from" — means "originate from", used to trace a cause back to its source.' },
+      { sentence: 'Technological advances in the 20th century helped ___ profound social change.', correct: 'bring about', explain: '"Bring about" — formal collocation meaning "to cause", often for large-scale or deliberate change.' },
+      { sentence: 'The proposed legislation could ___ millions of low-income households.', correct: 'have implications for', explain: '"Have implications for" — formal way to say a change will affect or impact someone/something.' },
+      { sentence: 'Economic instability can ___ increased rates of social unrest.', correct: 'give rise to', explain: '"Give rise to" — links a cause to its consequence; common in formal writing.' },
+      { sentence: 'The conflict appears to ___ deep-seated political and ethnic tensions.', correct: 'stem from', explain: '"Stem from" — traces the current situation back to its underlying causes.' },
+      { sentence: 'Grassroots movements have historically helped ___ lasting political reform.', correct: 'bring about', explain: '"Bring about" — collocates naturally with "change", "reform", "transformation".' },
+      { sentence: 'Budget cuts in education will ___ future workforce development.', correct: 'have implications for', explain: '"Have implications for" — highlights downstream consequences without specifying them precisely.' },
+      { sentence: 'Poor nutrition in early childhood can ___ developmental challenges in later life.', correct: 'give rise to', explain: '"Give rise to" — formal register; avoids the simpler "cause" or "lead to".' },
+      { sentence: 'Her reluctance to delegate appears to ___ a lack of trust in her team.', correct: 'stem from', explain: '"Stem from" — identifies the root cause of a behaviour or situation.' },
+    ]
+  },
+  criticalThinking: {
+    label: 'Critical Thinking',
+    icon: '🧠',
+    options: ['call into question', 'take into account', 'shed light on', 'weigh up the evidence'],
+    items: [
+      { sentence: 'These new findings ___ the validity of the original conclusions.', correct: 'call into question', explain: '"Call into question" — formal collocation meaning to cast doubt on something.' },
+      { sentence: 'Any fair assessment must ___ both short- and long-term consequences.', correct: 'take into account', explain: '"Take into account" — consider a factor when making a decision or judgement.' },
+      { sentence: 'The documentary sought to ___ the systemic causes of poverty.', correct: 'shed light on', explain: '"Shed light on" — reveal or clarify something that was previously unclear or hidden.' },
+      { sentence: 'Before reaching a verdict, jurors must carefully ___.', correct: 'weigh up the evidence', explain: '"Weigh up the evidence" — formally evaluate all available facts before deciding.' },
+      { sentence: 'This study aims to ___ the relationship between diet and cognitive performance.', correct: 'shed light on', explain: '"Shed light on" — collocates with complex or abstract relationships that need clarifying.' },
+      { sentence: 'Recent whistleblower reports ___ the company\'s ethical practices.', correct: 'call into question', explain: '"Call into question" — raise serious doubts; often used in journalism and formal commentary.' },
+      { sentence: 'A thorough policy review must ___ the perspectives of all stakeholders.', correct: 'take into account', explain: '"Take into account" — ensure a factor is not overlooked in a decision-making process.' },
+      { sentence: 'Researchers must ___ before drawing any firm conclusions.', correct: 'weigh up the evidence', explain: '"Weigh up the evidence" — evaluate competing data points before committing to a conclusion.' },
+      { sentence: 'The tribunal\'s report appeared to ___ several inconsistencies in the original investigation.', correct: 'call into question', explain: '"Call into question" — highlights contradictions or unreliability in previous findings.' },
+      { sentence: 'We must ___ the social context before judging individual behaviour.', correct: 'take into account', explain: '"Take into account" — avoid judging in isolation; consider the broader picture.' },
+    ]
+  },
 };

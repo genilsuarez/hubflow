@@ -56,5 +56,32 @@ export const CATEGORIES = {
       { sentence: 'product', correct: '1st syllable', explain: 'PROD-uct.' },
       { sentence: 'production', correct: '2nd syllable', explain: 'pro-DUC-tion — "-ion" shifts the stress forward.' }
     ]
+  },
+  verbNounPairs: {
+    label: 'Verb–Noun Stress Pairs',
+    icon: '🔁',
+    options: ['1st syllable', '2nd syllable'],
+    items: [
+      { sentence: 'record (noun)', correct: '1st syllable', explain: 'REC-ord (noun) — stress on first syllable.' },
+      { sentence: 'record (verb)', correct: '2nd syllable', explain: 're-CORD (verb) — stress on second syllable.' },
+      { sentence: 'permit (noun)', correct: '1st syllable', explain: 'PER-mit (noun) — the thing that allows you.' },
+      { sentence: 'permit (verb)', correct: '2nd syllable', explain: 'per-MIT (verb) — to allow something.' },
+      { sentence: 'present (noun/adj)', correct: '1st syllable', explain: 'PRE-sent — a gift, or being here.' },
+      { sentence: 'present (verb)', correct: '2nd syllable', explain: 'pre-SENT — to give or show formally.' },
+      { sentence: 'conflict (noun)', correct: '1st syllable', explain: 'CON-flict — a disagreement.' },
+      { sentence: 'conflict (verb)', correct: '2nd syllable', explain: 'con-FLICT — to clash or contradict.' },
+      { sentence: 'object (noun)', correct: '1st syllable', explain: 'OB-ject — a thing.' },
+      { sentence: 'object (verb)', correct: '2nd syllable', explain: 'ob-JECT — to disagree or protest.' },
+      { sentence: 'increase (noun)', correct: '1st syllable', explain: 'IN-crease — a rise in amount.' },
+      { sentence: 'increase (verb)', correct: '2nd syllable', explain: 'in-CREASE — to make something larger.' },
+      { sentence: 'export (noun)', correct: '1st syllable', explain: 'EX-port — goods sent abroad.' },
+      { sentence: 'export (verb)', correct: '2nd syllable', explain: 'ex-PORT — to send goods abroad.' },
+      { sentence: 'protest (noun)', correct: '1st syllable', explain: 'PRO-test — a demonstration.' },
+      { sentence: 'protest (verb)', correct: '2nd syllable', explain: 'pro-TEST — to demonstrate against something.' },
+      { sentence: 'impact (noun)', correct: '1st syllable', explain: 'IM-pact — an effect or collision.' },
+      { sentence: 'impact (verb)', correct: '2nd syllable', explain: 'im-PACT — to affect or hit.' },
+      { sentence: 'update (noun)', correct: '1st syllable', explain: 'UP-date — new information.' },
+      { sentence: 'update (verb)', correct: '2nd syllable', explain: 'up-DATE — to bring something current.' }
+    ]
   }
 };

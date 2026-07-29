@@ -36,5 +36,22 @@ export const CATEGORIES = {
       { sentence: '___ she was the only qualified candidate, she got the job.', correct: 'since', explain: '"Since" gives the reason before the main clause.' },
       { sentence: 'The bridge was damaged; ___, traffic was diverted for weeks.', correct: 'therefore', explain: '"Therefore" introduces the logical result of the damage.' },
     ]
+  },
+  concessionPurpose: {
+    label: 'Concession & Purpose',
+    icon: '🎯',
+    options: ['although', 'in order to', 'despite', 'so that', 'even though'],
+    items: [
+      { sentence: '___ it was raining, we went for a walk.', correct: 'although', explain: '"Although" introduces a concession — the rain did not stop them.' },
+      { sentence: 'She studied hard ___ pass her exams.', correct: 'in order to', explain: '"In order to" expresses purpose — why she studied.' },
+      { sentence: '___ the cold weather, they held the event outside.', correct: 'despite', explain: '"Despite" + noun phrase introduces a concession.' },
+      { sentence: 'He whispered ___ not wake the baby.', correct: 'so that', explain: '"So that" introduces the intended result.' },
+      { sentence: '___ he was tired, he kept working until midnight.', correct: 'even though', explain: '"Even though" is stronger than "although" — emphasizes the contrast.' },
+      { sentence: 'She wore a coat ___ keep warm in the cold wind.', correct: 'in order to', explain: '"In order to" + infinitive gives the reason for an action.' },
+      { sentence: '___ his best efforts, the project still failed.', correct: 'despite', explain: '"Despite" + noun phrase shows the effort did not prevent the outcome.' },
+      { sentence: 'He turned off his phone ___ nobody could disturb him.', correct: 'so that', explain: '"So that" introduces the intended result of an action.' },
+      { sentence: '___ she worked full-time, she still found time to volunteer.', correct: 'although', explain: '"Although" introduces a contrast between two facts.' },
+      { sentence: 'They left early ___ avoid the rush-hour traffic.', correct: 'in order to', explain: '"In order to" expresses purpose — why they left early.' },
+    ]
   }
 };

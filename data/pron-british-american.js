@@ -29,4 +29,19 @@ export const CATEGORIES = {
       { term: "magazine", ipa: "UK /ˌmæɡəˈziːn/ · US /ˈmæɡəziːn/", es: "revista", meaning: "UK stresses the last syllable, US the 1st", emoji: "📖" },
     ]
   },
+  vocabularyDifferences: {
+    label: "🗺️ Different Words, Same Thing",
+    items: [
+      { term: "boot / trunk", ipa: "UK /buːt/ · US /trʌŋk/", es: "maletero del coche", meaning: "Back storage of a car: 'boot' in UK, 'trunk' in US", emoji: "🚗" },
+      { term: "biscuit / cookie", ipa: "UK /ˈbɪskɪt/ · US /ˈkʊki/", es: "galleta", meaning: "A sweet baked snack: UK 'biscuit', US 'cookie'", emoji: "🍪" },
+      { term: "flat / apartment", ipa: "UK /flæt/ · US /əˈpɑːrtmənt/", es: "piso / apartamento", meaning: "A self-contained residence in a building", emoji: "🏢" },
+      { term: "lorry / truck", ipa: "UK /ˈlɒri/ · US /trʌk/", es: "camión", meaning: "Large goods vehicle: 'lorry' in UK, 'truck' in US", emoji: "🚛" },
+      { term: "autumn / fall", ipa: "UK /ˈɔːtəm/ · US /fɔːl/", es: "otoño", meaning: "The season after summer", emoji: "🍂" },
+      { term: "chemist / pharmacy", ipa: "UK /ˈkemɪst/ · US /ˈfɑːrməsi/", es: "farmacia", meaning: "Where you buy medicine: 'chemist' in UK, 'pharmacy' in US", emoji: "💊" },
+      { term: "lift / elevator", ipa: "UK /lɪft/ · US /ˈelɪveɪtər/", es: "ascensor", meaning: "A device to move between floors in a building", emoji: "🛗" },
+      { term: "rubbish / garbage", ipa: "UK /ˈrʌbɪʃ/ · US /ˈɡɑːrbɪdʒ/", es: "basura", meaning: "Waste or trash: 'rubbish' in UK, 'garbage/trash' in US", emoji: "🗑️" },
+      { term: "trainers / sneakers", ipa: "UK /ˈtreɪnərz/ · US /ˈsniːkərz/", es: "zapatillas deportivas", meaning: "Athletic shoes: 'trainers' in UK, 'sneakers' in US", emoji: "👟" },
+      { term: "jumper / sweater", ipa: "UK /ˈdʒʌmpər/ · US /ˈswetər/", es: "jersey / suéter", meaning: "A knitted pullover garment", emoji: "🧥" },
+    ]
+  },
 };

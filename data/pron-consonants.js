@@ -29,4 +29,19 @@ export const CATEGORIES = {
       { term: "Watched", es: "/wɒtʃt/", meaning: "Voiceless /tʃ/ → /t/ ending", emoji: "📺", example: "1 syllable: /wɒtʃt/" },
     ]
   },
+  silentConsonants: {
+    label: "🤐 Silent Consonants",
+    items: [
+      { term: "/p/ — psychology", es: "/saɪˈkɒlədʒi/", meaning: "'ps' at the start: P is always silent", emoji: "🧠", example: "Wrong: p-sy-chol-ogy. Right: /saɪˈkɒlədʒi/." },
+      { term: "/k/ — kneel", es: "/niːl/", meaning: "'kn' at the start: K is always silent", emoji: "🙏", example: "Wrong: k-neel. Right: /niːl/." },
+      { term: "/g/ — sign", es: "/saɪn/", meaning: "'gn' medially or at end: G is silent", emoji: "🪧", example: "sign /saɪn/, foreign /ˈfɒrən/, gnarl /nɑːrl/." },
+      { term: "/h/ — heir", es: "/eər/", meaning: "Silent H at the start of some words — 'air'", emoji: "👑", example: "heir /eər/, hour /ˈaʊər/, honest /ˈɒnɪst/." },
+      { term: "/w/ — write", es: "/raɪt/", meaning: "'wr' at the start: W is always silent", emoji: "✍️", example: "write, wrong, wrap, wrist — W never sounds." },
+      { term: "/b/ — doubt", es: "/daʊt/", meaning: "'bt' combination: B is silent", emoji: "🤨", example: "doubt /daʊt/, subtle /ˈsʌtəl/, debt /det/." },
+      { term: "/t/ — castle", es: "/ˈkɑːsəl/", meaning: "'st' in certain words: T is silent", emoji: "🏰", example: "castle, listen, whistle, fasten — T drops." },
+      { term: "/c/ — scissors", es: "/ˈsɪzərz/", meaning: "'sc' before 'i' or 'e': C is silent", emoji: "✂️", example: "scissors /ˈsɪzərz/, science /ˈsaɪəns/." },
+      { term: "/l/ — calm", es: "/kɑːm/", meaning: "'lm' combination: L is silent", emoji: "🧘", example: "calm /kɑːm/, palm /pɑːm/, psalm /sɑːm/." },
+      { term: "/n/ — autumn", es: "/ˈɔːtəm/", meaning: "'mn' at the end: N is silent", emoji: "🍂", example: "autumn /ˈɔːtəm/, column /ˈkɒləm/, solemn /ˈsɒləm/." },
+    ]
+  },
 };

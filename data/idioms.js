@@ -59,4 +59,19 @@ export const CATEGORIES = {
       { term: "Grasp at Straws", ipa: "/ɡrɑːsp æt strɔːz/", es: "Agarrarse a un clavo ardiendo", meaning: "Try anything desperate when out of options", emoji: "🌾", example: "He's grasping at straws with that excuse." },
     ]
   },
+  timeIdioms: {
+    label: "⏰ Time & Opportunity",
+    items: [
+      { term: "In the Nick of Time", ipa: "/ɪn ðə nɪk əv taɪm/", es: "En el último momento", meaning: "Just in time, at the last possible moment", emoji: "⏱️", example: "We caught the train in the nick of time." },
+      { term: "Hit the Ground Running", ipa: "/hɪt ðə ɡraʊnd ˈrʌnɪŋ/", es: "Arrancar a todo vapor", meaning: "Start something energetically and with full commitment", emoji: "🏃", example: "She hit the ground running on her first day." },
+      { term: "Time Flies", ipa: "/taɪm flaɪz/", es: "El tiempo vuela", meaning: "Time passes very quickly", emoji: "🕊️", example: "I can't believe it's December already — time flies!" },
+      { term: "On the Spur of the Moment", ipa: "/ɒn ðə spɜːr əv ðə ˈmoʊmənt/", es: "En el calor del momento", meaning: "Done impulsively, without planning", emoji: "⚡", example: "We decided on the spur of the moment to go to Paris." },
+      { term: "Strike While the Iron Is Hot", ipa: "/straɪk waɪl ðiː ˈaɪərn ɪz hɒt/", es: "Al hierro candente, batir de repente", meaning: "Act immediately when a good opportunity arises", emoji: "🔨", example: "They offered you the job — strike while the iron is hot!" },
+      { term: "Beat the Clock", ipa: "/biːt ðə klɒk/", es: "Ganarle al tiempo", meaning: "Finish something before the deadline", emoji: "⏰", example: "We just beat the clock and submitted the report." },
+      { term: "Once in a Blue Moon", ipa: "/wʌns ɪn ə bluː muːn/", es: "De vez en cuando / muy raramente", meaning: "Very rarely, almost never", emoji: "🌕", example: "I only see my cousin once in a blue moon." },
+      { term: "A Race Against Time", ipa: "/ə reɪs əˈɡɛnst taɪm/", es: "Una carrera contra el tiempo", meaning: "A situation where speed is critical to succeed", emoji: "🏁", example: "Rescuing the miners was a race against time." },
+      { term: "The Eleventh Hour", ipa: "/ðiː ɪˈlɛvənθ ˈaʊər/", es: "El último momento", meaning: "The last possible moment to act", emoji: "🕚", example: "They reached a deal at the eleventh hour." },
+      { term: "Seize the Day", ipa: "/siːz ðə deɪ/", es: "Carpe Diem — aprovechar el momento", meaning: "Make the most of the present opportunity", emoji: "🌅", example: "Don't wait — seize the day and apply for the job!" },
+    ]
+  },
 };

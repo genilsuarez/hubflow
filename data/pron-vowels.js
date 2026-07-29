@@ -29,4 +29,19 @@ export const CATEGORIES = {
       { term: "Secretary", es: "/ˈsekrətri/", meaning: "3 syllables — 'SEK-ruh-tree'", emoji: "📝", example: "Not 'sec-re-ta-ry' — collapsed." },
     ]
   },
+  confusedVowelPairs: {
+    label: "🔄 Confused Vowel Pairs",
+    items: [
+      { term: "/iː/ vs /ɪ/ — sheep vs ship", es: "larga vs corta", meaning: "/iː/ is tense and long; /ɪ/ is short and relaxed", emoji: "🐑", example: "sheep /ʃiːp/ vs ship /ʃɪp/ — a different vowel, not just length." },
+      { term: "/e/ vs /æ/ — bed vs bad", es: "media vs abierta", meaning: "/e/ is mid-front; /æ/ is lower with more jaw drop", emoji: "🛏️", example: "bed /bed/ vs bad /bæd/ — don't merge them." },
+      { term: "/ɑː/ vs /ʌ/ — heart vs hut", es: "larga abierta vs central", meaning: "/ɑː/ is long and back; /ʌ/ is short and central", emoji: "❤️", example: "heart /hɑːt/ vs hut /hʌt/." },
+      { term: "/ɒ/ vs /ɔː/ — hot vs hoot", es: "corta vs larga redondeada", meaning: "/ɒ/ is short; /ɔː/ is long with strong lip rounding", emoji: "🔥", example: "pot /pɒt/ vs port /pɔːt/." },
+      { term: "/ʊ/ vs /uː/ — foot vs food", es: "corta posterior vs larga", meaning: "/ʊ/ is short and relaxed; /uː/ is long and tense", emoji: "🦶", example: "foot /fʊt/ vs food /fuːd/." },
+      { term: "/e/ vs /eɪ/ — ten vs ten", es: "monoptongo vs diptongo", meaning: "/e/ is a single position; /eɪ/ glides upward", emoji: "✋", example: "pen /pen/ vs pain /peɪn/ — watch the glide." },
+      { term: "/ɜː/ vs /ɔː/ — bird vs board", es: "central larga vs posterior", meaning: "/ɜː/ is central, lips neutral; /ɔː/ is back with rounded lips", emoji: "🐦", example: "bird /bɜːd/ vs board /bɔːd/." },
+      { term: "/ə/ vs /ʌ/ — about vs bun", es: "átona vs tónica", meaning: "/ə/ only appears unstressed; /ʌ/ can be stressed", emoji: "😐", example: "The 'a' in 'about' is /ə/; the 'u' in 'bun' is /ʌ/." },
+      { term: "/æ/ vs /ɑː/ — cat vs cart", es: "abierta frontal vs abierta posterior", meaning: "Key distinction in RP: /æ/ is front, /ɑː/ is back and long", emoji: "🐱", example: "cat /kæt/ vs cart /kɑːt/ — length AND position differ." },
+      { term: "/ɪ/ vs /e/ — bit vs bet", es: "cerrada corta vs media", meaning: "/ɪ/ is higher and shorter; /e/ has more jaw drop", emoji: "🎰", example: "bit /bɪt/ vs bet /bet/ — Spanish speakers often merge these." },
+    ]
+  },
 };

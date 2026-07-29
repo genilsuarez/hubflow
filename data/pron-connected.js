@@ -29,4 +29,19 @@ export const CATEGORIES = {
       { term: "I_agree", es: "Estoy de acuerdo", meaning: "Vowel-vowel link adds /j/: 'I-yagree'", emoji: "🤝", example: "I‿agree → /aɪ.jə.ɡriː/" },
     ]
   },
+  assimilation: {
+    label: "🔀 Assimilation",
+    items: [
+      { term: "in Paris", es: "en París", meaning: "/n/ → /m/ before /p/: bilabial assimilation", emoji: "🗼", example: "in Paris → /ɪm ˈpærɪs/" },
+      { term: "good boy", es: "buen chico", meaning: "/d/ → /b/ before /b/: bilabial assimilation of final plosive", emoji: "👦", example: "good boy → /ɡʊb bɔɪ/" },
+      { term: "that person", es: "esa persona", meaning: "/t/ → /p/ before /p/: bilabial assimilation", emoji: "🧑", example: "that person → /ðæp ˈpɜːrsən/" },
+      { term: "ten minutes", es: "diez minutos", meaning: "/n/ → /m/ before /m/: bilabial assimilation", emoji: "⏱️", example: "ten minutes → /tem ˈmɪnɪts/" },
+      { term: "input", es: "entrada / aportación", meaning: "/n/ → /m/ before /p/: very common in fast speech", emoji: "⌨️", example: "input → /ˈɪmpʊt/" },
+      { term: "I can go", es: "Puedo ir", meaning: "/n/ → /ŋ/ before /g/: velar assimilation", emoji: "🚶", example: "can go → /kæŋ ɡəʊ/" },
+      { term: "that car", es: "ese coche", meaning: "/t/ → /k/ before /k/: velar assimilation", emoji: "🚗", example: "that car → /ðæk kɑːr/" },
+      { term: "in case", es: "por si acaso", meaning: "/n/ → /ŋ/ before /k/: velar assimilation", emoji: "📦", example: "in case → /ɪŋ keɪs/" },
+      { term: "don't go", es: "no vayas", meaning: "/t/ → /k/ before /g/: velar assimilation", emoji: "🚫", example: "don't go → /dəʊŋk ɡəʊ/" },
+      { term: "green car", es: "coche verde", meaning: "/n/ → /ŋ/ before /k/: velar assimilation in noun phrases", emoji: "💚", example: "green car → /ɡriːŋ kɑːr/" },
+    ]
+  },
 };
