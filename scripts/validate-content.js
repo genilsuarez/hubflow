@@ -251,6 +251,12 @@ function validateBottomNavContract() {
  * así que no puede generarse desde js/nav-sections.js. Aquí se comprueba que no
  * haya derivado: es lo que dejó "Rutas guiadas" en el dashboard pero fuera del
  * sidebar de los ejercicios.
+ *
+ * Desde el refactor de sidebar (Opción D, docs/to-do/hubflow-sidebar-refactor.md)
+ * solo las secciones `primary: true` (Inicio, Rutas, Mis estadísticas) viven en
+ * el sidebar — las categorías y "guides" se movieron a chips en #catalogToolbar
+ * y ya no se validan aquí; siguen siendo válidas para `?section=` y back-nav vía
+ * NAV_SECTION_KEYS (validado en la sección 3, el mirror `var vs`).
  */
 async function validateNavSections() {
   const navPath = path.join(ROOT_DIR, 'js', 'nav-sections.js');
@@ -259,8 +265,11 @@ async function validateNavSections() {
 
   const { NAV_SECTIONS, NAV_SECTION_KEYS } = await import(pathToFileURL(navPath).href);
   const html = readFileSync(indexPath, 'utf8');
+  const primarySections = NAV_SECTIONS.filter((s) => s.primary);
+  const primaryKeys = new Set(primarySections.map((s) => s.key));
 
-  // 1) Sidebar estático: mismas secciones y mismas etiquetas.
+  // 1) Sidebar estático: mismas secciones primarias y mismas etiquetas — las
+  //    categorías/guides no deben aparecer aquí (viven en #catalogChips).
   const sidebar = html.match(/<nav class="sb-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
   if (!sidebar) {
     err('NAV-SYNC', 'index.html: no se encontró <nav class="sb-nav"> para validar');
@@ -269,7 +278,7 @@ async function validateNavSections() {
       [...sidebar.matchAll(/data-target="([^"]+)"[\s\S]*?<span class="sb-label">([^<]*)<\/span>/g)]
         .map(([, key, label]) => [key, label.replace(/&amp;/g, '&').trim()]),
     );
-    for (const s of NAV_SECTIONS) {
+    for (const s of primarySections) {
       if (!rendered.has(s.key)) {
         err('NAV-SYNC', `index.html: falta la sección "${s.key}" (${s.label}) en el sidebar estático`);
       } else if (rendered.get(s.key) !== s.label) {
@@ -277,8 +286,8 @@ async function validateNavSections() {
       }
     }
     for (const key of rendered.keys()) {
-      if (!NAV_SECTION_KEYS.includes(key)) {
-        err('NAV-SYNC', `index.html: sección "${key}" en el sidebar no existe en js/nav-sections.js`);
+      if (!primaryKeys.has(key)) {
+        err('NAV-SYNC', `index.html: sección "${key}" en el sidebar no es una sección primaria (nav-sections.js) — las categorías van como chip en #catalogChips, no en el sidebar`);
       }
     }
   }

@@ -25,22 +25,69 @@
     }
     .search-bar .clear-btn.visible { display: flex; align-items: center; justify-content: center; }
 
-    /* Buscador + filtros — centrados en el área de contenido (secciones de catálogo) */
+    /* Buscador + filtros + chips de categoría — centrados en el área de
+       contenido (secciones de catálogo). Fila de chips arriba (cambio rápido
+       de categoría), buscador + filtros abajo. */
     .catalog-toolbar {
       display: none;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
-      max-width: 28rem;
       margin: 0 auto 16px;
     }
+    body[data-active="all"] .catalog-toolbar,
     body[data-active="vocab"] .catalog-toolbar,
     body[data-active="grammar"] .catalog-toolbar,
     body[data-active="pronunciation"] .catalog-toolbar,
     body[data-active="analysis"] .catalog-toolbar,
     body[data-active="guides"] .catalog-toolbar {
       display: flex;
+    }
+    .catalog-toolbar__row {
+      display: flex; justify-content: center; align-items: center; gap: 12px;
+      width: 100%; max-width: 28rem; margin: 0 auto;
+    }
+
+    /* ─── CATEGORY CHIPS (reemplazan las categorías que vivían en el sidebar) ─── */
+    .catalog-chips {
+      display: flex; gap: 0.4375rem; width: 100%;
+      overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding: 2px; /* espacio para el outline de foco */
+    }
+    .catalog-chips::-webkit-scrollbar { display: none; }
+    .catalog-chip {
+      --chip-color: var(--lp-accent);
+      flex: 0 0 auto;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 2.375rem; padding: 0.4375rem 0.875rem;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-full); cursor: pointer; white-space: nowrap;
+      font-family: var(--lp-font-body); font-size: 0.74rem; font-weight: 600;
+      color: var(--lp-ink-soft); touch-action: manipulation;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .catalog-chip:hover {
+      border-color: color-mix(in srgb, var(--chip-color) 30%, transparent);
+      color: var(--lp-ink);
+    }
+    .catalog-chip:active { transform: scale(0.97); }
+    .catalog-chip:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    .catalog-chip.active {
+      background: color-mix(in srgb, var(--chip-color) 14%, var(--lp-surface));
+      border-color: color-mix(in srgb, var(--chip-color) 45%, transparent);
+      color: var(--chip-color);
+    }
+    .catalog-chip.v { --chip-color: var(--lp-cat-purple); }
+    .catalog-chip.p { --chip-color: var(--lp-cat-blue); }
+    .catalog-chip.g { --chip-color: var(--lp-cat-amber); }
+    .catalog-chip.a { --chip-color: var(--lp-cat-teal); }
+    .catalog-chip.r { --chip-color: var(--lp-cat-green); }
+    [data-theme="dark"] .catalog-chip {
+      background: var(--lp-surface-raised); border-color: var(--lp-border); color: var(--lp-ink-soft);
+    }
+    [data-theme="dark"] .catalog-chip.active {
+      background: color-mix(in srgb, var(--chip-color) 20%, var(--lp-surface-raised));
     }
 
     .lp-header-stats {
@@ -82,6 +129,12 @@
     html[data-init-section="pronunciation"] .section[data-key="pronunciation"],
     html[data-init-section="analysis"] .section[data-key="analysis"],
     html[data-init-section="guides"] .section[data-key="guides"] { display: block; }
+    /* "all" apila las 5 secciones de catálogo — sin filtro, todo el contenido junto. */
+    html[data-init-section="all"] .section[data-key="vocab"],
+    html[data-init-section="all"] .section[data-key="grammar"],
+    html[data-init-section="all"] .section[data-key="pronunciation"],
+    html[data-init-section="all"] .section[data-key="analysis"],
+    html[data-init-section="all"] .section[data-key="guides"] { display: block; }
     .sec-head {
       font-size: .66rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase;
       color: var(--lp-muted); margin-bottom: 10px; padding-left: 2px;
@@ -972,12 +1025,14 @@
     body[data-active="rutas"] .tg-rutas { display: block; }
 
     /* Catálogo: título + subtítulo en topbar (debajo del nombre de sección) */
+    body[data-active="all"] .topbar-greeting-title.tg-resumen,
     body[data-active="vocab"] .topbar-greeting-title.tg-resumen,
     body[data-active="grammar"] .topbar-greeting-title.tg-resumen,
     body[data-active="pronunciation"] .topbar-greeting-title.tg-resumen,
     body[data-active="analysis"] .topbar-greeting-title.tg-resumen,
     body[data-active="guides"] .topbar-greeting-title.tg-resumen { display: none !important; }
 
+    body[data-active="all"] .tg-topic,
     body[data-active="vocab"] .tg-topic,
     body[data-active="grammar"] .tg-topic,
     body[data-active="pronunciation"] .tg-topic,
@@ -995,6 +1050,7 @@
       max-width: 100%;
     }
 
+    body[data-active="all"] .topbar-greeting,
     body[data-active="vocab"] .topbar-greeting,
     body[data-active="grammar"] .topbar-greeting,
     body[data-active="pronunciation"] .topbar-greeting,
@@ -1019,6 +1075,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    body[data-active="all"] #resumenSub.catalog-meta,
     body[data-active="vocab"] #resumenSub.catalog-meta,
     body[data-active="grammar"] #resumenSub.catalog-meta,
     body[data-active="pronunciation"] #resumenSub.catalog-meta,
@@ -1256,9 +1313,6 @@
       }
       html[data-navigation-mode="floating"] .navigation-launcher { display: flex; }
       html[data-navigation-mode="floating"] .topbar { padding-left: var(--lp-header-floating-pad-left); }
-      .sb-nav-group { display: contents; }
-      .sb-nav-group__toggle { display: none !important; }
-      .sb-nav-group__items { display: contents; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1393,7 +1447,7 @@
     /* Topbar angosta: el buscador manda — las stats se ocultan en pantallas chicas.
        min-width evita que flex lo aplaste a un ancho inusable. */
     @media (max-width: 639px) {
-      .catalog-toolbar { max-width: none; }
+      .catalog-toolbar__row { max-width: none; }
       .catalog-toolbar .search-bar { min-width: 130px; }
 
       /* Topic tiles — 2 per row on mobile */

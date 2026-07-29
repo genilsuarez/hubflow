@@ -6,12 +6,21 @@
  * derivaron: "Rutas guiadas" existía en el dashboard pero no en los ejercicios,
  * aunque exercise-shell.js sí la aceptaba como sección de vuelta válida.
  *
- * `primary: true` = va suelta arriba del sidebar.
- * El resto se agrupa bajo "Explorar temas".
+ * `primary: true` = navegación de app, vive en el sidebar (Inicio, Rutas,
+ * Mis estadísticas, Todos los módulos). El resto (las 4 categorías + guías)
+ * NO se renderiza en el sidebar — son taxonomía de contenido, viven como
+ * chips en #catalogToolbar (ver index.html) y solo se usan de aquí para dos
+ * cosas: validar `?section=` y decidir a qué sección volver desde un
+ * ejercicio (docs/to-do/hubflow-sidebar-refactor.md, Opción D).
+ *
+ * "all" es un caso especial: es `primary` (vive en el sidebar) pero también
+ * aparece como chip en el toolbar — es la vista sin filtro que apila las 5
+ * secciones de catálogo a la vez (ver applyFilters() en dashboard-filters.js).
  *
  * El sidebar de index.html es HTML estático (se pinta antes de que corra el JS).
  * No se genera desde aquí a propósito, pero validate-content.js comprueba que
- * coincida con esta lista — si divergen, falla el build (NAV-SYNC).
+ * las secciones `primary` coincidan con esta lista — si divergen, falla el
+ * build (NAV-SYNC).
  */
 
 import { CATEGORIES } from '../data/catalog.js';
@@ -20,9 +29,10 @@ import { CATEGORIES } from '../data/catalog.js';
 const SIDEBAR_CLS = { vocab: 'v', grammar: 'g', pronunciation: 'p', analysis: 'a' };
 
 export const NAV_SECTIONS = [
-  { key: 'resumen',     icon: 'home',  label: 'Inicio',           cls: '',     primary: true },
-  { key: 'rutas',       icon: 'route', label: 'Rutas guiadas',    cls: 'path', primary: true },
-  { key: 'mi-progreso', icon: 'chart', label: 'Mis estadísticas', cls: 'path', primary: true },
+  { key: 'resumen',     icon: 'home',  label: 'Inicio',            cls: '',     primary: true },
+  { key: 'all',         icon: 'book',  label: 'Todos los módulos', cls: '',     primary: true },
+  { key: 'rutas',       icon: 'route', label: 'Rutas guiadas',     cls: 'path', primary: true },
+  { key: 'mi-progreso', icon: 'chart', label: 'Mis estadísticas',  cls: 'path', primary: true },
   // Las 4 categorías salen de catalog.js — su label es el mismo que el de las
   // estanterías del dashboard, así que no se reescribe aquí.
   ...Object.entries(CATEGORIES).map(([key, cat]) => ({

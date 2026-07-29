@@ -143,10 +143,13 @@ export function initDashboardFilters() {
     const sections = document.querySelectorAll('.section');
     const q = searchInput.value.trim().toLowerCase();
     clearBtn.classList.toggle('visible', q.length > 0);
-    const filtering = q.length > 0 || activeTags.size > 0;
-    // Cross-section search only when there is a text query — tag-only filtering
-    // stays within the current active section to avoid breaking category context.
-    const crossSection = q.length > 0;
+    // "all" (Todos los módulos) apila las 5 secciones de catálogo sin filtro —
+    // se comporta como una búsqueda cross-section permanente, sin texto.
+    const isAllMode = document.body.dataset.active === 'all';
+    const filtering = q.length > 0 || activeTags.size > 0 || isAllMode;
+    // Cross-section search cuando hay texto o estás en "all" — el filtrado solo
+    // por tags se queda dentro de la categoría activa para no romper el contexto.
+    const crossSection = q.length > 0 || isAllMode;
     let anyVisible = false;
 
     sections.forEach(sec => {

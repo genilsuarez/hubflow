@@ -212,21 +212,9 @@ function renderSidebarItem(s) {
   return `<a class="sb-item ${s.cls}${active}" href="../?section=${s.key}" data-target="${s.key}"><span class="sb-icon">${iconMarkup}</span><span class="sb-label">${s.label}</span></a>`;
 }
 
-function setupSidebarMobileNav(sidebar) {
-  const group = sidebar.querySelector('#sbNavTopics');
-  const toggle = sidebar.querySelector('#sbNavTopicsToggle');
+function setupSidebarScrollHint(sidebar) {
   const nav = sidebar.querySelector('.sb-nav');
-  if (!group || !toggle || !nav) return null;
-
-  function syncTopicGroupState() {
-    const open = group.classList.contains('is-open') || !!group.querySelector('.sb-item.active');
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', () => {
-    group.classList.toggle('is-open');
-    syncTopicGroupState();
-  });
+  if (!nav) return;
 
   function syncNavScrollHint() {
     const atEnd = nav.scrollHeight - nav.scrollTop <= nav.clientHeight + 2;
@@ -236,8 +224,6 @@ function setupSidebarMobileNav(sidebar) {
   nav.addEventListener('scroll', syncNavScrollHint, { passive: true });
   window.addEventListener('resize', syncNavScrollHint);
   syncNavScrollHint();
-  syncTopicGroupState();
-  return syncTopicGroupState;
 }
 
 function buildSidebar() {
@@ -252,7 +238,6 @@ function buildSidebar() {
   sidebar.setAttribute('aria-label', 'Navegación HubFlow');
 
   const primaryItems = NAV_SECTIONS.filter(s => SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
-  const topicItems = NAV_SECTIONS.filter(s => !SIDEBAR_PRIMARY_KEYS.has(s.key)).map(renderSidebarItem).join('');
 
   sidebar.innerHTML = `
     <div class="sb-brand">
@@ -265,14 +250,6 @@ function buildSidebar() {
     </div>
     <nav class="sb-nav" id="sbNav">
       ${primaryItems}
-      <div class="sb-nav-group" id="sbNavTopics">
-        <button type="button" class="sb-nav-group__toggle" id="sbNavTopicsToggle" aria-expanded="false" aria-controls="sbNavTopicsList">
-          <span class="sb-icon">${navIcon('book')}</span>
-          <span class="sb-label">Explorar temas</span>
-          <span class="sb-nav-group__chev" aria-hidden="true">›</span>
-        </button>
-        <div class="sb-nav-group__items" id="sbNavTopicsList">${topicItems}</div>
-      </div>
     </nav>
     <div class="sidebar-footer">
       <button class="sb-item" id="sbAboutBtn" type="button"><span class="sb-icon">${navIcon('info')}</span><span class="sb-label">About LearnFlow</span></button>
@@ -283,7 +260,7 @@ function buildSidebar() {
   `;
 
   document.body.prepend(scrim, sidebar);
-  setupSidebarMobileNav(sidebar);
+  setupSidebarScrollHint(sidebar);
 
   function openSidebar() {
     sidebar.classList.add('is-open');

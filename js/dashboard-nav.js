@@ -1,10 +1,10 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow Dashboard — Navigation Shell
-   Theme toggle, navigation drawer/mode, mobile sidebar topics, about/login
-   triggers. Self-initializing. The one cross-reference to section-switching
-   (the topbar "back" button) is injected as `onBackToOverview`; the two
-   functions setActive() needs to call back into (`syncTopbarNavButtons`,
-   `setNavigationDrawerOpen`) and the sidebar topic-group sync are returned.
+   Theme toggle, navigation drawer/mode, about/login triggers. Self-
+   initializing. The one cross-reference to section-switching (the topbar
+   "back" button) is injected as `onBackToOverview`; the two functions
+   setActive() needs to call back into (`syncTopbarNavButtons`,
+   `setNavigationDrawerOpen`) are returned.
    ═══════════════════════════════════════════════════════ */
 
 import { CATEGORIES } from '../data/catalog.js';
@@ -47,7 +47,7 @@ export function initDashboardNav({ onBackToOverview } = {}) {
   // Las secciones de catálogo son las 4 categorías + la de guías; las de
   // resumen son el resto. Derivadas para que agregar una categoría no exija
   // acordarse de tocar esta línea.
-  const CATALOG_SECTIONS = new Set([...Object.keys(CATEGORIES), 'guides']);
+  const CATALOG_SECTIONS = new Set([...Object.keys(CATEGORIES), 'guides', 'all']);
   const OVERVIEW_SECTIONS = new Set(NAV_SECTION_KEYS.filter((k) => !CATALOG_SECTIONS.has(k)));
 
   function syncDrawerPersistent() {
@@ -126,21 +126,9 @@ export function initDashboardNav({ onBackToOverview } = {}) {
     if (event.key === 'Escape') setNavigationDrawerOpen(false);
   });
 
-  function setupSidebarMobileNav() {
-    const group = document.getElementById('sbNavTopics');
-    const toggle = document.getElementById('sbNavTopicsToggle');
+  function setupSidebarScrollHint() {
     const nav = document.getElementById('sbNav');
-    if (!group || !toggle || !nav) return;
-
-    function syncTopicGroupState() {
-      const open = group.classList.contains('is-open') || !!group.querySelector('.sb-item.active');
-      toggle.setAttribute('aria-expanded', String(open));
-    }
-
-    toggle.addEventListener('click', () => {
-      group.classList.toggle('is-open');
-      syncTopicGroupState();
-    });
+    if (!nav) return;
 
     function syncNavScrollHint() {
       const atEnd = nav.scrollHeight - nav.scrollTop <= nav.clientHeight + 2;
@@ -149,13 +137,10 @@ export function initDashboardNav({ onBackToOverview } = {}) {
 
     nav.addEventListener('scroll', syncNavScrollHint, { passive: true });
     window.addEventListener('resize', syncNavScrollHint);
-    group.addEventListener('transitionend', syncNavScrollHint);
     syncNavScrollHint();
-    syncTopicGroupState();
-    return syncTopicGroupState;
   }
 
-  const syncSidebarTopicGroup = setupSidebarMobileNav();
+  setupSidebarScrollHint();
   window.addEventListener('storage', (event) => {
     if (event.key === NAVIGATION_MODE_KEY) setNavigationMode(event.newValue);
   });
@@ -170,5 +155,5 @@ export function initDashboardNav({ onBackToOverview } = {}) {
     },
   });
 
-  return { syncTopbarNavButtons, setNavigationDrawerOpen, syncSidebarTopicGroup };
+  return { syncTopbarNavButtons, setNavigationDrawerOpen };
 }
