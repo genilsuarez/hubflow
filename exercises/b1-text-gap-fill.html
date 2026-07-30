@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Gap Fill (B1) — HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233D7F7F'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.js"></script>
+<script src="../js/lp-input-zoom.js"></script>
+<script src="../js/lp-nav-icons.js"></script>
+<script src="../js/lp-platform-urls.js"></script>
+<script src="../js/lp-guest-reset.js"></script>
+<script src="../js/lp-login.js"></script>
+<script src="../js/lp-nav-helpers.js"></script>
+<script src="../js/lp-about-content.js"></script>
+<script src="../js/lp-about.js"></script>
+<style>body{background:#FFFFFF;color:#2C2418}[data-theme="dark"] body{background:#181B20;color:#E8EAED}</style>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/lp-nav-active.css">
+<link rel="stylesheet" href="../css/lp-about.css">
+<link rel="stylesheet" href="../css/typed-answer-shell.css">
+<style>
+  .gf-card {
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 16px 20px; box-shadow: var(--lp-shadow-sm); text-align: center;
+  }
+  .gf-badge {
+    display: inline-block; font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--lp-cat-teal); background: color-mix(in srgb, var(--lp-cat-teal) 12%, transparent);
+    padding: 4px 10px; border-radius: var(--lp-radius-full); margin-bottom: 10px;
+  }
+  .gf-sentence { font-family: var(--lp-font-display); font-size: 1.1rem; color: var(--lp-ink); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="wrap" data-color="teal">
+  <div class="top-bar">
+    <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
+  </div>
+
+  <header class="header">
+    <h1>📝 Text Gap Fill (B1)</h1>
+    <div class="pill-bar pill-bar--scroll" role="tablist">
+      <button class="pill-btn active" data-mode="practice" role="tab">📝 Practice</button>
+      <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
+    </div>
+  </header>
+
+  <div class="cat-bar" id="catBar"></div>
+
+  <div class="progress">
+    <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
+    <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
+  </div>
+
+  <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">2:00</span></div>
+
+  <div class="scroll-body">
+    <div data-area="practice" class="show">
+      <div class="gf-card">
+        <div class="gf-badge" id="gfBadge"></div>
+        <div class="gf-sentence" id="gfSentence"></div>
+      </div>
+      <div class="item-counter" id="itemCounter"></div>
+
+      <button class="lp-btn lp-btn--ghost" id="hintBtn">💡 Hint</button>
+      <div class="hint-box" id="hintBox"></div>
+
+      <input class="answer-input" id="answerInput" placeholder="Type the missing word(s)..." autocomplete="off" autocapitalize="none" spellcheck="false">
+      <div class="apostrophe-tip" id="apostropheTip"></div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="lp-btn lp-btn--primary" id="checkBtn">Check ✓</button>
+        <button class="lp-btn lp-btn--ghost" id="nextBtn" style="display:none">Next →</button>
+      </div>
+
+      <div class="explain-box" id="explainBox"></div>
+      <div class="answers-list" id="answersList"></div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay"></div>
+</div>
+
+<script type="module">
+import { CATEGORIES } from '../data/b1-text-gap-fill.js';
+import { initTypedAnswerPractice } from '../js/typed-answer-engine.js';
+
+initTypedAnswerPractice({
+  categories: CATEGORIES,
+  scoreKeyPrefix: 'b1gapfill',
+  secondsPerQuestion: 30,
+  renderPrompt(item, currentCat) {
+    document.getElementById('gfBadge').textContent = CATEGORIES[currentCat].label;
+    document.getElementById('gfSentence').textContent = item.sentence;
+  },
+});
+</script>
+
+<script type="module" src="../js/exercise-shell.js"></script>
+</body>
+</html>

@@ -217,6 +217,41 @@ async function validateAnswerable(MODULES) {
 }
 
 /**
+ * cefrByCategory (rebalanceo 2026-07-30, Fase 2 — docs/to-do/hubflow-cefr-rebalance.md)
+ * declara el nivel CEFR de cada categoría interna de un módulo escalonado
+ * (technology-internet, phrasal-verbs, etc.). Debe coincidir 1:1 con las
+ * categorías reales del data file: ni claves huérfanas (categoría renombrada
+ * o borrada) ni categorías sin nivel asignado (categoría nueva sin clasificar).
+ */
+async function validateCefrByCategory(MODULES) {
+  const CEFR_LEVELS = new Set(['a1', 'a2', 'b1', 'b2', 'c1', 'c2']);
+  for (const m of MODULES) {
+    if (m.wip || !m.cefrByCategory || !m.dataFile) continue;
+
+    const dataPath = path.join(ROOT_DIR, m.dataFile.split('#')[0]);
+    if (!existsSync(dataPath)) continue;
+    const mod = await import(pathToFileURL(dataPath).href);
+    const realKeys = new Set(Object.keys(mod.CATEGORIES || mod.LEVELS || {}));
+    const declaredKeys = new Set(Object.keys(m.cefrByCategory));
+
+    for (const key of declaredKeys) {
+      if (!realKeys.has(key)) {
+        err('CAT-CEFRCAT', `catalog.js[${m.id}].cefrByCategory: "${key}" no existe en ${m.dataFile} — corregir o eliminar`);
+      }
+      const level = m.cefrByCategory[key];
+      if (!CEFR_LEVELS.has(level)) {
+        err('CAT-CEFRCAT', `catalog.js[${m.id}].cefrByCategory["${key}"]: nivel "${level}" no es un CEFR válido`);
+      }
+    }
+    for (const key of realKeys) {
+      if (!declaredKeys.has(key)) {
+        err('CAT-CEFRCAT', `catalog.js[${m.id}].cefrByCategory: falta la categoría "${key}" (existe en ${m.dataFile} pero no tiene nivel declarado)`);
+      }
+    }
+  }
+}
+
+/**
  * Los botones de acción van en #exBottomNav, no sueltos en el contenido.
  * ex-bottom-nav.js solo iza ids concretos, así que un id propio deja el botón
  * flotando — es lo que pasaba con `writeCheck` y con `battleActions`.
@@ -376,6 +411,7 @@ async function validateCatalog() {
   }
 
   await validateAnswerable(MODULES);
+  await validateCefrByCategory(MODULES);
 
   const moduleIds = new Set(MODULES.map((module) => module.id));
   for (const module of MODULES) {
