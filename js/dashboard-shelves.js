@@ -11,6 +11,7 @@ import { getContentProgress } from './progress-store.js';
 const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
 const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
 const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
+const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
 
 function pillsHTML(mod) {
   const pills = [`<span class="pill lvl">${mod.cefr.toUpperCase()}</span>`];
@@ -64,7 +65,11 @@ function renderShelf(containerId, modules, category) {
   const el = document.getElementById(containerId);
   if (!el) return;
   const cls = CATEGORY_SPINE[category] || '';
-  el.innerHTML = modules.map(mod => bookCardHTML(mod, cls)).join('');
+  // Dentro de cada estantería (categoría/subcategoría) el orden de origen en
+  // MODULES es temático, no por nivel — se reordena aquí para que A1→C2 se
+  // vea consistente sin depender de mantener el array de catalog.js a mano.
+  const sorted = [...modules].sort((a, b) => LEVEL_ORDER.indexOf(a.cefr) - LEVEL_ORDER.indexOf(b.cefr));
+  el.innerHTML = sorted.map(mod => bookCardHTML(mod, cls)).join('');
 }
 
 export function renderAllShelves() {
