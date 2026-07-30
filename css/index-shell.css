@@ -297,6 +297,30 @@
       border-color: color-mix(in srgb, var(--level-color, var(--lp-accent)) 45%, transparent);
       color: var(--level-color, var(--lp-accent));
     }
+    /* Pill de "limpiar filtros" — visible solo mientras hay tags activos (homologado con
+       el clear-filters-btn de FluentFlow: aparece junto a los resultados filtrados). */
+    .filter-status { display: flex; justify-content: center; width: 100%; }
+    .filter-status[hidden] { display: none; }
+    .filter-status__clear {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 0.25rem 0.625rem; background: transparent;
+      border: 1.5px solid color-mix(in srgb, var(--lp-accent) 40%, transparent);
+      border-radius: var(--lp-radius-full); color: var(--lp-accent);
+      font-family: var(--lp-font-body); font-size: 0.72rem; font-weight: 600;
+      cursor: pointer; touch-action: manipulation;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .filter-status__clear:hover {
+      background: var(--lp-accent); border-color: var(--lp-accent); color: var(--lp-ink-inverse);
+    }
+    .filter-status__clear:active { transform: scale(0.97); }
+    .filter-status__clear:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    [data-theme="dark"] .filter-status__clear {
+      border-color: color-mix(in srgb, #60a5fa 40%, transparent); color: #6b9fe8;
+    }
+    [data-theme="dark"] .filter-status__clear:hover {
+      background: #60a5fa; border-color: #60a5fa; color: var(--lp-ink-inverse);
+    }
     [data-theme="dark"] .filter-toggle {
       background: var(--lp-surface); border-color: var(--lp-border); color: var(--lp-ink-soft);
     }

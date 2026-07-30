@@ -22,6 +22,8 @@ export function initDashboardFilters() {
   const filterTabCountSkill = document.getElementById('filterTabCountSkill');
   const tagBarPanelCefr = document.getElementById('tagBarPanelCefr');
   const tagBarPanelSkills = document.getElementById('tagBarPanelSkills');
+  const filterStatus = document.getElementById('filterStatus');
+  const filterStatusClear = document.getElementById('filterStatusClear');
   const activeTags = new Set((new URLSearchParams(location.search).get('tag') || '').split(',').filter(Boolean));
   const LEVEL_COLORS = { a1: '#22c55e', a2: '#eab308', b1: '#f97316', b2: '#ef4444', c1: '#a855f7', c2: '#374151' };
   let activeFilterTab = 'cefr';
@@ -73,6 +75,18 @@ export function initDashboardFilters() {
     filterBadge.textContent = activeTags.size;
     filterToggle.classList.toggle('filter-toggle--active', activeTags.size > 0);
     updateFilterTabCounts();
+    if (filterStatus) filterStatus.hidden = activeTags.size === 0;
+  }
+
+  function clearActiveTags() {
+    if (activeTags.size === 0) return;
+    activeTags.clear();
+    tagBar.querySelectorAll('.filter-chip--active').forEach(chip => chip.classList.remove('filter-chip--active'));
+    updateFilterBadge();
+    applyFilters();
+    const u = new URL(location.href);
+    u.searchParams.delete('tag');
+    history.replaceState(null, '', u);
   }
 
   const FILTER_MOBILE_MQ = window.matchMedia('(max-width: 639px)');
@@ -107,6 +121,7 @@ export function initDashboardFilters() {
     filterToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleFilterPanel(); });
     filterClose?.addEventListener('click', closeFilterPanel);
     filterBackdrop?.addEventListener('click', closeFilterPanel);
+    filterStatusClear?.addEventListener('click', clearActiveTags);
     tagBar.querySelector('.tagbar__tabs')?.addEventListener('click', (e) => {
       const tabBtn = e.target.closest('[data-filter-tab]');
       if (!tabBtn) return;
