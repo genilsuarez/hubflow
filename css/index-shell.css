@@ -397,6 +397,29 @@
       --hero-spine: var(--lp-cat-amber);
     }
 
+    /* ─── LEVEL STATUS BANNER (LearnFlow Progression System) ─── */
+    .level-status-banner {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      margin: 0 0 16px; padding: 10px 14px;
+      background: color-mix(in srgb, var(--lp-accent) 8%, var(--lp-surface));
+      border: 1.5px solid color-mix(in srgb, var(--lp-accent) 30%, transparent);
+      border-radius: var(--lp-radius-lg);
+    }
+    .level-status-banner[hidden] { display: none; }
+    .level-status-banner__icon { font-size: 1rem; flex-shrink: 0; }
+    .level-status-banner__text {
+      flex: 1 1 auto; min-width: 180px;
+      font-size: 0.78rem; font-weight: 500; color: var(--lp-ink-soft); line-height: 1.35;
+    }
+    .level-status-banner__btn {
+      flex-shrink: 0; padding: 6px 12px;
+      background: var(--lp-accent); color: var(--lp-ink-inverse);
+      border-radius: var(--lp-radius-full);
+      font-size: 0.74rem; font-weight: 700; text-decoration: none; white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+    .level-status-banner__btn:hover { opacity: 0.85; }
+
     /* ─── HERO CARD (ejercicio sugerido) ─── */
     .resumen-hero .hero-card {
       margin-bottom: 0;

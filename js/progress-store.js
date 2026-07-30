@@ -13,7 +13,7 @@ import {
   markLocalCacheBootstrapped,
   HUBFLOW_LOCAL_READY_KEY,
 } from './sync-engine.js';
-import { enrichHubflowContentEntry } from './lp-progress-summary.js';
+import { enrichHubflowContentEntry, checkLevelAdvancement } from './lp-progress-summary.js';
 
 const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
 const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
@@ -374,6 +374,19 @@ function publishHubFlowProgress() {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(projection));
     invalidateProjectionCache();
     notifyHubFlowProgressUpdated();
+    // LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
+    // Se evalúa aquí (no en recordScore) porque este es el único punto que ya
+    // sabe que el documento de progreso cambió de verdad, no solo que hubo un
+    // intento más. checkLevelAdvancement() lee el documento recién escrito.
+    try {
+      const result = checkLevelAdvancement();
+      if (result.advanced) {
+        window.dispatchEvent(new CustomEvent('lp-level-advanced-locally', { detail: result }));
+        lpSupabase.updateCefrLevel(result.level).catch(() => { /* se reintenta en el próximo login */ });
+      }
+    } catch {
+      /* no bloquear el guardado de progreso por un fallo en el cálculo de nivel */
+    }
   }
 
   try {

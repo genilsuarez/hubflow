@@ -7,11 +7,11 @@
 
 import { MODULES, CATEGORIES, SUBCATEGORIES, getModuleDepth } from '../data/catalog.js';
 import { getContentProgress } from './progress-store.js';
+import { getActiveLevel, levelUnlocks, LEVEL_ORDER } from './lp-progress-summary.js';
 
 const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
 const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
 const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
-const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
 
 function pillsHTML(mod) {
   const pills = [`<span class="pill lvl">${mod.cefr.toUpperCase()}</span>`];
@@ -70,13 +70,26 @@ function renderShelf(containerId, modules, category) {
   // vea consistente sin depender de mantener el array de catalog.js a mano.
   const sorted = [...modules].sort((a, b) => LEVEL_ORDER.indexOf(a.cefr) - LEVEL_ORDER.indexOf(b.cefr));
   el.innerHTML = sorted.map(mod => bookCardHTML(mod, cls)).join('');
+  // Si el filtrado por nivel deja la subsección sin módulos, ocultar todo el
+  // bloque (encabezado incluido) en vez de mostrar un título sin contenido.
+  const subsec = el.closest('.subsec');
+  if (subsec) subsec.classList.toggle('hidden', sorted.length === 0);
 }
 
+/**
+ * LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
+ * El nivel activo es criterio de ACCESO, no una sugerencia: el material por
+ * encima de lp-level no se renderiza (sin mensaje de "bloqueado", según el
+ * diseño — simplemente no existe en la vista hasta que se desbloquea).
+ */
 export function renderAllShelves() {
-  renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation'), 'pronunciation');
-  renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis'), 'analysis');
+  const activeLevel = getActiveLevel();
+  const unlocked = (m) => levelUnlocks(m.cefr, activeLevel);
+
+  renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation' && unlocked(m)), 'pronunciation');
+  renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis' && unlocked(m)), 'analysis');
   Object.keys(SUBCATEGORIES).forEach(sub => {
-    renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub), 'grammar');
-    renderShelf(`shelf-vocab-${sub}`, MODULES.filter(m => m.category === 'vocab' && m.subcategory === sub), 'vocab');
+    renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub && unlocked(m)), 'grammar');
+    renderShelf(`shelf-vocab-${sub}`, MODULES.filter(m => m.category === 'vocab' && m.subcategory === sub && unlocked(m)), 'vocab');
   });
 }

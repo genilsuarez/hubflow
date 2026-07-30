@@ -277,6 +277,16 @@
           })();
         </script>
 
+        <!-- LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
+             Oculto por defecto; level-status.js lo muestra solo cuando HubFlow ya
+             cumplió su parte (≥50% del nivel activo) pero el nivel no avanzó
+             porque otra app (FluentFlow/LyricFlow) todavía no llega a la suya. -->
+        <div class="level-status-banner" id="levelStatusBanner" hidden>
+          <span class="level-status-banner__icon" aria-hidden="true">🔒</span>
+          <span class="level-status-banner__text">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
+          <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
+        </div>
+
         <div class="sec-head">Explora por tema</div>
         <div class="tiles">
           <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><div class="tile-copy"><div class="tile-title">Vocabulary &amp; Words</div><div class="tile-count" data-count-for="vocab">0 ejercicios</div></div></button>
@@ -543,6 +553,7 @@ import { renderHeroCard, refreshHeroSuggestion, clearPersistedHeroSuggestion } f
 import { renderRutas, renderProgressSnapshot, renderLastActivities, refreshHeaderStats, renderPaths } from './js/dashboard-stats.js';
 import { initDashboardFilters } from './js/dashboard-filters.js';
 import { initDashboardNav } from './js/dashboard-nav.js';
+import { initLevelStatus } from './js/level-status.js';
 
 (function() {
   const nav = initDashboardNav({ onBackToOverview: () => setActive('resumen') });
@@ -552,6 +563,17 @@ import { initDashboardNav } from './js/dashboard-nav.js';
 
   // ─── RUTAS (dashboard summary card) ───
   renderRutas();
+
+  // ─── LearnFlow Progression System ───
+  // docs/to-do/learnflow-progression-system.md. hubflow-progress-updated (más
+  // abajo) ya re-renderiza las estanterías cuando ESTA app avanza de nivel
+  // (requestAnimationFrame corre después de que checkLevelAdvancement() ya
+  // escribió lp-level). Lo que falta cubrir aquí es el ascenso disparado desde
+  // OTRA pestaña/app — ese solo llega como evento 'storage' nativo.
+  initLevelStatus();
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'lp-level') renderAllShelves();
+  });
 
   // ─── HEADER STATS / HOME REFRESH ORCHESTRATOR ───
   window.addEventListener('hubflow-progress-updated', () => {
