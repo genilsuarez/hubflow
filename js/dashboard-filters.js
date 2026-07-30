@@ -196,8 +196,14 @@ export function initDashboardFilters() {
         });
         // Oculta la subsección entera (ej. "Morfología y ortografía") si ninguna de
         // sus tarjetas pasa el filtro — evita encabezados huérfanos sin tarjetas debajo.
+        // Nota: si el shelf está vacío (sin tarjetas), renderShelf ya puso .hidden;
+        // no lo quitamos aquí aunque filtering=false — un subsec sin contenido nunca
+        // debe mostrarse independientemente del estado del filtro.
         const subsec = container.closest('.subsec');
-        if (subsec && (crossSection || isActive)) subsec.classList.toggle('hidden', filtering && !containerVisible);
+        const shelfIsEmpty = container.querySelectorAll('.book, .guide-link').length === 0;
+        if (subsec && (crossSection || isActive) && !shelfIsEmpty) {
+          subsec.classList.toggle('hidden', filtering && !containerVisible);
+        }
       });
       // Only promote non-active sections to visible during cross-section (text) search
       if (crossSection) {
