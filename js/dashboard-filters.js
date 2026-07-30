@@ -167,7 +167,14 @@ export function initDashboardFilters() {
           const text = card.textContent.toLowerCase();
           const textMatch = !q || text.includes(q);
           const cardTags = card.dataset.tags ? card.dataset.tags.split(',') : [];
-          const tagMatch = activeTags.size === 0 || [...activeTags].every(t => cardTags.includes(t));
+          // El nivel se compara contra data-cefr (valor único, la fuente de verdad del
+          // pill que se ve en la tarjeta), no contra data-tags: ese array arrastra tags
+          // de nivel históricos que no siempre coinciden con el cefr actual del módulo
+          // (ver docs/to-do/hubflow-cefr-rebalance.md — "nivel mixto"). Comparar contra
+          // tags hacía que filtrar por A2 mostrara tarjetas con el pill en A1.
+          const tagMatch = activeTags.size === 0 || [...activeTags].every(t =>
+            TAGS.cefr.includes(t) ? card.dataset.cefr === t : cardTags.includes(t)
+          );
           const match = textMatch && tagMatch;
           card.classList.toggle('hidden', !match);
           if (match && filtering) { containerVisible = true; sectionVisible = true; }

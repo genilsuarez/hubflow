@@ -47,7 +47,7 @@ function progressHTML(mod) {
 }
 
 function bookCardHTML(mod, spineClass) {
-  return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}">
+  return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}" data-cefr="${mod.cefr}">
     <div class="book-spine"></div>
     <div class="book-icon">${mod.icon}</div>
     <div class="book-body">
