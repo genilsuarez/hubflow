@@ -18,6 +18,16 @@ export const CATEGORIES = {
       { sentence: 'The company launched a new app. ___ became popular within days.', correct: 'it', explain: '"It" refers back to the single thing just mentioned (the app).' },
       { sentence: 'There were two routes: the highway and the coastal road. ___ was longer but more scenic.', correct: 'the latter', explain: '"The latter" refers back to the second option (the coastal road).' },
       { sentence: 'He apologized for being late. ___ was appreciated by everyone.', correct: 'this', explain: '"This" refers back to the act of apologizing.' },
+      { sentence: 'She bought a used car. ___ broke down within a week.', correct: 'it', explain: '"It" refers back to the single thing just mentioned (the car).' },
+      { sentence: 'He forgot his passport at home. ___ meant he almost missed the flight.', correct: 'this', explain: '"This" refers back to the whole situation just described.' },
+      { sentence: 'We tried the pasta and the pizza. ___ were both delicious.', correct: 'these', explain: '"These" refers back to the two things just mentioned.' },
+      { sentence: 'The company offered a bonus or extra holiday days. ___ was more popular among staff.', correct: 'the latter', explain: '"The latter" refers back to the second of two options mentioned.' },
+      { sentence: 'She could study medicine or law. ___ required much longer training.', correct: 'the former', explain: '"The former" refers back to the first of two options mentioned.' },
+      { sentence: 'I found my old diary yesterday. ___ brought back a lot of memories.', correct: 'it', explain: '"It" refers back to the single thing just mentioned (the diary).' },
+      { sentence: 'He missed the deadline again. ___ frustrated his manager.', correct: 'this', explain: '"This" refers back to the whole situation just described.' },
+      { sentence: 'We adopted two kittens last month. ___ are already best friends.', correct: 'these', explain: '"These" refers back to the two things just mentioned.' },
+      { sentence: 'The museum has a Roman exhibit and an Egyptian exhibit. ___ is more popular with children.', correct: 'the latter', explain: '"The latter" refers back to the second option mentioned.' },
+      { sentence: 'There were two flights available: an early one and a late one. ___ was cheaper.', correct: 'the former', explain: '"The former" refers back to the first option mentioned.' },
     ]
   },
   advancedCohesion: {
@@ -35,6 +45,16 @@ export const CATEGORIES = {
       { sentence: 'It was ___ an amazing concert that we stayed for the encore.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
       { sentence: "I don't have a car, but I'd like ___.", correct: 'one', explain: '"One" substitutes for the countable noun "a car".' },
       { sentence: '___ of us wanted to go first, so we drew straws.', correct: 'neither', explain: '"Neither" means "not one of the two of us".' },
+      { sentence: 'Are they moving to a new house? I think ___.', correct: 'so', explain: '"I think so" substitutes for the whole clause just mentioned.' },
+      { sentence: "I can't drive, and my sister can't ___.", correct: 'either', explain: '"Either" agrees with a negative statement.' },
+      { sentence: 'Neither the manager nor the assistant showed up; ___ explained why.', correct: 'neither', explain: '"Neither" refers back to both people, meaning "not one nor the other".' },
+      { sentence: 'It was ___ a boring lecture that half the class fell asleep.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
+      { sentence: "My umbrella broke, so I need to buy a new ___.", correct: 'one', explain: '"One" substitutes for the countable noun "umbrella".' },
+      { sentence: 'Will it rain tomorrow? The forecast says ___.', correct: 'so', explain: '"The forecast says so" substitutes for the whole idea just stated.' },
+      { sentence: "I haven't finished the book, and he hasn't ___.", correct: 'either', explain: '"Either" agrees with a negative statement.' },
+      { sentence: 'It was ___ a long journey that everyone fell asleep on the bus.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
+      { sentence: "I don't own a bicycle, but I'd like ___.", correct: 'one', explain: '"One" substitutes for the countable noun "bicycle".' },
+      { sentence: '___ of the applicants had enough experience for the role.', correct: 'neither', explain: '"Neither" means "not one of the two candidates".' },
     ]
   }
 };

@@ -73,6 +73,32 @@ export const CATEGORIES = {
           { word: "cake", index: 1, correction: "cake,", rule: "Non-defining relative clauses need a comma before \"which\"." },
           { word: "herself", index: 5, correction: "herself,", rule: "Non-defining relative clauses need a comma after the clause too." }
         ]
+      },
+      {
+        text: "After finishing his homework he watched television.",
+        errors: [
+          { word: "homework", index: 3, correction: "homework,", rule: "Use a comma after an introductory phrase." }
+        ]
+      },
+      {
+        text: "The museum which opened last year is very popular.",
+        errors: [
+          { word: "museum", index: 1, correction: "museum,", rule: "Non-defining relative clauses need a comma before \"which\"." },
+          { word: "year", index: 5, correction: "year,", rule: "Non-defining relative clauses need a comma after the clause too." }
+        ]
+      },
+      {
+        text: "No I haven't finished the assignment yet.",
+        errors: [
+          { word: "No", index: 0, correction: "No,", rule: "Use a comma after an introductory word like \"Yes\" or \"No\"." }
+        ]
+      },
+      {
+        text: "My neighbor Tom fixed our fence last week.",
+        errors: [
+          { word: "neighbor", index: 1, correction: "neighbor,", rule: "An appositive (a renaming phrase) needs commas around it." },
+          { word: "Tom", index: 2, correction: "Tom,", rule: "The appositive needs a comma after it too." }
+        ]
       }
     ]
   },
@@ -141,6 +167,26 @@ export const CATEGORIES = {
         errors: [
           { word: "teachers", index: 1, correction: "teacher's", rule: "Missing possessive apostrophe — the classroom belongs to the teacher." }
         ]
+      },
+      {
+        text: "The cats toy rolled under the sofa.",
+        errors: [
+          { word: "cats", index: 1, correction: "cat's", rule: "Missing possessive apostrophe — the toy belongs to the cat." }
+        ]
+      },
+      {
+        text: "Youre going to love this restaurant.",
+        errors: [
+          { word: "Youre", index: 0, correction: "You're", rule: "\"You're\" (you are) needs an apostrophe." }
+        ]
+      },
+      {
+        text: "we visited london and rome during our holiday.",
+        errors: [
+          { word: "we", index: 0, correction: "We", rule: "The first word of a sentence must be capitalized." },
+          { word: "london", index: 2, correction: "London", rule: "Proper nouns (city names) are always capitalized." },
+          { word: "rome", index: 4, correction: "Rome", rule: "Proper nouns (city names) are always capitalized." }
+        ]
       }
     ]
   },
@@ -207,6 +253,24 @@ export const CATEGORIES = {
         text: "The rule is simple never leave a door unlocked.",
         errors: [
           { word: "simple", index: 3, correction: "simple:", rule: "Use a colon to introduce a rule or principle that follows a complete clause." }
+        ]
+      },
+      {
+        text: "The recipe requires three ingredients flour sugar and butter.",
+        errors: [
+          { word: "ingredients", index: 4, correction: "ingredients:", rule: "Use a colon before a list that follows a complete statement." }
+        ]
+      },
+      {
+        text: "The traffic was terrible therefore we arrived late.",
+        errors: [
+          { word: "terrible", index: 3, correction: "terrible;", rule: "Use a semicolon before 'therefore' when joining two independent clauses." }
+        ]
+      },
+      {
+        text: "There is one rule listen carefully before you speak.",
+        errors: [
+          { word: "rule", index: 3, correction: "rule:", rule: "Use a colon to introduce a rule or principle that follows a complete clause." }
         ]
       }
     ]

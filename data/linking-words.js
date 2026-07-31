@@ -18,6 +18,10 @@ export const CATEGORIES = {
       { sentence: 'The team lost the match. ___, they played with great spirit.', correct: 'nevertheless', explain: '"Nevertheless" acknowledges the loss but adds a positive contrast.' },
       { sentence: 'The product is affordable. ___, it comes with a 2-year warranty.', correct: 'moreover', explain: '"Moreover" reinforces the positive point already made.' },
       { sentence: 'The gym has modern equipment. ___, membership is very affordable.', correct: 'in addition', explain: '"In addition" adds a second advantage.' },
+      { sentence: 'The flight was delayed for hours. ___, the airline offered free meals.', correct: 'however', explain: '"However" introduces a contrast with the previous sentence.' },
+      { sentence: 'The plan seems risky. ___, it could bring huge rewards.', correct: 'on the other hand', explain: '"On the other hand" presents a contrasting perspective on the same topic.' },
+      { sentence: 'The staff are friendly. ___, the service is very fast.', correct: 'moreover', explain: '"Moreover" adds an extra, reinforcing point.' },
+      { sentence: 'The city is beautiful. ___, it can be very crowded in summer.', correct: 'nevertheless', explain: '"Nevertheless" = despite the previous fact, a contrasting result still happens.' },
     ]
   },
   causeResult: {
@@ -35,6 +39,9 @@ export const CATEGORIES = {
       { sentence: 'Prices rose sharply. ___, many customers switched suppliers.', correct: 'consequently', explain: '"Consequently" formally introduces the outcome.' },
       { sentence: '___ she was the only qualified candidate, she got the job.', correct: 'since', explain: '"Since" gives the reason before the main clause.' },
       { sentence: 'The bridge was damaged; ___, traffic was diverted for weeks.', correct: 'therefore', explain: '"Therefore" introduces the logical result of the damage.' },
+      { sentence: 'The road was icy. ___, several cars skidded off the highway.', correct: 'as a result', explain: '"As a result" introduces the direct consequence.' },
+      { sentence: '___ the store was closed, we ordered online instead.', correct: 'since', explain: '"Since" introduces a reason at the start of a sentence.' },
+      { sentence: 'The concert was cancelled ___ the storm warning.', correct: 'due to', explain: '"Due to" + noun phrase introduces the cause.' },
     ]
   },
   concessionPurpose: {
@@ -52,6 +59,9 @@ export const CATEGORIES = {
       { sentence: 'He turned off his phone ___ nobody could disturb him.', correct: 'so that', explain: '"So that" introduces the intended result of an action.' },
       { sentence: '___ she worked full-time, she still found time to volunteer.', correct: 'although', explain: '"Although" introduces a contrast between two facts.' },
       { sentence: 'They left early ___ avoid the rush-hour traffic.', correct: 'in order to', explain: '"In order to" expresses purpose — why they left early.' },
+      { sentence: '___ the heavy traffic, she arrived on time.', correct: 'despite', explain: '"Despite" + noun phrase introduces a concession.' },
+      { sentence: 'He saved money every month ___ buy a new car.', correct: 'in order to', explain: '"In order to" + infinitive gives the reason for an action.' },
+      { sentence: '___ the instructions were confusing, he managed to assemble the shelf.', correct: 'although', explain: '"Although" introduces a contrast between two facts.' },
     ]
   }
 };

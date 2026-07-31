@@ -14,6 +14,10 @@ export const CATEGORIES = {
       { sentence: '___ your response.', correct: 'I look forward to', explain: 'A standard formal closing phrase.' },
       { sentence: '___ request an extension on the deadline.', correct: 'I am writing to', explain: 'A standard formal opener stating the purpose of the email.' },
       { sentence: '___ you could clarify this point.', correct: 'I would be grateful if', explain: 'A formal way to make a polite request.' },
+      { sentence: '___ apply for the marketing position advertised last week.', correct: 'I am writing to', explain: 'A standard formal opener stating the purpose of the email.' },
+      { sentence: '___ you could review the attached proposal before Monday.', correct: 'I would be grateful if', explain: 'A formal way to make a polite request.' },
+      { sentence: '___ get in touch if you need any further clarification.', correct: 'Please do not hesitate to', explain: 'A formal way to invite further contact.' },
+      { sentence: '___ working with you on this project.', correct: 'I look forward to', explain: 'A standard formal closing phrase.' },
     ]
   },
   academicVsCasualOpinion: {
@@ -31,6 +35,9 @@ export const CATEGORIES = {
       { sentence: '___ we should leave it for now.', correct: 'I guess', explain: 'Casual, informal way to state an opinion.' },
       { sentence: '___ the sample size was too small.', correct: 'It could be argued that', explain: 'Formal academic phrasing that introduces a debatable claim.' },
       { sentence: '___ conditions have improved slightly.', correct: 'It appears that', explain: 'Formal, hedged academic phrasing for an observation.' },
+      { sentence: '___ the current approach is not sustainable in the long term.', correct: 'It could be argued that', explain: 'Formal academic phrasing that introduces a debatable claim.' },
+      { sentence: "___ it's probably going to rain later.", correct: 'I guess', explain: 'Casual, informal way to state an opinion.' },
+      { sentence: '___ the new method reduces errors significantly.', correct: 'It appears that', explain: 'Formal, hedged academic phrasing for an observation.' },
     ]
   },
   directnessLevels: {
@@ -48,6 +55,9 @@ export const CATEGORIES = {
       { sentence: '___ with a small matter, when you have a moment?', correct: 'Would you be so kind as to help me', explain: 'Very formal, highly polite phrasing.' },
       { sentence: '___ fix this right now.', correct: 'Help me', explain: 'Very direct, blunt phrasing.' },
       { sentence: '___ finishing this project on time.', correct: 'I need help', explain: 'Neutral, straightforward phrasing.' },
+      { sentence: '___ move this table, would you?', correct: 'Help me', explain: 'Very direct, blunt phrasing — appropriate only among close friends/family.' },
+      { sentence: '___ understanding this diagram.', correct: 'I need help', explain: 'Neutral, straightforward phrasing.' },
+      { sentence: "___ open the window? It's quite warm in here.", correct: 'Could you possibly help me', explain: 'Polite, everyday phrasing for a reasonable request.' },
     ]
   },
 };

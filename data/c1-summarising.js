@@ -14,6 +14,10 @@ export const CATEGORIES = {
       { sentence: '___, the strategy is sound but needs refinement.', correct: 'In a nutshell', explain: '"In a nutshell" gives a very brief, essential summary.' },
       { sentence: '___, the team performed well this quarter.', correct: 'Overall', explain: '"Overall" summarizes a general impression.' },
       { sentence: '___, here is what we found.', correct: 'To sum up', explain: '"To sum up" closes a discussion with a final point.' },
+      { sentence: '___, the merger benefited both companies in the end.', correct: 'Overall', explain: '"Overall" summarizes a general impression after weighing several points.' },
+      { sentence: '___, we believe the risks are manageable.', correct: 'To sum up', explain: '"To sum up" closes a discussion with a final recommendation.' },
+      { sentence: '___, the negotiations failed.', correct: 'In short', explain: '"In short" gives a blunt, condensed conclusion.' },
+      { sentence: '___, the report says spending should be reduced.', correct: 'In a nutshell', explain: '"In a nutshell" gives a very brief, essential summary.' },
     ]
   },
   summarizingVerbs: {
@@ -31,6 +35,9 @@ export const CATEGORIES = {
       { sentence: 'The study ___ that further testing is needed.', correct: 'concludes', explain: '"Concludes" reports the final judgment of a text.' },
       { sentence: 'The introduction ___ the structure of the essay.', correct: 'outlines', explain: '"Outlines" reports a structured list of points.' },
       { sentence: "The abstract ___ the paper's main argument.", correct: 'summarizes', explain: '"Summarizes" reports a condensed version of the whole.' },
+      { sentence: 'The report ___ that immediate action is required.', correct: 'concludes', explain: '"Concludes" reports the final judgment of a text.' },
+      { sentence: 'The presentation ___ the main risks of the project.', correct: 'highlights', explain: '"Highlights" reports what the text emphasizes as important.' },
+      { sentence: 'The manual ___ the setup process step by step.', correct: 'outlines', explain: '"Outlines" reports a structured list of points.' },
     ]
   },
   concisenessMarkers: {
@@ -48,6 +55,9 @@ export const CATEGORIES = {
       { sentence: '___, this represents a shift in strategy.', correct: 'In essence', explain: '"In essence" reduces a complex idea to its core meaning.' },
       { sentence: '___, they disagreed on almost everything.', correct: 'Essentially', explain: '"Essentially" reduces a complex situation to its core.' },
       { sentence: "___, it's too expensive.", correct: 'Put simply', explain: '"Put simply" introduces a plain, direct restatement.' },
+      { sentence: '___, they lost because they were unprepared.', correct: 'Essentially', explain: '"Essentially" reduces a complex situation to its core cause.' },
+      { sentence: 'To put it ___, the team needs more resources.', correct: 'briefly', explain: '"Briefly" signals a short, condensed explanation follows.' },
+      { sentence: '___, the whole plan depends on funding.', correct: 'In essence', explain: '"In essence" reduces a complex idea to its core meaning.' },
     ]
   },
 };

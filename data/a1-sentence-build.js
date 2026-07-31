@@ -20,6 +20,10 @@ export const CATEGORIES = {
       { words: ["a", "have", "They", "car", "new"], correct: ["They have a new car."], hint: "Subject + have + article + adjective + noun", explain: "Adjectives go before the noun: 'a new car'." },
       { words: ["blue", "is", "sky", "The"], correct: ["The sky is blue."], hint: "The + noun + is + adjective", explain: "Basic sentence order: subject, verb 'be', adjective." },
       { words: ["works", "hospital", "at", "the", "She"], correct: ["She works at the hospital."], hint: "Subject + verb + at + the + place", explain: "'At' introduces the place where someone works." },
+      { words: ["cooks", "dinner", "He", "every", "evening"], correct: ["He cooks dinner every evening."], hint: "Subject + verb+s + object + time", explain: "Add -s to the verb with he/she/it in the present simple." },
+      { words: ["a", "have", "sister", "I"], correct: ["I have a sister."], hint: "Subject + verb + article + noun", explain: "'Have' is used to talk about family and possession." },
+      { words: ["tired", "am", "very", "I"], correct: ["I am very tired."], hint: "I + am + adverb + adjective", explain: "'Very' goes before the adjective it intensifies." },
+      { words: ["park", "to", "go", "We", "often"], correct: ["We often go to the park."], hint: "Subject + adverb of frequency + verb + to + place", explain: "Frequency adverbs like 'often' usually go before the main verb." },
     ]
   },
   simpleQuestions: {
@@ -36,6 +40,9 @@ export const CATEGORIES = {
       { words: ["live", "you", "Where", "do"], correct: ["Where do you live?"], hint: "Where + do + you + base verb", explain: "'Where' questions ask about a location." },
       { words: ["a", "you", "Do", "have", "car"], correct: ["Do you have a car?"], hint: "Do + you + have + article + noun", explain: "Yes/no questions with 'have' start with 'Do'." },
       { words: ["is", "he", "Who"], correct: ["Who is he?"], hint: "Who + is + he", explain: "'Who' questions ask to identify a person." },
+      { words: ["is", "job", "your", "What"], correct: ["What is your job?"], hint: "What + is + your + noun", explain: "'What' questions ask for information, not yes/no." },
+      { words: ["like", "you", "music", "Do"], correct: ["Do you like music?"], hint: "Do + you + verb + object", explain: "Yes/no questions in the present simple start with 'Do'." },
+      { words: ["brothers", "have", "you", "Do", "any"], correct: ["Do you have any brothers?"], hint: "Do + you + have + any + plural noun", explain: "'Any' is used with plural nouns in questions." },
     ]
   },
   simpleNegatives: {
@@ -52,6 +59,9 @@ export const CATEGORIES = {
       { words: ["can't", "I", "swim"], correct: ["I can't swim."], hint: "I + can't + base verb", explain: "'Can't' expresses lack of ability." },
       { words: ["aren't", "hungry", "We"], correct: ["We aren't hungry."], hint: "We + aren't + adjective", explain: "'Aren't' is the negative of 'are'." },
       { words: ["don't", "understand", "I"], correct: ["I don't understand."], hint: "I + don't + base verb", explain: "'Don't' negates the present simple for I/you/we/they." },
+      { words: ["don't", "We", "cook", "dinner"], correct: ["We don't cook dinner."], hint: "We + don't + base verb + object", explain: "'Don't' negates the present simple for I/you/we/they." },
+      { words: ["isn't", "easy", "This"], correct: ["This isn't easy."], hint: "This + isn't + adjective", explain: "'Isn't' is the negative of 'is'." },
+      { words: ["doesn't", "like", "She", "tea"], correct: ["She doesn't like tea."], hint: "She + doesn't + base verb + object", explain: "'Doesn't' negates the present simple for he/she/it." },
     ]
   },
 };

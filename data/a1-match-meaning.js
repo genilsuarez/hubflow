@@ -14,6 +14,10 @@ export const CATEGORIES = {
       { sentence: "You are late for a meeting: '___, I'm late.'", correct: 'Sorry', explain: '"Sorry" is used to apologize.' },
       { sentence: 'You see your teacher for the first time today. You say:', correct: 'Hello', explain: '"Hello" is used when you first see someone.' },
       { sentence: 'The class is finished and everyone is leaving. You say:', correct: 'Goodbye', explain: '"Goodbye" is used when you leave.' },
+      { sentence: 'You want to ask a stranger for directions. You start with:', correct: 'Excuse me', explain: '"Excuse me" is used to politely get someone\'s attention.' },
+      { sentence: "You knock over someone's coffee by accident. You say:", correct: 'Sorry', explain: '"Sorry" is used to apologize.' },
+      { sentence: 'You answer the phone and greet the caller. You say:', correct: 'Hello', explain: '"Hello" is used when you first speak to someone.' },
+      { sentence: "You ask a waiter for the menu politely: '___, could I see the menu?'", correct: 'Please', explain: '"Please" makes a request more polite.' },
     ]
   },
   feelings: {
@@ -31,6 +35,9 @@ export const CATEGORIES = {
       { sentence: 'You are crying. You feel ___.', correct: 'sad', explain: '"Sad" describes an unhappy feeling.' },
       { sentence: 'You need coffee to wake up. You feel ___.', correct: 'tired', explain: '"Tired" means you need rest.' },
       { sentence: "It's a dark movie and something jumps out. You feel ___.", correct: 'scared', explain: '"Scared" means afraid.' },
+      { sentence: 'You just ran five kilometres. You feel ___.', correct: 'tired', explain: '"Tired" means you need rest.' },
+      { sentence: 'You won first prize in the competition. You feel ___.', correct: 'happy', explain: '"Happy" describes a good feeling.' },
+      { sentence: 'You are alone at night and hear a strange noise. You feel ___.', correct: 'scared', explain: '"Scared" means afraid.' },
     ]
   },
   timeExpressions: {
@@ -48,6 +55,9 @@ export const CATEGORIES = {
       { sentence: 'We eat dinner in the ___.', correct: 'evening', explain: '"Evening" is the time before night.' },
       { sentence: 'Owls are awake at ___.', correct: 'night', explain: '"Night" is the darkest part of the day.' },
       { sentence: 'School classes usually finish in the ___.', correct: 'afternoon', explain: '"Afternoon" is between noon and evening.' },
+      { sentence: 'The exam is not today; it happens the day after today: ___.', correct: 'tomorrow', explain: '"Tomorrow" means the next day.' },
+      { sentence: 'The stars are visible in the sky. It is ___.', correct: 'night', explain: '"Night" is the darkest part of the day.' },
+      { sentence: 'This day, not yesterday or tomorrow, is called ___.', correct: 'today', explain: '"Today" means the current day.' },
     ]
   },
 };

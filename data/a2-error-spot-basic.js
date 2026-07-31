@@ -13,6 +13,11 @@ export const CATEGORIES = {
       { sentence: 'The dog ___ bark much.', correct: "doesn't", explain: 'Singular subjects use "doesn\'t".' },
       { sentence: 'I ___ understand this.', correct: "don't", explain: '"I" uses "don\'t".' },
       { sentence: 'My sister ___ eat meat.', correct: "doesn't", explain: 'Singular subjects use "doesn\'t".' },
+      { sentence: 'My brother ___ play football.', correct: "doesn't", explain: 'Singular subjects use "doesn\'t".' },
+      { sentence: 'We ___ like loud music.', correct: "don't", explain: 'I/you/we/they use "don\'t" in negative present simple.' },
+      { sentence: 'The baby ___ sleep well at night.', correct: "doesn't", explain: 'Singular subjects use "doesn\'t".' },
+      { sentence: 'You ___ need a jacket today.', correct: "don't", explain: '"You" uses "don\'t" in negative present simple.' },
+      { sentence: 'Our teacher ___ give much homework.', correct: "doesn't", explain: 'Singular subjects use "doesn\'t".' },
     ]
   },
   wasVsWere: {
@@ -28,6 +33,11 @@ export const CATEGORIES = {
       { sentence: 'You ___ right about that.', correct: 'were', explain: '"You" always takes "were".' },
       { sentence: 'It ___ a good movie.', correct: 'was', explain: '"It" takes "was".' },
       { sentence: 'The children ___ happy.', correct: 'were', explain: 'Plural subjects take "were".' },
+      { sentence: 'The weather ___ terrible last week.', correct: 'was', explain: '"The weather" is singular and takes "was".' },
+      { sentence: 'My friends ___ waiting outside.', correct: 'were', explain: 'Plural subjects take "were".' },
+      { sentence: 'This ___ my first trip abroad.', correct: 'was', explain: '"This" takes "was".' },
+      { sentence: 'The shoes ___ too expensive.', correct: 'were', explain: 'Plural subjects take "were".' },
+      { sentence: 'I ___ not ready for the exam.', correct: 'was', explain: '"I" takes "was" in the past simple of "be".' },
     ]
   },
   goVsGoes: {
@@ -43,6 +53,11 @@ export const CATEGORIES = {
       { sentence: 'They ___ on vacation every summer.', correct: 'go', explain: 'Plural subjects use the base form "go".' },
       { sentence: 'The bus ___ downtown.', correct: 'goes', explain: 'Singular subjects add -es: "goes".' },
       { sentence: 'You ___ too fast.', correct: 'go', explain: '"You" uses the base form "go".' },
+      { sentence: 'She ___ to the market every Friday.', correct: 'goes', explain: 'He/she/it add -es to "go" in the present simple.' },
+      { sentence: 'They ___ swimming on weekends.', correct: 'go', explain: 'Plural subjects use the base form "go".' },
+      { sentence: 'My mother ___ to church on Sundays.', correct: 'goes', explain: 'Singular subjects add -es: "goes".' },
+      { sentence: 'We ___ camping every summer.', correct: 'go', explain: 'I/you/we/they use the base form "go".' },
+      { sentence: 'The train ___ through the tunnel.', correct: 'goes', explain: 'Singular subjects add -es: "goes".' },
     ]
   },
 };

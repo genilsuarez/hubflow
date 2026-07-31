@@ -70,6 +70,66 @@ export const CATEGORIES = {
           { label: 'D', text: 'After an hour, the lights came back on.' },
           { label: 'B', text: 'They were relieved the storm had passed.' },
         ], correct: ['CADB'], hint: 'The power cut is the trigger event.', explain: 'Power out → light candles → power back → relief.' },
+      { sentences: [
+          { label: 'C', text: 'Lisa checked her fridge and wrote a shopping list.' },
+          { label: 'A', text: 'She drove to the supermarket and filled her cart.' },
+          { label: 'D', text: 'She paid at the checkout and packed her bags.' },
+          { label: 'B', text: 'Finally, she put everything away in the kitchen.' },
+        ], correct: ['CADB'], hint: 'Making the list comes before shopping.', explain: 'Check fridge & write list → shop → pay → put groceries away.' },
+      { sentences: [
+          { label: 'B', text: 'Mark ironed his shirt and prepared his answers the night before.' },
+          { label: 'D', text: 'He woke up early and had a light breakfast.' },
+          { label: 'A', text: 'He arrived at the office ten minutes early.' },
+          { label: 'C', text: "He answered the interviewer's questions confidently." },
+        ], correct: ['BDAC'], hint: 'Preparation happens before the interview itself.', explain: 'Prepare the night before → wake up & eat → arrive early → answer questions.' },
+      { sentences: [
+          { label: 'D', text: 'The family packed all their boxes over the weekend.' },
+          { label: 'A', text: 'The movers loaded the truck early in the morning.' },
+          { label: 'C', text: 'They drove to the new house across town.' },
+          { label: 'B', text: 'They spent the evening unpacking the kitchen boxes.' },
+        ], correct: ['DACB'], hint: 'Packing always happens before the truck arrives.', explain: 'Pack boxes → load truck → drive to new house → unpack.' },
+      { sentences: [
+          { label: 'C', text: 'Emma planted tomato seeds in small pots.' },
+          { label: 'A', text: 'She watered them every morning for two weeks.' },
+          { label: 'D', text: 'Tiny green shoots began to appear in the soil.' },
+          { label: 'B', text: 'By summer, the plants were full of ripe tomatoes.' },
+        ], correct: ['CADB'], hint: 'Planting seeds comes before watering them.', explain: 'Plant seeds → water daily → shoots appear → tomatoes ripen.' },
+      { sentences: [
+          { label: 'B', text: 'Her friends secretly planned a surprise party for weeks.' },
+          { label: 'D', text: 'They decorated the living room while she was at work.' },
+          { label: 'A', text: 'Everyone hid quietly behind the sofa and the door.' },
+          { label: 'C', text: 'When she walked in, they all shouted "Surprise!"' },
+        ], correct: ['BDAC'], hint: 'Planning happens long before the surprise itself.', explain: 'Plan party → decorate → hide → shout surprise.' },
+      { sentences: [
+          { label: 'A', text: 'Dad held the back of the bike as Tim pedaled slowly.' },
+          { label: 'C', text: 'Tim wobbled and almost fell off twice.' },
+          { label: 'D', text: 'Little by little, he found his balance.' },
+          { label: 'B', text: 'By the end of the afternoon, he was riding on his own.' },
+        ], correct: ['ACDB'], hint: 'Holding the bike comes before letting go.', explain: 'Dad holds bike → wobbles → finds balance → rides alone.' },
+      { sentences: [
+          { label: 'D', text: 'Karen woke up ten minutes later than usual.' },
+          { label: 'B', text: 'She rushed to get dressed and skipped breakfast.' },
+          { label: 'A', text: 'She ran to the bus stop, but the bus had already left.' },
+          { label: 'C', text: 'She had to wait twenty minutes for the next one.' },
+        ], correct: ['DBAC'], hint: 'Waking up late is the first domino to fall.', explain: 'Wake up late → rush → miss the bus → wait for the next one.' },
+      { sentences: [
+          { label: 'C', text: 'Paul had a toothache for three days.' },
+          { label: 'A', text: 'He finally booked an appointment with the dentist.' },
+          { label: 'D', text: 'The dentist checked his teeth and found a small cavity.' },
+          { label: 'B', text: 'She fixed it quickly, and the pain was gone.' },
+        ], correct: ['CADB'], hint: 'The toothache comes before booking the appointment.', explain: 'Toothache → book appointment → check-up → fixed.' },
+      { sentences: [
+          { label: 'B', text: 'Sofia felt nervous on her first morning at the new school.' },
+          { label: 'D', text: 'She found her classroom and sat down quietly.' },
+          { label: 'A', text: 'A friendly classmate introduced herself during break.' },
+          { label: 'C', text: 'By lunchtime, Sofia already had a new friend.' },
+        ], correct: ['BDAC'], hint: 'Feeling nervous comes before finding the classroom.', explain: 'Feel nervous → find classroom → make a friend → lunch together.' },
+      { sentences: [
+          { label: 'A', text: 'It rained all day, so the family stayed inside.' },
+          { label: 'C', text: 'They made popcorn and chose a movie together.' },
+          { label: 'D', text: 'Halfway through, the power flickered but stayed on.' },
+          { label: 'B', text: 'They finished the movie and went to bed early.' },
+        ], correct: ['ACDB'], hint: 'The rain is why they stayed inside in the first place.', explain: 'Rain all day → make popcorn & pick movie → power flickers → finish & sleep.' },
     ]
   },
   instructionsProcesses: {
@@ -136,6 +196,66 @@ export const CATEGORIES = {
           { label: 'A', text: 'Next, write the first draft.' },
           { label: 'C', text: 'Finally, edit and proofread the essay.' },
         ], correct: ['BDAC'], hint: 'Research always comes before writing.', explain: 'Research → outline → draft → edit.' },
+      { sentences: [
+          { label: 'A', text: 'First, boil water in the kettle.' },
+          { label: 'C', text: 'Then put a tea bag in your cup.' },
+          { label: 'D', text: 'Next, pour the hot water over the tea bag.' },
+          { label: 'B', text: 'Finally, add milk or sugar if you like.' },
+        ], correct: ['ACDB'], hint: 'You need boiling water before pouring it.', explain: 'Boil water → add tea bag → pour water → add milk/sugar.' },
+      { sentences: [
+          { label: 'B', text: 'First, turn off the light switch.' },
+          { label: 'D', text: 'Then let the old bulb cool down completely.' },
+          { label: 'A', text: 'Next, unscrew the old bulb carefully.' },
+          { label: 'C', text: 'Finally, screw in the new bulb and turn the switch on.' },
+        ], correct: ['BDAC'], hint: 'Safety first — the light must be off.', explain: 'Turn off switch → let it cool → unscrew old bulb → screw in new one.' },
+      { sentences: [
+          { label: 'C', text: 'First, place two slices of bread on a plate.' },
+          { label: 'A', text: 'Then spread butter on both slices.' },
+          { label: 'D', text: 'Next, add cheese, ham, and lettuce.' },
+          { label: 'B', text: 'Finally, put the slices together and cut the sandwich in half.' },
+        ], correct: ['CADB'], hint: 'The bread comes before anything is added.', explain: 'Bread → spread butter → add fillings → close & cut.' },
+      { sentences: [
+          { label: 'D', text: 'First, scrape the leftover food into the bin.' },
+          { label: 'B', text: 'Then fill the sink with warm, soapy water.' },
+          { label: 'A', text: 'Next, wash each plate and cup carefully.' },
+          { label: 'C', text: 'Finally, rinse everything and let it dry.' },
+        ], correct: ['DBAC'], hint: 'Scraping food off comes before washing.', explain: 'Scrape food → fill sink → wash → rinse & dry.' },
+      { sentences: [
+          { label: 'A', text: 'First, turn on the phone and choose your language.' },
+          { label: 'C', text: 'Then connect to your Wi-Fi network.' },
+          { label: 'D', text: 'Next, sign in with your email account.' },
+          { label: 'B', text: 'Finally, install your favourite apps.' },
+        ], correct: ['ACDB'], hint: 'You need Wi-Fi before signing in online.', explain: 'Turn on & choose language → connect Wi-Fi → sign in → install apps.' },
+      { sentences: [
+          { label: 'B', text: 'First, go to the library with your ID.' },
+          { label: 'D', text: 'Then fill in a short registration form.' },
+          { label: 'A', text: 'Next, the librarian checks your details.' },
+          { label: 'C', text: 'Finally, you receive your new library card.' },
+        ], correct: ['BDAC'], hint: 'You need your ID before filling in the form.', explain: 'Bring ID → fill form → librarian checks → receive card.' },
+      { sentences: [
+          { label: 'C', text: 'First, check if the soil feels dry.' },
+          { label: 'A', text: 'Then fill a small watering can with water.' },
+          { label: 'D', text: 'Next, pour the water slowly into the pot.' },
+          { label: 'B', text: 'Finally, remove any extra water from the tray.' },
+        ], correct: ['CADB'], hint: 'You only water when the soil is dry.', explain: 'Check soil → fill can → pour water → empty tray.' },
+      { sentences: [
+          { label: 'D', text: 'First, choose a box that fits the gift well.' },
+          { label: 'B', text: 'Then cover the box with wrapping paper.' },
+          { label: 'A', text: 'Next, fold the edges neatly and tape them down.' },
+          { label: 'C', text: 'Finally, tie a ribbon and add a small card.' },
+        ], correct: ['DBAC'], hint: 'The box comes before the paper.', explain: 'Choose box → wrap paper → fold & tape → ribbon & card.' },
+      { sentences: [
+          { label: 'A', text: 'First, turn off the alarm when it rings.' },
+          { label: 'D', text: 'Then check your messages and the weather.' },
+          { label: 'C', text: 'Next, put the phone on the charger while you shower.' },
+          { label: 'B', text: 'Finally, grab the fully charged phone before leaving.' },
+        ], correct: ['ADCB'], hint: 'The alarm always rings first.', explain: 'Turn off alarm → check messages → charge while showering → grab phone.' },
+      { sentences: [
+          { label: 'C', text: 'First, fill a small pot with soil.' },
+          { label: 'A', text: 'Then make a small hole in the middle.' },
+          { label: 'D', text: 'Next, drop the seed in and cover it gently.' },
+          { label: 'B', text: 'Finally, water the soil and place the pot near light.' },
+        ], correct: ['CADB'], hint: 'The pot needs soil before anything else.', explain: 'Fill pot → make hole → plant seed → water & place near light.' },
     ]
   }
 };

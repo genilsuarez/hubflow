@@ -14,6 +14,10 @@ export const CATEGORIES = {
       { sentence: '___ is the bathroom?', correct: 'Where', explain: '"Where" asks about a place.' },
       { sentence: '___ is your teacher?', correct: 'Who', explain: '"Who" asks about a person.' },
       { sentence: '___ do you like pizza so much?', correct: 'Why', explain: '"Why" asks for a reason.' },
+      { sentence: '___ is your favourite colour?', correct: 'What', explain: '"What" asks for information about a thing or idea.' },
+      { sentence: '___ are you from?', correct: 'Where', explain: '"Where" asks about a place.' },
+      { sentence: '___ does the train leave?', correct: 'When', explain: '"When" asks about a time or date.' },
+      { sentence: '___ is your best friend?', correct: 'Who', explain: '"Who" asks about a person.' },
     ]
   },
   doDoesQuestions: {
@@ -31,6 +35,9 @@ export const CATEGORIES = {
       { sentence: '___ your brother play soccer?', correct: 'Does', explain: 'Singular subjects use "Does" to form questions.' },
       { sentence: '___ I need to sign here?', correct: 'Do', explain: '"I" uses "Do" to form questions.' },
       { sentence: '___ the store open at 9?', correct: 'Does', explain: 'Singular subjects use "Does" to form questions.' },
+      { sentence: '___ you speak French?', correct: 'Do', explain: 'I/you/we/they use "Do" to form questions.' },
+      { sentence: '___ your sister like tea?', correct: 'Does', explain: 'Singular subjects use "Does" to form questions.' },
+      { sentence: '___ we have homework today?', correct: 'Do', explain: 'I/you/we/they use "Do" to form questions.' },
     ]
   },
   isAreQuestions: {
@@ -48,6 +55,9 @@ export const CATEGORIES = {
       { sentence: '___ he your friend?', correct: 'Is', explain: '"He" takes "Is".' },
       { sentence: '___ you hungry?', correct: 'Are', explain: '"You" takes "Are".' },
       { sentence: '___ the store open?', correct: 'Is', explain: 'Singular subjects take "Is".' },
+      { sentence: '___ your shoes new?', correct: 'Are', explain: 'Plural subjects take "Are".' },
+      { sentence: '___ this seat free?', correct: 'Is', explain: 'Singular subjects take "Is".' },
+      { sentence: '___ they at school?', correct: 'Are', explain: '"They" takes "Are".' },
     ]
   },
 };

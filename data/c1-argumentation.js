@@ -14,6 +14,10 @@ export const CATEGORIES = {
       { sentence: '___, the theory has limitations, it remains widely used.', correct: 'Granted', explain: '"Granted" concedes a point before countering it.' },
       { sentence: '___ some data is missing, the conclusions still hold.', correct: 'Even though', explain: '"Even though" introduces a concession clause before the main point.' },
       { sentence: '___, there are challenges ahead, but we are prepared.', correct: 'Admittedly', explain: '"Admittedly" concedes a point before countering it.' },
+      { sentence: '___, the new software has a learning curve, but it saves time in the long run.', correct: 'Admittedly', explain: '"Admittedly" concedes a point before countering it.' },
+      { sentence: '___ the budget is tight, the project can still succeed with careful planning.', correct: 'Even though', explain: '"Even though" introduces a concession clause before the main point.' },
+      { sentence: '___ the market is competitive, this company still has room to grow.', correct: 'While it is true that', explain: '"While it is true that" formally concedes a point before countering it.' },
+      { sentence: '___, the initial results were disappointing, but the team persevered.', correct: 'Granted', explain: '"Granted" concedes a point before countering it.' },
     ]
   },
   counterArgumentOpeners: {
@@ -31,6 +35,9 @@ export const CATEGORIES = {
       { sentence: 'The idea has merit. ___, it needs further testing.', correct: 'That said', explain: '"That said" softens a contrasting point after a positive statement.' },
       { sentence: 'Proponents highlight the benefits. ___ the costs are underestimated.', correct: 'Critics argue that', explain: '"Critics argue that" attributes the counter-argument to a specific group.' },
       { sentence: "It's a bold plan. ___, it comes with significant risk.", correct: 'However', explain: '"However" introduces a direct contrast to the previous statement.' },
+      { sentence: 'Many praise the new policy. ___, some worry about its long-term effects.', correct: 'However', explain: '"However" introduces a direct contrast to the previous statement.' },
+      { sentence: 'The programme is popular with parents. ___ it fails to address the underlying problem.', correct: 'Critics argue that', explain: '"Critics argue that" attributes the counter-argument to a specific group.' },
+      { sentence: 'The results look encouraging. ___, we should interpret them cautiously.', correct: 'That said', explain: '"That said" softens a contrasting point after a positive statement.' },
     ]
   },
   hedgingBoosting: {
@@ -48,6 +55,9 @@ export const CATEGORIES = {
       { sentence: 'The meeting was ___ about budget planning, but politics dominated.', correct: 'ostensibly', explain: '"Ostensibly" signals the stated purpose, which may not be the real one.' },
       { sentence: 'It is ___ the most efficient method we have.', correct: 'arguably', explain: '"Arguably" softens a strong claim, leaving room for debate.' },
       { sentence: 'The impact of the change is ___ positive.', correct: 'undeniably', explain: '"Undeniably" strengthens a claim, presenting it as beyond doubt.' },
+      { sentence: 'This is ___ the most controversial decision the board has ever made.', correct: 'arguably', explain: '"Arguably" softens a strong claim, leaving room for debate.' },
+      { sentence: 'The data shows ___ significant improvement across all regions.', correct: 'undeniably', explain: '"Undeniably" strengthens a claim, presenting it as beyond doubt.' },
+      { sentence: 'He left the meeting early, ___ because of a family emergency.', correct: 'presumably', explain: '"Presumably" signals an assumption not yet confirmed.' },
     ]
   },
 };
