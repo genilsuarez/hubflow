@@ -33,23 +33,6 @@ export const CATEGORIES = {
       { sentence: "If we didn't trust him, we ___ him the money.", correct: "wouldn't have lent", explain: "Present/general condition + past result.", options: ["wouldn't have lent", "wouldn't lend", "won't have lent"] },
     ]
   },
-  thirdConditionalReview: {
-    label: 'Third Conditional (review)',
-    icon: '🔁',
-    options: ['would have passed', 'would pass', 'will have passed'],
-    items: [
-      { sentence: "If she had studied harder, she ___ the exam.", correct: 'would have passed', explain: "Third conditional: if + past perfect, would have + past participle — for a completed unreal past situation." },
-      { sentence: "If we had left earlier, we ___ the train.", correct: "wouldn't have missed", explain: "Third conditional: if + past perfect, would have + past participle.", options: ["wouldn't have missed", "wouldn't miss", "won't have missed"] },
-      { sentence: "If he had listened to me, he ___ that mistake.", correct: "wouldn't have made", explain: "Third conditional: if + past perfect, would have + past participle.", options: ["wouldn't have made", "wouldn't make", "won't have made"] },
-      { sentence: "If they had checked the weather, they ___ their umbrellas.", correct: 'would have brought', explain: "Third conditional: if + past perfect, would have + past participle.", options: ['would have brought', 'would bring', 'will have brought'] },
-      { sentence: "If I had known about the party, I ___.", correct: 'would have come', explain: "Third conditional: if + past perfect, would have + past participle.", options: ['would have come', 'would come', 'will have come'] },
-      { sentence: "If she had booked earlier, she ___ a better seat.", correct: 'would have gotten', explain: "Third conditional: if + past perfect, would have + past participle.", options: ['would have gotten', 'would get', 'will have gotten'] },
-      { sentence: "If we had had more time, we ___ the whole city.", correct: 'would have explored', explain: "Third conditional: if + past perfect, would have + past participle.", options: ['would have explored', 'would explore', 'will have explored'] },
-      { sentence: "If he had saved his work, he ___ it.", correct: "wouldn't have lost", explain: "Third conditional: if + past perfect, would have + past participle.", options: ["wouldn't have lost", "wouldn't lose", "won't have lost"] },
-      { sentence: "If they had arrived on time, they ___ the beginning.", correct: "wouldn't have missed", explain: "Third conditional: if + past perfect, would have + past participle.", options: ["wouldn't have missed", "wouldn't miss", "won't have missed"] },
-      { sentence: "If I had known the answer, I ___ it.", correct: 'would have said', explain: "Third conditional: if + past perfect, would have + past participle.", options: ['would have said', 'would say', 'will have said'] },
-    ]
-  },
   mixedConditionalMeaning: {
     label: 'Choosing the Right Mixed Conditional',
     icon: '🧭',

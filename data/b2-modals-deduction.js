@@ -67,21 +67,4 @@ export const CATEGORIES = {
       { sentence: 'The delay ___ been caused by the weather.', correct: 'could have', explain: '"Could have" + past participle expresses a possible explanation.' },
     ]
   },
-  mixedDeduction: {
-    label: 'Mixed Review',
-    icon: '🔀',
-    options: ['must be', 'must have', "can't be", "can't have"],
-    items: [
-      { sentence: 'The ground is wet. It ___ rained last night.', correct: 'must have', explain: 'Past evidence needs "must have" + past participle.' },
-      { sentence: "He's not picking up. He ___ in a meeting right now.", correct: 'must be', explain: 'A present situation needs "must be".' },
-      { sentence: 'She ___ finished already; she only started an hour ago.', correct: "can't have", explain: 'Past impossibility needs "can\'t have" + past participle.' },
-      { sentence: "That ___ right; the math doesn't work.", correct: "can't be", explain: 'Present impossibility needs "can\'t be".' },
-      { sentence: 'You ___ tired after that long flight.', correct: 'must be', explain: 'A present situation needs "must be".' },
-      { sentence: 'They ___ won; they were losing by 20 points with 2 minutes left.', correct: "can't have", explain: 'Past impossibility needs "can\'t have" + past participle.' },
-      { sentence: 'He ___ studied hard; he got the top score.', correct: 'must have', explain: 'Past evidence needs "must have" + past participle.' },
-      { sentence: "This ___ the right address; there's no house here.", correct: "can't be", explain: 'Present impossibility needs "can\'t be".' },
-      { sentence: 'She ___ home; I can see the lights on.', correct: 'must be', explain: 'A present situation needs "must be".' },
-      { sentence: "He ___ done it alone; it's too big a job for one person.", correct: "can't have", explain: 'Past impossibility needs "can\'t have" + past participle.' },
-    ]
-  },
 };
