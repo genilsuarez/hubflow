@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HubFlow — Inventario de módulos</title>
+<style>
+  :root {
+    --bg: #F5F6F9;
+    --bg-raised: #FFFFFF;
+    --ink: #1A1D24;
+    --ink-soft: #565D6B;
+    --ink-faint: #8A91A0;
+    --border: #DEE2EA;
+    --border-soft: #EAEDF3;
+    --accent: #2563EB;
+    --accent-soft: #E7EEFE;
+    --row-hover: #EEF1F8;
+    --cat-vocab: #7B5EA7;
+    --cat-vocab-soft: #F1ECF9;
+    --cat-grammar: #B8860B;
+    --cat-grammar-soft: #FBF3E2;
+    --cat-pron: #3D6B9F;
+    --cat-pron-soft: #E9F0F9;
+    --cat-analysis: #3D7F7F;
+    --cat-analysis-soft: #E8F4F4;
+    --shadow: 0 1px 2px rgba(20, 24, 32, 0.04), 0 4px 16px rgba(20, 24, 32, 0.05);
+    --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171C;
+      --bg-raised: #1B1F26;
+      --ink: #EBEDF2;
+      --ink-soft: #A6ACB9;
+      --ink-faint: #6E7481;
+      --border: #2A2F38;
+      --border-soft: #21252D;
+      --accent: #5B8DF6;
+      --accent-soft: #1B2740;
+      --row-hover: #21262F;
+      --cat-vocab: #A98ED4;
+      --cat-vocab-soft: #2A2438;
+      --cat-grammar: #E6A832;
+      --cat-grammar-soft: #332A19;
+      --cat-pron: #6FA8DC;
+      --cat-pron-soft: #1B2836;
+      --cat-analysis: #6BC4C4;
+      --cat-analysis-soft: #17302E;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C;
+    --bg-raised: #1B1F26;
+    --ink: #EBEDF2;
+    --ink-soft: #A6ACB9;
+    --ink-faint: #6E7481;
+    --border: #2A2F38;
+    --border-soft: #21252D;
+    --accent: #5B8DF6;
+    --accent-soft: #1B2740;
+    --row-hover: #21262F;
+    --cat-vocab: #A98ED4;
+    --cat-vocab-soft: #2A2438;
+    --cat-grammar: #E6A832;
+    --cat-grammar-soft: #332A19;
+    --cat-pron: #6FA8DC;
+    --cat-pron-soft: #1B2836;
+    --cat-analysis: #6BC4C4;
+    --cat-analysis-soft: #17302E;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #F5F6F9;
+    --bg-raised: #FFFFFF;
+    --ink: #1A1D24;
+    --ink-soft: #565D6B;
+    --ink-faint: #8A91A0;
+    --border: #DEE2EA;
+    --border-soft: #EAEDF3;
+    --accent: #2563EB;
+    --accent-soft: #E7EEFE;
+    --row-hover: #EEF1F8;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: clamp(20px, 4vw, 44px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1180px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 4px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .subtitle {
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    max-width: 60ch;
+  }
+  .meta-line {
+    text-align: right;
+    color: var(--ink-faint);
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+
+  /* Summary strip */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cat-color, var(--accent));
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .stat-label {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .stat-card .stat-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .stat-card .stat-value small {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    margin-left: 3px;
+  }
+  .stat-card.total {
+    background: var(--accent);
+    border-left-color: var(--accent);
+    border-color: var(--accent);
+  }
+  .stat-card.total .stat-label { color: rgba(255,255,255,0.75); }
+  .stat-card.total .stat-value { color: #fff; }
+  .stat-card.total .stat-value small { color: rgba(255,255,255,0.75); }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .search-box {
+    position: relative;
+    flex: 1 1 220px;
+    min-width: 180px;
+  }
+  .search-box input {
+    width: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 12px 8px 30px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--ink);
+  }
+  .search-box input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .search-box::before {
+    content: "";
+    position: absolute;
+    left: 10px; top: 50%; transform: translateY(-50%);
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 50%;
+  }
+  .search-box::after {
+    content: "";
+    position: absolute;
+    left: 19px; top: 63%;
+    width: 5px; height: 1.5px;
+    background: var(--ink-faint);
+    transform: rotate(45deg);
+  }
+  .chip-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-raised);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color 0.12s, color 0.12s, background 0.12s;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--chip-color, var(--accent)); }
+  .chip.active {
+    background: var(--chip-soft, var(--accent-soft));
+    border-color: var(--chip-color, var(--accent));
+    color: var(--chip-color, var(--accent));
+  }
+  .chip[data-cat="vocab"] { --chip-color: var(--cat-vocab); --chip-soft: var(--cat-vocab-soft); }
+  .chip[data-cat="grammar"] { --chip-color: var(--cat-grammar); --chip-soft: var(--cat-grammar-soft); }
+  .chip[data-cat="pronunciation"] { --chip-color: var(--cat-pron); --chip-soft: var(--cat-pron-soft); }
+  .chip[data-cat="analysis"] { --chip-color: var(--cat-analysis); --chip-soft: var(--cat-analysis-soft); }
+
+  .result-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    margin: 0 0 8px;
+  }
+
+  /* Table */
+  .table-wrap {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: auto;
+    max-height: 68vh;
+    box-shadow: var(--shadow);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  thead th {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--bg-raised);
+    text-align: left;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--ink); }
+  thead th .arrow { display: inline-block; width: 10px; opacity: 0.5; font-size: 0.6rem; }
+  thead th.sorted { color: var(--accent); }
+  thead th.sorted .arrow { opacity: 1; }
+  thead th.num, td.num { text-align: right; }
+
+  tbody tr { border-bottom: 1px solid var(--border-soft); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+  td { padding: 8px 14px; vertical-align: middle; }
+  td.title-cell { display: flex; align-items: center; gap: 8px; min-width: 220px; }
+  td.title-cell .icon { font-size: 0.95rem; flex-shrink: 0; }
+  td.title-cell .title { font-weight: 500; }
+  td.title-cell .id { display: block; font-family: var(--font-mono); font-size: 0.66rem; color: var(--ink-faint); margin-top: 1px; }
+  td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+  td.subcat { color: var(--ink-faint); font-size: 0.78rem; }
+
+  .pill {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .pill.cat-vocab { color: var(--cat-vocab); background: var(--cat-vocab-soft); }
+  .pill.cat-grammar { color: var(--cat-grammar); background: var(--cat-grammar-soft); }
+  .pill.cat-pronunciation { color: var(--cat-pron); background: var(--cat-pron-soft); }
+  .pill.cat-analysis { color: var(--cat-analysis); background: var(--cat-analysis-soft); }
+
+  .cefr-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+  }
+
+  footer {
+    margin-top: 14px;
+    color: var(--ink-faint);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  @media (max-width: 720px) {
+    .summary { grid-template-columns: repeat(2, 1fr); }
+    .stat-card.total { grid-column: 1 / -1; }
+    td.subcat, th[data-key="subcategory"] { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <h1>Inventario de <em>módulos</em> — HubFlow</h1>
+      <div class="subtitle">Catálogo completo de ejercicios por categoría, subcategoría, nivel CEFR e ítems de contenido.</div>
+    </div>
+    <div class="meta-line">data/catalog.js · 2026-07-31</div>
+  </header>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Buscar por módulo o id…" autocomplete="off">
+    </div>
+    <div class="chip-group" id="catFilters">
+      <button class="chip active" data-cat="all">Todas</button>
+      <button class="chip" data-cat="vocab">Vocabulary</button>
+      <button class="chip" data-cat="grammar">Grammar</button>
+      <button class="chip" data-cat="pronunciation">Pronunciation</button>
+      <button class="chip" data-cat="analysis">Analysis</button>
+    </div>
+    <div class="chip-group" id="cefrFilters">
+      <button class="chip active" data-cefr="all">A1–C1</button>
+      <button class="chip" data-cefr="a1">A1</button>
+      <button class="chip" data-cefr="a2">A2</button>
+      <button class="chip" data-cefr="b1">B1</button>
+      <button class="chip" data-cefr="b2">B2</button>
+      <button class="chip" data-cefr="c1">C1</button>
+    </div>
+  </div>
+
+  <div class="result-count" id="resultCount"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-key="title">Módulo <span class="arrow">↕</span></th>
+          <th data-key="category">Categoría <span class="arrow">↕</span></th>
+          <th data-key="subcategory">Subcategoría <span class="arrow">↕</span></th>
+          <th data-key="cefr">Nivel <span class="arrow">↕</span></th>
+          <th data-key="items" class="num">Items <span class="arrow">↕</span></th>
+          <th data-key="modes" class="num">Modos <span class="arrow">↕</span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+const DATA = [{"id":"opposites","title":"Word Relations","category":"vocab","subcategory":"precision","cefr":"a2","items":160,"modes":5,"icon":"⚖️"},{"id":"confusing-verbs","title":"Confusing Verbs","category":"vocab","subcategory":"precision","cefr":"a2","items":50,"modes":3,"icon":"🔨"},{"id":"apostrophe-traps","title":"Apostrophe Traps","category":"vocab","subcategory":"precision","cefr":"a2","items":30,"modes":3,"icon":"🔤"},{"id":"lookalike-words","title":"Lookalike Words","category":"vocab","subcategory":"precision","cefr":"b1","items":40,"modes":3,"icon":"👀"},{"id":"grammar-confusions","title":"Grammar Confusions","category":"vocab","subcategory":"precision","cefr":"b1","items":60,"modes":3,"icon":"🧩"},{"id":"phrasal-verbs","title":"Phrasal Verbs","category":"vocab","subcategory":"precision","cefr":"b1","items":160,"modes":7,"icon":"🚀"},{"id":"body-appearance","title":"Body & Appearance","category":"vocab","subcategory":"foundations","cefr":"a1","items":40,"modes":5,"icon":"🧑"},{"id":"kitchen-cooking","title":"Kitchen & Cooking","category":"vocab","subcategory":"foundations","cefr":"a2","items":20,"modes":5,"icon":"🍳"},{"id":"time-weather-seasons","title":"Time, Weather & Seasons","category":"vocab","subcategory":"foundations","cefr":"a1","items":30,"modes":5,"icon":"🌤️"},{"id":"people-social-life","title":"People & Social Life","category":"vocab","subcategory":"foundations","cefr":"a2","items":40,"modes":5,"icon":"🎉"},{"id":"food-drink","title":"Food & Drink","category":"vocab","subcategory":"foundations","cefr":"a1","items":40,"modes":5,"icon":"🍎"},{"id":"home-furniture","title":"Home & Furniture","category":"vocab","subcategory":"thematic","cefr":"a2","items":40,"modes":5,"icon":"🛋️"},{"id":"shopping-retail","title":"Shopping & Retail","category":"vocab","subcategory":"thematic","cefr":"a2","items":40,"modes":5,"icon":"🛒"},{"id":"health-fitness","title":"Health & Fitness","category":"vocab","subcategory":"thematic","cefr":"a2","items":40,"modes":5,"icon":"🏃"},{"id":"travel-airport","title":"Travel & Airport","category":"vocab","subcategory":"thematic","cefr":"a2","items":40,"modes":5,"icon":"✈️"},{"id":"work-office","title":"Work & Office","category":"vocab","subcategory":"thematic","cefr":"b1","items":40,"modes":5,"icon":"💼"},{"id":"money-finance","title":"Money & Finance","category":"vocab","subcategory":"thematic","cefr":"b1","items":40,"modes":5,"icon":"💰"},{"id":"technology-internet","title":"Technology & Internet","category":"vocab","subcategory":"thematic","cefr":"a2","items":40,"modes":5,"icon":"💻"},{"id":"emotions-feelings","title":"Emotions & Feelings","category":"vocab","subcategory":"thematic","cefr":"b1","items":60,"modes":5,"icon":"😊"},{"id":"nature-environment","title":"Nature & Environment","category":"vocab","subcategory":"thematic","cefr":"b1","items":60,"modes":5,"icon":"🌍"},{"id":"education-study","title":"Education & Study","category":"vocab","subcategory":"thematic","cefr":"b1","items":60,"modes":5,"icon":"📖"},{"id":"idioms","title":"Idioms","category":"vocab","subcategory":"expression","cefr":"b1","items":50,"modes":5,"icon":"💬"},{"id":"sound-natural","title":"Sound Natural","category":"vocab","subcategory":"expression","cefr":"c1","items":50,"modes":5,"icon":"🗣️"},{"id":"vocab-c1","title":"C1 Vocabulary","category":"vocab","subcategory":"expression","cefr":"c1","items":40,"modes":5,"icon":"🎓"},{"id":"word-quirks","title":"Word Quirks","category":"vocab","subcategory":"expression","cefr":"b2","items":30,"modes":5,"icon":"🔁"},{"id":"phonics","title":"Pronunciation & Phonics","category":"pronunciation","subcategory":"","cefr":"a2","items":40,"modes":4,"icon":"🔊"},{"id":"plural-endings","title":"Plural Endings","category":"pronunciation","subcategory":"","cefr":"a1","items":60,"modes":3,"icon":"🔊"},{"id":"word-stress-quiz","title":"Word Stress","category":"pronunciation","subcategory":"","cefr":"b1","items":60,"modes":3,"icon":"🗣️"},{"id":"listening","title":"Listening","category":"pronunciation","subcategory":"","cefr":"a2","items":30,"modes":2,"icon":"🎧"},{"id":"spelling-by-ear","title":"Spelling by Ear","category":"pronunciation","subcategory":"","cefr":"a2","items":30,"modes":2,"icon":"👂"},{"id":"pron-connected","title":"Connected Speech","category":"pronunciation","subcategory":"","cefr":"b2","items":30,"modes":5,"icon":"🔗"},{"id":"pron-intonation","title":"Intonation & Rhythm","category":"pronunciation","subcategory":"","cefr":"b2","items":30,"modes":5,"icon":"📈"},{"id":"pron-mispronunciations","title":"Tricky Pronunciation","category":"pronunciation","subcategory":"","cefr":"b1","items":20,"modes":5,"icon":"⚠️"},{"id":"pron-vowels","title":"Vowel Sounds & Schwa","category":"pronunciation","subcategory":"","cefr":"a2","items":30,"modes":5,"icon":"🗣️"},{"id":"pron-consonants","title":"Clusters & -ED Endings","category":"pronunciation","subcategory":"","cefr":"a2","items":30,"modes":5,"icon":"🔤"},{"id":"pron-diphthongs","title":"Diphthongs","category":"pronunciation","subcategory":"","cefr":"a2","items":30,"modes":5,"icon":"🎢"},{"id":"pron-numbers","title":"Numbers, Dates & Prices","category":"pronunciation","subcategory":"","cefr":"a1","items":30,"modes":5,"icon":"🔢"},{"id":"pron-british-american","title":"British vs American","category":"pronunciation","subcategory":"","cefr":"b1","items":30,"modes":5,"icon":"🇬🇧"},{"id":"pron-homophones","title":"Homophones by Ear","category":"pronunciation","subcategory":"","cefr":"a2","items":20,"modes":5,"icon":"👂"},{"id":"pron-weak-forms","title":"Weak Forms","category":"pronunciation","subcategory":"","cefr":"b2","items":30,"modes":5,"icon":"🔗"},{"id":"ing-spelling","title":"Reglas del -ing","category":"grammar","subcategory":"morphology","cefr":"a2","items":60,"modes":3,"icon":"✏️"},{"id":"ed-spelling","title":"Reglas del -ed","category":"grammar","subcategory":"morphology","cefr":"a2","items":60,"modes":3,"icon":"📋"},{"id":"irregular-verbs","title":"Irregular Verbs","category":"grammar","subcategory":"morphology","cefr":"a2","items":60,"modes":7,"icon":"📝"},{"id":"word-formation","title":"Word Formation","category":"grammar","subcategory":"morphology","cefr":"b1","items":40,"modes":3,"icon":"🧩"},{"id":"tenses","title":"Verb Tenses","category":"grammar","subcategory":"tense","cefr":"a1","items":60,"modes":3,"icon":"⏱️"},{"id":"reported-speech","title":"Reported Speech","category":"grammar","subcategory":"tense","cefr":"b1","items":30,"modes":3,"icon":"⏪"},{"id":"conditionals","title":"Conditionals","category":"grammar","subcategory":"tense","cefr":"b1","items":30,"modes":3,"icon":"🔀"},{"id":"used-to","title":"Used To & Would","category":"grammar","subcategory":"tense","cefr":"a2","items":20,"modes":3,"icon":"🕰️"},{"id":"gerunds-infinitives","title":"Gerunds & Infinitives","category":"grammar","subcategory":"tense","cefr":"b1","items":20,"modes":3,"icon":"🔁"},{"id":"passive-voice","title":"Passive Voice","category":"grammar","subcategory":"tense","cefr":"b1","items":30,"modes":3,"icon":"🎭"},{"id":"articles","title":"Articles (a/an/the/∅)","category":"grammar","subcategory":"structure","cefr":"a1","items":100,"modes":3,"icon":"📝"},{"id":"prepositions","title":"Prepositions","category":"grammar","subcategory":"structure","cefr":"a2","items":50,"modes":3,"icon":"📐"},{"id":"verb-chunks","title":"Verb + Prep Chunks","category":"grammar","subcategory":"structure","cefr":"b1","items":40,"modes":5,"icon":"🔗"},{"id":"quantifiers","title":"Quantifiers","category":"grammar","subcategory":"structure","cefr":"a2","items":40,"modes":3,"icon":"📊"},{"id":"modals","title":"Modal Verbs","category":"grammar","subcategory":"structure","cefr":"b1","items":40,"modes":3,"icon":"🧭"},{"id":"parts-of-speech","title":"8 Parts of Speech","category":"grammar","subcategory":"structure","cefr":"a1","items":20,"modes":3,"icon":"🔤"},{"id":"clauses","title":"Relative Clauses","category":"grammar","subcategory":"structure","cefr":"b1","items":40,"modes":3,"icon":"🧩"},{"id":"made-of","title":"Made Of / From / With","category":"grammar","subcategory":"structure","cefr":"a2","items":20,"modes":3,"icon":"🧱"},{"id":"comparisons","title":"Comparisons","category":"grammar","subcategory":"nuance","cefr":"a2","items":30,"modes":3,"icon":"⚖️"},{"id":"causative-verbs","title":"Causative Verbs","category":"grammar","subcategory":"nuance","cefr":"b2","items":20,"modes":3,"icon":"🛠️"},{"id":"preferences","title":"Prefer / Would Rather","category":"grammar","subcategory":"nuance","cefr":"b1","items":20,"modes":3,"icon":"💭"},{"id":"collocations","title":"Collocations","category":"grammar","subcategory":"nuance","cefr":"b1","items":40,"modes":3,"icon":"🔗"},{"id":"noun-adjuncts","title":"Noun Adjuncts","category":"grammar","subcategory":"nuance","cefr":"b2","items":40,"modes":3,"icon":"🧩"},{"id":"error-hunt","title":"Error Hunt","category":"analysis","subcategory":"","cefr":"b1","items":40,"modes":2,"icon":"🔍"},{"id":"odd-one-out","title":"Odd One Out","category":"analysis","subcategory":"","cefr":"b1","items":40,"modes":2,"icon":"🧠"},{"id":"dictation-sprint","title":"Dictation Sprint","category":"analysis","subcategory":"","cefr":"a2","items":40,"modes":2,"icon":"🎙️"},{"id":"sentence-combining","title":"Sentence Combining","category":"analysis","subcategory":"","cefr":"b1","items":40,"modes":2,"icon":"🧵"},{"id":"register-switch","title":"Register Switch","category":"analysis","subcategory":"","cefr":"b2","items":30,"modes":2,"icon":"🎩"},{"id":"paragraph-cloze","title":"Paragraph Cloze","category":"analysis","subcategory":"","cefr":"a2","items":30,"modes":2,"icon":"📄"},{"id":"word-order","title":"Word Order","category":"analysis","subcategory":"","cefr":"b1","items":40,"modes":2,"icon":"🧩"},{"id":"paraphrasing","title":"Key Word Transformation","category":"analysis","subcategory":"","cefr":"b2","items":40,"modes":2,"icon":"🔄"},{"id":"inversions","title":"Inversions","category":"grammar","subcategory":"structure","cefr":"c1","items":40,"modes":3,"icon":"🔄"},{"id":"advanced-collocations","title":"Advanced Collocations","category":"grammar","subcategory":"nuance","cefr":"b2","items":50,"modes":3,"icon":"🎓"},{"id":"cleft-emphasis","title":"Cleft Sentences","category":"analysis","subcategory":"","cefr":"c1","items":40,"modes":3,"icon":"💡"},{"id":"key-word-transformation","title":"Key Word Transformation","category":"analysis","subcategory":"","cefr":"b2","items":40,"modes":2,"icon":"🔑"},{"id":"linking-words","title":"Linking Words & Connectors","category":"analysis","subcategory":"","cefr":"b2","items":30,"modes":3,"icon":"🔗"},{"id":"idiom-in-context","title":"Idiom in Context","category":"analysis","subcategory":"","cefr":"b1","items":20,"modes":3,"icon":"🗯️"},{"id":"text-cohesion","title":"Text Cohesion","category":"analysis","subcategory":"","cefr":"b2","items":20,"modes":3,"icon":"🧵"},{"id":"sentence-reordering","title":"Sentence Reordering","category":"analysis","subcategory":"","cefr":"b1","items":20,"modes":2,"icon":"🔀"},{"id":"punctuation-fix","title":"Punctuation Fix","category":"analysis","subcategory":"","cefr":"a2","items":30,"modes":2,"icon":"✏️"},{"id":"family-relationships","title":"Family & Relationships","category":"vocab","subcategory":"foundations","cefr":"a1","items":40,"modes":5,"icon":"👨‍👩‍👧"},{"id":"house-rooms","title":"House & Rooms","category":"vocab","subcategory":"foundations","cefr":"a1","items":40,"modes":5,"icon":"🏠"},{"id":"places-directions","title":"Places & Directions","category":"vocab","subcategory":"foundations","cefr":"a1","items":40,"modes":5,"icon":"🧭"},{"id":"animals-nature-basic","title":"Animals & Nature","category":"vocab","subcategory":"foundations","cefr":"a1","items":40,"modes":5,"icon":"🐶"},{"id":"colors-shapes","title":"Colors & Shapes","category":"vocab","subcategory":"foundations","cefr":"a1","items":30,"modes":5,"icon":"🎨"},{"id":"a1-to-be-have","title":"To Be & Have (A1)","category":"grammar","subcategory":"structure","cefr":"a1","items":40,"modes":3,"icon":"😊"},{"id":"a1-pronouns-possessives","title":"Pronouns & Possessives (A1)","category":"grammar","subcategory":"structure","cefr":"a1","items":40,"modes":3,"icon":"🙋"},{"id":"a1-alphabet-sounds","title":"Alphabet Sounds","category":"pronunciation","subcategory":"","cefr":"a1","items":26,"modes":5,"icon":"🔤"},{"id":"a1-word-stress-basic","title":"Word Stress Basics","category":"pronunciation","subcategory":"","cefr":"a1","items":30,"modes":5,"icon":"🗣️"},{"id":"a1-sentence-build","title":"Sentence Build (A1)","category":"analysis","subcategory":"","cefr":"a1","items":30,"modes":2,"icon":"🧩"},{"id":"a1-questions","title":"Questions (A1)","category":"analysis","subcategory":"","cefr":"a1","items":30,"modes":3,"icon":"❓"},{"id":"a1-match-meaning","title":"Match the Meaning (A1)","category":"analysis","subcategory":"","cefr":"a1","items":30,"modes":3,"icon":"🔗"},{"id":"a2-error-spot-basic","title":"Error Spot Basic (A2)","category":"analysis","subcategory":"","cefr":"a2","items":25,"modes":3,"icon":"🔎"},{"id":"a2-sentence-order","title":"Sentence Order (A2)","category":"analysis","subcategory":"","cefr":"a2","items":25,"modes":2,"icon":"🧩"},{"id":"pron-linking-basic","title":"Linking Basics","category":"pronunciation","subcategory":"","cefr":"b1","items":25,"modes":5,"icon":"🔗"},{"id":"b1-text-gap-fill","title":"Text Gap Fill (B1)","category":"analysis","subcategory":"","cefr":"b1","items":25,"modes":2,"icon":"📝"},{"id":"b2-academic-vocabulary","title":"Academic Vocabulary (B2)","category":"vocab","subcategory":"precision","cefr":"b2","items":60,"modes":5,"icon":"🔬"},{"id":"b2-abstract-nouns","title":"Abstract Nouns (B2)","category":"vocab","subcategory":"precision","cefr":"b2","items":50,"modes":5,"icon":"🧠"},{"id":"b2-business-lexis","title":"Business Lexis (B2)","category":"vocab","subcategory":"thematic","cefr":"b2","items":50,"modes":5,"icon":"💼"},{"id":"b2-connotation-nuance","title":"Connotation & Nuance (B2)","category":"vocab","subcategory":"expression","cefr":"b2","items":50,"modes":3,"icon":"🎭"},{"id":"b2-formal-register","title":"Formal Register (B2)","category":"vocab","subcategory":"expression","cefr":"b2","items":50,"modes":3,"icon":"🎩"},{"id":"b2-modals-deduction","title":"Modals of Deduction (B2)","category":"grammar","subcategory":"nuance","cefr":"b2","items":50,"modes":3,"icon":"🔍"},{"id":"b2-relative-advanced","title":"Advanced Relative Clauses (B2)","category":"grammar","subcategory":"structure","cefr":"b2","items":50,"modes":3,"icon":"🧵"},{"id":"pron-sentence-stress","title":"Sentence Stress","category":"pronunciation","subcategory":"","cefr":"b2","items":50,"modes":5,"icon":"🥁"},{"id":"c1-idiomatic-precision","title":"Idiomatic Precision (C1)","category":"vocab","subcategory":"expression","cefr":"c1","items":50,"modes":5,"icon":"🎯"},{"id":"c1-connotation-shades","title":"Connotation Shades (C1)","category":"vocab","subcategory":"expression","cefr":"c1","items":50,"modes":5,"icon":"🎭"},{"id":"c1-academic-lexis","title":"Academic Lexis (C1)","category":"vocab","subcategory":"precision","cefr":"c1","items":40,"modes":5,"icon":"📚"},{"id":"c1-collocation-mastery","title":"Collocation Mastery (C1)","category":"vocab","subcategory":"precision","cefr":"c1","items":40,"modes":3,"icon":"🧩"},{"id":"pron-contrastive-stress","title":"Contrastive Stress","category":"pronunciation","subcategory":"","cefr":"c1","items":40,"modes":5,"icon":"🎯"},{"id":"pron-prosody-advanced","title":"Advanced Prosody","category":"pronunciation","subcategory":"","cefr":"c1","items":40,"modes":5,"icon":"🎼"},{"id":"pron-connected-advanced","title":"Advanced Connected Speech","category":"pronunciation","subcategory":"","cefr":"c1","items":40,"modes":5,"icon":"⚡"},{"id":"pron-accent-variation","title":"Accent Variation","category":"pronunciation","subcategory":"","cefr":"c1","items":40,"modes":5,"icon":"🌍"},{"id":"c1-nominalisation","title":"Nominalisation (C1)","category":"grammar","subcategory":"morphology","cefr":"c1","items":40,"modes":3,"icon":"📄"},{"id":"c1-ellipsis-substitution","title":"Ellipsis & Substitution (C1)","category":"grammar","subcategory":"nuance","cefr":"c1","items":40,"modes":3,"icon":"✂️"},{"id":"c1-subjunctive-unreal","title":"Subjunctive & Unreal (C1)","category":"grammar","subcategory":"tense","cefr":"c1","items":40,"modes":3,"icon":"🎭"},{"id":"c1-fronting-emphasis","title":"Fronting & Emphasis (C1)","category":"grammar","subcategory":"structure","cefr":"c1","items":40,"modes":3,"icon":"🔄"},{"id":"c1-discourse-analysis","title":"Discourse Analysis (C1)","category":"analysis","subcategory":"","cefr":"c1","items":40,"modes":3,"icon":"🧵"},{"id":"c1-argumentation","title":"Argumentation (C1)","category":"analysis","subcategory":"","cefr":"c1","items":30,"modes":3,"icon":"⚔️"},{"id":"c1-register-precision","title":"Register Precision (C1)","category":"analysis","subcategory":"","cefr":"c1","items":30,"modes":3,"icon":"🎩"},{"id":"c1-summarising","title":"Summarising (C1)","category":"analysis","subcategory":"","cefr":"c1","items":30,"modes":3,"icon":"📌"}];
+
+const CAT_LABEL = { vocab: 'Vocabulary', grammar: 'Grammar', pronunciation: 'Pronunciation', analysis: 'Analysis' };
+const SUBCAT_LABEL = {
+  foundations: 'Foundations', thematic: 'Thematic', expression: 'Expression', precision: 'Precision',
+  morphology: 'Morphology', tense: 'Tense', structure: 'Structure', nuance: 'Nuance'
+};
+
+let state = { sortKey: 'category', sortDir: 1, cat: 'all', cefr: 'all', q: '' };
+
+function computeSummary() {
+  const byCat = {};
+  DATA.forEach(m => {
+    byCat[m.category] = byCat[m.category] || { count: 0, items: 0 };
+    byCat[m.category].count++;
+    byCat[m.category].items += m.items;
+  });
+  return byCat;
+}
+
+function renderSummary() {
+  const byCat = computeSummary();
+  const totalItems = DATA.reduce((s, m) => s + m.items, 0);
+  const el = document.getElementById('summary');
+  const order = ['vocab', 'grammar', 'pronunciation', 'analysis'];
+  el.innerHTML = order.map(cat => {
+    const v = byCat[cat] || { count: 0, items: 0 };
+    return `<div class="stat-card" style="--cat-color: var(--cat-${cat === 'pronunciation' ? 'pron' : cat})">
+      <div class="stat-label">${CAT_LABEL[cat]}</div>
+      <div class="stat-value">${v.count}<small>módulos · ${v.items} items</small></div>
+    </div>`;
+  }).join('') + `<div class="stat-card total">
+      <div class="stat-label">Total catálogo</div>
+      <div class="stat-value">${DATA.length}<small>módulos · ${totalItems} items</small></div>
+    </div>`;
+}
+
+function getFiltered() {
+  return DATA.filter(m => {
+    if (state.cat !== 'all' && m.category !== state.cat) return false;
+    if (state.cefr !== 'all' && m.cefr !== state.cefr) return false;
+    if (state.q) {
+      const q = state.q.toLowerCase();
+      if (!m.title.toLowerCase().includes(q) && !m.id.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function sortRows(rows) {
+  const { sortKey, sortDir } = state;
+  return [...rows].sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+    if (av < bv) return -1 * sortDir;
+    if (av > bv) return 1 * sortDir;
+    return a.title.localeCompare(b.title);
+  });
+}
+
+function render() {
+  const rows = sortRows(getFiltered());
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = rows.map(m => `
+    <tr>
+      <td class="title-cell">
+        <span class="icon">${m.icon}</span>
+        <span>
+          <span class="title">${m.title}</span>
+          <span class="id">${m.id}</span>
+        </span>
+      </td>
+      <td><span class="pill cat-${m.category}">${CAT_LABEL[m.category]}</span></td>
+      <td class="subcat">${m.subcategory ? (SUBCAT_LABEL[m.subcategory] || m.subcategory) : '—'}</td>
+      <td><span class="cefr-pill">${m.cefr.toUpperCase()}</span></td>
+      <td class="num">${m.items}</td>
+      <td class="num">${m.modes}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('resultCount').textContent =
+    `${rows.length} de ${DATA.length} módulos · ${rows.reduce((s, m) => s + m.items, 0)} items`;
+
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.key === state.sortKey);
+    const arrow = th.querySelector('.arrow');
+    if (th.dataset.key === state.sortKey) arrow.textContent = state.sortDir === 1 ? '↑' : '↓';
+    else arrow.textContent = '↕';
+  });
+
+  document.getElementById('footer').textContent =
+    `HubFlow · 120 módulos · 4 categorías · CEFR A1–C1 (C2 excluido por diseño editorial)`;
+}
+
+document.querySelectorAll('thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (state.sortKey === key) state.sortDir *= -1;
+    else { state.sortKey = key; state.sortDir = 1; }
+    render();
+  });
+});
+
+document.getElementById('catFilters').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#catFilters .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  state.cat = btn.dataset.cat;
+  render();
+});
+
+document.getElementById('cefrFilters').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#cefrFilters .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  state.cefr = btn.dataset.cefr;
+  render();
+});
+
+document.getElementById('search').addEventListener('input', e => {
+  state.q = e.target.value;
+  render();
+});
+
+renderSummary();
+render();
+</script>
+</body>
+</html>
