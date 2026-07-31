@@ -1,6 +1,6 @@
 /**
- * HubFlow — B1 Text Gap Fill Data
- * Categories: connectorsInContext, verbFormsInContext, prepositionsInContext — all B1
+ * HubFlow — A1 Text Gap Fill Data
+ * Categories: connectorsInContext, verbFormsInContext, prepositionsInContext
  * Each entry: { sentence, correct: string[], hint, explain }
  * The user types the missing word(s) into the gap.
  */
@@ -25,14 +25,14 @@ export const CATEGORIES = {
     label: 'Verb Forms',
     icon: '⏳',
     items: [
-      { sentence: 'By the time we arrived, the movie already ___ (start).', correct: ['had started'], hint: 'Past perfect: an action before another past action', explain: 'The past perfect shows the movie started before we arrived.' },
-      { sentence: 'I ___ (live) here for five years.', correct: ['have lived'], hint: 'Present perfect: unfinished time from past to now', explain: 'The present perfect connects a past action to the present.' },
-      { sentence: 'While she ___ (cook), the phone rang.', correct: ['was cooking'], hint: 'Past continuous: an action in progress when something happened', explain: 'The past continuous shows an action interrupted by another event.' },
-      { sentence: 'They ___ (finish) the project by Friday.', correct: ['will have finished'], hint: 'Future perfect: completed before a future point', explain: 'The future perfect shows completion before a specific future time.' },
-      { sentence: 'He ___ (never/be) to Japan.', correct: ['has never been'], hint: 'Present perfect: life experience', explain: 'The present perfect describes experiences up to now.' },
-      { sentence: 'If I ___ (have) more time, I would travel more.', correct: ['had'], hint: 'Second conditional: unreal present', explain: 'The second conditional uses the past simple for an unreal present situation.' },
-      { sentence: 'She ___ (work) here since 2020.', correct: ['has worked'], hint: 'Present perfect: unfinished time with "since"', explain: '"Since" + a point in time pairs with the present perfect.' },
-      { sentence: 'We ___ (watch) TV when the lights went out.', correct: ['were watching'], hint: 'Past continuous: an action in progress', explain: 'The past continuous shows an action interrupted by another event.' },
+      { sentence: 'She ___ (like) pizza a lot.', correct: ['likes'], hint: 'Present simple: he/she/it + verb-s', explain: 'Third person singular adds -s to the verb.' },
+      { sentence: 'I ___ (go) to school yesterday.', correct: ['went'], hint: 'Past simple of "go" (irregular)', explain: '"Go" is irregular in the past: go → went.' },
+      { sentence: 'They ___ (not / have) a car.', correct: ["don't have"], hint: 'Present simple negative: I/you/we/they', explain: '"Don\'t" + base verb makes the negative for I/you/we/they.' },
+      { sentence: 'He ___ (be) very tired now.', correct: ['is'], hint: '"To be": he/she/it', explain: '"He" goes with "is".' },
+      { sentence: 'We ___ (watch) a movie last night.', correct: ['watched'], hint: 'Past simple: regular verb + -ed', explain: 'Regular verbs add -ed in the past simple.' },
+      { sentence: 'I ___ (not / like) coffee.', correct: ["don't like"], hint: 'Present simple negative: I/you/we/they', explain: '"Don\'t" + base verb makes the negative for I/you/we/they.' },
+      { sentence: 'She ___ (have) two brothers.', correct: ['has'], hint: 'Present simple of "have": he/she/it', explain: '"She" goes with "has".' },
+      { sentence: 'It ___ (be) cold yesterday.', correct: ['was'], hint: '"To be" in the past: it', explain: '"It" goes with "was" in the past simple.' },
     ]
   },
   prepositionsInContext: {
