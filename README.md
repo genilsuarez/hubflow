@@ -55,7 +55,7 @@ HubFlow/
 | Analysis & Production | 25 | 1.000 | A1–C1 |
 | **Total** | **150** | **6.500** | **A1–C1** |
 
-Los números de esta tabla se derivan del contenido real en `data/*.js` — no son un conteo manual. `node scripts/sync-catalog.mjs --check` falla si `catalog.js` se desincroniza del contenido real. El inventario dinámico que antes vivía en `docs/inventory.html` se movió a `Learn/docs/inventory.html` — ahora es un panel único para las 3 apps de contenido (FluentFlow, HubFlow, LyricFlow), servido vía `learnctl` en `http://localhost:3000/panel/docs/inventory.html`.
+Los números de esta tabla se derivan del contenido real en `data/*.js` — no son un conteo manual. `node scripts/sync-catalog.mjs --check` falla si `catalog.js` se desincroniza del contenido real. El inventario dinámico que antes vivía en `docs/inventory.html` se movió a `Learn/index.html` — ahora es un panel único para las 3 apps de contenido (FluentFlow, HubFlow, LyricFlow), servido vía `learnctl` en `http://localhost:3000/panel/`.
 
 ## Mi Progreso — Rutas de aprendizaje
 
