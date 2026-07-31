@@ -11,6 +11,11 @@ export const CATEGORIES = {
       { term: "wait a minute", ipa: "/ˈweɪ tə ˈmɪnɪt/", es: "espera un momento", meaning: "The 't' links to the vowel of 'a'", emoji: "⏳" },
       { term: "not at all", ipa: "/ˈnɒ tə ˈtɔːl/", es: "de nada / para nada", meaning: "Both 't' sounds link forward to the next vowel", emoji: "🙅" },
       { term: "get up", ipa: "/ˈɡɛ tʌp/", es: "levantarse", meaning: "The 't' links to the vowel of 'up'", emoji: "⬆️" },
+      { term: "put it on", ipa: "/ˈpʊ tɪ ˈtɒn/", es: "póntelo", meaning: "Each final consonant links to the next vowel", emoji: "👕" },
+      { term: "sit up", ipa: "/ˈsɪ tʌp/", es: "sentarse derecho", meaning: "The 't' links to the vowel of 'up'", emoji: "🧎" },
+      { term: "watch out", ipa: "/ˈwɑː tʃaʊt/", es: "ten cuidado", meaning: "The 'ch' links to the vowel of 'out'", emoji: "⚠️" },
+      { term: "find out", ipa: "/ˈfaɪ naʊt/", es: "averiguar", meaning: "The 'n' links to the vowel of 'out'", emoji: "🔍" },
+      { term: "hold on", ipa: "/ˈhoʊ lɒn/", es: "espera", meaning: "The 'l' links to the vowel of 'on'", emoji: "✋" },
     ]
   },
   vowelToVowel: {
@@ -24,6 +29,11 @@ export const CATEGORIES = {
       { term: "see it", ipa: "/ˈsi jɪt/", es: "verlo", meaning: "An intrusive /j/ links 'see' and 'it'", emoji: "👁️" },
       { term: "go on", ipa: "/ˈɡoʊ wɑːn/", es: "continuar", meaning: "An intrusive /w/ links 'go' and 'on'", emoji: "▶️" },
       { term: "the end", ipa: "/ði jɛnd/", es: "el final", meaning: "'The' before a vowel sound adds a /j/ glide", emoji: "🏁" },
+      { term: "I am", ipa: "/aɪ jæm/", es: "yo soy / estoy", meaning: "An intrusive /j/ links 'I' and 'am'", emoji: "🙋" },
+      { term: "he asked", ipa: "/hi jæskt/", es: "él preguntó", meaning: "An intrusive /j/ links 'he' and 'asked'", emoji: "❓" },
+      { term: "do it", ipa: "/ˈdu wɪt/", es: "hazlo", meaning: "An intrusive /w/ links 'do' and 'it'", emoji: "👍" },
+      { term: "two apples", ipa: "/ˈtu wæpəlz/", es: "dos manzanas", meaning: "An intrusive /w/ links 'two' and 'apples'", emoji: "🍏" },
+      { term: "my answer", ipa: "/maɪ jænsər/", es: "mi respuesta", meaning: "An intrusive /j/ links 'my' and 'answer'", emoji: "💬" },
     ]
   },
   linkedPhrases: {
@@ -37,6 +47,11 @@ export const CATEGORIES = {
       { term: "Let me see", ipa: "/ˈlɛ mi ˈsiː/", es: "déjame ver", meaning: "'Let me' blends into 'lemme' in casual speech", emoji: "👀" },
       { term: "Give me a hand", ipa: "/ˈɡɪ mi ə ˈhænd/", es: "ayúdame", meaning: "'Give me' blends into 'gimme' in casual speech", emoji: "🤲" },
       { term: "Want to go?", ipa: "/ˈwɑːnə ˈɡoʊ/", es: "¿quieres ir?", meaning: "'Want to' blends into 'wanna' in casual speech", emoji: "🚶" },
+      { term: "Gonna be late", ipa: "/ˈɡʌnə bi ˈleɪt/", es: "voy a llegar tarde", meaning: "'Going to' blends into 'gonna' in casual speech", emoji: "⏰" },
+      { term: "What do you want?", ipa: "/ˈwʌdə jə ˈwɑːnt/", es: "¿qué quieres?", meaning: "'What do you' compresses heavily in fast speech", emoji: "❓" },
+      { term: "Come on in", ipa: "/ˈkʌ mɒ nɪn/", es: "entra", meaning: "Both 'come' and 'on' link forward to the next vowel", emoji: "🚪" },
+      { term: "I have to go", ipa: "/aɪ ˈhæftə ˈɡoʊ/", es: "tengo que irme", meaning: "'Have to' reduces to 'hafta' in casual speech", emoji: "🏃" },
+      { term: "Kind of tired", ipa: "/ˈkaɪndə ˈtaɪərd/", es: "algo cansado", meaning: "'Kind of' blends into 'kinda' in casual speech", emoji: "😴" },
     ]
   },
 };

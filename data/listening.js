@@ -19,6 +19,10 @@ export const CATEGORIES = {
       { text: 'I need to buy some bread and milk.', blank: 'bread', options: ['bread', 'bred', 'bright', 'breed'] },
       { text: 'The children are playing in the park.', blank: 'children', options: ['children', 'chicken', 'kitchen', 'kitten'] },
       { text: "Let's meet at the bus stop tomorrow.", blank: 'bus stop', options: ['bus stop', 'bus shop', 'bust stop', 'bus top'] },
+      { text: 'She usually walks to school with her sister.', blank: 'walks', options: ['walks', 'works', 'walls', 'works out'] },
+      { text: 'Can I borrow your pen for a minute?', blank: 'borrow', options: ['borrow', 'burrow', 'barrow', 'borough'] },
+      { text: 'We had dinner at a nice restaurant.', blank: 'dinner', options: ['dinner', 'diner', 'thinner', 'dinger'] },
+      { text: 'The baby is sleeping in her room.', blank: 'sleeping', options: ['sleeping', 'sweeping', 'slipping', 'steeping'] },
     ]
   },
   travelwork: {
@@ -35,6 +39,9 @@ export const CATEGORIES = {
       { text: 'The manager will attend the conference.', blank: 'conference', options: ['conference', 'confidence', 'conferred', 'conform'] },
       { text: 'I forgot to renew my passport.', blank: 'passport', options: ['passport', 'password', 'passage', 'past sport'] },
       { text: 'The company announced a new policy.', blank: 'policy', options: ['policy', 'police', 'polish', 'apology'] },
+      { text: 'The train departs from platform three.', blank: 'departs', options: ['departs', 'depicts', 'deposits', 'departments'] },
+      { text: 'She signed the contract this morning.', blank: 'contract', options: ['contract', 'contact', 'context', 'construct'] },
+      { text: 'The customs officer checked our bags.', blank: 'customs', options: ['customs', 'costumes', 'customers', 'costs'] },
     ]
   },
   tricky: {
@@ -51,6 +58,9 @@ export const CATEGORIES = {
       { text: 'I saw a bat flying near the barn.', blank: 'bat', options: ['bat', 'bad', 'back', 'bath'] },
       { text: 'The coach gave us some advice.', blank: 'coach', options: ['coach', 'couch', 'coast', 'coax'] },
       { text: 'Please close the door quietly.', blank: 'close', options: ['close', 'clothes', 'cloze', 'clause'] },
+      { text: 'The ferry crosses the channel every hour.', blank: 'ferry', options: ['ferry', 'fairy', 'furry', 'ferrous'] },
+      { text: 'He lost his voice after the concert.', blank: 'voice', options: ['voice', 'vice', 'vote', 'void'] },
+      { text: 'The nurse checked his pulse carefully.', blank: 'pulse', options: ['pulse', 'pulls', 'pause', 'purse'] },
     ]
   }
 };

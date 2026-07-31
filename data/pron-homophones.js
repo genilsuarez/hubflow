@@ -12,6 +12,16 @@ export const CATEGORIES = {
       { term: "one / won", ipa: "/wʌn/", es: "uno / ganó", meaning: "Number vs past tense of 'win'", emoji: "🏆" },
       { term: "eight / ate", ipa: "/eɪt/", es: "ocho / comió", meaning: "Number vs past tense of 'eat'", emoji: "🍽️" },
       { term: "meat / meet", ipa: "/miːt/", es: "carne / conocer / encontrarse", meaning: "Food vs the verb 'to meet'", emoji: "🥩" },
+      { term: "son / sun", ipa: "/sʌn/", es: "hijo / sol", meaning: "A family member vs the star in the sky", emoji: "☀️" },
+      { term: "for / four / fore", ipa: "/fɔːr/", es: "para / cuatro / delante", meaning: "A preposition, a number, and a golf term — one sound", emoji: "4️⃣" },
+      { term: "new / knew", ipa: "/njuː/", es: "nuevo / sabía (pasado)", meaning: "An adjective vs the past tense of 'know'", emoji: "🆕" },
+      { term: "blue / blew", ipa: "/bluː/", es: "azul / sopló", meaning: "A color vs the past tense of 'blow'", emoji: "💙" },
+      { term: "read / red", ipa: "/rɛd/", es: "leyó (pasado) / rojo", meaning: "The past tense of 'read' vs a color", emoji: "🔴" },
+      { term: "would / wood", ipa: "/wʊd/", es: "modal 'would' / madera", meaning: "A modal verb vs the material trees are made of", emoji: "🪵" },
+      { term: "hour / our", ipa: "/aʊər/", es: "hora / nuestro", meaning: "A unit of time vs a possessive pronoun", emoji: "⏰" },
+      { term: "night / knight", ipa: "/naɪt/", es: "noche / caballero", meaning: "Time of day vs a medieval warrior", emoji: "🌙" },
+      { term: "some / sum", ipa: "/sʌm/", es: "algunos / suma", meaning: "A quantifier vs a mathematical total", emoji: "➕" },
+      { term: "deer / dear", ipa: "/dɪr/", es: "ciervo / querido", meaning: "An animal vs a term of affection", emoji: "🦌" },
     ]
   },
   trickyHomophones: {
@@ -27,6 +37,16 @@ export const CATEGORIES = {
       { term: "cell / sell", ipa: "/sɛl/", es: "célula / vender", meaning: "A biology unit vs a commercial verb", emoji: "🧫" },
       { term: "aisle / isle / I'll", ipa: "/aɪl/", es: "pasillo / isla / yo (contracción)", meaning: "Three different spellings, identical sound", emoji: "🏝️" },
       { term: "waist / waste", ipa: "/weɪst/", es: "cintura / desperdiciar", meaning: "Body part vs to squander something", emoji: "⏳" },
+      { term: "bear / bare", ipa: "/bɛr/", es: "oso / desnudo", meaning: "An animal vs uncovered or plain", emoji: "🐻" },
+      { term: "steal / steel", ipa: "/stiːl/", es: "robar / acero", meaning: "The verb to steal vs the metal", emoji: "🔩" },
+      { term: "mail / male", ipa: "/meɪl/", es: "correo / masculino", meaning: "The post vs the gender", emoji: "📬" },
+      { term: "plain / plane", ipa: "/pleɪn/", es: "sencillo / avión", meaning: "An adjective for simplicity vs the aircraft", emoji: "✈️" },
+      { term: "fair / fare", ipa: "/fɛr/", es: "justo / tarifa", meaning: "An adjective for justice vs the price of a ride", emoji: "🎡" },
+      { term: "threw / through", ipa: "/θruː/", es: "lanzó (pasado) / a través de", meaning: "The past tense of 'throw' vs a preposition", emoji: "🎯" },
+      { term: "board / bored", ipa: "/bɔːrd/", es: "tabla / aburrido", meaning: "A flat piece of wood vs the feeling of tedium", emoji: "🪵" },
+      { term: "compliment / complement", ipa: "/ˈkɒmplɪmənt/", es: "cumplido / complemento", meaning: "A nice remark vs something that completes another thing", emoji: "💬" },
+      { term: "stationary / stationery", ipa: "/ˈsteɪʃənəri/", es: "inmóvil / papelería", meaning: "Not moving vs paper and pens", emoji: "📎" },
+      { term: "altar / alter", ipa: "/ˈɔːltər/", es: "altar / alterar", meaning: "A place in a church vs the verb to change", emoji: "⛪" },
     ]
   },
 };

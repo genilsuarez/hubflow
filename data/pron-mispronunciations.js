@@ -12,6 +12,16 @@ export const CATEGORIES = {
       { term: "Colonel", es: "/ˈkɜːnəl/", meaning: "Sounds like 'kernel' — the L is NOT pronounced", emoji: "🎖️", example: "Wrong: ko-LO-nel. Right: KER-nul." },
       { term: "Chaos", es: "/ˈkeɪɒs/", meaning: "Starts with /k/ — 'KAY-oss', NOT 'chay-oss'", emoji: "🌪️", example: "Wrong: CHA-os. Right: KAY-oss." },
       { term: "Specific", es: "/spəˈsɪfɪk/", meaning: "Starts with /sp/ — NOT 'pacific'", emoji: "🎯", example: "Wrong: pa-SIF-ic. Right: spuh-SIF-ik." },
+      { term: "Island", es: "/ˈaɪlənd/", meaning: "The S is silent — 'EYE-lund'", emoji: "🏝️", example: "Wrong: is-LAND. Right: EYE-lund." },
+      { term: "Salmon", es: "/ˈsæmən/", meaning: "The L is silent — 'SAM-un'", emoji: "🐟", example: "Wrong: SAL-mon. Right: SAM-un." },
+      { term: "Almond", es: "/ˈɑːmənd/", meaning: "The L is often silent — 'AH-mund'", emoji: "🌰", example: "Wrong: AL-mond. Right: AH-mund." },
+      { term: "Receipt", es: "/rɪˈsiːt/", meaning: "The P is silent — 'ri-SEET'", emoji: "🧾", example: "Wrong: ri-SEPT. Right: ri-SEET." },
+      { term: "Often", es: "/ˈɒfən/", meaning: "The T is usually silent — 'OFF-un'", emoji: "⏱️", example: "Wrong: OFF-ten. Right: OFF-un." },
+      { term: "Answer", es: "/ˈɑːnsər/", meaning: "The W is silent — 'AHN-ser'", emoji: "💬", example: "Wrong: AN-swer. Right: AHN-ser." },
+      { term: "Business", es: "/ˈbɪznɪs/", meaning: "2 syllables, NOT 3 — 'BIZ-nis'", emoji: "💼", example: "Wrong: bi-zi-NESS. Right: BIZ-nis." },
+      { term: "Determine", es: "/dɪˈtɜːmɪn/", meaning: "Stress on the 2nd syllable — 'di-TER-min'", emoji: "🎯", example: "Wrong: DE-ter-mine. Right: di-TER-min." },
+      { term: "Cupboard", es: "/ˈkʌbərd/", meaning: "Sounds like 'cubbard' — the P is silent", emoji: "🗄️", example: "Wrong: CUP-board. Right: KUB-erd." },
+      { term: "Leopard", es: "/ˈlepərd/", meaning: "The O is silent — 'LEP-erd'", emoji: "🐆", example: "Wrong: LEE-oh-pard. Right: LEP-erd." },
     ]
   },
   tricky50: {
@@ -27,6 +37,16 @@ export const CATEGORIES = {
       { term: "Subtle", es: "/ˈsʌtəl/", meaning: "The B is silent — 'SUT-ul'", emoji: "🤫" },
       { term: "Debt", es: "/det/", meaning: "The B is silent — just 'det'", emoji: "💳" },
       { term: "Stomach", es: "/ˈstʌmək/", meaning: "The 'ch' is /k/ — 'STUM-uk'", emoji: "🤢" },
+      { term: "Sword", es: "/sɔːrd/", meaning: "The W is silent — 'sord'", emoji: "⚔️" },
+      { term: "Yacht", es: "/jɒt/", meaning: "1 syllable — 'yot', most letters silent", emoji: "⛵" },
+      { term: "Wrist", es: "/rɪst/", meaning: "The W is silent — just 'rist'", emoji: "👋" },
+      { term: "Knife", es: "/naɪf/", meaning: "The K is silent — 'nife'", emoji: "🔪" },
+      { term: "Height", es: "/haɪt/", meaning: "Sounds like 'hite', NOT 'heigth'", emoji: "📏" },
+      { term: "Aisle", es: "/aɪl/", meaning: "Sounds exactly like 'isle' — the S is silent", emoji: "🛒" },
+      { term: "Muscle", es: "/ˈmʌsəl/", meaning: "The C is silent — 'MUS-ul'", emoji: "💪" },
+      { term: "Listen", es: "/ˈlɪsən/", meaning: "The T is silent — 'LIS-un'", emoji: "👂" },
+      { term: "Castle", es: "/ˈkæsəl/", meaning: "The T is silent — 'KAS-ul'", emoji: "🏰" },
+      { term: "Half", es: "/hæf/", meaning: "The L is silent — just 'haf'", emoji: "➗" },
     ]
   },
 };

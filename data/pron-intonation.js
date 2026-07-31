@@ -12,6 +12,10 @@ export const CATEGORIES = {
       { term: "Listing intonation", es: "Entonación de listas", meaning: "Rise on each item except the last, which falls", emoji: "📋", example: "I need eggs↗, milk↗, bread↗ and butter↘." },
       { term: "Alternative questions", es: "Preguntas alternativas", meaning: "Rise on the first option, fall on the last", emoji: "🍵", example: "Would you like tea↗ or coffee↘?" },
       { term: "Wh-question softened", es: "Wh-question suavizada", meaning: "Rising pitch on a wh-question sounds gentler, more polite", emoji: "🙂", example: "What's your NAME? ↗ (friendly, softer)" },
+      { term: "Statement as question", es: "Afirmación como pregunta", meaning: "A rising pitch on a statement turns it into a question, without changing word order", emoji: "❓", example: "You're leaving? ↗ (surprised, checking)" },
+      { term: "Polite request rise-fall", es: "Petición cortés", meaning: "A gentle rise-fall softens a request and sounds more polite", emoji: "🙏", example: "Could you help me? ↗↘ (warm, not demanding)" },
+      { term: "Neutral wh-question", es: "Wh-question neutra", meaning: "Falling pitch on a wh-question is the default, neutral tone", emoji: "➡️", example: "WHERE are you going? ↘ (simple information request)" },
+      { term: "Contradiction fall-rise", es: "Contradicción", meaning: "A fall-rise signals a polite disagreement or correction", emoji: "🤨", example: "Well, I don't think so... ↘↗" },
     ]
   },
   sentenceStress: {
@@ -27,6 +31,9 @@ export const CATEGORIES = {
       { term: "Auxiliary stressed for emphasis", es: "Auxiliar acentuado para énfasis", meaning: "Normally-weak auxiliaries (do/is/have) get stressed to emphasize truth or contradict", emoji: "💥", example: "I DO like it! (contradicting 'you don't like it')" },
       { term: "New information stressed", es: "Información nueva = acentuada", meaning: "First mention of information gets stress; once known, it's said weakly", emoji: "🆕", example: "I saw a CAT. The cat was black." },
       { term: "Numbers and negatives stressed", es: "Números y negativos acentuados", meaning: "Numbers and negative words (not, never, no) almost always carry stress", emoji: "🔢", example: "I have THREE cats. I do NOT agree." },
+      { term: "Question word stressed", es: "Palabra interrogativa acentuada", meaning: "The wh-word usually carries the main stress in a question", emoji: "❓", example: "WHERE did you put it?" },
+      { term: "Adverb of manner stressed", es: "Adverbio de modo acentuado", meaning: "Adverbs like 'quickly', 'carefully' carry stress as content words", emoji: "🏃", example: "She spoke very QUICKly." },
+      { term: "Modal verbs weak in mid-sentence", es: "Modales débiles en medio de la oración", meaning: "Modals like 'can', 'will' are usually weak unless emphasized", emoji: "🔈", example: "I can /kən/ swim. (weak, normal)" },
     ]
   },
   rhythm: {
@@ -42,6 +49,9 @@ export const CATEGORIES = {
       { term: "Linking consonant-vowel", es: "Enlace consonante-vocal", meaning: "A final consonant links smoothly to the vowel that starts the next word", emoji: "🔗", example: "turn it off → /tɜːr nɪ tɒf/ (sounds joined)" },
       { term: "Elision", es: "Elisión", meaning: "A sound is dropped entirely in fast, connected speech", emoji: "✂️", example: "next day → /neks deɪ/ (the /t/ disappears)" },
       { term: "Assimilation", es: "Asimilación", meaning: "A sound changes to become more like the sound next to it", emoji: "🔄", example: "handbag → /hæmbæg/ (n becomes m before b)" },
+      { term: "Contracted forms", es: "Formas contraídas", meaning: "Contractions like 'I'll', 'we're' keep the rhythm compact and natural", emoji: "✂️", example: "I'll /aɪl/ call you. = quicker than 'I will'." },
+      { term: "Pause for emphasis", es: "Pausa para énfasis", meaning: "A short pause before a key word draws attention to it", emoji: "⏸️", example: "The answer is... NO." },
+      { term: "Reduced auxiliary 'have'", es: "Auxiliar 'have' reducido", meaning: "'Have' reduces to /əv/ or /v/ after pronouns in fast speech", emoji: "🔉", example: "I should've /ʃʊdəv/ called." },
     ]
   },
 };

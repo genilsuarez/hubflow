@@ -12,6 +12,10 @@ export const CATEGORIES = {
       { term: "Lemme", es: "Let me", meaning: "Linking: 'let me' → /lemi/", emoji: "✋", example: "Lemme think. = Let me think." },
       { term: "Gimme", es: "Give me", meaning: "Linking: 'give me' → /ɡɪmi/", emoji: "🤲", example: "Gimme a sec. = Give me a second." },
       { term: "Dunno", es: "Don't know", meaning: "Reduction: 'don't know' → /dʌnəʊ/", emoji: "🤷", example: "I dunno. = I don't know." },
+      { term: "Musta", es: "Must have", meaning: "Reduction: 'must have' → /mʌstə/", emoji: "🤔", example: "You musta forgotten. = You must have forgotten." },
+      { term: "Oughta", es: "Ought to", meaning: "Reduction: 'ought to' → /ˈɔːtə/", emoji: "☝️", example: "You oughta call her. = You ought to call her." },
+      { term: "Cuz", es: "Because", meaning: "Reduction: 'because' → /kəz/", emoji: "💬", example: "I'm late cuz of traffic. = I'm late because of traffic." },
+      { term: "Sorta", es: "Sort of", meaning: "Reduction: 'sort of' → /ˈsɔːrtə/", emoji: "🤷", example: "It's sorta strange. = It's sort of strange." },
     ]
   },
   linking: {
@@ -27,6 +31,9 @@ export const CATEGORIES = {
       { term: "Far_away", es: "Lejos (intrusive r)", meaning: "Intrusive /r/ between vowels: 'far-raway'", emoji: "🌄", example: "Far‿away → /fɑː.rə.weɪ/" },
       { term: "Want_to_go", es: "Querer ir (linking)", meaning: "Multiple links: 'wanto-go' → /wɒn.tə.ɡəʊ/", emoji: "🚶", example: "Want‿to‿go → /wɒn.tə.ɡəʊ/" },
       { term: "I_agree", es: "Estoy de acuerdo", meaning: "Vowel-vowel link adds /j/: 'I-yagree'", emoji: "🤝", example: "I‿agree → /aɪ.jə.ɡriː/" },
+      { term: "Next_day", es: "Al día siguiente (elision)", meaning: "Elision: /t/ drops between consonants", emoji: "📆", example: "Nex(t) day → /neks.deɪ/" },
+      { term: "Try_it", es: "Pruébalo (linked)", meaning: "Consonant-vowel link: /traɪ ɪt/ sounds like 'try-yit'", emoji: "🧪", example: "Try‿it → /traɪ.jɪt/" },
+      { term: "Not_at_all", es: "Para nada (linking)", meaning: "Multiple links: /nɒ.tə.tɔːl/", emoji: "🙅", example: "Not‿at‿all → /nɒ.tə.tɔːl/" },
     ]
   },
   assimilation: {
@@ -42,6 +49,9 @@ export const CATEGORIES = {
       { term: "in case", es: "por si acaso", meaning: "/n/ → /ŋ/ before /k/: velar assimilation", emoji: "📦", example: "in case → /ɪŋ keɪs/" },
       { term: "don't go", es: "no vayas", meaning: "/t/ → /k/ before /g/: velar assimilation", emoji: "🚫", example: "don't go → /dəʊŋk ɡəʊ/" },
       { term: "green car", es: "coche verde", meaning: "/n/ → /ŋ/ before /k/: velar assimilation in noun phrases", emoji: "💚", example: "green car → /ɡriːŋ kɑːr/" },
+      { term: "sun cream", es: "protector solar", meaning: "/n/ → /ŋ/ before /k/: velar assimilation", emoji: "☀️", example: "sun cream → /sʌŋ kriːm/" },
+      { term: "brown paper", es: "papel marrón", meaning: "/n/ → /m/ before /p/: bilabial assimilation", emoji: "📦", example: "brown paper → /braʊm ˈpeɪpər/" },
+      { term: "red car", es: "coche rojo", meaning: "/d/ → /g/ before /k/: velar assimilation", emoji: "🚗", example: "red car → /reg kɑːr/" },
     ]
   },
 };

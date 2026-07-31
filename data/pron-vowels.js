@@ -27,6 +27,11 @@ export const CATEGORIES = {
       { term: "Interesting", es: "/ˈɪntrəstɪŋ/", meaning: "3 syllables — 'IN-truh-sting'", emoji: "🤔", example: "Not 'in-ter-ES-ting' — the 'e' is schwa." },
       { term: "Camera", es: "/ˈkæmrə/", meaning: "2 syllables — 'CAM-ruh'", emoji: "📸", example: "Not 'ca-me-ra' — just 'CAM-ruh'." },
       { term: "Secretary", es: "/ˈsekrətri/", meaning: "3 syllables — 'SEK-ruh-tree'", emoji: "📝", example: "Not 'sec-re-ta-ry' — collapsed." },
+      { term: "Comfortable", es: "/ˈkʌmftəbl/", meaning: "3 syllables in natural speech — 'KUMF-tuh-bl', not 4", emoji: "🛋️", example: "Not 'com-for-ta-ble' — collapsed to 3." },
+      { term: "Different", es: "/ˈdɪfrənt/", meaning: "2 syllables — 'DIF-rənt', the middle 'e' vanishes", emoji: "🔀", example: "Not 'dif-fer-ent' — just 'DIF-rənt'." },
+      { term: "Vegetable", es: "/ˈvedʒtəbl/", meaning: "3 syllables — 'VEJ-tuh-bl', the middle 'e' disappears", emoji: "🥦", example: "Not 've-ge-ta-ble' — collapsed." },
+      { term: "Especially", es: "/ɪˈspeʃli/", meaning: "3 syllables — 'i-SPESH-lee', not 4", emoji: "⭐", example: "Not 'es-pe-cial-ly' — collapsed." },
+      { term: "Support", es: "/səˈpɔːt/", meaning: "The first syllable is a schwa — 'suh-PORT'", emoji: "🤝", example: "Not 'SUP-port' — stress falls on the second syllable." },
     ]
   },
   confusedVowelPairs: {
@@ -42,6 +47,11 @@ export const CATEGORIES = {
       { term: "/ə/ vs /ʌ/ — about vs bun", es: "átona vs tónica", meaning: "/ə/ only appears unstressed; /ʌ/ can be stressed", emoji: "😐", example: "The 'a' in 'about' is /ə/; the 'u' in 'bun' is /ʌ/." },
       { term: "/æ/ vs /ɑː/ — cat vs cart", es: "abierta frontal vs abierta posterior", meaning: "Key distinction in RP: /æ/ is front, /ɑː/ is back and long", emoji: "🐱", example: "cat /kæt/ vs cart /kɑːt/ — length AND position differ." },
       { term: "/ɪ/ vs /e/ — bit vs bet", es: "cerrada corta vs media", meaning: "/ɪ/ is higher and shorter; /e/ has more jaw drop", emoji: "🎰", example: "bit /bɪt/ vs bet /bet/ — Spanish speakers often merge these." },
+      { term: "/ɒ/ vs /ʌ/ — not vs nut", es: "corta redondeada vs central", meaning: "/ɒ/ has rounded lips and a back tongue; /ʌ/ is central and unrounded", emoji: "🚫", example: "not /nɒt/ vs nut /nʌt/." },
+      { term: "/ɜː/ vs /ʌ/ — shirt vs shut", es: "central larga vs central corta", meaning: "/ɜː/ is long with neutral lips; /ʌ/ is short and more open", emoji: "👕", example: "shirt /ʃɜːt/ vs shut /ʃʌt/." },
+      { term: "/ɑː/ vs /ɒ/ — heart vs hot", es: "larga abierta vs corta redondeada", meaning: "/ɑː/ is long with an open jaw; /ɒ/ is short with rounded lips", emoji: "❤️", example: "heart /hɑːt/ vs hot /hɒt/." },
+      { term: "/iː/ vs /e/ — seat vs set", es: "cerrada larga vs media", meaning: "/iː/ is tense, high and long; /e/ is mid and short", emoji: "💺", example: "seat /siːt/ vs set /set/." },
+      { term: "/ɔː/ vs /ɑː/ — court vs cart", es: "posterior redondeada vs abierta", meaning: "/ɔː/ has rounded lips; /ɑː/ has an open, unrounded jaw", emoji: "🎾", example: "court /kɔːt/ vs cart /kɑːt/." },
     ]
   },
 };

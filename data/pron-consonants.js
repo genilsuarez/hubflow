@@ -12,6 +12,10 @@ export const CATEGORIES = {
       { term: "/fl/ — fly", es: "Grupo inicial suave", meaning: "Upper teeth on lip for /f/ then lateral /l/", emoji: "🪰", example: "fly, floor, flower, flat" },
       { term: "/dr/ — drink", es: "Grupo africado", meaning: "Often sounds like /dʒr/ — 'jrink'", emoji: "🥤", example: "drink, dream, drive, drop" },
       { term: "/tr/ — tree", es: "Grupo africado", meaning: "Often sounds like /tʃr/ — 'chree'", emoji: "🌳", example: "tree, train, try, trouble" },
+      { term: "/skr/ — scream", es: "Grupo consonántico inicial", meaning: "3 consonants — /s/ then /k/ then /r/ in quick succession", emoji: "😱", example: "scream, scratch, screen, script" },
+      { term: "/bl/ — blue", es: "Grupo inicial sonoro", meaning: "Voiced /b/ then lateral /l/", emoji: "💙", example: "blue, black, blow, block" },
+      { term: "/kw/ — queen", es: "Grupo labializado", meaning: "Written 'qu' but pronounced /kw/, with rounded lips", emoji: "👑", example: "queen, quick, quiet, quote" },
+      { term: "/sw/ — swim", es: "Grupo inicial labializado", meaning: "/s/ then rounded-lip /w/", emoji: "🏊", example: "swim, sweet, swing, switch" },
     ]
   },
   edPronunciation: {
@@ -27,6 +31,9 @@ export const CATEGORIES = {
       { term: "Opened", es: "/ˈəʊpənd/", meaning: "Voiced /n/ → /d/ ending", emoji: "🚪", example: "2 syllables: O-pened /ˈəʊ.pənd/" },
       { term: "Fixed", es: "/fɪkst/", meaning: "Voiceless /ks/ → /t/ ending", emoji: "🔧", example: "1 syllable: /fɪkst/" },
       { term: "Watched", es: "/wɒtʃt/", meaning: "Voiceless /tʃ/ → /t/ ending", emoji: "📺", example: "1 syllable: /wɒtʃt/" },
+      { term: "Laughed", es: "/læft/", meaning: "Voiceless /f/ → /t/ ending", emoji: "😂", example: "1 syllable: /læft/" },
+      { term: "Ended", es: "/ˈɛndɪd/", meaning: "Ends in /d/ → adds /ɪd/ extra syllable", emoji: "🏁", example: "2 syllables: END-id" },
+      { term: "Arrived", es: "/əˈraɪvd/", meaning: "Voiced /v/ → /d/ ending", emoji: "🛬", example: "2 syllables: a-RIVED /əˈraɪvd/" },
     ]
   },
   silentConsonants: {
@@ -42,6 +49,9 @@ export const CATEGORIES = {
       { term: "/c/ — scissors", es: "/ˈsɪzərz/", meaning: "'sc' before 'i' or 'e': C is silent", emoji: "✂️", example: "scissors /ˈsɪzərz/, science /ˈsaɪəns/." },
       { term: "/l/ — calm", es: "/kɑːm/", meaning: "'lm' combination: L is silent", emoji: "🧘", example: "calm /kɑːm/, palm /pɑːm/, psalm /sɑːm/." },
       { term: "/n/ — autumn", es: "/ˈɔːtəm/", meaning: "'mn' at the end: N is silent", emoji: "🍂", example: "autumn /ˈɔːtəm/, column /ˈkɒləm/, solemn /ˈsɒləm/." },
+      { term: "/gh/ — though", es: "/ðoʊ/", meaning: "'gh' after a vowel: usually silent", emoji: "💭", example: "though /ðoʊ/, night /naɪt/, light /laɪt/." },
+      { term: "/u/ — guess", es: "/ɡɛs/", meaning: "'gu' before a vowel: U is silent, just hardens the G", emoji: "🤔", example: "guess /ɡɛs/, guitar /ɡɪˈtɑːr/, guide /ɡaɪd/." },
+      { term: "/d/ — Wednesday", es: "/ˈwɛnzdeɪ/", meaning: "The first D is silent", emoji: "📅", example: "Wednesday /ˈwɛnzdeɪ/ — say 'WENZ-day'." },
     ]
   },
 };

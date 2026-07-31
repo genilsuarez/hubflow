@@ -11,6 +11,11 @@ export const CATEGORIES = {
       { term: "G", ipa: "/dʒiː/", es: "Letra G", meaning: "as in 'Grape' 🍇", emoji: "🍇" },
       { term: "H", ipa: "/eɪtʃ/", es: "Letra H", meaning: "as in 'House' 🏠", emoji: "🏠" },
       { term: "I", ipa: "/aɪ/", es: "Letra I", meaning: "as in 'Ice cream' 🍦", emoji: "🍦" },
+      { term: "B vs V", ipa: "/biː/ vs /viː/", es: "B contra V", meaning: "Round your lips for B, touch teeth to lip for V", emoji: "👄" },
+      { term: "C vs S", ipa: "/siː/ vs /ɛs/", es: "C contra S", meaning: "C says its own name 'see', S is a hiss 'ess'", emoji: "🐍" },
+      { term: "G vs J", ipa: "/dʒiː/ vs /dʒeɪ/", es: "G contra J", meaning: "G is 'jee', J is 'jay' — similar but not the same", emoji: "🔤" },
+      { term: "I vs E", ipa: "/aɪ/ vs /iː/", es: "I contra E", meaning: "I sounds like 'eye', E sounds like 'ee'", emoji: "👁️" },
+      { term: "A vs E", ipa: "/eɪ/ vs /iː/", es: "A contra E", meaning: "A sounds like 'ay', E sounds like 'ee'", emoji: "🔤" },
     ]
   },
   lettersJtoR: {
@@ -25,6 +30,10 @@ export const CATEGORIES = {
       { term: "P", ipa: "/piː/", es: "Letra P", meaning: "as in 'Pizza' 🍕", emoji: "🍕" },
       { term: "Q", ipa: "/kjuː/", es: "Letra Q", meaning: "as in 'Queen' 👸", emoji: "👸" },
       { term: "R", ipa: "/ɑːr/", es: "Letra R", meaning: "as in 'Rabbit' 🐰", emoji: "🐰" },
+      { term: "M vs N", ipa: "/ɛm/ vs /ɛn/", es: "M contra N", meaning: "Close your lips for M, tongue behind teeth for N", emoji: "👄" },
+      { term: "L vs R", ipa: "/ɛl/ vs /ɑːr/", es: "L contra R", meaning: "Tongue touches the roof for L, curls back for R", emoji: "👅" },
+      { term: "P vs B", ipa: "/piː/ vs /biː/", es: "P contra B", meaning: "P is a puff of air, B uses your voice", emoji: "💨" },
+      { term: "Q vs K", ipa: "/kjuː/ vs /keɪ/", es: "Q contra K", meaning: "Q is 'kyoo', K is 'kay' — both start with a 'k' sound", emoji: "🔤" },
     ]
   },
   lettersStoZ: {
@@ -38,6 +47,11 @@ export const CATEGORIES = {
       { term: "X", ipa: "/ɛks/", es: "Letra X", meaning: "as in 'X-ray' 🩻", emoji: "🩻" },
       { term: "Y", ipa: "/waɪ/", es: "Letra Y", meaning: "as in 'Yellow' 🟡", emoji: "🟡" },
       { term: "Z", ipa: "/ziː/", es: "Letra Z", meaning: "as in 'Zebra' 🦓", emoji: "🦓" },
+      { term: "S vs Z", ipa: "/ɛs/ vs /ziː/", es: "S contra Z", meaning: "S is a quiet hiss, Z buzzes with your voice", emoji: "🐝" },
+      { term: "U vs W", ipa: "/juː/ vs /ˈdʌbəlju/", es: "U contra W", meaning: "W is literally 'double U' — say them side by side", emoji: "💧" },
+      { term: "Y vs J", ipa: "/waɪ/ vs /dʒeɪ/", es: "Y contra J", meaning: "Y sounds like 'why', J sounds like 'jay'", emoji: "🔤" },
+      { term: "X vs S", ipa: "/ɛks/ vs /ɛs/", es: "X contra S", meaning: "X ends with a 'ks' sound, S is just a hiss", emoji: "🔤" },
+      { term: "T vs D", ipa: "/tiː/ vs /diː/", es: "T contra D", meaning: "T is a soft tap, D uses your voice", emoji: "👅" },
     ]
   },
 };
