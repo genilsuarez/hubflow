@@ -27,6 +27,11 @@ export const CATEGORIES = {
       { term: "Diamond", ipa: "/ˈdaɪmənd/", es: "Rombo / diamante", meaning: "A four-sided shape that stands on a point", emoji: "🔶" },
       { term: "Cross", ipa: "/krɔːs/", es: "Cruz", meaning: "A shape made of two crossing lines", emoji: "➕" },
       { term: "Arrow", ipa: "/ˈæroʊ/", es: "Flecha", meaning: "A shape that points in a direction", emoji: "➡️" },
+      { term: "Hexagon", ipa: "/ˈhɛksəɡɒn/", es: "Hexágono", meaning: "A shape with six sides", emoji: "⬡" },
+      { term: "Pentagon", ipa: "/ˈpɛntəɡɒn/", es: "Pentágono", meaning: "A shape with five sides", emoji: "⬠" },
+      { term: "Cube", ipa: "/kjuːb/", es: "Cubo", meaning: "A 3D shape with six square faces", emoji: "🧊" },
+      { term: "Cylinder", ipa: "/ˈsɪlɪndər/", es: "Cilindro", meaning: "A 3D shape with two circular ends", emoji: "🥫" },
+      { term: "Spiral", ipa: "/ˈspaɪrəl/", es: "Espiral", meaning: "A curved shape winding around a center", emoji: "🌀" },
     ]
   },
   moreColors: {
@@ -42,6 +47,11 @@ export const CATEGORIES = {
       { term: "Colorful", ipa: "/ˈkʌlərfəl/", es: "Colorido", meaning: "Having many bright colors", emoji: "🌈" },
       { term: "Turquoise", ipa: "/ˈtɜːrkɔɪz/", es: "Turquesa", meaning: "A blue-green color", emoji: "🩵" },
       { term: "Beige", ipa: "/beɪʒ/", es: "Beige", meaning: "A pale sandy-brown color", emoji: "🟫" },
+      { term: "Navy", ipa: "/ˈneɪvi/", es: "Azul marino", meaning: "A very dark blue", emoji: "🔵" },
+      { term: "Maroon", ipa: "/məˈruːn/", es: "Granate", meaning: "A dark brownish-red", emoji: "🟤" },
+      { term: "Lime", ipa: "/laɪm/", es: "Verde lima", meaning: "A bright yellowish-green", emoji: "🟢" },
+      { term: "Lavender", ipa: "/ˈlævəndər/", es: "Lavanda", meaning: "A pale purple color", emoji: "💜" },
+      { term: "Dull", ipa: "/dʌl/", es: "Apagado", meaning: "Not bright or shiny in color", emoji: "⬛" },
     ]
   },
 };

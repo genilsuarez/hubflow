@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Post office", ipa: "/poʊst ˈɔːfɪs/", es: "Oficina de correos", meaning: "Where you send and receive mail", emoji: "📮" },
       { term: "Pharmacy", ipa: "/ˈfɑːrməsi/", es: "Farmacia", meaning: "Where you buy medicine", emoji: "💊" },
       { term: "Police station", ipa: "/pəˈliːs ˌsteɪʃən/", es: "Estación de policía", meaning: "Where the police work", emoji: "🚓" },
+      { term: "Gym", ipa: "/dʒɪm/", es: "Gimnasio", meaning: "A place to exercise", emoji: "🏋️" },
+      { term: "Museum", ipa: "/mjuˈziːəm/", es: "Museo", meaning: "A place to see art and history", emoji: "🏛️" },
+      { term: "Church", ipa: "/tʃɜːrtʃ/", es: "Iglesia", meaning: "A building for religious worship", emoji: "⛪" },
     ]
   },
   directions: {
@@ -27,6 +30,9 @@ export const CATEGORIES = {
       { term: "Block", ipa: "/blɑːk/", es: "Cuadra / manzana", meaning: "One section of a street between corners", emoji: "🏢" },
       { term: "Near", ipa: "/nɪr/", es: "Cerca", meaning: "A short distance away", emoji: "📍" },
       { term: "Far", ipa: "/fɑːr/", es: "Lejos", meaning: "A long distance away", emoji: "🗺️" },
+      { term: "Roundabout", ipa: "/ˈraʊndəˌbaʊt/", es: "Rotonda / glorieta", meaning: "A circular junction where roads meet", emoji: "🔄" },
+      { term: "Crosswalk", ipa: "/ˈkrɔːsˌwɔːk/", es: "Cruce peatonal", meaning: "A marked path for pedestrians to cross", emoji: "🚸" },
+      { term: "Sidewalk", ipa: "/ˈsaɪdˌwɔːk/", es: "Acera", meaning: "A path for people to walk beside a street", emoji: "🚶" },
     ]
   },
   prepositionsOfPlace: {
@@ -42,6 +48,8 @@ export const CATEGORIES = {
       { term: "Inside", ipa: "/ɪnˈsaɪd/", es: "Adentro", meaning: "In the interior of a place", emoji: "🏠" },
       { term: "Outside", ipa: "/aʊtˈsaɪd/", es: "Afuera", meaning: "Not inside a place", emoji: "🌳" },
       { term: "Around the corner", ipa: "/əˈraʊnd ðə ˈkɔːrnər/", es: "A la vuelta de la esquina", meaning: "Very close, just past the corner", emoji: "📐" },
+      { term: "Along", ipa: "/əˈlɔːŋ/", es: "A lo largo de", meaning: "Following the length of something", emoji: "➡️" },
+      { term: "Through", ipa: "/θruː/", es: "A través de", meaning: "From one side to the other", emoji: "➡️" },
     ]
   },
   askingForDirections: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "It's on the corner", ipa: "/ɪts ɑːn ðə ˈkɔːrnər/", es: "Está en la esquina", meaning: "Describes a location at a corner", emoji: "📐" },
       { term: "You can't miss it", ipa: "/juː kænt mɪs ɪt/", es: "No tiene pérdida", meaning: "It's very easy to find", emoji: "👀" },
       { term: "Follow this street", ipa: "/ˈfɑːloʊ ðɪs striːt/", es: "Siga esta calle", meaning: "Instruction to continue along a street", emoji: "🛣️" },
+      { term: "It's the second street on the left", ipa: "/ɪts ðə ˈsɛkənd striːt ɑːn ðə lɛft/", es: "Es la segunda calle a la izquierda", meaning: "Gives a specific direction using street order", emoji: "⬅️" },
+      { term: "Could you show me on the map?", ipa: "/kʊd juː ʃoʊ miː ɑːn ðə mæp/", es: "¿Podría mostrarme en el mapa?", meaning: "Polite request for a visual direction", emoji: "🗺️" },
     ]
   },
 };

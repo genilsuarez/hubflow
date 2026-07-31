@@ -12,6 +12,16 @@ export const CATEGORIES = {
       { term: "Slice", ipa: "/slaɪs/", es: "Rebanar", meaning: "Cut into thin flat pieces", emoji: "🍞", example: "Slice the bread evenly." },
       { term: "Dice", ipa: "/daɪs/", es: "Cortar en cubos", meaning: "Cut into small cube-shaped pieces", emoji: "🎲", example: "Dice the tomatoes for salsa." },
       { term: "Knead", ipa: "/niːd/", es: "Amasar", meaning: "Press and fold dough with your hands", emoji: "🍞", example: "Knead the dough for 10 minutes." },
+      { term: "Marinate", ipa: "/ˈmærɪneɪt/", es: "Marinar", meaning: "Soak food in a seasoned liquid before cooking", emoji: "🍋", example: "Marinate the chicken overnight." },
+      { term: "Season", ipa: "/ˈsiːzən/", es: "Sazonar", meaning: "Add salt, pepper or spices to food", emoji: "🧂", example: "Season the meat with salt and pepper." },
+      { term: "Drain", ipa: "/dreɪn/", es: "Escurrir", meaning: "Remove liquid from food", emoji: "🚰", example: "Drain the pasta in a colander." },
+      { term: "Mash", ipa: "/mæʃ/", es: "Hacer puré", meaning: "Crush food into a soft, smooth mass", emoji: "🥔", example: "Mash the potatoes with butter." },
+      { term: "Beat", ipa: "/biːt/", es: "Batir", meaning: "Stir a mixture vigorously", emoji: "🥄", example: "Beat the batter until smooth." },
+      { term: "Squeeze", ipa: "/skwiːz/", es: "Exprimir", meaning: "Press to extract juice", emoji: "🍋", example: "Squeeze the lemon over the fish." },
+      { term: "Trim", ipa: "/trɪm/", es: "Recortar", meaning: "Cut away unwanted parts", emoji: "✂️", example: "Trim the fat off the meat." },
+      { term: "Sprinkle", ipa: "/ˈsprɪŋkəl/", es: "Espolvorear", meaning: "Scatter small amounts on top", emoji: "✨", example: "Sprinkle sugar on the cake." },
+      { term: "Coat", ipa: "/koʊt/", es: "Cubrir / rebozar", meaning: "Cover food evenly with a substance", emoji: "🍤", example: "Coat the chicken in breadcrumbs." },
+      { term: "Rinse", ipa: "/rɪns/", es: "Enjuagar", meaning: "Wash with clean water", emoji: "💧", example: "Rinse the vegetables before cooking." },
     ]
   },
   cookingMethods: {
@@ -27,6 +37,16 @@ export const CATEGORIES = {
       { term: "Broil", ipa: "/brɔɪl/", es: "Gratinar", meaning: "Cook under direct high heat from above", emoji: "🔥", example: "Broil the steak for 4 minutes." },
       { term: "Poach", ipa: "/poʊtʃ/", es: "Escalfar", meaning: "Cook gently in simmering liquid", emoji: "🥚", example: "Poach the eggs in vinegar water." },
       { term: "Grill", ipa: "/ɡrɪl/", es: "Asar a la parrilla", meaning: "Cook on a rack over direct flame", emoji: "🥩", example: "Grill burgers for 5 min each side." },
+      { term: "Stir-fry", ipa: "/ˈstɜːr fraɪ/", es: "Salteado (wok)", meaning: "Fry quickly over high heat while stirring", emoji: "🥡", example: "Stir-fry the vegetables for 3 minutes." },
+      { term: "Toast", ipa: "/toʊst/", es: "Tostar", meaning: "Brown bread or nuts with dry heat", emoji: "🍞", example: "Toast the bread until golden." },
+      { term: "Braise", ipa: "/breɪz/", es: "Estofar", meaning: "Cook slowly in a small amount of liquid", emoji: "🍲", example: "Braise the beef for two hours." },
+      { term: "Deep-fry", ipa: "/diːp fraɪ/", es: "Freír en abundante aceite", meaning: "Cook fully submerged in hot oil", emoji: "🍟", example: "Deep-fry the potatoes until crispy." },
+      { term: "Microwave", ipa: "/ˈmaɪkroʊweɪv/", es: "Calentar en microondas", meaning: "Heat food using microwave radiation", emoji: "📡", example: "Microwave the leftovers for two minutes." },
+      { term: "Blanch", ipa: "/blæntʃ/", es: "Escaldar", meaning: "Briefly boil then cool in ice water", emoji: "🧊", example: "Blanch the almonds to remove the skin." },
+      { term: "Caramelize", ipa: "/ˈkærəməlaɪz/", es: "Caramelizar", meaning: "Cook sugar or food until golden brown", emoji: "🍮", example: "Caramelize the onions slowly." },
+      { term: "Reduce", ipa: "/rɪˈduːs/", es: "Reducir", meaning: "Boil a liquid to make it thicker and stronger", emoji: "🍷", example: "Reduce the sauce by half." },
+      { term: "Ferment", ipa: "/ˈfɜːrmɛnt/", es: "Fermentar", meaning: "Let food change through bacteria or yeast", emoji: "🍞", example: "Ferment the dough overnight." },
+      { term: "Preheat", ipa: "/priˈhiːt/", es: "Precalentar", meaning: "Heat the oven before putting food in", emoji: "🌡️", example: "Preheat the oven to 200°C." },
     ]
   },
 };

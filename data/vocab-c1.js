@@ -12,6 +12,8 @@ export const CATEGORIES = {
       { term: "Morning person", ipa: "/ˈmɔːrnɪŋ ˈpɜːrsən/", es: "Persona madrugadora", meaning: "Someone who feels most active early in the day", emoji: "🌅" },
       { term: "Night owl", ipa: "/naɪt aʊl/", es: "Ave nocturna (persona)", meaning: "Someone who is most active late at night", emoji: "🦉" },
       { term: "On autopilot", ipa: "/ɒn ˈɔːtoʊˌpaɪlət/", es: "En piloto automático", meaning: "Doing something automatically, without thinking", emoji: "🤖" },
+      { term: "Procrastinate", ipa: "/proʊˈkræstɪneɪt/", es: "Procrastinar", meaning: "To delay doing something that should be done", emoji: "⏳" },
+      { term: "Burn the midnight oil", ipa: "/bɜːrn ðə ˈmɪdnaɪt ɔɪl/", es: "Trabajar hasta tarde en la noche", meaning: "To work late into the night", emoji: "🕯️" },
     ]
   },
   foodDrinkC1: {
@@ -27,6 +29,8 @@ export const CATEGORIES = {
       { term: "Comfort food", ipa: "/ˈkʌmfərt fuːd/", es: "Comida reconfortante", meaning: "Food that makes you feel emotionally good", emoji: "🍝" },
       { term: "Acquired taste", ipa: "/əˈkwaɪərd teɪst/", es: "Sabor que se aprende a apreciar", meaning: "Something you learn to enjoy over time", emoji: "🧀" },
       { term: "Mouth-watering", ipa: "/ˈmaʊθˌwɔːtərɪŋ/", es: "Que hace agua la boca", meaning: "Looking or smelling extremely appetising", emoji: "😋" },
+      { term: "Wholesome", ipa: "/ˈhoʊlsəm/", es: "Sano / nutritivo", meaning: "Healthy and good for you, especially food", emoji: "🥗" },
+      { term: "Piquant", ipa: "/ˈpiːkənt/", es: "Picante / con un toque agudo", meaning: "Pleasantly sharp or spicy in flavour", emoji: "🌶️" },
     ]
   },
   advancedVerbs: {
@@ -42,6 +46,9 @@ export const CATEGORIES = {
       { term: "Enhance", ipa: "/ɪnˈhæns/", es: "Mejorar", meaning: "To improve the quality or value of something", emoji: "✨" },
       { term: "Hinder", ipa: "/ˈhɪndər/", es: "Obstaculizar", meaning: "To create difficulty for someone/something", emoji: "🚧" },
       { term: "Thrive", ipa: "/θraɪv/", es: "Prosperar", meaning: "To grow or develop successfully", emoji: "🌟" },
+      { term: "Perpetuate", ipa: "/pərˈpɛtʃueɪt/", es: "Perpetuar", meaning: "To make a situation or belief continue indefinitely", emoji: "♾️" },
+      { term: "Reconcile", ipa: "/ˈrɛkənsaɪl/", es: "Reconciliar", meaning: "To make two conflicting ideas or people compatible again", emoji: "🤝" },
+      { term: "Substantiate", ipa: "/səbˈstænʃieɪt/", es: "Sustanciar / respaldar con pruebas", meaning: "To provide evidence to support a claim", emoji: "📋" },
     ]
   },
   advancedPhrases: {
@@ -57,6 +64,9 @@ export const CATEGORIES = {
       { term: "For what it's worth", ipa: "/fɔːr wɒt ɪts wɜːrθ/", es: "Por lo que valga", meaning: "Introduces an opinion that may not matter much", emoji: "🤷" },
       { term: "When it comes to", ipa: "/wɛn ɪt kʌmz tuː/", es: "Cuando se trata de", meaning: "Introduces a specific topic", emoji: "🎯" },
       { term: "The bottom line is", ipa: "/ðə ˈbɒtəm laɪn ɪz/", es: "La conclusión es", meaning: "Introduces the main/final point", emoji: "📊" },
+      { term: "By and large", ipa: "/baɪ ænd lɑːrdʒ/", es: "En general", meaning: "Used to summarize something as generally true", emoji: "📊" },
+      { term: "More often than not", ipa: "/mɔːr ˈɒfən ðæn nɒt/", es: "Más a menudo que no", meaning: "Introduces something that usually happens", emoji: "🔁" },
+      { term: "To put it bluntly", ipa: "/tuː pʊt ɪt ˈblʌntli/", es: "Para decirlo sin rodeos", meaning: "Introduces a very direct or blunt statement", emoji: "🎯" },
     ]
   },
 };

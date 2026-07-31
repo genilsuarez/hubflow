@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Press release", ipa: "/prɛs rɪˈliːs/", es: "Comunicado de prensa", meaning: "An official statement given to the media", emoji: "📄" },
       { term: "Editorial", ipa: "/ˌɛdɪˈtɔːriəl/", es: "Editorial (artículo de opinión)", meaning: "An article expressing the publication's opinion", emoji: "✍️" },
       { term: "Investigative report", ipa: "/ɪnˈvɛstɪɡeɪtɪv rɪˈpɔːrt/", es: "Reportaje de investigación", meaning: "In-depth reporting uncovering hidden facts", emoji: "🔍" },
+      { term: "Op-ed", ipa: "/ɒp ɛd/", es: "Artículo de opinión", meaning: "A newspaper article expressing a writer's personal opinion", emoji: "✍️" },
+      { term: "Anchor", ipa: "/ˈæŋkər/", es: "Presentador/a (noticias)", meaning: "The main presenter of a TV news broadcast", emoji: "📺" },
+      { term: "Leak (a story)", ipa: "/liːk/", es: "Filtrar (información)", meaning: "To reveal secret information to the press", emoji: "💧" },
     ]
   },
   socialMedia: {
@@ -27,6 +30,9 @@ export const CATEGORIES = {
       { term: "Cancel culture", ipa: "/ˈkænsəl ˈkʌltʃər/", es: "Cultura de la cancelación", meaning: "Public withdrawal of support for someone's actions", emoji: "🚫" },
       { term: "Screen time", ipa: "/skriːn taɪm/", es: "Tiempo de pantalla", meaning: "The amount of time spent on a device screen", emoji: "⏱️" },
       { term: "Privacy settings", ipa: "/ˈpraɪvəsi ˈsɛtɪŋz/", es: "Configuración de privacidad", meaning: "Controls for who can see your information", emoji: "🔒" },
+      { term: "Hashtag", ipa: "/ˈhæʃtæɡ/", es: "Hashtag / etiqueta", meaning: "A word or phrase preceded by # used to categorize content", emoji: "#️⃣" },
+      { term: "Feed", ipa: "/fiːd/", es: "Feed / muro", meaning: "The continuously updating stream of posts you see", emoji: "📜" },
+      { term: "Direct message", ipa: "/dɪˈrɛkt ˈmɛsɪdʒ/", es: "Mensaje directo", meaning: "A private message sent to one person", emoji: "📩" },
     ]
   },
   deviceAndGadgets: {
@@ -42,6 +48,8 @@ export const CATEGORIES = {
       { term: "Wearable technology", ipa: "/ˈwɛrəbəl tɛkˈnɒlədʒi/", es: "Tecnología ponible", meaning: "Devices worn on the body, like smartwatches", emoji: "⌚" },
       { term: "Touchscreen", ipa: "/ˈtʌtʃskriːn/", es: "Pantalla táctil", meaning: "A screen you interact with by touching", emoji: "👆" },
       { term: "Compatible", ipa: "/kəmˈpætəbəl/", es: "Compatible", meaning: "Able to work together with another device", emoji: "🔗" },
+      { term: "Bluetooth", ipa: "/ˈbluːtuːθ/", es: "Bluetooth", meaning: "Short-range wireless technology for connecting devices", emoji: "📶" },
+      { term: "Malfunction", ipa: "/mælˈfʌŋkʃən/", es: "Fallo / avería", meaning: "When a device stops working correctly", emoji: "⚠️" },
     ]
   },
   digitalLife: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "Notification", ipa: "/ˌnoʊtɪfɪˈkeɪʃən/", es: "Notificación", meaning: "An alert sent by an app or device", emoji: "🔔" },
       { term: "Digital detox", ipa: "/ˈdɪdʒɪtəl ˈdiːtɒks/", es: "Desintoxicación digital", meaning: "A period of avoiding screens and devices", emoji: "🧘" },
       { term: "Automate", ipa: "/ˈɔːtəmeɪt/", es: "Automatizar", meaning: "To make a process work without manual effort", emoji: "⚙️" },
+      { term: "Two-factor authentication", ipa: "/tuː ˈfæktər ɔːˌθɛntɪˈkeɪʃən/", es: "Autenticación de dos factores", meaning: "An extra security step to confirm your identity", emoji: "🔑" },
+      { term: "Streaming", ipa: "/ˈstriːmɪŋ/", es: "Transmisión en vivo/continua", meaning: "Watching or listening to content in real time online", emoji: "▶️" },
     ]
   }
 };

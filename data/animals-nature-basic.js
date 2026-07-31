@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Sheep", ipa: "/ʃiːp/", es: "Oveja", meaning: "A farm animal with wool", emoji: "🐑" },
       { term: "Chicken", ipa: "/ˈtʃɪkɪn/", es: "Pollo / gallina", meaning: "A farm bird that lays eggs", emoji: "🐔" },
       { term: "Horse", ipa: "/hɔːrs/", es: "Caballo", meaning: "A large animal people ride", emoji: "🐴" },
+      { term: "Duck", ipa: "/dʌk/", es: "Pato", meaning: "A farm bird that swims and quacks", emoji: "🦆" },
+      { term: "Goat", ipa: "/ɡoʊt/", es: "Cabra", meaning: "A farm animal that eats almost anything", emoji: "🐐" },
+      { term: "Turkey", ipa: "/ˈtɜːrki/", es: "Pavo", meaning: "A large farm bird eaten at holidays", emoji: "🦃" },
     ]
   },
   wildAnimals: {
@@ -27,6 +30,9 @@ export const CATEGORIES = {
       { term: "Giraffe", ipa: "/dʒəˈræf/", es: "Jirafa", meaning: "A wild animal with a very long neck", emoji: "🦒" },
       { term: "Wolf", ipa: "/wʊlf/", es: "Lobo", meaning: "A wild animal similar to a big dog", emoji: "🐺" },
       { term: "Fox", ipa: "/fɑːks/", es: "Zorro", meaning: "A small wild animal with a bushy tail", emoji: "🦊" },
+      { term: "Deer", ipa: "/dɪr/", es: "Ciervo", meaning: "A wild animal with antlers", emoji: "🦌" },
+      { term: "Kangaroo", ipa: "/ˌkæŋɡəˈruː/", es: "Canguro", meaning: "A wild animal that hops and carries babies in a pouch", emoji: "🦘" },
+      { term: "Owl", ipa: "/aʊl/", es: "Búho", meaning: "A wild bird that is awake at night", emoji: "🦉" },
     ]
   },
   natureBasics: {
@@ -42,6 +48,8 @@ export const CATEGORIES = {
       { term: "Beach", ipa: "/biːtʃ/", es: "Playa", meaning: "Sand next to the sea", emoji: "🏖️" },
       { term: "Sky", ipa: "/skaɪ/", es: "Cielo", meaning: "The space above the earth", emoji: "🌤️" },
       { term: "Sun", ipa: "/sʌn/", es: "Sol", meaning: "The star that gives us light and heat", emoji: "☀️" },
+      { term: "Island", ipa: "/ˈaɪlənd/", es: "Isla", meaning: "Land surrounded by water", emoji: "🏝️" },
+      { term: "Valley", ipa: "/ˈvæli/", es: "Valle", meaning: "Low land between mountains", emoji: "🏞️" },
     ]
   },
   weatherAndSky: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "Star", ipa: "/stɑːr/", es: "Estrella", meaning: "A small bright light in the night sky", emoji: "⭐" },
       { term: "Rainbow", ipa: "/ˈreɪnˌboʊ/", es: "Arcoíris", meaning: "Colorful arc in the sky after rain", emoji: "🌈" },
       { term: "Thunder", ipa: "/ˈθʌndər/", es: "Trueno", meaning: "The loud sound during a storm", emoji: "⛈️" },
+      { term: "Lightning", ipa: "/ˈlaɪtnɪŋ/", es: "Relámpago", meaning: "A bright flash of light in the sky during a storm", emoji: "⚡" },
+      { term: "Fog", ipa: "/fɒɡ/", es: "Niebla", meaning: "Thick cloud close to the ground", emoji: "🌫️" },
     ]
   },
 };

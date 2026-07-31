@@ -12,6 +12,10 @@ export const CATEGORIES = {
       { term: "Namby-Pamby", ipa: "/ˌnæmbi ˈpæmbi/", es: "Blandengue", meaning: "Weak, lacking courage or strength", emoji: "😩" },
       { term: "Super-Duper", ipa: "/ˌsuːpər ˈduːpər/", es: "Sensacional", meaning: "Excellent, very good (informal/playful)", emoji: "🌟" },
       { term: "Fuddy-Duddy", ipa: "/ˌfʌdi ˈdʌdi/", es: "Anticuado (persona)", meaning: "An old-fashioned, unadventurous person", emoji: "👴" },
+      { term: "Boogie-Woogie", ipa: "/ˌbuːɡi ˈwuːɡi/", es: "Estilo de música/baile", meaning: "A lively style of blues piano music or dance", emoji: "🎹" },
+      { term: "Itsy-Bitsy", ipa: "/ˌɪtsi ˈbɪtsi/", es: "Diminuto", meaning: "Very small (playful/childish)", emoji: "🤏" },
+      { term: "Nitty-Gritty", ipa: "/ˌnɪti ˈɡrɪti/", es: "Los detalles esenciales", meaning: "The essential, practical details of a matter", emoji: "🔍" },
+      { term: "Higgledy-Piggledy", ipa: "/ˌhɪɡəldi ˈpɪɡəldi/", es: "En desorden", meaning: "In a completely disordered, confused way", emoji: "🌀" },
     ]
   },
   sameWordDifferentMeaning: {
@@ -27,6 +31,8 @@ export const CATEGORIES = {
       { term: "Left", ipa: "/lɛft/", es: "Izquierda / se fue", meaning: "A direction, OR the past tense of 'leave'", emoji: "⬅️", example: "She left and turned left at the corner." },
       { term: "Park", ipa: "/pɑːrk/", es: "Parque / estacionar", meaning: "A green public space, OR to stop a vehicle", emoji: "🌳", example: "I'll park the car near the park." },
       { term: "Watch", ipa: "/wɒtʃ/", es: "Reloj / observar", meaning: "A wrist clock, OR to look at something carefully", emoji: "⌚", example: "I checked my watch while I watched the game." },
+      { term: "Tear", ipa: "/tɛr/ or /tɪr/", es: "Romper / lágrima", meaning: "To rip something, OR a drop from crying — different pronunciations!", emoji: "😢", example: "She shed a tear when the paper began to tear." },
+      { term: "Wind", ipa: "/wɪnd/ or /waɪnd/", es: "Viento / enrollar", meaning: "Moving air, OR to turn/coil something — different pronunciations!", emoji: "🌬️", example: "The wind was so strong I had to wind up the kite string quickly." },
     ]
   },
   eggcorns: {
@@ -42,6 +48,10 @@ export const CATEGORIES = {
       { term: "Doggy-dog world", ipa: "/ˈdɒɡi dɒɡ wɜːrld/", es: "Incorrecto (eggcorn)", meaning: "A common mishearing of 'dog-eat-dog world'", emoji: "❌" },
       { term: "A whole other story", ipa: "/ə hoʊl ˈʌðər ˈstɔːri/", es: "Correcto", meaning: "The correct phrase (NOT 'a whole nother story')", emoji: "✅" },
       { term: "A whole nother story", ipa: "/ə hoʊl ˈnʌðər ˈstɔːri/", es: "Incorrecto (eggcorn)", meaning: "A common (informal) mishearing", emoji: "❌" },
+      { term: "Case in point", ipa: "/keɪs ɪn pɔɪnt/", es: "Correcto", meaning: "The correct phrase — an example that proves a point", emoji: "✅" },
+      { term: "Case and point", ipa: "/keɪs ænd pɔɪnt/", es: "Incorrecto (eggcorn)", meaning: "A common mishearing of 'case in point'", emoji: "❌" },
+      { term: "Champing at the bit", ipa: "/ˈtʃæmpɪŋ æt ðə bɪt/", es: "Correcto", meaning: "The correct phrase — eager and impatient (NOT 'chomping')", emoji: "✅" },
+      { term: "Chomping at the bit", ipa: "/ˈtʃɒmpɪŋ æt ðə bɪt/", es: "Incorrecto (eggcorn)", meaning: "A very common alternate version of 'champing at the bit'", emoji: "❌" },
     ]
   },
 };

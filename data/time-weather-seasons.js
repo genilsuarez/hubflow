@@ -28,6 +28,11 @@ export const CATEGORIES = {
       { term: "Windy", ipa: "/ˈwɪndi/", es: "Ventoso", meaning: "Strong air movement", emoji: "💨", example: "Hold your hat — it's really windy!" },
       { term: "Breezy", ipa: "/ˈbriːzi/", es: "Con brisa", meaning: "Light, pleasant wind", emoji: "🍃", example: "A breezy afternoon by the coast." },
       { term: "Snowy", ipa: "/ˈsnoʊi/", es: "Nevado", meaning: "Snow falling from the sky", emoji: "🌨️", example: "It's snowy — let's make a snowman!" },
+      { term: "Humid", ipa: "/ˈhjuːmɪd/", es: "Húmedo", meaning: "High moisture in the air, feels sticky", emoji: "💦", example: "It's so humid today, I'm sweating." },
+      { term: "Hail", ipa: "/heɪl/", es: "Granizo", meaning: "Small balls of ice falling from the sky", emoji: "🧊", example: "The hail damaged some car windows." },
+      { term: "Thunder", ipa: "/ˈθʌndər/", es: "Trueno", meaning: "Loud sound after lightning", emoji: "⚡", example: "I heard thunder in the distance." },
+      { term: "Frosty", ipa: "/ˈfrɒsti/", es: "Con escarcha", meaning: "Cold enough for ice crystals to form", emoji: "❄️", example: "A frosty morning — the grass was white." },
+      { term: "Muggy", ipa: "/ˈmʌɡi/", es: "Bochornoso", meaning: "Uncomfortably warm and humid", emoji: "🥵", example: "It's muggy tonight, hard to sleep." },
     ]
   },
   seasons: {
@@ -43,6 +48,11 @@ export const CATEGORIES = {
       { term: "Equinox", ipa: "/ˈiːkwɪnɒks/", es: "Equinoccio", meaning: "Day and night are equal length", emoji: "⚖️", extra: "~Mar 20 / ~Sep 22" },
       { term: "Harvest", ipa: "/ˈhɑːrvɪst/", es: "Cosecha", meaning: "The time when crops are gathered", emoji: "🌾", extra: "Late summer/autumn" },
       { term: "Frost", ipa: "/frɒst/", es: "Escarcha", meaning: "Thin ice crystals that form on cold surfaces", emoji: "🥶", extra: "Winter mornings" },
+      { term: "Monsoon", ipa: "/mɒnˈsuːn/", es: "Monzón", meaning: "Seasonal heavy rains in South Asia", emoji: "🌧️", extra: "Summer months" },
+      { term: "Blossom", ipa: "/ˈblɒsəm/", es: "Florecer / flor", meaning: "Flowers opening in spring", emoji: "🌷", extra: "Early spring" },
+      { term: "Foliage", ipa: "/ˈfoʊliɪdʒ/", es: "Follaje", meaning: "Leaves of trees, especially in autumn colors", emoji: "🍁", extra: "Autumn" },
+      { term: "Thaw", ipa: "/θɔː/", es: "Deshielo", meaning: "Ice or snow melting as it gets warmer", emoji: "🌡️", extra: "Late winter" },
+      { term: "Bloom", ipa: "/bluːm/", es: "Floración", meaning: "The period when flowers are open", emoji: "🌼", extra: "Spring" },
     ]
   },
 };

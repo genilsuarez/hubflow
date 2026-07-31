@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Whiteboard", ipa: "/ˈwaɪtbɔːrd/", es: "Pizarra blanca", meaning: "A white surface teachers write on", emoji: "🖍️" },
       { term: "Ruler", ipa: "/ˈruːlər/", es: "Regla", meaning: "A flat tool for measuring or drawing straight lines", emoji: "📏" },
       { term: "Scissors", ipa: "/ˈsɪzərz/", es: "Tijeras", meaning: "A tool with two blades for cutting paper", emoji: "✂️" },
+      { term: "Marker", ipa: "/ˈmɑːrkər/", es: "Marcador", meaning: "A pen with thick, colorful ink", emoji: "🖊️" },
+      { term: "Glue", ipa: "/ɡluː/", es: "Pegamento", meaning: "A sticky substance for joining paper", emoji: "🧴" },
+      { term: "Calculator", ipa: "/ˈkælkjəleɪtər/", es: "Calculadora", meaning: "A device used to do math quickly", emoji: "🧮" },
     ]
   },
   schoolSubjects: {
@@ -27,6 +30,9 @@ export const CATEGORIES = {
       { term: "English", ipa: "/ˈɪŋɡlɪʃ/", es: "Inglés", meaning: "The subject of the English language", emoji: "🔤" },
       { term: "Homework", ipa: "/ˈhoʊmwɜːrk/", es: "Tarea", meaning: "School work done at home", emoji: "📝" },
       { term: "Exam", ipa: "/ɪɡˈzæm/", es: "Examen", meaning: "A test of what you have learned", emoji: "📄" },
+      { term: "Chemistry", ipa: "/ˈkɛmɪstri/", es: "Química", meaning: "The study of substances and reactions", emoji: "🧪" },
+      { term: "Biology", ipa: "/baɪˈɒlədʒi/", es: "Biología", meaning: "The study of living things", emoji: "🧬" },
+      { term: "Computer Science", ipa: "/kəmˈpjuːtər ˈsaɪəns/", es: "Informática", meaning: "The subject of computers and programming", emoji: "💻" },
     ]
   },
   schoolPeople: {
@@ -42,6 +48,8 @@ export const CATEGORIES = {
       { term: "Coach", ipa: "/koʊtʃ/", es: "Entrenador/a", meaning: "A person who trains a sports team", emoji: "🏃" },
       { term: "Parent", ipa: "/ˈpɛrənt/", es: "Padre / madre", meaning: "A mother or father of a student", emoji: "👨‍👩‍👧" },
       { term: "Class", ipa: "/klæs/", es: "Clase (grupo)", meaning: "A group of students who study together", emoji: "🏫" },
+      { term: "Headteacher", ipa: "/ˈhɛdˌtiːtʃər/", es: "Director/a (UK)", meaning: "The person in charge of a school (British term)", emoji: "🧑‍💼" },
+      { term: "Counselor", ipa: "/ˈkaʊnsələr/", es: "Consejero/a", meaning: "A person who gives students advice and support", emoji: "🗣️" },
     ]
   },
   schoolActions: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "Take notes", ipa: "/teɪk noʊts/", es: "Tomar apuntes", meaning: "To write down important information", emoji: "📝" },
       { term: "Pass (a test)", ipa: "/pæs/", es: "Aprobar", meaning: "To succeed in a test or exam", emoji: "✅" },
       { term: "Fail (a test)", ipa: "/feɪl/", es: "Reprobar", meaning: "To not succeed in a test or exam", emoji: "❌" },
+      { term: "Explain", ipa: "/ɪkˈspleɪn/", es: "Explicar", meaning: "To make something clear and easy to understand", emoji: "💡" },
+      { term: "Revise", ipa: "/rɪˈvaɪz/", es: "Repasar", meaning: "To study material again before a test", emoji: "🔄" },
     ]
   }
 };

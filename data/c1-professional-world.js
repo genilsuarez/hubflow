@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Long-term vision", ipa: "/lɒŋ tɜːrm ˈvɪʒən/", es: "Visión a largo plazo", meaning: "A plan for a company's future beyond immediate goals", emoji: "🔭" },
       { term: "Scalable", ipa: "/ˈskeɪləbəl/", es: "Escalable", meaning: "Able to grow efficiently as demand increases", emoji: "📈" },
       { term: "Disrupt (an industry)", ipa: "/dɪsˈrʌpt/", es: "Revolucionar (una industria)", meaning: "To radically change how an industry operates", emoji: "💥" },
+      { term: "Synergy", ipa: "/ˈsɪnərdʒi/", es: "Sinergia", meaning: "The combined effect of teams working together being greater than individually", emoji: "🤝" },
+      { term: "Acquisition", ipa: "/ˌækwɪˈzɪʃən/", es: "Adquisición", meaning: "When one company buys another", emoji: "🏢" },
+      { term: "Value proposition", ipa: "/ˈvæljuː ˌprɒpəˈzɪʃən/", es: "Propuesta de valor", meaning: "The unique benefit a company offers customers", emoji: "💎" },
     ]
   },
   leadershipAndManagement: {
@@ -27,6 +30,8 @@ export const CATEGORIES = {
       { term: "Succession planning", ipa: "/səkˈsɛʃən ˈplænɪŋ/", es: "Plan de sucesión", meaning: "Preparing who will take over key roles in the future", emoji: "🔀" },
       { term: "Autonomy", ipa: "/ɔːˈtɒnəmi/", es: "Autonomía", meaning: "The freedom to make your own decisions at work", emoji: "🕊️" },
       { term: "Change management", ipa: "/tʃeɪndʒ ˈmænɪdʒmənt/", es: "Gestión del cambio", meaning: "The process of guiding an organization through change", emoji: "🔧" },
+      { term: "Groupthink", ipa: "/ˈɡruːpθɪŋk/", es: "Pensamiento grupal", meaning: "Poor decisions made when a group avoids conflict", emoji: "🧠" },
+      { term: "Stakeholder buy-in", ipa: "/ˈsteɪkhoʊldər baɪ ɪn/", es: "Respaldo de las partes interesadas", meaning: "Getting agreement and support from key people", emoji: "✅" },
     ]
   },
   workplaceCulture: {
@@ -42,6 +47,9 @@ export const CATEGORIES = {
       { term: "Red tape", ipa: "/rɛd teɪp/", es: "Burocracia", meaning: "Excessive rules and procedures that slow things down", emoji: "📋" },
       { term: "Office politics", ipa: "/ˈɒfɪs ˈpɒlɪtɪks/", es: "Política de oficina", meaning: "Informal power struggles within a workplace", emoji: "🎭" },
       { term: "Cross-functional team", ipa: "/krɒs ˈfʌŋkʃənəl tiːm/", es: "Equipo interfuncional", meaning: "A team combining people from different departments", emoji: "🧩" },
+      { term: "Water cooler talk", ipa: "/ˈwɔːtər ˈkuːlər tɔːk/", es: "Charla informal de oficina", meaning: "Casual conversation among coworkers", emoji: "💬" },
+      { term: "Flexitime", ipa: "/ˈflɛksitaɪm/", es: "Horario flexible", meaning: "A work schedule with flexible start/end times", emoji: "🕐" },
+      { term: "Psychological safety", ipa: "/ˌsaɪkəˈlɒdʒɪkəl ˈseɪfti/", es: "Seguridad psicológica", meaning: "Feeling safe to speak up without fear of punishment", emoji: "🛡️" },
     ]
   },
   careerDevelopment: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "Job security", ipa: "/dʒɒb sɪˈkjʊrəti/", es: "Estabilidad laboral", meaning: "The likelihood of keeping your job long-term", emoji: "🔒" },
       { term: "Portfolio career", ipa: "/pɔːrtˈfoʊlioʊ kəˈrɪr/", es: "Carrera de portafolio", meaning: "Working several jobs or projects instead of one", emoji: "🎨" },
       { term: "Transferable skills", ipa: "/trænsˈfɜːrəbəl skɪlz/", es: "Habilidades transferibles", meaning: "Skills useful across different jobs or industries", emoji: "🔀" },
+      { term: "Headhunter", ipa: "/ˈhɛdhʌntər/", es: "Cazatalentos", meaning: "A recruiter who finds candidates for senior positions", emoji: "🎯" },
+      { term: "Glass ceiling", ipa: "/ɡlæs ˈsiːlɪŋ/", es: "Techo de cristal", meaning: "An invisible barrier preventing advancement, especially for women", emoji: "🏢" },
     ]
   }
 };

@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Abundant", ipa: "/əˈbʌndənt/", es: "Abundante", meaning: "More formal than 'plenty of' — existing in large quantity", emoji: "🌾" },
       { term: "Sparse", ipa: "/spɑːrs/", es: "Disperso / escaso", meaning: "Thinly distributed, more precise than 'not much'", emoji: "🌵" },
       { term: "Vast", ipa: "/væst/", es: "Vasto", meaning: "Emphasizes extreme size, often for areas or amounts", emoji: "🌌" },
+      { term: "Meager", ipa: "/ˈmiːɡər/", es: "Escaso / miserable", meaning: "Weaker than 'small' — pitifully small in amount", emoji: "😕" },
+      { term: "Immense", ipa: "/ɪˈmɛns/", es: "Inmenso", meaning: "Emphasizes vastness, close to 'enormous'", emoji: "🌊" },
+      { term: "Numerous", ipa: "/ˈnuːmərəs/", es: "Numeroso", meaning: "More formal than 'many' — existing in large numbers", emoji: "🔢" },
     ]
   },
   emotionShades: {
@@ -27,6 +30,9 @@ export const CATEGORIES = {
       { term: "Devastated", ipa: "/ˈdɛvəsteɪtɪd/", es: "Devastado", meaning: "Much stronger than 'sad' — deeply and painfully upset", emoji: "💔" },
       { term: "Indifferent", ipa: "/ɪnˈdɪfərənt/", es: "Indiferente", meaning: "More precise than 'not caring' — no strong feeling either way", emoji: "😐" },
       { term: "Ecstatic", ipa: "/ɪkˈstætɪk/", es: "Extasiado", meaning: "Stronger than 'elated' — overwhelming joy or excitement", emoji: "🤩" },
+      { term: "Disheartened", ipa: "/dɪsˈhɑːrtənd/", es: "Desanimado", meaning: "Milder than 'devastated' — having lost hope or confidence", emoji: "😔" },
+      { term: "Exasperated", ipa: "/ɪɡˈzæspəreɪtɪd/", es: "Exasperado", meaning: "Stronger than 'irritated' — frustrated to the point of losing patience", emoji: "😖" },
+      { term: "Serene", ipa: "/səˈriːn/", es: "Sereno", meaning: "Deeper than 'calm' — peacefully undisturbed", emoji: "😇" },
     ]
   },
   speechAndCommunication: {
@@ -42,6 +48,8 @@ export const CATEGORIES = {
       { term: "Elaborate (on)", ipa: "/ɪˈlæbəreɪt/", es: "Explicar con más detalle", meaning: "More precise than 'explain' — to add more detail to a point", emoji: "📖" },
       { term: "Blurt out", ipa: "/blɜːrt aʊt/", es: "Soltar de repente", meaning: "Different from 'say' — to say something suddenly, without thinking", emoji: "💥" },
       { term: "Convey", ipa: "/kənˈveɪ/", es: "Transmitir", meaning: "More formal than 'show' — to communicate a feeling or idea", emoji: "📤" },
+      { term: "Insinuate", ipa: "/ɪnˈsɪnjueɪt/", es: "Insinuar (negativamente)", meaning: "Stronger and more negative than 'imply' — to hint at something unpleasant", emoji: "😒" },
+      { term: "Retort", ipa: "/rɪˈtɔːrt/", es: "Replicar", meaning: "More specific than 'reply' — to answer quickly and sharply", emoji: "💢" },
     ]
   },
   qualityAndValue: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "Inferior", ipa: "/ɪnˈfɪriər/", es: "Inferior", meaning: "More formal than 'worse' — of a lower quality by comparison", emoji: "📉" },
       { term: "Top-notch", ipa: "/tɒp nɒtʃ/", es: "De primera categoría", meaning: "Informal, stronger than 'good' — of the highest quality", emoji: "🏆" },
       { term: "Adequate", ipa: "/ˈædɪkwət/", es: "Adecuado / suficiente", meaning: "Weaker than 'good' — enough to meet a basic standard", emoji: "☑️" },
+      { term: "Subpar", ipa: "/ˌsʌbˈpɑːr/", es: "Por debajo del estándar", meaning: "More formal than 'bad' — below an acceptable standard", emoji: "📉" },
+      { term: "Impeccable", ipa: "/ɪmˈpɛkəbəl/", es: "Impecable", meaning: "Synonym for 'flawless' — without any imperfection", emoji: "✨" },
     ]
   }
 };

@@ -12,6 +12,9 @@ export const CATEGORIES = {
       { term: "Ascertain", ipa: "/ˌæsərˈteɪn/", es: "Determinar / averiguar", meaning: "To find something out for certain", emoji: "🔍" },
       { term: "Reconcile", ipa: "/ˈrɛkənˌsaɪl/", es: "Reconciliar / conciliar", meaning: "To make two ideas or facts compatible", emoji: "🤝" },
       { term: "Undermine", ipa: "/ˌʌndərˈmaɪn/", es: "Socavar", meaning: "To weaken something gradually", emoji: "⛏️" },
+      { term: "Discredit", ipa: "/dɪsˈkrɛdɪt/", es: "Desacreditar", meaning: "To damage someone's reputation or cast doubt on a claim", emoji: "❌" },
+      { term: "Circumvent", ipa: "/ˌsɜːrkəmˈvɛnt/", es: "Eludir / evitar", meaning: "To find a clever way of avoiding a rule or problem", emoji: "🔄" },
+      { term: "Underpin", ipa: "/ˌʌndərˈpɪn/", es: "Sustentar / respaldar", meaning: "To form the basis or foundation of an argument", emoji: "🏛️" },
     ]
   },
   abstractAcademicNouns: {
@@ -27,6 +30,8 @@ export const CATEGORIES = {
       { term: "Nuance", ipa: "/ˈnuːˌɑːns/", es: "Matiz", meaning: "A subtle difference in meaning or feeling", emoji: "🎨" },
       { term: "Coherence", ipa: "/koʊˈhɪrəns/", es: "Coherencia", meaning: "The quality of being logical and consistent", emoji: "🧩" },
       { term: "Precedent", ipa: "/ˈprɛsɪdənt/", es: "Precedente", meaning: "An earlier example used as a guide", emoji: "📜" },
+      { term: "Inference", ipa: "/ˈɪnfərəns/", es: "Inferencia", meaning: "A conclusion reached through reasoning", emoji: "🧩" },
+      { term: "Consensus", ipa: "/kənˈsɛnsəs/", es: "Consenso", meaning: "General agreement among a group", emoji: "🤝" },
     ]
   },
   criticalThinkingAdjectives: {
@@ -42,6 +47,9 @@ export const CATEGORIES = {
       { term: "Empirical", ipa: "/ɪmˈpɪrɪkəl/", es: "Empírico", meaning: "Based on observation or experience", emoji: "🔬" },
       { term: "Normative", ipa: "/ˈnɔːrmətɪv/", es: "Normativo", meaning: "Relating to a standard or norm", emoji: "📋" },
       { term: "Salient", ipa: "/ˈseɪliənt/", es: "Sobresaliente / destacado", meaning: "Most noticeable or important", emoji: "⭐" },
+      { term: "Ambiguous", ipa: "/æmˈbɪɡjuəs/", es: "Ambiguo", meaning: "Open to more than one interpretation", emoji: "❓" },
+      { term: "Cogent", ipa: "/ˈkoʊdʒənt/", es: "Convincente / persuasivo", meaning: "Clear, logical and convincing", emoji: "💪" },
+      { term: "Arbitrary", ipa: "/ˈɑːrbɪˌtrɛri/", es: "Arbitrario", meaning: "Based on random choice, not reason or system", emoji: "🎲" },
     ]
   },
   academicPhrasesC1: {
@@ -57,6 +65,8 @@ export const CATEGORIES = {
       { term: "By virtue of", ipa: "/baɪ ˈvɜːrtʃuː əv/", es: "En virtud de", meaning: "Because of, due to", emoji: "⚖️" },
       { term: "Insofar as", ipa: "/ˌɪnsoʊˈfɑːr æz/", es: "En la medida en que", meaning: "To the extent that", emoji: "📐" },
       { term: "With the exception of", ipa: "/wɪð ði ɪkˈsɛpʃən əv/", es: "Con la excepción de", meaning: "Except for", emoji: "🚫" },
+      { term: "For the most part", ipa: "/fɔːr ðə moʊst pɑːrt/", es: "En su mayor parte", meaning: "Mostly, in most cases", emoji: "📊" },
+      { term: "Notwithstanding", ipa: "/ˌnɒtwɪðˈstændɪŋ/", es: "A pesar de / no obstante", meaning: "In spite of, despite", emoji: "⚖️" },
     ]
   },
 };
