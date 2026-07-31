@@ -552,16 +552,42 @@ function countModes(html) {
 function stripQuery(p) { return p.split('#')[0].split('?')[0]; }
 
 /**
- * Live facts for one module: imports its real data/*.js file (ES module, same
- * origin) and fetches its real exercises/*.html to count items and modes the
+ * Mirrors dataFileOf() in scripts/lib/derive-catalog.mjs: the exercise HTML's
+ * own import is the ground truth for which data file is actually used, not
+ * catalog.js's `dataFile` field -- that field can go stale (e.g. 'opposites'
+ * declares data/opposites.js but the exercise really imports
+ * data/word-relations.js). Falls back to the catalog field if the HTML can't
+ * be parsed.
+ */
+function dataFileOf(html) {
+  const hit = html?.match(/import\s+\{[^}]*\b(?:CATEGORIES|LEVELS)\b[^}]*\}\s+from\s+['"]\.\.\/data\/([^'"]+)['"]/);
+  return hit ? 'data/' + hit[1] : null;
+}
+
+/**
+ * Live facts for one module: fetches its real exercises/*.html (to count
+ * modes AND to resolve which data file it actually imports), then imports
+ * that real data/*.js file (ES module, same origin) to count items -- the
  * same way scripts/sync-catalog.mjs does on the Node side -- so this page can
  * never drift the way a regenerated static snapshot could.
  */
 async function deriveLive(mod) {
   const result = { items: null, categories: null, modes: null, derivable: true, error: null };
 
+  let html = null;
   try {
-    const dataUrl = new URL('../' + mod.dataFile, document.baseURI).href;
+    const exUrl = new URL('../' + stripQuery(mod.exercise), document.baseURI).href;
+    const res = await fetch(exUrl);
+    if (res.ok) html = await res.text();
+  } catch (e) {
+    // exercise fetch failed; html stays null, falls back to catalog.dataFile below
+  }
+
+  if (html) result.modes = countModes(html);
+
+  try {
+    const realDataFile = dataFileOf(html) || mod.dataFile;
+    const dataUrl = new URL('../' + realDataFile, document.baseURI).href;
     const dataModule = await import(/* @vite-ignore */ dataUrl);
     const catalogue = dataModule.CATEGORIES || dataModule.LEVELS;
     if (catalogue) {
@@ -578,14 +604,6 @@ async function deriveLive(mod) {
   } catch (e) {
     result.derivable = false;
     result.error = String(e?.message || e);
-  }
-
-  try {
-    const exUrl = new URL('../' + stripQuery(mod.exercise), document.baseURI).href;
-    const res = await fetch(exUrl);
-    if (res.ok) result.modes = countModes(await res.text());
-  } catch (e) {
-    // modes stays null, falls back below
   }
 
   return result;
