@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HubFlow — Inventario de módulos</title>
+<style>
+  :root {
+    --bg: #F5F6F9;
+    --bg-raised: #FFFFFF;
+    --ink: #1A1D24;
+    --ink-soft: #565D6B;
+    --ink-faint: #8A91A0;
+    --border: #DEE2EA;
+    --border-soft: #EAEDF3;
+    --accent: #2563EB;
+    --accent-soft: #E7EEFE;
+    --row-hover: #EEF1F8;
+    --warn: #B8860B;
+    --warn-soft: #FBF3E2;
+    --cat-vocab: #7B5EA7;
+    --cat-vocab-soft: #F1ECF9;
+    --cat-grammar: #B8860B;
+    --cat-grammar-soft: #FBF3E2;
+    --cat-pron: #3D6B9F;
+    --cat-pron-soft: #E9F0F9;
+    --cat-analysis: #3D7F7F;
+    --cat-analysis-soft: #E8F4F4;
+    --shadow: 0 1px 2px rgba(20, 24, 32, 0.04), 0 4px 16px rgba(20, 24, 32, 0.05);
+    --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171C;
+      --bg-raised: #1B1F26;
+      --ink: #EBEDF2;
+      --ink-soft: #A6ACB9;
+      --ink-faint: #6E7481;
+      --border: #2A2F38;
+      --border-soft: #21252D;
+      --accent: #5B8DF6;
+      --accent-soft: #1B2740;
+      --row-hover: #21262F;
+      --warn: #E6A832;
+      --warn-soft: #332A19;
+      --cat-vocab: #A98ED4;
+      --cat-vocab-soft: #2A2438;
+      --cat-grammar: #E6A832;
+      --cat-grammar-soft: #332A19;
+      --cat-pron: #6FA8DC;
+      --cat-pron-soft: #1B2836;
+      --cat-analysis: #6BC4C4;
+      --cat-analysis-soft: #17302E;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C;
+    --bg-raised: #1B1F26;
+    --ink: #EBEDF2;
+    --ink-soft: #A6ACB9;
+    --ink-faint: #6E7481;
+    --border: #2A2F38;
+    --border-soft: #21252D;
+    --accent: #5B8DF6;
+    --accent-soft: #1B2740;
+    --row-hover: #21262F;
+    --warn: #E6A832;
+    --warn-soft: #332A19;
+    --cat-vocab: #A98ED4;
+    --cat-vocab-soft: #2A2438;
+    --cat-grammar: #E6A832;
+    --cat-grammar-soft: #332A19;
+    --cat-pron: #6FA8DC;
+    --cat-pron-soft: #1B2836;
+    --cat-analysis: #6BC4C4;
+    --cat-analysis-soft: #17302E;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #F5F6F9;
+    --bg-raised: #FFFFFF;
+    --ink: #1A1D24;
+    --ink-soft: #565D6B;
+    --ink-faint: #8A91A0;
+    --border: #DEE2EA;
+    --border-soft: #EAEDF3;
+    --accent: #2563EB;
+    --accent-soft: #E7EEFE;
+    --row-hover: #EEF1F8;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: clamp(20px, 4vw, 44px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1180px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 4px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .subtitle {
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    max-width: 60ch;
+  }
+  .meta-line {
+    text-align: right;
+    color: var(--ink-faint);
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+
+  /* Loading panel */
+  .loading-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 72px 20px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+  .spinner {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+  }
+  .loading-sub {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+  .progress-track {
+    width: min(360px, 80vw);
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border-soft);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width 0.15s ease-out;
+  }
+  .progress-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .load-error {
+    max-width: 480px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .load-error code {
+    font-family: var(--font-mono);
+    background: var(--border-soft);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  #app { display: none; }
+
+  /* Summary strip */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cat-color, var(--accent));
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .stat-label {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .stat-card .stat-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .stat-card .stat-value small {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    margin-left: 3px;
+  }
+  .stat-card.total {
+    background: var(--accent);
+    border-left-color: var(--accent);
+    border-color: var(--accent);
+  }
+  .stat-card.total .stat-label { color: rgba(255,255,255,0.75); }
+  .stat-card.total .stat-value { color: #fff; }
+  .stat-card.total .stat-value small { color: rgba(255,255,255,0.75); }
+
+  /* Drift banner */
+  .drift-banner {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--warn-soft);
+    border: 1px solid var(--warn);
+    color: var(--warn);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 0.78rem;
+    margin-bottom: 14px;
+  }
+  .drift-banner.show { display: flex; }
+  .drift-banner code {
+    font-family: var(--font-mono);
+    background: rgba(0,0,0,0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .search-box {
+    position: relative;
+    flex: 1 1 220px;
+    min-width: 180px;
+  }
+  .search-box input {
+    width: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 12px 8px 30px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--ink);
+  }
+  .search-box input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .search-box::before {
+    content: "";
+    position: absolute;
+    left: 10px; top: 50%; transform: translateY(-50%);
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 50%;
+  }
+  .search-box::after {
+    content: "";
+    position: absolute;
+    left: 19px; top: 63%;
+    width: 5px; height: 1.5px;
+    background: var(--ink-faint);
+    transform: rotate(45deg);
+  }
+  .chip-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-raised);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color 0.12s, color 0.12s, background 0.12s;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--chip-color, var(--accent)); }
+  .chip.active {
+    background: var(--chip-soft, var(--accent-soft));
+    border-color: var(--chip-color, var(--accent));
+    color: var(--chip-color, var(--accent));
+  }
+  .chip[data-cat="vocab"] { --chip-color: var(--cat-vocab); --chip-soft: var(--cat-vocab-soft); }
+  .chip[data-cat="grammar"] { --chip-color: var(--cat-grammar); --chip-soft: var(--cat-grammar-soft); }
+  .chip[data-cat="pronunciation"] { --chip-color: var(--cat-pron); --chip-soft: var(--cat-pron-soft); }
+  .chip[data-cat="analysis"] { --chip-color: var(--cat-analysis); --chip-soft: var(--cat-analysis-soft); }
+
+  .btn-refresh {
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-raised);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
+
+  .result-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    margin: 0 0 8px;
+  }
+
+  /* Table */
+  .table-wrap {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: auto;
+    max-height: 68vh;
+    box-shadow: var(--shadow);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  thead th {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--bg-raised);
+    text-align: left;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--ink); }
+  thead th .arrow { display: inline-block; width: 10px; opacity: 0.5; font-size: 0.6rem; }
+  thead th.sorted { color: var(--accent); }
+  thead th.sorted .arrow { opacity: 1; }
+  thead th.num, td.num { text-align: right; }
+
+  tbody tr { border-bottom: 1px solid var(--border-soft); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+  td { padding: 8px 14px; vertical-align: middle; }
+  td.title-cell { display: flex; align-items: center; gap: 8px; min-width: 220px; }
+  td.title-cell .icon { font-size: 0.95rem; flex-shrink: 0; }
+  td.title-cell .title { font-weight: 500; }
+  td.title-cell .id { display: block; font-family: var(--font-mono); font-size: 0.66rem; color: var(--ink-faint); margin-top: 1px; }
+  td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+  td.subcat { color: var(--ink-faint); font-size: 0.78rem; }
+
+  .pill {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .pill.cat-vocab { color: var(--cat-vocab); background: var(--cat-vocab-soft); }
+  .pill.cat-grammar { color: var(--cat-grammar); background: var(--cat-grammar-soft); }
+  .pill.cat-pronunciation { color: var(--cat-pron); background: var(--cat-pron-soft); }
+  .pill.cat-analysis { color: var(--cat-analysis); background: var(--cat-analysis-soft); }
+
+  .cefr-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+  }
+
+  .drift-flag {
+    color: var(--warn);
+    cursor: help;
+    margin-left: 3px;
+    font-size: 0.7rem;
+  }
+
+  .stale-row { opacity: 0.55; }
+  .stale-row .title-cell .title::after {
+    content: " — no se pudo cargar en vivo";
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 14px;
+    color: var(--ink-faint);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  @media (max-width: 720px) {
+    .summary { grid-template-columns: repeat(2, 1fr); }
+    .stat-card.total { grid-column: 1 / -1; }
+    td.subcat, th[data-key="subcategory"] { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <h1>Inventario de <em>módulos</em> — HubFlow</h1>
+      <div class="subtitle">Catálogo completo de ejercicios por categoría, subcategoría, nivel CEFR e ítems de contenido — calculado en vivo desde <code>data/*.js</code> en cada carga, no desde una foto fija.</div>
+    </div>
+    <div class="meta-line" id="metaLine">generando…</div>
+  </header>
+
+  <div class="loading-panel" id="loadingPanel">
+    <div class="spinner" id="spinner"></div>
+    <div class="loading-text" id="loadingText">Importando data/catalog.js…</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-count" id="progressCount">0 / 0 módulos</div>
+    <div class="loading-sub">Cada módulo se importa y su ejercicio se descarga por separado para contar items y modos reales — puede tardar uno o dos minutos, es una página interna.</div>
+    <div class="load-error" id="loadError" style="display:none"></div>
+  </div>
+
+  <div id="app">
+    <div class="drift-banner" id="driftBanner"></div>
+
+    <div class="summary" id="summary"></div>
+
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Buscar por módulo o id…" autocomplete="off">
+      </div>
+      <div class="chip-group" id="catFilters">
+        <button class="chip active" data-cat="all">Todas</button>
+        <button class="chip" data-cat="vocab">Vocabulary</button>
+        <button class="chip" data-cat="grammar">Grammar</button>
+        <button class="chip" data-cat="pronunciation">Pronunciation</button>
+        <button class="chip" data-cat="analysis">Analysis</button>
+      </div>
+      <div class="chip-group" id="cefrFilters">
+        <button class="chip active" data-cefr="all">A1–C1</button>
+        <button class="chip" data-cefr="a1">A1</button>
+        <button class="chip" data-cefr="a2">A2</button>
+        <button class="chip" data-cefr="b1">B1</button>
+        <button class="chip" data-cefr="b2">B2</button>
+        <button class="chip" data-cefr="c1">C1</button>
+      </div>
+      <button class="btn-refresh" id="refreshBtn" title="Volver a recalcular desde data/*.js">↻ Recalcular</button>
+    </div>
+
+    <div class="result-count" id="resultCount"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-key="title">Módulo <span class="arrow">↕</span></th>
+            <th data-key="category">Categoría <span class="arrow">↕</span></th>
+            <th data-key="subcategory">Subcategoría <span class="arrow">↕</span></th>
+            <th data-key="cefr">Nivel <span class="arrow">↕</span></th>
+            <th data-key="items" class="num">Items <span class="arrow">↕</span></th>
+            <th data-key="modes" class="num">Modos <span class="arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <footer id="footer"></footer>
+  </div>
+</div>
+
+<script type="module">
+const CAT_LABEL = { vocab: 'Vocabulary', grammar: 'Grammar', pronunciation: 'Pronunciation', analysis: 'Analysis' };
+const SUBCAT_LABEL = {
+  foundations: 'Foundations', thematic: 'Thematic', expression: 'Expression', precision: 'Precision',
+  morphology: 'Morphology', tense: 'Tense', structure: 'Structure', nuance: 'Nuance'
+};
+const CONCURRENCY = 10;
+
+let DATA = [];
+let state = { sortKey: 'category', sortDir: 1, cat: 'all', cefr: 'all', q: '' };
+
+const $ = (id) => document.getElementById(id);
+
+/** Mirrors countItems() in scripts/lib/derive-catalog.mjs. */
+function countItems(categoryValue) {
+  if (Array.isArray(categoryValue)) return categoryValue.length;
+  return categoryValue?.items?.length ?? 0;
+}
+
+/** Mirrors countModes() in scripts/lib/derive-catalog.mjs -- reads the real exercise HTML. */
+function countModes(html) {
+  if (!html) return null;
+  const modeSet = new Set([...html.matchAll(/data-mode="([^"]+)"/g)].map((m) => m[1]));
+  if (modeSet.size) return modeSet.size;
+  const modesConfig = html.match(/modes:\s*\[([^\]]*)\]/);
+  if (modesConfig) {
+    const names = new Set([...modesConfig[1].matchAll(/['"]([^'"]+)['"]/g)].map((m) => m[1]));
+    if (names.size) return names.size;
+  }
+  return null;
+}
+
+function stripQuery(p) { return p.split('#')[0].split('?')[0]; }
+
+/**
+ * Live facts for one module: imports its real data/*.js file (ES module, same
+ * origin) and fetches its real exercises/*.html to count items and modes the
+ * same way scripts/sync-catalog.mjs does on the Node side -- so this page can
+ * never drift the way a regenerated static snapshot could.
+ */
+async function deriveLive(mod) {
+  const result = { items: null, categories: null, modes: null, derivable: true, error: null };
+
+  try {
+    const dataUrl = new URL('../' + mod.dataFile, document.baseURI).href;
+    const dataModule = await import(/* @vite-ignore */ dataUrl);
+    const catalogue = dataModule.CATEGORIES || dataModule.LEVELS;
+    if (catalogue) {
+      const keys = Object.keys(catalogue);
+      result.categories = keys.length;
+      result.items = keys.reduce((sum, k) => sum + countItems(catalogue[k]), 0);
+    } else if (Array.isArray(dataModule.VERBS)) {
+      // irregular-verbs.js: flat array grouped by a `cat` field, not CATEGORIES/LEVELS.
+      result.items = dataModule.VERBS.length;
+      result.categories = new Set(dataModule.VERBS.map((v) => v.cat)).size;
+    } else {
+      result.derivable = false;
+    }
+  } catch (e) {
+    result.derivable = false;
+    result.error = String(e?.message || e);
+  }
+
+  try {
+    const exUrl = new URL('../' + stripQuery(mod.exercise), document.baseURI).href;
+    const res = await fetch(exUrl);
+    if (res.ok) result.modes = countModes(await res.text());
+  } catch (e) {
+    // modes stays null, falls back below
+  }
+
+  return result;
+}
+
+async function mapWithConcurrency(items, limit, worker, onProgress) {
+  const results = new Array(items.length);
+  let next = 0, done = 0;
+  async function run() {
+    while (next < items.length) {
+      const i = next++;
+      results[i] = await worker(items[i], i);
+      done++;
+      onProgress(done, items.length);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, run));
+  return results;
+}
+
+function setProgress(done, total) {
+  $('progressFill').style.width = total ? `${Math.round((done / total) * 100)}%` : '0%';
+  $('progressCount').textContent = `${done} / ${total} módulos`;
+}
+
+async function loadInventory() {
+  $('loadingPanel').style.display = 'flex';
+  $('app').style.display = 'none';
+  $('loadError').style.display = 'none';
+  $('metaLine').textContent = 'generando…';
+  const t0 = performance.now();
+
+  if (location.protocol === 'file:') {
+    $('loadingText').textContent = 'No se puede cargar en vivo.';
+    $('loadError').style.display = 'block';
+    $('loadError').innerHTML = 'Esta página importa módulos ES (<code>import()</code>) y hace <code>fetch()</code> de los ejercicios reales, lo que los navegadores bloquean bajo <code>file://</code>. Ábrela servida por el gateway local, p. ej. <code>http://localhost:3000/hubflow/docs/inventory.html</code>.';
+    return;
+  }
+
+  let catalogModule;
+  try {
+    const catalogUrl = new URL('../data/catalog.js', document.baseURI).href;
+    catalogModule = await import(/* @vite-ignore */ catalogUrl);
+  } catch (e) {
+    $('loadingText').textContent = 'No se pudo importar data/catalog.js.';
+    $('loadError').style.display = 'block';
+    $('loadError').textContent = String(e?.message || e);
+    return;
+  }
+
+  const { MODULES, MODULE_DEPTH } = catalogModule;
+  $('loadingText').textContent = `Calculando items y modos reales para ${MODULES.length} módulos…`;
+  setProgress(0, MODULES.length);
+
+  const facts = await mapWithConcurrency(MODULES, CONCURRENCY, deriveLive, setProgress);
+
+  let driftCount = 0;
+  DATA = MODULES.map((m, i) => {
+    const fact = facts[i];
+    const declared = MODULE_DEPTH[m.id] || {};
+    const items = fact.items ?? declared.items ?? 0;
+    const modes = fact.modes ?? declared.modes ?? 0;
+    const itemsDrift = fact.derivable && fact.items != null && declared.items != null && fact.items !== declared.items;
+    const modesDrift = fact.modes != null && declared.modes != null && fact.modes !== declared.modes;
+    if (itemsDrift || modesDrift) driftCount++;
+    return {
+      id: m.id, title: m.title, category: m.category, subcategory: m.subcategory || '',
+      cefr: m.cefr, icon: m.icon, items, modes,
+      itemsDrift, modesDrift, declaredItems: declared.items, declaredModes: declared.modes,
+      failed: !fact.derivable && fact.error,
+    };
+  });
+
+  const elapsed = ((performance.now() - t0) / 1000).toFixed(1);
+  $('metaLine').textContent = `calculado en vivo desde data/*.js · ${elapsed}s · ${new Date().toLocaleString('es-ES')}`;
+
+  const driftBanner = $('driftBanner');
+  if (driftCount > 0) {
+    driftBanner.classList.add('show');
+    driftBanner.innerHTML = `⚠ ${driftCount} módulo(s) con items/modos distintos a lo declarado en <code>catalog.js</code> — correr <code>node scripts/sync-catalog.mjs</code>.`;
+  } else {
+    driftBanner.classList.remove('show');
+  }
+
+  $('loadingPanel').style.display = 'none';
+  $('app').style.display = 'block';
+  renderSummary();
+  render();
+}
+
+function computeSummary() {
+  const byCat = {};
+  DATA.forEach((m) => {
+    byCat[m.category] = byCat[m.category] || { count: 0, items: 0 };
+    byCat[m.category].count++;
+    byCat[m.category].items += m.items;
+  });
+  return byCat;
+}
+
+function renderSummary() {
+  const byCat = computeSummary();
+  const totalItems = DATA.reduce((s, m) => s + m.items, 0);
+  const el = $('summary');
+  const order = ['vocab', 'grammar', 'pronunciation', 'analysis'];
+  el.innerHTML = order.map((cat) => {
+    const v = byCat[cat] || { count: 0, items: 0 };
+    return `<div class="stat-card" style="--cat-color: var(--cat-${cat === 'pronunciation' ? 'pron' : cat})">
+      <div class="stat-label">${CAT_LABEL[cat]}</div>
+      <div class="stat-value">${v.count}<small>módulos · ${v.items} items</small></div>
+    </div>`;
+  }).join('') + `<div class="stat-card total">
+      <div class="stat-label">Total catálogo</div>
+      <div class="stat-value">${DATA.length}<small>módulos · ${totalItems} items</small></div>
+    </div>`;
+}
+
+function getFiltered() {
+  return DATA.filter((m) => {
+    if (state.cat !== 'all' && m.category !== state.cat) return false;
+    if (state.cefr !== 'all' && m.cefr !== state.cefr) return false;
+    if (state.q) {
+      const q = state.q.toLowerCase();
+      if (!m.title.toLowerCase().includes(q) && !m.id.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function sortRows(rows) {
+  const { sortKey, sortDir } = state;
+  return [...rows].sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+    if (av < bv) return -1 * sortDir;
+    if (av > bv) return 1 * sortDir;
+    return a.title.localeCompare(b.title);
+  });
+}
+
+function driftTitle(live, declared) {
+  return `catalog.js declara ${declared} — desincronizado, correr node scripts/sync-catalog.mjs`;
+}
+
+function render() {
+  const rows = sortRows(getFiltered());
+  const tbody = $('tbody');
+  tbody.innerHTML = rows.map((m) => `
+    <tr class="${m.failed ? 'stale-row' : ''}">
+      <td class="title-cell">
+        <span class="icon">${m.icon}</span>
+        <span>
+          <span class="title">${m.title}</span>
+          <span class="id">${m.id}</span>
+        </span>
+      </td>
+      <td><span class="pill cat-${m.category}">${CAT_LABEL[m.category]}</span></td>
+      <td class="subcat">${m.subcategory ? (SUBCAT_LABEL[m.subcategory] || m.subcategory) : '—'}</td>
+      <td><span class="cefr-pill">${m.cefr.toUpperCase()}</span></td>
+      <td class="num">${m.items}${m.itemsDrift ? `<span class="drift-flag" title="${driftTitle(m.items, m.declaredItems)}">⚠</span>` : ''}</td>
+      <td class="num">${m.modes}${m.modesDrift ? `<span class="drift-flag" title="${driftTitle(m.modes, m.declaredModes)}">⚠</span>` : ''}</td>
+    </tr>
+  `).join('');
+
+  $('resultCount').textContent =
+    `${rows.length} de ${DATA.length} módulos · ${rows.reduce((s, m) => s + m.items, 0)} items`;
+
+  document.querySelectorAll('thead th').forEach((th) => {
+    th.classList.toggle('sorted', th.dataset.key === state.sortKey);
+    const arrow = th.querySelector('.arrow');
+    if (th.dataset.key === state.sortKey) arrow.textContent = state.sortDir === 1 ? '↑' : '↓';
+    else arrow.textContent = '↕';
+  });
+
+  const categories = new Set(DATA.map((m) => m.category)).size;
+  $('footer').textContent =
+    `HubFlow · ${DATA.length} módulos · ${categories} categorías · CEFR A1–C1 (C2 excluido por diseño editorial)`;
+}
+
+document.querySelectorAll('thead th').forEach((th) => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (state.sortKey === key) state.sortDir *= -1;
+    else { state.sortKey = key; state.sortDir = 1; }
+    render();
+  });
+});
+
+$('catFilters').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#catFilters .chip').forEach((c) => c.classList.remove('active'));
+  btn.classList.add('active');
+  state.cat = btn.dataset.cat;
+  render();
+});
+
+$('cefrFilters').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#cefrFilters .chip').forEach((c) => c.classList.remove('active'));
+  btn.classList.add('active');
+  state.cefr = btn.dataset.cefr;
+  render();
+});
+
+$('search').addEventListener('input', (e) => {
+  state.q = e.target.value;
+  render();
+});
+
+$('refreshBtn').addEventListener('click', loadInventory);
+
+loadInventory();
+</script>
+</body>
+</html>
