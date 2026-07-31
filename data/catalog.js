@@ -616,8 +616,8 @@ export const MODULES = [
     id: 'pron-vowels',
     title: 'Vowel Sounds & Schwa',
     category: 'pronunciation',
-    tags: ['pronunciation', 'a2', 'b1', 'study'],
-    cefr: 'a2',
+    tags: ['pronunciation', 'a1', 'a2', 'study'],
+    cefr: 'a1',
     icon: '🗣️',
     meta: 'English Vowels · The Schwa /ə/ — with IPA transcription',
     exercise: 'exercises/pron-vowels.html',
@@ -630,7 +630,7 @@ export const MODULES = [
     title: 'Clusters & -ED Endings',
     category: 'pronunciation',
     tags: ['pronunciation', 'a2', 'b1', 'study'],
-    cefr: 'a2',
+    cefr: 'b1',
     icon: '🔤',
     meta: 'Consonant clusters (str, spr, θr) · -ED pronunciation (/t/ /d/ /ɪd/)',
     exercise: 'exercises/pron-consonants.html',
@@ -2235,6 +2235,34 @@ export const MODULES = [
     dataFile: 'data/c1-hedging-softening.js',
     scoreKey: 'hedging',
   },
+
+  // Pronunciation rebalance — 5 módulos por nivel CEFR A1-C1.
+  {
+    id: 'b2-thought-groups',
+    title: 'Thought Groups & Chunking (B2)',
+    category: 'pronunciation',
+    tags: ['pronunciation', 'b2', 'study'],
+    cefr: 'b2',
+    icon: '🧩',
+    meta: 'Basic Thought Groups · Pausing at Clauses · Pausing in Lists · Avoiding Wrong Pauses',
+    exercise: 'exercises/b2-thought-groups.html',
+    guide: null,
+    dataFile: 'data/b2-thought-groups.js',
+    scoreKey: 'pron-study',
+  },
+  {
+    id: 'c1-discourse-marker-prosody',
+    title: 'Discourse Marker Prosody (C1)',
+    category: 'pronunciation',
+    tags: ['pronunciation', 'c1', 'study'],
+    cefr: 'c1',
+    icon: '🗣️',
+    meta: 'Hesitation & Consideration · Signaling a Transition · Clarifying & Rephrasing · Checking & Confirming',
+    exercise: 'exercises/c1-discourse-marker-prosody.html',
+    guide: null,
+    dataFile: 'data/c1-discourse-marker-prosody.js',
+    scoreKey: 'pron-study',
+  },
 ];
 
 /** Todas las guías registradas van 1:1 con un módulo salvo excepciones documentadas. */
@@ -2424,6 +2452,10 @@ export const PROGRESS_RULES = {
   'c1-future-in-past': practiceRule(scoreKeys('futurepast', ['wasGoingTo', 'wouldFutureInPast', 'reportedFutureTense', 'futurePerfectInPast'])),
   'c1-aspect-time-nuance': practiceRule(scoreKeys('aspect', ['perfectVsSimpleAspect', 'continuousForStativeShift', 'timeAdverbsPlacement', 'aspectInNarrative'])),
   'c1-hedging-softening': practiceRule(scoreKeys('hedging', ['modalHedges', 'tentativeLanguage', 'softeningAdverbs', 'indirectDisagreement'])),
+
+  // Pronunciation rebalance — 5 módulos por nivel CEFR A1-C1.
+  'b2-thought-groups': practiceRule(scoreKeys('pron-study', ['basicChunking', 'pausingForClauses', 'pausingForLists', 'avoidingWrongPauses'], ['quiz'])),
+  'c1-discourse-marker-prosody': practiceRule(scoreKeys('pron-study', ['hesitationMarkers', 'transitionMarkers', 'clarificationMarkers', 'agreementCheckMarkers'], ['quiz'])),
 };
 
 /**
@@ -2598,6 +2630,10 @@ export const MODULE_DEPTH = {
   'c1-future-in-past':           { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
   'c1-aspect-time-nuance':       { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
   'c1-hedging-softening':        { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
+
+  // Pronunciation rebalance — 5 módulos por nivel CEFR A1-C1.
+  'b2-thought-groups':            { engine: 'tts', items: 40, categories: 4, modes: 5, hasBattle: true },
+  'c1-discourse-marker-prosody':  { engine: 'tts', items: 40, categories: 4, modes: 5, hasBattle: true },
 };
 
 /**
