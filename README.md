@@ -17,17 +17,17 @@ Plataforma de ejercicios interactivos de inglés — vocabulario, pronunciación
 ```
 HubFlow/
 ├── index.html          # Dashboard SPA: categorías + "Mi Progreso" (rutas de aprendizaje)
-├── exercises/           # 43 páginas de ejercicio, una por tema
-├── guides/              # 24 páginas de referencia (reglas, tablas, consulta rápida)
-├── data/                # Un archivo por tema con el contenido del ejercicio
-│   └── catalog.js       # Metadata de los 61 módulos (título, categoría, CEFR, scoreKey...)
+├── exercises/           # 150 páginas de ejercicio, una por módulo
+├── guides/              # 30 páginas de referencia (reglas, tablas, consulta rápida)
+├── data/                # Un archivo por módulo con el contenido del ejercicio (153 archivos)
+│   └── catalog.js       # Metadata de los 150 módulos (título, categoría, CEFR, scoreKey...) + MODULE_DEPTH (items/categorías/modos derivados del contenido real)
 ├── css/
 │   ├── base.css          # Tokens --lp-*, reset, tipografía
 │   ├── buttons.css       # Sistema de botones compartido (.lp-btn/.lp-icon-btn/.lp-pill)
 │   ├── components.css    # Top-bar, categorías, progreso, flashcards
 │   └── *-shell.css       # Estilos propios de cada familia de ejercicio
 ├── js/
-│   ├── *-engine.js       # Un motor por familia de ejercicio
+│   ├── *-engine.js       # Un motor por familia de ejercicio (flashcard, spelling, sentence-quiz, typed-answer, dictation)
 │   ├── array-utils.js    # shuffle
 │   ├── progress-store.js # recordScore, progress tracking, cloud sync
 │   ├── exercise-ui.js    # renderCatBar, mode tabs, Timer, progress bar
@@ -38,22 +38,26 @@ HubFlow/
 │   ├── lp-nav-helpers.js # themedAppHref, toggleTheme, navIcon
 │   └── lp-about.js       # Modal "About LearnFlow"
 ├── docs/
-│   └── mi-progreso-decisions.md  # Documento de decisiones de rutas de aprendizaje
+│   └── inventory.html    # Inventario dinámico: recalcula items/categorías/modos reales de los 150 módulos al cargar
 ├── scripts/
 │   ├── validate-content.js  # Valida data/*.js antes de deployar (bloqueante)
-│   └── analyze-content.mjs
+│   ├── sync-catalog.mjs     # Deriva MODULE_DEPTH real (items/categorías/modos) desde data/*.js y exercises/*.html
+│   ├── analyze-content.mjs
+│   └── lib/derive-catalog.mjs
 └── build.sh              # Commit + push + espera CI Validate/CD Deploy
 ```
 
 ## Categorías y niveles CEFR
 
-| Categoría | Módulos | CEFR |
-|-----------|---------|------|
-| Vocabulary & Words | 18 | A2–C1 |
-| Grammar & Spelling | 25 | A1–B2 |
-| Pronunciation | 10 | A1–B2 |
-| Analysis & Production | 8 | A2–C1 |
-| **Total** | **61** | **A1–C1** |
+| Categoría | Módulos | Items | CEFR |
+|-----------|---------|-------|------|
+| Vocabulary & Words | 50 | 2.500 | A1–C1 |
+| Grammar & Spelling | 50 | 2.000 | A1–C1 |
+| Pronunciation | 25 | 1.000 | A1–C1 |
+| Analysis & Production | 25 | 1.000 | A1–C1 |
+| **Total** | **150** | **6.500** | **A1–C1** |
+
+Los números de esta tabla se derivan del contenido real en `data/*.js` — no son un conteo manual. `node scripts/sync-catalog.mjs --check` falla si `catalog.js` se desincroniza del contenido real; `docs/inventory.html` los recalcula en vivo en el navegador.
 
 ## Mi Progreso — Rutas de aprendizaje
 
@@ -69,8 +73,6 @@ Feature del dashboard que ofrece 6 rutas transversales (cruzan 3+ categorías) c
 | 🏆 Advanced Mastery | B2 → C1 | G + A + V |
 
 El progreso se calcula leyendo los `scoreKey` existentes de localStorage (≥60% = completado).
-
-Ver `docs/mi-progreso-decisions.md` para detalles completos.
 
 ## Familias de ejercicio
 
