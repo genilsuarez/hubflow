@@ -10,10 +10,10 @@ export const CATEGORIES = {
     icon: '🔊',
     description: 'Distinguish similar vowel sounds',
     items: [
-      { word_a: "ship", word_b: "sheep", ipa_a: "/ʃɪp/", ipa_b: "/ʃiːp/", sound: "/ɪ/ vs /iː/", es: "barco / oveja", tip: "Short /ɪ/ = relaxed. Long /iː/ = tense, smile." },
+      { word_a: "hill", word_b: "heel", ipa_a: "/hɪl/", ipa_b: "/hiːl/", sound: "/ɪ/ vs /iː/", es: "colina / talón", tip: "Short /ɪ/ = relaxed. Long /iː/ = tense, smile." },
       { word_a: "full", word_b: "fool", ipa_a: "/fʊl/", ipa_b: "/fuːl/", sound: "/ʊ/ vs /uː/", es: "lleno / tonto", tip: "/ʊ/ is short. /uː/ is long — round your lips more." },
       { word_a: "cat", word_b: "cut", ipa_a: "/kæt/", ipa_b: "/kʌt/", sound: "/æ/ vs /ʌ/", es: "gato / cortar", tip: "/æ/ mouth open wide. /ʌ/ mouth more relaxed, central." },
-      { word_a: "bad", word_b: "bed", ipa_a: "/bæd/", ipa_b: "/bed/", sound: "/æ/ vs /e/", es: "malo / cama", tip: "Drop your jaw more for /æ/ ('bad')." },
+      { word_a: "sat", word_b: "set", ipa_a: "/sæt/", ipa_b: "/sɛt/", sound: "/æ/ vs /e/", es: "se sentó / puso", tip: "Drop your jaw more for /æ/ ('sat')." },
       { word_a: "cot", word_b: "caught", ipa_a: "/kɒt/", ipa_b: "/kɔːt/", sound: "/ɒ/ vs /ɔː/", es: "cuna / atrapó", tip: "/ɒ/ short. /ɔː/ long and more open." },
       { word_a: "bit", word_b: "beat", ipa_a: "/bɪt/", ipa_b: "/biːt/", sound: "/ɪ/ vs /iː/", es: "poco / golpear", tip: "Short /ɪ/ relaxed. Long /iː/ tense, wider smile." },
       { word_a: "pull", word_b: "pool", ipa_a: "/pʊl/", ipa_b: "/puːl/", sound: "/ʊ/ vs /uː/", es: "tirar / piscina", tip: "/ʊ/ short and relaxed. /uː/ long, rounded lips." },
