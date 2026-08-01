@@ -16,6 +16,7 @@ import {
 import { enrichHubflowContentEntry, checkLevelAdvancement } from './lp-progress-summary.js';
 
 const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
+const CATALOG_STORAGE_KEY = 'learnflow:catalog:hubflow:v1';
 const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
 const SCORE_KEY_VERSION = ':v1';
 const MAX_SCORE_HISTORY = 20;
@@ -397,6 +398,22 @@ function publishHubFlowProgress() {
 
   try {
     localStorage.setItem(HUBFLOW_LOCAL_READY_KEY, '1');
+  } catch {
+    /* ignore quota errors */
+  }
+
+  try {
+    // learnflow:catalog:hubflow:v1 — tamaño de catálogo por separado de
+    // learnflow:progress:hubflow:v1. clearGuestLocalProgress() (DeskFlow,
+    // lp-guest-reset.js) borra todo lo que empieza con learnflow:progress:/
+    // learnflow:activity: al hacer logout explícito (correcto, evita filtrar
+    // progreso ajeno en un dispositivo compartido) — pero eso dejaba el
+    // total en 0 también en modo invitado, aunque el catálogo es público.
+    // Esta clave no matchea ese borrado, así que sobrevive al logout.
+    localStorage.setItem(
+      CATALOG_STORAGE_KEY,
+      JSON.stringify({ totalContent: MODULES.length, updatedAt: projection.updatedAt })
+    );
   } catch {
     /* ignore quota errors */
   }
