@@ -412,7 +412,11 @@ function publishHubFlowProgress() {
     // Esta clave no matchea ese borrado, así que sobrevive al logout.
     localStorage.setItem(
       CATALOG_STORAGE_KEY,
-      JSON.stringify({ totalContent: MODULES.length, updatedAt: projection.updatedAt })
+      JSON.stringify({
+        totalContent: MODULES.length,
+        ids: MODULES.map((module) => module.id),
+        updatedAt: projection.updatedAt,
+      })
     );
   } catch {
     /* ignore quota errors */
