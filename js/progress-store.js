@@ -129,6 +129,28 @@ function readProjectionDoc() {
   reconcileHubflowProgressFromEvents();
   const doc = readJson(PROGRESS_STORAGE_KEY, null);
   if (!doc?.content) return null;
+
+  // Poda ids fuera del catálogo vigente antes de usar el documento: lo llena el
+  // cloud-merge de DeskFlow, que une filas de Supabase sin quitar contenido
+  // renombrado/eliminado (ej. los vocab-pack-* del split de Vocabulary). Importa
+  // sobre todo por getHubFlowProgressSummary(), que hace Math.max(computed,
+  // stored) — ese Math.max es necesario para que un dispositivo nuevo vea el
+  // progreso que solo existe en la nube, pero sin podar deja ganar un
+  // completedContent inflado (40) sobre el real derivado de MODULES (24).
+  const catalogIds = new Set(MODULES.map((module) => module.id));
+  for (const contentId of Object.keys(doc.content)) {
+    if (!catalogIds.has(contentId)) delete doc.content[contentId];
+  }
+  if (doc.summary) {
+    const items = Object.values(doc.content);
+    doc.summary = {
+      ...doc.summary,
+      completedContent: items.filter((item) => item?.completed).length,
+      attemptedContent: items.filter((item) => (item?.attempts ?? 0) > 0).length,
+      totalContent: MODULES.length,
+    };
+  }
+
   for (const item of Object.values(doc.content)) {
     enrichHubflowContentEntry(item);
   }
