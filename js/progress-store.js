@@ -363,6 +363,12 @@ function publishHubFlowProgress() {
     app: 'hubflow',
     updatedAt: new Date().toISOString(),
     catalogVersion: 'hubflow-catalog-v1',
+    // Catálogo real vigente, fuera de summary/content a propósito: el
+    // cloud-merge de DeskFlow (sync-engine.js) solo une content_ids de
+    // Supabase sin podar ids huérfanos de catálogos viejos, así que
+    // Object.keys(content).length ahí puede inflarse. catalogTotalContent
+    // es la única fuente que sabe con certeza cuántos módulos hay AHORA.
+    catalogTotalContent: MODULES.length,
     summary,
     content,
   };
