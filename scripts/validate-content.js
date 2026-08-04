@@ -373,6 +373,70 @@ async function validateNavSections() {
  * Valida integridad de rutas, unicidad de ids, y que los 34 ejercicios en
  * exercises/*.html tengan una entrada — sin huérfanos en ningún sentido.
  */
+/**
+ * LEARNING_PATHS referencia ids de módulo a mano y su orden es lo que el
+ * dashboard propone como progresión. Tres cosas se rompían en silencio:
+ * un id renombrado dejaba el paso apuntando al vacío; un módulo fuera de orden
+ * CEFR mandaba al usuario a un B2 antes que a un B1; y un módulo nuevo que no
+ * entra a ninguna ruta queda invisible para el sistema guiado — le pasó a los
+ * 71 módulos del rebalanceo de julio 2026, ninguno entró a una ruta.
+ */
+async function validateLearningPaths(MODULES, TAGS) {
+  const pathsPath = path.join(DATA_DIR, 'learning-paths.js');
+  if (!existsSync(pathsPath)) return;
+  const { LEARNING_PATHS, pathCefrRegressions, pathSections } = await import(pathToFileURL(pathsPath).href);
+
+  const moduleIds = new Set(MODULES.map((m) => m.id));
+  const pathIds = new Set();
+  const covered = new Set();
+
+  for (const p of LEARNING_PATHS) {
+    if (pathIds.has(p.id)) err('PATH-ID', `learning-paths.js: ruta duplicada "${p.id}"`);
+    pathIds.add(p.id);
+
+    // `cefr` se derivaba mal en cuanto el catálogo re-nivelaba un módulo, y
+    // `color` no lo leía nadie: ambos se quitaron a propósito.
+    if ('cefr' in p) err('PATH-FIELD', `learning-paths.js[${p.id}]: no declarar "cefr" — se deriva con pathCefrRange()`);
+    if ('color' in p) err('PATH-FIELD', `learning-paths.js[${p.id}]: "color" no lo lee ningún render — quitarlo o cablearlo primero`);
+
+    const seen = new Set();
+    for (const id of p.modules) {
+      if (!moduleIds.has(id)) err('PATH-ID', `learning-paths.js[${p.id}]: módulo "${id}" no existe en catalog.js`);
+      else covered.add(id);
+      if (seen.has(id)) err('PATH-DUP', `learning-paths.js[${p.id}]: módulo "${id}" repetido dentro de la misma ruta`);
+      seen.add(id);
+    }
+
+    for (const { from, to } of pathCefrRegressions(p)) {
+      err('PATH-ORDER', `learning-paths.js[${p.id}]: "${from}" → "${to}" baja de nivel CEFR — los pasos van de menor a mayor`);
+    }
+
+    // Principio 2: una ruta responde a "¿qué logro?", así que cruza secciones.
+    // `deepDive` es la puerta de salida, y solo se abre cuando la cola de una
+    // categoría no tiene pareja temática en ninguna otra (las dos rutas de
+    // pronunciación por encima de A2).
+    const sections = pathSections(p);
+    if (!p.deepDive && sections.size < 3) {
+      err('PATH-SECTIONS', `learning-paths.js[${p.id}]: cruza ${sections.size} sección(es) (${[...sections].join(', ')}) — el mínimo son 3, o marcarla deepDive con motivo`);
+    }
+    if (p.deepDive && sections.size >= 3) {
+      err('PATH-SECTIONS', `learning-paths.js[${p.id}]: marcada deepDive pero ya cruza ${sections.size} secciones — quitar la excepción`);
+    }
+  }
+
+  // Cobertura: warning y no error. El catálogo siempre tendrá más módulos que
+  // rutas; lo que importa es que el número sea visible en cada build, para que
+  // añadir 40 módulos sin engancharlos no vuelva a pasar desapercibido.
+  const perLevel = TAGS.cefr
+    .map((level) => {
+      const all = MODULES.filter((m) => m.cefr === level);
+      return `${level.toUpperCase()} ${all.filter((m) => covered.has(m.id)).length}/${all.length}`;
+    })
+    .join(' · ');
+  const pct = Math.round((covered.size / moduleIds.size) * 100);
+  warn('PATH-COVERAGE', `las rutas cubren ${covered.size}/${moduleIds.size} módulos (${pct}%) — ${perLevel}`);
+}
+
 async function validateCatalog() {
   const catalogPath = path.join(DATA_DIR, 'catalog.js');
   if (!existsSync(catalogPath)) return;
@@ -484,21 +548,7 @@ async function validateCatalog() {
     }
   }
 
-  // LEARNING_PATHS (data/learning-paths.js) referencia ids de módulo a mano. Si
-  // se renombra o borra un módulo, la ruta apunta al vacío sin ruido en consola.
-  const learningPathsSrc = readFileSync(path.join(ROOT_DIR, 'data', 'learning-paths.js'), 'utf8');
-  const pathsBlock = learningPathsSrc.match(/export const LEARNING_PATHS = \[([\s\S]*?)\n\];/)?.[1];
-  if (!pathsBlock) {
-    err('CAT-PATHS', 'data/learning-paths.js: no se encontró LEARNING_PATHS para validar');
-  } else {
-    for (const entry of pathsBlock.matchAll(/modules:\s*\[([^\]]*)\]/g)) {
-      for (const [, id] of entry[1].matchAll(/'([^']+)'/g)) {
-        if (!moduleIds.has(id)) {
-          err('CAT-PATHS', `data/learning-paths.js LEARNING_PATHS: módulo "${id}" no existe en catalog.js`);
-        }
-      }
-    }
-  }
+  await validateLearningPaths(MODULES, TAGS);
 
   // Every exercises/*.html must have a catalog entry (no orphans in either direction).
   const exerciseFiles = readdirSync(EXERCISES_DIR).filter((f) => f.endsWith('.html'));

@@ -59,16 +59,17 @@ Los números de esta tabla se derivan del contenido real en `data/*.js` — no s
 
 ## Mi Progreso — Rutas de aprendizaje
 
-Feature del dashboard que ofrece 6 rutas transversales (cruzan 3+ categorías) con propósito pedagógico. No bloquean acceso — son sugerencias de progresión.
+Feature del dashboard que ofrece 19 rutas transversales (cruzan 3+ categorías) con propósito pedagógico. No bloquean acceso — son sugerencias de progresión, y todos los pasos navegan siempre.
 
-| Ruta | CEFR | Secciones cruzadas |
-|------|------|--------------------|
-| ✏️ Spell It Right | A1 → B1 | G + P + V + A |
-| 🧱 Build Sentences | A1 → B1 | G + V + A |
-| 👂 Decode Speech | A2 → B1 | P + V + A |
-| 🗣️ Sound Natural | A2 → B1 | V + G + P + A |
-| 🔄 Transform & Produce | A2 → B1 | G + A + V |
-| 🏆 Advanced Mastery | B2 → C1 | G + A + V |
+Cubren los 150 módulos del catálogo (30/30 en cada nivel CEFR). El grid las agrupa en tres etapas derivadas del nivel al que te llevan:
+
+| Etapa | Rutas |
+|-------|-------|
+| **Fundamentos** — hasta A2 | 🌱 First Words · 🏡 Everyday Life · 🖼️ Describe & Narrate · 📝 Write It Right |
+| **Intermedio** — de A2 a B2 | ✏️ Spell It Right · 🧱 Build Sentences · ⏳ Past & Habit · ☕ Everyday Fluency · 👂 Decode Speech · 🗣️ Sound Natural · 🔄 Transform & Produce · 🦴 Grammar Backbone · 💼 Professional English · 🎚️ Clear Speech |
+| **Avanzado** — camino a C1 | 🌍 World & Society · 🏆 Advanced Mastery · 🎓 Academic & Argument · 🎯 C1 Precision · 🎼 Native Prosody |
+
+El rango CEFR de cada ruta se **deriva** de sus módulos (`pathCefrRange()`), no se declara: un string en duro ya se desincronizó del catálogo una vez.
 
 El progreso se calcula leyendo los `scoreKey` existentes de localStorage (≥60% = completado).
 

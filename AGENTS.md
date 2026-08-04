@@ -165,8 +165,13 @@ Each family uses `[data-color="..."]` on its wrapper to pick up category color (
 
 ## Mi Progreso — Learning paths
 
-6 cross-category paths with pedagogical purpose. Non-blocking — suggested progression only.
+19 cross-category paths with pedagogical purpose, covering all 150 modules (30/30 per CEFR level).
+Non-blocking — suggested progression only; every step is always a navigable link.
 Progress calculated from `scoreKey` entries in localStorage (≥60% = completed).
+
+`data/learning-paths.js` holds only `id/title/icon/description/modules` — the CEFR range and the
+stage (Fundamentos/Intermedio/Avanzado) are **derived** from the catalog, never declared.
+CI enforces PATH-ID / PATH-ORDER / PATH-DUP / PATH-SECTIONS and reports PATH-COVERAGE.
 
 See `docs/mi-progreso-decisions.md` for full details.
 

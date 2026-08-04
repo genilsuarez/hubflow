@@ -6,15 +6,26 @@
    ═══════════════════════════════════════════════════════ */
 
 import { MODULES, catColor, moduleMap, getModuleDepth } from '../data/catalog.js';
-import { LEARNING_PATHS } from '../data/learning-paths.js';
+import { LEARNING_PATHS, pathCefrRange, pathsByStage } from '../data/learning-paths.js';
 import { getBestScore, isContentCompleted, getProgressStats } from './progress-store.js';
 import { shouldDeferStatsDisplay, shouldDeferActivityDisplay } from './sync-engine.js';
 import { animateText, animateCssVar } from './lp-stats-animate.js';
 
+/** Encabezado de etapa. Ocupa el ancho completo del grid de dos columnas. */
+function stageHeader({ label, hint }) {
+  return `<div class="sec-head sec-head--sub rutas-stage-head">${label} <span class="rutas-stage-hint">${hint}</span></div>`;
+}
+
 export function renderRutas() {
   const grid = document.getElementById('rutasGrid');
   if (!grid) return;
-  grid.innerHTML = LEARNING_PATHS.map(path => {
+  grid.innerHTML = pathsByStage().map(({ stage, paths }) =>
+    stageHeader(stage) + renderRutaCards(paths)
+  ).join('');
+}
+
+function renderRutaCards(paths) {
+  return paths.map(path => {
     const done = path.modules.filter(isContentCompleted).length;
     const total = path.modules.length;
     const nextIdx = path.modules.findIndex(id => !isContentCompleted(id));
@@ -29,18 +40,17 @@ export function renderRutas() {
       const itemsBadge = depth ? `<span class="ruta-step__items">${depth.items}</span>` : '';
       return `<a class="ruta-step ${cls}" href="${href}" title="${label}">${label}${itemsBadge}</a>`;
     }).join('');
-    const color = 'var(--lp-accent)';
     const totalItems = path.modules.reduce((sum, id) => {
       const d = getModuleDepth(id);
       return sum + (d ? d.items : 0);
     }, 0);
     const totalTooltip = `${totalItems} items de práctica en ${total} ejercicios — cada uno con múltiples categorías y modos`;
-    return `<div class="ruta-card" style="--ruta-color: ${color}">
+    return `<div class="ruta-card">
       <div class="ruta-card__header">
         <span class="ruta-card__icon">${path.icon}</span>
         <div>
           <div class="ruta-card__title">${path.title} <span class="ruta-card__total" title="${totalTooltip}" aria-label="${totalTooltip}">${totalItems} items</span></div>
-          <div class="ruta-card__cefr">${path.cefr}</div>
+          <div class="ruta-card__cefr">${pathCefrRange(path)}</div>
         </div>
         <span class="ruta-card__progress"><strong>${done}/${total}</strong> completados</span>
       </div>
@@ -166,7 +176,13 @@ const isPathModuleCompleted = isContentCompleted;
 export function renderPaths() {
   const container = document.getElementById('pathsContainer');
   if (!container) return;
-  container.innerHTML = LEARNING_PATHS.map(path => {
+  container.innerHTML = pathsByStage().map(({ stage, paths }) =>
+    stageHeader(stage) + renderPathAccordions(paths)
+  ).join('');
+}
+
+function renderPathAccordions(paths) {
+  return paths.map(path => {
     const completed = path.modules.filter(isPathModuleCompleted);
     const completedCount = completed.length;
     const total = path.modules.length;
@@ -186,17 +202,18 @@ export function renderPaths() {
       const cls = done ? 'completed' : isNext ? 'current' : '';
       const step = done ? '✓' : String(i + 1);
       const best = done ? getBestScore(id) : 0;
+      // "Pendiente" señala el orden sugerido, no un candado: la ruta es una
+      // sugerencia de progresión y el bloqueo de módulos está descartado desde
+      // el diseño original (docs/mi-progreso-decisions.md, "Decisiones
+      // descartadas"). Todos los pasos navegan.
       const statusHTML = done ? `<span class="pm-status done">⭐ ${best}%</span>`
         : isNext ? `<span class="pm-status next">${completedCount > 0 ? 'Siguiente →' : 'Empezar →'}</span>`
-        : `<span class="pm-status locked">Pendiente</span>`;
-      const canOpen = done || isNext;
-      const tag = canOpen ? 'a' : 'div';
-      const hrefAttr = canOpen ? ` href="${mod.exercise}"` : '';
-      return `<${tag} class="path-module ${cls}"${hrefAttr}${canOpen ? '' : ' aria-disabled="true"'}>
+        : `<span class="pm-status pending">Pendiente</span>`;
+      return `<a class="path-module ${cls}" href="${mod.exercise}">
         <div class="pm-step">${step}</div>
         <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta">${mod.meta}</div></div>
         ${statusHTML}
-      </${tag}>`;
+      </a>`;
     }).join('');
 
     return `<details class="path-accordion">
@@ -205,7 +222,7 @@ export function renderPaths() {
         <div class="path-summary-body">
           <div class="path-summary-top">
             <span class="path-summary-title">${path.title}</span>
-            <span class="path-summary-cefr">${path.cefr}</span>
+            <span class="path-summary-cefr">${pathCefrRange(path)}</span>
             ${nextText ? `<span class="path-summary-next">${nextText}</span>` : ''}
           </div>
           <div class="path-summary-bar">

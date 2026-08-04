@@ -1319,6 +1319,19 @@
     /* Rutas guiadas section */
     .rutas-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
     @media (min-width: 768px) { .rutas-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Encabezado de etapa (Fundamentos / Intermedio / Avanzado). Vive dentro
+       del grid, así que tiene que ocupar las dos columnas del layout ancho. */
+    .rutas-stage-head {
+      grid-column: 1 / -1;
+      margin: 18px 0 2px;
+      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    }
+    .rutas-stage-head:first-child { margin-top: 0; }
+    .rutas-stage-hint {
+      font-size: .58rem; font-weight: var(--lp-weight-semibold);
+      letter-spacing: .04em; text-transform: none; opacity: .75;
+    }
     .ruta-card {
       --ruta-color: var(--lp-accent);
       display: flex; flex-direction: column; gap: 6px;
@@ -1731,8 +1744,6 @@
     a.path-module:hover { background: var(--lp-surface-sunken); border-color: var(--lp-border); }
     a.path-module:active { transform: scale(.98); }
     a.path-module:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
-    div.path-module { cursor: default; }
-    div.path-module:hover { background: var(--lp-surface); border-color: var(--lp-border-subtle); }
     .path-module.completed { background: var(--lp-surface-sunken); }
     .path-module.current { border-color: var(--lp-accent); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
     .pm-step {
@@ -1753,7 +1764,7 @@
     .pm-status { font-size: .58rem; font-weight: 700; padding: 3px 7px; border-radius: var(--lp-radius-full); white-space: nowrap; }
     .pm-status.done { background: var(--lp-success-soft); color: var(--lp-success); }
     .pm-status.next { background: color-mix(in srgb, var(--lp-accent) 12%, transparent); color: var(--lp-accent); }
-    .pm-status.locked { color: var(--lp-muted); }
+    .pm-status.pending { color: var(--lp-muted); }
 
     /* Rutas de aprendizaje (Mi Progreso) compactadas: en colapsado, las 6
        tarjetas deben caber sin scroll en un iPhone en Safari (viewport
@@ -1834,7 +1845,6 @@
         display: inline-flex; align-items: center; justify-content: center;
         padding: 6px 10px; font-size: .62rem;
       }
-      div.path-module { opacity: .72; }
     }
   
 .skip-link {
