@@ -434,7 +434,9 @@ async function validateLearningPaths(MODULES, TAGS) {
     })
     .join(' · ');
   const pct = Math.round((covered.size / moduleIds.size) * 100);
-  warn('PATH-COVERAGE', `las rutas cubren ${covered.size}/${moduleIds.size} módulos (${pct}%) — ${perLevel}`);
+  if (pct < 100) {
+    warn('PATH-COVERAGE', `las rutas cubren ${covered.size}/${moduleIds.size} módulos (${pct}%) — ${perLevel}`);
+  }
 }
 
 async function validateCatalog() {
