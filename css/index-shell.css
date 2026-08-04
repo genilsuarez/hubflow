@@ -66,11 +66,32 @@
 
     /* ─── CATEGORY CHIPS (reemplazan las categorías que vivían en el sidebar) ─── */
     .catalog-chips {
-      display: flex; gap: 0.375rem; width: 100%; max-width: 52rem; justify-content: center; flex-wrap: wrap;
-      overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      display: flex; gap: 0.375rem; width: 100%; max-width: 52rem;
+      flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
       padding: 2px; /* espacio para el outline de foco */
     }
     .catalog-chips::-webkit-scrollbar { display: none; }
+
+    /* Fade lateral derecho — hint visual de que hay más chips fuera de pantalla */
+    @media (max-width: 767px) {
+      .catalog-toolbar {
+        position: relative;
+      }
+      .catalog-toolbar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 16px; /* mismo padding que .catalog-toolbar */
+        width: 48px;
+        height: calc(2.125rem + 4px); /* altura chip + padding outline */
+        background: linear-gradient(to right, transparent, var(--lp-canvas, var(--lp-bg, #fff)));
+        pointer-events: none;
+        z-index: 1;
+      }
+      [data-theme="dark"] .catalog-toolbar::after {
+        background: linear-gradient(to right, transparent, #181B20);
+      }
+    }
     .catalog-chip {
       --chip-color: var(--lp-accent);
       flex: 0 0 auto;

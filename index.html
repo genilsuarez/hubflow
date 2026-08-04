@@ -750,6 +750,9 @@ import { initLevelStatus } from './js/level-status.js';
     filters.clearSearch();
     filters.applyFilters();
     syncResumenSubPlacement(target);
+    // Scroll activo chip into view en mobile (fila horizontal con overflow)
+    const activeChip = document.querySelector(`.catalog-chip[data-target="${target}"]`);
+    if (activeChip) activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
   navButtons.forEach(b => {
