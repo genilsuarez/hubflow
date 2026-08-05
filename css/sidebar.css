@@ -102,6 +102,14 @@ body > .shell { flex: 1 1 auto; min-height: 0; width: 100%; }
 }
 .nav-mode-toggle:hover { opacity: 1; }
 
+/* Cierre del drawer: solo mobile/tablet, mismo slot que el pin (desktop-only).
+   display:none/flex vive en buttons.css (junto al media query que lo activa) —
+   sidebar.css carga después y una regla de display aquí lo pisaría en silencio. */
+.drawer-close-btn {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
 /* ─── EXERCISE PAGE FOOTER ─── */
 .exercise-foot {
   position: relative; z-index: 1;

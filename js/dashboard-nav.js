@@ -114,6 +114,7 @@ export function initDashboardNav({ onBackToOverview } = {}) {
     const nextMode = document.documentElement.dataset.navigationMode === 'floating' ? 'sidebar' : 'floating';
     setNavigationMode(nextMode, true);
   });
+  document.getElementById('drawerCloseBtn')?.addEventListener('click', () => setNavigationDrawerOpen(false));
   navigationLauncher.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
   if (topbarMenuToggle) {
     topbarMenuToggle.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));

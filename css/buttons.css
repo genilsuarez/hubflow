@@ -122,6 +122,12 @@
   display: none !important;
 }
 
+/* Oculto por defecto (desktop); el media query de abajo lo muestra en mobile.
+   Vive en el mismo archivo que ese override para no depender del orden de <link>. */
+.drawer-close-btn {
+  display: none;
+}
+
 /* Ghost nav — app bar mobile (sin círculo/borde/sombra web) */
 @media (max-width: 860px) {
   .navigation-launcher,
@@ -168,5 +174,10 @@
   /* Sidebar pin es desktop-only — ocultar toggle de modo nav en mobile/tablet */
   .nav-mode-toggle {
     display: none;
+  }
+
+  /* ...y mostrar la X de cierre en su lugar */
+  .drawer-close-btn {
+    display: flex;
   }
 }
