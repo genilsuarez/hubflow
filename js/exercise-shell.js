@@ -605,9 +605,9 @@ function buildDepthBanner() {
   }
 
   function showDepthBell(html) {
-    const footer = document.querySelector('.exercise-foot');
+    const footer = document.querySelector('.lp-footer');
     if (!footer) return;
-    const meta = footer.querySelector('.foot-meta');
+    const meta = footer.querySelector('.lp-footer__meta');
     const bell = document.createElement('button');
     bell.className = 'depth-bell';
     bell.setAttribute('aria-label', 'Mostrar información del módulo');
@@ -628,9 +628,9 @@ buildDepthBanner();
 
 function buildFooter() {
   const footer = document.createElement('footer');
-  footer.className = 'exercise-foot';
+  footer.className = 'lp-footer';
   footer.innerHTML = `
-    <span class="foot-meta">HubFlow → LearnFlow</span>
+    <span class="lp-footer__meta">HubFlow → LearnFlow</span>
   `;
   document.body.appendChild(footer);
 }

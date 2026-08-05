@@ -790,7 +790,7 @@ h1 {
   }
 
   /* Footer + depth toast compete with fixed bottom nav — hide on mobile */
-  body.shell-ready:has(#exBottomNav:not([hidden])) .exercise-foot,
+  body.shell-ready:has(#exBottomNav:not([hidden])) .lp-footer,
   body.shell-ready:has(#exBottomNav:not([hidden])) .depth-banner,
   body.shell-ready:has(#exBottomNav:not([hidden])) .depth-bell {
     display: none !important;
@@ -994,7 +994,7 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
     padding-bottom: 8px;
   }
 
-  body.shell-ready:has(#exBottomNav:not([hidden])) .exercise-foot,
+  body.shell-ready:has(#exBottomNav:not([hidden])) .lp-footer,
   body.shell-ready:has(#exBottomNav:not([hidden])) .depth-banner,
   body.shell-ready:has(#exBottomNav:not([hidden])) .depth-bell {
     display: none !important;

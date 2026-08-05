@@ -410,7 +410,7 @@ body.shell-ready:has(#exBottomNav #checkBtn) .scroll-body > div:has(> #checkBtn)
 
 /* Fallback when @custom-media from breakpoints.css is unavailable in this sheet */
 @media (max-width: 767px) {
-  body.shell-ready:has(#exBottomNav:not([hidden])) .exercise-foot,
+  body.shell-ready:has(#exBottomNav:not([hidden])) .lp-footer,
   body.shell-ready:has(#exBottomNav:not([hidden])) .depth-banner,
   body.shell-ready:has(#exBottomNav:not([hidden])) .depth-bell {
     display: none !important;

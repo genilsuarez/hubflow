@@ -1407,11 +1407,11 @@
     .guide-link.g-sound { --guide-color: var(--lp-cat-blue); }
     .guide-link.g-words { --guide-color: var(--lp-cat-teal); }
 
-    .foot {
+    .lp-footer {
       flex-shrink: 0; padding: 12px clamp(16px, 3vw, 34px); border-top: 1.5px solid var(--lp-border);
       display: flex; justify-content: space-between; align-items: center; background: var(--lp-bg);
     }
-    .foot-meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
+    .lp-footer__meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 
     @media (min-width: 861px) {
       html[data-navigation-mode="sidebar"] .lp-drawer-scrim { display: none !important; }
@@ -1542,7 +1542,7 @@
       .topbar-greeting-sub { display: none; }
       .topbar-greeting-sub .tgs-full { display: none; }
       .topbar-greeting-sub .tgs-short { display: inline; }
-      .foot { display: none; }
+      .lp-footer { display: none; }
       .content { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
       body[data-active="mi-progreso"] .content {
         /* Rutas expandidas: aire extra al final para que la última tarjeta no
