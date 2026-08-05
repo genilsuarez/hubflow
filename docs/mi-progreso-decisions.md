@@ -115,10 +115,29 @@ catálogo, ninguno entró a una ruta, y nadie se enteró durante cuatro días.
 ## Decisiones descartadas
 
 - ❌ Barras de progreso en el sidebar por categoría.
-- ❌ Streak (días consecutivos) en el topbar.
+- ❌ ~~Streak (días consecutivos) en el topbar~~ — revertido 2026-08-04, ver *Reversiones*.
 - ❌ Stats badge (sesiones / mastered) en el topbar.
-- ❌ "Continúa aquí" como sección separada.
+- ❌ ~~"Continúa aquí" como sección separada~~ — revertido 2026-08-04, ver *Reversiones*.
 - ❌ Rutas que replican las categorías 1:1.
 - ❌ **Bloqueo de módulos** (contradice naturaleza referencial) — ver arriba.
 - ❌ Zustand o state manager (localStorage existente es suficiente).
 - ❌ Declarar el rango CEFR, la etapa o el color a mano.
+
+---
+
+## Reversiones (2026-08-04)
+
+Dos ítems de *Decisiones descartadas* se revierten con el plan de mejoras UX de esta fecha
+(`Learn/docs/ux-improvement-plan.md`, decisión 5). El resto de la lista queda intacta.
+
+- **Streak en el topbar** → se revierte. El descarte original era sobre la **ubicación**
+  (topbar), no sobre el concepto: un bloque de streak en el cuerpo del dashboard no lo
+  contradice literalmente. Alcance decidido: streak de plataforma, que suma actividad de
+  FluentFlow + HubFlow + LyricFlow (Fase 4.1 del plan).
+- **"Continúa aquí" como sección separada** → se revierte.
+
+Nota aparte, no una tercera reversión: esta lista ya estaba desactualizada antes de este
+plan. También descarta "Stats badge (sesiones / mastered) en el topbar", y hoy las 4 apps
+tienen exactamente eso (`.lp-header-stats`) — ya se había revertido en la práctica sin que
+nadie actualizara este documento. Queda anotado para que no genere la misma confusión que
+el streak.
