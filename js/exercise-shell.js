@@ -108,9 +108,13 @@ const TB_ICON_TARGET = '<svg class="lp-header-stats__icon lp-header-stats__icon-
 if (topBar) {
   // Insert branding after hamburger — usa el título del ejercicio (mismo texto/ícono
   // del <h1> del área de juego) en vez del genérico "HubFlow", y saca ese <h1>
-  // original para no duplicar el título.
+  // original para no duplicar el título. Es <h2> (no <span>): el <h1> de marca vive
+  // en el sidebar (buildSidebar(), prepended antes que este topBar en el DOM final),
+  // así que esto es la única forma de que el ejercicio tenga estructura de encabezados
+  // más allá del H1 de marca (H9/1.12) — antes no había ningún heading para el título
+  // del ejercicio en sí.
   if (!topBar.querySelector('.learnflow-signature')) {
-    const sig = document.createElement('span');
+    const sig = document.createElement('h2');
     sig.className = 'learnflow-signature';
     const gameHeading = document.querySelector('.header h1');
     if (gameHeading) {

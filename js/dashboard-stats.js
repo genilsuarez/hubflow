@@ -13,7 +13,7 @@ import { animateText, animateCssVar } from './lp-stats-animate.js';
 
 /** Encabezado de etapa. Ocupa el ancho completo del grid de dos columnas. */
 function stageHeader({ label, hint }) {
-  return `<div class="sec-head sec-head--sub rutas-stage-head">${label} <span class="rutas-stage-hint">${hint}</span></div>`;
+  return `<h2 class="sec-head sec-head--sub rutas-stage-head">${label} <span class="rutas-stage-hint">${hint}</span></h2>`;
 }
 
 export function renderRutas() {
@@ -49,7 +49,7 @@ function renderRutaCards(paths) {
       <div class="ruta-card__header">
         <span class="ruta-card__icon">${path.icon}</span>
         <div>
-          <div class="ruta-card__title">${path.title} <span class="ruta-card__total" title="${totalTooltip}" aria-label="${totalTooltip}">${totalItems} items</span></div>
+          <h3 class="ruta-card__title">${path.title} <span class="ruta-card__total" title="${totalTooltip}" aria-label="${totalTooltip}">${totalItems} items</span></h3>
           <div class="ruta-card__cefr">${pathCefrRange(path)}</div>
         </div>
         <span class="ruta-card__progress"><strong>${done}/${total}</strong> completados</span>
