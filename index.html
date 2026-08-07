@@ -150,8 +150,8 @@
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
         <span id="resumenSubHome" hidden aria-hidden="true"></span>
         <p class="topbar-greeting-sub tg-resumen" id="resumenSub"></p>
-        <span class="topbar-greeting-title tg-progreso">Rutas de <em>aprendizaje</em></span>
-        <p class="topbar-greeting-sub tg-progreso">Tu progreso por ruta.</p>
+        <span class="topbar-greeting-title tg-progreso">Mis <em>estadísticas</em></span>
+        <p class="topbar-greeting-sub tg-progreso">Tu progreso general.</p>
         <span class="topbar-greeting-title tg-rutas">Rutas <em>guiadas</em></span>
         <p class="topbar-greeting-sub tg-rutas">
           <span class="tgs-full">Secuencias de ejercicios, de lo básico a lo avanzado.</span>
@@ -257,24 +257,6 @@
           <button class="hero-card__alt" id="heroAlt" type="button" hidden aria-label="Otra sugerencia">Otra sugerencia</button>
           <button class="hero-card__browse" id="heroBrowse" type="button" hidden>Ver ejercicios</button>
         </div>
-
-        <button type="button" class="progress-snapshot" id="progressSnapshot" aria-label="Ver tu progreso">
-          <div class="progress-snapshot__visual" id="snapshotRing" style="--progress: 0" role="img" aria-hidden="true">
-            <div><strong id="snapshotPct">0%</strong></div>
-          </div>
-          <span class="progress-snapshot__copy">
-            <span class="progress-snapshot__line progress-snapshot__line--primary">
-              <span class="progress-snapshot__title"></span>
-            </span>
-            <span class="progress-snapshot__line progress-snapshot__line--meta" id="snapshotDetail">Tu aventura empieza aquí</span>
-          </span>
-          <div class="progress-snapshot__stat-col">
-            <span class="progress-snapshot__stat-wrap">
-              <span class="progress-snapshot__stat" id="snapshotStat">0/0</span><span class="progress-snapshot__unit"> ejercicios</span>
-            </span>
-          </div>
-          <span class="progress-snapshot__chev" aria-hidden="true">›</span>
-        </button>
         </div>
 
         <script>
@@ -325,17 +307,12 @@
           <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><div class="tile-copy"><div class="tile-title">Guías de referencia</div><div class="tile-count" data-count-for="guides">0 guías</div></div></button>
         </div>
 
-        <!-- Last Activities -->
-        <div class="last-activities" id="lastActivities"></div>
-
-
-
       </section>
 
       <div class="no-results" id="noResults">No modules match your search.</div>
 
-      <!-- MI PROGRESO -->
-      <section class="section" data-key="mi-progreso">
+      <!-- RUTAS GUIADAS -->
+      <section class="section" data-key="rutas">
         <div class="paths-head-row">
           <div class="paths-actions">
             <button class="paths-icon-btn" id="pathExpandAll" title="Expandir todo">
@@ -349,9 +326,34 @@
         <div class="paths-full" id="pathsContainer"></div>
       </section>
 
-      <!-- RUTAS GUIADAS -->
-      <section class="section" data-key="rutas">
-        <div class="rutas-grid" id="rutasGrid"></div>
+      <!-- MIS ESTADÍSTICAS -->
+      <section class="section" data-key="mi-progreso">
+        <button type="button" class="progress-snapshot" id="progressSnapshot" aria-label="Ver tu progreso">
+          <div class="progress-snapshot__visual" id="snapshotRing" style="--progress: 0" role="img" aria-hidden="true">
+            <div><strong id="snapshotPct">0%</strong></div>
+          </div>
+          <span class="progress-snapshot__copy">
+            <span class="progress-snapshot__line progress-snapshot__line--primary">
+              <span class="progress-snapshot__title"></span>
+            </span>
+            <span class="progress-snapshot__line progress-snapshot__line--meta" id="snapshotDetail">Tu aventura empieza aquí</span>
+          </span>
+          <div class="progress-snapshot__stat-col">
+            <span class="progress-snapshot__stat-wrap">
+              <span class="progress-snapshot__stat" id="snapshotStat">0/0</span><span class="progress-snapshot__unit"> ejercicios</span>
+            </span>
+          </div>
+          <span class="progress-snapshot__chev" aria-hidden="true">›</span>
+        </button>
+
+        <!-- Last Activities -->
+        <div class="last-activities" id="lastActivities"></div>
+
+        <div class="sec-head">Progreso por categoría</div>
+        <div class="stats-breakdown" id="statsByCategory"></div>
+
+        <div class="sec-head">Progreso por nivel</div>
+        <div class="stats-breakdown" id="statsByCefr"></div>
       </section>
 
       <!-- VOCABULARY (4 subcategorías) -->
@@ -579,7 +581,7 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 import { consumeStatsRevealAnimation, hydrateActivityFromCloud } from './js/sync-engine.js';
 import { renderAllShelves } from './js/dashboard-shelves.js';
 import { renderHeroCard, refreshHeroSuggestion, clearPersistedHeroSuggestion } from './js/dashboard-hero.js';
-import { renderRutas, renderProgressSnapshot, renderLastActivities, refreshHeaderStats, renderPaths } from './js/dashboard-stats.js';
+import { renderProgressSnapshot, renderLastActivities, refreshHeaderStats, renderPaths, renderStatsBreakdown } from './js/dashboard-stats.js';
 import { initDashboardFilters } from './js/dashboard-filters.js';
 import { initDashboardNav } from './js/dashboard-nav.js';
 import { initLevelStatus } from './js/level-status.js';
@@ -589,9 +591,6 @@ import { initLevelStatus } from './js/level-status.js';
 
   // ─── RENDER MODULE CARDS FROM CATALOG ───
   renderAllShelves();
-
-  // ─── RUTAS (dashboard summary card) ───
-  renderRutas();
 
   // ─── LearnFlow Progression System ───
   // docs/to-do/learnflow-progression-system.md. hubflow-progress-updated (más
@@ -619,6 +618,7 @@ import { initLevelStatus } from './js/level-status.js';
       renderAllShelves();
       renderLastActivities();
       renderProgressSnapshot(animateReveal, { onOpenProgress: () => setActive('all') });
+      renderStatsBreakdown();
       refreshHeaderStats(animateReveal);
       renderHeroCard({ animateReveal });
     } finally {
@@ -893,7 +893,8 @@ import { initLevelStatus } from './js/level-status.js';
       renderAllShelves();
       renderHeroCard();
       renderProgressSnapshot(undefined, { onOpenProgress: () => setActive('all') });
-      renderRutas();
+      renderPaths();
+      renderStatsBreakdown();
       renderLastActivities();
       filters.applyFilters();
       hydrateHubFlowFromCloud();

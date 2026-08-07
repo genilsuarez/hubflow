@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow Dashboard — Progress Views
-   Rutas card, progress snapshot ring, last-activities list, header stats,
-   and the "Mi Progreso" learning-paths accordion. All read-only views over
-   catalog + progress data.
+   Progress snapshot ring, last-activities list, header stats, the "Rutas
+   guiadas" learning-paths accordion, and the "Mis estadísticas" breakdown
+   by category/CEFR. All read-only views over catalog + progress data.
    ═══════════════════════════════════════════════════════ */
 
-import { MODULES, catColor, moduleMap, getModuleDepth } from '../data/catalog.js';
+import { MODULES, CATEGORIES, TAGS, catColor, moduleMap } from '../data/catalog.js';
 import { LEARNING_PATHS, pathCefrRange, pathsByStage } from '../data/learning-paths.js';
 import { getBestScore, isContentCompleted, getProgressStats } from './progress-store.js';
 import { shouldDeferStatsDisplay, shouldDeferActivityDisplay } from './sync-engine.js';
@@ -15,50 +15,6 @@ import { shortMeta } from './dashboard-shelves.js';
 /** Encabezado de etapa. Ocupa el ancho completo del grid de dos columnas. */
 function stageHeader({ label, hint }) {
   return `<h2 class="sec-head sec-head--sub rutas-stage-head">${label} <span class="rutas-stage-hint">${hint}</span></h2>`;
-}
-
-export function renderRutas() {
-  const grid = document.getElementById('rutasGrid');
-  if (!grid) return;
-  grid.innerHTML = pathsByStage().map(({ stage, paths }) =>
-    stageHeader(stage) + renderRutaCards(paths)
-  ).join('');
-}
-
-function renderRutaCards(paths) {
-  return paths.map(path => {
-    const done = path.modules.filter(isContentCompleted).length;
-    const total = path.modules.length;
-    const nextIdx = path.modules.findIndex(id => !isContentCompleted(id));
-    const steps = path.modules.map((id, i) => {
-      const mod = moduleMap.get(id);
-      const label = mod ? mod.title : id;
-      const href = mod ? mod.exercise : '#';
-      const isDone = isContentCompleted(id);
-      const isCurrent = i === nextIdx;
-      const cls = isDone ? 'done' : isCurrent ? 'current' : '';
-      const depth = getModuleDepth(id);
-      const itemsBadge = depth ? `<span class="ruta-step__items">${depth.items}</span>` : '';
-      return `<a class="ruta-step ${cls}" href="${href}" title="${label}">${label}${itemsBadge}</a>`;
-    }).join('');
-    const totalItems = path.modules.reduce((sum, id) => {
-      const d = getModuleDepth(id);
-      return sum + (d ? d.items : 0);
-    }, 0);
-    const totalTooltip = `${totalItems} items de práctica en ${total} ejercicios — cada uno con múltiples categorías y modos`;
-    return `<div class="ruta-card">
-      <div class="ruta-card__header">
-        <span class="ruta-card__icon">${path.icon}</span>
-        <div>
-          <h3 class="ruta-card__title">${path.title} <span class="ruta-card__total" title="${totalTooltip}" aria-label="${totalTooltip}">${totalItems} items</span></h3>
-          <div class="ruta-card__cefr">${pathCefrRange(path)}</div>
-        </div>
-        <span class="ruta-card__progress"><strong>${done}/${total}</strong> completados</span>
-      </div>
-      <p class="ruta-card__desc">${path.description}</p>
-      <div class="ruta-card__steps">${steps}</div>
-    </div>`;
-  }).join('');
 }
 
 export function renderProgressSnapshot(animateReveal = false, { onOpenProgress } = {}) {
@@ -242,4 +198,37 @@ function renderPathAccordions(paths) {
       </div>
     </details>`;
   }).join('');
+}
+
+function statsBarRow({ label, done, total }) {
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  return `<div class="stats-bar-row">
+    <span class="stats-bar-label">${label}</span>
+    <div class="stats-bar">
+      <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${pct}%"></div></div>
+      <span class="stats-bar-frac">${done}/${total}</span>
+    </div>
+  </div>`;
+}
+
+/** "Mis estadísticas" — desglose de completado por categoría y por nivel CEFR. */
+export function renderStatsBreakdown() {
+  const catEl = document.getElementById('statsByCategory');
+  const cefrEl = document.getElementById('statsByCefr');
+  if (!catEl || !cefrEl) return;
+
+  const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
+
+  const byCategory = Object.entries(CATEGORIES).map(([key, cat]) => {
+    const mods = exercises.filter(m => m.category === key);
+    return { label: cat.label, done: mods.filter(isContentCompleted).length, total: mods.length };
+  });
+
+  const byCefr = TAGS.cefr.map(level => {
+    const mods = exercises.filter(m => m.cefr === level);
+    return { label: level.toUpperCase(), done: mods.filter(isContentCompleted).length, total: mods.length };
+  }).filter(row => row.total > 0);
+
+  catEl.innerHTML = byCategory.map(statsBarRow).join('');
+  cefrEl.innerHTML = byCefr.map(statsBarRow).join('');
 }

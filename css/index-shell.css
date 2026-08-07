@@ -446,10 +446,6 @@
       margin-bottom: 0;
     }
 
-    .resumen-hero .progress-snapshot {
-      margin-bottom: 0;
-    }
-
     .hero-card {
       position: relative;
       border-radius: var(--lp-radius-lg);
@@ -678,6 +674,7 @@
       padding: 12px 14px;
       border-radius: var(--lp-radius-lg);
       width: 100%;
+      margin-bottom: 16px;
       text-align: left;
       font: inherit;
       color: inherit;
@@ -1316,14 +1313,9 @@
       font-size: .6rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-success);
     }
 
-    /* Rutas guiadas section */
-    .rutas-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 768px) { .rutas-grid { grid-template-columns: repeat(2, 1fr); } }
-
-    /* Encabezado de etapa (Fundamentos / Intermedio / Avanzado). Vive dentro
-       del grid, así que tiene que ocupar las dos columnas del layout ancho. */
+    /* Encabezado de etapa (Fundamentos / Intermedio / Avanzado), usado por el
+       acordeón de "Rutas guiadas" (stageHeader() en dashboard-stats.js). */
     .rutas-stage-head {
-      grid-column: 1 / -1;
       margin: 18px 0 2px;
       display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
     }
@@ -1332,60 +1324,6 @@
       font-size: .58rem; font-weight: var(--lp-weight-semibold);
       letter-spacing: .04em; text-transform: none; opacity: .75;
     }
-    .ruta-card {
-      --ruta-color: var(--lp-accent);
-      display: flex; flex-direction: column; gap: 6px;
-      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
-      border-radius: var(--lp-radius-lg); padding: 14px 18px;
-      box-shadow: var(--lp-shadow-sm);
-      transition: transform .2s var(--lp-ease), box-shadow .2s;
-    }
-    .ruta-card:hover { box-shadow: var(--lp-shadow-hover); }
-    .ruta-card__header { display: flex; align-items: center; gap: 8px; }
-    .ruta-card__icon { font-size: 1.1rem; }
-    .ruta-card__title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; display: flex; align-items: center; gap: 6px; }
-    .ruta-card__total {
-      font-size: .58rem; font-weight: var(--lp-weight-extrabold);
-      background: var(--lp-surface-sunken);
-      color: var(--lp-muted); padding: 2px 6px; border-radius: var(--lp-radius-full);
-      border: 1px solid var(--lp-border-subtle);
-      letter-spacing: .01em; cursor: default;
-    }
-    .ruta-card__cefr { font-size: .55rem; font-weight: var(--lp-weight-bold); color: var(--lp-muted); }
-    .ruta-card__desc { font-size: .66rem; color: var(--lp-ink-soft); line-height: 1.35; }
-    .ruta-card__progress { font-size: .56rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted); margin-left: auto; flex-shrink: 0; }
-    .ruta-card__progress strong { color: var(--lp-ink); }
-    .ruta-card__steps { display: flex; flex-wrap: wrap; gap: 4px; }
-    .ruta-step {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: .63rem; padding: 5px 9px; border-radius: 5px;
-      background: var(--lp-bg-paper); border: 1.5px solid var(--lp-border);
-      color: var(--lp-ink); font-weight: var(--lp-weight-semibold);
-      transition: background .15s, border-color .15s, transform .15s, box-shadow .15s;
-      text-decoration: none; cursor: pointer;
-      min-height: 36px; position: relative;
-    }
-    /* Hit-area táctil 44px, mismo patrón que :is(.cat-btn, .lp-pill) (components.css).
-       Con gap:4px entre filas el solape entre hit-areas vecinas queda en ~4px (H2/1.8) —
-       aceptable: hoy tocar fuera del chip de 26.5px no hace nada, esto es mejora neta. */
-    .ruta-step::after {
-      content: ''; position: absolute; left: 0; right: 0; top: 50%;
-      transform: translateY(-50%); height: 44px; min-height: 44px;
-    }
-    .ruta-step:hover { border-color: var(--lp-border-strong); background: var(--lp-surface); }
-    .ruta-step:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
-    .ruta-step.done { background: var(--lp-bg-paper); border-color: var(--lp-border); color: var(--lp-muted); }
-    .ruta-step.done:hover { background: var(--lp-surface); border-color: var(--lp-border-strong); }
-    .ruta-step.current { background: var(--lp-surface); border-color: var(--lp-border-strong); color: var(--lp-ink); font-weight: var(--lp-weight-bold); }
-    .ruta-step.current:hover { background: var(--lp-surface); border-color: var(--lp-ink); }
-    .ruta-step__items {
-      font-size: .55rem; font-weight: var(--lp-weight-extrabold);
-      background: color-mix(in srgb, var(--lp-ink) 8%, transparent);
-      color: var(--lp-muted); padding: 1px 5px; border-radius: 3px;
-      line-height: 1.2;
-    }
-    .ruta-step.current .ruta-step__items { background: color-mix(in srgb, var(--lp-ink) 10%, transparent); color: var(--lp-muted); }
-    .ruta-step.done .ruta-step__items { background: color-mix(in srgb, var(--lp-ink) 6%, transparent); color: var(--lp-muted); }
     .book.b-vocab { --spine: var(--lp-cat-purple); }
     .book.b-grammar { --spine: var(--lp-cat-amber); }
     .book.b-pron { --spine: var(--lp-cat-blue); }
@@ -1451,8 +1389,8 @@
 
     /* Expand/Collapse en topbar: solo visible en desktop + sección mi-progreso */
     @media (min-width: 861px) {
-      body[data-active="mi-progreso"] .paths-actions.paths-actions--topbar { display: flex; }
-      body[data-active="mi-progreso"] .paths-head-row { display: none; }
+      body[data-active="rutas"] .paths-actions.paths-actions--topbar { display: flex; }
+      body[data-active="rutas"] .paths-head-row { display: none; }
       /* Menú ☰ del topbar: solo mobile; en web la sidebar es persistente o el launcher flotante */
       .topbar-menu { display: none !important; }
     }
@@ -1545,7 +1483,7 @@
       .topbar-greeting-sub .tgs-short { display: inline; }
       .lp-footer { display: none; }
       .content { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
-      body[data-active="mi-progreso"] .content {
+      body[data-active="rutas"] .content {
         /* Rutas expandidas: aire extra al final para que la última tarjeta no
            quede tapada por la barra del navegador en iOS / simuladores mobile. */
         padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px));
@@ -1654,9 +1592,6 @@
       .guide-icon { width: 28px; height: 28px; margin: 0 2px 0 8px; font-size: .85rem; }
       .guide-body { padding: 9px 12px 9px 8px; }
       .guide-title { font-size: .72rem; }
-
-      /* Rutas guiadas: la descripción larga no aporta en pantalla estrecha */
-      .ruta-card__desc { display: none; }
     }
 
     /* ═══ MI PROGRESO — COLLAPSIBLE PATH CARDS ═══ */
@@ -1709,6 +1644,20 @@
     .path-summary-bar-track { flex: 1; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
     .path-summary-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
     .path-summary-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
+
+    /* ─── STATS BREAKDOWN (Mis estadísticas — por categoría / por nivel) ─── */
+    .stats-breakdown {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 20px; padding: 14px 16px;
+      background: var(--lp-surface); border: 1px solid var(--lp-border-subtle);
+      border-radius: var(--lp-radius-lg);
+    }
+    .stats-bar-row { display: flex; flex-direction: column; gap: 5px; }
+    .stats-bar-label { font-size: .72rem; font-weight: 600; color: var(--lp-ink-soft); }
+    .stats-bar { display: flex; align-items: center; gap: 8px; }
+    .stats-bar-track { flex: 1; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
+    .stats-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
+    .stats-bar-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
 
     .path-summary-right { display: flex; align-items: center; gap: 8px; }
     .path-summary-status {

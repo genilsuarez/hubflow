@@ -7,13 +7,33 @@
 ## Concepto
 
 **Rutas de aprendizaje transversales** — agrupaciones de módulos que cruzan categorías con un
-propósito pedagógico definido. Se muestran en dos vistas sobre los mismos datos:
+propósito pedagógico definido. Se muestran en una sola vista sobre los datos:
 
-- **Rutas guiadas** (`renderRutas`) — grid de cards con los pasos como chips.
-- **Mi Progreso** (`renderPaths`) — acordeón con el detalle de cada paso y su estado.
+- **Rutas guiadas** (`renderPaths`, sección `rutas`) — acordeón con el detalle de cada paso y
+  su estado, agrupado por etapa CEFR.
 
 No reemplaza nada. Las categorías del sidebar (Vocabulary, Grammar, Pronunciation, Analysis,
 Guides) se mantienen intactas. Es una capa adicional que da dirección sin bloquear.
+
+### Fusión de las dos vistas (agosto 2026)
+
+Hasta agosto 2026 existían dos vistas sobre los mismos datos: "Rutas guiadas" (`renderRutas`,
+grid de cards) bajo la sección `rutas`, y "Mi Progreso" (`renderPaths`, acordeón) bajo la sección
+`mi-progreso` — con el label de sidebar "Mis estadísticas". El label no coincidía con el
+contenido: la sección no mostraba estadísticas agregadas, sino la misma agrupación de rutas que
+"Rutas guiadas", solo que en otro formato.
+
+Se fusionaron: el acordeón (`renderPaths`) pasó a vivir en la sección `rutas` (reemplaza el grid
+de cards, que se eliminó junto con `renderRutas`/`renderRutaCards` y su CSS `.ruta-card*`/
+`.rutas-grid`). La sección `mi-progreso` — que conserva el label "Mis estadísticas" y el ícono
+`chart` — pasó a ser un apartado real de estadísticas: anillo de % global, sesiones y
+ejercicios dominados, y última actividad (movidos desde "Inicio"), más desglose de completado
+por categoría (Vocabulary/Grammar/Pronunciation/Analysis) y por nivel CEFR
+(`renderStatsBreakdown`, nuevo).
+
+Las claves de sección (`rutas`, `mi-progreso`) no cambiaron — solo qué renderiza cada una — para
+no romper `NAV_SECTION_KEYS`, `?section=`, `hf-back-section` ni el NAV-SYNC de
+`validate-content.js`.
 
 ---
 
