@@ -1485,10 +1485,10 @@
       body[data-active="resumen"] .tg-topic,
       body[data-active="mi-progreso"] .tg-topic,
       body[data-active="rutas"] .tg-topic { display: none !important; }
-      /* L2 catálogo: [←] título [☰] — homologado DeskFlow */
+      /* L2 catálogo: [☰] título — sin botón de volver */
       body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar {
         display: grid;
-        grid-template-columns: var(--lp-navbtn-size, 44px) minmax(0, 1fr) var(--lp-navbtn-size, 44px);
+        grid-template-columns: var(--lp-navbtn-size, 44px) minmax(0, 1fr);
         align-items: center;
         gap: 0;
         padding-top: calc(var(--lp-header-pad-y-compact) + env(safe-area-inset-top, 0px));
@@ -1496,18 +1496,11 @@
         padding-bottom: var(--lp-header-pad-y-compact);
         padding-left: max(var(--lp-header-pad-x-compact, 12px), env(safe-area-inset-left, 0px));
       }
-      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-back {
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-menu {
         display: flex;
         grid-column: 1;
         grid-row: 1;
         justify-self: start;
-        align-self: center;
-      }
-      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .topbar-menu {
-        display: flex;
-        grid-column: 3;
-        grid-row: 1;
-        justify-self: end;
         align-self: center;
       }
       body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .navigation-launcher {

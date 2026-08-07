@@ -44,7 +44,7 @@ function ensureCatExpandButton(bar) {
     expandBtn.setAttribute('aria-expanded', 'false');
     expandBtn.title = 'Ver todas';
     expandBtn.innerHTML = '<span class="expand-count"></span><span class="expand-icon">▼</span>';
-    bar.appendChild(expandBtn);
+    bar.prepend(expandBtn);
     return expandBtn;
   }
 
@@ -57,8 +57,10 @@ function ensureCatExpandButton(bar) {
     icon.textContent = '▼';
     expandBtn.appendChild(icon);
   }
-  if (expandBtn.parentElement === bar && expandBtn !== bar.lastElementChild) {
-    bar.appendChild(expandBtn);
+  // Kept as first child (not last) so the expanded view can float it top-right
+  // and wrap pills around it instead of stranding it alone on a trailing line.
+  if (expandBtn.parentElement === bar && expandBtn !== bar.firstElementChild) {
+    bar.prepend(expandBtn);
   }
   return expandBtn;
 }
@@ -197,7 +199,7 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
     return `<button class="cat-btn ${k === getCurrentCat() ? 'active' : ''}" data-cat="${k}" title="${pillTitle}" aria-label="${pillTitle}">${label}</button>`;
   }).join('');
   bar.querySelectorAll('.cat-btn').forEach(el => el.remove());
-  if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
+  if (expandBtn) expandBtn.insertAdjacentHTML('afterend', pills);
   else bar.innerHTML = pills;
   // Double-click detection: persist the tracker on the bar element itself so it
   // survives rebuilds (renderCatBar is called on every category switch).

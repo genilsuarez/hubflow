@@ -10,6 +10,7 @@ import { LEARNING_PATHS, pathCefrRange, pathsByStage } from '../data/learning-pa
 import { getBestScore, isContentCompleted, getProgressStats } from './progress-store.js';
 import { shouldDeferStatsDisplay, shouldDeferActivityDisplay } from './sync-engine.js';
 import { animateText, animateCssVar } from './lp-stats-animate.js';
+import { shortMeta } from './dashboard-shelves.js';
 
 /** Encabezado de etapa. Ocupa el ancho completo del grid de dos columnas. */
 function stageHeader({ label, hint }) {
@@ -211,7 +212,7 @@ function renderPathAccordions(paths) {
         : `<span class="pm-status pending">Pendiente</span>`;
       return `<a class="path-module ${cls}" href="${mod.exercise}">
         <div class="pm-step">${step}</div>
-        <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta">${mod.meta}</div></div>
+        <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta" title="${mod.meta}">${shortMeta(mod.meta)}</div></div>
         ${statusHTML}
       </a>`;
     }).join('');

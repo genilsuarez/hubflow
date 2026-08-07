@@ -70,7 +70,36 @@
     /* Critical: prevent flash while external CSS loads */
     body { background: #FFFFFF; color: #2C2418; }
     [data-theme="dark"] body { background: #181B20; color: #E8EAED; }
+    /* El HTML estático ya pinta los encabezados de cada subsección (Fundamentos,
+       Vida temática...) antes de que el <script type="module"> — que importa
+       ~11 archivos JS por separado — termine de cargar y rellenar las tarjetas.
+       En redes lentas eso se ve como "títulos sin contenido debajo". Se oculta
+       .content por defecto y se revela recién cuando el primer render (síncrono,
+       ver boot script al final del body) terminó — con un timeout de seguridad
+       por si el script falla. Lo mismo aplica, con un margen más largo, al volver
+       de un ejercicio con sesión activa: el progreso recién cambió y viene un
+       re-render con datos de la nube (ver exercise-shell.js — recarga completa,
+       no SPA — y data-boot-syncing más abajo).  */
+    html:not([data-app-ready]) .content,
+    html[data-boot-syncing] .content { opacity: 0; transform: translateY(4px); }
+    .content {
+      opacity: 1;
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html:not([data-app-ready]) .content,
+      html[data-boot-syncing] .content { opacity: 1; transform: none; }
+      .content { transition: none; }
+    }
   </style>
+  <script>
+    // Salvavidas: si el script del módulo nunca corre (error de red/JS), no
+    // dejar el contenido oculto para siempre.
+    window.setTimeout(function() {
+      document.documentElement.setAttribute('data-app-ready', '1');
+    }, 4000);
+  </script>
+  <noscript><style>html:not([data-app-ready]) .content { opacity: 1 !important; transform: none !important; }</style></noscript>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/buttons.css">
   <link rel="stylesheet" href="css/sidebar.css">
@@ -117,7 +146,6 @@
   <!-- MAIN COLUMN -->
   <div class="main-col">
     <div class="topbar">
-      <button class="lp-icon-btn topbar-back" id="topbarBackBtn" type="button" aria-label="Volver al inicio" hidden><span data-lp-icon="arrow-left" aria-hidden="true"></span></button>
       <div class="topbar-greeting">
         <span class="topbar-greeting-title tg-resumen">Hub<em>Flow</em></span>
         <span id="resumenSubHome" hidden aria-hidden="true"></span>
@@ -557,7 +585,7 @@ import { initDashboardNav } from './js/dashboard-nav.js';
 import { initLevelStatus } from './js/level-status.js';
 
 (function() {
-  const nav = initDashboardNav({ onBackToOverview: () => setActive('resumen') });
+  const nav = initDashboardNav();
 
   // ─── RENDER MODULE CARDS FROM CATALOG ───
   renderAllShelves();
@@ -608,7 +636,10 @@ import { initLevelStatus } from './js/level-status.js';
     });
   }
 
-  scheduleRefreshHomeStats();
+  // Llamada directa (no scheduleRefreshHomeStats) para que hero/stats/última-
+  // actividad pinten en el mismo frame que las estanterías de arriba, en vez
+  // de un rAF después — evita el "carga por pedazos" en el primer paint.
+  refreshHomeStats();
   void hydrateActivityFromCloud('hubflow');
   window.addEventListener('lp-stats-ready', () => scheduleRefreshHomeStats());
   window.addEventListener('lp-activity-ready', (event) => {
@@ -816,9 +847,44 @@ import { initLevelStatus } from './js/level-status.js';
   const storedSection = sessionStorage.getItem('hf-back-section');
   const initSection = paramSection || storedSection;
   if (storedSection) sessionStorage.removeItem('hf-back-section');
+
+  // Volver de un ejercicio con sesión activa: el progreso recién cambió, así
+  // que viene un refresh de stats desde la nube (ver hubflow-progress-updated
+  // / lp-cloud-hydrated más arriba). Ocultar el contenido hasta que llegue (o
+  // hasta un timeout corto) evita ver el render local y luego todo reconstruido
+  // encima — el "carga por pedazos" reportado al volver a Todas las lecciones.
+  function hasStoredSupabaseSession() {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!/^sb-.+-auth-token$/.test(key || '')) continue;
+        const parsed = JSON.parse(localStorage.getItem(key) || 'null');
+        if (parsed?.access_token || parsed?.currentSession?.access_token) return true;
+      }
+    } catch { /* noop */ }
+    return false;
+  }
+  if (storedSection && hasStoredSupabaseSession()) {
+    document.documentElement.dataset.bootSyncing = '1';
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      delete document.documentElement.dataset.bootSyncing;
+    };
+    window.setTimeout(reveal, 2000);
+    window.addEventListener('lp-cloud-hydrated', reveal, { once: true });
+    window.addEventListener('lp-stats-ready', reveal, { once: true });
+  }
+
   setActive(VALID_SECTIONS.has(initSection) ? initSection : 'resumen');
   delete document.documentElement.dataset.initSection;
   filters.applyFilters();
+
+  // Primer render (estanterías, hero, stats, sección activa) ya está completo:
+  // revelar .content ahora evita el hueco entre HTML estático (solo encabezados)
+  // y el módulo JS terminando de poblar las tarjetas.
+  document.documentElement.setAttribute('data-app-ready', '1');
 
   // Handle bfcache restore (history.back from exercise)
   window.addEventListener('pageshow', function(e) {

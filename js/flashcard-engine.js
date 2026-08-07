@@ -273,14 +273,15 @@ export class FlashcardEngine {
   renderCatBar() {
     const bar = document.getElementById('catBar');
     if (!bar) return;
-    // Preserve the expand button (last child)
+    // Preserve the expand button (first child — lets the expanded view float
+    // it top-right and wrap pills around it instead of stranding it below)
     const expandBtn = bar.querySelector('.cat-expand-btn');
     const pills = Object.entries(this.categories).map(([key, cat]) =>
       `<button class="pill-btn ${key === this.currentCat ? 'active purple' : ''}" data-cat="${key}">${cat.label}</button>`
     ).join('');
     // Remove old pills, keep expand btn
     bar.querySelectorAll('.pill-btn').forEach(el => el.remove());
-    if (expandBtn) expandBtn.insertAdjacentHTML('beforebegin', pills);
+    if (expandBtn) expandBtn.insertAdjacentHTML('afterend', pills);
     else bar.innerHTML = pills;
     bar.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {

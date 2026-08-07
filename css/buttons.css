@@ -117,7 +117,6 @@
 
 .lp-icon-btn[hidden],
 .navigation-launcher[hidden],
-.topbar-back[hidden],
 .topbar-menu[hidden] {
   display: none !important;
 }
@@ -131,7 +130,6 @@
 /* Ghost nav — app bar mobile (sin círculo/borde/sombra web) */
 @media (max-width: 860px) {
   .navigation-launcher,
-  .topbar-back,
   .topbar-menu,
   .top-bar > a.lp-icon-btn,
   .top-bar .top-bar__start .lp-icon-btn,
@@ -147,7 +145,6 @@
   }
 
   .navigation-launcher:hover,
-  .topbar-back:hover,
   .topbar-menu:hover,
   .top-bar > a.lp-icon-btn:hover,
   .top-bar .top-bar__start .lp-icon-btn:hover,
@@ -161,7 +158,6 @@
   }
 
   .navigation-launcher:active,
-  .topbar-back:active,
   .topbar-menu:active,
   .top-bar > a.lp-icon-btn:active,
   .top-bar .top-bar__start .lp-icon-btn:active,

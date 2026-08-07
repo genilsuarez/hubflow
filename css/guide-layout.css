@@ -60,9 +60,9 @@ body > .top-bar {
   border-bottom-color: var(--border, var(--lp-border)) !important;
 }
 
-/* Hamburger en guías: al extremo derecho */
+/* Hamburger en guías: al extremo izquierdo (no hay botón de volver) */
 .top-bar > button.lp-icon-btn[aria-controls="guideSidebar"] {
-  margin-left: auto;
+  margin-right: auto;
 }
 
 .skip-link {

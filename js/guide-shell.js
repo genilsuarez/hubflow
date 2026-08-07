@@ -216,7 +216,7 @@
     hamburgerBtn.setAttribute('aria-controls', 'guideSidebar');
     hamburgerBtn.setAttribute('aria-expanded', 'false');
 
-    topBar.appendChild(hamburgerBtn);
+    topBar.prepend(hamburgerBtn);
 
     buildSidebar(hamburgerBtn);
   }

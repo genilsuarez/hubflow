@@ -1,16 +1,14 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow Dashboard — Navigation Shell
    Theme toggle, navigation drawer/mode, about/login triggers. Self-
-   initializing. The one cross-reference to section-switching (the topbar
-   "back" button) is injected as `onBackToOverview`; the two functions
-   setActive() needs to call back into (`syncTopbarNavButtons`,
-   `setNavigationDrawerOpen`) are returned.
+   initializing. The two functions setActive() needs to call back into
+   (`syncTopbarNavButtons`, `setNavigationDrawerOpen`) are returned.
    ═══════════════════════════════════════════════════════ */
 
 import { CATEGORIES } from '../data/catalog.js';
 import { NAV_SECTION_KEYS } from './nav-sections.js';
 
-export function initDashboardNav({ onBackToOverview } = {}) {
+export function initDashboardNav() {
   const themeBtns = [...document.querySelectorAll('.theme-toggle')];
   function upd() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -42,7 +40,6 @@ export function initDashboardNav({ onBackToOverview } = {}) {
   const navigationLauncher = document.getElementById('navigationLauncher');
   const navigationModeToggle = document.getElementById('navigationModeToggle');
   const topbar = document.querySelector('.topbar');
-  const topbarBackBtn = document.getElementById('topbarBackBtn');
   const topbarMenuToggle = document.getElementById('topbarMenuToggle');
   // Las secciones de catálogo son las 4 categorías + la de guías; las de
   // resumen son el resto. Derivadas para que agregar una categoría no exija
@@ -102,7 +99,6 @@ export function initDashboardNav({ onBackToOverview } = {}) {
       navigationLauncher.hidden = isSecondaryTopbar ? !(isDesktop && isFloating) : false;
     }
     if (topbar) topbar.classList.toggle('topbar--secondary', isSecondaryTopbar);
-    if (topbarBackBtn) topbarBackBtn.hidden = !isSecondaryTopbar;
   }
 
   window.addEventListener('resize', () => {
@@ -118,9 +114,6 @@ export function initDashboardNav({ onBackToOverview } = {}) {
   navigationLauncher.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
   if (topbarMenuToggle) {
     topbarMenuToggle.addEventListener('click', () => setNavigationDrawerOpen(!sidebar.classList.contains('is-open')));
-  }
-  if (topbarBackBtn) {
-    topbarBackBtn.addEventListener('click', () => onBackToOverview?.());
   }
   sidebarScrim.addEventListener('click', () => setNavigationDrawerOpen(false));
   document.addEventListener('keydown', (event) => {

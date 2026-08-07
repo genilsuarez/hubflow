@@ -26,6 +26,33 @@ function titleHTML(mod) {
   return mod.title;
 }
 
+/**
+ * `mod.meta` es una lista larga "Item A · Item B · Item C..." (hasta ~120
+ * caracteres) pensada como descripción, no para caber en una tarjeta angosta.
+ * En vez de dejar que el CSS (line-clamp) la corte a media palabra o a mitad
+ * de un item, se arma una versión corta tomando items completos hasta el
+ * límite — nunca corta dentro de un item. El texto completo se mantiene en un
+ * nodo oculto para que la búsqueda del dashboard (que lee `card.textContent`,
+ * ver dashboard-filters.js) siga encontrando términos que quedaron fuera de
+ * la versión corta.
+ */
+export function shortMeta(meta, maxLen = 44) {
+  const items = meta.split(' · ');
+  let result = items[0];
+  for (let i = 1; i < items.length; i++) {
+    const next = `${result} · ${items[i]}`;
+    if (next.length > maxLen) break;
+    result = next;
+  }
+  return result;
+}
+
+function metaHTML(mod) {
+  const short = shortMeta(mod.meta);
+  if (short.length >= mod.meta.length) return `<div class="book-meta">${mod.meta}</div>`;
+  return `<div class="book-meta">${short}…<span hidden>${mod.meta}</span></div>`;
+}
+
 function depthHTML(mod) {
   const depth = getModuleDepth(mod.id);
   if (!depth) return '';
@@ -53,7 +80,7 @@ function bookCardHTML(mod, spineClass) {
     <div class="book-icon">${mod.icon}</div>
     <div class="book-body">
       <div class="book-title">${titleHTML(mod)}</div>
-      <div class="book-meta">${mod.meta}</div>
+      ${metaHTML(mod)}
       ${depthHTML(mod)}
       <div class="book-pills">${pillsHTML(mod)}</div>
       ${progressHTML(mod)}
