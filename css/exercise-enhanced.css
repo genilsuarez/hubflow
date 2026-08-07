@@ -286,7 +286,10 @@ body > .top-bar {
 
 /* ─── HEADER SECTION ─── */
 /* ─── WIDER WRAP FOR EXERCISES ─── */
-.wrap { max-width: 860px; }
+/* Antes fijo en 860px — a 1280px+ dejaba ~55% del viewport vacío (Fase 4, ítem 1).
+   clamp responsivo: nunca más angosto que antes, crece con la ventana, tope en 1100px
+   para no perder la legibilidad de columna angosta que ya tenía el diseño original. */
+.wrap { max-width: clamp(860px, 70vw, 1100px); }
 
 .header {
   padding: 0;
