@@ -1363,6 +1363,14 @@
       color: var(--lp-ink); font-weight: var(--lp-weight-semibold);
       transition: background .15s, border-color .15s, transform .15s, box-shadow .15s;
       text-decoration: none; cursor: pointer;
+      min-height: 36px; position: relative;
+    }
+    /* Hit-area táctil 44px, mismo patrón que :is(.cat-btn, .lp-pill) (components.css).
+       Con gap:4px entre filas el solape entre hit-areas vecinas queda en ~4px (H2/1.8) —
+       aceptable: hoy tocar fuera del chip de 26.5px no hace nada, esto es mejora neta. */
+    .ruta-step::after {
+      content: ''; position: absolute; left: 0; right: 0; top: 50%;
+      transform: translateY(-50%); height: 44px; min-height: 44px;
     }
     .ruta-step:hover { border-color: var(--lp-border-strong); background: var(--lp-surface); }
     .ruta-step:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
