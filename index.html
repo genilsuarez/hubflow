@@ -309,12 +309,13 @@
         </script>
 
         <!-- LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
-             Oculto por defecto; level-status.js lo muestra solo cuando HubFlow ya
-             cumplió su parte (≥50% del nivel activo) pero el nivel no avanzó
-             porque otra app (FluentFlow/LyricFlow) todavía no llega a la suya. -->
+             Oculto por defecto; level-status.js lo muestra siempre que el nivel activo
+             no haya avanzado: con el progreso propio de HubFlow hacia el 50% mientras
+             falta, o con el aviso de "ya hiciste tu parte" cuando HubFlow ya llegó al
+             50% pero otra app (FluentFlow/LyricFlow) todavía no llega a la suya. -->
         <div class="level-status-banner" id="levelStatusBanner" hidden>
-          <span class="level-status-banner__icon" aria-hidden="true">🔒</span>
-          <span class="level-status-banner__text">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
+          <span class="level-status-banner__icon" id="levelStatusBannerIcon" aria-hidden="true">🔒</span>
+          <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
           <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
         </div>
 
