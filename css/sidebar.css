@@ -121,6 +121,8 @@ body > .shell { flex: 1 1 auto; min-height: 0; width: 100%; }
   margin-top: auto;
 }
 .lp-footer__meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
+.lp-footer__link { margin-left: auto; font-size: 11px; color: var(--lp-muted); text-decoration: underline; }
+.lp-footer__link:hover { color: var(--lp-ink-soft); }
 .lp-footer .depth-bell { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .lp-footer .depth-bell:hover { transform: translate(-50%, -50%) scale(1.15); }
 
