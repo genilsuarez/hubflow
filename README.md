@@ -104,3 +104,14 @@ No uses `npx serve` ni `python -m http.server` en puertos sueltos — el gateway
 ## Deploy
 
 `build.sh` hace commit + push y espera (no bloqueante) a que terminen los workflows `CI Validate` y `CD Deploy` en GitHub Actions. `CD Deploy` solo publica en GitHub Pages si `CI Validate` pasó primero.
+
+## Licencia
+
+| Qué | Licencia |
+|---|---|
+| Código fuente | [Apache-2.0](LICENSE) |
+| Contenido educativo | [CC BY-SA 4.0](LICENSE-CONTENT.md) |
+
+Puedes reusar y adaptar ambos, incluso comercialmente, pero debes **dar crédito**
+a Genil Alejandro Suarez Perez y conservar el archivo [NOTICE](NOTICE). Los
+nombres y logos de LearnFlow no están cubiertos por estas licencias.
