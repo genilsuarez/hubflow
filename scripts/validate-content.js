@@ -329,7 +329,7 @@ async function validateNavSections() {
 
   // 2) Estanterías del dashboard: el <div class="sec-head"> de cada sección de
   //    categoría debe decir lo mismo que CATEGORIES.
-  const { CATEGORIES, SUBCATEGORIES } = await import(pathToFileURL(path.join(DATA_DIR, 'catalog.js')).href);
+  const { CATEGORIES, TAGS } = await import(pathToFileURL(path.join(DATA_DIR, 'catalog.js')).href);
   for (const [key, cat] of Object.entries(CATEGORIES)) {
     const section = html.match(
       new RegExp(`<section class="section" data-key="${key}">\\s*<div class="sec-head">([^<]*)</div>`),
@@ -339,15 +339,20 @@ async function validateNavSections() {
     }
   }
 
-  // Y las subsecciones de grammar contra SUBCATEGORIES.
-  for (const [key, label] of Object.entries(SUBCATEGORIES)) {
-    const sub = html.match(
-      new RegExp(`data-subcat="${key}">\\s*<div class="sec-head sec-head--sub">([^<]*)</div>`),
-    );
-    if (!sub) {
-      err('NAV-SYNC', `index.html: falta la subsección "${key}" (${label})`);
-    } else if (sub[1].replace(/&amp;/g, '&').trim() !== label) {
-      err('NAV-SYNC', `index.html: subsección "${key}" titula "${sub[1].trim()}", SUBCATEGORIES dice "${label}"`);
+  // Las 4 categorías (+ "all"/Browse, que las combina) se agrupan en un
+  // acordeón por nivel CEFR (<details id="acc-${catKey}-${level}">), no por
+  // subcategoría — la subcategoría (donde existe) vive como tag dentro de la
+  // tarjeta (ver pillsHTML en dashboard-shelves.js).
+  for (const catKey of ['all', 'vocab', 'grammar', 'pronunciation', 'analysis']) {
+    for (const level of TAGS.cefr) {
+      const sub = html.match(
+        new RegExp(`id="acc-${catKey}-${level}" data-level="${level}"[^>]*>\\s*<summary class="sec-head sec-head--sub">([^<]*)</summary>\\s*<div class="shelf" id="shelf-${catKey}-${level}">`),
+      );
+      if (!sub) {
+        err('NAV-SYNC', `index.html: falta la subsección "${level}" en la sección "${catKey}"`);
+      } else if (sub[1].trim() !== level.toUpperCase()) {
+        err('NAV-SYNC', `index.html: subsección "${level}" de "${catKey}" titula "${sub[1].trim()}", se esperaba "${level.toUpperCase()}"`);
+      }
     }
   }
 

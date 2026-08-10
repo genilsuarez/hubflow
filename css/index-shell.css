@@ -164,20 +164,54 @@
     html[data-init-section="grammar"] .section[data-key="grammar"],
     html[data-init-section="pronunciation"] .section[data-key="pronunciation"],
     html[data-init-section="analysis"] .section[data-key="analysis"],
-    html[data-init-section="guides"] .section[data-key="guides"] { display: block; }
-    /* "all" apila las 5 secciones de catálogo — sin filtro, todo el contenido junto. */
-    html[data-init-section="all"] .section[data-key="vocab"],
-    html[data-init-section="all"] .section[data-key="grammar"],
-    html[data-init-section="all"] .section[data-key="pronunciation"],
-    html[data-init-section="all"] .section[data-key="analysis"],
-    html[data-init-section="all"] .section[data-key="guides"] { display: block; }
+    html[data-init-section="guides"] .section[data-key="guides"],
+    html[data-init-section="all"] .section[data-key="all"] { display: block; }
     .sec-head {
       font-size: .66rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em; text-transform: uppercase;
       color: var(--lp-muted); margin-bottom: 10px; padding-left: 2px;
     }
     .subsec { margin-bottom: 22px; }
     .subsec:last-child { margin-bottom: 0; }
-    .sec-head--sub { font-size: .62rem; opacity: .85; }
+    /* Acordeón por nivel CEFR (A1, A2...) — <details>/<summary> nativos: da
+       teclado/aria gratis y el estado abierto/cerrado sobrevive a los
+       re-renders de dashboard-shelves.js porque el nodo <details> nunca se
+       recrea, solo se le pisa el contenido interno. */
+    .sec-head--sub {
+      font-size: .62rem; opacity: .85;
+      display: flex; align-items: center; gap: 6px;
+      cursor: pointer; list-style: none; user-select: none;
+    }
+    .sec-head--sub::-webkit-details-marker { display: none; }
+    .sec-head--sub::before {
+      content: '▸'; display: inline-block; font-size: .7em; opacity: .7;
+      transition: transform .15s ease;
+    }
+    .subsec[open] > .sec-head--sub::before { transform: rotate(90deg); }
+    /* Nivel bloqueado: no hay tarjetas que revelar (el módulo sigue sin
+       renderizarse por encima del nivel activo — ver renderLevelBlock), solo
+       se informa que existe y cuántos ejercicios trae. No es interactivo. */
+    .subsec--locked > .sec-head--sub { cursor: default; opacity: .55; pointer-events: none; }
+    .subsec--locked > .sec-head--sub::before { content: ''; }
+    .subsec-lock { font-size: .95em; }
+    .subsec-count { font-weight: var(--lp-weight-medium); text-transform: none; letter-spacing: 0; opacity: .85; }
+    /* Progreso agregado del nivel (X/Y completados + barra), a la derecha del
+       header — mismo patrón que el header de unidad de FluentFlow. */
+    .subsec-label { text-transform: uppercase; }
+    .subsec-progress { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .subsec-stats {
+      font-size: .62rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-ink-soft);
+      background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
+      padding: 2px 7px; white-space: nowrap; letter-spacing: 0; text-transform: none;
+    }
+    .subsec-bar {
+      width: 70px; height: var(--lp-progress-height, 4px); border-radius: var(--lp-radius-full);
+      background: var(--lp-border); overflow: hidden;
+    }
+    .subsec-bar__fill {
+      display: block; height: 100%; border-radius: var(--lp-radius-full);
+      background: var(--lp-accent); transition: width .3s ease;
+    }
+    @media (max-width: 639px) { .subsec-bar { width: 44px; } }
 
     /* ─── FILTER MENU (homologado con FluentFlow UnifiedFilter) ─── */
     .filter-menu { position: relative; flex-shrink: 0; }

@@ -158,13 +158,14 @@ export function initDashboardFilters() {
     const sections = document.querySelectorAll('.section');
     const q = searchInput.value.trim().toLowerCase();
     clearBtn.classList.toggle('visible', q.length > 0);
-    // "all" (Todos los módulos) apila las 5 secciones de catálogo sin filtro —
-    // se comporta como una búsqueda cross-section permanente, sin texto.
-    const isAllMode = document.body.dataset.active === 'all';
-    const filtering = q.length > 0 || activeTags.size > 0 || isAllMode;
-    // Cross-section search cuando hay texto o estás en "all" — el filtrado solo
-    // por tags se queda dentro de la categoría activa para no romper el contexto.
-    const crossSection = q.length > 0 || isAllMode;
+    // "all" (Browse) ya no es un caso especial: es una sección real con sus
+    // propias tarjetas (las 4 categorías combinadas por nivel, ver
+    // renderAllShelves() en dashboard-shelves.js), así que se filtra como
+    // cualquier otra sección activa.
+    const filtering = q.length > 0 || activeTags.size > 0;
+    // Cross-section search cuando hay texto — el filtrado solo por tags se
+    // queda dentro de la sección activa para no romper el contexto.
+    const crossSection = q.length > 0;
     let anyVisible = false;
 
     sections.forEach(sec => {

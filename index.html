@@ -88,8 +88,8 @@
     /* Critical: prevent flash while external CSS loads */
     body { background: #FFFFFF; color: #2C2418; }
     [data-theme="dark"] body { background: #181B20; color: #E8EAED; }
-    /* El HTML estático ya pinta los encabezados de cada subsección (Fundamentos,
-       Vida temática...) antes de que el <script type="module"> — que importa
+    /* El HTML estático ya pinta los encabezados de cada subsección (A1, A2...)
+       antes de que el <script type="module"> — que importa
        ~11 archivos JS por separado — termine de cargar y rellenar las tarjetas.
        En redes lentas eso se ve como "títulos sin contenido debajo". Se oculta
        .content por defecto y se revela recién cuando el primer render (síncrono,
@@ -377,56 +377,134 @@
         <div class="stats-breakdown" id="statsByCefr"></div>
       </section>
 
-      <!-- VOCABULARY (4 subcategorías) -->
-      <section class="section" data-key="vocab">
-        <div class="subsec" data-subcat="foundations">
-          <div class="sec-head sec-head--sub">Fundamentos</div>
-          <div class="shelf" id="shelf-vocab-foundations"></div>
-        </div>
-        <div class="subsec" data-subcat="thematic">
-          <div class="sec-head sec-head--sub">Vida temática</div>
-          <div class="shelf" id="shelf-vocab-thematic"></div>
-        </div>
-        <div class="subsec" data-subcat="expression">
-          <div class="sec-head sec-head--sub">Expresión y matiz</div>
-          <div class="shelf" id="shelf-vocab-expression"></div>
-        </div>
-        <div class="subsec" data-subcat="precision">
-          <div class="sec-head sec-head--sub">Precisión léxica</div>
-          <div class="shelf" id="shelf-vocab-precision"></div>
-        </div>
+      <!--
+        Acordeón por nivel CEFR, igual en las 5 categorías (all/vocab/grammar/
+        pronunciation/analysis): un <details data-level="X"> por nivel, la
+        subcategoría (donde existe) va como tag dentro de la tarjeta (ver
+        pillsHTML en dashboard-shelves.js). Solo el nivel activo arranca
+        abierto; los anteriores quedan colapsados pero expandibles; los que
+        todavía no se desbloquean se pintan como fila bloqueada sin tarjetas
+        (renderLevelBlock() decide open/locked en runtime — el `open` de aquí
+        es solo el estado antes de que corra JS, para el prepaint estático).
+      -->
+      <!-- BROWSE (las 4 categorías combinadas por nivel) -->
+      <section class="section" data-key="all">
+        <details class="subsec" id="acc-all-a1" data-level="a1" open>
+          <summary class="sec-head sec-head--sub">A1</summary>
+          <div class="shelf" id="shelf-all-a1"></div>
+        </details>
+        <details class="subsec" id="acc-all-a2" data-level="a2">
+          <summary class="sec-head sec-head--sub">A2</summary>
+          <div class="shelf" id="shelf-all-a2"></div>
+        </details>
+        <details class="subsec" id="acc-all-b1" data-level="b1">
+          <summary class="sec-head sec-head--sub">B1</summary>
+          <div class="shelf" id="shelf-all-b1"></div>
+        </details>
+        <details class="subsec" id="acc-all-b2" data-level="b2">
+          <summary class="sec-head sec-head--sub">B2</summary>
+          <div class="shelf" id="shelf-all-b2"></div>
+        </details>
+        <details class="subsec" id="acc-all-c1" data-level="c1">
+          <summary class="sec-head sec-head--sub">C1</summary>
+          <div class="shelf" id="shelf-all-c1"></div>
+        </details>
       </section>
 
-      <!-- GRAMMAR (4 subcategorías — Fase 1/2 del plan de recategorización) -->
+      <!-- VOCABULARY -->
+      <section class="section" data-key="vocab">
+        <details class="subsec" id="acc-vocab-a1" data-level="a1" open>
+          <summary class="sec-head sec-head--sub">A1</summary>
+          <div class="shelf" id="shelf-vocab-a1"></div>
+        </details>
+        <details class="subsec" id="acc-vocab-a2" data-level="a2">
+          <summary class="sec-head sec-head--sub">A2</summary>
+          <div class="shelf" id="shelf-vocab-a2"></div>
+        </details>
+        <details class="subsec" id="acc-vocab-b1" data-level="b1">
+          <summary class="sec-head sec-head--sub">B1</summary>
+          <div class="shelf" id="shelf-vocab-b1"></div>
+        </details>
+        <details class="subsec" id="acc-vocab-b2" data-level="b2">
+          <summary class="sec-head sec-head--sub">B2</summary>
+          <div class="shelf" id="shelf-vocab-b2"></div>
+        </details>
+        <details class="subsec" id="acc-vocab-c1" data-level="c1">
+          <summary class="sec-head sec-head--sub">C1</summary>
+          <div class="shelf" id="shelf-vocab-c1"></div>
+        </details>
+      </section>
+
+      <!-- GRAMMAR -->
       <section class="section" data-key="grammar">
-        <div class="subsec" data-subcat="morphology">
-          <div class="sec-head sec-head--sub">Morfología y ortografía</div>
-          <div class="shelf" id="shelf-grammar-morphology"></div>
-        </div>
-        <div class="subsec" data-subcat="tense">
-          <div class="sec-head sec-head--sub">Tiempo y aspecto</div>
-          <div class="shelf" id="shelf-grammar-tense"></div>
-        </div>
-        <div class="subsec" data-subcat="structure">
-          <div class="sec-head sec-head--sub">Estructura y palabras función</div>
-          <div class="shelf" id="shelf-grammar-structure"></div>
-        </div>
-        <div class="subsec" data-subcat="nuance">
-          <div class="sec-head sec-head--sub">Matices de uso</div>
-          <div class="shelf" id="shelf-grammar-nuance"></div>
-        </div>
+        <details class="subsec" id="acc-grammar-a1" data-level="a1" open>
+          <summary class="sec-head sec-head--sub">A1</summary>
+          <div class="shelf" id="shelf-grammar-a1"></div>
+        </details>
+        <details class="subsec" id="acc-grammar-a2" data-level="a2">
+          <summary class="sec-head sec-head--sub">A2</summary>
+          <div class="shelf" id="shelf-grammar-a2"></div>
+        </details>
+        <details class="subsec" id="acc-grammar-b1" data-level="b1">
+          <summary class="sec-head sec-head--sub">B1</summary>
+          <div class="shelf" id="shelf-grammar-b1"></div>
+        </details>
+        <details class="subsec" id="acc-grammar-b2" data-level="b2">
+          <summary class="sec-head sec-head--sub">B2</summary>
+          <div class="shelf" id="shelf-grammar-b2"></div>
+        </details>
+        <details class="subsec" id="acc-grammar-c1" data-level="c1">
+          <summary class="sec-head sec-head--sub">C1</summary>
+          <div class="shelf" id="shelf-grammar-c1"></div>
+        </details>
       </section>
 
       <!-- PRONUNCIATION -->
       <section class="section" data-key="pronunciation">
-        <div class="sec-head">Pronunciation</div>
-        <div class="shelf" id="shelf-pronunciation"></div>
+        <details class="subsec" id="acc-pronunciation-a1" data-level="a1" open>
+          <summary class="sec-head sec-head--sub">A1</summary>
+          <div class="shelf" id="shelf-pronunciation-a1"></div>
+        </details>
+        <details class="subsec" id="acc-pronunciation-a2" data-level="a2">
+          <summary class="sec-head sec-head--sub">A2</summary>
+          <div class="shelf" id="shelf-pronunciation-a2"></div>
+        </details>
+        <details class="subsec" id="acc-pronunciation-b1" data-level="b1">
+          <summary class="sec-head sec-head--sub">B1</summary>
+          <div class="shelf" id="shelf-pronunciation-b1"></div>
+        </details>
+        <details class="subsec" id="acc-pronunciation-b2" data-level="b2">
+          <summary class="sec-head sec-head--sub">B2</summary>
+          <div class="shelf" id="shelf-pronunciation-b2"></div>
+        </details>
+        <details class="subsec" id="acc-pronunciation-c1" data-level="c1">
+          <summary class="sec-head sec-head--sub">C1</summary>
+          <div class="shelf" id="shelf-pronunciation-c1"></div>
+        </details>
       </section>
 
       <!-- ANALYSIS & PRODUCTION -->
       <section class="section" data-key="analysis">
-        <div class="sec-head">Analysis & Production</div>
-        <div class="shelf" id="shelf-analysis"></div>
+        <details class="subsec" id="acc-analysis-a1" data-level="a1" open>
+          <summary class="sec-head sec-head--sub">A1</summary>
+          <div class="shelf" id="shelf-analysis-a1"></div>
+        </details>
+        <details class="subsec" id="acc-analysis-a2" data-level="a2">
+          <summary class="sec-head sec-head--sub">A2</summary>
+          <div class="shelf" id="shelf-analysis-a2"></div>
+        </details>
+        <details class="subsec" id="acc-analysis-b1" data-level="b1">
+          <summary class="sec-head sec-head--sub">B1</summary>
+          <div class="shelf" id="shelf-analysis-b1"></div>
+        </details>
+        <details class="subsec" id="acc-analysis-b2" data-level="b2">
+          <summary class="sec-head sec-head--sub">B2</summary>
+          <div class="shelf" id="shelf-analysis-b2"></div>
+        </details>
+        <details class="subsec" id="acc-analysis-c1" data-level="c1">
+          <summary class="sec-head sec-head--sub">C1</summary>
+          <div class="shelf" id="shelf-analysis-c1"></div>
+        </details>
       </section>
 
       <!-- GUIDES -->

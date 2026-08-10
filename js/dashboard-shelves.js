@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow Dashboard — Module Shelves
-   Renders the module cards for each topic shelf on the "Explora por tema"
-   section. Self-contained: reads catalog/progress data directly, no
-   page-specific state.
+   Renders the module cards for each level accordion on Browse/Vocabulary/
+   Grammar/Pronunciation/Analysis. Self-contained: reads catalog/progress
+   data directly, no page-specific state.
    ═══════════════════════════════════════════════════════ */
 
 import { MODULES, CATEGORIES, SUBCATEGORIES, getModuleDepth } from '../data/catalog.js';
@@ -15,6 +15,8 @@ const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study:
 
 function pillsHTML(mod) {
   const pills = [`<span class="pill lvl">${mod.cefr.toUpperCase()}</span>`];
+  const subLabel = SUBCATEGORIES[mod.subcategory];
+  if (subLabel) pills.push(`<span class="pill">${subLabel}</span>`);
   const mechanics = mod.tags.filter(t => MECHANIC_PRIORITY.includes(t))
     .sort((a, b) => MECHANIC_PRIORITY.indexOf(a) - MECHANIC_PRIORITY.indexOf(b))
     .slice(0, 2);
@@ -74,8 +76,12 @@ function progressHTML(mod) {
   return `<div class="book-progress" aria-label="${pct}% completado"><span class="book-progress__bar"><span class="book-progress__fill" style="width:${pct}%"></span></span><span class="book-progress__pct">${pct}%</span></div>`;
 }
 
-function bookCardHTML(mod, spineClass) {
-  return `<a class="book ${spineClass}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}" data-cefr="${mod.cefr}">
+/** La franja de color de la tarjeta sale de la categoría del propio módulo,
+ * no de un parámetro externo — necesario para el acordeón "Browse", donde un
+ * mismo nivel mezcla módulos de las 4 categorías con distinto color. */
+function bookCardHTML(mod) {
+  const cls = CATEGORY_SPINE[mod.category] || '';
+  return `<a class="book ${cls}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}" data-cefr="${mod.cefr}">
     <div class="book-spine"></div>
     <div class="book-icon">${mod.icon}</div>
     <div class="book-body">
@@ -88,35 +94,98 @@ function bookCardHTML(mod, spineClass) {
   </a>`;
 }
 
-function renderShelf(containerId, modules, category) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  const cls = CATEGORY_SPINE[category] || '';
-  // Dentro de cada estantería (categoría/subcategoría) el orden de origen en
-  // MODULES es temático, no por nivel — se reordena aquí para que A1→C2 se
-  // vea consistente sin depender de mantener el array de catalog.js a mano.
-  const sorted = [...modules].sort((a, b) => LEVEL_ORDER.indexOf(a.cefr) - LEVEL_ORDER.indexOf(b.cefr));
-  el.innerHTML = sorted.map(mod => bookCardHTML(mod, cls)).join('');
-  // Si el filtrado por nivel deja la subsección sin módulos, ocultar todo el
-  // bloque (encabezado incluido) en vez de mostrar un título sin contenido.
-  const subsec = el.closest('.subsec');
-  if (subsec) subsec.classList.toggle('hidden', sorted.length === 0);
+/** Progreso agregado de un nivel: X/Y módulos completados + barra — mismo
+ * criterio que el header de unidad de FluentFlow (ProgressionDashboard). */
+function levelProgressHTML(modules) {
+  const total = modules.length;
+  const completed = modules.filter(m => getContentProgress(m.id).completed).length;
+  const pct = total ? Math.round((completed / total) * 100) : 0;
+  return `<span class="subsec-progress">
+    <span class="subsec-bar"><span class="subsec-bar__fill" style="width:${pct}%"></span></span>
+    <span class="subsec-stats">${completed}/${total}</span>
+  </span>`;
 }
+
+/**
+ * Un bloque de nivel dentro de un acordeón (<details id="acc-${prefix}-${level}">,
+ * ver index.html). Dos estados:
+ *
+ * - Desbloqueado (cefr <= nivel activo): pinta las tarjetas. Solo el nivel
+ *   activo se auto-expande la primera vez que se ve ese nivel — luego el
+ *   usuario controla el colapso/expansión (estilo acordeón de FluentFlow) y
+ *   los renders siguientes no le pisan el estado porque el <details> nunca
+ *   se recrea, solo se le actualiza el contenido.
+ * - Bloqueado (cefr > nivel activo): el módulo sigue sin renderizarse (el
+ *   nivel activo sigue siendo criterio de ACCESO, no una sugerencia — ver
+ *   docs/to-do/learnflow-progression-system.md), pero ahora el encabezado sí
+ *   se muestra, con candado y conteo, en vez de desaparecer del todo.
+ */
+function renderLevelBlock(prefix, level, modules, activeLevel, levelJustBecameActive) {
+  const details = document.getElementById(`acc-${prefix}-${level}`);
+  if (!details) return;
+  const shelf = details.querySelector('.shelf');
+  const summary = details.querySelector('summary');
+  const locked = LEVEL_ORDER.indexOf(level) > LEVEL_ORDER.indexOf(activeLevel);
+
+  details.classList.toggle('subsec--locked', locked);
+
+  if (locked) {
+    details.open = false;
+    if (shelf) shelf.innerHTML = '';
+    if (summary) {
+      const count = modules.length;
+      summary.innerHTML = `<span class="subsec-lock" aria-hidden="true">🔒</span><span class="subsec-label">${level.toUpperCase()}</span><span class="subsec-count">${count} ejercicio${count === 1 ? '' : 's'}</span>`;
+    }
+    details.classList.remove('hidden');
+    return;
+  }
+
+  if (shelf) shelf.innerHTML = modules.map(bookCardHTML).join('');
+  if (summary) summary.innerHTML = `<span class="subsec-label">${level.toUpperCase()}</span>${levelProgressHTML(modules)}`;
+  details.classList.toggle('hidden', modules.length === 0);
+  // Primera vez que este bloque se pinta (recién desbloqueado o carga inicial):
+  // arranca abierto solo si es el nivel activo. Si el nivel activo cambia más
+  // adelante (el usuario sube de nivel), se auto-abre el que se vuelve activo
+  // — pero no se toca el resto: si el usuario ya colapsó/expandió algo a mano,
+  // eso no se pisa en renders posteriores (estilo acordeón de FluentFlow).
+  if (!details.dataset.accInit) {
+    details.open = level === activeLevel;
+    details.dataset.accInit = '1';
+  } else if (levelJustBecameActive && level === activeLevel) {
+    details.open = true;
+  }
+}
+
+// Último nivel activo visto por renderAllShelves() — para detectar el
+// instante en que sube de nivel y auto-abrir solo ese bloque, sin pisar los
+// demás (ver renderLevelBlock).
+let lastSeenActiveLevel = null;
 
 /**
  * LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
  * El nivel activo es criterio de ACCESO, no una sugerencia: el material por
- * encima de lp-level no se renderiza (sin mensaje de "bloqueado", según el
- * diseño — simplemente no existe en la vista hasta que se desbloquea).
+ * encima de lp-level no se renderiza. A diferencia de antes, el nivel en sí
+ * (encabezado + conteo) sí se muestra como fila bloqueada — solo las
+ * tarjetas quedan ocultas hasta desbloquear (ver renderLevelBlock).
  */
 export function renderAllShelves() {
   const activeLevel = getActiveLevel();
-  const unlocked = (m) => levelUnlocks(m.cefr, activeLevel);
+  const levelJustBecameActive = activeLevel !== lastSeenActiveLevel;
+  lastSeenActiveLevel = activeLevel;
 
-  renderShelf('shelf-pronunciation', MODULES.filter(m => m.category === 'pronunciation' && unlocked(m)), 'pronunciation');
-  renderShelf('shelf-analysis', MODULES.filter(m => m.category === 'analysis' && unlocked(m)), 'analysis');
-  Object.keys(SUBCATEGORIES).forEach(sub => {
-    renderShelf(`shelf-grammar-${sub}`, MODULES.filter(m => m.category === 'grammar' && m.subcategory === sub && unlocked(m)), 'grammar');
-    renderShelf(`shelf-vocab-${sub}`, MODULES.filter(m => m.category === 'vocab' && m.subcategory === sub && unlocked(m)), 'vocab');
+  LEVEL_ORDER.forEach(level => {
+    const atLevel = (cat) => MODULES.filter(m => m.category === cat && m.cefr === level);
+    const vocab = atLevel('vocab');
+    const grammar = atLevel('grammar');
+    const pronunciation = atLevel('pronunciation');
+    const analysis = atLevel('analysis');
+
+    renderLevelBlock('vocab', level, vocab, activeLevel, levelJustBecameActive);
+    renderLevelBlock('grammar', level, grammar, activeLevel, levelJustBecameActive);
+    renderLevelBlock('pronunciation', level, pronunciation, activeLevel, levelJustBecameActive);
+    renderLevelBlock('analysis', level, analysis, activeLevel, levelJustBecameActive);
+    // Browse: las 4 categorías combinadas, en el mismo orden que catalog.js
+    // (ya viene agrupado por nivel → por categoría, ver data/catalog.js).
+    renderLevelBlock('all', level, [...vocab, ...pronunciation, ...grammar, ...analysis], activeLevel, levelJustBecameActive);
   });
 }

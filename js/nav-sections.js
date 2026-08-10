@@ -14,8 +14,11 @@
  * ejercicio (docs/to-do/hubflow-sidebar-refactor.md, Opción D).
  *
  * "all" es un caso especial: es `primary` (vive en el sidebar) pero también
- * aparece como chip en el toolbar — es la vista sin filtro que apila las 5
- * secciones de catálogo a la vez (ver applyFilters() en dashboard-filters.js).
+ * aparece como chip en el toolbar — es la vista "Browse" que combina los
+ * módulos de las 4 categorías en un único acordeón por nivel CEFR (ver
+ * renderAllShelves() en dashboard-shelves.js). El texto que se busca sigue
+ * siendo cross-section entre las 4 secciones de categoría (ver applyFilters()
+ * en dashboard-filters.js).
  *
  * El sidebar de index.html es HTML estático (se pinta antes de que corra el JS).
  * No se genera desde aquí a propósito, pero validate-content.js comprueba que
