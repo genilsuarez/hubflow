@@ -11,6 +11,7 @@ import { getBestScore, isContentCompleted, getProgressStats } from './progress-s
 import { shouldDeferStatsDisplay, shouldDeferActivityDisplay } from './sync-engine.js';
 import { animateText, animateCssVar } from './lp-stats-animate.js';
 import { shortMeta } from './dashboard-shelves.js';
+import { getActiveLevel, levelUnlocks } from './lp-progress-summary.js';
 
 /** Encabezado de etapa. Ocupa el ancho completo del grid de dos columnas. */
 function stageHeader({ label, hint }) {
@@ -139,6 +140,7 @@ export function renderPaths() {
 }
 
 function renderPathAccordions(paths) {
+  const activeLevel = getActiveLevel();
   return paths.map(path => {
     const completed = path.modules.filter(isPathModuleCompleted);
     const completedCount = completed.length;
@@ -147,30 +149,39 @@ function renderPathAccordions(paths) {
     const allDone = completedCount === total;
     const nextModule = path.modules.find(id => !isPathModuleCompleted(id));
     const nextMod = nextModule ? moduleMap.get(nextModule) : null;
+    // Una ruta no puede prometer "Siguiente: X" si X todavía está por encima
+    // del nivel activo — no es clickeable (ver locked más abajo).
+    const nextModLocked = nextMod && !levelUnlocks(nextMod.cefr, activeLevel);
     const statusLabel = allDone ? '✓ Completada' : completedCount > 0 ? 'En progreso' : 'Sin empezar';
     const statusClass = allDone ? ' completed' : completedCount > 0 ? ' in-progress' : '';
-    const nextText = allDone ? '' : nextMod ? (completedCount > 0 ? 'Siguiente: ' : 'Empezar: ') + nextMod.title : '';
+    const nextText = allDone || nextModLocked ? '' : nextMod ? (completedCount > 0 ? 'Siguiente: ' : 'Empezar: ') + nextMod.title : '';
 
     const modulesHTML = path.modules.map((id, i) => {
       const mod = moduleMap.get(id);
       if (!mod) return '';
       const done = isPathModuleCompleted(id);
-      const isNext = id === nextModule;
-      const cls = done ? 'completed' : isNext ? 'current' : '';
-      const step = done ? '✓' : String(i + 1);
+      // Mismo criterio de acceso que Browse/las 4 categorías (ver
+      // dashboard-shelves.js) — antes las rutas ignoraban el nivel activo y
+      // todo era siempre clickeable, lo que las hacía inconsistentes con el
+      // resto del dashboard. Ahora el paso bloqueado se ve (como en
+      // FluentFlow) pero no navega.
+      const locked = !done && !levelUnlocks(mod.cefr, activeLevel);
+      const isNext = !locked && id === nextModule;
+      const cls = done ? 'completed' : locked ? 'locked' : isNext ? 'current' : '';
+      const step = done ? '✓' : locked ? '🔒' : String(i + 1);
       const best = done ? getBestScore(id) : 0;
-      // "Pendiente" señala el orden sugerido, no un candado: la ruta es una
-      // sugerencia de progresión y el bloqueo de módulos está descartado desde
-      // el diseño original (docs/mi-progreso-decisions.md, "Decisiones
-      // descartadas"). Todos los pasos navegan.
       const statusHTML = done ? `<span class="pm-status done">⭐ ${best}%</span>`
+        : locked ? `<span class="pm-status locked">Bloqueado</span>`
         : isNext ? `<span class="pm-status next">${completedCount > 0 ? 'Siguiente →' : 'Empezar →'}</span>`
         : `<span class="pm-status pending">Pendiente</span>`;
-      return `<a class="path-module ${cls}" href="${mod.exercise}">
+      const tag = locked ? 'div' : 'a';
+      const hrefAttr = locked ? '' : ` href="${mod.exercise}"`;
+      const disabledAttr = locked ? ' aria-disabled="true"' : '';
+      return `<${tag} class="path-module ${cls}"${hrefAttr}${disabledAttr}>
         <div class="pm-step">${step}</div>
         <div class="pm-info"><div class="pm-title">${mod.icon} ${mod.title} <span class="pm-cefr">${mod.cefr.toUpperCase()}</span></div><div class="pm-meta" title="${mod.meta}">${shortMeta(mod.meta)}</div></div>
         ${statusHTML}
-      </a>`;
+      </${tag}>`;
     }).join('');
 
     return `<details class="path-accordion">

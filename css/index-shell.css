@@ -1730,6 +1730,11 @@
     a.path-module:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
     .path-module.completed { background: var(--lp-surface-sunken); }
     .path-module.current { border-color: var(--lp-accent); background: var(--lp-surface); box-shadow: var(--lp-shadow-xs); }
+    /* Paso bloqueado (nivel por encima del activo) — mismo criterio de acceso
+       que Browse/las 4 categorías (ver .subsec--locked). Es un <div>, no un
+       <a> (dashboard-stats.js), así que no hace falta anular pointer-events;
+       solo se opaca y se le quita el hover de a.path-module. */
+    .path-module.locked { opacity: .55; }
     .pm-step {
       width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: .55rem; font-weight: 800; font-family: var(--lp-font-mono);
@@ -1737,6 +1742,7 @@
     }
     .path-module.completed .pm-step { background: var(--lp-success); color: white; }
     .path-module.current .pm-step { background: transparent; border: 2.5px solid var(--lp-accent); color: var(--lp-accent); }
+    .path-module.locked .pm-step { background: transparent; font-size: .7rem; }
     .pm-info { min-width: 0; }
     .pm-title { font-size: .72rem; font-weight: 700; }
     .pm-title .pm-cefr {
@@ -1749,6 +1755,7 @@
     .pm-status.done { background: var(--lp-success-soft); color: var(--lp-success); }
     .pm-status.next { background: color-mix(in srgb, var(--lp-accent) 12%, transparent); color: var(--lp-accent); }
     .pm-status.pending { color: var(--lp-muted); }
+    .pm-status.locked { color: var(--lp-muted); }
 
     /* Rutas de aprendizaje (Mi Progreso) compactadas: en colapsado, las 6
        tarjetas deben caber sin scroll en un iPhone en Safari (viewport

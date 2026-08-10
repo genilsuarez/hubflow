@@ -700,7 +700,7 @@ import { initLevelStatus } from './js/level-status.js';
   // OTRA pestaña/app — ese solo llega como evento 'storage' nativo.
   initLevelStatus();
   window.addEventListener('storage', (event) => {
-    if (event.key === 'lp-level') renderAllShelves();
+    if (event.key === 'lp-level') { renderAllShelves(); renderPaths(); }
   });
 
   // ─── HEADER STATS / HOME REFRESH ORCHESTRATOR ───
@@ -716,6 +716,7 @@ import { initLevelStatus } from './js/level-status.js';
       const animateReveal = consumeStatsRevealAnimation();
       hydrateHubFlowFromCloud();
       renderAllShelves();
+      renderPaths();
       renderLastActivities();
       renderProgressSnapshot(animateReveal, { onOpenProgress: () => setActive('all') });
       renderStatsBreakdown();

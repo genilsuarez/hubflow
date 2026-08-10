@@ -99,6 +99,25 @@ Tres problemas:
 Hoy **todos los pasos son `<a>` navegables** en ambas vistas. "Pendiente" señala el orden sugerido,
 no un candado.
 
+### Reintroducido con otro criterio (2026-08-10)
+
+Lo de arriba describe el `canOpen = done || isNext` original: bloqueaba por **posición dentro de
+la ruta** (el paso N+1 solo abría si el N estaba hecho). De ahí el problema 2 — con saltos de
+orden CEFR en los datos de entonces, eso obligaba a aprobar un B2 para abrir un B1.
+
+El bloqueo que hay ahora es distinto: usa el mismo **gate de nivel CEFR activo** que ya aplicaba
+en Browse y las 4 categorías (`levelUnlocks()`, `lp-progress-summary.js`) desde antes de esta
+sesión — un módulo se bloquea si su `cefr` está por encima de `lp-level`, sin importar en qué
+paso de la ruta esté. No revive el bug: `PATH-ORDER` ya garantiza que el CEFR nunca baja entre
+pasos consecutivos, así que un paso bloqueado nunca puede tener detrás un paso desbloqueado sin
+completar.
+
+Motivo del cambio: Browse/categorías y Rutas mostraban el mismo catálogo con dos políticas de
+acceso distintas — problema 3 de la lista de arriba, que seguía sin resolverse aunque ya no fuera
+por el mecanismo original. El paso bloqueado se ve (icono 🔒, pill "Bloqueado", estilo atenuado —
+mismo patrón que `.subsec--locked` en Browse) pero no navega: es un `<div aria-disabled="true">`,
+no un `<a>` (`renderPathAccordions()`, `js/dashboard-stats.js`).
+
 ---
 
 ## Lógica de progreso
