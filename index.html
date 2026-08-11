@@ -50,6 +50,7 @@
   <script src="js/lp-login.js"></script>
   <script src="js/lp-about-content.js"></script>
   <script src="js/lp-about.js"></script>
+  <script src="js/lp-settings.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
     // Dev utility: ?reset=full clears all HubFlow progress in the real browser
@@ -124,6 +125,7 @@
   <link rel="stylesheet" href="css/lp-nav-active.css">
   <link rel="stylesheet" href="css/lp-tinted-surface.css">
   <link rel="stylesheet" href="css/lp-about.css">
+  <link rel="stylesheet" href="css/lp-settings.css">
   <link rel="stylesheet" href="css/lp-cookie-consent.css">
   <link rel="stylesheet" href="css/index-shell.css">
 
@@ -155,13 +157,36 @@
       <button class="sb-item path" data-target="mi-progreso"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="chart" aria-hidden="true"></span><span class="sb-label">Mis estadísticas</span></button>
     </nav>
     <div class="sidebar-footer">
-      <button class="sb-item sb-footer-item" id="aboutTrigger"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">About LearnFlow</span></button>
-      <a class="sb-item sb-footer-item" href="privacy.html"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">Privacidad</span></a>
       <button class="sb-item sb-footer-item theme-toggle" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="moon" aria-hidden="true"></span><span class="sb-label">Modo oscuro</span></button>
-      <button class="sb-item sb-footer-item" id="loginTrigger" type="button" aria-label="Iniciar sesión" title="Iniciar sesión"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="user" aria-hidden="true"></span><span class="sb-label">Iniciar Sesión</span></button>
-      <a class="sb-item sb-footer-item portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Portal</span></a>
+      <button class="sb-item sb-footer-item" id="settingsTrigger" type="button"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="settings" aria-hidden="true"></span><span class="sb-label">Ajustes</span></button>
+      <a class="sb-item sb-footer-item" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Portal</span></a>
     </div>
   </aside>
+
+  <div class="lp-settings-overlay" id="settingsOverlay" hidden>
+    <section class="lp-settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+      <header class="lp-settings-header">
+        <h2 id="settingsModalTitle">Ajustes</h2>
+        <button class="lp-settings-close" id="settingsCloseBtn" type="button" aria-label="Cerrar ajustes">✕</button>
+      </header>
+      <div class="lp-settings-body">
+        <section class="lp-settings-section" aria-labelledby="settingsSectionAccount">
+          <h3 class="lp-settings-section__title" id="settingsSectionAccount">Cuenta</h3>
+          <button class="sb-item" id="loginTrigger" type="button" aria-label="Iniciar sesión" title="Iniciar sesión"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="user" aria-hidden="true"></span><span class="sb-label">Iniciar Sesión</span></button>
+        </section>
+        <section class="lp-settings-section" aria-labelledby="settingsSectionAppearance">
+          <h3 class="lp-settings-section__title" id="settingsSectionAppearance">Apariencia</h3>
+          <button class="sb-item theme-toggle" type="button" aria-label="Cambiar a tema oscuro"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="moon" aria-hidden="true"></span><span class="sb-label">Modo oscuro</span></button>
+        </section>
+        <section class="lp-settings-section" aria-labelledby="settingsSectionHelp">
+          <h3 class="lp-settings-section__title" id="settingsSectionHelp">Ayuda y acerca de</h3>
+          <button class="sb-item" id="aboutTrigger" type="button"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">About LearnFlow</span></button>
+          <a class="sb-item" href="privacy.html"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">Privacidad</span></a>
+          <a class="sb-item portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Portal</span></a>
+        </section>
+      </div>
+    </section>
+  </div>
 
   <!-- MAIN COLUMN -->
   <div class="main-col">

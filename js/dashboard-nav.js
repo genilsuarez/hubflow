@@ -139,10 +139,15 @@ export function initDashboardNav() {
     if (event.key === NAVIGATION_MODE_KEY) setNavigationMode(event.newValue);
   });
 
+  document.getElementById('settingsTrigger').addEventListener('click', (event) => {
+    lpSettings.open(event, { inertElements: [document.querySelector('.shell')] });
+  });
   document.getElementById('aboutTrigger').addEventListener('click', (event) => {
+    lpSettings.close();
     lpAbout.open(event, { inertElements: [document.querySelector('.shell')] });
   });
   lpLogin.bindNavButton('#loginTrigger', {
+    beforeOpen: () => lpSettings.close(),
     labelSelector: '.sb-label',
     onSync(user, btn) {
       btn.setAttribute('aria-label', user ? user.name + ' — perfil' : 'Iniciar sesión');
