@@ -229,6 +229,37 @@
       <button class="lp-icon-btn topbar-menu" id="topbarMenuToggle" type="button" aria-label="Abrir navegación" aria-controls="sidebar" aria-expanded="false" hidden><span data-lp-icon="menu" aria-hidden="true"></span></button>
     </div>
 
+    <script>
+      // El ☰ del topbar y `body[data-active]` antes solo se resolvían dentro
+      // de setActive() (script type=module más abajo), gateado por la cadena
+      // de imports ES (catalog, dashboard-shelves, etc.). En redes lentas eso
+      // deja el ☰ oculto (y el pill de stats sin mostrar, ver
+      // `body:not([data-active]) .lp-header-stats` en index-shell.css) varios
+      // cientos de ms después de que header/sidebar/footer — HTML estático —
+      // ya pintaron: se ve como si cargaran en etapas distintas. Resolverlo
+      // aquí, sync, apenas existen los nodos del topbar, lo sincroniza con el
+      // resto del shell estático. setActive() vuelve a asignar el mismo valor
+      // (idempotente) cuando los módulos terminan de cargar. Debe reflejar
+      // exactamente la resolución de `target`/`isSecondaryTopbar` en el script
+      // module de más abajo — mismo `vs` espejo de NAV_SECTIONS que ya usa el
+      // script de <head> (validate-content.js falla con NAV-SYNC si divergen).
+      (function() {
+        var vs = ['resumen','rutas','mi-progreso','all','vocab','grammar','pronunciation','analysis','guides'];
+        var p = new URLSearchParams(location.search).get('section');
+        var s = sessionStorage.getItem('hf-back-section');
+        var target = p || s;
+        var idx = target ? vs.indexOf(target) : -1;
+        var isSecondary = idx > 2;
+        var isDesktop = window.innerWidth >= 861;
+        var isFloating = document.documentElement.dataset.navigationMode === 'floating';
+        document.body.dataset.active = idx > 0 ? target : 'resumen';
+        var topbarMenuToggle = document.getElementById('topbarMenuToggle');
+        var navigationLauncher = document.getElementById('navigationLauncher');
+        if (topbarMenuToggle) topbarMenuToggle.hidden = !isSecondary || isDesktop;
+        if (navigationLauncher) navigationLauncher.hidden = isSecondary ? !(isDesktop && isFloating) : false;
+      })();
+    </script>
+
     <main class="content" id="mainContent">
       <div class="catalog-toolbar" id="catalogToolbar" aria-label="Buscar y filtrar módulos">
         <div class="catalog-chips" id="catalogChips" aria-label="Cambiar de categoría">
