@@ -457,16 +457,16 @@
 
     /* ─── LEVEL STATUS BANNER (LearnFlow Progression System) ─── */
     .level-status-banner {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      margin: 0 0 16px; padding: 10px 14px;
+      display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap;
+      margin: 0; padding: 10px 14px;
       background: color-mix(in srgb, var(--lp-accent) 8%, var(--lp-surface));
       border: 1.5px solid color-mix(in srgb, var(--lp-accent) 30%, transparent);
       border-radius: var(--lp-radius-lg);
     }
     .level-status-banner[hidden] { display: none; }
-    .level-status-banner__icon { font-size: 1rem; flex-shrink: 0; }
+    .level-status-banner__icon { font-size: 1rem; flex-shrink: 0; line-height: 1.35; }
     .level-status-banner__text {
-      flex: 1 1 auto; min-width: 180px;
+      flex: 1 1 160px; min-width: 0;
       font-size: 0.78rem; font-weight: 500; color: var(--lp-ink-soft); line-height: 1.35;
     }
     .level-status-banner__btn {
@@ -477,6 +477,20 @@
       transition: opacity 0.15s;
     }
     .level-status-banner__btn:hover { opacity: 0.85; }
+
+    /* En escritorio va al lado de la hero-card (2ª columna del grid .resumen-hero)
+       para tener más impacto visual en vez de una barra angosta debajo. */
+    @media (min-width: 640px) {
+      .resumen-hero .level-status-banner {
+        grid-column: 2;
+        grid-row: 1;
+        align-items: center;
+        padding: 16px 18px;
+      }
+      .resumen-hero .level-status-banner__icon { font-size: 1.3rem; }
+      .resumen-hero .level-status-banner__text { font-size: 0.85rem; }
+      .resumen-hero .level-status-banner__btn { align-self: center; }
+    }
 
     /* ─── HERO CARD (ejercicio sugerido) ─── */
     .resumen-hero .hero-card {

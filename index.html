@@ -303,6 +303,18 @@
           <button class="hero-card__alt" id="heroAlt" type="button" hidden aria-label="Otra sugerencia">Otra sugerencia</button>
           <button class="hero-card__browse" id="heroBrowse" type="button" hidden>Ver ejercicios</button>
         </div>
+
+        <!-- LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
+             Oculto por defecto; level-status.js lo muestra siempre que el nivel activo
+             no haya avanzado: con el progreso propio de HubFlow hacia el 50% mientras
+             falta, o con el aviso de "ya hiciste tu parte" cuando HubFlow ya llegó al
+             50% pero otra app (FluentFlow/LyricFlow) todavía no llega a la suya.
+             Va al lado de la hero-card (misma fila del grid) para más impacto visual. -->
+        <div class="level-status-banner" id="levelStatusBanner" hidden>
+          <span class="level-status-banner__icon" id="levelStatusBannerIcon" aria-hidden="true">🔒</span>
+          <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
+          <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
+        </div>
         </div>
 
         <script>
@@ -333,17 +345,6 @@
             } catch { /* noop */ }
           })();
         </script>
-
-        <!-- LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
-             Oculto por defecto; level-status.js lo muestra siempre que el nivel activo
-             no haya avanzado: con el progreso propio de HubFlow hacia el 50% mientras
-             falta, o con el aviso de "ya hiciste tu parte" cuando HubFlow ya llegó al
-             50% pero otra app (FluentFlow/LyricFlow) todavía no llega a la suya. -->
-        <div class="level-status-banner" id="levelStatusBanner" hidden>
-          <span class="level-status-banner__icon" id="levelStatusBannerIcon" aria-hidden="true">🔒</span>
-          <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
-          <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
-        </div>
 
         <div class="sec-head">Explora por tema</div>
         <div class="tiles">
