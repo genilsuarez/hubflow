@@ -49,6 +49,7 @@
   <script src="js/lp-guest-reset.js"></script>
   <script src="js/lp-login.js"></script>
   <script src="js/lp-login-nudge.js"></script>
+  <script src="js/lp-placement-banner.js"></script>
   <script src="js/lp-about-content.js"></script>
   <script src="js/lp-about.js"></script>
   <script src="js/lp-settings.js"></script>
@@ -347,6 +348,14 @@
           <span class="level-status-banner__icon" id="levelStatusBannerIcon" aria-hidden="true">🔒</span>
           <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
           <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
+        </div>
+
+        <!-- M4 — banner cuando el placement test B2+ quedó pendiente en DeskFlow.
+             No porta el examen, solo enlaza. js/lp-placement-banner.js -->
+        <div class="level-status-banner" id="placementTestBanner" hidden>
+          <span class="level-status-banner__icon" aria-hidden="true">🎯</span>
+          <span class="level-status-banner__text">Confirmaste nivel B2+ · Toma el examen en DeskFlow para desbloquear contenido avanzado.</span>
+          <a class="level-status-banner__btn" href="#" target="_blank" rel="noopener">Ir a DeskFlow →</a>
         </div>
         </div>
 
@@ -783,6 +792,7 @@ import { initLevelStatus } from './js/level-status.js';
       refreshHeaderStats(animateReveal);
       renderHeroCard({ animateReveal });
       maybePromptLoginNudge();
+      if (typeof lpPlacementBanner !== 'undefined') lpPlacementBanner.mount('placementTestBanner');
     } finally {
       refreshingHomeStats = false;
     }
