@@ -618,8 +618,8 @@ export class FlashcardEngine {
           <div class="result-title">¡Tarjetas repasadas! 🎉</div>
           <div class="result-sub">${subtitle}</div>
           <div class="result-btns">
-            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
             <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
           </div>
         </div>
       `;
@@ -642,8 +642,8 @@ export class FlashcardEngine {
           <div class="result-title">¡Lección completa! 🎉</div>
           <div class="result-sub">Aprobaste todos los modos de esta lección.</div>
           <div class="result-btns">
-            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
             <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
           </div>
         </div>
       `;
@@ -1085,8 +1085,8 @@ export class FlashcardEngine {
         <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
         ${timeHtml}
         <div class="result-btns">
-          <button class="lp-btn lp-btn--purple" id="resultRestart">🔄 Try Again</button>
           <button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>
+          <button class="lp-btn lp-btn--purple" id="resultRestart">🔄 Try Again</button>
         </div>
       </div>
     `;
