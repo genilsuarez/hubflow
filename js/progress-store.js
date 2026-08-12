@@ -472,17 +472,23 @@ function syncScoreKeysFromProgressDoc() {
     const timestamp = item.completedAt || doc.updatedAt || new Date().toISOString();
 
     for (const activity of rule.requiredActivities) {
-      for (const scoreKey of activity.scoreKeys) {
-        if (readScoreHistory(scoreKey).length > 0) continue;
-        try {
-          localStorage.setItem(
-            versionedKey(scoreKey),
-            JSON.stringify([{ pct, date: timestamp, timestamp }])
-          );
-          changed = true;
-        } catch {
-          /* ignore quota errors */
-        }
+      // The aggregate projection only carries one score for the whole activity —
+      // it can't say which category/mode earned it. Backfilling is only safe
+      // when the activity maps to exactly one scoreKey; for multi-key activities
+      // (e.g. one per vocabulary category) it would wrongly clone a single
+      // category's result onto every other untouched category. Skip those —
+      // better to leave them unfilled than to fabricate false completions.
+      if (activity.scoreKeys.length !== 1) continue;
+      const [scoreKey] = activity.scoreKeys;
+      if (readScoreHistory(scoreKey).length > 0) continue;
+      try {
+        localStorage.setItem(
+          versionedKey(scoreKey),
+          JSON.stringify([{ pct, date: timestamp, timestamp }])
+        );
+        changed = true;
+      } catch {
+        /* ignore quota errors */
       }
     }
   }
@@ -505,17 +511,17 @@ function syncScoreKeysFromActivityDoc() {
       rule.requiredActivities[0];
     if (!activityRule) continue;
 
+    // Legacy events (recorded before `metrics.scoreKey` existed) don't say which
+    // key they belong to. Guessing is only safe for single-key activities — for
+    // multi-key ones (e.g. one per vocabulary category) it would clone one
+    // category's score onto every other untouched category (see the identical
+    // guard in syncScoreKeysFromProgressDoc above).
     const metricKey = typeof event.metrics?.scoreKey === 'string' ? event.metrics.scoreKey : null;
     const scoreKeysToFill = metricKey
       ? [metricKey]
-      : activityRule.scoreKeys.filter((key) => readScoreHistory(key).length === 0);
-
-    if (!scoreKeysToFill.length) {
-      const fallback =
-        activityRule.scoreKeys.find((key) => readScoreHistory(key).length === 0) ||
-        activityRule.scoreKeys[0];
-      if (fallback) scoreKeysToFill.push(fallback);
-    }
+      : activityRule.scoreKeys.length === 1
+        ? activityRule.scoreKeys.filter((key) => readScoreHistory(key).length === 0)
+        : [];
 
     const timestamp = event.occurredAt || doc.updatedAt || new Date().toISOString();
     const pct = Math.max(0, Math.min(100, Number(event.scorePct) || 0));
@@ -705,6 +711,16 @@ export function getStars(pct) {
 }
 
 /**
+ * Best score and pass/fail for a single scoreKey (e.g. `vocab-family-quiz`).
+ * Used to decide what to suggest next once a mode/category is finished.
+ */
+export function getScoreStatus(key, passScorePct = HUBFLOW_PASS_SCORE_PCT) {
+  const history = readScoreHistory(key);
+  const bestPct = history.reduce((best, attempt) => Math.max(best, Number(attempt.pct) || 0), 0);
+  return { attempted: history.length > 0, bestPct, passed: bestPct >= passScorePct };
+}
+
+/**
  * Renders (or updates) the module-progress detail button for an exercise page.
  * The button is relocated to .fc-nav (or .check-area) by exercise-shell.js.
  * Call on init and after each recordScore to keep labels current.
@@ -761,20 +777,61 @@ export function renderLessonProgress(contentId) {
   if (typeof window !== 'undefined' && typeof window.__relocateLessonProgressBtn === 'function') {
     window.__relocateLessonProgressBtn();
   }
+
+  renderModuleCompletionMarks(contentId);
+}
+
+/* ─── Módulo: matriz categoría × modo ────────────────────────────────────────
+   El orden de secciones y modos sale de los chips visibles del ejercicio para
+   que la tabla de progreso nunca contradiga lo que el usuario ve en pantalla.
+   Cuando la página no está renderizada (o el módulo no tiene chips) se cae al
+   orden canónico MODE_ORDER + el orden de los scoreKeys. */
+
+const MODE_ORDER = ['quiz', 'match', 'timed', 'write', 'study', 'challenge', null];
+const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', null: 'Practice' };
+const MODE_ICONS = { quiz: '⚡', match: '⇄', write: '✎', study: '◉', challenge: '◆', timed: '◷', null: '◉' };
+
+/** Texto de un chip ignorando el badge de completado inyectado por esta capa. */
+function pillLabelText(btn) {
+  return [...btn.childNodes]
+    .filter((node) => !(node.nodeType === 1 && node.classList?.contains('hf-done-dot')))
+    .map((node) => node.textContent)
+    .join('')
+    .trim();
+}
+
+/** Orden visual de los mode tabs (`data-mode`) tal como se pintan en la página. */
+function readVisualModeOrder() {
+  return [...document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]')]
+    .map((btn) => btn.dataset.mode)
+    .filter(Boolean);
+}
+
+/* Chips de sección: `#catBar [data-cat]` en la mayoría de motores,
+   `#levelBar [data-level]` en los de spelling (ed/ing/noun-adjuncts). */
+const SECTION_PILL_SELECTOR = '#catBar [data-cat], #levelBar [data-level]';
+
+/** Orden + etiqueta visual de los chips de sección de la página. */
+function readVisualCategories() {
+  return [...document.querySelectorAll(SECTION_PILL_SELECTOR)].map((btn) => ({
+    key: btn.dataset.cat ?? btn.dataset.level,
+    label: pillLabelText(btn),
+  }));
+}
+
+function humanizeCategoryKey(key) {
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim();
 }
 
 /**
- * Opens a modal showing detailed per-category progress for a module.
- * Shows columns for each tracked mode (quiz, match, etc.) per category.
+ * Deriva la matriz de progreso (secciones × modos) de un módulo.
  * @param {string} contentId
+ * @returns {null | {passScorePct:number, prefix:string, categories:{key:string,label:string}[],
+ *                   displayModes:(string|null)[], cellFor:(cat:string, mode:string|null)=>object}}
  */
-function openProgressDetail(contentId) {
-  if (!contentId) return;
+function buildModuleMatrix(contentId) {
   const rule = PROGRESS_RULES[contentId];
-  if (!rule) return;
-
-  // Remove existing modal if open
-  document.getElementById('progressDetailModal')?.remove();
+  if (!rule) return null;
 
   const passScorePct = rule.requiredActivities[0]?.passScorePct || HUBFLOW_PASS_SCORE_PCT;
 
@@ -803,8 +860,6 @@ function openProgressDetail(contentId) {
     }
   }
 
-  // For flashcard exercises, also check for match keys that exist in localStorage
-  const categories = [...categoriesFromKeys];
   let trackedModes = [...modesFromKeys];
 
   // If no mode suffix found, it's a single-mode exercise (practice)
@@ -830,11 +885,50 @@ function openProgressDetail(contentId) {
     }
   }
 
-  // Determine display modes — always show quiz first, then others
-  const MODE_ORDER = ['quiz', 'match', 'timed', 'write', 'study', 'challenge', null];
-  const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', null: 'Practice' };
-  const MODE_ICONS = { quiz: '⚡', match: '⇄', write: '✎', study: '◉', challenge: '◆', timed: '◷', null: '◉' };
-  const displayModes = MODE_ORDER.filter(m => trackedModes.includes(m));
+  // Orden de columnas = orden de los mode tabs en pantalla; los modos rastreados
+  // que no tienen tab visible se anexan según el orden canónico.
+  const visualModes = readVisualModeOrder();
+  const displayModes = [
+    ...visualModes.filter((m) => trackedModes.includes(m)),
+    ...MODE_ORDER.filter((m) => trackedModes.includes(m) && !visualModes.includes(m)),
+  ];
+
+  // Orden y etiqueta de filas = chips de sección en pantalla (con su emoji);
+  // las categorías sin chip visible conservan el orden de los scoreKeys.
+  const visualCats = readVisualCategories();
+  const visualLabels = new Map(visualCats.map((c) => [c.key, c.label]));
+  const categories = [
+    ...visualCats.filter((c) => categoriesFromKeys.has(c.key)),
+    ...[...categoriesFromKeys]
+      .filter((key) => !visualLabels.has(key))
+      .map((key) => ({ key, label: humanizeCategoryKey(key) })),
+  ];
+
+  const cellFor = (cat, mode) => {
+    const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
+    const history = readScoreHistory(key);
+    const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+    const attempts = history.length;
+    return { key, best, attempts, passed: best >= passScorePct };
+  };
+
+  return { passScorePct, prefix, categories, displayModes, cellFor };
+}
+
+/**
+ * Opens a modal showing detailed per-category progress for a module.
+ * Shows columns for each tracked mode (quiz, match, etc.) per category.
+ * @param {string} contentId
+ */
+function openProgressDetail(contentId) {
+  if (!contentId) return;
+  const matrix = buildModuleMatrix(contentId);
+  if (!matrix) return;
+
+  // Remove existing modal if open
+  document.getElementById('progressDetailModal')?.remove();
+
+  const { passScorePct, categories, displayModes, cellFor } = matrix;
   const showModeInPill = displayModes.length > 1;
 
   const mod = MODULES.find(m => m.id === contentId);
@@ -844,15 +938,9 @@ function openProgressDetail(contentId) {
   let passedTotal = 0;
   let totalCells = 0;
 
-  const rowsHTML = categories.map(cat => {
-    const displayLabel = cat.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()).trim();
-
+  const rowsHTML = categories.map(({ key: cat, label: displayLabel }) => {
     const pills = displayModes.map(mode => {
-      const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
-      const history = readScoreHistory(key);
-      const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
-      const attempts = history.length;
-      const passed = best >= passScorePct;
+      const { best, attempts, passed } = cellFor(cat, mode);
       if (passed) passedTotal++;
       totalCells++;
 
@@ -912,4 +1000,52 @@ function openProgressDetail(contentId) {
   document.addEventListener('keydown', function esc(e) {
     if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
   });
+}
+
+/** Pone o quita el badge ✓ de un chip, sin tocar su etiqueta. */
+function stampDoneMark(btn, done, srLabel) {
+  const dot = btn.querySelector('.hf-done-dot');
+  btn.classList.toggle('is-done', done);
+  if (done && !dot) {
+    btn.insertAdjacentHTML('beforeend', `<span class="hf-done-dot" aria-hidden="true">✓</span>`);
+  } else if (!done && dot) {
+    dot.remove();
+  }
+  const base = btn.dataset.doneBaseLabel ?? (btn.dataset.doneBaseLabel = btn.getAttribute('aria-label') || pillLabelText(btn));
+  btn.setAttribute('aria-label', done ? `${base} — ${srLabel}` : base);
+}
+
+/**
+ * Marca con ✓ los chips de sección y los mode tabs ya superados (≥ passScorePct),
+ * al estilo de los `toolbar-done-dot` de LyricFlow.
+ * - Sección: todos sus modos rastreados superados.
+ * - Modo: superado en todas las secciones.
+ * @param {string} contentId
+ */
+export function renderModuleCompletionMarks(contentId) {
+  const matrix = buildModuleMatrix(contentId);
+  if (!matrix) return;
+  const { categories, displayModes, cellFor } = matrix;
+  if (!categories.length || !displayModes.length) return;
+
+  document.querySelectorAll(SECTION_PILL_SELECTOR).forEach((btn) => {
+    const cat = btn.dataset.cat ?? btn.dataset.level;
+    if (!categories.some((c) => c.key === cat)) return;
+    const done = displayModes.every((mode) => cellFor(cat, mode).passed);
+    stampDoneMark(btn, done, 'sección completada');
+  });
+
+  document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]').forEach((btn) => {
+    const mode = btn.dataset.mode;
+    if (!displayModes.includes(mode)) return;
+    const done = categories.every(({ key }) => cellFor(key, mode).passed);
+    stampDoneMark(btn, done, 'modo completado');
+  });
+}
+
+/** Variante sin argumentos: resuelve el contentId desde el DOM de la página. */
+export function refreshModuleCompletionMarks() {
+  const id = document.getElementById('lessonProgress')?.dataset.contentId
+    || document.getElementById('lessonProgressBtn')?.dataset.contentId;
+  if (id) renderModuleCompletionMarks(id);
 }

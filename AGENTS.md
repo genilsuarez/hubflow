@@ -37,7 +37,9 @@ js/
   exercise-shell.js — Sidebar drawer, header; calls ex-bottom-nav.js
   ex-bottom-nav.js    — Bottom nav canonical (mirrors FluentFlow game-controls)
   array-utils.js    — shuffle
-  progress-store.js — recordScore, progress tracking, header stats, cloud sync
+  progress-store.js — recordScore, progress tracking, header stats, cloud sync,
+                      modal "Progreso del módulo" + badges ✓ en chips de sección
+                      y mode tabs (orden y etiquetas leídos de los chips visibles)
   exercise-ui.js    — renderCatBar, wireModeTabs, syncModeTabsActive,
                       updateProgress, Timer, formatTime, makeTimerState
   exercise-flow.js  — finishExercise, advanceStudyCard, createMatchMode

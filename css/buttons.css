@@ -29,10 +29,12 @@
 /* Variantes semánticas (sombra derivada del token, no rgba a mano) */
 .lp-btn--primary { background: var(--lp-primary, var(--lp-accent)); color: #fff;
   box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-primary, var(--lp-accent)) 25%, transparent); }
-.lp-btn--success { background: var(--lp-success); color: var(--lp-ink-inverse);
+.lp-btn--success { background: var(--lp-success); color: var(--lp-on-accent);
   box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-success) 25%, transparent); }
-.lp-btn--danger  { background: var(--lp-error);   color: var(--lp-ink-inverse);
+.lp-btn--danger  { background: var(--lp-error);   color: var(--lp-on-accent);
   box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-error) 20%, transparent); }
+/* --lp-cat-purple se aclara en dark (a diferencia de accent/success/error);
+   --lp-ink-inverse invierte correctamente para eso. */
 .lp-btn--purple  { background: var(--lp-cat-purple); color: var(--lp-ink-inverse);
   box-shadow: 0 3px 12px color-mix(in srgb, var(--lp-cat-purple) 25%, transparent); }
 .lp-btn--ghost   { background: var(--lp-surface); color: var(--lp-ink-soft);
@@ -106,6 +108,27 @@
   opacity: 0.4;
   cursor: not-allowed;
   transform: none !important;
+}
+
+/* Toggle de pronunciación automática (#speakBtn): botón de estado on/off.
+   El id gana en especificidad a .lp-btn--ghost cuando ex-bottom-nav.js
+   re-clasifica el botón dentro de la barra inferior. */
+#speakBtn { position: relative; }
+#speakBtn.is-on {
+  background: var(--lp-accent-soft);
+  border-color: color-mix(in srgb, var(--lp-accent) 45%, transparent);
+  color: var(--lp-accent-dark);
+}
+/* El anillo va en ::after porque varias páginas traen background/border inline
+   en #speakBtn, y el inline gana a cualquier selector. */
+#speakBtn.is-on::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--lp-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lp-accent) 16%, transparent);
+  pointer-events: none;
 }
 
 /* Icono circular compacto: 36px visual, hit-area 44 vía ::after */

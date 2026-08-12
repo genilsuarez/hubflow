@@ -4,6 +4,8 @@
    across exercises and engines.
    ═══════════════════════════════════════════════════════ */
 
+import { refreshModuleCompletionMarks } from './progress-store.js';
+
 const CAT_EXPANDER_INIT = 'data-cat-expander-init';
 const CAT_PILL_SELECTOR = '.cat-btn, .pill-btn';
 
@@ -225,6 +227,9 @@ export function renderCatBar({ containerId = 'catBar', categories, getCurrentCat
   });
 
   initCatBarExpander({ barId: containerId });
+
+  // Los pills se reconstruyen en cada cambio de categoría: hay que repintar los ✓.
+  refreshModuleCompletionMarks();
 }
 
 /** Toggles `.active` on the `[data-mode]` pill matching `mode` — shared by

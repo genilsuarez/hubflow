@@ -3,10 +3,19 @@
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
 import { shuffle } from './array-utils.js';
-import { recordScore, getStars, renderLessonProgress } from './progress-store.js';
+import { recordScore, getStars, getScoreStatus, renderLessonProgress } from './progress-store.js';
 import { Timer, formatTime } from './exercise-ui.js';
 import { speak, isSpeechAvailable } from './speech.js';
 import { initSwipe } from './swipe.js';
+
+// Preferencia persistente del toggle de pronunciación automática (on/off).
+// Convención `lp-*` como el resto de preferencias de usuario de la plataforma.
+const AUTOSPEAK_KEY = 'lp-autospeak';
+
+function readAutoSpeak() {
+  if (!isSpeechAvailable()) return false;
+  try { return localStorage.getItem(AUTOSPEAK_KEY) === '1'; } catch { return false; }
+}
 
 const MODE_META = {
   study: '📖 Study',
@@ -15,6 +24,11 @@ const MODE_META = {
   match: '🔀 Match',
   battle: '⚔️ Battle',
 };
+
+// Order in which Study suggests a follow-up mode once the deck is finished.
+// 'battle' is excluded on purpose — it's 2-player and never records a score,
+// so it can't be checked for "pending/passed" the way quiz/timed/match can.
+const STUDY_FOLLOWUP_MODES = ['quiz', 'timed', 'match'];
 
 // Solo 'purple' tiene modificadores CSS de primera clase (.lp-btn--purple,
 // .progress__fill--purple). 'blue' replica exactamente el patrón que ya usaba
@@ -94,7 +108,7 @@ export class FlashcardEngine {
         </div>
       </div>
       <div class="fc-nav">
-        <button class="listen-btn" id="speakBtn" aria-label="Listen to pronunciation" style="width:44px;height:44px;border-radius:50%;${v.speakBtnStyle}font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;">🔊</button>
+        <button class="listen-btn" id="speakBtn" aria-pressed="false" aria-label="Pronunciación automática: OFF" style="width:44px;height:44px;border-radius:50%;${v.speakBtnStyle}font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;">🔇</button>
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="${v.accentBtnClass}" id="nextBtn">→</button>
@@ -174,10 +188,16 @@ export class FlashcardEngine {
     // Timer
     this.timer = null;
 
+    // Pronunciación automática (botón de estado, no pulsador)
+    this.autoSpeak = readAutoSpeak();
+
     this.init();
   }
 
   init() {
+    // Modes are declared in the DOM (pill-bar) rather than passed to the
+    // constructor — every lesson page renders its own subset of pills.
+    this.modes = Array.from(document.querySelectorAll('[data-mode]')).map(btn => btn.dataset.mode);
     this.bindGlobal();
     this.renderCatBar();
     this.updateLessonProgress();
@@ -185,13 +205,12 @@ export class FlashcardEngine {
   }
 
   bindGlobal() {
-    // TTS speak button
+    // TTS: toggle de pronunciación automática (estado on/off, persistido)
     const speakBtn = document.getElementById('speakBtn');
     if (speakBtn && isSpeechAvailable()) {
       speakBtn.style.display = '';
-      speakBtn.addEventListener('click', () => {
-        if (this._currentTerm) speak(this._currentTerm);
-      });
+      speakBtn.addEventListener('click', () => this.toggleAutoSpeak());
+      this.syncSpeakBtn();
     } else if (speakBtn) {
       speakBtn.style.display = 'none';
     }
@@ -332,6 +351,7 @@ export class FlashcardEngine {
     }
     window.__syncBattleProgressPlacement?.();
     window.__syncBottomNavMode?.();
+    this.syncSpeakBtn();
     window.__resetModeStageScroll?.();
     window.__syncModeTabIndicator?.({ scrollActive: true });
   }
@@ -453,6 +473,36 @@ export class FlashcardEngine {
 
     // TTS: update current term for speak button
     this._currentTerm = item.term;
+    if (this.autoSpeak) speak(this._currentTerm);
+  }
+
+  /** Alterna el modo "leer todas las tarjetas" y lo persiste. */
+  toggleAutoSpeak() {
+    this.autoSpeak = !this.autoSpeak;
+    try { localStorage.setItem(AUTOSPEAK_KEY, this.autoSpeak ? '1' : '0'); } catch { /* storage bloqueado */ }
+    this.syncSpeakBtn();
+    if (this.autoSpeak) {
+      if (this._currentTerm) speak(this._currentTerm);
+    } else if (isSpeechAvailable()) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  /**
+   * Refleja el estado del toggle en el botón. Se re-aplica tras cada cambio de
+   * modo porque ex-bottom-nav.js limpia el `style` inline al re-normalizar la
+   * barra inferior.
+   */
+  syncSpeakBtn() {
+    const btn = document.getElementById('speakBtn');
+    if (!btn) return;
+    const on = this.autoSpeak;
+    const label = on ? 'Pronunciación automática: ON' : 'Pronunciación automática: OFF';
+    btn.setAttribute('aria-pressed', String(on));
+    btn.classList.toggle('is-on', on);
+    btn.textContent = on ? '🔊' : '🔇';
+    btn.title = label;
+    btn.setAttribute('aria-label', label);
   }
 
   flipCard() {
@@ -460,6 +510,13 @@ export class FlashcardEngine {
   }
 
   navCard(delta) {
+    // Reaching the end of the deck going forward suggests what to do next
+    // instead of silently wrapping back to card 1.
+    if (delta > 0 && this.cardIdx === this.deck.length - 1) {
+      this.showStudyFollowUp();
+      return;
+    }
+
     const card = document.getElementById('fcCard');
     const inner = card?.querySelector('.fc-inner');
     if (!card || !inner) return;
@@ -500,6 +557,100 @@ export class FlashcardEngine {
     this.cardIdx = 0;
     this.renderStudyCard();
     this.updateStudyProgress();
+  }
+
+  _scoreKeyFor(cat, mode) {
+    return `${this.config.storagePrefix}-${cat}-${mode}`;
+  }
+
+  /**
+   * What to suggest once the Study deck is finished: the first not-yet-passed
+   * mode in the current category (quiz → timed → match), then the first
+   * category with a pending mode, or null once everything is passed.
+   */
+  findStudyFollowUp() {
+    const followModes = STUDY_FOLLOWUP_MODES.filter(m => this.modes.includes(m));
+    if (!followModes.length) return null;
+
+    for (const mode of followModes) {
+      if (!getScoreStatus(this._scoreKeyFor(this.currentCat, mode)).passed) {
+        return { cat: this.currentCat, mode, isNewCategory: false };
+      }
+    }
+
+    const catKeys = Object.keys(this.categories);
+    const startIdx = catKeys.indexOf(this.currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === this.currentCat) continue;
+      for (const mode of followModes) {
+        if (!getScoreStatus(this._scoreKeyFor(cat, mode)).passed) {
+          return { cat, mode, isNewCategory: true };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  showStudyFollowUp() {
+    const overlay = document.getElementById('resultOverlay');
+    if (!overlay) return;
+    const suggestion = this.findStudyFollowUp();
+
+    const restudy = () => {
+      overlay.classList.remove('show');
+      this.cardIdx = 0;
+      this.renderStudyCard();
+      this.updateStudyProgress();
+    };
+
+    if (suggestion) {
+      const modeLabel = MODE_META[suggestion.mode] || suggestion.mode;
+      const subtitle = suggestion.isNewCategory
+        ? `Siguiente: ${this.categories[suggestion.cat]?.label || suggestion.cat} — ${modeLabel}`
+        : `Siguiente: ${modeLabel}`;
+
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
+          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
+          <div class="result-sub">${subtitle}</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
+        overlay.classList.remove('show');
+        if (suggestion.isNewCategory) {
+          this.currentCat = suggestion.cat;
+          this.renderCatBar();
+        }
+        this.setMode(suggestion.mode);
+      });
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    } else {
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+          <div class="result-title">¡Lección completa! 🎉</div>
+          <div class="result-sub">Aprobaste todos los modos de esta lección.</div>
+          <div class="result-btns">
+            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    }
   }
 
   // ═══ QUIZ ═══

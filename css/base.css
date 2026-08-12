@@ -30,6 +30,11 @@
   --lp-ink-soft: #574A3C;
   --lp-muted: #8A7D6E;
   --lp-ink-inverse: #FFFFFF;
+  /* Texto sobre fondos de color fijo (accent/success/error/cat-*): siempre
+     blanco, sin importar el tema — a diferencia de --lp-ink-inverse, que se
+     invierte con el tema y por eso no sirve para esto (queda casi negro
+     sobre azul en dark). */
+  --lp-on-accent: #FFFFFF;
 
   /* Accent — vivid blue (homologado entre las 4 apps) */
   --lp-accent: #2563EB;
