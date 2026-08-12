@@ -117,6 +117,13 @@ export function renderHeroCard({ animateReveal = false, refreshSuggestion = fals
   const titleEl = document.getElementById('heroTitle');
   const metaEl = document.getElementById('heroMeta');
   const altBtn = document.getElementById('heroAlt');
+  const whatIsBtn = document.getElementById('heroWhatIsLearnFlow');
+  if (whatIsBtn && !whatIsBtn.dataset.bound) {
+    whatIsBtn.dataset.bound = '1';
+    whatIsBtn.addEventListener('click', (event) => {
+      if (typeof lpAbout !== 'undefined') lpAbout.open(event);
+    });
+  }
 
   function setLaunchInteractive(enabled) {
     if (enabled) {
@@ -148,6 +155,7 @@ export function renderHeroCard({ animateReveal = false, refreshSuggestion = fals
     launch.setAttribute('aria-label', 'Cargando sugerencia');
     setLaunchInteractive(false);
     altBtn.hidden = true;
+    whatIsBtn.hidden = true;
     return;
   }
 
@@ -174,6 +182,7 @@ export function renderHeroCard({ animateReveal = false, refreshSuggestion = fals
     launch.setAttribute('aria-label', 'Empezar ruta guiada');
     setLaunchInteractive(true);
     altBtn.hidden = true;
+    whatIsBtn.hidden = false;
     return;
   }
 
@@ -201,6 +210,7 @@ export function renderHeroCard({ animateReveal = false, refreshSuggestion = fals
   setLaunchInteractive(true);
   altBtn.hidden = false;
   altBtn.textContent = 'Otra sugerencia';
+  whatIsBtn.hidden = true;
 
   if (animateReveal && !prefersReducedMotion()) {
     heroCard.classList.remove('hero-card--revealed');
