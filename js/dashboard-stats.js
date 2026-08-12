@@ -117,9 +117,26 @@ export function refreshHeaderStats(animateReveal = false) {
   const progressStats = getProgressStats();
   const totalEl = document.getElementById('psTotal');
   const masteredEl = document.getElementById('psMastered');
+  const sesGroup = totalEl?.closest('.lp-header-stats__group');
+  const divider = document.querySelector('.lp-header-stats__divider');
   const attempts = progressStats.totalAttempts || 0;
   const completed = progressStats.completedContent || 0;
   const total = progressStats.totalContent || 0;
+  const hasActivity = attempts > 0 || completed > 0;
+
+  // M2 — "0 ses · 0/150" en usuario nuevo lee como app vacía. El 150 es la
+  // propuesta de valor y se mantiene; lo que se oculta es el "0 ses" y el
+  // "0/" del completado, no el catálogo. display:none inline — `.lp-header-
+  // stats__group { display: flex }` empata en especificidad con `[hidden]`
+  // y gana por venir después en la cascada, así que el atributo no alcanza.
+  if (sesGroup) sesGroup.style.display = hasActivity ? '' : 'none';
+  if (divider) divider.style.display = hasActivity ? '' : 'none';
+
+  if (!hasActivity) {
+    masteredEl.textContent = `${total} disponibles`;
+    return;
+  }
+
   if (animateReveal && attempts > 0) animateText(totalEl, 0, attempts);
   else totalEl.textContent = String(attempts);
   if (animateReveal && completed > 0) {
