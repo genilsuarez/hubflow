@@ -48,6 +48,7 @@
   <script src="js/lp-nav-helpers.js"></script>
   <script src="js/lp-guest-reset.js"></script>
   <script src="js/lp-login.js"></script>
+  <script src="js/lp-login-nudge.js"></script>
   <script src="js/lp-about-content.js"></script>
   <script src="js/lp-about.js"></script>
   <script src="js/lp-settings.js"></script>
@@ -734,7 +735,7 @@
 <script type="module">
 import { MODULES, CATEGORIES, getModuleDepth } from './data/catalog.js';
 import { NAV_SECTION_KEYS } from './js/nav-sections.js';
-import { hydrateHubFlowFromCloud } from './js/progress-store.js';
+import { hydrateHubFlowFromCloud, getProgressStats } from './js/progress-store.js';
 import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 import { consumeStatsRevealAnimation, hydrateActivityFromCloud } from './js/sync-engine.js';
 import { renderAllShelves } from './js/dashboard-shelves.js';
@@ -780,9 +781,26 @@ import { initLevelStatus } from './js/level-status.js';
       renderStatsBreakdown();
       refreshHeaderStats(animateReveal);
       renderHeroCard({ animateReveal });
+      maybePromptLoginNudge();
     } finally {
       refreshingHomeStats = false;
     }
+  }
+
+  // M3 — nudge de login tras la primera actividad real, una sola vez en toda
+  // la plataforma. Lógica compartida en js/lp-login-nudge.js.
+  function maybePromptLoginNudge() {
+    if (typeof lpLoginNudge === 'undefined') return;
+    lpLoginNudge.maybePrompt({
+      hasProgress: getProgressStats().completedActivities > 0,
+      copy: {
+        eyebrow: 'Ejercicio completado',
+        title: 'Guarda tu racha',
+        lede: 'Tu progreso vive solo en este dispositivo: si cambias de teléfono, limpias el ' +
+          'navegador o lo pierdes, se pierde con él. Crear una cuenta lo respalda en la nube en ' +
+          'menos de un minuto — o puedes seguir como invitado y hacerlo más adelante.'
+      }
+    });
   }
 
   let refreshHomeScheduled = false;
