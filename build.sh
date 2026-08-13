@@ -22,6 +22,15 @@ if ! node scripts/validate-content.js; then
   exit 1
 fi
 
+# Deriva del <head> de exercises/*.html (scripts/stylesheets compartidos
+# editados a mano en una página y no en las otras 149). Ver
+# scripts/generate-exercise-heads.mjs.
+if ! node scripts/generate-exercise-heads.mjs --check; then
+  echo "❌ HubFlow — deriva en el <head> de exercises/*.html — correr:"
+  echo "   node scripts/generate-exercise-heads.mjs"
+  exit 1
+fi
+
 # ─── Progress-system validation (blocking) ─────────────────────────────────────
 # Invariantes del conteo + deriva de archivos compartidos.
 # docs/progress-counting-system.md
