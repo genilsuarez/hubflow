@@ -215,7 +215,8 @@
 .result-title { font-family: var(--lp-font-display); font-weight: var(--lp-weight-semibold); font-size: 1.4rem; color: var(--lp-ink); margin-bottom: 4px; }
 .result-sub { font-size: .8rem; color: var(--lp-muted); font-weight: var(--lp-weight-semibold); margin-bottom: 14px; }
 .result-time { font-size: .85rem; color: var(--lp-accent); font-weight: var(--lp-weight-semibold); margin-bottom: 14px; margin-top: -8px; }
-.result-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.result-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.result-btns .lp-btn { flex: 1 1 auto; }
 
 /* ─── BATTLE ─── */
 .battle-scores {

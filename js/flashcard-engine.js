@@ -1073,6 +1073,17 @@ export class FlashcardEngine {
     const overlay = document.getElementById('resultOverlay');
     if (!overlay) return;
 
+    // Igual que al terminar Study: sugerir la siguiente actividad pendiente
+    // del módulo (quiz → timed → match, luego siguiente categoría) en vez de
+    // dejar al usuario sin rumbo tras ver su puntaje.
+    const suggestion = this.findStudyFollowUp();
+    const nextHtml = suggestion
+      ? `<div class="result-sub">Siguiente: ${suggestion.isNewCategory
+          ? `${this.categories[suggestion.cat]?.label || suggestion.cat} — ${MODE_META[suggestion.mode] || suggestion.mode}`
+          : MODE_META[suggestion.mode] || suggestion.mode}</div>`
+      : '';
+    const primaryLabel = suggestion ? 'Continuar →' : '📖 Study';
+
     overlay.innerHTML = `
       <div class="result-box">
         <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
@@ -1084,9 +1095,10 @@ export class FlashcardEngine {
         <div class="result-title">${titles[stars]}</div>
         <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
         ${timeHtml}
+        ${nextHtml}
         <div class="result-btns">
-          <button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>
-          <button class="lp-btn lp-btn--purple" id="resultRestart">🔄 Try Again</button>
+          <button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Try Again</button>
+          <button class="lp-btn lp-btn--purple" id="resultPrimary">${primaryLabel}</button>
         </div>
       </div>
     `;
@@ -1099,9 +1111,17 @@ export class FlashcardEngine {
       overlay.classList.remove('show');
       this.setMode(this.currentMode);
     });
-    overlay.querySelector('#resultStudy')?.addEventListener('click', () => {
+    overlay.querySelector('#resultPrimary')?.addEventListener('click', () => {
       overlay.classList.remove('show');
-      this.setMode('study');
+      if (!suggestion) {
+        this.setMode('study');
+        return;
+      }
+      if (suggestion.isNewCategory) {
+        this.currentCat = suggestion.cat;
+        this.renderCatBar();
+      }
+      this.setMode(suggestion.mode);
     });
   }
 }

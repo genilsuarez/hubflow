@@ -124,6 +124,19 @@ function invalidateProjectionCache() {
   projectionDocCache = null;
 }
 
+/** Recalcula si un item guardado (local o nube) está realmente completo según
+ * la regla vigente, en vez de confiar en su flag `completed` — que puede
+ * arrastrar un `true` de cuando el módulo tenía menos scoreKeys requeridas. */
+function isStoredItemCompleted(contentId, item) {
+  const rule = PROGRESS_RULES[contentId];
+  const activityStates = Object.values(item?.activities || {});
+  if (!rule || !activityStates.length) return Boolean(item?.completed);
+  const completedCount = activityStates.filter(
+    (activity) => (activity.totalKeys ?? 0) > 0 && activity.completedKeys === activity.totalKeys
+  ).length;
+  return rule.completionRule === 'any' ? completedCount > 0 : completedCount === activityStates.length;
+}
+
 function readProjectionDoc() {
   if (projectionDocCache) return projectionDocCache;
   reconcileHubflowProgressFromEvents();
@@ -142,11 +155,14 @@ function readProjectionDoc() {
     if (!catalogIds.has(contentId)) delete doc.content[contentId];
   }
   if (doc.summary) {
-    const items = Object.values(doc.content);
+    const entries = Object.entries(doc.content);
     doc.summary = {
       ...doc.summary,
-      completedContent: items.filter((item) => item?.completed).length,
-      attemptedContent: items.filter((item) => (item?.attempts ?? 0) > 0).length,
+      // No confiar en `item.completed` tal cual: puede ser un flag heredado de
+      // una regla de puntuación con menos scoreKeys que la vigente (ver fix en
+      // mergeHubflowProgressItem). Se recalcula contra la regla actual.
+      completedContent: entries.filter(([contentId, item]) => isStoredItemCompleted(contentId, item)).length,
+      attemptedContent: entries.filter(([, item]) => (item?.attempts ?? 0) > 0).length,
       totalContent: MODULES.length,
     };
   }
@@ -168,7 +184,7 @@ function hasProgressSignal(item) {
   );
 }
 
-function mergeHubflowProgressItem(scoreDerived, projectionItem) {
+function mergeHubflowProgressItem(scoreDerived, projectionItem, rule) {
   if (!scoreDerived && !projectionItem) return null;
   if (!scoreDerived) return projectionItem ? { ...projectionItem } : null;
   if (!projectionItem || !hasProgressSignal(projectionItem)) return scoreDerived;
@@ -180,11 +196,16 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem) {
       mergedActivities[activityId] = activity;
       continue;
     }
+    const completedKeys = Math.max(existing.completedKeys ?? 0, activity.completedKeys ?? 0);
+    const totalKeys = Math.max(existing.totalKeys ?? 0, activity.totalKeys ?? 0);
     mergedActivities[activityId] = {
       ...existing,
-      completed: Boolean(existing.completed) || Boolean(activity.completed),
-      completedKeys: Math.max(existing.completedKeys ?? 0, activity.completedKeys ?? 0),
-      totalKeys: Math.max(existing.totalKeys ?? 0, activity.totalKeys ?? 0),
+      // Recalculado desde los conteos fusionados: un `completed` heredado de
+      // una regla de puntuación previa (menos scoreKeys) no debe sobrevivir
+      // si el catálogo actual exige más categorías/modos que antes.
+      completed: totalKeys > 0 && completedKeys === totalKeys,
+      completedKeys,
+      totalKeys,
       bestScorePct: Math.max(existing.bestScorePct ?? 0, activity.bestScorePct ?? 0),
       attempts: Math.max(existing.attempts ?? 0, activity.attempts ?? 0),
       completedAt: existing.completedAt || activity.completedAt || null,
@@ -192,12 +213,18 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem) {
     };
   }
 
+  const activityStates = Object.values(mergedActivities);
+  const completedCount = activityStates.filter((activity) => activity.completed).length;
+  const completed = rule
+    ? (rule.completionRule === 'any' ? completedCount > 0 : completedCount === activityStates.length)
+    : (Boolean(scoreDerived.completed) || Boolean(projectionItem.completed));
+
   return {
     ...projectionItem,
     ...scoreDerived,
     progressPct: Math.max(scoreDerived.progressPct ?? 0, projectionItem.progressPct ?? 0),
-    completed: Boolean(scoreDerived.completed) || Boolean(projectionItem.completed),
-    completedAt: scoreDerived.completedAt || projectionItem.completedAt || null,
+    completed,
+    completedAt: completed ? (scoreDerived.completedAt || projectionItem.completedAt || null) : null,
     bestScorePct: Math.max(scoreDerived.bestScorePct ?? 0, projectionItem.bestScorePct ?? 0),
     attempts: Math.max(scoreDerived.attempts ?? 0, projectionItem.attempts ?? 0),
     activities: mergedActivities,
@@ -256,7 +283,7 @@ export function getContentProgress(contentId) {
   }
   const fromScores = getContentProgressFromScoreKeys(contentId);
   const projectionItem = readProjectionDoc()?.content?.[contentId] ?? null;
-  return mergeHubflowProgressItem(fromScores, projectionItem);
+  return mergeHubflowProgressItem(fromScores, projectionItem, PROGRESS_RULES[contentId]);
 }
 
 function buildHubFlowSummary(contentStates) {

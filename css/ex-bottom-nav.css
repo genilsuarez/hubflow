@@ -218,8 +218,7 @@
     --ex-bottom-nav-practice-skip-font-size: 1.04rem;
   }
 
-  .battle-actions:not(.ex-bottom-nav .battle-actions),
-  .result-btns {
+  .battle-actions:not(.ex-bottom-nav .battle-actions) {
     position: sticky;
     bottom: 0;
     z-index: 10;
@@ -317,8 +316,7 @@
     font-size: var(--ex-bottom-nav-detail-font-size);
   }
 
-  .ex-bottom-nav .battle-actions .lp-btn,
-  .result-btns .lp-btn {
+  .ex-bottom-nav .battle-actions .lp-btn {
     width: auto;
     min-width: calc(var(--ex-bottom-nav-btn-size) * 1.1);
     min-height: var(--ex-bottom-nav-btn-size);
@@ -478,8 +476,7 @@ body.shell-ready:has(#exBottomNav #checkBtn) .scroll-body > div:has(> #checkBtn)
     padding-right: var(--ex-bottom-nav-padding-x);
   }
 
-  .ex-bottom-nav .battle-actions .lp-btn,
-  .result-btns .lp-btn {
+  .ex-bottom-nav .battle-actions .lp-btn {
     min-width: auto;
     padding: 0 10px;
   }
