@@ -249,12 +249,12 @@ export function renderStatsBreakdown() {
 
   const byCategory = Object.entries(CATEGORIES).map(([key, cat]) => {
     const mods = exercises.filter(m => m.category === key);
-    return { label: cat.label, done: mods.filter(isContentCompleted).length, total: mods.length };
+    return { label: cat.label, done: mods.filter(m => isContentCompleted(m.id)).length, total: mods.length };
   });
 
   const byCefr = TAGS.cefr.map(level => {
     const mods = exercises.filter(m => m.cefr === level);
-    return { label: level.toUpperCase(), done: mods.filter(isContentCompleted).length, total: mods.length };
+    return { label: level.toUpperCase(), done: mods.filter(m => isContentCompleted(m.id)).length, total: mods.length };
   }).filter(row => row.total > 0);
 
   catEl.innerHTML = byCategory.map(statsBarRow).join('');
