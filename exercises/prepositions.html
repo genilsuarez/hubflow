@@ -146,7 +146,7 @@
 <script type="module">
 import { CATEGORIES } from '../data/prepositions.js';
 import { shuffle } from '../js/array-utils.js';
-import { recordScore } from '../js/progress-store.js';
+import { recordScore, recordStudyItemSeen } from '../js/progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/exercise-ui.js';
 import { finishExercise, advanceStudyCard } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
@@ -295,6 +295,7 @@ function initStudy() {
 
 function renderStudyCard() {
   const item = deck[idx];
+  recordStudyItemSeen({ storagePrefix: 'prep', category: currentCat, term: item.sentence, totalItems: getData().length });
   const card = document.getElementById('fcCard');
   card.classList.remove('flip');
   document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon;

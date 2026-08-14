@@ -3,7 +3,7 @@
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
 import { shuffle } from './array-utils.js';
-import { recordScore, getStars, getScoreStatus, renderLessonProgress } from './progress-store.js';
+import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen } from './progress-store.js';
 import { Timer, formatTime } from './exercise-ui.js';
 import { speak, isSpeechAvailable } from './speech.js';
 import { initSwipe } from './swipe.js';
@@ -420,6 +420,14 @@ export class FlashcardEngine {
   renderStudyCard() {
     const item = this.deck[this.cardIdx];
     if (!item) return;
+
+    recordStudyItemSeen({
+      contentId: this.config.contentId,
+      storagePrefix: this.config.storagePrefix,
+      category: this.currentCat,
+      term: item.term,
+      totalItems: this.getItems().length,
+    });
 
     const card = document.getElementById('fcCard');
     if (card) card.classList.remove('flip');

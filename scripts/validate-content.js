@@ -502,8 +502,11 @@ async function validateCatalog() {
       if (!activity.activityId || !Array.isArray(activity.scoreKeys) || activity.scoreKeys.length === 0) {
         err('CAT-PROGRESS', `catalog.js[${module.id}]: activity requires activityId and exact scoreKeys`);
       }
-      if (activity.passScorePct !== HUBFLOW_PASS_SCORE_PCT) {
-        err('CAT-PROGRESS', `catalog.js[${module.id}].${activity.activityId}: passScorePct must be ${HUBFLOW_PASS_SCORE_PCT}`);
+      // El requisito 'study' (mastery-tiers-plan.md §5) exige ver el 100% de
+      // los items, no el HUBFLOW_PASS_SCORE_PCT — es "todos", no "el 60%".
+      const expectedPassScorePct = activity.activityId === 'study' ? 100 : HUBFLOW_PASS_SCORE_PCT;
+      if (activity.passScorePct !== expectedPassScorePct) {
+        err('CAT-PROGRESS', `catalog.js[${module.id}].${activity.activityId}: passScorePct must be ${expectedPassScorePct}`);
       }
       if (new Set(activity.scoreKeys).size !== activity.scoreKeys.length) {
         err('CAT-PROGRESS', `catalog.js[${module.id}].${activity.activityId}: duplicate scoreKeys`);

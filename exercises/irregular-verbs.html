@@ -301,7 +301,7 @@
 <script type="module">
 import { VERBS } from '../data/irregular-verbs.js';
 import { shuffle } from '../js/array-utils.js';
-import { recordScore } from '../js/progress-store.js';
+import { recordScore, recordStudyItemSeen } from '../js/progress-store.js';
 import { Timer, formatTime, wireModeTabs, syncModeTabsActive } from '../js/exercise-ui.js';
 import { finishExercise, advanceStudyCard, createMatchMode } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
@@ -366,6 +366,7 @@ function initStudy() {
 
 function renderCard() {
   const v = deck[cardIdx];
+  recordStudyItemSeen({ storagePrefix: 'irr', category: currentCat, term: v.base, totalItems: filteredData().length });
   const card = document.getElementById('fcCard');
   card.classList.remove('flip');
   document.getElementById('fcBase').textContent = v.base;

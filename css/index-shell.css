@@ -490,6 +490,14 @@
       transition: opacity 0.15s;
     }
     .level-status-banner__btn:hover { opacity: 0.85; }
+    .level-status-banner__close {
+      flex-shrink: 0; width: 24px; height: 24px; margin-left: auto;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; border: none; border-radius: var(--lp-radius-full);
+      color: var(--lp-ink-soft); font-size: .8rem; line-height: 1; cursor: pointer;
+      transition: background .15s;
+    }
+    .level-status-banner__close:hover { background: color-mix(in srgb, var(--lp-ink) 8%, transparent); }
 
     /* En escritorio va al lado de la hero-card (2ª columna del grid .resumen-hero)
        para tener más impacto visual en vez de una barra angosta debajo. */
@@ -1087,6 +1095,13 @@
       font-size: .68rem; color: var(--lp-muted); font-style: italic;
       padding: 14px 0; text-align: center;
     }
+    /* Contador de Maestría — docs/to-do/mastery-tiers-plan.md §6 Fase 3. */
+    .mastery-count {
+      display: flex; align-items: center; gap: 6px; margin: -4px 0 16px;
+      font-size: .72rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink-soft);
+    }
+    .mastery-count[hidden] { display: none; }
+    .mastery-count__icon { font-size: .9rem; }
     @media (max-width: 860px) {
       #lastActivities:has(.last-activities--empty) { display: none; }
     }
@@ -1378,6 +1393,9 @@
     .book-progress__check {
       font-size: .51rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-success);
     }
+    .book-progress__crown {
+      font-size: .68rem; line-height: 1; flex-shrink: 0;
+    }
 
     /* Encabezado de etapa (Fundamentos / Intermedio / Avanzado), usado por el
        acordeón de "Rutas guiadas" (stageHeader() en dashboard-stats.js). */
@@ -1649,6 +1667,7 @@
       }
       .book-progress__bar { height: 3px; }
       .book-progress__check { font-size: .55rem; }
+      .book-progress__crown { font-size: .62rem; }
 
       /* Guías de referencia: usaban más gap entre tarjetas (11px vs 7px de
          .shelf) y más padding interno (11/14/11/10 vs 9/12/9/8 de .book-body)

@@ -363,6 +363,18 @@
           <span class="level-status-banner__text">Confirmaste nivel B2+ · Toma el examen en DeskFlow para desbloquear contenido avanzado.</span>
           <a class="level-status-banner__btn" href="#" target="_blank" rel="noopener">Ir a DeskFlow →</a>
         </div>
+
+        <!-- Aviso de lanzamiento — Study ahora también cuenta para el ✓ de
+             Aprobado (antes solo exigía el quiz). Módulos ya aprobados pueden
+             perder el check hasta repasar Study — ver
+             docs/to-do/mastery-tiers-plan.md §4.4/§6 Fase 2. Descartable
+             (js/dashboard-stats.js renderStudyMasteryBanner); solo se muestra
+             a quien ya tenía progreso previo. -->
+        <div class="level-status-banner" id="studyMasteryBanner" hidden>
+          <span class="level-status-banner__icon" aria-hidden="true">📖</span>
+          <span class="level-status-banner__text">Ahora Study también cuenta para el ✓ — repasa tus módulos aprobados para que no pierdan el check.</span>
+          <button type="button" class="level-status-banner__close" id="studyMasteryBannerClose" aria-label="Cerrar aviso">✕</button>
+        </div>
         </div>
 
         <script>
@@ -444,6 +456,14 @@
 
         <!-- Last Activities -->
         <div class="last-activities" id="lastActivities"></div>
+
+        <!-- Contador de Maestría — docs/to-do/mastery-tiers-plan.md §6 Fase 3.
+             Aparte del conteo de Aprobados (progressSnapshot/psMastered arriba),
+             no en su lugar. Oculto si todavía no hay ningún módulo en Maestría. -->
+        <div class="mastery-count" id="masteryCount" hidden>
+          <span class="mastery-count__icon" aria-hidden="true">👑</span>
+          <span class="mastery-count__text" id="masteryCountText">0 módulos en Maestría</span>
+        </div>
 
         <div class="sec-head" id="secHeadCategory">Progreso por categoría</div>
         <div class="stats-breakdown" id="statsByCategory"></div>
@@ -756,7 +776,7 @@ import { setupSupabaseAuth } from './js/lp-auth-setup.js';
 import { consumeStatsRevealAnimation, hydrateActivityFromCloud } from './js/sync-engine.js';
 import { renderAllShelves } from './js/dashboard-shelves.js';
 import { renderHeroCard, refreshHeroSuggestion, clearPersistedHeroSuggestion } from './js/dashboard-hero.js';
-import { renderProgressSnapshot, renderLastActivities, refreshHeaderStats, renderPaths, renderStatsBreakdown } from './js/dashboard-stats.js';
+import { renderProgressSnapshot, renderLastActivities, refreshHeaderStats, renderPaths, renderStatsBreakdown, renderMasteryCount, renderStudyMasteryBanner } from './js/dashboard-stats.js';
 import { initDashboardFilters } from './js/dashboard-filters.js';
 import { initDashboardNav } from './js/dashboard-nav.js';
 import { initLevelStatus } from './js/level-status.js';
@@ -795,6 +815,8 @@ import { initLevelStatus } from './js/level-status.js';
       renderLastActivities();
       renderProgressSnapshot(animateReveal, { onOpenProgress: () => setActive('all') });
       renderStatsBreakdown();
+      renderMasteryCount();
+      renderStudyMasteryBanner();
       refreshHeaderStats(animateReveal);
       renderHeroCard({ animateReveal });
       maybePromptLoginNudge();
@@ -1089,6 +1111,8 @@ import { initLevelStatus } from './js/level-status.js';
       renderProgressSnapshot(undefined, { onOpenProgress: () => setActive('all') });
       renderPaths();
       renderStatsBreakdown();
+      renderMasteryCount();
+      renderStudyMasteryBanner();
       renderLastActivities();
       filters.applyFilters();
       hydrateHubFlowFromCloud();

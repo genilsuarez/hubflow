@@ -9,7 +9,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from './array-utils.js';
-import { recordScore, renderLessonProgress } from './progress-store.js';
+import { recordScore, renderLessonProgress, recordStudyItemSeen } from './progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs } from './exercise-ui.js';
 import { finishExercise } from './exercise-flow.js';
 import { speak } from './speech.js';
@@ -209,6 +209,15 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
   function renderStudyCard() {
     const item = deck[idx];
+
+    recordStudyItemSeen({
+      contentId,
+      storagePrefix: scoreKeyPrefix,
+      category: currentCat,
+      term: item.sentence,
+      totalItems: getData().length,
+    });
+
     const card = document.getElementById('fcCard');
     card.classList.remove('flip');
     const fcEmoji = document.getElementById('fcEmoji');

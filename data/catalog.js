@@ -2259,7 +2259,7 @@ const practiceRule = (keys) => ({
  * Todas las lecturas de progreso comparan claves exactas de esta tabla; nunca
  * infieren pertenencia con prefijos libres.
  */
-export const PROGRESS_RULES = {
+const PROGRESS_RULES_BASE = {
   'body-appearance': practiceRule(scoreKeys('vocab', ['bodyFace', 'bodyArms', 'bodyLegs', 'clothingAppearance'], ['quiz'])),
   'kitchen-cooking': practiceRule(scoreKeys('vocab', ['cookingPrep', 'cookingMethods'], ['quiz'])),
   'time-weather-seasons': practiceRule(scoreKeys('vocab', ['timeOfDay', 'weather', 'seasons'], ['quiz'])),
@@ -2419,6 +2419,90 @@ export const PROGRESS_RULES = {
   'b2-thought-groups': practiceRule(scoreKeys('pron-study', ['basicChunking', 'pausingForClauses', 'pausingForLists', 'avoidingWrongPauses'], ['quiz'])),
   'c1-discourse-marker-prosody': practiceRule(scoreKeys('pron-study', ['hesitationMarkers', 'transitionMarkers', 'clarificationMarkers', 'agreementCheckMarkers'], ['quiz'])),
 };
+
+/**
+ * IDs de módulos con un modo Study navegable de verdad (FlashcardEngine,
+ * initSentenceQuiz, o las ~11 copias inline del mismo patrón) — derivado de
+ * qué exercises/*.html importan esos motores (docs/to-do/mastery-tiers-plan.md
+ * §6 Fase 0). Los módulos que faltan aquí no tienen Study: usan
+ * dictation-engine/typed-answer-engine/analysis (solo Practice/Timed) o
+ * spelling-engine, donde "study" ya es un modo puntuado normal (entra por
+ * `spellingScoreKeys` arriba, no necesita este requisito aparte).
+ */
+const STUDY_TRACKED_MODULES = new Set([
+  'a1-alphabet-sounds', 'a1-contractions', 'a1-demonstratives', 'a1-imperatives',
+  'a1-match-meaning', 'a1-plurals-possessives', 'a1-pronouns-possessives', 'a1-questions',
+  'a1-some-any-quantity', 'a1-to-be-have', 'a1-word-stress-basic', 'a2-adverbs-frequency-manner',
+  'a2-error-spot-basic', 'a2-past-simple-continuous', 'advanced-collocations', 'animals-nature-basic',
+  'apostrophe-traps', 'articles', 'b2-abstract-nouns', 'b2-academic-vocabulary',
+  'b2-business-lexis', 'b2-compound-words', 'b2-connotation-nuance', 'b2-environment-sustainability',
+  'b2-formal-register', 'b2-future-forms', 'b2-media-technology', 'b2-mixed-conditionals',
+  'b2-modals-deduction', 'b2-negative-affixes', 'b2-nuanced-synonyms', 'b2-participle-clauses',
+  'b2-relative-advanced', 'b2-thought-groups', 'b2-travel-culture', 'body-appearance',
+  'c1-academic-lexis', 'c1-advanced-word-formation', 'c1-argumentation', 'c1-aspect-time-nuance',
+  'c1-collocation-mastery', 'c1-compounding-blends', 'c1-connotation-shades', 'c1-discourse-analysis',
+  'c1-discourse-marker-prosody', 'c1-ellipsis-substitution', 'c1-etymology-roots', 'c1-fronting-emphasis',
+  'c1-future-in-past', 'c1-hedging-softening', 'c1-idiomatic-precision', 'c1-law-politics-society',
+  'c1-nominalisation', 'c1-professional-world', 'c1-register-precision', 'c1-science-technology',
+  'c1-subjunctive-unreal', 'c1-summarising', 'causative-verbs', 'clauses',
+  'cleft-emphasis', 'clothing-shopping', 'collocations', 'colors-shapes',
+  'comparisons', 'conditionals', 'confusing-verbs', 'education-study',
+  'emotions-feelings', 'family-relationships', 'food-drink', 'gerunds-infinitives',
+  'grammar-confusions', 'health-fitness', 'home-furniture', 'house-rooms',
+  'idiom-in-context', 'idioms', 'inversions', 'irregular-verbs',
+  'kitchen-cooking', 'linking-words', 'lookalike-words', 'made-of',
+  'modals', 'money-finance', 'nature-environment', 'opposites',
+  'parts-of-speech', 'passive-voice', 'people-social-life', 'phonics',
+  'phrasal-verbs', 'places-directions', 'plural-endings', 'preferences',
+  'prepositions', 'pron-accent-variation', 'pron-british-american', 'pron-connected',
+  'pron-connected-advanced', 'pron-consonants', 'pron-contrastive-stress', 'pron-diphthongs',
+  'pron-homophones', 'pron-intonation', 'pron-linking-basic', 'pron-mispronunciations',
+  'pron-numbers', 'pron-prosody-advanced', 'pron-sentence-stress', 'pron-vowels',
+  'pron-weak-forms', 'quantifiers', 'reported-speech', 'school-classroom',
+  'shopping-retail', 'social-expressions', 'sound-natural', 'technology-internet',
+  'tenses', 'text-cohesion', 'time-weather-seasons', 'travel-airport',
+  'used-to', 'verb-chunks', 'vocab-c1', 'word-formation',
+  'word-quirks', 'word-stress-quiz', 'work-office',
+]);
+
+const STUDY_KEY_MODE_SUFFIXES = ['quiz', 'match', 'write', 'sort', 'timed', 'challenge', 'study'];
+
+/** A partir de las scoreKeys de las actividades base de un módulo, deriva una
+ * clave `<prefijo>-<categoría>-study` por categoría (mismo prefijo/categoría,
+ * sufijo de modo distinto) — la clave que instrumenta Fase 0 escribe al ver
+ * todos los items de esa categoría en Study. */
+function deriveStudyKeys(baseScoreKeys) {
+  const derived = new Set();
+  for (const key of baseScoreKeys) {
+    const parts = key.split('-');
+    const last = parts[parts.length - 1];
+    const base = STUDY_KEY_MODE_SUFFIXES.includes(last) ? parts.slice(0, -1) : parts;
+    derived.add(`${base.join('-')}-study`);
+  }
+  return [...derived];
+}
+
+/**
+ * Aprobado ahora exige Study (ver todos los items al menos una vez) en los
+ * módulos con modo Study navegable — docs/to-do/mastery-tiers-plan.md §4.1/§5.
+ * El umbral es 100% fijo (no HUBFLOW_PASS_SCORE_PCT): es "todos los items",
+ * no "el 60% de los items".
+ */
+function withStudyRequirement(id, rule) {
+  if (!STUDY_TRACKED_MODULES.has(id)) return rule;
+  const baseKeys = rule.requiredActivities.flatMap((activity) => activity.scoreKeys);
+  return {
+    ...rule,
+    requiredActivities: [
+      ...rule.requiredActivities,
+      { activityId: 'study', scoreKeys: deriveStudyKeys(baseKeys), passScorePct: 100 },
+    ],
+  };
+}
+
+export const PROGRESS_RULES = Object.fromEntries(
+  Object.entries(PROGRESS_RULES_BASE).map(([id, rule]) => [id, withStudyRequirement(id, rule)])
+);
 
 /**
  * MODULE_DEPTH — metadata de profundidad para comunicar escala al usuario.

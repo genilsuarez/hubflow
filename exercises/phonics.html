@@ -174,7 +174,7 @@
 <script type="module">
 import { CATEGORIES } from '../data/phonics.js';
 import { shuffle } from '../js/array-utils.js';
-import { recordScore } from '../js/progress-store.js';
+import { recordScore, recordStudyItemSeen } from '../js/progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, wireModeTabs } from '../js/exercise-ui.js';
 import { finishExercise, advanceStudyCard, createMatchMode } from '../js/exercise-flow.js';
 import { speak } from '../js/speech.js';
@@ -261,6 +261,7 @@ function renderStudyCard() {
     document.getElementById('fcTip').textContent = item.tip;
     currentWord = item.word;
   }
+  recordStudyItemSeen({ storagePrefix: 'phonics', category: currentCat, term: currentWord, totalItems: getData().length });
   document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
   updProgress(idx + 1, deck.length);
 }

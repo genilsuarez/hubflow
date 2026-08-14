@@ -64,7 +64,7 @@
 <script type="module">
 import { CATEGORIES } from '../data/word-formation.js';
 import { shuffle } from '../js/array-utils.js';
-import { recordScore } from '../js/progress-store.js';
+import { recordScore, recordStudyItemSeen } from '../js/progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../js/exercise-ui.js';
 import { finishExercise, advanceStudyCard } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
@@ -85,7 +85,7 @@ function checkAnswer() { if (answered) return; const input = document.getElement
 document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
 function finishPractice() { const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v }); recordScore(`wf-${currentCat}`, pct); }
 function initStudy() { deck = shuffle(getData()); idx = 0; document.querySelector('[data-area="study"]').classList.add('show'); renderStudyCard(); }
-function renderStudyCard() { const item = deck[idx]; document.getElementById('fcCard').classList.remove('flip'); document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon; document.getElementById('fcSentence').textContent = item.sentence.replace('___', '_____'); document.getElementById('fcRoot').textContent = `Root: ${item.root}`; document.getElementById('fcAnswer').textContent = item.correct; document.getElementById('fcExplain').textContent = item.explain; document.getElementById('fcCounter').textContent = `${idx+1} / ${deck.length}`; updProgress(idx+1, deck.length); }
+function renderStudyCard() { const item = deck[idx]; recordStudyItemSeen({ storagePrefix: 'wf', category: currentCat, term: item.sentence, totalItems: getData().length }); document.getElementById('fcCard').classList.remove('flip'); document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon; document.getElementById('fcSentence').textContent = item.sentence.replace('___', '_____'); document.getElementById('fcRoot').textContent = `Root: ${item.root}`; document.getElementById('fcAnswer').textContent = item.correct; document.getElementById('fcExplain').textContent = item.explain; document.getElementById('fcCounter').textContent = `${idx+1} / ${deck.length}`; updProgress(idx+1, deck.length); }
 document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
 document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
 document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));

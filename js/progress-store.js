@@ -18,6 +18,7 @@ import { enrichHubflowContentEntry, checkLevelAdvancement } from './lp-progress-
 const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
 const CATALOG_STORAGE_KEY = 'learnflow:catalog:hubflow:v1';
 const ACTIVITY_STORAGE_KEY = 'learnflow:activity:hubflow:v1';
+const STUDY_SEEN_STORAGE_KEY = 'learnflow:study-seen:hubflow:v1';
 const SCORE_KEY_VERSION = ':v1';
 const MAX_SCORE_HISTORY = 20;
 const MAX_ACTIVITY_EVENTS = 200;
@@ -270,12 +271,26 @@ function getContentProgressFromScoreKeys(contentId) {
   };
 }
 
+/**
+ * Maestría (docs/to-do/mastery-tiers-plan.md §4.1): todas las categorías × todos
+ * los modos con score de MODULE_DEPTH, excluyendo Battle y el requisito Study
+ * (ya lo exige Aprobado aparte, ver getModuleMatrixProgress/computeModuleMatrixCore).
+ * Requiere `completed` (Aprobado) también, para que la corona nunca aparezca
+ * sin el check — la corona es un nivel encima, no un sustituto.
+ */
+function isModuleMastered(contentId, completed) {
+  if (!completed) return false;
+  const matrix = getModuleMatrixProgress(contentId);
+  return Boolean(matrix && matrix.total > 0 && matrix.passed === matrix.total);
+}
+
 export function getContentProgress(contentId) {
   if (shouldDeferStatsDisplay()) {
     return {
       contentId,
       progressPct: 0,
       completed: false,
+      mastered: false,
       bestScorePct: 0,
       attempts: 0,
       activities: {},
@@ -283,7 +298,10 @@ export function getContentProgress(contentId) {
   }
   const fromScores = getContentProgressFromScoreKeys(contentId);
   const projectionItem = readProjectionDoc()?.content?.[contentId] ?? null;
-  return mergeHubflowProgressItem(fromScores, projectionItem, PROGRESS_RULES[contentId]);
+  const merged = mergeHubflowProgressItem(fromScores, projectionItem, PROGRESS_RULES[contentId]);
+  if (!merged) return merged;
+  merged.mastered = isModuleMastered(contentId, merged.completed);
+  return merged;
 }
 
 function buildHubFlowSummary(contentStates) {
@@ -334,6 +352,10 @@ function getHubFlowProgressSummary() {
 
 export function isContentCompleted(contentId) {
   return getContentProgress(contentId)?.completed || false;
+}
+
+export function isContentMastered(contentId) {
+  return getContentProgress(contentId)?.mastered || false;
 }
 
 export function getBestScore(contentId) {
@@ -658,6 +680,32 @@ export function recordScore(key, pct, context = {}) {
   }
 }
 
+/**
+ * Marca un item como visto en modo Study y, si el set de vistos creció,
+ * refleja el % acumulado en el scoreKey `<prefix>-<cat>-study` vía
+ * `recordScore` — mismo contrato que quiz/write/etc (ver PROGRESS_RULES en
+ * data/catalog.js). El set de vistos se persiste aparte (STUDY_SEEN_STORAGE_KEY)
+ * porque, a diferencia de un quiz, Study no tiene un intento con inicio/fin: la
+ * cobertura se acumula entre sesiones y hay que recordar qué items concretos
+ * ya se vieron, no solo el último % alcanzado.
+ */
+export function recordStudyItemSeen({ contentId, storagePrefix, category, term, totalItems }) {
+  if (!storagePrefix || !category || !term || !totalItems) return;
+  const scoreKey = `${storagePrefix}-${category}-study`;
+  const map = readJson(STUDY_SEEN_STORAGE_KEY, {});
+  const seen = new Set(map[scoreKey] || []);
+  if (seen.has(term)) return;
+  seen.add(term);
+  map[scoreKey] = [...seen];
+  try {
+    localStorage.setItem(STUDY_SEEN_STORAGE_KEY, JSON.stringify(map));
+  } catch {
+    /* ignore quota errors */
+  }
+  const pct = Math.min(100, Math.round((seen.size / totalItems) * 100));
+  recordScore(scoreKey, pct, { contentId, activity: 'study' });
+}
+
 // Sube progreso + eventos a Supabase cuando el usuario está autenticado.
 // Debounced porque recordScore puede dispararse varias veces seguidas
 // (p.ej. quiz de varias preguntas registrando cada intento).
@@ -856,18 +904,32 @@ function humanizeCategoryKey(key) {
  * visibles en pantalla, por lo que puede usarse tanto desde la página del
  * ejercicio (modal de detalle) como desde el dashboard (tarjetas de módulo),
  * donde el DOM del ejercicio de ese módulo no existe.
+ *
+ * `includeStudy` controla si la columna Study (requisito de Aprobado, no de
+ * Maestría — mastery-tiers-plan.md §4.1/§5) entra en la matriz. Por defecto
+ * queda fuera: los ✓ por categoría/modo del selector de la página de
+ * ejercicio (`renderModuleCompletionMarks`) siempre significaron "quiz+match+
+ * timed completos", y exigir también Study ahí borraría de golpe checks ya
+ * ganados de cuentas reales sin relación con lo que esa marca comunica. El
+ * modal de detalle y el % de la tarjeta del dashboard sí lo piden en `true`
+ * explícitamente porque ahí sí hace falta ver si falta Study.
  * @param {string} contentId
+ * @param {{includeStudy?: boolean}} [opts]
  * @returns {null | {passScorePct:number, prefix:string, categoryKeys:string[],
  *                   trackedModes:(string|null)[], cellFor:(cat:string, mode:string|null)=>object}}
  */
-function computeModuleMatrixCore(contentId) {
+function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
   const rule = PROGRESS_RULES[contentId];
   if (!rule) return null;
 
-  const passScorePct = rule.requiredActivities[0]?.passScorePct || HUBFLOW_PASS_SCORE_PCT;
+  const studyActivity = rule.requiredActivities.find((activity) => activity.activityId === 'study');
+  const matrixActivities = rule.requiredActivities.filter((activity) => activity.activityId !== 'study');
+  if (!matrixActivities.length) return null;
+
+  const passScorePct = matrixActivities[0]?.passScorePct || HUBFLOW_PASS_SCORE_PCT;
 
   // Determine the storage prefix from the first scoreKey
-  const sampleKey = rule.requiredActivities[0]?.scoreKeys[0] || '';
+  const sampleKey = matrixActivities[0]?.scoreKeys[0] || '';
   const prefix = sampleKey.split('-')[0]; // e.g. "vocab", "ing", "art"
 
   // Extract unique categories from scoreKeys
@@ -876,7 +938,7 @@ function computeModuleMatrixCore(contentId) {
   const modesFromKeys = new Set();
   let hasNoModeSuffix = false;
 
-  for (const act of rule.requiredActivities) {
+  for (const act of matrixActivities) {
     for (const key of act.scoreKeys) {
       const parts = key.split('-');
       const lastPart = parts[parts.length - 1];
@@ -916,15 +978,34 @@ function computeModuleMatrixCore(contentId) {
     }
   }
 
+  // La columna Study (Fase 0/1 de mastery-tiers-plan.md §4.1) se agrega con su
+  // propio umbral (100% de items vistos, no el passScorePct de quiz/match/timed)
+  // solo cuando el caller la pide explícitamente (ver doc del includeStudy
+  // arriba). No afecta el booleano de Maestría cuando se pide: `completed`
+  // ya exige Study al 100%, así que esa celda siempre pasa cuando el módulo
+  // está aprobado (ver isModuleMastered).
+  const studyPassPct = studyActivity?.passScorePct ?? 100;
+  if (includeStudy && studyActivity && !trackedModes.includes('study')) {
+    trackedModes = [...trackedModes, 'study'];
+  }
+
   const cellFor = (cat, mode) => {
+    const threshold = mode === 'study' ? studyPassPct : passScorePct;
     const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
     const history = readScoreHistory(key);
     const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
     const attempts = history.length;
-    return { key, best, attempts, passed: best >= passScorePct };
+    return { key, best, attempts, passed: best >= threshold };
   };
 
-  return { passScorePct, prefix, categoryKeys: [...categoriesFromKeys], trackedModes, cellFor };
+  return {
+    passScorePct,
+    studyPassPct: includeStudy && studyActivity ? studyPassPct : null,
+    prefix,
+    categoryKeys: [...categoriesFromKeys],
+    trackedModes,
+    cellFor,
+  };
 }
 
 /**
@@ -934,10 +1015,10 @@ function computeModuleMatrixCore(contentId) {
  * @returns {null | {passScorePct:number, prefix:string, categories:{key:string,label:string}[],
  *                   displayModes:(string|null)[], cellFor:(cat:string, mode:string|null)=>object}}
  */
-function buildModuleMatrix(contentId) {
-  const core = computeModuleMatrixCore(contentId);
+function buildModuleMatrix(contentId, { includeStudy = false } = {}) {
+  const core = computeModuleMatrixCore(contentId, { includeStudy });
   if (!core) return null;
-  const { passScorePct, prefix, categoryKeys, trackedModes, cellFor } = core;
+  const { passScorePct, studyPassPct, prefix, categoryKeys, trackedModes, cellFor } = core;
 
   // Orden de columnas = orden de los mode tabs en pantalla; los modos rastreados
   // que no tienen tab visible se anexan según el orden canónico.
@@ -959,7 +1040,7 @@ function buildModuleMatrix(contentId) {
       .map((key) => ({ key, label: humanizeCategoryKey(key) })),
   ];
 
-  return { passScorePct, prefix, categories, displayModes, cellFor };
+  return { passScorePct, studyPassPct, prefix, categories, displayModes, cellFor };
 }
 
 /**
@@ -970,8 +1051,8 @@ function buildModuleMatrix(contentId) {
  * @param {string} contentId
  * @returns {null | {passed:number, total:number, progressPct:number}}
  */
-export function getModuleMatrixProgress(contentId) {
-  const core = computeModuleMatrixCore(contentId);
+export function getModuleMatrixProgress(contentId, { includeStudy = false } = {}) {
+  const core = computeModuleMatrixCore(contentId, { includeStudy });
   if (!core) return null;
   const { categoryKeys, trackedModes, cellFor } = core;
 
@@ -994,13 +1075,13 @@ export function getModuleMatrixProgress(contentId) {
  */
 function openProgressDetail(contentId) {
   if (!contentId) return;
-  const matrix = buildModuleMatrix(contentId);
+  const matrix = buildModuleMatrix(contentId, { includeStudy: true });
   if (!matrix) return;
 
   // Remove existing modal if open
   document.getElementById('progressDetailModal')?.remove();
 
-  const { passScorePct, categories, displayModes, cellFor } = matrix;
+  const { passScorePct, studyPassPct, categories, displayModes, cellFor } = matrix;
   const showModeInPill = displayModes.length > 1;
 
   const mod = MODULES.find(m => m.id === contentId);
@@ -1020,7 +1101,9 @@ function openProgressDetail(contentId) {
       const value = passed ? '✓' : attempts > 0 ? `${best}%` : '·';
       const modeLabel = MODE_SHORT[mode] || 'Practice';
       const modeIcon = MODE_ICONS[mode] || '◉';
-      const title = `${modeLabel}: ${attempts > 0 ? `${best}%` : 'pendiente'}`;
+      const title = mode === 'study'
+        ? `Study: ${attempts > 0 ? `${best}% visto` : 'pendiente'}`
+        : `${modeLabel}: ${attempts > 0 ? `${best}%` : 'pendiente'}`;
       const modeMarkup = showModeInPill
         ? `<span class="pg-status__mode" aria-hidden="true">${modeIcon}</span>`
         : '';
@@ -1053,6 +1136,7 @@ function openProgressDetail(contentId) {
       <div class="pg-modal__body"><ul class="pg-list">${rowsHTML}</ul></div>
       <footer class="pg-modal__legend">
         <span class="pg-legend-item"><span class="pg-status pg-status--pass">✓</span> ≥${passScorePct}%</span>
+        ${studyPassPct != null ? `<span class="pg-legend-item"><span class="pg-status__mode" aria-hidden="true">${MODE_ICONS.study}</span> Study: visto ${studyPassPct}%</span>` : ''}
         <span class="pg-legend-item"><span class="pg-status pg-status--tried">%</span> intentado</span>
         <span class="pg-legend-item"><span class="pg-status">·</span> pendiente</span>
       </footer>

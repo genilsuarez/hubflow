@@ -7,7 +7,7 @@
 
 import { MODULES, CATEGORIES, TAGS, catColor, moduleMap } from '../data/catalog.js';
 import { LEARNING_PATHS, pathCefrRange, pathsByStage } from '../data/learning-paths.js';
-import { getBestScore, isContentCompleted, getProgressStats } from './progress-store.js';
+import { getBestScore, isContentCompleted, isContentMastered, getProgressStats } from './progress-store.js';
 import { shouldDeferStatsDisplay, shouldDeferActivityDisplay } from './sync-engine.js';
 import { animateText, animateCssVar } from './lp-stats-animate.js';
 import { shortMeta } from './dashboard-shelves.js';
@@ -237,6 +237,56 @@ function statsBarRow({ label, done, total }) {
       <span class="stats-bar-frac">${done}/${total}</span>
     </div>
   </div>`;
+}
+
+const STUDY_MASTERY_BANNER_DISMISSED_KEY = 'hf-study-mastery-banner-dismissed';
+
+/**
+ * Aviso puntual de lanzamiento (docs/to-do/mastery-tiers-plan.md §4.4/§6 Fase 2):
+ * Study ahora también cuenta para el ✓ de Aprobado, así que módulos que ya
+ * tenían check pueden perderlo hasta repasar Study. Solo se muestra a quien
+ * ya tenía progreso previo (a una cuenta nueva no le dice nada) y se puede
+ * descartar — el dismiss se recuerda en localStorage y no vuelve a aparecer.
+ */
+export function renderStudyMasteryBanner() {
+  const el = document.getElementById('studyMasteryBanner');
+  if (!el) return;
+  if (shouldDeferStatsDisplay()) { el.hidden = true; return; }
+
+  let dismissed = false;
+  try { dismissed = localStorage.getItem(STUDY_MASTERY_BANNER_DISMISSED_KEY) === '1'; } catch { /* localStorage bloqueado */ }
+  if (dismissed) { el.hidden = true; return; }
+
+  const stats = getProgressStats();
+  const hasPriorProgress = (stats.completedContent || 0) > 0 || (stats.totalAttempts || 0) > 0;
+  el.hidden = !hasPriorProgress;
+
+  const closeBtn = document.getElementById('studyMasteryBannerClose');
+  if (closeBtn && !closeBtn.dataset.bound) {
+    closeBtn.dataset.bound = '1';
+    closeBtn.addEventListener('click', () => {
+      el.hidden = true;
+      try { localStorage.setItem(STUDY_MASTERY_BANNER_DISMISSED_KEY, '1'); } catch { /* localStorage bloqueado */ }
+    });
+  }
+}
+
+/** Contador de Maestría (docs/to-do/mastery-tiers-plan.md §4.1/§6 Fase 3) —
+ * aparte del contador de Aprobados que ya vive en refreshHeaderStats/
+ * progressSnapshot, no en su lugar. */
+export function renderMasteryCount() {
+  const el = document.getElementById('masteryCount');
+  if (!el) return;
+  if (shouldDeferStatsDisplay()) { el.hidden = true; return; }
+
+  const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
+  const masteredCount = exercises.filter(m => isContentMastered(m.id)).length;
+
+  el.hidden = masteredCount === 0;
+  const textEl = document.getElementById('masteryCountText');
+  if (textEl) {
+    textEl.textContent = `${masteredCount} módulo${masteredCount === 1 ? '' : 's'} en Maestría`;
+  }
 }
 
 /** "Mis estadísticas" — desglose de completado por categoría y por nivel CEFR. */

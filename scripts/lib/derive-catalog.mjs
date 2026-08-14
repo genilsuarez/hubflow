@@ -130,7 +130,15 @@ export async function deriveEmittedScoreKeys(modules) {
     }
 
     const scorePrefix = html.match(/scoreKeyPrefix:\s*['"]([^'"]+)['"]/)?.[1];
-    if (scorePrefix) categoryKeys.forEach((cat) => emitted.add(`${scorePrefix}-${cat}`));
+    if (scorePrefix) {
+      categoryKeys.forEach((cat) => emitted.add(`${scorePrefix}-${cat}`));
+      // initSentenceQuiz's Study card llama recordStudyItemSeen() por cada
+      // carta vista (mastery-tiers-plan.md Fase 0) — igual que -quiz abajo,
+      // es incondicional para todo consumidor del engine.
+      if (html.includes('initSentenceQuiz')) {
+        categoryKeys.forEach((cat) => emitted.add(`${scorePrefix}-${cat}-study`));
+      }
+    }
 
     const storagePrefix = html.match(/storagePrefix:\s*['"]([^'"]+)['"]/)?.[1];
     if (storagePrefix && html.includes('SpellingEngine')) {
@@ -138,6 +146,9 @@ export async function deriveEmittedScoreKeys(modules) {
       categoryKeys.forEach((cat) => modes.forEach((mode) => emitted.add(`${storagePrefix}-${cat}-${mode}`)));
     } else if (storagePrefix && html.includes('FlashcardEngine')) {
       categoryKeys.forEach((cat) => emitted.add(`${storagePrefix}-${cat}-quiz`));
+      // FlashcardEngine.renderStudyCard() llama recordStudyItemSeen() por
+      // cada carta vista — mismo motivo que arriba.
+      categoryKeys.forEach((cat) => emitted.add(`${storagePrefix}-${cat}-study`));
     }
 
     // Shared Match mode (js/exercise-flow.js createMatchMode) — recordScore()
@@ -145,6 +156,13 @@ export async function deriveEmittedScoreKeys(modules) {
     // the generic recordScore(`...${currentCat}...`) scan above.
     const matchScoreKey = html.match(/matchScoreKey:\s*['"]([^'"]+)['"]/)?.[1];
     if (matchScoreKey) categoryKeys.forEach((cat) => emitted.add(`${matchScoreKey}-${cat}-match`));
+
+    // Copias inline del patrón Study de sentence-quiz-engine (11 ejercicios,
+    // ver docs/to-do/mastery-tiers-plan.md Fase 0) — llaman recordStudyItemSeen()
+    // con un storagePrefix literal en vez de importar el engine compartido.
+    for (const match of html.matchAll(/recordStudyItemSeen\(\s*\{[^}]*storagePrefix:\s*['"]([^'"]+)['"]/g)) {
+      categoryKeys.forEach((cat) => emitted.add(`${match[1]}-${cat}-study`));
+    }
   }
   return emitted;
 }

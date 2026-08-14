@@ -69,13 +69,18 @@ function depthHTML(mod) {
 function progressHTML(mod) {
   const progress = getContentProgress(mod.id);
   if (!progress) return '';
-  // Mismo cálculo (categorías × modos rastreados) que el modal "Progreso del
-  // módulo" — evita que la tarjeta muestre un % distinto al del detalle para
-  // el mismo módulo (ver getModuleMatrixProgress en progress-store.js).
-  const matrix = getModuleMatrixProgress(mod.id);
+  // Mismo cálculo (categorías × modos rastreados, incluido Study) que el modal
+  // "Progreso del módulo" — evita que la tarjeta muestre un % distinto al del
+  // detalle para el mismo módulo (ver getModuleMatrixProgress en progress-store.js).
+  const matrix = getModuleMatrixProgress(mod.id, { includeStudy: true });
   const pct = Math.round(matrix ? matrix.progressPct : progress.progressPct);
   if (progress.completed) {
-    return `<div class="book-progress book-progress--done" aria-label="Completado"><span class="book-progress__check">✓</span><span class="book-progress__bar"><span class="book-progress__fill" style="width:100%"></span></span></div>`;
+    // Corona (Maestría) junto al check — nivel encima de Aprobado, nunca en su
+    // lugar. Ver docs/to-do/mastery-tiers-plan.md §4.1/§5.
+    const crown = progress.mastered
+      ? `<span class="book-progress__crown" role="img" aria-label="Maestría">👑</span>`
+      : '';
+    return `<div class="book-progress book-progress--done" aria-label="${progress.mastered ? 'Completado — Maestría' : 'Completado'}"><span class="book-progress__check">✓</span>${crown}<span class="book-progress__bar"><span class="book-progress__fill" style="width:100%"></span></span></div>`;
   }
   return `<div class="book-progress" aria-label="${pct}% completado"><span class="book-progress__bar"><span class="book-progress__fill" style="width:${pct}%"></span></span><span class="book-progress__pct">${pct}%</span></div>`;
 }
