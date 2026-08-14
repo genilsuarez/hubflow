@@ -851,12 +851,16 @@ function humanizeCategoryKey(key) {
 }
 
 /**
- * Deriva la matriz de progreso (secciones × modos) de un módulo.
+ * Núcleo (sin DOM) de la matriz categoría × modo de un módulo: qué categorías
+ * y qué modos se rastrean, y el evaluador de celdas. No depende de los chips
+ * visibles en pantalla, por lo que puede usarse tanto desde la página del
+ * ejercicio (modal de detalle) como desde el dashboard (tarjetas de módulo),
+ * donde el DOM del ejercicio de ese módulo no existe.
  * @param {string} contentId
- * @returns {null | {passScorePct:number, prefix:string, categories:{key:string,label:string}[],
- *                   displayModes:(string|null)[], cellFor:(cat:string, mode:string|null)=>object}}
+ * @returns {null | {passScorePct:number, prefix:string, categoryKeys:string[],
+ *                   trackedModes:(string|null)[], cellFor:(cat:string, mode:string|null)=>object}}
  */
-function buildModuleMatrix(contentId) {
+function computeModuleMatrixCore(contentId) {
   const rule = PROGRESS_RULES[contentId];
   if (!rule) return null;
 
@@ -912,6 +916,29 @@ function buildModuleMatrix(contentId) {
     }
   }
 
+  const cellFor = (cat, mode) => {
+    const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
+    const history = readScoreHistory(key);
+    const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+    const attempts = history.length;
+    return { key, best, attempts, passed: best >= passScorePct };
+  };
+
+  return { passScorePct, prefix, categoryKeys: [...categoriesFromKeys], trackedModes, cellFor };
+}
+
+/**
+ * Deriva la matriz de progreso (secciones × modos) de un módulo, con orden y
+ * etiquetas visuales tomadas de los chips en pantalla.
+ * @param {string} contentId
+ * @returns {null | {passScorePct:number, prefix:string, categories:{key:string,label:string}[],
+ *                   displayModes:(string|null)[], cellFor:(cat:string, mode:string|null)=>object}}
+ */
+function buildModuleMatrix(contentId) {
+  const core = computeModuleMatrixCore(contentId);
+  if (!core) return null;
+  const { passScorePct, prefix, categoryKeys, trackedModes, cellFor } = core;
+
   // Orden de columnas = orden de los mode tabs en pantalla; los modos rastreados
   // que no tienen tab visible se anexan según el orden canónico.
   const visualModes = readVisualModeOrder();
@@ -924,22 +951,40 @@ function buildModuleMatrix(contentId) {
   // las categorías sin chip visible conservan el orden de los scoreKeys.
   const visualCats = readVisualCategories();
   const visualLabels = new Map(visualCats.map((c) => [c.key, c.label]));
+  const categoriesFromKeys = new Set(categoryKeys);
   const categories = [
     ...visualCats.filter((c) => categoriesFromKeys.has(c.key)),
-    ...[...categoriesFromKeys]
+    ...categoryKeys
       .filter((key) => !visualLabels.has(key))
       .map((key) => ({ key, label: humanizeCategoryKey(key) })),
   ];
 
-  const cellFor = (cat, mode) => {
-    const key = mode === null ? `${prefix}-${cat}` : `${prefix}-${cat}-${mode}`;
-    const history = readScoreHistory(key);
-    const best = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
-    const attempts = history.length;
-    return { key, best, attempts, passed: best >= passScorePct };
-  };
-
   return { passScorePct, prefix, categories, displayModes, cellFor };
+}
+
+/**
+ * Progreso agregado de un módulo (categorías × modos rastreados), sin
+ * depender del DOM del ejercicio — misma cuenta que el modal "Progreso del
+ * módulo" (`openProgressDetail`), para que la tarjeta del dashboard y el
+ * detalle nunca muestren porcentajes distintos para el mismo módulo.
+ * @param {string} contentId
+ * @returns {null | {passed:number, total:number, progressPct:number}}
+ */
+export function getModuleMatrixProgress(contentId) {
+  const core = computeModuleMatrixCore(contentId);
+  if (!core) return null;
+  const { categoryKeys, trackedModes, cellFor } = core;
+
+  let passed = 0;
+  let total = 0;
+  for (const cat of categoryKeys) {
+    for (const mode of trackedModes) {
+      total++;
+      if (cellFor(cat, mode).passed) passed++;
+    }
+  }
+
+  return { passed, total, progressPct: total > 0 ? (passed / total) * 100 : 0 };
 }
 
 /**

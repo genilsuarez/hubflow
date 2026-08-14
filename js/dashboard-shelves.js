@@ -6,7 +6,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { MODULES, CATEGORIES, SUBCATEGORIES, getModuleDepth } from '../data/catalog.js';
-import { getContentProgress } from './progress-store.js';
+import { getContentProgress, getModuleMatrixProgress } from './progress-store.js';
 import { getActiveLevel, levelUnlocks, LEVEL_ORDER } from './lp-progress-summary.js';
 
 const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
@@ -69,7 +69,11 @@ function depthHTML(mod) {
 function progressHTML(mod) {
   const progress = getContentProgress(mod.id);
   if (!progress) return '';
-  const pct = Math.round(progress.progressPct);
+  // Mismo cálculo (categorías × modos rastreados) que el modal "Progreso del
+  // módulo" — evita que la tarjeta muestre un % distinto al del detalle para
+  // el mismo módulo (ver getModuleMatrixProgress en progress-store.js).
+  const matrix = getModuleMatrixProgress(mod.id);
+  const pct = Math.round(matrix ? matrix.progressPct : progress.progressPct);
   if (progress.completed) {
     return `<div class="book-progress book-progress--done" aria-label="Completado"><span class="book-progress__check">✓</span><span class="book-progress__bar"><span class="book-progress__fill" style="width:100%"></span></span></div>`;
   }
