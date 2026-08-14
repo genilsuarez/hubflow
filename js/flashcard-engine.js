@@ -609,11 +609,10 @@ export class FlashcardEngine {
     for (let i = 1; i <= catKeys.length; i++) {
       const cat = catKeys[(startIdx + i) % catKeys.length];
       if (cat === this.currentCat) continue;
-      for (const mode of followModes) {
-        if (!getScoreStatus(this._scoreKeyFor(cat, mode)).passed) {
-          return { cat, mode, isNewCategory: true };
-        }
-      }
+      const hasPending = followModes.some(mode => !getScoreStatus(this._scoreKeyFor(cat, mode)).passed);
+      // A new category always starts with Study — jumping straight to Quiz/Timed/
+      // Match would test material the learner hasn't seen in this category yet.
+      if (hasPending) return { cat, mode: 'study', isNewCategory: true };
     }
 
     return null;
