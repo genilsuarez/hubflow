@@ -499,12 +499,26 @@
     }
     .level-status-banner__close:hover { background: color-mix(in srgb, var(--lp-ink) 8%, transparent); }
 
+    /* Contenedor de los 3 avisos posibles (nivel compartido, placement test,
+       Study cuenta para el check). Cada uno decide su visibilidad por su
+       cuenta sin coordinarse entre sí, así que pueden estar visibles a la
+       vez — se apilan en columna en vez de superponerse (bug: "se ven
+       montados los dos cuadros" cuando dos banners coinciden). */
+    .hero-status-banners { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
     /* En escritorio va al lado de la hero-card (2ª columna del grid .resumen-hero)
        para tener más impacto visual en vez de una barra angosta debajo. */
     @media (min-width: 640px) {
-      .resumen-hero .level-status-banner {
+      .resumen-hero .hero-status-banners {
         grid-column: 2;
         grid-row: 1;
+        /* El grid estira este contenedor a la altura de la hero-card (celda 1)
+           por ser más alta; sin esto, un solo aviso quedaba con su altura de
+           contenido y dejaba hueco vacío debajo — descuadrado con la tarjeta. */
+        height: 100%;
+      }
+      .resumen-hero .level-status-banner {
+        flex: 1;
         align-items: center;
         padding: 16px 18px;
       }

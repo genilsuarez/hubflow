@@ -1196,8 +1196,20 @@ export function renderModuleCompletionMarks(contentId) {
     stampDoneMark(btn, done, 'sección completada');
   });
 
+  // El tab Study se marca aparte con su propio umbral (100% de items vistos, no
+  // el passScorePct de quiz/match/timed) — no participa del check de sección de
+  // arriba para no exigir Study donde antes no hacía falta (ver includeStudy en
+  // computeModuleMatrixCore).
+  const studyMatrix = buildModuleMatrix(contentId, { includeStudy: true });
+
   document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]').forEach((btn) => {
     const mode = btn.dataset.mode;
+    if (mode === 'study') {
+      if (!studyMatrix || !studyMatrix.studyPassPct) return;
+      const done = studyMatrix.categories.every(({ key }) => studyMatrix.cellFor(key, 'study').passed);
+      stampDoneMark(btn, done, 'modo completado');
+      return;
+    }
     if (!displayModes.includes(mode)) return;
     const done = categories.every(({ key }) => cellFor(key, mode).passed);
     stampDoneMark(btn, done, 'modo completado');

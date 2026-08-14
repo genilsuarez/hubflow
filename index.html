@@ -338,6 +338,12 @@
           <button class="hero-card__alt" id="heroWhatIsLearnFlow" type="button" hidden>¿Qué es LearnFlow?</button>
         </div>
 
+        <!-- Los tres avisos de abajo pueden estar visibles a la vez (cada uno
+             lo decide su propio módulo, sin coordinarse entre sí) — este
+             wrapper los apila en columna en vez de superponerlos, ya que
+             todos comparten la misma celda del grid (ver .resumen-hero
+             .hero-status-banners en index-shell.css). -->
+        <div class="hero-status-banners" id="heroStatusBanners">
         <!-- LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
              Oculto por defecto; level-status.js lo muestra siempre que el nivel activo
              no haya avanzado: con el progreso propio de HubFlow hacia el 50% mientras
@@ -374,6 +380,7 @@
           <span class="level-status-banner__icon" aria-hidden="true">📖</span>
           <span class="level-status-banner__text">Ahora Study también cuenta para el ✓ — repasa tus módulos aprobados para que no pierdan el check.</span>
           <button type="button" class="level-status-banner__close" id="studyMasteryBannerClose" aria-label="Cerrar aviso">✕</button>
+        </div>
         </div>
         </div>
 
