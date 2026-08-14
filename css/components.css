@@ -154,11 +154,21 @@
 @media (max-width: 639px) { .quiz-options { grid-template-columns: 1fr; } }
 
 .quiz-opt {
+  position: relative;
   font-family: var(--lp-font-body); font-weight: var(--lp-weight-bold); font-size: .8rem;
-  padding: 11px 14px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
+  padding: 11px 14px 11px 32px; border-radius: var(--lp-radius-sm); border: 1.5px solid var(--lp-border);
   background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
   transition: all .2s var(--lp-ease); text-align: center;
 }
+.quiz-opt__num {
+  position: absolute; top: 50%; left: 8px; translate: 0 -50%;
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .62rem; font-weight: var(--lp-weight-bold);
+  background: color-mix(in srgb, var(--lp-ink) 8%, transparent); color: var(--lp-muted);
+}
+.quiz-opt.correct .quiz-opt__num { background: var(--lp-success); color: #fff; }
+.quiz-opt.wrong .quiz-opt__num { background: var(--lp-error); color: #fff; }
 @media (hover: hover) {
   .quiz-opt:hover:not(.disabled) { border-color: var(--lp-accent); background: var(--lp-accent-soft); transform: translateY(-1px); }
 }

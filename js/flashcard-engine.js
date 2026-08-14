@@ -283,6 +283,10 @@ export class FlashcardEngine {
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
         if (this.currentMode === 'study') this.navCard(-1);
+      } else if ((this.currentMode === 'quiz' || this.currentMode === 'timed') && /^[1-4]$/.test(e.key)) {
+        e.preventDefault();
+        const opt = document.querySelectorAll('#quizOptions .quiz-opt')[Number(e.key) - 1];
+        if (opt && !opt.classList.contains('disabled')) opt.click();
       } else if (this.currentMode === 'battle' && this.battle.phase === 'claim') {
         if (e.key === '1') { e.preventDefault(); this.battleClaim(1); }
         else if (e.key === '2') { e.preventDefault(); this.battleClaim(2); }
@@ -728,12 +732,12 @@ export class FlashcardEngine {
 
     if (optsEl) {
       optsEl.style.pointerEvents = 'none';
-      optsEl.innerHTML = options.map(opt =>
-        `<button class="quiz-opt">${opt.text}</button>`
+      optsEl.innerHTML = options.map((opt, i) =>
+        `<button class="quiz-opt"><span class="quiz-opt__num">${i + 1}</span>${opt.text}</button>`
       ).join('');
 
       optsEl.querySelectorAll('.quiz-opt').forEach((btn, idx) => {
-        btn.addEventListener('click', () => this.handleQuizAnswer(btn, options[idx].correct, optsEl));
+        btn.addEventListener('click', () => this.handleQuizAnswer(btn, idx, options, optsEl));
       });
 
       // Prevent ghost clicks from previous touch on mobile
@@ -741,22 +745,17 @@ export class FlashcardEngine {
     }
   }
 
-  handleQuizAnswer(btn, correct, container) {
+  handleQuizAnswer(btn, idx, options, container) {
     const allBtns = container.querySelectorAll('.quiz-opt');
     allBtns.forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
 
-    if (correct) {
+    if (options[idx].correct) {
       btn.classList.add('correct');
       this.quizScore++;
     } else {
       btn.classList.add('wrong');
-      // Highlight correct
-      const correctItem = this.deck[this.quizIdx];
-      const correctText = correctItem.term;
-      const correctMeaning = (correctItem.meaning || correctItem.description || '').slice(0, 55);
-      allBtns.forEach(b => {
-        if (b.textContent === correctText || b.textContent === correctMeaning) b.classList.add('correct');
-      });
+      const correctIdx = options.findIndex(o => o.correct);
+      allBtns[correctIdx]?.classList.add('correct');
     }
 
     this.quizIdx++;
