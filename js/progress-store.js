@@ -663,9 +663,14 @@ function recordActivityEvent(key, pct, timestamp, context) {
  * { contentId, activity, runId, durationMs, metrics } as a third argument.
  */
 export function recordScore(key, pct, context = {}) {
-  const normalizedPct = Math.max(0, Math.min(100, Number(pct) || 0));
+  const requestedPct = Math.max(0, Math.min(100, Number(pct) || 0));
   const timestamp = new Date().toISOString();
   const history = readScoreHistory(key);
+  // El progreso nunca baja: un repaso incompleto (o cualquier otra causa) no
+  // debe hacer retroceder un % ya alcanzado en un intento anterior — se
+  // guarda el mayor entre el intento nuevo y el mejor histórico.
+  const previousBest = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+  const normalizedPct = Math.max(requestedPct, previousBest);
   history.unshift({ pct: normalizedPct, date: timestamp, timestamp, context });
   localStorage.setItem(versionedKey(key), JSON.stringify(history.slice(0, MAX_SCORE_HISTORY)));
   recordActivityEvent(key, normalizedPct, timestamp, context);

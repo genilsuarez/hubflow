@@ -3,7 +3,7 @@
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
 import { shuffle } from './array-utils.js';
-import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen } from './progress-store.js';
+import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen, refreshModuleCompletionMarks } from './progress-store.js';
 import { Timer, formatTime } from './exercise-ui.js';
 import { speak, isSpeechAvailable } from './speech.js';
 import { initSwipe } from './swipe.js';
@@ -346,6 +346,10 @@ export class FlashcardEngine {
     // Scroll active pill into view without animating the bar on load/switch
     const active = bar.querySelector('.pill-btn.active');
     if (active) active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
+
+    // Los pills se destruyen y reconstruyen en cada click (ver arriba), lo que
+    // borra el ✓ inyectado por stampDoneMark — hay que repintarlo cada vez.
+    refreshModuleCompletionMarks();
   }
 
   // ═══ MODE MANAGEMENT ═══
