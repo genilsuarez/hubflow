@@ -90,30 +90,41 @@
 }
 .timer-display.warn { animation: pulse .5s infinite alternate; }
 
-/* ─── FLASHCARD ─── */
+/* ─── FLASHCARD ───
+   Face swap uses a scaleX "squeeze" + display toggle rather than a true
+   rotateY/backface-visibility 3D flip: WebKit and Chromium both have a known
+   GPU-compositor race where the rotated face briefly paints mirrored mid-
+   transition (seen live, confirmed on both Safari and Chromium). Squeezing
+   to zero width and swapping which face has display:flex at that instant
+   can never expose a mirrored face, since only one face is ever painted. */
 .fc-card {
   width: 100%; max-width: 720px; height: 260px;
-  cursor: pointer; perspective: 1200px; position: relative;
+  cursor: pointer; position: relative;
 }
 .fc-inner {
   position: absolute; inset: 0; border-radius: var(--lp-radius-lg);
-  transition: transform .5s var(--lp-ease), opacity .15s;
-  transform-style: preserve-3d; will-change: transform;
+  transition: transform .15s var(--lp-ease);
+  transform-origin: center;
 }
-.fc-card.flip .fc-inner { transform: rotateY(180deg); }
+.fc-card.squeeze .fc-inner { transform: scaleX(.02); }
 .fc-face {
-  position: absolute; inset: 0; backface-visibility: hidden;
-  border-radius: var(--lp-radius-lg); display: flex; flex-direction: column;
+  position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; padding: 24px; gap: 8px;
   text-align: center; background: var(--lp-surface);
+  border-radius: var(--lp-radius-lg);
   border: 1.5px solid var(--lp-border); box-shadow: var(--lp-shadow-sm);
 }
 .fc-back {
-  transform: rotateY(180deg);
+  display: none;
   background: var(--lp-accent-soft); border-color: var(--lp-accent);
   box-shadow: var(--lp-shadow-lg);
 }
+.fc-card.flip .fc-face:not(.fc-back) { display: none; }
+.fc-card.flip .fc-face.fc-back { display: flex; }
 [data-theme="dark"] .fc-back { background: var(--lp-surface); border-color: var(--lp-accent); }
+@media (prefers-reduced-motion: reduce) {
+  .fc-inner, .battle-card .fc-inner { transition: none; }
+}
 .fc-emoji { font-size: 2.8rem; line-height: 1; }
 .fc-term { font-family: var(--lp-font-display); font-size: 1.8rem; font-weight: var(--lp-weight-semibold); color: var(--lp-ink); letter-spacing: -.01em; }
 .fc-detail {

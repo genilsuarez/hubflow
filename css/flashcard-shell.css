@@ -142,12 +142,14 @@ h1 { display: flex; align-items: center; gap: 6px; }
   width: 100%;
   max-width: 360px;
   height: calc(var(--lp-match-battle-h, 259px) - var(--lp-battle-stack-overhead, 140px));
-  perspective: 1200px;
   position: relative;
   margin: 0 auto 4px;
 }
-.battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: transform .55s var(--ease); transform-style: preserve-3d; }
-.battle-card.flipped .fc-inner { transform: rotateY(180deg); }
+/* Squeeze + display-swap flip — see components.css .fc-card comment for why. */
+.battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--radius-lg); transition: transform .15s var(--ease); transform-origin: center; }
+.battle-card.squeeze .fc-inner { transform: scaleX(.02); }
+.battle-card.flipped .fc-face:not(.fc-back) { display: none; }
+.battle-card.flipped .fc-face.fc-back { display: flex; }
 .battle-card .fc-face { border-radius: var(--radius-lg); padding: 16px; }
 .battle-card .fc-emoji { font-size: 2.4rem; }
 .battle-card .fc-term { font-size: 1.4rem; }

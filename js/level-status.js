@@ -17,12 +17,18 @@ import { getActiveLevel, getCombinedLevelProgress } from './lp-progress-summary.
 
 const HUBFLOW_THRESHOLD_PCT = 50;
 
+/** Misma paleta por nivel que dashboard-filters.js usa en los chips de CEFR —
+ * se reutiliza aquí para que el ring del banner y los filtros hablen el mismo
+ * lenguaje visual de color por nivel. */
+const LEVEL_COLORS = { a1: '#22c55e', a2: '#eab308', b1: '#f97316', b2: '#ef4444', c1: '#a855f7', c2: '#374151' };
+
 export function refreshLevelStatusBanner() {
   const banner = document.getElementById('levelStatusBanner');
-  const icon = document.getElementById('levelStatusBannerIcon');
   const text = document.getElementById('levelStatusBannerText');
   const link = document.getElementById('levelStatusBannerLink');
-  if (!banner || !icon || !text) return;
+  const ringFill = document.getElementById('levelStatusBannerRingFill');
+  const ringPct = document.getElementById('levelStatusBannerRingPct');
+  if (!banner || !text) return;
 
   const level = getActiveLevel();
   const upperLevel = level.toUpperCase();
@@ -40,9 +46,16 @@ export function refreshLevelStatusBanner() {
   }
 
   banner.hidden = false;
+  banner.style.setProperty('--level-color', LEVEL_COLORS[level] || 'var(--lp-accent)');
+
+  // El ring llena al 100% cuando se alcanza el umbral propio de HubFlow
+  // (50%, no 100%) — visualmente "completo" significa "ya cumpliste tu
+  // parte", no "terminaste todo el contenido".
+  const normalized = hubflowDone ? 100 : Math.max(0, Math.min(100, Math.round((hubflowPct / HUBFLOW_THRESHOLD_PCT) * 100)));
+  if (ringFill) ringFill.setAttribute('stroke-dasharray', `${normalized}, 100`);
+  if (ringPct) ringPct.textContent = hubflowDone ? '✓' : `${hubflowPct}%`;
 
   if (hubflowDone) {
-    icon.textContent = '🔒';
     text.textContent = `Nivel ${upperLevel} · ya hiciste tu parte en HubFlow. Tu nivel es compartido con FluentFlow y LyricFlow — revisa qué falta.`;
     if (link) {
       link.hidden = false;
@@ -51,8 +64,7 @@ export function refreshLevelStatusBanner() {
       }
     }
   } else {
-    icon.textContent = '🎯';
-    text.textContent = `Nivel ${upperLevel} · llevas ${hubflowPct}% de ${HUBFLOW_THRESHOLD_PCT}% en HubFlow para hacer tu parte y avanzar de nivel.`;
+    text.textContent = `Nivel ${upperLevel} · te falta ${HUBFLOW_THRESHOLD_PCT - hubflowPct}% en HubFlow para avanzar de nivel.`;
     if (link) link.hidden = true;
   }
 }

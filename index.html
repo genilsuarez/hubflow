@@ -345,7 +345,13 @@
              50% pero otra app (FluentFlow/LyricFlow) todavía no llega a la suya.
              Va al lado de la hero-card (misma fila del grid) para más impacto visual. -->
         <div class="level-status-banner" id="levelStatusBanner" hidden>
-          <span class="level-status-banner__icon" id="levelStatusBannerIcon" aria-hidden="true">🔒</span>
+          <div class="level-status-banner__ring" id="levelStatusBannerRing" aria-hidden="true">
+            <svg viewBox="0 0 36 36" class="level-status-banner__ring-svg">
+              <path class="level-status-banner__ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+              <path class="level-status-banner__ring-fill" id="levelStatusBannerRingFill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+            </svg>
+            <span class="level-status-banner__ring-label" id="levelStatusBannerRingPct">0%</span>
+          </div>
           <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
           <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
         </div>

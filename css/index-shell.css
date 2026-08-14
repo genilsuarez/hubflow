@@ -463,7 +463,21 @@
       border-radius: var(--lp-radius-lg);
     }
     .level-status-banner[hidden] { display: none; }
-    .level-status-banner__icon { font-size: 1rem; flex-shrink: 0; line-height: 1.35; }
+    /* Ring de progreso — mismo lenguaje visual que el "Level Progress" de
+       FluentFlow (SVG donut, stroke-dasharray, rotate(-90deg) para empezar
+       arriba), con la paleta por nivel que HubFlow ya usa en los chips CEFR. */
+    .level-status-banner__ring { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
+    .level-status-banner__ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .level-status-banner__ring-bg { fill: none; stroke: var(--lp-border); stroke-width: 3.5; }
+    .level-status-banner__ring-fill {
+      fill: none; stroke: var(--level-color, var(--lp-accent)); stroke-width: 3.5; stroke-linecap: round;
+      transition: stroke-dasharray 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .level-status-banner__ring-label {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold); letter-spacing: -0.02em;
+      color: var(--level-color, var(--lp-accent));
+    }
     .level-status-banner__text {
       flex: 1 1 160px; min-width: 0;
       font-size: 0.78rem; font-weight: 500; color: var(--lp-ink-soft); line-height: 1.35;
@@ -486,7 +500,8 @@
         align-items: center;
         padding: 16px 18px;
       }
-      .resumen-hero .level-status-banner__icon { font-size: 1.3rem; }
+      .resumen-hero .level-status-banner__ring { width: 58px; height: 58px; }
+      .resumen-hero .level-status-banner__ring-label { font-size: .8rem; }
       .resumen-hero .level-status-banner__text { font-size: 0.85rem; }
       .resumen-hero .level-status-banner__btn { align-self: center; }
     }

@@ -235,11 +235,22 @@ export class FlashcardEngine {
 
     // Battle card tap-to-flip (mobile) — mirrors the Space/Enter peek shortcut above
     document.getElementById('battleCard')?.addEventListener('click', () => {
-      document.getElementById('battleCard')?.classList.toggle('flipped');
+      this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
     });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
+      const overlay = document.getElementById('resultOverlay');
+      if (overlay?.classList.contains('show')) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          overlay.querySelector('.result-btns .lp-btn--purple')?.click();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          overlay.querySelector('#resultDismiss')?.click();
+        }
+        return;
+      }
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         switch (this.currentMode) {
@@ -260,7 +271,7 @@ export class FlashcardEngine {
             } else if (cardFlipped) {
               this.battleNext(); // peeked → skip & advance
             } else {
-              document.getElementById('battleCard')?.classList.add('flipped');
+              this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
             }
             break;
           }
@@ -505,8 +516,19 @@ export class FlashcardEngine {
     btn.setAttribute('aria-label', label);
   }
 
+  // Squeezes the card to zero width, swaps which face is visible while it's
+  // invisible, then lets it un-squeeze — see components.css .fc-card comment.
+  squeezeToggle(el, cls) {
+    if (!el || el.classList.contains('squeeze')) return;
+    el.classList.add('squeeze');
+    setTimeout(() => {
+      el.classList.toggle(cls);
+      el.classList.remove('squeeze');
+    }, 150);
+  }
+
   flipCard() {
-    document.getElementById('fcCard')?.classList.toggle('flip');
+    this.squeezeToggle(document.getElementById('fcCard'), 'flip');
   }
 
   navCard(delta) {
@@ -941,14 +963,14 @@ export class FlashcardEngine {
   battleClaim(player) {
     this.battle.claimer = player;
     this.battle.phase = 'judge';
-    document.getElementById('battleCard')?.classList.add('flipped');
+    this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
     this._setBattleInstruction(`Player ${player} claimed! Correct?`);
     this.showBattleActions('judge');
   }
 
   battleSkip() {
     this.battle.phase = 'next';
-    document.getElementById('battleCard')?.classList.add('flipped');
+    this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
     this._setBattleInstruction('Skipped — no points');
     this.showBattleActions('next');
   }

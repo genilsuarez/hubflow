@@ -165,6 +165,21 @@ Each exercise imports one of these shared engines:
 
 Each family uses `[data-color="..."]` on its wrapper to pick up category color (`--lp-cat-*`).
 
+### Flashcard flip — never use rotateY/backface-visibility
+
+`.fc-card` / `.battle-card` flip via a **scaleX "squeeze" + display swap** (`.fc-inner` → `scaleX(.02)`,
+JS toggles `display:flex`/`none` on `.fc-face`/`.fc-face.fc-back` at the squeeze midpoint, see
+`squeezeToggle()` in `flashcard-engine.js` and the `.fc-card`/`.fc-inner`/`.fc-face` rules in
+`components.css`), **not** a 3D `rotateY(180deg)` + `backface-visibility: hidden` flip.
+
+**Why:** a true 3D flip was tried first and showed the *other* face mirrored/upside-down for a frame
+mid-transition — confirmed on both Safari and Chromium, via a recorded video (screenshot below).
+This is a GPU-compositor race in `backface-visibility` under frame pressure, not something
+`-webkit-` prefixes or `translateZ` reliably fix. The squeeze approach never renders both faces at
+once (verified by sampling every animation frame's computed `display`), so it cannot glitch this way
+regardless of browser or device load. **Do not reintroduce `rotateY`/`backface-visibility`/`perspective`
+for card flips in this codebase — reach for the squeeze pattern instead.**
+
 ## Mi Progreso — Learning paths
 
 19 cross-category paths with pedagogical purpose, covering all 150 modules (30/30 per CEFR level).
