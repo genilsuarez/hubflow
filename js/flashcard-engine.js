@@ -7,6 +7,7 @@ import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStud
 import { Timer, formatTime } from './exercise-ui.js';
 import { speak, isSpeechAvailable, hasVoiceForLang } from './speech.js';
 import { initSwipe } from './swipe.js';
+import { RESULT_TITLES } from './result-copy.js';
 
 // Preferencia persistente del toggle de pronunciación automática (on/off).
 // Convención `lp-*` como el resto de preferencias de usuario de la plataforma.
@@ -134,7 +135,7 @@ export class FlashcardEngine {
             <div class="fc-emoji" id="fcEmoji"></div>
             <div class="fc-term" id="fcWord"></div>
             <div class="fc-ipa" id="fcIpa"></div>
-            <div class="fc-hint">tap to flip</div>
+            <div class="fc-hint">toca para voltear</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-emoji" id="fcBackEmoji" style="font-size:2rem;"></div>
@@ -152,7 +153,7 @@ export class FlashcardEngine {
         <button class="${v.accentBtnClass}" id="nextBtn">→</button>
         <!-- Quiz/Timed: barra reducida (progreso + skip) — ver BOTTOM_NAV.ORDER.quiz
              en ex-bottom-nav.js. Oculto fuera de esos modos. -->
-        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Skip</button>
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
         <!-- Match: barra reducida (progreso + sonido) — mismo lenguaje visual que
              speakBtn (toggle on/off persistido), pero controla el feedback sonoro
              de aciertos/errores en vez de la pronunciación. -->
@@ -166,13 +167,16 @@ export class FlashcardEngine {
         <div class="quiz-prompt__text" id="quizText"></div>
       </div>
       <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-next-wrap" id="quizNextWrap" style="display:none;margin-top:14px;text-align:center;">
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn">Siguiente →</button>
+      </div>
     </div>
     <div data-area="match">
       <div class="pair-grid" id="pairGrid"></div>
       <div id="pairScore"></div>
     </div>
     <div data-area="battle">
-      <div class="battle-instruction" id="battleInstruction">Who knows? Tap your button!</div>
+      <div class="battle-instruction" id="battleInstruction">¿Quién sabe? ¡Toca tu botón!</div>
       <div class="battle-scores">
         <div class="player-score p1"><span class="p-label">P1</span><span class="p-points" id="p1Score">0</span></div>
         <span class="vs-badge">vs</span>
@@ -192,15 +196,15 @@ export class FlashcardEngine {
       </div>
       <div class="battle-actions" id="battleClaim">
         <button class="lp-btn lp-btn--ghost" id="battleClaimP1">🙋 P1</button>
-        <button class="lp-btn lp-btn--ghost" id="battleSkipBtn">⏭ Skip</button>
+        <button class="lp-btn lp-btn--ghost" id="battleSkipBtn">⏭ Saltar</button>
         <button class="lp-btn lp-btn--ghost" id="battleClaimP2">🙋 P2</button>
       </div>
       <div class="battle-actions" id="battleJudge" style="display:none;">
-        <button class="lp-btn lp-btn--primary" id="battleJudgeCorrect">✓ Correct</button>
-        <button class="lp-btn lp-btn--danger" id="battleJudgeWrong">✗ Wrong</button>
+        <button class="lp-btn lp-btn--primary" id="battleJudgeCorrect">✓ Correcto</button>
+        <button class="lp-btn lp-btn--danger" id="battleJudgeWrong">✗ Incorrecto</button>
       </div>
       <div class="battle-actions" id="battleNext" style="display:none;">
-        <button class="${v.accentBtnClass}" id="battleNextBtn">Next →</button>
+        <button class="${v.accentBtnClass}" id="battleNextBtn">Siguiente →</button>
       </div>
     </div>
   </div>
@@ -734,7 +738,7 @@ export class FlashcardEngine {
 
       overlay.innerHTML = `
         <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
           <div style="font-size:3rem;margin-bottom:8px;">📖</div>
           <div class="result-title">¡Tarjetas repasadas! 🎉</div>
           <div class="result-sub">${subtitle}</div>
@@ -758,7 +762,7 @@ export class FlashcardEngine {
     } else {
       overlay.innerHTML = `
         <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
           <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
           <div class="result-title">¡Lección completa! 🎉</div>
           <div class="result-sub">Aprobaste todos los modos de esta lección.</div>
@@ -802,11 +806,11 @@ export class FlashcardEngine {
 
     if (qType === 'termFromDesc') {
       if (emojiEl) emojiEl.textContent = item.emoji;
-      if (labelEl) labelEl.textContent = 'What term matches this?';
+      if (labelEl) labelEl.textContent = '¿Qué término corresponde?';
       if (textEl) textEl.textContent = meaning + (item.time ? ` (${item.time})` : '');
     } else {
       if (emojiEl) emojiEl.textContent = '❓';
-      if (labelEl) labelEl.textContent = `What does "${item.term}" mean?`;
+      if (labelEl) labelEl.textContent = `¿Qué significa "${item.term}"?`;
       if (textEl) textEl.textContent = `${item.emoji} ${item.term}`;
     }
 
@@ -825,6 +829,9 @@ export class FlashcardEngine {
       }));
     }
 
+    const nextWrap = document.getElementById('quizNextWrap');
+    if (nextWrap) nextWrap.style.display = 'none';
+
     if (optsEl) {
       optsEl.style.pointerEvents = 'none';
       optsEl.innerHTML = options.map((opt, i) =>
@@ -840,6 +847,10 @@ export class FlashcardEngine {
     }
   }
 
+  // Marca la respuesta y espera un clic explícito en "Siguiente" en vez de
+  // auto-avanzar: con la pausa fija anterior (900ms) no daba tiempo a leer
+  // cuál era la correcta al fallar — el momento en que más se aprende.
+  // Mismo patrón que el quiz de LyricFlow (js/quiz.js).
   handleQuizAnswer(btn, idx, options, container) {
     const allBtns = container.querySelectorAll('.quiz-opt');
     allBtns.forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
@@ -855,7 +866,17 @@ export class FlashcardEngine {
 
     this.quizIdx++;
     this.updateQuizProgress();
-    setTimeout(() => this.renderQuiz(), 900);
+
+    const nextWrap = document.getElementById('quizNextWrap');
+    const nextBtn = document.getElementById('quizNextBtn');
+    if (nextWrap && nextBtn) {
+      nextBtn.textContent = this.quizIdx >= this.quizTotal ? 'Ver resultado →' : 'Siguiente →';
+      nextWrap.style.display = '';
+      nextBtn.onclick = () => this.renderQuiz();
+      nextBtn.focus({ preventScroll: true });
+    } else {
+      this.renderQuiz();
+    }
   }
 
   updateQuizProgress() {
@@ -1082,7 +1103,7 @@ export class FlashcardEngine {
   battleSkip() {
     this.battle.phase = 'next';
     this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
-    this._setBattleInstruction('Skipped — no points');
+    this._setBattleInstruction('Saltado — sin puntos');
     this.showBattleActions('next');
   }
 
@@ -1137,13 +1158,13 @@ export class FlashcardEngine {
     let title, trophy;
     if (this.battle.p1 > this.battle.p2) { trophy = '🏆'; title = 'Player 1 wins!'; }
     else if (this.battle.p2 > this.battle.p1) { trophy = '🏆'; title = 'Player 2 wins!'; }
-    else { trophy = '🤝'; title = "It's a tie!"; }
+    else { trophy = '🤝'; title = '¡Empate!'; }
 
     const overlay = document.getElementById('resultOverlay');
     if (!overlay) return;
     overlay.innerHTML = `
       <div class="result-box">
-        <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
+        <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
         <div style="font-size:3rem;margin-bottom:8px;">${trophy}</div>
         <div class="result-title">${title}</div>
         <div class="result-sub">${this.battle.p1} — ${this.battle.p2}</div>
@@ -1193,7 +1214,7 @@ export class FlashcardEngine {
   showResultOverlay(correct, total) {
     const pct = Math.round((correct / total) * 100);
     const stars = getStars(pct);
-    const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
+    const titles = RESULT_TITLES;
 
     // Calculate elapsed time for timed mode
     let timeHtml = '';
@@ -1219,18 +1240,18 @@ export class FlashcardEngine {
 
     overlay.innerHTML = `
       <div class="result-box">
-        <button class="result-close" id="resultDismiss" aria-label="Close">✕</button>
+        <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
         <div class="result-stars">
           <span class="result-star ${stars >= 1 ? 'lit' : ''}">⭐</span>
           <span class="result-star ${stars >= 2 ? 'lit' : ''}">⭐</span>
           <span class="result-star ${stars >= 3 ? 'lit' : ''}">⭐</span>
         </div>
         <div class="result-title">${titles[stars]}</div>
-        <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
+        <div class="result-sub">${correct}/${total} correctas — ${pct}%</div>
         ${timeHtml}
         ${nextHtml}
         <div class="result-btns">
-          <button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Try Again</button>
+          <button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Reintentar</button>
           <button class="lp-btn lp-btn--purple" id="resultPrimary">${primaryLabel}</button>
         </div>
       </div>

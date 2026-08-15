@@ -7,6 +7,7 @@ import { shuffle } from './array-utils.js';
 import { recordScore, getStars, renderLessonProgress } from './progress-store.js';
 import { updateProgress, Timer, formatTime } from './exercise-ui.js';
 import { setupPracticeBottomNav } from './ex-bottom-nav.js';
+import { RESULT_TITLES } from './result-copy.js';
 
 /** Max cards per session — random subset + shuffle on each level load / restart. */
 const ITEMS_PER_SESSION = 12;
@@ -467,7 +468,7 @@ export class SpellingEngine {
     const overlay = document.getElementById('resultOverlay');
     if (!overlay) return;
 
-    const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
+    const titles = RESULT_TITLES;
 
     // Calculate elapsed time for timed mode
     let timeHtml = '';
@@ -485,14 +486,14 @@ export class SpellingEngine {
         </div>
         <div class="result-title">${titles[stars]}</div>
         <div class="result-sub">
-          Spelling: ${spellingOk}/${total}
-          ${this.config.hasColorPicker ? `· Colors: ${colorOk}/${total}` : ''}
-          · Score: ${pct}%
+          Ortografía: ${spellingOk}/${total}
+          ${this.config.hasColorPicker ? `· Colores: ${colorOk}/${total}` : ''}
+          · Puntaje: ${pct}%
         </div>
         ${timeHtml}
         <div class="result-btns">
-          <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Try Again</button>
-          <button class="lp-btn lp-btn--ghost" id="resultClose">✕ Close</button>
+          <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Reintentar</button>
+          <button class="lp-btn lp-btn--ghost" id="resultClose">✕ Cerrar</button>
         </div>
       </div>
     `;

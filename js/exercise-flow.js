@@ -7,12 +7,13 @@
 import { shuffle } from './array-utils.js';
 import { recordScore, getStars } from './progress-store.js';
 import { syncModeTabsActive, formatTime } from './exercise-ui.js';
+import { RESULT_TITLES } from './result-copy.js';
 
 /** Show result overlay */
 function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSeconds }) {
   const pct = Math.round((correct / total) * 100);
   const stars = getStars(pct);
-  const titles = { 3: 'Perfect! 🎉', 2: 'Well done!', 1: 'Keep practicing!' };
+  const titles = RESULT_TITLES;
 
   const timeHtml = elapsedSeconds != null
     ? `<div class="result-time">⏱ ${formatTime(elapsedSeconds)}</div>`
@@ -20,17 +21,17 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
 
   containerEl.innerHTML = `
     <div class="result-box">
-      <button class="result-close" id="resultClose" aria-label="Close">✕</button>
+      <button class="result-close" id="resultClose" aria-label="Cerrar">✕</button>
       <div class="result-stars">
         <span class="result-star ${stars >= 1 ? 'lit' : ''}">⭐</span>
         <span class="result-star ${stars >= 2 ? 'lit' : ''}">⭐</span>
         <span class="result-star ${stars >= 3 ? 'lit' : ''}">⭐</span>
       </div>
       <div class="result-title">${titles[stars]}</div>
-      <div class="result-sub">${correct}/${total} correct — ${pct}%</div>
+      <div class="result-sub">${correct}/${total} correctas — ${pct}%</div>
       ${timeHtml}
       <div class="result-btns">
-        <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Try Again</button>
+        <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Reintentar</button>
         ${onStudy ? '<button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>' : ''}
       </div>
     </div>
