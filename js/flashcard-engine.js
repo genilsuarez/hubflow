@@ -17,6 +17,44 @@ function readAutoSpeak() {
   try { return localStorage.getItem(AUTOSPEAK_KEY) === '1'; } catch { return false; }
 }
 
+// Preferencia persistente del feedback sonoro de Match (mismo patrón que
+// AUTOSPEAK_KEY: toggle on/off, apagado por defecto).
+const MATCH_SOUND_KEY = 'lp-match-sound';
+
+function readMatchSound() {
+  try { return localStorage.getItem(MATCH_SOUND_KEY) === '1'; } catch { return false; }
+}
+
+// Tonos generados con Web Audio API (sin assets .mp3/.wav) para el feedback
+// de Match: un "tick" al seleccionar, un acorde ascendente al acertar y un
+// tono grave al fallar. Un solo AudioContext compartido, creado perezosamente
+// (los navegadores lo bloquean hasta el primer gesto del usuario, que aquí ya
+// existe porque el tono se dispara desde un click).
+let sharedAudioCtx = null;
+function playTone(freq, duration = 120, type = 'sine') {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    if (!sharedAudioCtx) sharedAudioCtx = new AudioCtx();
+    if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
+    const osc = sharedAudioCtx.createOscillator();
+    const gain = sharedAudioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.16, sharedAudioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, sharedAudioCtx.currentTime + duration / 1000);
+    osc.connect(gain).connect(sharedAudioCtx.destination);
+    osc.start();
+    osc.stop(sharedAudioCtx.currentTime + duration / 1000);
+  } catch { /* audio no soportado/bloqueado — falla en silencio */ }
+}
+function playSelectTone() { playTone(660, 70, 'sine'); }
+function playMatchCorrectTone() {
+  playTone(880, 140, 'sine');
+  setTimeout(() => playTone(1175, 160, 'sine'), 90);
+}
+function playMatchWrongTone() { playTone(220, 180, 'sawtooth'); }
+
 const MODE_META = {
   study: '📖 Study',
   quiz: '⚡ Quiz',
@@ -112,6 +150,13 @@ export class FlashcardEngine {
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="${v.accentBtnClass}" id="nextBtn">→</button>
+        <!-- Quiz/Timed: barra reducida (progreso + skip) — ver BOTTOM_NAV.ORDER.quiz
+             en ex-bottom-nav.js. Oculto fuera de esos modos. -->
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Skip</button>
+        <!-- Match: barra reducida (progreso + sonido) — mismo lenguaje visual que
+             speakBtn (toggle on/off persistido), pero controla el feedback sonoro
+             de aciertos/errores en vez de la pronunciación. -->
+        <button class="listen-btn" id="matchSoundBtn" aria-pressed="false" aria-label="Sonido: OFF" style="width:44px;height:44px;border-radius:50%;${v.speakBtnStyle}font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;">🔇</button>
       </div>
     </div>
     <div data-area="quiz">
@@ -190,6 +235,8 @@ export class FlashcardEngine {
 
     // Pronunciación automática (botón de estado, no pulsador)
     this.autoSpeak = readAutoSpeak();
+    // Feedback sonoro de Match (botón de estado, mismo patrón que autoSpeak)
+    this.matchSound = readMatchSound();
 
     this.init();
   }
@@ -214,6 +261,13 @@ export class FlashcardEngine {
     } else if (speakBtn) {
       speakBtn.style.display = 'none';
     }
+
+    // Match: toggle de feedback sonoro (estado on/off, persistido)
+    document.getElementById('matchSoundBtn')?.addEventListener('click', () => this.toggleMatchSound());
+    this.syncMatchSoundBtn();
+
+    // Quiz/Timed: saltar la pregunta actual sin puntuar
+    document.getElementById('quizSkipBtn')?.addEventListener('click', () => this.skipQuiz());
 
     document.querySelectorAll('[data-mode]').forEach(btn => {
       btn.addEventListener('click', () => this.setMode(btn.dataset.mode));
@@ -371,6 +425,7 @@ export class FlashcardEngine {
     window.__syncBattleProgressPlacement?.();
     window.__syncBottomNavMode?.();
     this.syncSpeakBtn();
+    this.syncMatchSoundBtn();
     window.__resetModeStageScroll?.();
     window.__syncModeTabIndicator?.({ scrollActive: true });
   }
@@ -530,6 +585,35 @@ export class FlashcardEngine {
     btn.textContent = on ? '🔊' : '🔇';
     btn.title = label;
     btn.setAttribute('aria-label', label);
+  }
+
+  /** Alterna el feedback sonoro de Match y lo persiste — mismo patrón que toggleAutoSpeak. */
+  toggleMatchSound() {
+    this.matchSound = !this.matchSound;
+    try { localStorage.setItem(MATCH_SOUND_KEY, this.matchSound ? '1' : '0'); } catch { /* storage bloqueado */ }
+    this.syncMatchSoundBtn();
+    if (this.matchSound) playSelectTone();
+  }
+
+  /** Refleja el estado del toggle de sonido en el botón — mismo motivo que syncSpeakBtn. */
+  syncMatchSoundBtn() {
+    const btn = document.getElementById('matchSoundBtn');
+    if (!btn) return;
+    const on = this.matchSound;
+    const label = on ? 'Sonido: ON' : 'Sonido: OFF';
+    btn.setAttribute('aria-pressed', String(on));
+    btn.classList.toggle('is-on', on);
+    btn.textContent = on ? '🔊' : '🔇';
+    btn.title = label;
+    btn.setAttribute('aria-label', label);
+  }
+
+  /** Salta la pregunta actual de Quiz/Timed sin puntuar — mismo espíritu que battleSkip. */
+  skipQuiz() {
+    if (this.quizIdx >= this.quizTotal) return;
+    this.quizIdx++;
+    this.updateQuizProgress();
+    this.renderQuiz();
   }
 
   // Squeezes the card to zero width, swaps which face is visible while it's
@@ -857,6 +941,7 @@ export class FlashcardEngine {
       this.pairState.right = el;
     }
     el.classList.add('selected');
+    if (this.matchSound) playSelectTone();
 
     if (this.pairState.left && this.pairState.right) this.checkPair();
   }
@@ -866,6 +951,7 @@ export class FlashcardEngine {
     const rightTerm = this.pairState.right.dataset.term;
 
     if (leftTerm === rightTerm) {
+      if (this.matchSound) playMatchCorrectTone();
       this.pairState.left.classList.remove('selected');
       this.pairState.right.classList.remove('selected');
       this.pairState.left.classList.add('matched');
@@ -883,6 +969,7 @@ export class FlashcardEngine {
         setTimeout(() => this.showResultOverlay(score, this.pairState.total), 600);
       }
     } else {
+      if (this.matchSound) playMatchWrongTone();
       this.pairState.errors++;
       this.updateMatchProgress();
       const l = this.pairState.left;

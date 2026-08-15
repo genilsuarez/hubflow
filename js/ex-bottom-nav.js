@@ -32,6 +32,12 @@ export const BOTTOM_NAV = {
    */
   PRACTICE_NAV_IDS: ['checkBtn', 'skipBtn', 'hintBtn'],
 
+  /** Quiz/Timed: barra reducida (progreso + skip). Ver perfil `quiz`. */
+  QUIZ_NAV_IDS: ['quizSkipBtn'],
+
+  /** Match: barra reducida (progreso + sonido). Ver perfil `match`. */
+  MATCH_NAV_IDS: ['matchSoundBtn'],
+
   /**
    * Button roles — id, desktopOnly, and BEM role class applied by applyRoleClasses().
    * Order within each mode is defined in ORDER.
@@ -47,6 +53,8 @@ export const BOTTOM_NAV = {
     check: { id: 'checkBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__primary-btn' },
     next: { id: 'nextBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__nav-btn' },
     skip: { id: 'skipBtn', desktopOnly: true, roleClass: 'ex-bottom-nav__icon-btn ex-bottom-nav__skip' },
+    quizSkip: { id: 'quizSkipBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__quiz-skip' },
+    matchSound: { id: 'matchSoundBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__icon-btn' },
   },
 
   /** Canonical left → right order per profile (FluentFlow game-controls parity). */
@@ -56,10 +64,11 @@ export const BOTTOM_NAV = {
     battle: ['lessonProgressBtn'],
     /** Tap-to-answer modes (sentence-quiz practice, listening, etc.) — progress only */
     minimal: ['lessonProgressBtn'],
+    /** Quiz/Timed — barra reducida: progreso + skip (sin nav de tarjetas/sonido). */
+    quiz: ['lessonProgressBtn', 'quizSkipBtn'],
+    /** Match — barra reducida: progreso + sonido de feedback (aciertos/errores). */
+    match: ['lessonProgressBtn', 'matchSoundBtn'],
   },
-
-  /** Flashcard areas with no bottom controls (options/pairs in content). */
-  HIDDEN_AREAS: ['quiz', 'match'],
 };
 
 const DESKTOP_ONLY_CLASS = 'ex-bottom-nav__desktop-only';
@@ -150,7 +159,10 @@ export function resolveBottomNavProfile() {
   const area = getVisibleExerciseArea();
 
   if (mode === 'battle') return 'battle';
-  if (area && BOTTOM_NAV.HIDDEN_AREAS.includes(area)) return 'hidden';
+  // 'quiz' es el área compartida por los modos Quiz y Timed (mismo markup,
+  // ver flashcard-engine.js initQuiz/initTimed) — ambos usan la barra reducida.
+  if (area === 'quiz' && BOTTOM_NAV.ORDER.quiz) return 'quiz';
+  if (area === 'match' && BOTTOM_NAV.ORDER.match) return 'match';
 
   if (isCheckBtnActive()) return 'practice';
 
@@ -264,6 +276,8 @@ export function syncBottomNavMode() {
     nav.classList.toggle('ex-bottom-nav--practice', profile === 'practice');
     nav.classList.toggle('ex-bottom-nav--study', profile === 'study');
     nav.classList.toggle('ex-bottom-nav--minimal', profile === 'minimal');
+    nav.classList.toggle('ex-bottom-nav--quiz', profile === 'quiz');
+    nav.classList.toggle('ex-bottom-nav--match', profile === 'match');
   }
 
   const toggleGroup = (ids, hide) => ids.forEach((id) => {
@@ -276,6 +290,8 @@ export function syncBottomNavMode() {
 
   toggleGroup(BOTTOM_NAV.STUDY_NAV_IDS, profile !== 'study');
   toggleGroup(BOTTOM_NAV.PRACTICE_NAV_IDS, profile !== 'practice');
+  toggleGroup(BOTTOM_NAV.QUIZ_NAV_IDS, profile !== 'quiz');
+  toggleGroup(BOTTOM_NAV.MATCH_NAV_IDS, profile !== 'match');
 
   if (profile !== 'battle') {
     battleActionPhase = null;
