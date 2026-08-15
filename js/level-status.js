@@ -59,13 +59,26 @@ export function refreshLevelStatusBanner() {
     text.textContent = `Nivel ${upperLevel} · ya hiciste tu parte en HubFlow. Tu nivel es compartido con FluentFlow y LyricFlow — revisa qué falta.`;
     if (link) {
       link.hidden = false;
+      link.target = '_blank';
+      link.setAttribute('rel', 'noopener');
+      link.textContent = 'Ver progreso global →';
       if (typeof window.LPPlatformUrls?.portalHref === 'function') {
         link.href = window.LPPlatformUrls.portalHref();
       }
     }
   } else {
     text.textContent = `Nivel ${upperLevel} · te falta ${HUBFLOW_THRESHOLD_PCT - hubflowPct}% en HubFlow para avanzar de nivel.`;
-    if (link) link.hidden = true;
+    if (link) {
+      // Lleva a "Explorar" sin filtrar por nivel — no se abre en pestaña
+      // nueva porque es navegación dentro de la misma app. section=all
+      // fuerza esa sección porque "resumen" (sección por defecto) se
+      // excluye del filtrado en dashboard-filters.js applyFilters().
+      link.hidden = false;
+      link.target = '_self';
+      link.removeAttribute('rel');
+      link.href = '?section=all';
+      link.textContent = 'Ver ejercicios →';
+    }
   }
 }
 
