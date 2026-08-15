@@ -529,11 +529,19 @@ function syncScoreKeysFromProgressDoc() {
       // better to leave them unfilled than to fabricate false completions.
       if (activity.scoreKeys.length !== 1) continue;
       const [scoreKey] = activity.scoreKeys;
-      if (readScoreHistory(scoreKey).length > 0) continue;
+      // Antes se saltaba por completo si ya había CUALQUIER historial local,
+      // así que un dispositivo con su propio progreso (aunque fuera menor al
+      // de la nube) nunca recibía la mejora — exactamente el caso de "force
+      // sync no cambia nada" reportado en localhost vs producción. Ahora se
+      // fusiona con el mismo criterio "el progreso nunca baja" que usa
+      // recordScore(): solo escribe si el dato de la nube es mejor.
+      const history = readScoreHistory(scoreKey);
+      const currentBest = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+      if (pct <= currentBest) continue;
       try {
         localStorage.setItem(
           versionedKey(scoreKey),
-          JSON.stringify([{ pct, date: timestamp, timestamp }])
+          JSON.stringify([{ pct, date: timestamp, timestamp }, ...history].slice(0, MAX_SCORE_HISTORY))
         );
         changed = true;
       } catch {
@@ -565,35 +573,50 @@ function syncScoreKeysFromActivityDoc() {
     // multi-key ones (e.g. one per vocabulary category) it would clone one
     // category's score onto every other untouched category (see the identical
     // guard in syncScoreKeysFromProgressDoc above).
+    // `metricKey` confirmado (evento moderno) vs adivinado (evento legacy sin
+    // scoreKey, solo seguro para actividades de una sola clave — ver guard
+    // arriba). Solo el confirmado se fusiona por mejor puntaje; el adivinado
+    // sigue siendo "solo si está vacío" para no arriesgar clonar un resultado
+    // sobre una categoría distinta que ya tenía su propio dato real.
     const metricKey = typeof event.metrics?.scoreKey === 'string' ? event.metrics.scoreKey : null;
-    const scoreKeysToFill = metricKey
-      ? [metricKey]
-      : activityRule.scoreKeys.length === 1
-        ? activityRule.scoreKeys.filter((key) => readScoreHistory(key).length === 0)
-        : [];
+    const confirmedKeys = metricKey ? [metricKey] : [];
+    const guessedKeys = !metricKey && activityRule.scoreKeys.length === 1
+      ? activityRule.scoreKeys.filter((key) => readScoreHistory(key).length === 0)
+      : [];
 
     const timestamp = event.occurredAt || doc.updatedAt || new Date().toISOString();
     const pct = Math.max(0, Math.min(100, Number(event.scorePct) || 0));
 
-    for (const scoreKey of scoreKeysToFill) {
-      if (!scoreKey || readScoreHistory(scoreKey).length > 0) continue;
-
+    const writeEntry = (scoreKey, history) => {
       try {
-        localStorage.setItem(
-          versionedKey(scoreKey),
-          JSON.stringify([
-            {
-              pct,
-              date: timestamp,
-              timestamp,
-              context: { contentId: event.contentId, activity: event.activity, scoreKey },
-            },
-          ])
-        );
+        const entry = {
+          pct,
+          date: timestamp,
+          timestamp,
+          context: { contentId: event.contentId, activity: event.activity, scoreKey },
+        };
+        localStorage.setItem(versionedKey(scoreKey), JSON.stringify([entry, ...history].slice(0, MAX_SCORE_HISTORY)));
         changed = true;
       } catch {
         /* ignore quota errors */
       }
+    };
+
+    for (const scoreKey of confirmedKeys) {
+      if (!scoreKey) continue;
+      // El mismo fix que en syncScoreKeysFromProgressDoc: fusiona por mejor
+      // puntaje en vez de saltarse cualquier historial local existente —
+      // así "forzar sync" sí puede levantar un dato que este dispositivo
+      // tenía peor (o nunca tuvo) para esta categoría exacta.
+      const history = readScoreHistory(scoreKey);
+      const currentBest = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+      if (pct <= currentBest) continue;
+      writeEntry(scoreKey, history);
+    }
+
+    for (const scoreKey of guessedKeys) {
+      if (!scoreKey || readScoreHistory(scoreKey).length > 0) continue;
+      writeEntry(scoreKey, []);
     }
   }
   return changed;
