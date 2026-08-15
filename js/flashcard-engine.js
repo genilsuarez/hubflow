@@ -5,7 +5,7 @@
 import { shuffle } from './array-utils.js';
 import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen, refreshModuleCompletionMarks } from './progress-store.js';
 import { Timer, formatTime } from './exercise-ui.js';
-import { speak, isSpeechAvailable } from './speech.js';
+import { speak, isSpeechAvailable, hasVoiceForLang } from './speech.js';
 import { initSwipe } from './swipe.js';
 
 // Preferencia persistente del toggle de pronunciación automática (on/off).
@@ -913,9 +913,15 @@ export class FlashcardEngine {
       <div class="pair-col-label">${rightLabel}</div>
       ${leftItems.map((item, i) => {
         const rightItem = rightItems[i];
+        // El lado derecho no siempre es español: en Idioms muestra el
+        // "meaning" en inglés (ver rightLabel "📖 Meaning" arriba). El TTS de
+        // selectPair() debe leer en el idioma real del texto mostrado, no
+        // asumir español solo por estar en la columna derecha.
+        const rightText = isIdiom ? rightItem.meaning : (rightItem.es || rightItem.meaning || '');
+        const rightLang = (!isIdiom && rightItem.es) ? 'es-ES' : 'en-GB';
         return `
-          <div class="pair-item pair-left" data-term="${item.term}"><span>${item.emoji}</span> ${item.term}</div>
-          <div class="pair-item pair-right" data-term="${rightItem.term}">${isIdiom ? rightItem.meaning : (rightItem.es || rightItem.meaning || '')}</div>
+          <div class="pair-item pair-left" data-term="${item.term}" data-speak-text="${item.term}" data-speak-lang="en-GB"><span>${item.emoji}</span> ${item.term}</div>
+          <div class="pair-item pair-right" data-term="${rightItem.term}" data-speak-text="${rightText}" data-speak-lang="${rightLang}">${rightText}</div>
         `;
       }).join('')}
     `;
@@ -941,7 +947,15 @@ export class FlashcardEngine {
       this.pairState.right = el;
     }
     el.classList.add('selected');
-    if (this.matchSound) playSelectTone();
+    // "Sonido de la tarjeta": pronunciar el texto mostrado (TTS), mismo
+    // mecanismo que el toggle de Study — en el idioma real de esa tarjeta
+    // (inglés a la izquierda; español o inglés a la derecha según el modo,
+    // ver data-speak-lang en renderPairGrid). Si el dispositivo no tiene
+    // ninguna voz en español, mejor sonar en inglés que no sonar nada.
+    if (this.matchSound) {
+      const lang = el.dataset.speakLang || 'en-GB';
+      speak(el.dataset.speakText, { lang: hasVoiceForLang(lang) ? lang : 'en-GB' });
+    }
 
     if (this.pairState.left && this.pairState.right) this.checkPair();
   }
