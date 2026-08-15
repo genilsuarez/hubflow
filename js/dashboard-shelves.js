@@ -6,7 +6,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { MODULES, CATEGORIES, SUBCATEGORIES, getModuleDepth } from '../data/catalog.js';
-import { getContentProgress, getModuleMatrixProgress } from './progress-store.js';
+import { getContentProgress } from './progress-store.js';
 import { getActiveLevel, levelUnlocks, LEVEL_ORDER } from './lp-progress-summary.js';
 
 const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
@@ -69,11 +69,11 @@ function depthHTML(mod) {
 function progressHTML(mod) {
   const progress = getContentProgress(mod.id);
   if (!progress) return '';
-  // Mismo cálculo (categorías × modos rastreados, incluido Study) que el modal
-  // "Progreso del módulo" — evita que la tarjeta muestre un % distinto al del
-  // detalle para el mismo módulo (ver getModuleMatrixProgress en progress-store.js).
-  const matrix = getModuleMatrixProgress(mod.id, { includeStudy: true });
-  const pct = Math.round(matrix ? matrix.progressPct : progress.progressPct);
+  // progress.progressPct ya incorpora la grilla categoría×modo (ver
+  // getContentProgress en progress-store.js) — evita que la tarjeta muestre
+  // un % distinto al del modal "Progreso del módulo" para el mismo módulo,
+  // sin recalcular la matriz dos veces por tarjeta.
+  const pct = Math.round(progress.progressPct);
   if (progress.completed) {
     // Corona (Maestría) junto al check — nivel encima de Aprobado, nunca en su
     // lugar. Ver docs/to-do/mastery-tiers-plan.md §4.1/§5.

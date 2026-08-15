@@ -317,6 +317,21 @@ export function getContentProgress(contentId) {
   const projectionItem = readProjectionDoc()?.content?.[contentId] ?? null;
   const merged = mergeHubflowProgressItem(fromScores, projectionItem, PROGRESS_RULES[contentId]);
   if (!merged) return merged;
+  // La tarjeta y el modal "Progreso del módulo" ya usaban esta grilla
+  // categoría×modo (getModuleMatrixProgress, incluye Match — que
+  // practice/study no cuentan) como fuente para el % que se ve. Pero
+  // merged.progressPct de arriba sale de otro cálculo (practice+study sin
+  // Match) mezclado con el snapshot histórico ya subido a Supabase, que
+  // puede haber quedado congelado de una versión vieja del catálogo — de ahí
+  // que tarjeta y "% en la nube" pudieran mostrar números distintos con los
+  // mismos datos ya sincronizados. Unificado acá: la grilla gana si es
+  // mayor, nunca baja el % ya alcanzado (mismo criterio de recordScore) —
+  // y como esto alimenta publishHubFlowProgress(), también es lo que se
+  // termina subiendo a Supabase.
+  const matrix = getModuleMatrixProgress(contentId, { includeStudy: true });
+  if (matrix && matrix.total > 0) {
+    merged.progressPct = Math.max(merged.progressPct ?? 0, matrix.progressPct);
+  }
   merged.mastered = isModuleMastered(contentId, merged.completed);
   return merged;
 }
