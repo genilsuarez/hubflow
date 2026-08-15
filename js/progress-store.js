@@ -1143,6 +1143,21 @@ export function getModuleMatrixProgress(contentId, { includeStudy = false } = {}
 }
 
 /**
+ * Lleva a la sección + modo exactos de una celda del modal de progreso,
+ * simulando los clicks que cada motor de ejercicio (flashcard, spelling, …)
+ * ya tiene cableados sobre sus propios chips — así el modal no necesita saber
+ * nada del motor concreto, solo qué categoría y modo pedir.
+ * @param {string} cat
+ * @param {string|null} mode
+ */
+function navigateToModeCell(cat, mode) {
+  document.querySelector(`#catBar [data-cat="${cat}"], #levelBar [data-level="${cat}"]`)?.click();
+  if (mode != null) {
+    document.querySelector(`.pill-bar [data-mode="${mode}"], .ex-header__modes [data-mode="${mode}"]`)?.click();
+  }
+}
+
+/**
  * Opens a modal showing detailed per-category progress for a module.
  * Shows columns for each tracked mode (quiz, match, etc.) per category.
  * @param {string} contentId
@@ -1181,7 +1196,8 @@ function openProgressDetail(contentId) {
       const modeMarkup = showModeInPill
         ? `<span class="pg-status__mode" aria-hidden="true">${modeIcon}</span>`
         : '';
-      return `<span class="pg-status ${cls}" title="${title}">${modeMarkup}${value}</span>`;
+      const navLabel = `${displayLabel} — ${title} — ir al ejercicio`;
+      return `<button type="button" class="pg-status pg-status--nav ${cls}" data-nav-cat="${cat}" data-nav-mode="${mode ?? ''}" title="${title}" aria-label="${navLabel}">${modeMarkup}<span class="pg-status__value">${value}</span></button>`;
     }).join('');
 
     return `<li class="pg-item"><span class="pg-item__label">${displayLabel}</span><div class="pg-item__modes">${pills}</div></li>`;
@@ -1280,6 +1296,12 @@ function openProgressDetail(contentId) {
     modal.classList.remove('pg-modal--open');
     setTimeout(() => modal.remove(), 250);
   };
+  modal.querySelectorAll('[data-nav-cat]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      close();
+      navigateToModeCell(btn.dataset.navCat, btn.dataset.navMode || null);
+    });
+  });
   modal.querySelector('.pg-modal__backdrop').addEventListener('click', close);
   modal.querySelector('.pg-modal__close').addEventListener('click', close);
   modal.querySelector('.pg-modal__close').focus();
