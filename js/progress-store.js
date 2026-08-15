@@ -1118,7 +1118,38 @@ function openProgressDetail(contentId) {
     return `<li class="pg-item"><span class="pg-item__label">${displayLabel}</span><div class="pg-item__modes">${pills}</div></li>`;
   }).join('');
 
+  // Encabezado de columnas (ícono + texto corto) alineado sobre las píldoras,
+  // para que el modo de cada columna se lea de un vistazo sin tener que
+  // pasar el mouse por cada píldora — mismas columnas/ancho que .pg-item__modes.
+  const colHeadersHTML = displayModes.map(mode => {
+    const icon = MODE_ICONS[mode] || '◉';
+    const label = MODE_SHORT[mode] || 'Practice';
+    return `<span class="pg-col-header"><span class="pg-col-header__icon" aria-hidden="true">${icon}</span><span class="pg-col-header__label">${label}</span></span>`;
+  }).join('');
+
   const pct = totalCells > 0 ? Math.round((passedTotal / totalCells) * 100) : 0;
+
+  // Umbrales reales de Aprobado/Maestría — derivados de la regla vigente
+  // (no de un 50% fijo: varía según cuántos modos rastree cada módulo), para
+  // que el marcador de hito y las tarjetas de nivel siempre coincidan con lo
+  // que `getContentProgress` (y por tanto el check ✓ del dashboard) exige.
+  const progress = getContentProgress(contentId);
+  const completed = Boolean(progress?.completed);
+  const mastered = Boolean(progress?.mastered);
+  const rule = PROGRESS_RULES[contentId];
+  const aprobadoCells = rule
+    ? rule.requiredActivities.reduce((sum, activity) => sum + activity.scoreKeys.length, 0)
+    : null;
+  const aprobadoPct = aprobadoCells != null && totalCells > 0
+    ? Math.min(100, Math.round((aprobadoCells / totalCells) * 100))
+    : null;
+  const hasMasteryTier = aprobadoPct != null && aprobadoPct < 100;
+
+  const tierClass = mastered ? 'pg-modal__summary-pill--mastery' : completed ? 'pg-modal__summary-pill--done' : '';
+  const tierIcon = mastered ? '👑' : completed ? '✓' : '';
+  const clampedPct = Math.min(pct, 100);
+  const doneWidth = aprobadoPct != null ? Math.min(clampedPct, aprobadoPct) : clampedPct;
+  const masteryWidth = aprobadoPct != null ? Math.max(0, clampedPct - aprobadoPct) : 0;
 
   const modal = document.createElement('div');
   modal.id = 'progressDetailModal';
@@ -1135,16 +1166,41 @@ function openProgressDetail(contentId) {
           <p class="pg-modal__eyebrow">${moduleTitle}</p>
           <h3 id="pgModalTitle">Progreso del módulo</h3>
         </div>
-        <span class="pg-modal__summary-pill">${passedTotal}/${totalCells} · ${pct}%</span>
+        <span class="pg-modal__summary-pill ${tierClass}">${tierIcon ? `${tierIcon} ` : ''}${passedTotal}/${totalCells} · ${pct}%</span>
         <button type="button" class="pg-modal__close" aria-label="Cerrar detalle de progreso">✕</button>
       </header>
-      <div class="pg-modal__body"><ul class="pg-list">${rowsHTML}</ul></div>
+      ${hasMasteryTier ? `
+      <div class="pg-modal__track" role="img" aria-label="${pct}% del módulo. Completado se alcanza en ${aprobadoPct}%, Maestría en 100%.">
+        <div class="pg-modal__track-seg pg-modal__track-seg--done" style="width:${doneWidth}%"></div>
+        <div class="pg-modal__track-seg pg-modal__track-seg--mastery" style="left:${aprobadoPct}%; width:${masteryWidth}%"></div>
+        <span class="pg-modal__track-tick ${completed ? 'is-reached' : ''}" style="left:${aprobadoPct}%" title="Completado (${aprobadoPct}%)"></span>
+      </div>` : ''}
+      <div class="pg-modal__body">
+        <div class="pg-col-headers" aria-hidden="true">
+          <span class="pg-col-headers__spacer"></span>
+          <div class="pg-col-headers__modes">${colHeadersHTML}</div>
+        </div>
+        <ul class="pg-list">${rowsHTML}</ul>
+      </div>
       <footer class="pg-modal__legend">
-        <span class="pg-legend-item"><span class="pg-status pg-status--pass">✓</span> ≥${passScorePct}%</span>
-        ${studyPassPct != null ? `<span class="pg-legend-item"><span class="pg-status__mode" aria-hidden="true">${MODE_ICONS.study}</span> Study: visto ${studyPassPct}%</span>` : ''}
+        <span class="pg-legend-item">
+          <span class="pg-status pg-status--pass">✓</span> ≥${passScorePct}%
+          ${studyPassPct != null ? `<span class="pg-legend-item__note">(Study exige ${studyPassPct}% visto)</span>` : ''}
+        </span>
         <span class="pg-legend-item"><span class="pg-status pg-status--tried">%</span> intentado</span>
         <span class="pg-legend-item"><span class="pg-status">·</span> pendiente</span>
       </footer>
+      ${hasMasteryTier ? `
+      <div class="pg-modal__tiers">
+        <div class="pg-tier pg-tier--done ${completed ? 'is-reached' : ''}">
+          <span class="pg-tier__icon" aria-hidden="true">✓</span>
+          <span class="pg-tier__text"><strong>Completado</strong>Study + Quiz al 100%</span>
+        </div>
+        <div class="pg-tier pg-tier--mastery ${mastered ? 'is-reached' : ''}">
+          <span class="pg-tier__icon" aria-hidden="true">👑</span>
+          <span class="pg-tier__text"><strong>Maestría</strong>Las 4 columnas al 100%</span>
+        </div>
+      </div>` : ''}
     </div>
   `;
 

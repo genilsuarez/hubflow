@@ -841,6 +841,60 @@
   min-height: 0;
 }
 
+/* Encabezado de columnas: mismo layout (label + grupo de modos alineado a la
+   derecha) que .pg-item, para que cada ícono+texto quede sobre su columna de
+   píldoras. Sticky para seguir visible si la lista de categorías scrollea. */
+.pg-col-headers {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 0 10px 6px;
+  position: sticky;
+  top: 0;
+  background: var(--lp-bg-paper, var(--lp-surface));
+  z-index: 1;
+}
+
+.pg-col-headers__spacer {
+  flex: 1;
+  min-width: 0;
+}
+
+.pg-col-headers__modes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.pg-col-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 36px;
+}
+
+.pg-col-header__icon {
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+.pg-col-header__label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--lp-muted);
+}
+
+@media (min-width: 640px) {
+  .pg-col-header {
+    min-width: 42px;
+  }
+}
+
 .pg-list {
   list-style: none;
   margin: 0;
@@ -923,7 +977,7 @@
   padding: 10px 14px 14px;
   border-top: 1px solid var(--lp-border);
   font-size: 0.62rem;
-  color: var(--lp-muted);
+  color: var(--lp-ink-soft);
   flex-shrink: 0;
 }
 
@@ -938,6 +992,160 @@
   min-height: 20px;
   padding: 0 5px;
   font-size: 0.58rem;
+}
+
+.pg-legend-item__note {
+  color: var(--lp-ink-soft);
+}
+
+/* Pill de cabecera: color neutro en progreso, verde al alcanzar Completado,
+   dorado al alcanzar Maestría — mismo código de color que las tarjetas de
+   nivel y la barra de hitos, para que los tres lean como un solo sistema. */
+.pg-modal__summary-pill--done {
+  color: var(--lp-success);
+  background: color-mix(in srgb, var(--lp-success) 12%, transparent);
+  border-color: color-mix(in srgb, var(--lp-success) 30%, transparent);
+}
+
+.pg-modal__summary-pill--mastery {
+  color: var(--lp-gold);
+  background: color-mix(in srgb, var(--lp-gold) 14%, transparent);
+  border-color: color-mix(in srgb, var(--lp-gold) 32%, transparent);
+}
+
+/* Barra de hitos: una sola pista de progreso con una marca en el umbral
+   real de Completado (derivado de la regla, no fija en 50%) — el 100% de
+   la pista es Maestría por definición, así que no necesita marca propia. */
+.pg-modal__track {
+  position: relative;
+  height: 8px;
+  margin: 0 14px;
+  border-radius: var(--lp-radius-full);
+  background: color-mix(in srgb, var(--lp-border) 70%, transparent);
+  flex-shrink: 0;
+}
+
+.pg-modal__track-seg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.pg-modal__track-seg--done {
+  background: var(--lp-success);
+}
+
+.pg-modal__track-seg--mastery {
+  background: var(--lp-gold);
+}
+
+.pg-modal__track-tick {
+  position: absolute;
+  top: 50%;
+  width: 3px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--lp-radius-full);
+  background: var(--lp-bg-paper, var(--lp-surface));
+  box-shadow: 0 0 0 1.5px var(--lp-success);
+}
+
+.pg-modal__track-tick.is-reached {
+  background: var(--lp-success);
+}
+
+/* Tarjetas de nivel: reemplazan la nota de texto plano por un par de chips
+   tipo "badge" (Completado / Maestría) que se iluminan al alcanzarse — el
+   mismo patrón de insignias por niveles (bronce/oro) que usan los sistemas
+   de logros modernos, aplicado a nuestros dos tiers reales. */
+.pg-modal__tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 14px 14px;
+  flex-shrink: 0;
+}
+
+.pg-tier {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--lp-radius-md);
+  border: 1px solid var(--lp-border);
+  background: var(--lp-surface);
+  opacity: 0.6;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.pg-tier.is-reached {
+  opacity: 1;
+}
+
+.pg-tier--done.is-reached {
+  border-color: color-mix(in srgb, var(--lp-success) 35%, transparent);
+  background: color-mix(in srgb, var(--lp-success) 10%, transparent);
+}
+
+.pg-tier--mastery.is-reached {
+  border-color: color-mix(in srgb, var(--lp-gold) 40%, transparent);
+  background: color-mix(in srgb, var(--lp-gold) 12%, transparent);
+}
+
+.pg-tier__icon {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  background: color-mix(in srgb, var(--lp-ink) 6%, transparent);
+}
+
+.pg-tier--done.is-reached .pg-tier__icon {
+  background: color-mix(in srgb, var(--lp-success) 20%, transparent);
+  color: var(--lp-success);
+}
+
+.pg-tier--mastery.is-reached .pg-tier__icon {
+  background: color-mix(in srgb, var(--lp-gold) 22%, transparent);
+  color: var(--lp-gold);
+}
+
+.pg-tier__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 0.6rem;
+  line-height: 1.3;
+  color: var(--lp-ink-soft);
+  min-width: 0;
+}
+
+.pg-tier__text strong {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--lp-ink);
+}
+
+@media (min-width: 640px) {
+  .pg-modal__panel {
+    width: min(100%, 460px);
+    max-height: min(560px, calc(100dvh - 40px));
+  }
+
+  .pg-item {
+    padding: 9px 14px;
+  }
+
+  .pg-status {
+    min-width: 42px;
+    padding: 3px 10px;
+  }
 }
 
 @media (max-width: 639px) {
