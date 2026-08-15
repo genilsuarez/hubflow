@@ -442,8 +442,7 @@ export class FlashcardEngine {
     document.querySelectorAll('[data-area]').forEach(el => el.classList.remove('show'));
     document.getElementById('timerBar')?.classList.remove('show');
     document.getElementById('pairScore')?.classList.remove('show');
-    const nextBtn = document.getElementById('quizNextBtn');
-    if (nextBtn) nextBtn.hidden = true;
+    this.setQuizAnswered(false);
   }
 
   showArea(name) {
@@ -835,10 +834,7 @@ export class FlashcardEngine {
       }));
     }
 
-    const nextBtnEl = document.getElementById('quizNextBtn');
-    if (nextBtnEl) nextBtnEl.hidden = true;
-    const skipBtnEl = document.getElementById('quizSkipBtn');
-    if (skipBtnEl) skipBtnEl.hidden = false;
+    this.setQuizAnswered(false);
 
     if (optsEl) {
       optsEl.style.pointerEvents = 'none';
@@ -878,14 +874,22 @@ export class FlashcardEngine {
     const nextBtn = document.getElementById('quizNextBtn');
     if (nextBtn) {
       nextBtn.textContent = this.quizIdx >= this.quizTotal ? 'Ver resultado →' : 'Siguiente →';
-      nextBtn.hidden = false;
-      const skipBtnEl = document.getElementById('quizSkipBtn');
-      if (skipBtnEl) skipBtnEl.hidden = true;
+      this.setQuizAnswered(true);
       nextBtn.onclick = () => this.renderQuiz();
       nextBtn.focus({ preventScroll: true });
     } else {
       this.renderQuiz();
     }
+  }
+
+  // Saltar y Siguiente ocupan la misma posición en la barra: solo uno de los
+  // dos tiene sentido según haya o no una respuesta marcada, así que se
+  // intercambian en vez de convivir (desperdiciaba espacio en la barra).
+  setQuizAnswered(answered) {
+    const nextBtn = document.getElementById('quizNextBtn');
+    const skipBtn = document.getElementById('quizSkipBtn');
+    if (nextBtn) nextBtn.hidden = !answered;
+    if (skipBtn) skipBtn.hidden = answered;
   }
 
   updateQuizProgress() {
