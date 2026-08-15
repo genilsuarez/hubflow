@@ -54,6 +54,7 @@ export const BOTTOM_NAV = {
     next: { id: 'nextBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__nav-btn' },
     skip: { id: 'skipBtn', desktopOnly: true, roleClass: 'ex-bottom-nav__icon-btn ex-bottom-nav__skip' },
     quizSkip: { id: 'quizSkipBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__quiz-skip' },
+    quizNext: { id: 'quizNextBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__quiz-next' },
     matchSound: { id: 'matchSoundBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__icon-btn' },
   },
 
@@ -65,7 +66,7 @@ export const BOTTOM_NAV = {
     /** Tap-to-answer modes (sentence-quiz practice, listening, etc.) — progress only */
     minimal: ['lessonProgressBtn'],
     /** Quiz/Timed — barra reducida: progreso + skip (sin nav de tarjetas/sonido). */
-    quiz: ['lessonProgressBtn', 'quizSkipBtn'],
+    quiz: ['lessonProgressBtn', 'quizSkipBtn', 'quizNextBtn'],
     /** Match — barra reducida: progreso + sonido de feedback (aciertos/errores). */
     match: ['lessonProgressBtn', 'matchSoundBtn'],
   },

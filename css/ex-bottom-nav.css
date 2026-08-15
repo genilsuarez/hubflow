@@ -66,7 +66,8 @@
    círculo de icono que usa el resto de la barra (heredar --lp-navbtn-radius:
    50% con texto largo lo desbordaba fuera del borde). Misma altura que los
    botones circulares vecinos para quedar alineado con ellos. ─── */
-.ex-bottom-nav__quiz-skip {
+.ex-bottom-nav__quiz-skip,
+.ex-bottom-nav__quiz-next {
   width: auto !important;
   height: var(--ex-bottom-nav-btn-size) !important;
   min-width: calc(var(--ex-bottom-nav-btn-size) * 1.3);

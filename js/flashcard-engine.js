@@ -154,6 +154,7 @@ export class FlashcardEngine {
         <!-- Quiz/Timed: barra reducida (progreso + skip) — ver BOTTOM_NAV.ORDER.quiz
              en ex-bottom-nav.js. Oculto fuera de esos modos. -->
         <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
         <!-- Match: barra reducida (progreso + sonido) — mismo lenguaje visual que
              speakBtn (toggle on/off persistido), pero controla el feedback sonoro
              de aciertos/errores en vez de la pronunciación. -->
@@ -167,9 +168,6 @@ export class FlashcardEngine {
         <div class="quiz-prompt__text" id="quizText"></div>
       </div>
       <div class="quiz-options" id="quizOptions"></div>
-      <div class="quiz-next-wrap" id="quizNextWrap" style="display:none;margin-top:14px;text-align:center;">
-        <button class="lp-btn lp-btn--purple" id="quizNextBtn">Siguiente →</button>
-      </div>
     </div>
     <div data-area="match">
       <div class="pair-grid" id="pairGrid"></div>
@@ -333,6 +331,12 @@ export class FlashcardEngine {
             }
             break;
           }
+          case 'quiz':
+          case 'timed': {
+            const nextBtn = document.getElementById('quizNextBtn');
+            if (nextBtn && !nextBtn.hidden) nextBtn.click();
+            break;
+          }
         }
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
@@ -438,6 +442,8 @@ export class FlashcardEngine {
     document.querySelectorAll('[data-area]').forEach(el => el.classList.remove('show'));
     document.getElementById('timerBar')?.classList.remove('show');
     document.getElementById('pairScore')?.classList.remove('show');
+    const nextBtn = document.getElementById('quizNextBtn');
+    if (nextBtn) nextBtn.hidden = true;
   }
 
   showArea(name) {
@@ -829,8 +835,10 @@ export class FlashcardEngine {
       }));
     }
 
-    const nextWrap = document.getElementById('quizNextWrap');
-    if (nextWrap) nextWrap.style.display = 'none';
+    const nextBtnEl = document.getElementById('quizNextBtn');
+    if (nextBtnEl) nextBtnEl.hidden = true;
+    const skipBtnEl = document.getElementById('quizSkipBtn');
+    if (skipBtnEl) skipBtnEl.hidden = false;
 
     if (optsEl) {
       optsEl.style.pointerEvents = 'none';
@@ -867,11 +875,12 @@ export class FlashcardEngine {
     this.quizIdx++;
     this.updateQuizProgress();
 
-    const nextWrap = document.getElementById('quizNextWrap');
     const nextBtn = document.getElementById('quizNextBtn');
-    if (nextWrap && nextBtn) {
+    if (nextBtn) {
       nextBtn.textContent = this.quizIdx >= this.quizTotal ? 'Ver resultado →' : 'Siguiente →';
-      nextWrap.style.display = '';
+      nextBtn.hidden = false;
+      const skipBtnEl = document.getElementById('quizSkipBtn');
+      if (skipBtnEl) skipBtnEl.hidden = true;
       nextBtn.onclick = () => this.renderQuiz();
       nextBtn.focus({ preventScroll: true });
     } else {

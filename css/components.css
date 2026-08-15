@@ -940,9 +940,9 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
-  min-width: 36px;
+  width: 36px;
   min-height: 28px;
-  padding: 2px 8px;
+  padding: 2px 4px;
   border-radius: var(--lp-radius-full);
   font-size: 0.65rem;
   font-weight: 700;
@@ -950,6 +950,7 @@
   background: var(--lp-bg-paper);
   color: var(--lp-muted);
   white-space: nowrap;
+  overflow: hidden;
 }
 
 .pg-status__mode {
@@ -1143,8 +1144,8 @@
   }
 
   .pg-status {
-    min-width: 42px;
-    padding: 3px 10px;
+    width: 42px;
+    padding: 3px 4px;
   }
 }
 
