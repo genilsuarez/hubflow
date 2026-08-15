@@ -274,7 +274,7 @@ export const MODULES = [
   },
   {
     id: 'a1-plurals-possessives',
-    title: 'Plurals & Possessives (A1)',
+    title: 'Plurals & Possessives',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'a1', 'quiz', 'study'],
@@ -288,7 +288,7 @@ export const MODULES = [
   },
   {
     id: 'a1-contractions',
-    title: 'Contractions (A1)',
+    title: 'Contractions',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'a1', 'quiz', 'study'],
@@ -316,7 +316,7 @@ export const MODULES = [
   },
   {
     id: 'a1-imperatives',
-    title: 'Imperatives & Instructions (A1)',
+    title: 'Imperatives & Instructions',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'a1', 'quiz', 'study'],
@@ -358,7 +358,7 @@ export const MODULES = [
   },
   {
     id: 'a1-to-be-have',
-    title: 'To Be & Have (A1)',
+    title: 'To Be & Have',
     category: 'grammar',
     subcategory: 'structure',
     tags: ['grammar', 'verbs', 'a1', 'quiz', 'study'],
@@ -372,7 +372,7 @@ export const MODULES = [
   },
   {
     id: 'a1-pronouns-possessives',
-    title: 'Pronouns & Possessives (A1)',
+    title: 'Pronouns & Possessives',
     category: 'grammar',
     subcategory: 'structure',
     tags: ['grammar', 'a1', 'quiz', 'study'],
@@ -386,7 +386,7 @@ export const MODULES = [
   },
   {
     id: 'a1-some-any-quantity',
-    title: 'Some, Any & Quantity Basics (A1)',
+    title: 'Some, Any & Quantity Basics',
     category: 'grammar',
     subcategory: 'nuance',
     tags: ['grammar', 'a1', 'quiz', 'study'],
@@ -400,7 +400,7 @@ export const MODULES = [
   },
   {
     id: 'a1-demonstratives',
-    title: 'This, That, These, Those (A1)',
+    title: 'This, That, These, Those',
     category: 'grammar',
     subcategory: 'nuance',
     tags: ['grammar', 'a1', 'quiz', 'study'],
@@ -419,7 +419,7 @@ export const MODULES = [
     tags: ['writing', 'grammar', 'a1', 'write'],
     cefr: 'a1',
     icon: '🔀',
-    meta: 'Arrange scrambled sentences into a coherent paragraph — everyday stories and step-by-step instructions',
+    meta: 'Everyday stories · Step-by-step instructions',
     exercise: 'exercises/sentence-reordering.html',
     guide: null,
     dataFile: 'data/sentence-reordering.js',
@@ -427,7 +427,7 @@ export const MODULES = [
   },
   {
     id: 'a1-sentence-build',
-    title: 'Sentence Build (A1)',
+    title: 'Sentence Build',
     category: 'analysis',
     tags: ['writing', 'grammar', 'a1', 'write', 'timed'],
     cefr: 'a1',
@@ -440,7 +440,7 @@ export const MODULES = [
   },
   {
     id: 'a1-questions',
-    title: 'Questions (A1)',
+    title: 'Questions',
     category: 'analysis',
     tags: ['grammar', 'a1', 'quiz', 'study'],
     cefr: 'a1',
@@ -453,7 +453,7 @@ export const MODULES = [
   },
   {
     id: 'a1-match-meaning',
-    title: 'Match the Meaning (A1)',
+    title: 'Match the Meaning',
     category: 'analysis',
     tags: ['vocabulary', 'a1', 'quiz', 'study'],
     cefr: 'a1',
@@ -466,7 +466,7 @@ export const MODULES = [
   },
   {
     id: 'a1-text-gap-fill',
-    title: 'Text Gap Fill (A1)',
+    title: 'Text Gap Fill',
     category: 'analysis',
     tags: ['grammar', 'writing', 'a1', 'write', 'timed'],
     cefr: 'a1',
@@ -770,7 +770,7 @@ export const MODULES = [
   },
   {
     id: 'a2-past-simple-continuous',
-    title: 'Past Simple vs Past Continuous (A2)',
+    title: 'Past Simple vs Past Continuous',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'a2', 'quiz', 'study'],
@@ -841,7 +841,7 @@ export const MODULES = [
   },
   {
     id: 'a2-adverbs-frequency-manner',
-    title: 'Adverbs of Frequency & Manner (A2)',
+    title: 'Adverbs of Frequency & Manner',
     category: 'grammar',
     subcategory: 'nuance',
     tags: ['grammar', 'a2', 'quiz', 'study'],
@@ -900,7 +900,7 @@ export const MODULES = [
   },
   {
     id: 'a2-error-spot-basic',
-    title: 'Error Spot Basic (A2)',
+    title: 'Error Spot Basic',
     category: 'analysis',
     tags: ['grammar', 'error-correction', 'a2', 'quiz', 'study'],
     cefr: 'a2',
@@ -913,7 +913,7 @@ export const MODULES = [
   },
   {
     id: 'a2-sentence-order',
-    title: 'Sentence Order (A2)',
+    title: 'Sentence Order',
     category: 'analysis',
     tags: ['writing', 'grammar', 'a2', 'write', 'timed'],
     cefr: 'a2',
@@ -1386,7 +1386,7 @@ export const MODULES = [
   },
   {
     id: 'b2-academic-vocabulary',
-    title: 'Academic Vocabulary (B2)',
+    title: 'Academic Vocabulary',
     category: 'vocab',
     subcategory: 'precision',
     tags: ['vocabulary', 'b2', 'study'],
@@ -1400,7 +1400,7 @@ export const MODULES = [
   },
   {
     id: 'b2-abstract-nouns',
-    title: 'Abstract Nouns (B2)',
+    title: 'Abstract Nouns',
     category: 'vocab',
     subcategory: 'precision',
     tags: ['vocabulary', 'nouns', 'b2', 'study'],
@@ -1414,7 +1414,7 @@ export const MODULES = [
   },
   {
     id: 'b2-nuanced-synonyms',
-    title: 'Nuanced Synonyms (B2)',
+    title: 'Nuanced Synonyms',
     category: 'vocab',
     subcategory: 'precision',
     tags: ['vocabulary', 'b2', 'study'],
@@ -1428,7 +1428,7 @@ export const MODULES = [
   },
   {
     id: 'b2-business-lexis',
-    title: 'Business Lexis (B2)',
+    title: 'Business Lexis',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'b2', 'study'],
@@ -1442,7 +1442,7 @@ export const MODULES = [
   },
   {
     id: 'b2-travel-culture',
-    title: 'Travel & Culture (B2)',
+    title: 'Travel & Culture',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'b2', 'study'],
@@ -1456,7 +1456,7 @@ export const MODULES = [
   },
   {
     id: 'b2-environment-sustainability',
-    title: 'Environment & Sustainability (B2)',
+    title: 'Environment & Sustainability',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'b2', 'study'],
@@ -1470,7 +1470,7 @@ export const MODULES = [
   },
   {
     id: 'b2-media-technology',
-    title: 'Media & Technology (B2)',
+    title: 'Media & Technology',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'b2', 'study'],
@@ -1498,7 +1498,7 @@ export const MODULES = [
   },
   {
     id: 'b2-connotation-nuance',
-    title: 'Connotation & Nuance (B2)',
+    title: 'Connotation & Nuance',
     category: 'vocab',
     subcategory: 'expression',
     tags: ['vocabulary', 'b2', 'quiz', 'study'],
@@ -1512,7 +1512,7 @@ export const MODULES = [
   },
   {
     id: 'b2-formal-register',
-    title: 'Formal Register (B2)',
+    title: 'Formal Register',
     category: 'vocab',
     subcategory: 'expression',
     tags: ['vocabulary', 'register', 'b2', 'quiz', 'study'],
@@ -1578,7 +1578,7 @@ export const MODULES = [
   },
   {
     id: 'b2-thought-groups',
-    title: 'Thought Groups & Chunking (B2)',
+    title: 'Thought Groups & Chunking',
     category: 'pronunciation',
     tags: ['pronunciation', 'b2', 'study'],
     cefr: 'b2',
@@ -1591,7 +1591,7 @@ export const MODULES = [
   },
   {
     id: 'b2-compound-words',
-    title: 'Compound Words & Word Formation (B2)',
+    title: 'Compound Words & Word Formation',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'b2', 'quiz', 'study'],
@@ -1605,7 +1605,7 @@ export const MODULES = [
   },
   {
     id: 'b2-negative-affixes',
-    title: 'Negative Prefixes & Suffixes (B2)',
+    title: 'Negative Prefixes & Suffixes',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'b2', 'quiz', 'study'],
@@ -1619,7 +1619,7 @@ export const MODULES = [
   },
   {
     id: 'b2-future-forms',
-    title: 'Future Forms & Predictions (B2)',
+    title: 'Future Forms & Predictions',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'b2', 'quiz', 'study'],
@@ -1633,7 +1633,7 @@ export const MODULES = [
   },
   {
     id: 'b2-mixed-conditionals',
-    title: 'Mixed Conditionals (B2)',
+    title: 'Mixed Conditionals',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'b2', 'quiz', 'study'],
@@ -1647,7 +1647,7 @@ export const MODULES = [
   },
   {
     id: 'b2-relative-advanced',
-    title: 'Advanced Relative Clauses (B2)',
+    title: 'Advanced Relative Clauses',
     category: 'grammar',
     subcategory: 'structure',
     tags: ['grammar', 'clauses', 'b2', 'quiz', 'study'],
@@ -1661,7 +1661,7 @@ export const MODULES = [
   },
   {
     id: 'b2-participle-clauses',
-    title: 'Participle Clauses (B2)',
+    title: 'Participle Clauses',
     category: 'grammar',
     subcategory: 'structure',
     tags: ['grammar', 'b2', 'quiz', 'study'],
@@ -1725,7 +1725,7 @@ export const MODULES = [
   },
   {
     id: 'b2-modals-deduction',
-    title: 'Modals of Deduction (B2)',
+    title: 'Modals of Deduction',
     category: 'grammar',
     subcategory: 'nuance',
     tags: ['grammar', 'modals', 'b2', 'quiz', 'study'],
@@ -1809,7 +1809,7 @@ export const MODULES = [
   },
   {
     id: 'c1-academic-lexis',
-    title: 'Academic Lexis (C1)',
+    title: 'Academic Lexis',
     category: 'vocab',
     subcategory: 'precision',
     tags: ['vocabulary', 'c1', 'study'],
@@ -1823,7 +1823,7 @@ export const MODULES = [
   },
   {
     id: 'c1-collocation-mastery',
-    title: 'Collocation Mastery (C1)',
+    title: 'Collocation Mastery',
     category: 'vocab',
     subcategory: 'precision',
     tags: ['vocabulary', 'collocations', 'c1', 'quiz', 'study'],
@@ -1837,7 +1837,7 @@ export const MODULES = [
   },
   {
     id: 'c1-etymology-roots',
-    title: 'Etymology & Word Roots (C1)',
+    title: 'Etymology & Word Roots',
     category: 'vocab',
     subcategory: 'precision',
     tags: ['vocabulary', 'c1', 'study'],
@@ -1851,7 +1851,7 @@ export const MODULES = [
   },
   {
     id: 'c1-professional-world',
-    title: 'Professional & Business World (C1)',
+    title: 'Professional & Business World',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'c1', 'study'],
@@ -1865,7 +1865,7 @@ export const MODULES = [
   },
   {
     id: 'c1-science-technology',
-    title: 'Science & Technology (C1)',
+    title: 'Science & Technology',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'c1', 'study'],
@@ -1879,7 +1879,7 @@ export const MODULES = [
   },
   {
     id: 'c1-law-politics-society',
-    title: 'Law, Politics & Society (C1)',
+    title: 'Law, Politics & Society',
     category: 'vocab',
     subcategory: 'thematic',
     tags: ['vocabulary', 'c1', 'study'],
@@ -1927,7 +1927,7 @@ export const MODULES = [
   },
   {
     id: 'c1-idiomatic-precision',
-    title: 'Idiomatic Precision (C1)',
+    title: 'Idiomatic Precision',
     category: 'vocab',
     subcategory: 'expression',
     tags: ['vocabulary', 'idioms', 'c1', 'study'],
@@ -1941,7 +1941,7 @@ export const MODULES = [
   },
   {
     id: 'c1-connotation-shades',
-    title: 'Connotation Shades (C1)',
+    title: 'Connotation Shades',
     category: 'vocab',
     subcategory: 'expression',
     tags: ['vocabulary', 'c1', 'study'],
@@ -2007,7 +2007,7 @@ export const MODULES = [
   },
   {
     id: 'c1-discourse-marker-prosody',
-    title: 'Discourse Marker Prosody (C1)',
+    title: 'Discourse Marker Prosody',
     category: 'pronunciation',
     tags: ['pronunciation', 'c1', 'study'],
     cefr: 'c1',
@@ -2020,7 +2020,7 @@ export const MODULES = [
   },
   {
     id: 'c1-nominalisation',
-    title: 'Nominalisation (C1)',
+    title: 'Nominalisation',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'word-formation', 'c1', 'quiz', 'study'],
@@ -2034,7 +2034,7 @@ export const MODULES = [
   },
   {
     id: 'c1-advanced-word-formation',
-    title: 'Advanced Word Formation (C1)',
+    title: 'Advanced Word Formation',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2048,7 +2048,7 @@ export const MODULES = [
   },
   {
     id: 'c1-compounding-blends',
-    title: 'Compounding & Blends (C1)',
+    title: 'Compounding & Blends',
     category: 'grammar',
     subcategory: 'morphology',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2062,7 +2062,7 @@ export const MODULES = [
   },
   {
     id: 'c1-subjunctive-unreal',
-    title: 'Subjunctive & Unreal (C1)',
+    title: 'Subjunctive & Unreal',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2076,7 +2076,7 @@ export const MODULES = [
   },
   {
     id: 'c1-future-in-past',
-    title: 'Future in the Past & Reported Tenses (C1)',
+    title: 'Future in the Past & Reported Tenses',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2090,7 +2090,7 @@ export const MODULES = [
   },
   {
     id: 'c1-aspect-time-nuance',
-    title: 'Aspect & Time Nuance (C1)',
+    title: 'Aspect & Time Nuance',
     category: 'grammar',
     subcategory: 'tense',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2119,7 +2119,7 @@ export const MODULES = [
   },
   {
     id: 'c1-fronting-emphasis',
-    title: 'Fronting & Emphasis (C1)',
+    title: 'Fronting & Emphasis',
     category: 'grammar',
     subcategory: 'structure',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2133,7 +2133,7 @@ export const MODULES = [
   },
   {
     id: 'c1-ellipsis-substitution',
-    title: 'Ellipsis & Substitution (C1)',
+    title: 'Ellipsis & Substitution',
     category: 'grammar',
     subcategory: 'nuance',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2147,7 +2147,7 @@ export const MODULES = [
   },
   {
     id: 'c1-hedging-softening',
-    title: 'Hedging & Softening Language (C1)',
+    title: 'Hedging & Softening Language',
     category: 'grammar',
     subcategory: 'nuance',
     tags: ['grammar', 'c1', 'quiz', 'study'],
@@ -2175,7 +2175,7 @@ export const MODULES = [
   },
   {
     id: 'c1-discourse-analysis',
-    title: 'Discourse Analysis (C1)',
+    title: 'Discourse Analysis',
     category: 'analysis',
     tags: ['grammar', 'connectors', 'c1', 'quiz', 'study'],
     cefr: 'c1',
@@ -2188,7 +2188,7 @@ export const MODULES = [
   },
   {
     id: 'c1-argumentation',
-    title: 'Argumentation (C1)',
+    title: 'Argumentation',
     category: 'analysis',
     tags: ['grammar', 'writing', 'c1', 'quiz', 'study'],
     cefr: 'c1',
@@ -2201,7 +2201,7 @@ export const MODULES = [
   },
   {
     id: 'c1-register-precision',
-    title: 'Register Precision (C1)',
+    title: 'Register Precision',
     category: 'analysis',
     tags: ['vocabulary', 'register', 'c1', 'quiz', 'study'],
     cefr: 'c1',
@@ -2214,7 +2214,7 @@ export const MODULES = [
   },
   {
     id: 'c1-summarising',
-    title: 'Summarising (C1)',
+    title: 'Summarising',
     category: 'analysis',
     tags: ['writing', 'c1', 'quiz', 'study'],
     cefr: 'c1',
