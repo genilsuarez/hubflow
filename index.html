@@ -53,6 +53,7 @@
   <script src="js/lp-about-content.js"></script>
   <script src="js/lp-about.js"></script>
   <script src="js/lp-settings.js"></script>
+  <script src="js/lp-dev-tools.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
     // Dev utility: ?reset=full clears all HubFlow progress in the real browser
@@ -128,6 +129,7 @@
   <link rel="stylesheet" href="css/lp-tinted-surface.css">
   <link rel="stylesheet" href="css/lp-about.css">
   <link rel="stylesheet" href="css/lp-settings.css">
+  <link rel="stylesheet" href="css/lp-dev-tools.css">
   <link rel="stylesheet" href="css/lp-cookie-consent.css">
   <link rel="stylesheet" href="css/index-shell.css">
 
@@ -770,6 +772,31 @@
         <button class="sb-item" id="aboutTrigger" type="button"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">About LearnFlow</span></button>
         <a class="sb-item" href="privacy.html"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="info" aria-hidden="true"></span><span class="sb-label">Privacidad</span></a>
         <a class="sb-item portal-link" href="/deskflow/" aria-label="Volver a LearnFlow" title="Volver a LearnFlow"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="home" aria-hidden="true"></span><span class="sb-label">Portal</span></a>
+      </section>
+      <section class="lp-settings-section" id="settingsSectionDev" aria-labelledby="settingsSectionDevTitle" hidden>
+        <h3 class="lp-settings-section__title" id="settingsSectionDevTitle">Desarrollador</h3>
+        <button class="sb-item" type="button" id="devToolsTrigger" aria-expanded="false" aria-controls="devToolsPanel"><span class="sb-spine"></span><span class="sb-icon" data-lp-icon="wrench" aria-hidden="true"></span><span class="sb-label">Dev</span></button>
+        <div class="lp-dev-panel" id="devToolsPanel" hidden>
+          <header class="lp-dev-panel__header">
+            <span><span class="sb-icon" data-lp-icon="wrench" aria-hidden="true"></span><strong>Herramientas de desarrollo</strong></span>
+            <code id="devBuildStamp"></code>
+          </header>
+          <div class="lp-dev-panel__actions">
+            <button type="button" id="devRecompileBtn"><span class="sb-icon" data-lp-icon="refresh" aria-hidden="true"></span>Recargar</button>
+            <button type="button" id="devForceSyncBtn"><span class="sb-icon" data-lp-icon="refresh" aria-hidden="true"></span>Forzar sync</button>
+            <button type="button" id="devClearCacheBtn" aria-expanded="false"><span class="sb-icon" data-lp-icon="trash" aria-hidden="true"></span>Limpiar caché</button>
+            <button type="button" id="devScreenInfoBtn" aria-expanded="false"><span class="sb-icon" data-lp-icon="monitor" aria-hidden="true"></span>Información de Pantalla</button>
+          </div>
+          <p class="lp-dev-panel__status" id="devSyncStatus" hidden></p>
+          <div class="lp-dev-cache-confirm" id="devCacheConfirm" hidden role="alert">
+            <p>Borra caché y datos locales de LearnFlow en este navegador y recarga. Tema, modo y sesión se mantienen.</p>
+            <div>
+              <button type="button" id="devCacheCancelBtn">Cancelar</button>
+              <button type="button" id="devCacheConfirmBtn">Limpiar y recargar</button>
+            </div>
+          </div>
+          <dl class="lp-dev-screen-grid" id="devScreenGrid" hidden></dl>
+        </div>
       </section>
     </div>
   </section>

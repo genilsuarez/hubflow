@@ -127,15 +127,22 @@ function invalidateProjectionCache() {
 
 /** Recalcula si un item guardado (local o nube) está realmente completo según
  * la regla vigente, en vez de confiar en su flag `completed` — que puede
- * arrastrar un `true` de cuando el módulo tenía menos scoreKeys requeridas. */
+ * arrastrar un `true` de cuando el módulo tenía menos scoreKeys requeridas.
+ * Mira solo las activityId de `rule.requiredActivities` (siempre 'practice'/
+ * 'study', ver catalog.js) — `item.activities` puede traer además entradas
+ * "match"/"timed" (rastreadas para la matriz/Maestría vía resolveScoreActivity,
+ * no exigidas para Aprobado) que no deben contar aquí. */
 function isStoredItemCompleted(contentId, item) {
   const rule = PROGRESS_RULES[contentId];
-  const activityStates = Object.values(item?.activities || {});
-  if (!rule || !activityStates.length) return Boolean(item?.completed);
-  const completedCount = activityStates.filter(
-    (activity) => (activity.totalKeys ?? 0) > 0 && activity.completedKeys === activity.totalKeys
-  ).length;
-  return rule.completionRule === 'any' ? completedCount > 0 : completedCount === activityStates.length;
+  const activities = item?.activities && typeof item.activities === 'object' ? item.activities : {};
+  if (!rule) return Boolean(item?.completed);
+  const requiredIds = rule.requiredActivities.map((activity) => activity.activityId);
+  if (!requiredIds.length) return Boolean(item?.completed);
+  const completedCount = requiredIds.filter((id) => {
+    const activity = activities[id];
+    return activity && (activity.totalKeys ?? 0) > 0 && activity.completedKeys === activity.totalKeys;
+  }).length;
+  return rule.completionRule === 'any' ? completedCount > 0 : completedCount === requiredIds.length;
 }
 
 function readProjectionDoc() {
@@ -214,10 +221,20 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem, rule) {
     };
   }
 
-  const activityStates = Object.values(mergedActivities);
+  // `mergedActivities` puede traer además entradas "match"/"timed" —
+  // resolveScoreActivity() ahora las registra en el ledger para que
+  // sincronicen entre dispositivos (ver auditoría de House & Rooms), pero
+  // no son parte de `rule.requiredActivities` (siempre 'practice'/'study').
+  // Solo esas cuentan para Aprobado — si se usara Object.values(mergedActivities)
+  // completo, un módulo con Match/Timed sin terminar nunca mostraría el ✓
+  // aunque Study+Quiz ya estén al 100%.
+  const requiredIds = rule ? rule.requiredActivities.map((activity) => activity.activityId) : null;
+  const activityStates = requiredIds
+    ? requiredIds.map((id) => mergedActivities[id]).filter(Boolean)
+    : Object.values(mergedActivities);
   const completedCount = activityStates.filter((activity) => activity.completed).length;
   const completed = rule
-    ? (rule.completionRule === 'any' ? completedCount > 0 : completedCount === activityStates.length)
+    ? (rule.completionRule === 'any' ? completedCount > 0 : completedCount === requiredIds.length)
     : (Boolean(scoreDerived.completed) || Boolean(projectionItem.completed));
 
   return {
@@ -645,7 +662,36 @@ function resolveScoreActivity(key, context) {
     contentId === requestedContent && (!context?.activity || activity.activityId === context.activity)
   );
   if (requestedMatch) return requestedMatch;
-  return candidates.sort((a, b) => a.activity.scoreKeys.length - b.activity.scoreKeys.length)[0] || null;
+  if (candidates.length) {
+    return candidates.sort((a, b) => a.activity.scoreKeys.length - b.activity.scoreKeys.length)[0];
+  }
+
+  // Modos que la matriz de progreso rastrea (Match, Timed) pero que
+  // PROGRESS_RULES no exige para Aprobado (solo Study + Quiz — ver
+  // withStudyRequirement en catalog.js). Antes se descartaban aquí en
+  // silencio, así que nunca llegaban al ledger de eventos ni, por lo tanto,
+  // a la sincronización con Supabase: un Match ganado en un dispositivo
+  // jamás aparecía en otro, aunque "forzar sync" se corriera mil veces (ver
+  // auditoría de House & Rooms divergiendo 31%/25% entre dos orígenes con
+  // la misma cuenta). Se registran igual, con un activityId derivado de la
+  // propia clave — nunca 'practice'/'study' (los únicos nombres reales que
+  // usa PROGRESS_RULES) — para que jamás se mezclen con las actividades
+  // exigidas al reconciliar el ledger genérico (applyHubflowActivityEvents
+  // en lp-progress-summary.js, que agrupa por (contentId, activity) sin
+  // conocer el catálogo). isStoredItemCompleted/mergeHubflowProgressItem ya
+  // filtran por rule.requiredActivities, así que esta entrada extra nunca
+  // participa del criterio de Aprobado — solo viaja para que el % de la
+  // matriz y Maestría (que sí miran las 4 columnas) sincronicen entre
+  // dispositivos.
+  if (requestedContent && MODULES.some((module) => module.id === requestedContent)) {
+    const activityId = key.split('-').pop() || 'practice';
+    if (activityId === 'practice' || activityId === 'study') return null;
+    return {
+      contentId: requestedContent,
+      activity: { activityId, scoreKeys: [key], passScorePct: HUBFLOW_PASS_SCORE_PCT },
+    };
+  }
+  return null;
 }
 
 function recordActivityEvent(key, pct, timestamp, context) {

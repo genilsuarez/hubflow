@@ -140,6 +140,7 @@ export function initDashboardNav() {
   });
 
   document.getElementById('settingsTrigger').addEventListener('click', (event) => {
+    if (window.lpDevTools) lpDevTools.updateSectionVisibility();
     lpSettings.open(event, { inertElements: [document.querySelector('.shell')] });
   });
   document.getElementById('aboutTrigger').addEventListener('click', (event) => {
