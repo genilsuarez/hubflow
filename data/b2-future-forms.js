@@ -46,7 +46,7 @@ export const CATEGORIES = {
       { sentence: "This time tomorrow, they ___ on the plane.", correct: 'will be flying', explain: "Future continuous: will be + verb-ing.", options: ['will be flying', 'will fly', 'are flying'] },
       { sentence: "At 9am, she ___ her classes.", correct: 'will be teaching', explain: "Future continuous: will be + verb-ing.", options: ['will be teaching', 'will teach', 'is teaching'] },
       { sentence: "This time next month, we ___ in Paris.", correct: 'will be traveling', explain: "Future continuous: will be + verb-ing.", options: ['will be traveling', 'will travel', 'are traveling'] },
-      { sentence: "At midnight, he ___ still ___.", correct: 'will be studying', explain: "Future continuous: will be + verb-ing.", options: ['will be studying', 'will study', 'is studying'] },
+      { sentence: "At midnight, he ___ for his exam.", correct: 'will be studying', explain: "Future continuous: will be + verb-ing.", options: ['will be studying', 'will study', 'is studying'] },
       { sentence: "This time tomorrow, I ___ my exam.", correct: 'will be taking', explain: "Future continuous: will be + verb-ing.", options: ['will be taking', 'will take', 'am taking'] },
     ]
   },

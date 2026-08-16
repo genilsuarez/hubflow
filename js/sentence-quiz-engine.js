@@ -17,6 +17,26 @@ import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 
 const SPEAK_ICON = '🔊';
 
+/**
+ * Rellena todos los huecos de la frase, no solo el primero: hay items con dos
+ * `___` cuya respuesta viene como par ("was cooking, arrived"). Con un
+ * `.replace('___', ...)` la respuesta entera caía en el primer hueco y el
+ * segundo se quedaba literal ("We were eating, went dinner when the lights ___
+ * off."). Si el número de partes coincide con el de huecos se reparten en
+ * orden; si no, la respuesta va al primer hueco y el resto queda marcado.
+ */
+function fillBlanks(sentence, filler, wrap = t => t) {
+  const holes = (sentence.match(/___/g) || []).length;
+  const parts = (holes > 1 && typeof filler === 'string' && filler.split(',').length === holes)
+    ? filler.split(',').map(s => s.trim())
+    : null;
+  let i = -1;
+  return sentence.replace(/___/g, () => {
+    i++;
+    return wrap(parts ? parts[i] : (i === 0 ? filler : '?'));
+  });
+}
+
 export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   renderLessonProgress(contentId);
 
@@ -80,8 +100,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   function getSpeakableText(item) {
     if (!item?.sentence) return '';
     const text = studyBlankPlaceholder
-      ? item.sentence.replace('___', studyBlankPlaceholder)
-      : item.sentence.replace('___', item.correct || '');
+      ? fillBlanks(item.sentence, studyBlankPlaceholder)
+      : fillBlanks(item.sentence, item.correct || '');
     return text.replace(/<[^>]*>/g, '').trim();
   }
 
@@ -184,7 +204,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
     const scIcon = document.getElementById('scIcon');
     if (scIcon && !usesSpeakNav()) scIcon.textContent = cat.icon;
-    document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
+    document.getElementById('scText').innerHTML = fillBlanks(item.sentence, '?', t => `<span class="blank">${t}</span>`);
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
     setQuizAnswered(false);
@@ -204,7 +224,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
           optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); });
         }
 
-        document.getElementById('scText').innerHTML = item.sentence.replace('___', `<span class="blank">${item.correct}</span>`);
+        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, item.correct, t => `<span class="blank">${t}</span>`);
         document.getElementById('explainBox').textContent = item.explain;
 
         idx++;
@@ -259,7 +279,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     const fcEmoji = document.getElementById('fcEmoji');
     if (fcEmoji && !usesSpeakNav()) fcEmoji.textContent = categories[currentCat].icon;
     document.getElementById('fcSentence').textContent = studyBlankPlaceholder
-      ? item.sentence.replace('___', studyBlankPlaceholder)
+      ? fillBlanks(item.sentence, studyBlankPlaceholder)
       : item.sentence;
     document.getElementById('fcAnswer').textContent = item.correct;
     document.getElementById('fcExplain').textContent = item.explain;
