@@ -145,6 +145,10 @@
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <!-- Mismo patrón que el resto de la app: la respuesta se queda a la vista
+             hasta que el usuario pulsa Siguiente, en vez de saltar a los 1,3 s. -->
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
     </div>
 
@@ -319,8 +323,23 @@ function initQuiz(timed) {
   renderQuiz();
 }
 
+function setQuizAnswered(isAnswered) {
+  const nextBtn = document.getElementById('quizNextBtn');
+  const skipBtn = document.getElementById('quizSkipBtn');
+  if (nextBtn) nextBtn.hidden = !isAnswered;
+  if (skipBtn) skipBtn.hidden = isAnswered;
+}
+
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => {
+  if (idx >= total) return;
+  idx++;
+  updProgress(idx, total);
+  renderQuiz();
+});
+
 function renderQuiz() {
   if (idx >= total) { finishQuiz(); return; }
+  setQuizAnswered(false);
   const item = deck[idx];
   document.getElementById('explainBox').textContent = '';
 
@@ -347,7 +366,15 @@ function renderQuiz() {
         document.getElementById('explainBox').textContent = item.tip;
         idx++;
         updProgress(idx, total);
-        setTimeout(renderQuiz, 1300);
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn) {
+          nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+          setQuizAnswered(true);
+          nextBtn.onclick = () => renderQuiz();
+          nextBtn.focus({ preventScroll: true });
+        } else {
+          setTimeout(renderQuiz, 1300);
+        }
       });
     });
   } else if (currentCat === 'word-stress') {
@@ -371,7 +398,15 @@ function renderQuiz() {
         document.getElementById('explainBox').textContent = item.tip;
         idx++;
         updProgress(idx, total);
-        setTimeout(renderQuiz, 1300);
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn) {
+          nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+          setQuizAnswered(true);
+          nextBtn.onclick = () => renderQuiz();
+          nextBtn.focus({ preventScroll: true });
+        } else {
+          setTimeout(renderQuiz, 1300);
+        }
       });
     });
   } else {
@@ -397,7 +432,15 @@ function renderQuiz() {
         document.getElementById('explainBox').textContent = item.tip;
         idx++;
         updProgress(idx, total);
-        setTimeout(renderQuiz, 1300);
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn) {
+          nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+          setQuizAnswered(true);
+          nextBtn.onclick = () => renderQuiz();
+          nextBtn.focus({ preventScroll: true });
+        } else {
+          setTimeout(renderQuiz, 1300);
+        }
       });
     });
   }

@@ -114,6 +114,13 @@
       <div class="ooo-options" id="qOptions"></div>
 
       <div class="ooo-explanation" id="qExplanation"></div>
+
+      <!-- Mismo patrón que el resto de la app: se marca la respuesta y se espera
+           un clic explícito, en vez de auto-avanzar a los 2,2 s. -->
+      <div class="fc-nav">
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
+      </div>
     </div>
   </div>
 
@@ -146,6 +153,13 @@ sharedRenderCatBar({
 // ─── Mode switching ───
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
+// Saltar sin puntuar, igual que en los demás ejercicios.
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => {
+  if (answered || idx >= deck.length) return;
+  idx++;
+  renderQuestion();
+});
+
 function startMode() {
   stopTimer();
   deck = shuffle(CATEGORIES[currentCat].items);
@@ -170,6 +184,7 @@ function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds =
 function renderQuestion() {
   if (idx >= deck.length) { finish(); return; }
   answered = false;
+  setQuizAnswered(false);
   const item = deck[idx];
 
   document.getElementById('qCounter').textContent = `${idx + 1} / ${deck.length}`;
@@ -211,8 +226,22 @@ function handleAnswer(chosen, item) {
   expEl.innerHTML = `<strong>${item.words[item.odd]}</strong> — ${item.reason}<div class="ooo-group">The others: ${item.group}</div>`;
   expEl.classList.add('show');
 
-  // Auto-advance
-  setTimeout(() => { idx++; renderQuestion(); }, mode === 'timed' ? 1800 : 2200);
+  const nextBtn = document.getElementById('quizNextBtn');
+  if (nextBtn) {
+    nextBtn.textContent = idx + 1 >= deck.length ? 'Ver resultado →' : 'Siguiente →';
+    setQuizAnswered(true);
+    nextBtn.onclick = () => { idx++; renderQuestion(); };
+    nextBtn.focus({ preventScroll: true });
+  } else {
+    setTimeout(() => { idx++; renderQuestion(); }, mode === 'timed' ? 1800 : 2200);
+  }
+}
+
+function setQuizAnswered(isAnswered) {
+  const nextBtn = document.getElementById('quizNextBtn');
+  const skipBtn = document.getElementById('quizSkipBtn');
+  if (nextBtn) nextBtn.hidden = !isAnswered;
+  if (skipBtn) skipBtn.hidden = isAnswered;
 }
 
 function updateProgress() {
