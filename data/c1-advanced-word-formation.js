@@ -45,7 +45,7 @@ export const CATEGORIES = {
       { sentence: "The evidence was ___ with his statement.", correct: 'inconsistent', explain: "'In-' negates the adjective 'consistent'.", options: ['inconsistent', 'unconsistent', 'misconsistent'] },
       { sentence: "He felt completely ___ from his colleagues.", correct: 'alienated', explain: "'Alienated' means made to feel like an outsider (not a negative prefix, a distinct word).", options: ['alienated', 'unalienated', 'disalienated'] },
       { sentence: "The report contained several ___ claims.", correct: 'unsubstantiated', explain: "'Un-' negates 'substantiated' (proven with evidence).", options: ['unsubstantiated', 'insubstantiated', 'missubstantiated'] },
-      { sentence: "His actions were completely ___.", correct: 'unjustifiable', explain: "'Un-' negates the adjective 'justifiable'.", options: ['unjustifiable', 'injustifiable', 'disjustifiable'] },
+      { sentence: "The panel found his conduct entirely ___.", correct: 'unjustifiable', explain: "'Un-' negates the adjective 'justifiable'.", options: ['unjustifiable', 'injustifiable', 'disjustifiable'] },
       { sentence: "The witness clearly ___ the events.", correct: 'misrepresented', explain: "'Mis-' means 'wrongly': misrepresent = to represent wrongly.", options: ['misrepresented', 'unrepresented', 'disrepresented'] },
       { sentence: "The theory was proven to be ___.", correct: 'unfounded', explain: "'Un-' negates 'founded' (based on solid grounds).", options: ['unfounded', 'infounded', 'misfounded'] },
     ]
