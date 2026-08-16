@@ -210,6 +210,8 @@
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
     </div>
 
@@ -331,12 +333,17 @@ document.querySelectorAll('[data-cat]').forEach(btn => {
 // ─── Mode ───
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipQuiz());
+function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
+function skipQuiz() { if (quizIdx >= quizTotal) return; quizIdx++; updProgress(quizIdx, quizTotal); renderQuiz(); }
+
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
   const sortBtn = document.getElementById('sortCheck');
   if (sortBtn && mode !== 'sort') sortBtn.style.display = 'none';
+  setQuizAnswered(false);
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'match') initMatch();
@@ -443,6 +450,7 @@ function renderQuiz() {
 
   document.getElementById('quizBase').textContent = verb.base;
   document.getElementById('quizLabel').textContent = `What is the ${question}?`;
+  setQuizAnswered(false);
 
   // Build distractors from same category preferring
   const pool = filteredData().filter(v => v !== verb);
@@ -458,7 +466,16 @@ function renderQuiz() {
       else { btn.classList.add('wrong'); optsEl.querySelectorAll('.quiz-opt').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); }); }
       quizIdx++;
       updProgress(quizIdx, quizTotal);
-      setTimeout(renderQuiz, 700);
+
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = quizIdx >= quizTotal ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderQuiz();
+        nextBtn.focus({ preventScroll: true });
+      } else {
+        setTimeout(renderQuiz, 700);
+      }
     });
   });
   updProgress(quizIdx, quizTotal);

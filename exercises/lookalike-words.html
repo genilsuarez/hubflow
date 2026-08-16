@@ -50,7 +50,7 @@
     <!-- Modes -->
     <div class="pill-bar">
       <button class="pill-btn active" data-mode="study">📖 Study</button>
-      <button class="pill-btn" data-mode="practice">🎯 Practice</button>
+      <button class="pill-btn" data-mode="practice">🎯 Quiz</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
@@ -97,6 +97,8 @@
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
     </div>
   </div>
@@ -127,21 +129,17 @@ sharedRenderCatBar({
 });
 
 // ─── Mode switching ───
-wireModeTabs({
-  getMode: () => mode, setMode: v => mode = v,
-  onChange: () => {
-    startMode();
-    setTimeout(() => {
-      if (mode === 'practice' || mode === 'timed') syncPracticeNav({ showNext: !!practiceAdvance });
-      else if (mode === 'study') restoreStudyNav();
-    }, 10);
-  },
-});
+wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
+
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
+function skipPractice() { if (idx >= total) return; idx++; updProgress(idx, total); renderPractice(); }
 
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
+  setQuizAnswered(false);
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
@@ -150,51 +148,6 @@ function startMode() {
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
 
 function getData() { return CATEGORIES[currentCat].items; }
-
-let practiceAdvance = null;
-
-function syncPracticeNav({ showNext = false } = {}) {
-  const shuffleBtn = document.getElementById('shuffleBtn');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  [shuffleBtn, prevBtn].forEach((btn) => {
-    if (!btn) return;
-    btn.hidden = true;
-    btn.style.display = 'none';
-  });
-  if (nextBtn) {
-    nextBtn.hidden = !showNext;
-    if (showNext) nextBtn.style.removeProperty('display');
-    else nextBtn.style.display = 'none';
-  }
-}
-
-function restoreStudyNav() {
-  ['shuffleBtn', 'prevBtn', 'nextBtn'].forEach((id) => {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.hidden = false;
-    btn.style.removeProperty('display');
-  });
-  practiceAdvance = null;
-}
-
-function installBottomNavHook(attempt = 0) {
-  const orig = window.__syncBottomNavMode;
-  if (!orig) {
-    if (attempt < 40) setTimeout(() => installBottomNavHook(attempt + 1), 50);
-    return;
-  }
-  window.__syncBottomNavMode = () => {
-    orig();
-    if (mode === 'practice' || mode === 'timed') {
-      syncPracticeNav({ showNext: !!practiceAdvance });
-    } else if (mode === 'study') {
-      restoreStudyNav();
-    }
-  };
-  window.__syncBottomNavMode();
-}
 
 const updProgress = (current, t) => updateProgress(current, t,
   document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
@@ -228,7 +181,7 @@ function renderPractice() {
   document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
   document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
   document.getElementById('explainBox').textContent = '';
-  syncPracticeNav({ showNext: false });
+  setQuizAnswered(false);
 
   // Build options from the category pairs
   const opts = shuffle([...cat.pairs]);
@@ -261,21 +214,15 @@ function renderPractice() {
       idx++;
       updProgress(idx, total);
 
-      if (idx >= total) {
-        practiceAdvance = null;
-        syncPracticeNav({ showNext: false });
-        requestAnimationFrame(() => finishPractice());
-        return;
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderPractice();
+        nextBtn.focus({ preventScroll: true });
+      } else {
+        setTimeout(renderPractice, 1400);
       }
-
-      practiceAdvance = () => {
-        practiceAdvance = null;
-        syncPracticeNav({ showNext: false });
-        renderPractice();
-      };
-      syncPracticeNav({ showNext: true });
-      setTimeout(() => syncPracticeNav({ showNext: true }), 10);
-      document.getElementById('nextBtn')?.focus();
     });
   });
   updProgress(idx, total);
@@ -288,21 +235,20 @@ function finishPractice() {
     correct: score, total, startMode, setMode: v => mode = v,
     elapsedSeconds: elapsed,
   });
-  requestAnimationFrame(() => recordScore(`conf-${currentCat}`, pct));
+  recordScore(`look-${currentCat}`, pct);
 }
 
 // ═══ STUDY ═══
 function initStudy() {
   deck = shuffle(getData());
   idx = 0;
-  restoreStudyNav();
   document.querySelector('[data-area="study"]').classList.add('show');
   renderStudyCard();
 }
 
 function renderStudyCard() {
   const item = deck[idx];
-  recordStudyItemSeen({ storagePrefix: 'conf', category: currentCat, term: item.sentence, totalItems: getData().length });
+  recordStudyItemSeen({ storagePrefix: 'look', category: currentCat, term: item.sentence, totalItems: getData().length });
   const card = document.getElementById('fcCard');
   card.classList.remove('flip');
   document.getElementById('fcEmoji').textContent = CATEGORIES[currentCat].icon;
@@ -315,10 +261,7 @@ function renderStudyCard() {
 }
 
 document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
-document.getElementById('nextBtn').addEventListener('click', () => {
-  if (practiceAdvance) { practiceAdvance(); return; }
-  if (mode === 'study') advanceCard(1);
-});
+document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
 document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
 document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
 initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
@@ -328,13 +271,6 @@ function advanceCard(dir) {
 }
 
 document.addEventListener('keydown', e => {
-  if (mode === 'practice' || mode === 'timed') {
-    if (practiceAdvance && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
-      e.preventDefault();
-      practiceAdvance();
-    }
-    return;
-  }
   if (mode !== 'study') return;
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
@@ -346,7 +282,6 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── Init ───
-installBottomNavHook();
 startMode();
 </script>
 

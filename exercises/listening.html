@@ -92,7 +92,7 @@
     <div class="cat-bar" id="catBar"></div>
 
     <div class="pill-bar">
-      <button class="pill-btn active" data-mode="practice">🎯 Practice</button>
+      <button class="pill-btn active" data-mode="practice">🎯 Quiz</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
@@ -114,10 +114,14 @@
       <div class="sc-counter" id="scCounter"></div>
       <div class="word-options" id="wordOptions"></div>
       <div class="practice-actions">
-        <button class="listen-btn" id="listenBtn" aria-label="Play audio">🔊</button>
+        <button class="listen-btn" id="playAudioBtn" aria-label="Play audio">🔊</button>
       </div>
       <div class="reveal-box" id="revealBox">Listen and choose the word you hear.</div>
     </div>
+  </div>
+  <div class="fc-nav">
+    <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+    <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
   </div>
 
   <div class="result-overlay" id="resultOverlay"></div>
@@ -141,7 +145,7 @@ let timer = null;
 let timedSeconds = 0;
 let answered = false;
 
-const listenBtn = document.getElementById('listenBtn');
+const listenBtn = document.getElementById("playAudioBtn");
 
 sharedRenderCatBar({
   containerId: 'catBar', categories: CATEGORIES,
@@ -151,10 +155,15 @@ sharedRenderCatBar({
 
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+function setQuizAnswered(isAnswered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !isAnswered; if (skipBtn) skipBtn.hidden = isAnswered; }
+function skipPractice() { if (answered || idx >= total) return; idx++; updProgress(idx, total); renderQuestion(); }
+
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
+  setQuizAnswered(false);
   initPractice(mode === 'timed');
 }
 
@@ -200,6 +209,7 @@ function renderQuestion() {
 
   document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
   document.getElementById('revealBox').innerHTML = 'Listen and choose the word you hear.';
+  setQuizAnswered(false);
 
   const opts = shuffle([...item.options]);
   const optsEl = document.getElementById('wordOptions');
@@ -220,7 +230,16 @@ function renderQuestion() {
       document.getElementById('revealBox').innerHTML = highlighted;
       idx++;
       updProgress(idx, total);
-      setTimeout(renderQuestion, 1800);
+
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderQuestion();
+        nextBtn.focus({ preventScroll: true });
+      } else {
+        setTimeout(renderQuestion, 1800);
+      }
     });
   });
   updProgress(idx, total);

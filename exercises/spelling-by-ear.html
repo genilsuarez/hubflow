@@ -49,7 +49,7 @@
   <div class="header">
     <h1>👂 Spelling by Ear</h1>
     <div class="cat-bar" id="catBar"></div>
-    <div class="pill-bar"><button class="pill-btn active" data-mode="practice">🎯 Practice</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
+    <div class="pill-bar"><button class="pill-btn active" data-mode="practice">🎯 Quiz</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
     <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
     <div class="progress"><div class="progress__labels"><span id="progTxt">0 / 15</span><span id="progPct">0%</span></div><div class="progress__track"><div class="progress__fill" id="progFill"></div></div></div>
   </div>
@@ -60,10 +60,14 @@
       <div class="sc-counter" id="scCounter"></div>
       <input class="answer-input" id="answerInput" type="text" placeholder="Type the form…" autocomplete="off" autocorrect="off" spellcheck="false">
       <div class="practice-actions">
-        <button class="listen-btn" id="listenBtn" aria-label="Listen to base verb">🔊</button>
+        <button class="listen-btn" id="playAudioBtn" aria-label="Listen to base verb">🔊</button>
       </div>
       <div class="explain-box" id="explainBox"></div>
     </div>
+  </div>
+  <div class="fc-nav">
+    <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+    <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
   </div>
   <div class="result-overlay" id="resultOverlay"></div>
 </div>
@@ -82,15 +86,18 @@ sharedRenderCatBar({
   onChange: startMode,
 });
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
-function startMode() { stopTimer(); document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show')); document.getElementById('timerBar').classList.remove('show'); initPractice(mode === 'timed'); }
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+function setQuizAnswered(isAnswered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !isAnswered; if (skipBtn) skipBtn.hidden = isAnswered; }
+function skipPractice() { if (answered || idx >= total) return; idx++; updProgress(idx, total); renderItem(); }
+function startMode() { stopTimer(); document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show')); document.getElementById('timerBar').classList.remove('show'); setQuizAnswered(false); initPractice(mode === 'timed'); }
 function stopTimer() { if (timer) { timer.stop(); timer = null; } }
 function getData() { return CATEGORIES[currentCat].items; }
 const updProgress = (c, t) => updateProgress(c, t, document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 function playBase() { const item = deck[idx]; if (item) speak(item.base, { rate: 0.8 }); }
-document.getElementById('listenBtn').addEventListener('click', playBase);
+document.getElementById("playAudioBtn").addEventListener('click', playBase);
 function initPractice(timed) { deck = shuffle(getData()); idx = 0; score = 0; answered = false; total = Math.min(timed ? 10 : deck.length, deck.length); document.querySelector('[data-area="practice"]').classList.add('show'); if (timed) { document.getElementById('timerBar').classList.add('show'); timer = new Timer(total*8, r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r<=10); }, () => finishPractice()); timer.start(); } renderItem(); }
-function renderItem() { if (idx >= total) { stopTimer(); finishPractice(); return; } answered = false; const item = deck[idx]; document.getElementById('formLabel').textContent = `Write the ${item.form} form`; document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; const input = document.getElementById('answerInput'); input.value = ''; input.className = 'answer-input'; input.disabled = false; input.focus(); updProgress(idx, total); setTimeout(playBase, 300); }
-function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); input.value = `${val} → ${item.correct}`; } document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); setTimeout(renderItem, 1600); }
+function renderItem() { if (idx >= total) { stopTimer(); finishPractice(); return; } answered = false; setQuizAnswered(false); const item = deck[idx]; document.getElementById('formLabel').textContent = `Write the ${item.form} form`; document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; const input = document.getElementById('answerInput'); input.value = ''; input.className = 'answer-input'; input.disabled = false; input.focus(); updProgress(idx, total); setTimeout(playBase, 300); }
+function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); input.value = `${val} → ${item.correct}`; } document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); const nextBtn = document.getElementById('quizNextBtn'); if (nextBtn) { nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →'; setQuizAnswered(true); nextBtn.onclick = () => renderItem(); nextBtn.focus({ preventScroll: true }); } else { setTimeout(renderItem, 1600); } }
 document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
 function finishPractice() { const pct = finishExercise({ correct: score, total, startMode }); recordScore(`sbe-${currentCat}`, pct); }
 startMode();

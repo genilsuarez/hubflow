@@ -59,22 +59,25 @@
   [data-theme="dark"] .quiz-opt.wrong { color: #FF9F9F; }
 
   /* Write mode */
-  .write-card { width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 20px; text-align: center; box-shadow: var(--lp-shadow-sm); }
-  .write-card .w-meaning { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 600; color: var(--lp-cat-teal); margin-bottom: 4px; }
-  .write-card .w-hint { font-size: .65rem; color: var(--lp-muted); font-weight: 600; margin-bottom: 10px; }
-  .write-card .w-gap { font-size: 1rem; font-weight: 500; color: var(--lp-ink); line-height: 1.6; margin-bottom: 12px; }
-  .write-card .w-gap .blank { border-bottom: 2px dashed var(--lp-cat-teal); min-width: 50px; display: inline-block; }
-  .write-input-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .write-input-row input {
-    width: 110px; font-family: var(--lp-font-mono); font-size: .82rem; font-weight: 600;
-    text-align: center; padding: 8px 10px; border-radius: var(--lp-radius-sm);
-    border: 1.5px solid var(--lp-border); background: var(--lp-bg-paper); color: var(--lp-ink);
-    outline: none; transition: border-color .2s;
+  .write-card { width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 24px 20px; text-align: center; box-shadow: var(--lp-shadow-sm); }
+  .write-card .w-meaning { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 600; color: var(--lp-cat-teal); margin-bottom: 14px; }
+  /* Inline "fill in the blank" sentence: the input sits inside the sentence
+     flow instead of a disconnected row below it, so what you're completing
+     and where it goes are the same thing (natural-language-form pattern). */
+  .w-sentence { font-size: 1.05rem; font-weight: 500; color: var(--lp-ink); line-height: 2.4; }
+  .w-sentence .w-input {
+    font-family: var(--lp-font-mono); font-size: .95rem; font-weight: 700;
+    min-width: 44px; text-align: center; vertical-align: baseline;
+    border: none; border-bottom: 2.5px solid var(--lp-border);
+    border-radius: 3px 3px 0 0; background: color-mix(in srgb, var(--lp-cat-teal) 6%, transparent);
+    color: var(--lp-cat-teal); padding: 1px 4px; margin: 0 2px; outline: none;
+    transition: border-color .2s, background-color .2s;
   }
-  .write-input-row input:focus { border-color: var(--lp-cat-teal); }
-  .write-input-row input.correct { border-color: var(--lp-success); background: var(--lp-success-soft); }
-  .write-input-row input.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); }
-  .write-feedback { font-size: .72rem; font-weight: 600; margin-top: 8px; min-height: 1.2em; }
+  .w-sentence .w-input:focus { border-color: var(--lp-cat-teal); background: color-mix(in srgb, var(--lp-cat-teal) 14%, transparent); }
+  .w-sentence .w-input.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
+  .w-sentence .w-input.wrong { border-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error-dark); }
+  .w-sentence .w-input:disabled { opacity: 1; }
+  .write-feedback { font-size: .72rem; font-weight: 600; margin-top: 14px; min-height: 1.2em; }
   .write-feedback.ok { color: var(--lp-success); }
   .write-feedback.err { color: var(--lp-error); }
 
@@ -142,7 +145,6 @@
 
   @media (max-width: 480px) {
     .quiz-opt { min-width: 55px; padding: 9px 14px; }
-    .write-input-row input { width: 90px; }
   }
 
   /* Match mode */
@@ -214,6 +216,8 @@
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
     </div>
 
@@ -230,9 +234,7 @@
     <div data-area="write">
       <div class="write-card">
         <div class="w-meaning" id="writeMeaning"></div>
-        <div class="w-hint" id="writeHint">Complete the phrasal verb</div>
-        <div class="w-gap" id="writeGap"></div>
-        <div class="write-input-row" id="writeInputs"></div>
+        <div class="w-sentence" id="writeSentence"></div>
         <div class="write-feedback" id="writeFeedback"></div>
       </div>
       <button class="lp-btn lp-btn--primary" id="checkBtn">Comprobar ✓</button>
@@ -316,12 +318,17 @@ sharedRenderCatBar({
 // ─── Mode switching ───
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipQuiz());
+function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
+function skipQuiz() { if (idx >= total) return; idx++; updProgress(idx, total); renderQuiz(); }
+
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
   const sortBtn = document.getElementById('sortCheck');
   if (sortBtn && mode !== 'sort') sortBtn.style.display = 'none';
+  setQuizAnswered(false);
   if (mode === 'study') initStudy();
   else if (mode === 'quiz') initQuiz(false);
   else if (mode === 'match') initMatch();
@@ -422,6 +429,7 @@ function renderQuiz() {
 
   document.getElementById('quizVerb').innerHTML = `${item.base} <span class="q-blank">___</span>`;
   document.getElementById('quizMeaning').textContent = item.es;
+  setQuizAnswered(false);
 
   // Get unique particles from current category for distractors
   const allParticles = [...new Set(getData().map(i => i.particle))];
@@ -441,7 +449,16 @@ function renderQuiz() {
       document.getElementById('quizVerb').innerHTML = `${item.base} <span style="color:var(--lp-success);font-weight:700">${item.particle}</span>`;
       idx++;
       updProgress(idx, total);
-      setTimeout(renderQuiz, 800);
+
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderQuiz();
+        nextBtn.focus({ preventScroll: true });
+      } else {
+        setTimeout(renderQuiz, 800);
+      }
     });
   });
   updProgress(idx, total);
@@ -458,7 +475,7 @@ function finishQuiz() {
 }
 
 // ═══ WRITE ═══
-let writeDeck = [], writeIdx = 0, writeScore = 0, writeTotal = 10;
+let writeDeck = [], writeIdx = 0, writeScore = 0, writeTotal = 10, writeAnswered = false;
 
 function initWrite() {
   writeDeck = shuffle(getData());
@@ -474,18 +491,39 @@ function renderWrite() {
   const item = writeDeck[writeIdx];
 
   document.getElementById('writeMeaning').textContent = item.es;
-  document.getElementById('writeHint').textContent = `Complete: ${item.base} + ?`;
+  writeAnswered = false;
+  const fb = document.getElementById('writeFeedback');
+  fb.textContent = '';
+  fb.className = 'write-feedback';
 
-  // Count blanks in gap sentence
-  const parts = item.verb.split(' ');
-  const inputsEl = document.getElementById('writeInputs');
-  inputsEl.innerHTML = parts.map((p, i) => `<input type="text" class="w-input" data-idx="${i}" autocomplete="off" spellcheck="false" placeholder="${i === 0 ? 'verb' : 'particle'}">`).join('');
+  // Blanks in `gap` don't always match verb.split(' ').length: some entries
+  // already show the conjugated verb in the sentence ("She hung ___ before…")
+  // and only blank the particle. Deriving inputs from the actual blanks (and
+  // aligning them to the trailing words of `verb`, since phrasal verbs are
+  // always "base + particle(s)" in order) keeps the check in sync with what's
+  // really being asked instead of always assuming 2 disconnected inputs.
+  const segments = item.gap.split('___');
+  const blankCount = segments.length - 1;
+  const expectedWords = item.verb.split(' ').slice(-blankCount);
 
-  document.getElementById('writeGap').innerHTML = item.gap.replace(/___/g, '<span class="blank">___</span>');
-  document.getElementById('writeFeedback').textContent = '';
-  document.getElementById('writeFeedback').className = 'write-feedback';
+  const sentenceEl = document.getElementById('writeSentence');
+  sentenceEl.innerHTML = '';
+  segments.forEach((seg, i) => {
+    sentenceEl.appendChild(document.createTextNode(seg));
+    if (i >= blankCount) return;
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'w-input';
+    inp.dataset.idx = i;
+    inp.autocomplete = 'off';
+    inp.autocapitalize = 'off';
+    inp.spellcheck = false;
+    inp.setAttribute('aria-label', `palabra ${i + 1} de ${blankCount}`);
+    inp.style.width = `${Math.max(3, expectedWords[i].length + 1.5)}ch`;
+    sentenceEl.appendChild(inp);
+  });
 
-  const inputs = inputsEl.querySelectorAll('.w-input');
+  const inputs = sentenceEl.querySelectorAll('.w-input');
   inputs[0]?.focus();
   // Tab through inputs, submit on Enter in last
   inputs.forEach((inp, i) => {
@@ -501,16 +539,19 @@ function renderWrite() {
 }
 
 function doWriteCheck() {
+  if (writeAnswered) return;
+  writeAnswered = true;
   const item = writeDeck[writeIdx];
-  const parts = item.verb.split(' ');
-  const inputs = document.querySelectorAll('.w-input');
+  const inputs = document.querySelectorAll('#writeSentence .w-input');
+  const expectedWords = item.verb.split(' ').slice(-inputs.length);
   let allCorrect = true;
 
   inputs.forEach((inp, i) => {
     const val = inp.value.trim().toLowerCase();
-    const expected = parts[i].toLowerCase();
+    const expected = expectedWords[i].toLowerCase();
     if (val === expected) { inp.classList.add('correct'); }
     else { inp.classList.add('wrong'); allCorrect = false; }
+    inp.disabled = true;
   });
 
   const fb = document.getElementById('writeFeedback');
