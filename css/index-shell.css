@@ -1849,9 +1849,21 @@
       .section.active-section[data-key="mi-progreso"] #secHeadCefr { grid-area: lvlhead; margin-bottom: 0; margin-top: 6px; }
       .section.active-section[data-key="mi-progreso"] #statsByCategory { grid-area: catbody; }
       .section.active-section[data-key="mi-progreso"] #statsByCefr { grid-area: lvlbody; }
+      /* Columnas fijas (no auto-fill) — con auto-fill, categoría (4 ítems)
+         quedaba pareja pero nivel (5 ítems, primo) siempre dejaba una fila
+         final con una sola tarjeta y 2-3 columnas de hueco vacío al lado, y
+         ese hueco crecía sin límite en monitores anchos porque el contenedor
+         no tenía tope de ancho. Por debajo de los 1200px la columna de
+         contenido (261-861px, ver .section grid-template-columns arriba)
+         todavía no tiene aire para 2 columnas sin truncar labels largos
+         ("Analysis & Production"), así que se queda en 1 sola columna ancha
+         hasta ese punto; de ahí en adelante pasa a 2 columnas con tope de
+         ancho, para que el "resto" de nivel sea como mucho media fila (mucho
+         menos notorio) y el tamaño de las tarjetas deje de depender del
+         monitor del usuario — M4 2026-08. */
       .section.active-section[data-key="mi-progreso"] #statsByCategory,
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: 1fr;
       }
 
       .section.active-section[data-key="mi-progreso"] .last-activities {
@@ -1875,6 +1887,14 @@
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
         margin: 0; min-height: 0; height: 100%;
         align-content: start;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .section.active-section[data-key="mi-progreso"] #statsByCategory,
+      .section.active-section[data-key="mi-progreso"] #statsByCefr {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 640px;
       }
     }
 
