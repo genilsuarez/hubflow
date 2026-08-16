@@ -12,12 +12,12 @@ export const CATEGORIES = {
       { sentence: 'She ___ have a dog when she was a kid.', correct: 'used to', explain: '"Have" (possession) is a state → only "used to", never "would".' },
       { sentence: 'We ___ live in a small flat before we moved here.', correct: 'used to', explain: '"Live" here describes a past state → "used to", not "would".' },
       { sentence: 'He ___ believe in ghosts, but not anymore.', correct: 'used to', explain: '"Believe" is a state verb → only "used to".' },
-      { sentence: 'Every summer, my dad ___ take us fishing at the lake.', correct: 'would', explain: '"Take" is an ACTION repeated in the past → "would" works perfectly here (and so does "used to").' },
-      { sentence: 'After school, we ___ play football in the park for hours.', correct: 'would', explain: '"Play" is a repeated past ACTION → "would" is natural here to describe the routine.' },
-      { sentence: 'She ___ always bring homemade cake to the office on Fridays.', correct: 'would', explain: '"Bring" is an ACTION repeated habitually → "would" emphasises the nostalgic routine.' },
-      { sentence: 'On rainy days, grandma ___ read us stories by the fire.', correct: 'would', explain: '"Read" is a repeated past ACTION → "would" paints the nostalgic picture of that routine.' },
+      { sentence: 'Every summer, my dad ___ take us fishing at the lake.', correct: ['would', 'used to'], explain: '"Take" is an ACTION repeated in the past → "would" works perfectly here (and so does "used to" — it always accepts actions too).' },
+      { sentence: 'After school, we ___ play football in the park for hours.', correct: ['would', 'used to'], explain: '"Play" is a repeated past ACTION → "would" is natural here to describe the routine ("used to" also works for actions).' },
+      { sentence: 'She ___ always bring homemade cake to the office on Fridays.', correct: ['would', 'used to'], explain: '"Bring" is an ACTION repeated habitually → "would" emphasises the nostalgic routine ("used to" also works for actions).' },
+      { sentence: 'On rainy days, grandma ___ read us stories by the fire.', correct: ['would', 'used to'], explain: '"Read" is a repeated past ACTION → "would" paints the nostalgic picture of that routine ("used to" also works for actions).' },
       { sentence: 'I ___ like broccoli, but now I love it.', correct: 'used to', explain: '"Like" is a state verb → only "used to".' },
-      { sentence: 'Every morning he ___ walk to the bakery and buy fresh bread.', correct: 'would', explain: '"Walk" and "buy" are repeated past ACTIONS → "would" is ideal for describing habitual routines.' }
+      { sentence: 'Every morning he ___ walk to the bakery and buy fresh bread.', correct: ['would', 'used to'], explain: '"Walk" and "buy" are repeated past ACTIONS → "would" is ideal for describing habitual routines ("used to" also works for actions).' }
     ]
   },
   accustomed: {

@@ -10,13 +10,13 @@ export const CATEGORIES = {
     options: ['can', 'could', 'must', 'might', 'should', 'shall', 'will'],
     items: [
       { sentence: '___ you swim when you were five?', correct: 'could', explain: '"Could" expresses past ability.' },
-      { sentence: "It's cloudy — it ___ rain later.", correct: 'might', explain: '"Might" expresses a weaker possibility.' },
+      { sentence: "It's cloudy — it ___ rain later.", correct: ['might', 'could'], explain: '"Might" expresses a weaker possibility — "could" works equally well here for the same weak possibility.' },
       { sentence: 'You ___ wear a seatbelt in this country — it\'s the law.', correct: 'must', explain: '"Must" expresses a strong obligation or rule.' },
-      { sentence: 'You ___ be tired after that flight.', correct: 'must', explain: '"Must" also expresses a confident deduction.' },
+      { sentence: "You ___ be exhausted after that flight — you look shattered.", correct: 'must', explain: '"Must" expresses a confident deduction, backed here by visible evidence ("you look shattered").' },
       { sentence: "You really ___ see a doctor about that cough.", correct: 'should', explain: '"Should" gives advice or a recommendation.' },
       { sentence: '___ we order dessert?', correct: 'shall', explain: '"Shall" (with I/we) makes a suggestion or offer.' },
-      { sentence: '___ I borrow your pen for a second?', correct: 'can', explain: '"Can" makes an informal request for permission.' },
-      { sentence: '___ you help me lift this box, please?', correct: 'could', explain: '"Could" for polite requests (more formal than "can").' },
+      { sentence: '___ I borrow your pen for a second?', correct: ['can', 'could'], explain: '"Can" makes an informal request for permission — "could" is equally valid, just more polite.' },
+      { sentence: '___ you help me lift this box, please?', correct: ['could', 'can'], explain: '"Could" for polite requests (more formal than "can") — "can" works too, just less formal.' },
       { sentence: 'Don\'t worry — I ___ take care of it.', correct: 'will', explain: '"Will" for a promise or a spontaneous decision.' },
       { sentence: 'She ___ speak four languages fluently.', correct: 'can', explain: '"Can" for present ability.' }
     ]

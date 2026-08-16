@@ -25,6 +25,15 @@ const SPEAK_ICON = '🔊';
  * off."). Si el número de partes coincide con el de huecos se reparten en
  * orden; si no, la respuesta va al primer hueco y el resto queda marcado.
  */
+// Casi todo item.correct es un string único. Algunos puntos gramaticales
+// (used-to vs would para acciones repetidas: "would" siempre es correcto ahí,
+// pero "used to" TAMBIÉN lo es — es la forma general) tienen más de una
+// respuesta válida y solo el clic sobre la que quedó fijada como `correct`
+// contaba como acierto. Con un array se aceptan todas; sigue siendo un string
+// en el resto de items, sin cambiar su comportamiento.
+const acceptedAnswers = item => Array.isArray(item.correct) ? item.correct : [item.correct];
+const primaryAnswer = item => Array.isArray(item.correct) ? item.correct[0] : item.correct;
+
 function fillBlanks(sentence, filler, wrap = t => t) {
   const holes = (sentence.match(/___/g) || []).length;
   const parts = (holes > 1 && typeof filler === 'string' && filler.split(',').length === holes)
@@ -107,7 +116,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     if (!item?.sentence) return '';
     const text = studyBlankPlaceholder
       ? fillBlanks(item.sentence, studyBlankPlaceholder)
-      : fillBlanks(item.sentence, item.correct || '');
+      : fillBlanks(item.sentence, primaryAnswer(item) || '');
     return text.replace(/<[^>]*>/g, '').trim();
   }
 
@@ -224,13 +233,14 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
         optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
 
         const chosen = btn.dataset.val;
-        if (chosen === item.correct) { btn.classList.add('correct'); score++; }
+        const accepted = acceptedAnswers(item);
+        if (accepted.includes(chosen)) { btn.classList.add('correct'); score++; }
         else {
           btn.classList.add('wrong');
-          optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); });
+          optsEl.querySelectorAll('.word-opt').forEach(b => { if (accepted.includes(b.dataset.val)) b.classList.add('correct'); });
         }
 
-        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, item.correct, (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
+        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, primaryAnswer(item), (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
         document.getElementById('explainBox').textContent = item.explain;
 
         idx++;
@@ -287,7 +297,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     document.getElementById('fcSentence').textContent = studyBlankPlaceholder
       ? fillBlanks(item.sentence, studyBlankPlaceholder)
       : item.sentence;
-    document.getElementById('fcAnswer').textContent = item.correct;
+    document.getElementById('fcAnswer').textContent = Array.isArray(item.correct) ? item.correct.join(' / ') : item.correct;
     document.getElementById('fcExplain').textContent = item.explain;
     document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
     updProgress(idx + 1, deck.length);

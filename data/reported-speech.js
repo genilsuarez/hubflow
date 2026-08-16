@@ -42,15 +42,15 @@ export const CATEGORIES = {
     icon: '❓',
     options: ['if', 'whether', 'what', 'where', 'when', 'why', 'how'],
     items: [
-      { sentence: '"Are you coming?" she asked. → She asked ___ I was coming.', correct: 'if', explain: 'Yes/no questions use "if" or "whether" in reported speech.' },
+      { sentence: '"Are you coming?" she asked. → She asked ___ I was coming.', correct: ['if', 'whether'], explain: 'Yes/no questions use "if" or "whether" in reported speech — both are correct here.' },
       { sentence: '"Where do you live?" he asked. → He asked me ___ I lived.', correct: 'where', explain: 'Wh-questions keep the question word; word order becomes statement order.' },
       { sentence: '"What time does it start?" she asked. → She asked ___ it started.', correct: 'when', explain: '"What time" questions are often reported with "when"; tense backshifts and "does" disappears.' },
-      { sentence: '"Did you see the news?" he asked. → He asked ___ I had seen the news.', correct: 'if', explain: 'Yes/no question → "if" + statement word order.' },
+      { sentence: '"Did you see the news?" he asked. → He asked ___ I had seen the news.', correct: ['if', 'whether'], explain: 'Yes/no question → "if" or "whether" + statement word order — both are correct here.' },
       { sentence: '"Why are you late?" she asked. → She asked me ___ I was late.', correct: 'why', explain: '"Why" stays as the reporting word; tense backshifts.' },
       { sentence: '"How long have you been waiting?" he asked. → He asked ___ I had been waiting.', correct: 'how', explain: '"How" stays as the question word; "how long" uses "how" as the key reported word.' },
-      { sentence: '"Can you swim?" she asked. → She asked ___ I could swim.', correct: 'if', explain: 'Yes/no question → "if" + backshifted auxiliary ("can" → "could").' },
+      { sentence: '"Can you swim?" she asked. → She asked ___ I could swim.', correct: ['if', 'whether'], explain: 'Yes/no question → "if" or "whether" + backshifted auxiliary ("can" → "could") — both are correct here.' },
       { sentence: '"When will the results come out?" they asked. → They asked ___ the results would come out.', correct: 'when', explain: '"When" stays; "will" → "would" in reported speech.' },
-      { sentence: '"Is there a doctor here?" he asked. → He asked ___ there was a doctor there.', correct: 'if', explain: 'Yes/no question → "if" + statement word order; "here" → "there".' },
+      { sentence: '"Is there a doctor here?" he asked. → He asked ___ there was a doctor there.', correct: ['if', 'whether'], explain: 'Yes/no question → "if" or "whether" + statement word order; "here" → "there" — both are correct here.' },
       { sentence: '"How do you spell that?" she asked. → She asked me ___ I spelled that.', correct: 'how', explain: '"How" stays as the reporting word; tense backshifts.' },
     ]
   }

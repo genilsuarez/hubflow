@@ -10,7 +10,7 @@ export const CATEGORIES = {
     options: ['have', 'get', 'make', 'let', 'help'],
     items: [
       { sentence: 'I always ___ the mechanic check my brakes before a long trip.', correct: 'have', explain: '"Have" + person + base verb: you arrange for someone to do something (a service).' },
-      { sentence: 'Did she ___ her brother help her move house?', correct: 'get', explain: '"Get" + person + to-infinitive: you persuade someone to do something.' },
+      { sentence: 'Did she ___ her brother to help her move house?', correct: 'get', explain: '"Get" + person + to-infinitive: you persuade someone to do something.' },
       { sentence: 'Did the teacher ___ the students rewrite their essays?', correct: 'make', explain: '"Make" + person + base verb: you force someone, no choice involved.' },
       { sentence: 'Will your parents ___ you stay out late for the party?', correct: 'let', explain: '"Let" + person + base verb: you give someone permission.' },
       { sentence: 'Could you ___ me carry these bags?', correct: 'help', explain: '"Help" + person + base verb (or to + base): you assist someone.' },
