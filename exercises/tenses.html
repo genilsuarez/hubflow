@@ -45,13 +45,13 @@
   <div class="header">
     <h1>⏱️ Verb Tenses</h1>
     <div class="cat-bar" id="catBar"></div>
-    <div class="pill-bar"><button class="pill-btn active" data-mode="study">📖 Study</button><button class="pill-btn" data-mode="practice">🎯 Practice</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
+    <div class="pill-bar"><button class="pill-btn active" data-mode="study">📖 Study</button><button class="pill-btn" data-mode="practice">🎯 Quiz</button><button class="pill-btn" data-mode="timed">⏱️ Timed</button></div>
     <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
     <div class="progress"><div class="progress__labels"><span id="progTxt">0 / 12</span><span id="progPct">0%</span></div><div class="progress__track"><div class="progress__fill" id="progFill"></div></div></div>
   </div>
   <div class="scroll-body">
     <div data-area="practice"><div class="sentence-card"><div class="sc-icon" id="scIcon"></div><div class="sc-text" id="scText"></div><div class="sc-counter" id="scCounter"></div></div><div class="word-options" id="wordOptions"></div><div class="explain-box" id="explainBox"></div></div>
-    <div data-area="study"><div class="fc-count" id="fcCounter">1 / 12</div><div class="fc-card" id="fcCard"><div class="fc-inner"><div class="fc-face t-front"><div class="fc-emoji" id="fcEmoji">⏱️</div><div class="fc-term" id="fcSentence"></div><div class="fc-hint">tap to see answer</div></div><div class="fc-face fc-back"><div class="fc-term" id="fcAnswer" style="font-size:1.4rem;color:var(--lp-success)"></div><div class="fc-detail" id="fcExplain"></div></div></div></div><div class="fc-nav"><button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button><button class="lp-btn lp-btn--ghost" id="prevBtn">←</button><button class="lp-btn lp-btn--primary" id="nextBtn">→</button></div></div>
+    <div data-area="study"><div class="fc-count" id="fcCounter">1 / 12</div><div class="fc-card" id="fcCard"><div class="fc-inner"><div class="fc-face t-front"><div class="fc-emoji" id="fcEmoji">⏱️</div><div class="fc-term" id="fcSentence"></div><div class="fc-hint">tap to see answer</div></div><div class="fc-face fc-back"><div class="fc-term" id="fcAnswer" style="font-size:1.4rem;color:var(--lp-success)"></div><div class="fc-detail" id="fcExplain"></div></div></div></div><div class="fc-nav"><button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button><button class="lp-btn lp-btn--ghost" id="prevBtn">←</button><button class="lp-btn lp-btn--primary" id="nextBtn">→</button><button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button><button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button></div></div>
   </div>
   <div class="result-overlay" id="resultOverlay"></div>
 </div>

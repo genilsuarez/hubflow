@@ -952,7 +952,7 @@ export function renderLessonProgress(contentId) {
    orden canónico MODE_ORDER + el orden de los scoreKeys. */
 
 const MODE_ORDER = ['quiz', 'match', 'timed', 'write', 'study', 'challenge', null];
-const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', null: 'Practice' };
+const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', null: 'Quiz' };
 const MODE_ICONS = { quiz: '⚡', match: '⇄', write: '✎', study: '◉', challenge: '◆', timed: '◷', null: '◉' };
 
 /** Texto de un chip ignorando el badge de completado inyectado por esta capa. */
@@ -1203,7 +1203,7 @@ function openProgressDetail(contentId) {
 
       const cls = passed ? 'pg-status--pass' : attempts > 0 ? 'pg-status--tried' : '';
       const value = passed ? '✓' : attempts > 0 ? `${best}%` : '·';
-      const modeLabel = MODE_SHORT[mode] || 'Practice';
+      const modeLabel = MODE_SHORT[mode] || 'Quiz';
       const modeIcon = MODE_ICONS[mode] || '◉';
       const title = mode === 'study'
         ? `Study: ${attempts > 0 ? `${best}% visto` : 'pendiente'}`
@@ -1223,7 +1223,7 @@ function openProgressDetail(contentId) {
   // pasar el mouse por cada píldora — mismas columnas/ancho que .pg-item__modes.
   const colHeadersHTML = displayModes.map(mode => {
     const icon = MODE_ICONS[mode] || '◉';
-    const label = MODE_SHORT[mode] || 'Practice';
+    const label = MODE_SHORT[mode] || 'Quiz';
     return `<span class="pg-col-header"><span class="pg-col-header__icon" aria-hidden="true">${icon}</span><span class="pg-col-header__label">${label}</span></span>`;
   }).join('');
 

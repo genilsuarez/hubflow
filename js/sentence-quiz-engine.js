@@ -9,8 +9,8 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from './array-utils.js';
-import { recordScore, renderLessonProgress, recordStudyItemSeen } from './progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs } from './exercise-ui.js';
+import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus } from './progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from './exercise-ui.js';
 import { finishExercise } from './exercise-flow.js';
 import { speak } from './speech.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
@@ -34,6 +34,27 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   });
 
   wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
+
+  // Quiz/Timed: "Siguiente" en vez de auto-avanzar tras responder, y "Saltar"
+  // para pasar sin puntuar — mismo patrón que el quiz de FlashcardEngine
+  // (js/flashcard-engine.js handleQuizAnswer/skipQuiz). Los botones solo
+  // existen en el markup de los ejercicios que los declaran; si no están,
+  // renderPractice() sigue avanzando solo tras una pausa (comportamiento previo).
+  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+
+  function setQuizAnswered(answered) {
+    const nextBtn = document.getElementById('quizNextBtn');
+    const skipBtn = document.getElementById('quizSkipBtn');
+    if (nextBtn) nextBtn.hidden = !answered;
+    if (skipBtn) skipBtn.hidden = answered;
+  }
+
+  function skipPractice() {
+    if (idx >= total) return;
+    idx++;
+    updProgress(idx, total);
+    renderPractice();
+  }
 
   function startMode() {
     timerState.stop();
@@ -162,6 +183,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
+    setQuizAnswered(false);
 
     const opts = shuffleOptions ? shuffle([...cat.options]) : [...cat.options];
     const optsEl = document.getElementById('wordOptions');
@@ -182,7 +204,16 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
         idx++;
         updProgress(idx, total);
-        setTimeout(renderPractice, 1400);
+
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn) {
+          nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+          setQuizAnswered(true);
+          nextBtn.onclick = () => renderPractice();
+          nextBtn.focus({ preventScroll: true });
+        } else {
+          setTimeout(renderPractice, 1400);
+        }
       });
     });
     updProgress(idx, total);
@@ -238,6 +269,13 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
 
   function advanceCard(dir) {
+    // Reaching the end of the deck going forward suggests what to do next
+    // instead of silently wrapping back to card 1 — same UX as FlashcardEngine.
+    if (dir > 0 && idx === deck.length - 1) {
+      showStudyFollowUp();
+      return;
+    }
+
     const card = document.getElementById('fcCard');
     const inner = card.querySelector('.fc-inner');
     if (card.classList.contains('flip')) {
@@ -250,9 +288,106 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     renderStudyCard();
   }
 
+  function scoreKeyFor(cat) { return `${scoreKeyPrefix}-${cat}`; }
+
+  /**
+   * What to suggest once the Study deck is finished: Practice for the current
+   * category if not yet passed, else the first other category still pending —
+   * mirrors FlashcardEngine.findStudyFollowUp() (practice/timed share one score
+   * key here, so there's a single next mode instead of a ranked list).
+   */
+  function findStudyFollowUp() {
+    if (!getScoreStatus(scoreKeyFor(currentCat)).passed) {
+      return { cat: currentCat, mode: 'practice', isNewCategory: false };
+    }
+    const catKeys = Object.keys(categories);
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      if (!getScoreStatus(scoreKeyFor(cat)).passed) return { cat, mode: 'study', isNewCategory: true };
+    }
+    return null;
+  }
+
+  function switchToCategory(cat) {
+    currentCat = cat;
+    document.querySelectorAll('#catBar [data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  }
+
+  function showStudyFollowUp() {
+    const overlay = document.getElementById('resultOverlay');
+    if (!overlay) return;
+    const suggestion = findStudyFollowUp();
+
+    const restudy = () => {
+      overlay.classList.remove('show');
+      idx = 0;
+      renderStudyCard();
+    };
+
+    if (suggestion) {
+      const subtitle = suggestion.isNewCategory
+        ? `Siguiente: ${categories[suggestion.cat]?.label || suggestion.cat} — 📖 Study`
+        : 'Siguiente: 🎯 Quiz';
+
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
+          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
+          <div class="result-sub">${subtitle}</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
+        overlay.classList.remove('show');
+        if (suggestion.isNewCategory) switchToCategory(suggestion.cat);
+        mode = suggestion.mode;
+        syncModeTabsActive(mode);
+        startMode();
+      });
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    } else {
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+          <div class="result-title">¡Lección completa! 🎉</div>
+          <div class="result-sub">Aprobaste todas las categorías de esta lección.</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    }
+  }
+
   // Keyboard: Enter/Space = flip or advance, Arrows = navigate
   document.addEventListener('keydown', e => {
     if (mode !== 'study') return;
+
+    // While the end-of-deck follow-up overlay is open, Enter/Space confirms
+    // its primary action instead of flipping the (hidden) card underneath.
+    const overlay = document.getElementById('resultOverlay');
+    if (overlay && overlay.classList.contains('show')) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
+        primaryBtn?.click();
+      }
+      return;
+    }
+
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (document.activeElement && document.activeElement.tagName === 'BUTTON') {

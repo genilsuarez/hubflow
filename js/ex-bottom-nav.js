@@ -167,7 +167,11 @@ export function resolveBottomNavProfile() {
 
   if (isCheckBtnActive()) return 'practice';
 
-  if (area === 'practice' || mode === 'practice' || mode === 'timed') return 'minimal';
+  // Sentence-quiz engine (grammar/analysis/vocab/pronunciation) shares this
+  // area with FlashcardEngine's `quiz` area — same reduced bar (progreso +
+  // saltar/siguiente) when the page declares #quizSkipBtn/#quizNextBtn;
+  // pages that don't just show the progress button, same as before.
+  if (area === 'practice' || mode === 'practice' || mode === 'timed') return 'quiz';
 
   return 'study';
 }
