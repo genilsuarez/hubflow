@@ -61,6 +61,7 @@
       <input class="answer-input" id="answerInput" type="text" placeholder="Type the form…" autocomplete="off" autocorrect="off" spellcheck="false">
       <div class="practice-actions">
         <button class="listen-btn" id="playAudioBtn" aria-label="Listen to base verb">🔊</button>
+        <button class="lp-btn lp-btn--primary" id="checkBtn">Check ✓</button>
       </div>
       <div class="explain-box" id="explainBox"></div>
     </div>
@@ -99,6 +100,7 @@ function initPractice(timed) { deck = shuffle(getData()); idx = 0; score = 0; an
 function renderItem() { if (idx >= total) { stopTimer(); finishPractice(); return; } answered = false; setQuizAnswered(false); const item = deck[idx]; document.getElementById('formLabel').textContent = `Write the ${item.form} form`; document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; const input = document.getElementById('answerInput'); input.value = ''; input.className = 'answer-input'; input.disabled = false; input.focus(); updProgress(idx, total); setTimeout(playBase, 300); }
 function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); input.value = `${val} → ${item.correct}`; } document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); const nextBtn = document.getElementById('quizNextBtn'); if (nextBtn) { nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →'; setQuizAnswered(true); nextBtn.onclick = () => renderItem(); nextBtn.focus({ preventScroll: true }); } else { setTimeout(renderItem, 1600); } }
 document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+document.getElementById('checkBtn').addEventListener('click', checkAnswer);
 function finishPractice() { const pct = finishExercise({ correct: score, total, startMode }); recordScore(`sbe-${currentCat}`, pct); }
 startMode();
 </script>
