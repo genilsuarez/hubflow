@@ -127,7 +127,7 @@ check('borra el historial de TODOS los prefijos del catálogo', () => {
 check('el catálogo declara los 88 prefijos esperados', () => {
   // Centinela: si el catálogo crece, esta prueba avisa antes de que el regex
   // quede corto en silencio. Actualizar el número junto con el regex.
-  assertEqual(prefixes.length, 88, 'cantidad de prefijos en PROGRESS_RULES');
+  assertEqual(prefixes.length, 91, 'cantidad de prefijos en PROGRESS_RULES');
 });
 
 // ── El resto del contrato de clearGuestLocalProgress ────────────────────────
