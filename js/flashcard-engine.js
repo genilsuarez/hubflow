@@ -562,8 +562,12 @@ export class FlashcardEngine {
     const counter = document.getElementById('fcCounter');
     if (counter) counter.textContent = `${this.cardIdx + 1} / ${this.deck.length}`;
 
-    // TTS: update current term for speak button
-    this._currentTerm = item.term;
+    // TTS: update current term for speak button. Los sets de thought-groups
+    // marcan la pausa con "|" en el propio term ("I saw my friend | at the
+    // station."), que el motor de voz leía literal (algunos navegadores dicen
+    // "bar"). "," produce la misma pausa breve al hablarlo y es coherente con
+    // lo que "|" representa.
+    this._currentTerm = item.term.includes('|') ? item.term.replace(/\s*\|\s*/g, ', ') : item.term;
     if (this.autoSpeak) speak(this._currentTerm);
   }
 
