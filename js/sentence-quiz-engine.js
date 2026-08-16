@@ -31,13 +31,19 @@ function fillBlanks(sentence, filler, wrap = t => t) {
     ? filler.split(',').map(s => s.trim())
     : null;
   let i = -1;
-  return sentence.replace(/___/g, () => {
+  // 334 frases tienen el hueco pegado a un signo ("___,", "___."). El span
+  // relleno tiene padding a ambos lados para separarse del texto; contra
+  // puntuación ese padding se leía como un espacio espurio ("remain , the").
+  // El próximo carácter tras el hueco decide si se suprime ese lado.
+  return sentence.replace(/___/g, (match, offset) => {
     i++;
-    return wrap(parts ? parts[i] : (i === 0 ? filler : '?'));
+    const next = sentence[offset + match.length];
+    const tight = next && /[,.;:!?)]/.test(next);
+    return wrap(parts ? parts[i] : (i === 0 ? filler : '?'), tight);
   });
 }
 
-export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = false, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
+export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = true, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
   renderLessonProgress(contentId);
 
   let currentCat = Object.keys(categories)[0];
@@ -204,7 +210,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
     const scIcon = document.getElementById('scIcon');
     if (scIcon && !usesSpeakNav()) scIcon.textContent = cat.icon;
-    document.getElementById('scText').innerHTML = fillBlanks(item.sentence, '?', t => `<span class="blank">${t}</span>`);
+    document.getElementById('scText').innerHTML = fillBlanks(item.sentence, '?', (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
     setQuizAnswered(false);
@@ -224,7 +230,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
           optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); });
         }
 
-        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, item.correct, t => `<span class="blank">${t}</span>`);
+        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, item.correct, (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
         document.getElementById('explainBox').textContent = item.explain;
 
         idx++;

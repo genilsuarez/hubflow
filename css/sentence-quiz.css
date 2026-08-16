@@ -126,6 +126,9 @@ body { min-height: 100vh; padding: 0 14px; }
   display: inline-block; min-width: 50px; border-bottom: 2.5px dashed transparent;
   font-weight: 700; padding: 0 4px;
 }
+/* El hueco pegado a un signo ("___," / "___.") no debe llevar el padding
+   derecho: se leía como un espacio antes de la puntuación ("remain , the"). */
+.sentence-card .sc-text .blank--tight { padding-right: 0; }
 .sentence-card .sc-counter {
   font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 8px;
 }
