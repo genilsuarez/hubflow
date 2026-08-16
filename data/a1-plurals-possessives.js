@@ -4,11 +4,11 @@ export const CATEGORIES = {
     icon: '📚',
     options: ['book', 'books', 'boxs'],
     items: [
-      { sentence: 'I have three ___ (book).', correct: 'books', explain: 'Add -s to most nouns to make them plural.' },
+      { sentence: 'I have three ___ (book).', correct: 'books', explain: 'Add -s to most nouns to make them plural.', options: ['book', 'books', 'bookes'] },
       { sentence: 'She bought two ___ (box) of apples.', correct: 'boxes', explain: "Nouns ending in -x add -es: box → boxes.", options: ['boxs', 'boxes', 'box'] },
       { sentence: 'There are five ___ (chair) in the classroom.', correct: 'chairs', explain: 'Add -s to make "chair" plural.', options: ['chair', 'chairs', 'chaires'] },
       { sentence: 'He has two ___ (dog).', correct: 'dogs', explain: 'Add -s to make "dog" plural.', options: ['dog', 'dogs', 'doges'] },
-      { sentence: 'We watched two ___ (movie) yesterday.', correct: 'movies', explain: 'Nouns ending in a vowel + y just add -s: movie → movies.', options: ['movys', 'movies', 'movyes'] },
+      { sentence: 'We watched two ___ (movie) yesterday.', correct: 'movies', explain: 'Nouns ending in -e just add -s: movie → movies.', options: ['movie', 'movies', 'moviees'] },
       { sentence: 'I need three ___ (piece) of paper.', correct: 'pieces', explain: "Nouns ending in -ce add -s: piece → pieces.", options: ['piece', 'pieces', 'peices'] },
       { sentence: 'There are many ___ (dish) on the table.', correct: 'dishes', explain: "Nouns ending in -sh add -es: dish → dishes.", options: ['dish', 'dishs', 'dishes'] },
       { sentence: 'She has two ___ (watch).', correct: 'watches', explain: "Nouns ending in -ch add -es: watch → watches.", options: ['watchs', 'watches', 'watche'] },

@@ -185,7 +185,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     document.getElementById('explainBox').textContent = '';
     setQuizAnswered(false);
 
-    const opts = shuffleOptions ? shuffle([...cat.options]) : [...cat.options];
+    const baseOpts = item.options || cat.options;
+    const opts = shuffleOptions ? shuffle([...baseOpts]) : [...baseOpts];
     const optsEl = document.getElementById('wordOptions');
     optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join('');
     optsEl.querySelectorAll('.word-opt').forEach(btn => {

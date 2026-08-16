@@ -19,7 +19,7 @@ export const CATEGORIES = {
   tentativeLanguage: {
     label: 'Tentative Language',
     icon: '🤔',
-    options: ['it seems that', 'it is', 'it must be'],
+    options: ['It seems that', 'It is', 'It must be'],
     items: [
       { sentence: "___ the plan needs some adjustments.", correct: 'It seems that', explain: "'It seems that' softens a statement, presenting it as an impression rather than a fact." },
       { sentence: "___ this could be improved.", correct: 'It appears that', explain: "'It appears that' softens a statement as a tentative observation.", options: ['It appears that', 'It is that', 'It must be'] },
