@@ -795,13 +795,26 @@ export class FlashcardEngine {
     this.renderQuiz();
   }
 
+  // Texto de "significado" que el quiz muestra para cada item de la categoría.
+  // `meaning` no siempre identifica al item: en a1-word-stress-basic o en los
+  // sets de pronunciación es la regla del grupo ("Stress on the 1st syllable"),
+  // repetida en los 10 items. Con ese enunciado la pregunta no tiene respuesta
+  // deducible, así que se cae a la traducción `es`, que sí discrimina.
+  quizDescriptions() {
+    const raw = o => (o.meaning || o.description || '').slice(0, 55);
+    const count = new Map();
+    for (const o of this.getItems()) count.set(raw(o), (count.get(raw(o)) || 0) + 1);
+    return o => (count.get(raw(o)) > 1 && o.es) ? o.es : raw(o);
+  }
+
   renderQuiz() {
     if (this.quizIdx >= this.quizTotal) {
       this.showQuizResult();
       return;
     }
     const item = this.deck[this.quizIdx];
-    const meaning = item.meaning || item.description || '';
+    const descOf = this.quizDescriptions();
+    const meaning = descOf(item);
     const qType = Math.random() < 0.5 ? 'termFromDesc' : 'descFromTerm';
 
     const emojiEl = document.getElementById('quizEmoji');
@@ -821,18 +834,24 @@ export class FlashcardEngine {
 
     // Generate options
     const allItems = this.getItems();
-    const others = allItems.filter(x => x.term !== item.term);
-    const distractors = shuffle(others).slice(0, 3);
-    let options;
-
-    if (qType === 'termFromDesc') {
-      options = shuffle([item, ...distractors]).map(o => ({ text: o.term, correct: o.term === item.term }));
-    } else {
-      options = shuffle([item, ...distractors]).map(o => ({
-        text: (o.meaning || o.description || '').slice(0, 55),
-        correct: o.term === item.term
-      }));
+    const optText = o => qType === 'termFromDesc' ? o.term : descOf(o);
+    // Descarta el distractor cuyo botón se leería igual que otro ya elegido: en
+    // los sets de pronunciación varios items comparten meaning y salían dos o
+    // más opciones idénticas, con solo una contada como correcta.
+    const taken = new Set([optText(item)]);
+    const distractors = [];
+    for (const o of shuffle(allItems.filter(x => x.term !== item.term))) {
+      const t = optText(o);
+      if (taken.has(t)) continue;
+      taken.add(t);
+      distractors.push(o);
+      if (distractors.length === 3) break;
     }
+
+    const options = shuffle([item, ...distractors]).map(o => ({
+      text: optText(o),
+      correct: o.term === item.term
+    }));
 
     this.setQuizAnswered(false);
 

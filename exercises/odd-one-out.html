@@ -176,8 +176,13 @@ function renderQuestion() {
   document.getElementById('qExplanation').classList.remove('show');
 
   const optsEl = document.getElementById('qOptions');
-  optsEl.innerHTML = item.words.map((w, i) =>
-    `<button class="ooo-opt" data-idx="${i}">${w}</button>`
+  // Baraja solo la presentación: data-idx conserva el índice original, que es
+  // contra el que handleAnswer compara item.odd. Sin esto la respuesta caía en
+  // la última posición en 24 de los 40 items y el ejercicio se podía "ganar"
+  // eligiendo siempre la cuarta.
+  const order = shuffle(item.words.map((_, i) => i));
+  optsEl.innerHTML = order.map(i =>
+    `<button class="ooo-opt" data-idx="${i}">${item.words[i]}</button>`
   ).join('');
 
   optsEl.querySelectorAll('.ooo-opt').forEach(btn => {
