@@ -488,6 +488,8 @@ function initWrite() {
 
 function renderWrite() {
   if (writeIdx >= writeTotal) { finishWrite(); return; }
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) checkBtn.textContent = 'Comprobar ✓';
   const item = writeDeck[writeIdx];
 
   document.getElementById('writeMeaning').textContent = item.es;
@@ -539,7 +541,8 @@ function renderWrite() {
 }
 
 function doWriteCheck() {
-  if (writeAnswered) return;
+  // Segundo clic (el botón ya dice "Siguiente"): avanza en vez de re-corregir.
+  if (writeAnswered) { writeAnswered = false; renderWrite(); return; }
   writeAnswered = true;
   const item = writeDeck[writeIdx];
   const inputs = document.querySelectorAll('#writeSentence .w-input');
@@ -566,7 +569,16 @@ function doWriteCheck() {
 
   writeIdx++;
   updProgress(writeIdx, writeTotal);
-  setTimeout(renderWrite, 1200);
+  // Mismo criterio que el resto de la app: la corrección se queda a la vista
+  // hasta que el usuario decide seguir.
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) {
+    checkBtn.textContent = writeIdx >= writeTotal ? 'Ver resultado →' : 'Siguiente →';
+    checkBtn.focus({ preventScroll: true });
+  } else {
+    writeAnswered = false;
+    setTimeout(renderWrite, 1200);
+  }
 }
 
 document.getElementById('checkBtn').addEventListener('click', doWriteCheck);

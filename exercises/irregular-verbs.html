@@ -314,6 +314,7 @@ let mode = 'study';
 let deck = [], cardIdx = 0;
 let quizDeck = [], quizIdx = 0, quizScore = 0, quizTotal = 15;
 let writeDeck = [], writeIdx = 0, writeScore = 0, writeTotal = 10;
+let writeAnswered = false;
 let timer = null;
 let timedSeconds = 0;
 
@@ -682,6 +683,9 @@ function initWrite() {
 
 function renderWrite() {
   if (writeIdx >= writeTotal) { finishWrite(); return; }
+  writeAnswered = false;
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) checkBtn.textContent = 'Check ✓';
   const verb = writeDeck[writeIdx];
   document.getElementById('writeBase').textContent = verb.base;
   document.getElementById('writePast').value = '';
@@ -711,6 +715,9 @@ document.getElementById('writePP').addEventListener('keydown', e => { if (e.key 
 document.getElementById('writePast').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('writePP').focus(); });
 
 function doWriteCheck() {
+  // Segundo clic (el botón ya dice "Siguiente"): avanza en vez de re-corregir.
+  if (writeAnswered) { writeAnswered = false; renderWrite(); return; }
+  writeAnswered = true;
   const verb = writeDeck[writeIdx];
   const pastInput = document.getElementById('writePast');
   const ppInput = document.getElementById('writePP');
@@ -733,7 +740,17 @@ function doWriteCheck() {
 
   writeIdx++;
   updProgress(writeIdx, writeTotal);
-  setTimeout(renderWrite, 1200);
+
+  // Mismo criterio que el resto de la app: la corrección se queda a la vista
+  // hasta que el usuario decide seguir, en vez de desaparecer a los 1,2 s.
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) {
+    checkBtn.textContent = writeIdx >= writeTotal ? 'Ver resultado →' : 'Siguiente →';
+    checkBtn.focus({ preventScroll: true });
+  } else {
+    writeAnswered = false;
+    setTimeout(renderWrite, 1200);
+  }
 }
 
 function finishWrite() {

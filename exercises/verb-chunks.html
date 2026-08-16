@@ -430,6 +430,9 @@ function initWrite() {
 
 function renderWrite() {
   if (idx >= total) { finishWrite(); return; }
+  writeAnswered = false;
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) checkBtn.textContent = 'Check ✓';
   const item = deck[idx];
 
   if (currentCat === 'prepositional') {
@@ -449,7 +452,12 @@ function renderWrite() {
   updProgress(idx, total);
 }
 
+let writeAnswered = false;
+
 function checkWrite() {
+  // Segundo clic (el botón ya dice "Siguiente"): avanza en vez de re-corregir.
+  if (writeAnswered) { writeAnswered = false; renderWrite(); return; }
+  writeAnswered = true;
   const item = deck[idx];
   const input = document.getElementById('writeInput');
   const fb = document.getElementById('writeFeedback');
@@ -470,7 +478,17 @@ function checkWrite() {
 
   idx++;
   updProgress(idx, total);
-  setTimeout(renderWrite, 1600);
+
+  // Mismo criterio que el resto de la app: la corrección se queda a la vista
+  // hasta que el usuario decide seguir.
+  const checkBtn = document.getElementById('checkBtn');
+  if (checkBtn) {
+    checkBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+    checkBtn.focus({ preventScroll: true });
+  } else {
+    writeAnswered = false;
+    setTimeout(renderWrite, 1600);
+  }
 }
 
 function skipWrite() {
