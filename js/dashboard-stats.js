@@ -228,16 +228,36 @@ function renderPathAccordions(paths) {
   }).join('');
 }
 
-function statsBarRow({ label, done, total }) {
+/** Tarjetas de "Mis estadísticas" — mismo lenguaje visual de tinted-card que
+ * tiles/hero-card/book (ver css/lp-tinted-surface.css), aplicado localmente
+ * vía --stat-color para no tocar ese archivo compartido entre apps. */
+function statsBarRow({ label, done, total, icon, color, iconText }) {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  return `<div class="stats-bar-row">
-    <span class="stats-bar-label">${label}</span>
-    <div class="stats-bar">
-      <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${pct}%"></div></div>
+  const style = color ? ` style="--stat-color:${color}"` : '';
+  const iconCls = iconText ? 'stat-card__icon stat-card__icon--text' : 'stat-card__icon';
+  return `<div class="stat-card"${style}>
+    <span class="${iconCls}" aria-hidden="true">${icon || '📘'}</span>
+    <div class="stat-card__body">
+      <div class="stat-card__top">
+        <span class="stat-card__label">${label}</span>
+        <span class="stat-card__pct">${pct}%</span>
+      </div>
+      <div class="stats-bar">
+        <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${pct}%"></div></div>
+      </div>
       <span class="stats-bar-frac">${done}/${total}</span>
     </div>
   </div>`;
 }
+
+const CATEGORY_ICONS = { vocab: '🧠', grammar: '✏️', pronunciation: '🔊', analysis: '🔍' };
+
+/** Metáfora de crecimiento por nivel CEFR — de semilla a trofeo — y una
+ * escala de intensidad sobre --lp-accent para que el color exprese
+ * progresión en vez de reutilizar los colores de categoría (que ya
+ * significan otra cosa en el resto del dashboard). */
+const CEFR_ICONS = { a1: '🌱', a2: '🌿', b1: '🪴', b2: '🌳', c1: '🏆' };
+const CEFR_INTENSITY = { a1: 40, a2: 55, b1: 70, b2: 85, c1: 100 };
 
 const STUDY_MASTERY_BANNER_DISMISSED_KEY = 'hf-study-mastery-banner-dismissed';
 
@@ -299,12 +319,24 @@ export function renderStatsBreakdown() {
 
   const byCategory = Object.entries(CATEGORIES).map(([key, cat]) => {
     const mods = exercises.filter(m => m.category === key);
-    return { label: cat.label, done: mods.filter(m => isContentCompleted(m.id)).length, total: mods.length };
+    return {
+      label: cat.label,
+      done: mods.filter(m => isContentCompleted(m.id)).length,
+      total: mods.length,
+      icon: CATEGORY_ICONS[key],
+      color: catColor(key),
+    };
   });
 
   const byCefr = TAGS.cefr.map(level => {
     const mods = exercises.filter(m => m.cefr === level);
-    return { label: level.toUpperCase(), done: mods.filter(m => isContentCompleted(m.id)).length, total: mods.length };
+    return {
+      label: level.toUpperCase(),
+      done: mods.filter(m => isContentCompleted(m.id)).length,
+      total: mods.length,
+      icon: CEFR_ICONS[level],
+      color: `color-mix(in srgb, var(--lp-accent) ${CEFR_INTENSITY[level] ?? 60}%, var(--lp-border-strong))`,
+    };
   }).filter(row => row.total > 0);
 
   catEl.innerHTML = byCategory.map(statsBarRow).join('');

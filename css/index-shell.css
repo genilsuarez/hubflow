@@ -1109,13 +1109,23 @@
       font-size: .68rem; color: var(--lp-muted); font-style: italic;
       padding: 14px 0; text-align: center;
     }
-    /* Contador de Maestría — docs/to-do/mastery-tiers-plan.md §6 Fase 3. */
+    /* Contador de Maestría — docs/to-do/mastery-tiers-plan.md §6 Fase 3.
+       Chip dorado (en vez de texto plano) para que tenga el mismo peso visual
+       que las nuevas .stat-card de más abajo (M4 2026-08). */
     .mastery-count {
-      display: flex; align-items: center; gap: 6px; margin: -4px 0 16px;
-      font-size: .72rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink-soft);
+      display: inline-flex; align-items: center; gap: 6px; margin: -4px 0 16px;
+      padding: 5px 12px 5px 8px;
+      border-radius: var(--lp-radius-full);
+      background: color-mix(in srgb, var(--lp-gold) 12%, var(--lp-surface));
+      border: 1px solid color-mix(in srgb, var(--lp-gold) 30%, var(--lp-border));
+      font-size: .68rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-gold);
     }
     .mastery-count[hidden] { display: none; }
-    .mastery-count__icon { font-size: .9rem; }
+    .mastery-count__icon {
+      display: grid; place-items: center;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--lp-gold); font-size: .68rem;
+    }
     @media (max-width: 860px) {
       #lastActivities:has(.last-activities--empty) { display: none; }
     }
@@ -1744,49 +1754,105 @@
     .path-summary-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
     .path-summary-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
 
-    /* ─── STATS BREAKDOWN (Mis estadísticas — por categoría / por nivel) ─── */
+    /* ─── STATS BREAKDOWN (Mis estadísticas — por categoría / por nivel) ───
+       Reutiliza el lenguaje visual de tinted-card que ya usan tiles/hero-card/
+       book (css/lp-tinted-surface.css) — ícono en círculo de color + gradiente
+       sutil + borde tintado — aplicado aquí de forma local vía --stat-color
+       (no --tint-color) para no tocar ese archivo compartido entre las 4 apps.
+       Antes era una lista de barras planas grises que desentonaba con el
+       resto del dashboard (M4 2026-08). */
     .stats-breakdown {
-      display: flex; flex-direction: column; gap: 12px;
-      margin-bottom: 20px; padding: 14px 16px;
-      background: var(--lp-surface); border: 1px solid var(--lp-border-subtle);
-      border-radius: var(--lp-radius-lg);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
     }
-    .stats-bar-row { display: flex; flex-direction: column; gap: 5px; }
-    .stats-bar-label { font-size: .72rem; font-weight: 600; color: var(--lp-ink-soft); }
-    .stats-bar { display: flex; align-items: center; gap: 8px; }
-    .stats-bar-track { flex: 1; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
-    .stats-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
-    .stats-bar-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
+    .stat-card {
+      --stat-color: var(--lp-accent);
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 12px;
+      border-radius: var(--lp-radius-lg);
+      border: 1.5px solid color-mix(in srgb, var(--stat-color) 24%, var(--lp-border));
+      background: linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--stat-color) 11%, var(--lp-surface)) 0%,
+        color-mix(in srgb, var(--stat-color) 3%, var(--lp-surface)) 60%,
+        var(--lp-surface) 100%
+      );
+      box-shadow:
+        0 1px 2px color-mix(in srgb, var(--stat-color) 8%, transparent),
+        0 3px 10px color-mix(in srgb, var(--stat-color) 10%, transparent);
+      transition: box-shadow .2s var(--lp-ease), border-color .2s var(--lp-ease);
+    }
+    .stat-card:hover {
+      border-color: color-mix(in srgb, var(--stat-color) 40%, var(--lp-border));
+      box-shadow:
+        0 2px 4px color-mix(in srgb, var(--stat-color) 10%, transparent),
+        0 6px 16px color-mix(in srgb, var(--stat-color) 16%, transparent);
+    }
+    .stat-card__icon {
+      width: 32px; height: 32px; flex: 0 0 32px;
+      border-radius: 50%; display: grid; place-items: center;
+      background: var(--stat-color); color: var(--lp-ink-inverse);
+      font-size: .8rem; font-weight: 800; line-height: 1;
+      box-shadow: 0 3px 8px color-mix(in srgb, var(--stat-color) 32%, transparent);
+    }
+    .stat-card__icon--text { font-size: .58rem; letter-spacing: .01em; font-family: var(--lp-font-mono); }
+    .stat-card__body { min-width: 0; flex: 1; }
+    .stat-card__top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
+    .stat-card__label {
+      font-size: .66rem; font-weight: 700; color: var(--lp-ink-soft);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+    }
+    .stat-card__pct {
+      font-family: var(--lp-font-mono); font-size: .68rem; font-weight: 800;
+      color: var(--stat-color); flex-shrink: 0;
+    }
+    .stats-bar { display: flex; align-items: center; }
+    .stats-bar-track { flex: 1; height: 5px; border-radius: var(--lp-radius-full); background: color-mix(in srgb, var(--stat-color) 14%, var(--lp-surface-sunken)); overflow: hidden; }
+    .stats-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--stat-color); transition: width .5s var(--lp-ease); }
+    .stats-bar-frac { display: block; margin-top: 4px; font-family: var(--lp-font-mono); font-size: .58rem; font-weight: 700; color: var(--lp-muted); }
 
-    /* En web (≥861px) "Mis estadísticas" pasa a una grid de 3 columnas —
-       snapshot + última actividad a la izquierda, categoría y nivel en
-       paneles propios — para que todo el desglose entre en la pantalla sin
-       scroll, en vez de apilarse como en mobile.
-       El selector exige `.active-section`: sin esa clase, `.section` de base
-       (display:none) debe seguir ganando — de lo contrario esta regla, al
-       tener más especificidad, forzaba display:grid también cuando la
-       sección estaba oculta (aparecía duplicada debajo de "Inicio"). Las
-       áreas "activity"/"cathead"/"lvlhead" comparten fila para que "Última
-       actividad" quede a la misma altura que los encabezados de las otras
-       dos columnas. */
+    /* En web (≥861px) "Mis estadísticas" pasa a una grid de 2 columnas —
+       snapshot + última actividad en una barra lateral angosta, categoría y
+       nivel apiladas en una única columna de contenido ancha — para que cada
+       desglose use todo el ancho disponible en vez de partirse en dos mitades
+       (antes categoría/nivel eran columnas 1fr 1fr lado a lado: con solo 4-5
+       tarjetas cada una, el grid interno de .stats-breakdown nunca alcanzaba
+       a usar más de 2 columnas y dejaba mucho aire muerto a los lados —
+       M4 2026-08). El selector exige `.active-section`: sin esa clase,
+       `.section` de base (display:none) debe seguir ganando — de lo
+       contrario esta regla, al tener más especificidad, forzaba display:grid
+       también cuando la sección estaba oculta (aparecía duplicada debajo de
+       "Inicio"). "activity" repite en las 4 filas de contenido para que la
+       columna de última actividad quede a la altura de ambos desgloses. */
     @media (min-width: 861px) {
       .section.active-section[data-key="mi-progreso"] {
         display: grid;
-        grid-template-columns: minmax(230px, 290px) 1fr 1fr;
-        grid-template-rows: auto auto 1fr;
+        grid-template-columns: minmax(230px, 290px) 1fr;
+        grid-template-rows: auto auto auto auto 1fr;
         grid-template-areas:
-          "snapshot .       .      "
-          "activity cathead lvlhead"
-          "activity catbody lvlbody";
+          "snapshot mastery"
+          "activity cathead"
+          "activity catbody"
+          "activity lvlhead"
+          "activity lvlbody";
         gap: 10px 16px;
         height: 100%;
         min-height: 0;
       }
       .section.active-section[data-key="mi-progreso"] .progress-snapshot { grid-area: snapshot; margin-bottom: 0; }
+      .section.active-section[data-key="mi-progreso"] .mastery-count {
+        grid-area: mastery; margin: 0; align-self: center; justify-self: start;
+      }
       .section.active-section[data-key="mi-progreso"] #secHeadCategory { grid-area: cathead; margin-bottom: 0; }
-      .section.active-section[data-key="mi-progreso"] #secHeadCefr { grid-area: lvlhead; margin-bottom: 0; }
+      .section.active-section[data-key="mi-progreso"] #secHeadCefr { grid-area: lvlhead; margin-bottom: 0; margin-top: 6px; }
       .section.active-section[data-key="mi-progreso"] #statsByCategory { grid-area: catbody; }
       .section.active-section[data-key="mi-progreso"] #statsByCefr { grid-area: lvlbody; }
+      .section.active-section[data-key="mi-progreso"] #statsByCategory,
+      .section.active-section[data-key="mi-progreso"] #statsByCefr {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
 
       .section.active-section[data-key="mi-progreso"] .last-activities {
         grid-area: activity; margin: 0; min-height: 0;
@@ -1808,7 +1874,7 @@
       .section.active-section[data-key="mi-progreso"] #statsByCategory,
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
         margin: 0; min-height: 0; height: 100%;
-        padding: 14px 18px;
+        align-content: start;
       }
     }
 
