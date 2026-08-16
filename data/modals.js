@@ -16,9 +16,9 @@ export const CATEGORIES = {
       { sentence: "You really ___ see a doctor about that cough.", correct: 'should', explain: '"Should" gives advice or a recommendation.' },
       { sentence: '___ we order dessert?', correct: 'shall', explain: '"Shall" (with I/we) makes a suggestion or offer.' },
       { sentence: '___ I borrow your pen for a second?', correct: 'can', explain: '"Can" makes an informal request for permission.' },
-      { sentence: '___ you help me lift this box, please?', correct: 'could', explain: '"Could" para peticiones educadas (más formal que "can").' },
-      { sentence: 'Don\'t worry — I ___ take care of it.', correct: 'will', explain: '"Will" para una promesa o decisión espontánea.' },
-      { sentence: 'She ___ speak four languages fluently.', correct: 'can', explain: '"Can" para habilidad presente.' }
+      { sentence: '___ you help me lift this box, please?', correct: 'could', explain: '"Could" for polite requests (more formal than "can").' },
+      { sentence: 'Don\'t worry — I ___ take care of it.', correct: 'will', explain: '"Will" for a promise or a spontaneous decision.' },
+      { sentence: 'She ___ speak four languages fluently.', correct: 'can', explain: '"Can" for present ability.' }
     ]
   },
   obligation: {
@@ -33,9 +33,9 @@ export const CATEGORIES = {
       { sentence: 'You ___ see a dentist twice a year for check-ups.', correct: 'should', explain: '"Should" gives advice — weaker than an obligation.' },
       { sentence: 'Passengers ___ fasten their seatbelts before takeoff.', correct: 'must', explain: '"Must" states a firm rule.' },
       { sentence: "You ___ pay to enter the museum on Sundays — it's free.", correct: "don't have to", explain: '"Don\'t have to" = no obligation to pay.' },
-      { sentence: 'You ___ touch that — it\'s still hot.', correct: 'mustn\'t', explain: '"Mustn\'t" = prohibición absoluta.' },
-      { sentence: 'In Spain you ___ carry ID at all times.', correct: 'have to', explain: '"Have to" = obligación externa (una ley o norma).' },
-      { sentence: 'You ___ try the new bakery — it\'s excellent.', correct: 'should', explain: '"Should" = recomendación, no obligación.' }
+      { sentence: 'You ___ touch that — it\'s still hot.', correct: 'mustn\'t', explain: '"Mustn\'t" = absolute prohibition.' },
+      { sentence: 'In Spain you ___ carry ID at all times.', correct: 'have to', explain: '"Have to" = external obligation (a law or rule).' },
+      { sentence: 'You ___ try the new bakery — it\'s excellent.', correct: 'should', explain: '"Should" = a recommendation, not an obligation.' }
     ]
   },
   supposedTo: {
@@ -47,12 +47,12 @@ export const CATEGORIES = {
       { sentence: "A student ___ eat in the library — it's against the rules.", correct: "isn't supposed to", explain: '"Isn\'t supposed to" = not allowed / against the rules.' },
       { sentence: 'The train ___ arrive at platform 4 today.', correct: 'is supposed to', explain: '"Is supposed to" describes what is expected or scheduled to happen.' },
       { sentence: "Everyone ___ hand in the assignment by Friday, according to the syllabus.", correct: 'is supposed to', explain: 'States the expected/official plan.' },
-      { sentence: "The delivery ___ arrive yesterday, but nothing came.", correct: 'was supposed to', explain: '"Was supposed to" = lo esperado que no ocurrió.' },
-      { sentence: "The machine ___ make that noise — something is wrong.", correct: "isn't supposed to", explain: '"Isn\'t supposed to" = no es lo normal ni lo previsto.' },
-      { sentence: 'The package ___ arrive on Tuesday, according to the tracking.', correct: 'is supposed to', explain: '"Is supposed to" = lo previsto o programado.' },
-      { sentence: 'He ___ call his mother yesterday, but he forgot.', correct: 'was supposed to', explain: '"Was supposed to" = lo previsto que no ocurrió.' },
-      { sentence: 'This door ___ be locked during opening hours.', correct: 'isn\'t supposed to', explain: '"Isn\'t supposed to" = contrario a la norma.' },
-      { sentence: 'The software ___ crash every time you save.', correct: 'isn\'t supposed to', explain: '"Isn\'t supposed to" = no es el comportamiento esperado.' }
+      { sentence: "The delivery ___ arrive yesterday, but nothing came.", correct: 'was supposed to', explain: '"Was supposed to" = what was expected but did not happen.' },
+      { sentence: "The machine ___ make that noise — something is wrong.", correct: "isn't supposed to", explain: '"Isn\'t supposed to" = not what is normal or expected.' },
+      { sentence: 'The package ___ arrive on Tuesday, according to the tracking.', correct: 'is supposed to', explain: '"Is supposed to" = what is expected or scheduled.' },
+      { sentence: 'He ___ call his mother yesterday, but he forgot.', correct: 'was supposed to', explain: '"Was supposed to" = what was planned but did not happen.' },
+      { sentence: 'This door ___ be locked during opening hours.', correct: 'isn\'t supposed to', explain: '"Isn\'t supposed to" = against the rule.' },
+      { sentence: 'The software ___ crash every time you save.', correct: 'isn\'t supposed to', explain: '"Isn\'t supposed to" = not the expected behaviour.' }
     ]
   },
   pastDeduction: {
