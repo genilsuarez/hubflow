@@ -32,7 +32,7 @@ export const CATEGORIES = {
   healthIdioms: {
     label: "🤒 Illness Idioms",
     items: [
-      { term: "Feeling Off Colour", ipa: "/ˈfiːlɪŋ ɒf ˈkʌlər/", es: "Sentirse mal (UK)", meaning: "Feeling slightly unwell", emoji: "😷", example: "She's feeling a bit off colour today." },
+      { term: "Feeling Off Colour", ipa: "/ˈfiːlɪŋ ɒf ˈkʌlər/", es: "Sentirse mal (UK)", esSpeak: "Sentirse mal", meaning: "Feeling slightly unwell", emoji: "😷", example: "She's feeling a bit off colour today." },
       { term: "On the Mend", ipa: "/ɒn ðə mɛnd/", es: "Mejorando / recuperándose", meaning: "Recovering from an illness", emoji: "📈", example: "He's still weak, but he's on the mend." },
       { term: "Fit as a Fiddle", ipa: "/fɪt æz ə ˈfɪdəl/", es: "En excelente forma", meaning: "Very healthy and fit", emoji: "💪", example: "At 80, my grandfather is fit as a fiddle." },
       { term: "Catch Your Death", ipa: "/kætʃ jɔːr dɛθ/", es: "Resfriarse gravemente", meaning: "Get a very bad cold (informal warning)", emoji: "🥶", example: "Put a coat on or you'll catch your death!" },

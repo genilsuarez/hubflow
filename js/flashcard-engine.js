@@ -975,10 +975,15 @@ export class FlashcardEngine {
         // selectPair() debe leer en el idioma real del texto mostrado, no
         // asumir español solo por estar en la columna derecha.
         const rightText = isIdiom ? rightItem.meaning : (rightItem.es || rightItem.meaning || '');
+        // `esSpeak` es opcional y solo afecta lo que dice la voz sintética,
+        // nunca lo que se muestra: existe para casos como "Director/a (UK)"
+        // donde el "(UK)" aclara el término por escrito pero suena mal leído
+        // en voz alta. Mismo patrón que `ipa` para el término en inglés.
+        const rightSpeakText = isIdiom ? rightItem.meaning : (rightItem.esSpeak || rightItem.es || rightItem.meaning || '');
         const rightLang = (!isIdiom && rightItem.es) ? 'es-ES' : 'en-GB';
         return `
           <div class="pair-item pair-left" data-term="${item.term}" data-speak-text="${item.term}" data-speak-lang="en-GB"><span>${item.emoji}</span> ${item.term}</div>
-          <div class="pair-item pair-right" data-term="${rightItem.term}" data-speak-text="${rightText}" data-speak-lang="${rightLang}">${rightText}</div>
+          <div class="pair-item pair-right" data-term="${rightItem.term}" data-speak-text="${rightSpeakText}" data-speak-lang="${rightLang}">${rightText}</div>
         `;
       }).join('')}
     `;

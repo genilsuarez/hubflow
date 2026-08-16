@@ -48,7 +48,7 @@ export const CATEGORIES = {
       { term: "Coach", ipa: "/koʊtʃ/", es: "Entrenador/a", meaning: "A person who trains a sports team", emoji: "🏃" },
       { term: "Parent", ipa: "/ˈpɛrənt/", es: "Padre / madre", meaning: "A mother or father of a student", emoji: "👨‍👩‍👧" },
       { term: "Class", ipa: "/klæs/", es: "Clase (grupo)", meaning: "A group of students who study together", emoji: "🏫" },
-      { term: "Headteacher", ipa: "/ˈhɛdˌtiːtʃər/", es: "Director/a (UK)", meaning: "The person in charge of a school (British term)", emoji: "🧑‍💼" },
+      { term: "Headteacher", ipa: "/ˈhɛdˌtiːtʃər/", es: "Director/a (UK)", esSpeak: "Director/a", meaning: "The person in charge of a school (British term)", emoji: "🧑‍💼" },
       { term: "Counselor", ipa: "/ˈkaʊnsələr/", es: "Consejero/a", meaning: "A person who gives students advice and support", emoji: "🗣️" },
     ]
   },
