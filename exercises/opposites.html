@@ -96,6 +96,12 @@
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <!-- Este ejercicio declara su propia fc-nav en vez de usar la que genera
+             flashcard-engine, y se quedaba sin estos dos botones: al responder,
+             handleQuizAnswer caía en la rama sin #quizNextBtn y re-renderizaba al
+             instante, sin llegar a mostrar cuál era la correcta. -->
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
     </div>
 
