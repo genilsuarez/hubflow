@@ -204,8 +204,23 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem, rule) {
       mergedActivities[activityId] = activity;
       continue;
     }
-    const completedKeys = Math.max(existing.completedKeys ?? 0, activity.completedKeys ?? 0);
-    const totalKeys = Math.max(existing.totalKeys ?? 0, activity.totalKeys ?? 0);
+    // Los conteos de `existing` (foto vieja, de localStorage o de la nube) solo
+    // son comparables con los de `activity` (recién calculados contra la regla
+    // vigente) si se tomaron bajo la MISMA forma de regla — mismo totalKeys.
+    // Si no coinciden, `existing` puede venir de categorías ya renombradas o
+    // de un catálogo con distinto número de categorías/modos: un Math.max
+    // ciego sobre totalKeys Y completedKeys por separado puede reconstruir un
+    // "6 de 6" fantasma (viejo) que nunca corresponde a las 4 categorías
+    // reales de hoy, marcando el módulo completo aunque falte una categoría
+    // nueva sin hacer. totalKeys siempre sale del cálculo en vivo (nunca del
+    // máximo con la foto vieja); completedKeys solo hereda de `existing`
+    // cuando las formas coinciden (caso real: bootstrap en dispositivo nuevo,
+    // regla sin cambios, historial local aún sin sincronizar).
+    const sameShape = (existing.totalKeys ?? 0) === (activity.totalKeys ?? 0);
+    const totalKeys = activity.totalKeys ?? 0;
+    const completedKeys = sameShape
+      ? Math.max(existing.completedKeys ?? 0, activity.completedKeys ?? 0)
+      : (activity.completedKeys ?? 0);
     mergedActivities[activityId] = {
       ...existing,
       // Recalculado desde los conteos fusionados: un `completed` heredado de
@@ -237,10 +252,23 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem, rule) {
     ? (rule.completionRule === 'any' ? completedCount > 0 : completedCount === requiredIds.length)
     : (Boolean(scoreDerived.completed) || Boolean(projectionItem.completed));
 
+  // progressPct se deriva de `activityStates` ya saneado (mismo dato que
+  // decide `completed` arriba), no de un Math.max entre scoreDerived y el
+  // `progressPct` crudo de projectionItem: ese campo es un número suelto sin
+  // relación con mergedActivities, así que una foto vieja con más scoreKeys
+  // de las que exige el catálogo actual (ver fix de completedKeys/totalKeys
+  // arriba) podía dejar el % pegado en un valor alto para siempre — nunca
+  // baja porque Math.max nunca decrece.
+  const totalKeysAll = activityStates.reduce((sum, activity) => sum + (activity.totalKeys ?? 0), 0);
+  const completedKeysAll = activityStates.reduce((sum, activity) => sum + (activity.completedKeys ?? 0), 0);
+  const progressPct = totalKeysAll > 0
+    ? (completedKeysAll / totalKeysAll) * 100
+    : Math.max(scoreDerived.progressPct ?? 0, projectionItem.progressPct ?? 0);
+
   return {
     ...projectionItem,
     ...scoreDerived,
-    progressPct: Math.max(scoreDerived.progressPct ?? 0, projectionItem.progressPct ?? 0),
+    progressPct,
     completed,
     completedAt: completed ? (scoreDerived.completedAt || projectionItem.completedAt || null) : null,
     bestScorePct: Math.max(scoreDerived.bestScorePct ?? 0, projectionItem.bestScorePct ?? 0),
