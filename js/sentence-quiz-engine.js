@@ -60,6 +60,10 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     timerState.stop();
     document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
     document.getElementById('timerBar').classList.remove('show');
+    // Reset unconditionally on every mode switch (not just at the top of
+    // renderPractice) so #quizNextBtn never bleeds into Study/other areas —
+    // mirrors flashcard-engine.js hideAllAreas().
+    setQuizAnswered(false);
     if (mode === 'practice') initPractice(false);
     else if (mode === 'timed') initPractice(true);
     else if (mode === 'study') initStudy();

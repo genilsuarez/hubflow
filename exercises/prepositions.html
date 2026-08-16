@@ -170,12 +170,15 @@ sharedRenderCatBar({
 // ─── Mode switching ───
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
+function skipPractice() { if (idx >= total) return; idx++; updProgress(idx, total); renderPractice(); }
+
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
-  const pn = document.getElementById('practiceNextBtn');
-  if (pn) pn.style.display = 'none';
   document.getElementById('timerBar').classList.remove('show');
+  setQuizAnswered(false);
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
@@ -196,7 +199,6 @@ function initPractice(timed) {
   idx = 0; score = 0;
   total = Math.min(timed ? 12 : deck.length, deck.length);
   document.querySelector('[data-area="practice"]').classList.add('show');
-  ensurePracticeNextInNav();
 
   if (timed) {
     document.getElementById('timerBar').classList.add('show');
@@ -220,6 +222,7 @@ function renderPractice() {
   document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
   document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
   document.getElementById('explainBox').textContent = '';
+  setQuizAnswered(false);
 
   const opts = shuffle([...cat.options]);
   const optsEl = document.getElementById('wordOptions');
@@ -241,14 +244,17 @@ function renderPractice() {
       idx++;
       updProgress(idx, total);
 
-      if (mode === 'timed') {
-        setTimeout(renderPractice, 1200);
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderPractice();
+        nextBtn.focus({ preventScroll: true });
       } else {
-        document.getElementById('practiceNextBtn').style.display = '';
+        setTimeout(renderPractice, 1200);
       }
     });
   });
-  document.getElementById('practiceNextBtn').style.display = 'none';
   updProgress(idx, total);
 }
 
@@ -260,31 +266,6 @@ function finishPractice() {
     elapsedSeconds: elapsed,
   });
   recordScore(`prep-${currentCat}`, pct);
-}
-
-// ─── Practice Next button ───
-/** El "siguiente" de práctica va en la barra, no suelto en el área. No puede
- *  llamarse #nextBtn: ese id ya es el de la navegación de Study. */
-function ensurePracticeNextInNav() {
-  let btn = document.getElementById('practiceNextBtn');
-  if (!btn) {
-    btn = document.createElement('button');
-    btn.id = 'practiceNextBtn';
-    btn.type = 'button';
-    btn.className = 'lp-btn lp-btn--primary ex-bottom-nav__nav-btn';
-    btn.textContent = '→';
-    btn.setAttribute('aria-label', 'Siguiente');
-    btn.title = 'Siguiente';
-    btn.style.display = 'none';
-    btn.addEventListener('click', onPracticeNext);
-    document.body.appendChild(btn);
-  }
-  window.__insertInBottomNav?.(btn);
-}
-
-function onPracticeNext() {
-  document.getElementById('practiceNextBtn').style.display = 'none';
-  renderPractice();
 }
 
 // ═══ STUDY ═══

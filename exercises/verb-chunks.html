@@ -256,12 +256,17 @@ sharedRenderCatBar({
 // ─── Mode switching ───
 wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
+document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
+function skipPractice() { if (idx >= total) return; idx++; updProgress(idx, total); renderPractice(); }
+
 function startMode() {
   stopTimer();
   document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
   document.getElementById('timerBar').classList.remove('show');
   const sortBtn = document.getElementById('sortCheck');
   if (sortBtn && mode !== 'sort') sortBtn.style.display = 'none';
+  setQuizAnswered(false);
   if (mode === 'practice') initPractice(false);
   else if (mode === 'timed') initPractice(true);
   else if (mode === 'study') initStudy();
@@ -329,6 +334,7 @@ function renderPractice() {
   document.getElementById('scHint').textContent = item.es;
   document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
   document.getElementById('explainBox').textContent = '';
+  setQuizAnswered(false);
 
   const opts = buildOptions(item.prep);
   const optsEl = document.getElementById('wordOptions');
@@ -349,7 +355,16 @@ function renderPractice() {
 
       idx++;
       updProgress(idx, total);
-      setTimeout(renderPractice, 1400);
+
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderPractice();
+        nextBtn.focus({ preventScroll: true });
+      } else {
+        setTimeout(renderPractice, 1400);
+      }
     });
   });
   updProgress(idx, total);
