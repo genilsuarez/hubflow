@@ -446,12 +446,19 @@ export function setupPracticeBottomNav(attempt = 0) {
 }
 
 export function setPracticeBottomNav({ check = true, next = false, skip = true } = {}) {
-  const checkBtn = document.getElementById('checkBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const skipBtn = document.getElementById('skipBtn');
-  if (checkBtn) checkBtn.hidden = !check;
-  if (nextBtn) nextBtn.hidden = !next;
-  if (skipBtn) skipBtn.hidden = !skip;
+  // No basta con `hidden`: en el perfil `practice`, toggleGroup() ya ha dejado
+  // un `style.display = 'none'` inline sobre #nextBtn (está en STUDY_NAV_IDS),
+  // y ese inline gana. Sin limpiarlo, typed-answer-engine se quedaba sin
+  // ningún control visible tras responder — solo se podía avanzar con Enter.
+  const setVisible = (btn, show) => {
+    if (!btn) return;
+    btn.hidden = !show;
+    if (show) btn.style.removeProperty('display');
+    else btn.style.display = 'none';
+  };
+  setVisible(document.getElementById('checkBtn'), check);
+  setVisible(document.getElementById('nextBtn'), next);
+  setVisible(document.getElementById('skipBtn'), skip);
 }
 
 /** Create studySpeak button with canonical classes (sentence-quiz-engine). */
