@@ -342,7 +342,11 @@ export class SpellingEngine {
 
     // Check button
     const checkBtn = document.getElementById('checkBtn');
-    if (checkBtn) checkBtn.disabled = this.checked;
+    if (checkBtn && !this.checked) {
+      checkBtn.disabled = false;
+      checkBtn.textContent = this.checkBtnLabel ||= checkBtn.textContent;
+      checkBtn.onclick = null;
+    }
   }
 
   updateProgressBar() {
@@ -450,8 +454,18 @@ export class SpellingEngine {
     // Save failed words
     this.saveFailedWords(failed);
 
-    // Show results after delay
-    setTimeout(() => this.showResults(pct, spellingOk, colorOk, total), 800);
+    // El overlay de resultados tapaba la hoja corregida a los 800 ms, sin dejar
+    // repasar palabra por palabra. Igual que en el resto de la app, el paso al
+    // resultado lo decide el usuario: #checkBtn se reetiqueta y espera su clic.
+    const checkBtn = document.getElementById('checkBtn');
+    if (checkBtn) {
+      checkBtn.disabled = false;
+      checkBtn.textContent = 'Ver resultado →';
+      checkBtn.onclick = () => this.showResults(pct, spellingOk, colorOk, total);
+      checkBtn.focus({ preventScroll: true });
+    } else {
+      setTimeout(() => this.showResults(pct, spellingOk, colorOk, total), 800);
+    }
   }
 
   saveFailedWords(failed) {
