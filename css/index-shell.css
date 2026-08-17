@@ -2089,9 +2089,12 @@
       /* Barra de control: los chips de etapa se desplazan en horizontal y el
          bloque de la derecha (orden · densidad · expandir) baja a su fila. */
       .rutas-toolbar { gap: 8px; margin-bottom: 12px; }
+      /* Los chips se desplazan dentro de su propia caja. Sin `width:100%` +
+         `min-width:0`, la fila sin wrap empuja el ancho de .content y aparece
+         scroll horizontal en toda la sección (no solo en los chips). */
       .rutas-stagebar {
         flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
-        margin: 0 calc(-1 * clamp(16px, 3vw, 34px)); padding: 0 clamp(16px, 3vw, 34px);
+        width: 100%; min-width: 0;
       }
       .rutas-stagebar::-webkit-scrollbar { display: none; }
       .rutas-toolbar__right { width: 100%; justify-content: space-between; }
