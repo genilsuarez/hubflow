@@ -22,8 +22,14 @@ export const BOTTOM_NAV = {
     battleNext: 'next',
   },
 
-  /** Study-mode nav hidden entirely in battle. */
-  STUDY_NAV_IDS: ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn'],
+  /**
+   * Study-mode nav hidden entirely in battle.
+   * `studySpeakBtn` NO está aquí: su visibilidad la decide el propio
+   * sentence-quiz-engine (solo en ejercicios con `speech`), y debe seguir
+   * disponible en Practice/Timed — esos modos también pronuncian el item, así
+   * que ocultar el toggle dejaba al usuario sin forma de silenciarlo.
+   */
+  STUDY_NAV_IDS: ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn'],
 
   /**
    * Simétrico de STUDY_NAV_IDS: botones de práctica que se ocultan fuera del
@@ -46,7 +52,10 @@ export const BOTTOM_NAV = {
     progress: { id: 'lessonProgressBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__progress' },
     speak: { id: 'speakBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__icon-btn' },
     listen: { id: 'listenBtn', desktopOnly: true, roleClass: 'ex-bottom-nav__icon-btn' },
-    studySpeak: { id: 'studySpeakBtn', desktopOnly: true, roleClass: 'ex-bottom-nav__icon-btn' },
+    // No `desktopOnly`: es el mismo toggle de audio que `speak` en
+    // flashcard-engine, y en móvil escuchar la pronunciación es tan útil (o
+    // más) que en escritorio. Antes desaparecía por debajo de 768px.
+    studySpeak: { id: 'studySpeakBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__icon-btn' },
     shuffle: { id: 'shuffleBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__icon-btn' },
     hint: { id: 'hintBtn', desktopOnly: true, roleClass: 'ex-bottom-nav__icon-btn ex-bottom-nav__hint' },
     prev: { id: 'prevBtn', desktopOnly: false, roleClass: 'ex-bottom-nav__nav-btn' },
@@ -66,7 +75,7 @@ export const BOTTOM_NAV = {
     /** Tap-to-answer modes (sentence-quiz practice, listening, etc.) — progress only */
     minimal: ['lessonProgressBtn'],
     /** Quiz/Timed — barra reducida: progreso + skip (sin nav de tarjetas/sonido). */
-    quiz: ['lessonProgressBtn', 'quizSkipBtn', 'quizNextBtn'],
+    quiz: ['lessonProgressBtn', 'studySpeakBtn', 'quizSkipBtn', 'quizNextBtn'],
     /** Match — barra reducida: progreso + sonido de feedback (aciertos/errores). */
     match: ['lessonProgressBtn', 'matchSoundBtn'],
   },
@@ -466,11 +475,13 @@ export function createStudySpeakButton({ onClick, active = false } = {}) {
   const btn = document.createElement('button');
   btn.id = 'studySpeakBtn';
   btn.type = 'button';
-  btn.className = 'lp-btn lp-btn--ghost ex-bottom-nav__icon-btn ex-bottom-nav__desktop-only';
-  btn.textContent = '🔊';
-  btn.setAttribute('aria-label', 'Activar auto-pronunciación');
+  btn.className = 'lp-btn lp-btn--ghost ex-bottom-nav__icon-btn';
+  btn.classList.toggle('is-on', active);
+  btn.textContent = active ? '🔊' : '🔇';
+  const label = active ? 'Pronunciación automática: ON' : 'Pronunciación automática: OFF';
+  btn.setAttribute('aria-label', label);
   btn.setAttribute('aria-pressed', String(active));
-  btn.title = 'Activar auto-pronunciación';
+  btn.title = label;
   if (onClick) btn.addEventListener('click', onClick);
   return btn;
 }

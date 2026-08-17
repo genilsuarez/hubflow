@@ -5,21 +5,12 @@
 import { shuffle } from './array-utils.js';
 import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen, refreshModuleCompletionMarks } from './progress-store.js';
 import { Timer, formatTime } from './exercise-ui.js';
-import { speak, isSpeechAvailable, hasVoiceForLang } from './speech.js';
+import { speak, isSpeechAvailable, hasVoiceForLang, readAutoSpeak, writeAutoSpeak } from './speech.js';
 import { initSwipe } from './swipe.js';
 import { RESULT_TITLES } from './result-copy.js';
 
-// Preferencia persistente del toggle de pronunciación automática (on/off).
-// Convención `lp-*` como el resto de preferencias de usuario de la plataforma.
-const AUTOSPEAK_KEY = 'lp-autospeak';
-
-function readAutoSpeak() {
-  if (!isSpeechAvailable()) return false;
-  try { return localStorage.getItem(AUTOSPEAK_KEY) === '1'; } catch { return false; }
-}
-
 // Preferencia persistente del feedback sonoro de Match (mismo patrón que
-// AUTOSPEAK_KEY: toggle on/off, apagado por defecto).
+// el autospeak de speech.js: toggle on/off, apagado por defecto).
 const MATCH_SOUND_KEY = 'lp-match-sound';
 
 function readMatchSound() {
@@ -574,7 +565,7 @@ export class FlashcardEngine {
   /** Alterna el modo "leer todas las tarjetas" y lo persiste. */
   toggleAutoSpeak() {
     this.autoSpeak = !this.autoSpeak;
-    try { localStorage.setItem(AUTOSPEAK_KEY, this.autoSpeak ? '1' : '0'); } catch { /* storage bloqueado */ }
+    writeAutoSpeak(this.autoSpeak);
     this.syncSpeakBtn();
     if (this.autoSpeak) {
       if (this._currentTerm) speak(this._currentTerm);

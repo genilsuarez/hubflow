@@ -93,7 +93,8 @@
 import { CATEGORIES } from '../data/word-stress-quiz.js';
 import { initSentenceQuiz } from '../js/sentence-quiz-engine.js';
 
-initSentenceQuiz({ categories: CATEGORIES, scoreKeyPrefix: 'stress' });
+// speech: identificar la sílaba tónica sin poder oír la palabra es adivinar.
+initSentenceQuiz({ categories: CATEGORIES, scoreKeyPrefix: 'stress', speech: true });
 </script>
 
 <script type="module" src="../js/exercise-shell.js"></script>

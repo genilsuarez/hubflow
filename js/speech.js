@@ -26,6 +26,25 @@ export function speak(text, { lang = 'en-GB', rate = 0.85, pitch = 1 } = {}) {
 }
 
 /**
+ * Preferencia persistente del toggle de pronunciación automática (on/off),
+ * compartida por TODOS los motores (flashcard-engine, sentence-quiz-engine).
+ * Vive aquí y no en un motor concreto porque el usuario la percibe como un
+ * ajuste de plataforma: si la deja activa en un ejercicio de vocabulario,
+ * espera oír también los de pronunciación. Convención `lp-*` como el resto de
+ * preferencias.
+ */
+export const AUTOSPEAK_KEY = 'lp-autospeak';
+
+export function readAutoSpeak() {
+  if (!isSpeechAvailable()) return false;
+  try { return localStorage.getItem(AUTOSPEAK_KEY) === '1'; } catch { return false; }
+}
+
+export function writeAutoSpeak(on) {
+  try { localStorage.setItem(AUTOSPEAK_KEY, on ? '1' : '0'); } catch { /* storage bloqueado */ }
+}
+
+/**
  * ¿Hay alguna voz instalada para este idioma? Antes de forzar `lang` a algo
  * como "es-ES" conviene comprobarlo: en algunos navegadores/dispositivos, si
  * no existe ninguna voz que matchee el lang pedido, el utterance se descarta

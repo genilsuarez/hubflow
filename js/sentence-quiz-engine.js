@@ -12,7 +12,7 @@ import { shuffle } from './array-utils.js';
 import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus } from './progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from './exercise-ui.js';
 import { finishExercise } from './exercise-flow.js';
-import { speak } from './speech.js';
+import { speak, readAutoSpeak, writeAutoSpeak } from './speech.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 
 const SPEAK_ICON = '🔊';
@@ -52,13 +52,17 @@ function fillBlanks(sentence, filler, wrap = t => t) {
   });
 }
 
-export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = true, studyBlankPlaceholder = null, timedQuestionCount = 10 }) {
+export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = true, studyBlankPlaceholder = null, timedQuestionCount = 10, speech = false }) {
   renderLessonProgress(contentId);
 
   let currentCat = Object.keys(categories)[0];
   let mode = 'study';
   let deck = [], idx = 0, score = 0, total = 0;
-  let autoSpeak = false;
+  // Se hereda la preferencia de plataforma (`lp-autospeak`), la misma que usa
+  // flashcard-engine: si el usuario dejó el sonido activo en otro ejercicio,
+  // aquí también suena. Antes arrancaba siempre apagado y sin persistir, así
+  // que el ejercicio parecía mudo aunque el toggle estuviera "encendido".
+  let autoSpeak = readAutoSpeak();
   const timerState = makeTimerState();
 
   sharedRenderCatBar({
@@ -108,7 +112,22 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
   function getData() { return categories[currentCat].items; }
 
+  /**
+   * ¿Este ejercicio ofrece pronunciación? Antes se deducía de que el icono de
+   * la categoría fuera literalmente '🔊', lo que dejaba sin audio a las otras
+   * categorías del MISMO ejercicio de pronunciación (plural-endings: solo
+   * "Plural Nouns" lo tenía; "Third-Person Verbs" 🏃 y "Possessive 's" 🔑 no)
+   * y a ejercicios enteros como word-stress-quiz. Ahora se declara con
+   * `speech: true` al inicializar, o por categoría con `speech: true`.
+   */
   function usesSpeakNav() {
+    const cat = categories[currentCat];
+    if (cat?.speech !== undefined) return Boolean(cat.speech);
+    return speech || cat?.icon === SPEAK_ICON;
+  }
+
+  /** El icono de la tarjeta solo se cede al botón de audio si ERA el altavoz. */
+  function hidesCardIcon() {
     return categories[currentCat]?.icon === SPEAK_ICON;
   }
 
@@ -126,15 +145,28 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     if (text) speak(text);
   }
 
-  function setAutoSpeak(on) {
-    autoSpeak = on;
+  /**
+   * Refleja el estado on/off en el botón. Mismo lenguaje visual que #speakBtn
+   * de flashcard-engine (🔊/🔇 + `.is-on`): antes solo se ponía la clase
+   * `active`, que no tiene ningún estilo, así que el único indicio de "activo"
+   * era el anillo de foco del navegador — indistinguible de apagado.
+   */
+  function syncSpeakBtnState() {
     const btn = document.getElementById('studySpeakBtn');
     if (!btn) return;
-    btn.classList.toggle('active', on);
+    const on = autoSpeak && usesSpeakNav();
+    const label = on ? 'Pronunciación automática: ON' : 'Pronunciación automática: OFF';
+    btn.classList.toggle('is-on', on);
+    btn.textContent = on ? '🔊' : '🔇';
     btn.setAttribute('aria-pressed', String(on));
-    const label = on ? 'Desactivar auto-pronunciación' : 'Activar auto-pronunciación';
     btn.setAttribute('aria-label', label);
-    btn.title = on ? 'Auto-pronunciación activa' : 'Activar auto-pronunciación';
+    btn.title = label;
+  }
+
+  function setAutoSpeak(on) {
+    autoSpeak = on;
+    writeAutoSpeak(on);
+    syncSpeakBtnState();
     if (on) speakCurrentItem();
     else if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
@@ -153,33 +185,28 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
           e.stopPropagation();
           setAutoSpeak(!autoSpeak);
         },
+        active: autoSpeak,
       });
       insertInBottomNav(btn);
     }
     btn.hidden = !usesSpeakNav();
-    btn.classList.toggle('active', autoSpeak && usesSpeakNav());
-    btn.setAttribute('aria-pressed', String(autoSpeak && usesSpeakNav()));
+    syncSpeakBtnState();
     return btn;
   }
 
   function syncSpeakNavUI() {
     const active = usesSpeakNav();
+    const hideIcon = hidesCardIcon();
     const fcCard = document.getElementById('fcCard');
     const sentenceCard = document.querySelector('.sentence-card');
     const fcEmoji = document.getElementById('fcEmoji');
     const scIcon = document.getElementById('scIcon');
 
-    fcCard?.classList.toggle('fc-card--speak-in-nav', active);
-    sentenceCard?.classList.toggle('sentence-card--speak-in-nav', active);
+    fcCard?.classList.toggle('fc-card--speak-in-nav', hideIcon);
+    sentenceCard?.classList.toggle('sentence-card--speak-in-nav', hideIcon);
 
-    if (fcEmoji) {
-      if (active) fcEmoji.textContent = '';
-      else fcEmoji.textContent = categories[currentCat].icon;
-    }
-    if (scIcon) {
-      if (active) scIcon.textContent = '';
-      else scIcon.textContent = categories[currentCat].icon;
-    }
+    if (fcEmoji) fcEmoji.textContent = hideIcon ? '' : categories[currentCat].icon;
+    if (scIcon) scIcon.textContent = hideIcon ? '' : categories[currentCat].icon;
 
     const speakBtn = document.getElementById('studySpeakBtn');
     if (active) ensureSpeakButton();
@@ -218,7 +245,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     const cat = categories[currentCat];
 
     const scIcon = document.getElementById('scIcon');
-    if (scIcon && !usesSpeakNav()) scIcon.textContent = cat.icon;
+    if (scIcon && !hidesCardIcon()) scIcon.textContent = cat.icon;
     document.getElementById('scText').innerHTML = fillBlanks(item.sentence, '?', (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
@@ -293,7 +320,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     const card = document.getElementById('fcCard');
     card.classList.remove('flip');
     const fcEmoji = document.getElementById('fcEmoji');
-    if (fcEmoji && !usesSpeakNav()) fcEmoji.textContent = categories[currentCat].icon;
+    if (fcEmoji && !hidesCardIcon()) fcEmoji.textContent = categories[currentCat].icon;
     document.getElementById('fcSentence').textContent = studyBlankPlaceholder
       ? fillBlanks(item.sentence, studyBlankPlaceholder)
       : item.sentence;
