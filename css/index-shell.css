@@ -751,60 +751,51 @@
       .hero-card__title { font-size: .9rem; }
     }
 
-    /* ─── PROGRESS SNAPSHOT (FluentFlow home-dash__context-card--summary) ─── */
+    /* ─── PROGRESS SNAPSHOT (Mis estadísticas — hero) ───
+       Único uso real: #progressSnapshot dentro de "mi-progreso" (ver
+       index.html). Las reglas .resumen-hero .progress-snapshot* que vivían
+       acá habían quedado muertas hace tiempo (esa sección nunca llegó a
+       incluir este componente) — se limpian junto con este rediseño en vez
+       de seguir cargando peso muerto. Ring + dos bloques de stat + barra
+       larga abajo, reemplazando el layout de una sola línea de texto — M4
+       2026-08. */
+    /* ~40% más compacta en vertical que la primera versión (padding, anillo,
+       tipografía y barra reducidos) — pedido explícito del usuario tras ver
+       la tarjeta muy alta comparada con el resto del panel. M4 2026-08. */
     .progress-snapshot {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-template-rows: 1fr;
-      align-items: center;
-      gap: 0 12px;
-      padding: 12px 14px;
-      border-radius: var(--lp-radius-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       width: 100%;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
+      padding: 10px 16px;
+      border-radius: var(--lp-radius-lg);
       text-align: left;
       font: inherit;
       color: inherit;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
     }
-    .progress-snapshot__copy {
-      grid-column: 2;
-      grid-row: 1;
-      align-self: center;
+    .progress-snapshot__top {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 2px;
-      min-width: 0;
-      min-height: 0;
-    }
-    .progress-snapshot__chev {
-      grid-column: 3;
-      grid-row: 1 / -1;
-      align-self: center;
-      display: none;
-      font-size: 1.25rem;
-      line-height: 1;
-      color: var(--lp-muted);
-      font-weight: 400;
-      padding-left: 4px;
+      align-items: center;
+      gap: 14px;
     }
     .progress-snapshot__visual {
-      grid-column: 1;
-      grid-row: 1;
-      align-self: center;
-      width: 48px;
-      height: 48px;
-      flex: 0 0 48px;
+      flex: 0 0 46px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: conic-gradient(var(--lp-accent) calc(var(--progress) * 1%), var(--lp-border) 0);
+      background: conic-gradient(var(--lp-accent) calc(var(--progress) * 1%), color-mix(in srgb, var(--lp-accent) 14%, var(--lp-border)) 0);
       display: grid;
       place-items: center;
+      box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--lp-accent) 12%, transparent),
+        0 4px 18px color-mix(in srgb, var(--lp-accent) 22%, transparent);
     }
     .progress-snapshot__visual > div {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       background: var(--lp-surface);
       border-radius: 50%;
       display: flex;
@@ -812,277 +803,74 @@
       justify-content: center;
     }
     .progress-snapshot__visual strong {
-      font-size: 0.8125rem;
-      font-weight: 700;
+      font-size: .75rem;
+      font-weight: 800;
       line-height: 1;
       font-variant-numeric: tabular-nums;
       color: var(--lp-ink);
     }
-    .progress-snapshot__line {
+    .progress-snapshot__stats {
       display: flex;
-      align-items: center;
-      margin: 0;
+      flex: 1;
       min-width: 0;
-      line-height: 1.2;
+      gap: 20px;
     }
-    .progress-snapshot__line--primary {
+    .progress-snapshot__stat-block {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8125rem;
-      font-weight: 500;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .progress-snapshot__stat-label {
+      font-size: .6rem;
+      font-weight: 600;
       color: var(--lp-ink-soft);
-    }
-    .progress-snapshot__line--meta {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--lp-muted);
-      line-height: 1.25;
-    }
-    .progress-snapshot__title {
-      font-size: 0.625rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--lp-muted);
       white-space: nowrap;
-      line-height: 1;
-      align-self: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .progress-snapshot__stat-wrap {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 0.15rem;
-      min-width: 0;
-      white-space: nowrap;
-      line-height: 1;
-    }
-    .progress-snapshot__stat-col {
-      display: flex;
-      align-items: center;
-      min-width: 0;
-    }
-    .progress-snapshot__stat {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
+    .progress-snapshot__stat-value {
+      font-size: .88rem;
+      font-weight: 800;
       color: var(--lp-ink);
-      letter-spacing: -0.02em;
-      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
     }
-    .progress-snapshot__unit {
-      font-size: 0.6875rem;
-      font-weight: 500;
-      color: var(--lp-ink-soft);
-      line-height: 1;
+    .progress-snapshot__bar-track {
+      height: 4px;
+      border-radius: var(--lp-radius-full);
+      background: color-mix(in srgb, var(--lp-accent) 14%, var(--lp-surface-sunken));
+      overflow: hidden;
     }
-    .progress-snapshot--empty .progress-snapshot__line--meta {
-      color: var(--lp-muted);
-      font-style: italic;
+    .progress-snapshot__bar-fill {
+      height: 100%;
+      border-radius: var(--lp-radius-full);
+      background: var(--lp-accent);
+      transition: width .5s var(--lp-ease);
     }
-
-    @media (min-width: 640px) {
-      .resumen-hero {
-        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-        gap: 12px;
-      }
-
-      .resumen-hero .hero-card {
-        grid-column: 1;
-        grid-row: 1;
-        margin-bottom: 0;
-      }
-
-      .resumen-hero .hero-card__launch {
-        padding: 16px 18px;
-      }
-
-      .resumen-hero .hero-card__title {
-        font-size: 1rem;
-      }
-
-      .resumen-hero .progress-snapshot {
-        grid-column: 2;
-        grid-row: 1;
-        grid-template-columns: auto minmax(0, 1fr) auto;
-        grid-template-rows: auto auto;
-        padding: 14px 16px;
-        gap: 0.35rem 12px;
-        cursor: pointer;
-      }
-
-      .resumen-hero .progress-snapshot__visual {
-        grid-column: 1;
-        grid-row: 1 / -1;
-        align-self: center;
-        width: 52px;
-        height: 52px;
-      }
-
-      .resumen-hero .progress-snapshot__visual > div {
-        width: 40px;
-        height: 40px;
-      }
-
-      .resumen-hero .progress-snapshot__visual strong { font-size: 0.875rem; }
-
-      .resumen-hero .progress-snapshot__copy {
-        display: contents;
-      }
-
-      .resumen-hero .progress-snapshot__line--primary {
-        display: contents;
-      }
-
-      .resumen-hero .progress-snapshot__title {
-        grid-column: 2;
-        grid-row: 1;
-        align-self: center;
-        min-width: 0;
-      }
-
-      .resumen-hero .progress-snapshot__stat-col {
-        grid-column: 3;
-        grid-row: 1 / -1;
-        justify-self: end;
-        align-self: center;
-      }
-
-      .resumen-hero .progress-snapshot__line--meta {
-        grid-column: 2;
-        grid-row: 2;
-        align-self: start;
-        min-width: 0;
-        font-size: 0.8125rem;
-        white-space: normal;
-      }
-
-      .resumen-hero .progress-snapshot__line--meta::before {
-        content: none;
-        margin: 0;
-      }
-
-      .resumen-hero .progress-snapshot__line--primary { font-size: 0.875rem; }
-
-      .resumen-hero .progress-snapshot__chev {
-        display: none;
-      }
-    }
+    .progress-snapshot--empty .progress-snapshot__stat-value { color: var(--lp-muted); }
 
     @media (max-width: 639px) {
-      .resumen-hero {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-
-      .resumen-hero .hero-card {
-        margin-bottom: 0;
-      }
-
-      .resumen-hero .hero-card__context {
-        font-size: 0.58rem;
-        letter-spacing: 0.07em;
-      }
-
-      .resumen-hero .hero-card__title {
-        font-size: 1rem;
-        line-height: 1.2;
-      }
-
-      .resumen-hero .progress-snapshot {
-        grid-template-columns: 44px minmax(0, 1fr) auto auto;
-        grid-template-rows: auto auto;
-        align-items: center;
-        gap: 0 12px;
-        row-gap: 4px;
-        min-height: 68px;
-        padding: 12px 14px;
-      }
-
-      .resumen-hero .progress-snapshot__visual {
-        grid-column: 1;
-        grid-row: 1 / -1;
-        align-self: center;
-        width: 44px;
-        height: 44px;
-      }
-
-      .resumen-hero .progress-snapshot__visual > div {
-        width: 33px;
-        height: 33px;
-      }
-
-      .resumen-hero .progress-snapshot__visual strong {
-        font-size: 0.72rem;
-      }
-
-      .resumen-hero .progress-snapshot__copy {
-        display: contents;
-      }
-
-      .resumen-hero .progress-snapshot__line--primary {
-        display: contents;
-      }
-
-      .resumen-hero .progress-snapshot__title {
-        grid-column: 2;
-        grid-row: 1;
-        align-self: end;
-        font-size: 0.6rem;
-        letter-spacing: 0.08em;
-      }
-
-      .resumen-hero .progress-snapshot__stat-col {
-        grid-column: 3;
-        grid-row: 1 / -1;
-        align-self: center;
-      }
-
-      .resumen-hero .progress-snapshot__line--meta {
-        grid-column: 2;
-        grid-row: 2;
-        align-self: start;
-        font-size: 0.6875rem;
-        color: var(--lp-muted);
-      }
-
-      .resumen-hero .progress-snapshot__line--meta::before {
-        content: none;
-        margin: 0;
-      }
-
-      .resumen-hero .progress-snapshot__stat {
-        font-size: 0.8125rem;
-      }
-
-      .resumen-hero .progress-snapshot__unit {
-        font-size: 0.6875rem;
-      }
-
-      .resumen-hero .progress-snapshot__chev {
-        display: block;
-        grid-column: 4;
-        grid-row: 1 / -1;
-        align-self: center;
-        font-size: 1.125rem;
-        color: color-mix(in srgb, var(--lp-muted) 85%, transparent);
-      }
-
-      .resumen-hero .hero-card--welcome .hero-card__title {
-        font-size: 1rem;
-      }
-    }
-
-    @media (max-width: 639px) {
-      .resumen-hero .hero-card__title { font-size: 0.94rem; }
+      .progress-snapshot { padding: 10px 14px; gap: 8px; }
+      .progress-snapshot__top { gap: 10px; }
+      .progress-snapshot__visual { flex-basis: 40px; width: 40px; height: 40px; }
+      .progress-snapshot__visual > div { width: 30px; height: 30px; }
+      .progress-snapshot__visual strong { font-size: .64rem; }
+      .progress-snapshot__stats { gap: 12px; }
+      .progress-snapshot__stat-label { font-size: .55rem; }
+      .progress-snapshot__stat-value { font-size: .78rem; }
     }
 
     /* ─── LAST ACTIVITIES ─── */
     .last-activities { margin-top: 4px; margin-bottom: 20px; }
     .last-activities__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .last-activities__title { font-size: .72rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-ink); }
+    /* Mismo tratamiento que .sec-head ("Progreso por categoría/nivel") —
+       antes tenía color/tamaño propios y quedaba desalineado visualmente
+       con los otros encabezados del panel. M4 2026-08. */
+    .last-activities__title {
+      font-size: .66rem; font-weight: var(--lp-weight-extrabold); letter-spacing: .14em;
+      text-transform: uppercase; color: var(--lp-muted);
+    }
     .last-activities__list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 6px 0 4px; margin: -6px 0 -2px; }
     .la-card {
       display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -1098,9 +886,12 @@
       display: flex; align-items: center; justify-content: center; font-size: .95rem;
     }
     .la-card__body { min-width: 0; width: 100%; }
-    .la-card__name { font-size: .66rem; font-weight: var(--lp-weight-bold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Tipografía homologada con .stat-card (categoría/nivel): mismo tamaño/
+       peso de label y el porcentaje en mono, para que ambas columnas de
+       "Mis estadísticas" lean como un solo sistema — M4 2026-08. */
+    .la-card__name { font-size: .66rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .la-card__score {
-      font-size: .58rem; font-weight: var(--lp-weight-bold); padding: 2px 7px;
+      font-family: var(--lp-font-mono); font-size: .66rem; font-weight: 800; padding: 2px 7px;
       border-radius: var(--lp-radius-full); white-space: nowrap;
     }
     .la-card__score--pass { background: var(--lp-success-soft); color: var(--lp-success); }
@@ -1109,23 +900,37 @@
       font-size: .68rem; color: var(--lp-muted); font-style: italic;
       padding: 14px 0; text-align: center;
     }
+    /* Wrapper de snapshot + Maestría (index.html) — en mobile son dos tarjetas
+       apiladas normales; en desktop (ver @media 861px más abajo) se vuelve un
+       flex row donde ambas crecen para llenar el ancho disponible. */
+    .mi-progreso-top { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .mi-progreso-top .progress-snapshot { margin-bottom: 0; }
+
     /* Contador de Maestría — docs/to-do/mastery-tiers-plan.md §6 Fase 3.
-       Chip dorado (en vez de texto plano) para que tenga el mismo peso visual
-       que las nuevas .stat-card de más abajo (M4 2026-08). */
+       Tarjeta dorada (no píldora) para que tenga el mismo peso visual que las
+       .stat-card de más abajo y para que, en desktop, pueda crecer con
+       flexbox sin verse como una cápsula estirada — M4 2026-08. */
     .mastery-count {
-      display: inline-flex; align-items: center; gap: 6px; margin: -4px 0 16px;
-      padding: 5px 12px 5px 8px;
-      border-radius: var(--lp-radius-full);
+      display: flex; align-items: center; gap: 10px; margin: 0;
+      padding: 8px 16px;
+      border-radius: var(--lp-radius-lg);
       background: color-mix(in srgb, var(--lp-gold) 12%, var(--lp-surface));
-      border: 1px solid color-mix(in srgb, var(--lp-gold) 30%, var(--lp-border));
-      font-size: .68rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-gold);
+      border: 1.5px solid color-mix(in srgb, var(--lp-gold) 30%, var(--lp-border));
+      width: fit-content;
     }
     .mastery-count[hidden] { display: none; }
     .mastery-count__icon {
-      display: grid; place-items: center;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--lp-gold); font-size: .68rem;
+      display: grid; place-items: center; flex-shrink: 0;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--lp-gold); color: var(--lp-ink-inverse); font-size: .78rem;
+      box-shadow: 0 3px 8px color-mix(in srgb, var(--lp-gold) 32%, transparent);
     }
+    .mastery-count__copy { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .mastery-count__label {
+      font-size: .58rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--lp-gold) 75%, var(--lp-ink-soft));
+    }
+    .mastery-count__text { font-size: .72rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-gold); }
     @media (max-width: 860px) {
       #lastActivities:has(.last-activities--empty) { display: none; }
     }
@@ -1764,13 +1569,15 @@
     .stats-breakdown {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 7px;
+      margin-bottom: 14px;
     }
+    /* ~30% más compacta en vertical que la versión anterior — pedido
+       explícito del usuario. M4 2026-08. */
     .stat-card {
       --stat-color: var(--lp-accent);
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 12px;
+      display: flex; align-items: center; gap: 9px;
+      padding: 10px 14px;
       border-radius: var(--lp-radius-lg);
       border: 1.5px solid color-mix(in srgb, var(--stat-color) 24%, var(--lp-border));
       background: linear-gradient(
@@ -1791,27 +1598,27 @@
         0 6px 16px color-mix(in srgb, var(--stat-color) 16%, transparent);
     }
     .stat-card__icon {
-      width: 32px; height: 32px; flex: 0 0 32px;
+      width: 27px; height: 27px; flex: 0 0 27px;
       border-radius: 50%; display: grid; place-items: center;
       background: var(--stat-color); color: var(--lp-ink-inverse);
-      font-size: .8rem; font-weight: 800; line-height: 1;
+      font-size: .68rem; font-weight: 800; line-height: 1;
       box-shadow: 0 3px 8px color-mix(in srgb, var(--stat-color) 32%, transparent);
     }
-    .stat-card__icon--text { font-size: .58rem; letter-spacing: .01em; font-family: var(--lp-font-mono); }
+    .stat-card__icon--text { font-size: .52rem; letter-spacing: .01em; font-family: var(--lp-font-mono); }
     .stat-card__body { min-width: 0; flex: 1; }
-    .stat-card__top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
+    .stat-card__top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin-bottom: 3px; }
     .stat-card__label {
       font-size: .66rem; font-weight: 700; color: var(--lp-ink-soft);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
     }
     .stat-card__pct {
-      font-family: var(--lp-font-mono); font-size: .68rem; font-weight: 800;
+      font-family: var(--lp-font-mono); font-size: .66rem; font-weight: 800;
       color: var(--stat-color); flex-shrink: 0;
     }
     .stats-bar { display: flex; align-items: center; }
-    .stats-bar-track { flex: 1; height: 5px; border-radius: var(--lp-radius-full); background: color-mix(in srgb, var(--stat-color) 14%, var(--lp-surface-sunken)); overflow: hidden; }
+    .stats-bar-track { flex: 1; height: 4px; border-radius: var(--lp-radius-full); background: color-mix(in srgb, var(--stat-color) 14%, var(--lp-surface-sunken)); overflow: hidden; }
     .stats-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--stat-color); transition: width .5s var(--lp-ease); }
-    .stats-bar-frac { display: block; margin-top: 4px; font-family: var(--lp-font-mono); font-size: .58rem; font-weight: 700; color: var(--lp-muted); }
+    .stats-bar-frac { display: block; margin-top: 2px; font-family: var(--lp-font-mono); font-size: .55rem; font-weight: 700; color: var(--lp-muted); }
 
     /* En web (≥861px) "Mis estadísticas" pasa a una grid de 2 columnas —
        snapshot + última actividad en una barra lateral angosta, categoría y
@@ -1829,21 +1636,45 @@
     @media (min-width: 861px) {
       .section.active-section[data-key="mi-progreso"] {
         display: grid;
-        grid-template-columns: minmax(230px, 290px) 1fr;
-        grid-template-rows: auto auto auto auto 1fr;
+        /* Proporción 3fr:2fr (desglose:actividad) — mismas proporciones del
+           spec previo ("PROPUESTA FINAL", sección "4. GRID Y DISTRIBUCIÓN")
+           pero con "Última actividad" movida a la derecha, a pedido del
+           usuario. M4 2026-08. */
+        grid-template-columns: 3fr minmax(230px, 2fr);
+        /* Filas todas "auto" (no 1fr) — con la última fila en 1fr y el grid
+           forzado a height:100%, la fila de nivel/actividad se estiraba
+           hasta el fondo del viewport aunque el contenido real fuera mucho
+           más corto, dejando un hueco enorme (y descompensado entre ambas
+           columnas) en vez de que las tarjetas terminen donde termina su
+           contenido — M4 2026-08. */
+        grid-template-rows: auto auto auto auto auto;
         grid-template-areas:
-          "snapshot mastery"
-          "activity cathead"
-          "activity catbody"
-          "activity lvlhead"
-          "activity lvlbody";
+          "toprow   toprow"
+          "cathead  activity"
+          "catbody  activity"
+          "lvlhead  activity"
+          "lvlbody  activity";
         gap: 10px 16px;
-        height: 100%;
+        max-width: 960px;
         min-height: 0;
       }
-      .section.active-section[data-key="mi-progreso"] .progress-snapshot { grid-area: snapshot; margin-bottom: 0; }
-      .section.active-section[data-key="mi-progreso"] .mastery-count {
-        grid-area: mastery; margin: 0; align-self: center; justify-self: start;
+      /* Fila superior — snapshot + Maestría comparten "toprow" (las dos
+         columnas del grid) como un flex row: ambas tarjetas crecen para
+         llenar el ancho real en vez de que Maestría quede como una píldora
+         angosta con un vacío enorme al lado (M4 2026-08, reporte de usuario
+         "sigue sin verse bien... cuando está más de 1000px" — el tope de
+         ancho por sí solo no alcanzaba porque el hueco estaba DENTRO de la
+         fila, no fuera de la sección). */
+      .section.active-section[data-key="mi-progreso"] .mi-progreso-top {
+        grid-area: toprow; flex-direction: row; align-items: stretch;
+        gap: 16px; margin-bottom: 0;
+      }
+      .section.active-section[data-key="mi-progreso"] .mi-progreso-top .progress-snapshot {
+        flex: 2 1 380px;
+      }
+      .section.active-section[data-key="mi-progreso"] .mi-progreso-top .mastery-count {
+        flex: 1 1 260px; max-width: 420px; width: auto;
+        justify-content: flex-start;
       }
       .section.active-section[data-key="mi-progreso"] #secHeadCategory { grid-area: cathead; margin-bottom: 0; }
       .section.active-section[data-key="mi-progreso"] #secHeadCefr { grid-area: lvlhead; margin-bottom: 0; margin-top: 6px; }
@@ -1865,22 +1696,46 @@
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
         grid-template-columns: 1fr;
       }
+      /* Nivel usa 3 columnas en vez de 2 desde este mismo quiebre — a
+         diferencia de categoría ("Analysis & Production"), las etiquetas de
+         nivel son 2 caracteres (A1…C1) y entran sin apretarse. Con 5 niveles
+         eso da 2 filas en vez de 3, para que el bloque completo quede a la
+         misma altura que "Última actividad" en vez de sobrepasarla — pedido
+         explícito del usuario (M4 2026-08). */
+      .section.active-section[data-key="mi-progreso"] #statsByCefr {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
 
+      .section.active-section[data-key="mi-progreso"] .mi-progreso-activity {
+        grid-area: activity; min-height: 0;
+        display: flex; flex-direction: column; gap: 10px; overflow: hidden;
+      }
       .section.active-section[data-key="mi-progreso"] .last-activities {
-        grid-area: activity; margin: 0; min-height: 0;
+        margin: 0; min-height: 0; flex: 1;
         display: flex; flex-direction: column; overflow: hidden;
       }
+      /* justify-content: space-between se probó para que la última tarjeta
+         quedara al mismo nivel que "Progreso por nivel", pero con pocas
+         actividades (1-3) reparte un hueco enorme ENTRE las tarjetas en vez
+         de after — mucho peor que dejarlo como espacio en blanco al final.
+         Vuelve al apilado normal (flex-start); el emparejamiento de altura
+         ya lo resuelve la fila "auto" del grid exterior (ver arriba) — con
+         4 actividades el resultado ya queda a pocos px de "Progreso por
+         nivel" sin necesitar forzar el reparto. M4 2026-08. */
       .section.active-section[data-key="mi-progreso"] .last-activities__list {
         flex: 1; min-height: 0; flex-direction: column;
         overflow-x: visible; overflow-y: auto;
-        padding: 0; margin: 0; gap: 6px;
+        padding: 0; margin: 0; gap: 10px;
       }
+      /* Filas más altas (padding/ícono más grandes que el compacto original)
+         para que "Última actividad" quede a una altura comparable a las
+         .stat-card de categoría/nivel — M4 2026-08. */
       .section.active-section[data-key="mi-progreso"] .la-card {
         width: 100%; flex: 0 0 auto; flex-direction: row;
-        text-align: left; padding: 7px 10px; gap: 10px;
+        text-align: left; padding: 15px 16px; gap: 14px;
       }
       .section.active-section[data-key="mi-progreso"] .la-card__body { flex: 1; min-width: 0; }
-      .section.active-section[data-key="mi-progreso"] .la-card__icon { width: 28px; height: 28px; font-size: .78rem; flex-shrink: 0; }
+      .section.active-section[data-key="mi-progreso"] .la-card__icon { width: 42px; height: 42px; font-size: 1.05rem; flex-shrink: 0; }
       .section.active-section[data-key="mi-progreso"] .la-card__score { flex-shrink: 0; }
 
       .section.active-section[data-key="mi-progreso"] #statsByCategory,
@@ -1894,7 +1749,11 @@
       .section.active-section[data-key="mi-progreso"] #statsByCategory,
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 640px;
+      }
+      /* Nivel se queda en 3 columnas (ver el mismo comentario en el
+         quiebre de 861px) — 2 filas para 5 niveles en vez de 3. */
+      .section.active-section[data-key="mi-progreso"] #statsByCefr {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 

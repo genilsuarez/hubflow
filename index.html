@@ -420,33 +420,47 @@
 
       <!-- MIS ESTADÍSTICAS -->
       <section class="section" data-key="mi-progreso">
+        <!-- Envuelve snapshot + Maestría para que en desktop (mi-progreso-top,
+             ver index-shell.css) ambas tarjetas puedan crecer con flexbox y
+             llenar la fila completa en vez de que la insignia de Maestría
+             quede como una píldora angosta flotando en un vacío — M4 2026-08. -->
+        <div class="mi-progreso-top">
         <button type="button" class="progress-snapshot" id="progressSnapshot" aria-label="Ver tu progreso">
-          <div class="progress-snapshot__visual" id="snapshotRing" style="--progress: 0" role="img" aria-hidden="true">
-            <div><strong id="snapshotPct">0%</strong></div>
+          <div class="progress-snapshot__top">
+            <div class="progress-snapshot__visual" id="snapshotRing" style="--progress: 0" role="img" aria-hidden="true">
+              <div><strong id="snapshotPct">0%</strong></div>
+            </div>
+            <div class="progress-snapshot__stats">
+              <div class="progress-snapshot__stat-block">
+                <span class="progress-snapshot__stat-label">Rutas activas</span>
+                <span class="progress-snapshot__stat-value" id="snapshotPaths">0</span>
+              </div>
+              <div class="progress-snapshot__stat-block">
+                <span class="progress-snapshot__stat-label">Ejercicios completados</span>
+                <span class="progress-snapshot__stat-value" id="snapshotStat">0/0</span>
+              </div>
+            </div>
           </div>
-          <span class="progress-snapshot__copy">
-            <span class="progress-snapshot__line progress-snapshot__line--primary">
-              <span class="progress-snapshot__title"></span>
-            </span>
-            <span class="progress-snapshot__line progress-snapshot__line--meta" id="snapshotDetail">Tu aventura empieza aquí</span>
-          </span>
-          <div class="progress-snapshot__stat-col">
-            <span class="progress-snapshot__stat-wrap">
-              <span class="progress-snapshot__stat" id="snapshotStat">0/0</span><span class="progress-snapshot__unit"> ejercicios</span>
-            </span>
+          <div class="progress-snapshot__bar" aria-hidden="true">
+            <div class="progress-snapshot__bar-track"><div class="progress-snapshot__bar-fill" id="snapshotBarFill" style="width:0%"></div></div>
           </div>
-          <span class="progress-snapshot__chev" aria-hidden="true">›</span>
         </button>
-
-        <!-- Last Activities -->
-        <div class="last-activities" id="lastActivities"></div>
 
         <!-- Contador de Maestría — docs/to-do/mastery-tiers-plan.md §6 Fase 3.
              Aparte del conteo de Aprobados (progressSnapshot/psMastered arriba),
              no en su lugar. Oculto si todavía no hay ningún módulo en Maestría. -->
         <div class="mastery-count" id="masteryCount" hidden>
           <span class="mastery-count__icon" aria-hidden="true">👑</span>
-          <span class="mastery-count__text" id="masteryCountText">0 módulos en Maestría</span>
+          <span class="mastery-count__copy">
+            <span class="mastery-count__label">Maestría</span>
+            <span class="mastery-count__text" id="masteryCountText">0 módulos en Maestría</span>
+          </span>
+        </div>
+        </div>
+
+        <!-- Last Activities -->
+        <div class="mi-progreso-activity">
+        <div class="last-activities" id="lastActivities"></div>
         </div>
 
         <div class="sec-head" id="secHeadCategory">Progreso por categoría</div>

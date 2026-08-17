@@ -23,7 +23,8 @@ export function renderProgressSnapshot(animateReveal = false, { onOpenProgress }
   const ring = document.getElementById('snapshotRing');
   const pctEl = document.getElementById('snapshotPct');
   const statEl = document.getElementById('snapshotStat');
-  const detailEl = document.getElementById('snapshotDetail');
+  const pathsEl = document.getElementById('snapshotPaths');
+  const barFillEl = document.getElementById('snapshotBarFill');
   const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
   const total = exercises.length;
   const defer = shouldDeferStatsDisplay();
@@ -32,35 +33,27 @@ export function renderProgressSnapshot(animateReveal = false, { onOpenProgress }
   const activePaths = defer ? 0 : LEARNING_PATHS.filter(p => p.modules.some(id => getBestScore(id) > 0) && !p.modules.every(isContentCompleted)).length;
   const hasProgress = !defer && (completed > 0 || MODULES.some(m => getBestScore(m.id) > 0));
 
-  if (!hasProgress) {
-    snapshot.classList.add('progress-snapshot--empty');
-    ring.style.setProperty('--progress', '0');
-    pctEl.textContent = '0%';
-    statEl.textContent = `0/${total}`;
-    detailEl.textContent = 'Tu aventura empieza aquí';
-    snapshot.setAttribute('aria-label', `Progreso HubFlow: 0 de ${total} ejercicios. Tu aventura empieza aquí`);
+  snapshot.classList.toggle('progress-snapshot--empty', !hasProgress);
+  if (animateReveal && pct > 0) {
+    animateCssVar(ring, '--progress', pct);
+    animateText(pctEl, 0, pct, (v) => `${v}%`);
   } else {
-    snapshot.classList.remove('progress-snapshot--empty');
-    if (animateReveal && pct > 0) {
-      animateCssVar(ring, '--progress', pct);
-      animateText(pctEl, 0, pct, (v) => `${v}%`);
-    } else {
-      ring.style.setProperty('--progress', String(pct));
-      pctEl.textContent = `${pct}%`;
-    }
-    statEl.textContent = `${completed}/${total}`;
-    detailEl.textContent = `${activePaths} rutas activas`;
-    snapshot.setAttribute(
-      'aria-label',
-      `Progreso HubFlow: ${pct} por ciento, ${completed} de ${total} ejercicios, ${activePaths} rutas activas`
-    );
+    ring.style.setProperty('--progress', String(pct));
+    pctEl.textContent = `${pct}%`;
   }
+  barFillEl.style.width = `${pct}%`;
+  pathsEl.textContent = String(activePaths);
+  statEl.textContent = `${completed}/${total}`;
+  snapshot.setAttribute(
+    'aria-label',
+    `Progreso HubFlow: ${pct} por ciento, ${completed} de ${total} ejercicios, ${activePaths} rutas activas`
+  );
 
   snapshot.onclick = () => onOpenProgress?.();
 }
 
 const ACTIVITY_KEY = 'learnflow:activity:hubflow:v1';
-const MAX_LAST_ACTIVITIES = 5;
+const MAX_LAST_ACTIVITIES = 4;
 
 export function renderLastActivities() {
   const container = document.getElementById('lastActivities');
