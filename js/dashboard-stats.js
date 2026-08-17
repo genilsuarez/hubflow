@@ -6,16 +6,16 @@
    ═══════════════════════════════════════════════════════ */
 
 import { MODULES, CATEGORIES, TAGS, catColor, moduleMap } from '../data/catalog.js';
-import { LEARNING_PATHS, pathCefrRange, pathsByStage } from '../data/learning-paths.js';
+import { LEARNING_PATHS, PATH_STAGES, pathCefrRange, pathsByStage } from '../data/learning-paths.js';
 import { getBestScore, isContentCompleted, isContentMastered, getProgressStats } from './progress-store.js';
 import { shouldDeferStatsDisplay, shouldDeferActivityDisplay } from './sync-engine.js';
 import { animateText, animateCssVar } from './lp-stats-animate.js';
 import { shortMeta } from './dashboard-shelves.js';
 import { getActiveLevel, levelUnlocks } from './lp-progress-summary.js';
 
-/** Encabezado de etapa. Ocupa el ancho completo del grid de dos columnas. */
-function stageHeader({ label, hint }) {
-  return `<h2 class="sec-head sec-head--sub rutas-stage-head">${label} <span class="rutas-stage-hint">${hint}</span></h2>`;
+/** Encabezado de etapa. El punto de color repite el del chip de filtro. */
+function stageHeader({ id, label, hint }) {
+  return `<h2 class="sec-head sec-head--sub rutas-stage-head"><span class="rutas-stage-dot" data-stage-dot="${id}" aria-hidden="true"></span>${label} <span class="rutas-stage-hint">${hint}</span></h2>`;
 }
 
 export function renderProgressSnapshot(animateReveal = false, { onOpenProgress } = {}) {
@@ -141,12 +141,94 @@ export function refreshHeaderStats(animateReveal = false) {
 
 const isPathModuleCompleted = isContentCompleted;
 
+/* ─── Rutas guiadas — preferencias de la barra de control ───
+   Etapa visible, criterio de orden y densidad de vista. Se recuerdan porque
+   la sección se re-renderiza entera en cada cambio de progreso (volver de un
+   ejercicio, hidratación de nube, bfcache): sin persistir, el usuario perdía
+   el filtro que acababa de elegir en cada vuelta. */
+const PATHS_PREFS_KEY = 'hf-rutas-prefs-v1';
+const PATHS_PREFS_DEFAULT = { stage: 'all', sort: 'progress', view: 'list' };
+const PATH_SORTS = new Set(['progress', 'recommended', 'name']);
+
+function loadPathsPrefs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PATHS_PREFS_KEY) || 'null');
+    if (!saved) return { ...PATHS_PREFS_DEFAULT };
+    return {
+      stage: PATH_STAGES.some(s => s.id === saved.stage) ? saved.stage : 'all',
+      sort: PATH_SORTS.has(saved.sort) ? saved.sort : PATHS_PREFS_DEFAULT.sort,
+      view: saved.view === 'grid' ? 'grid' : 'list',
+    };
+  } catch { return { ...PATHS_PREFS_DEFAULT }; }
+}
+
+let pathsPrefs = loadPathsPrefs();
+
+function savePathsPrefs() {
+  try { localStorage.setItem(PATHS_PREFS_KEY, JSON.stringify(pathsPrefs)); } catch { /* localStorage bloqueado */ }
+}
+
+function pathCompletedCount(path) {
+  return path.modules.filter(isPathModuleCompleted).length;
+}
+
+/** 0 = en progreso, 1 = sin empezar, 2 = completada. El orden por "Progreso"
+ *  pone arriba lo que ya arrancaste y manda al final lo que ya terminaste. */
+function pathProgressRank(path) {
+  const done = pathCompletedCount(path);
+  if (done === path.modules.length) return 2;
+  return done > 0 ? 0 : 1;
+}
+
+function sortPaths(paths) {
+  if (pathsPrefs.sort === 'recommended') return paths;
+  // Se decora con el índice curado para que los empates conserven el orden de
+  // learning-paths.js (la secuencia pedagógica) en vez de quedar al azar.
+  const decorated = paths.map((path, index) => ({ path, index }));
+  if (pathsPrefs.sort === 'name') {
+    decorated.sort((a, b) => a.path.title.localeCompare(b.path.title, 'es') || a.index - b.index);
+  } else {
+    decorated.sort((a, b) =>
+      pathProgressRank(a.path) - pathProgressRank(b.path)
+      || (pathCompletedCount(b.path) / b.path.modules.length) - (pathCompletedCount(a.path) / a.path.modules.length)
+      || a.index - b.index);
+  }
+  return decorated.map(d => d.path);
+}
+
 export function renderPaths() {
   const container = document.getElementById('pathsContainer');
   if (!container) return;
-  container.innerHTML = pathsByStage().map(({ stage, paths }) =>
-    stageHeader(stage) + renderPathAccordions(paths)
+  closePathMenu();
+  container.classList.toggle('paths-full--grid', pathsPrefs.view === 'grid');
+  const groups = pathsByStage().filter(({ stage }) => pathsPrefs.stage === 'all' || stage.id === pathsPrefs.stage);
+  container.innerHTML = groups.map(({ stage, paths }) =>
+    `<div class="rutas-stage" data-stage="${stage.id}">
+      ${stageHeader(stage)}
+      <div class="rutas-group">${renderPathAccordions(sortPaths(paths))}</div>
+    </div>`
   ).join('');
+  syncPathsControls();
+  renderPathsAside();
+}
+
+/** Tarjeta lateral de "Rutas guiadas" — mismo par completado/total que el pill
+ *  de la topbar (refreshHeaderStats), para que no puedan discrepar. */
+export function renderPathsAside() {
+  const ring = document.getElementById('rutasProgressRing');
+  const pctEl = document.getElementById('rutasProgressPct');
+  const statEl = document.getElementById('rutasProgressStat');
+  if (!ring || !pctEl || !statEl) return;
+
+  const defer = shouldDeferStatsDisplay();
+  const stats = getProgressStats();
+  const total = stats.totalContent || 0;
+  const completed = defer ? 0 : (stats.completedContent || 0);
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  ring.style.setProperty('--progress', String(pct));
+  pctEl.textContent = `${pct}%`;
+  statEl.textContent = `${completed} de ${total} estrellas`;
 }
 
 function renderPathAccordions(paths) {
@@ -194,24 +276,25 @@ function renderPathAccordions(paths) {
       </${tag}>`;
     }).join('');
 
-    return `<details class="path-accordion">
-      <summary class="path-summary">
-        <div class="path-summary-icon">${path.icon}</div>
-        <div class="path-summary-body">
-          <div class="path-summary-top">
-            <span class="path-summary-title">${path.title}</span>
-            <span class="path-summary-cefr">${pathCefrRange(path)}</span>
-            ${nextText ? `<span class="path-summary-next">${nextText}</span>` : ''}
-          </div>
-          <div class="path-summary-bar">
-            <div class="path-summary-bar-track"><div class="path-summary-bar-fill" style="width:${pct}%"></div></div>
-            <span class="path-summary-frac">${completedCount}/${total}</span>
-          </div>
-        </div>
-        <div class="path-summary-right">
-          <span class="path-summary-status${statusClass}">${statusLabel}</span>
-          <span class="path-chevron">▼</span>
-        </div>
+    // Los hijos del <summary> son celdas directas de su grid (sin wrappers):
+    // eso permite recolocarlos por grid-template-areas en lista, tarjetas y
+    // mobile sin cambiar el DOM. Ver .path-summary en index-shell.css.
+    const nextHref = !allDone && nextMod && !nextModLocked ? nextMod.exercise : '';
+    return `<details class="path-accordion" data-path-id="${path.id}">
+      <summary class="path-summary" title="Ver los módulos de la ruta">
+        <span class="path-summary-icon">${path.icon}</span>
+        <span class="path-summary-top">
+          <span class="path-summary-title">${path.title}</span>
+          <span class="path-summary-cefr">${pathCefrRange(path)}</span>
+        </span>
+        <span class="path-summary-next">${nextText}</span>
+        <span class="path-summary-bar"><span class="path-summary-bar-track"><span class="path-summary-bar-fill" style="width:${pct}%"></span></span></span>
+        <span class="path-summary-frac">${completedCount}/${total}</span>
+        <span class="path-summary-status${statusClass}">${statusLabel}</span>
+        <button type="button" class="path-menu-btn" data-path-menu="${path.id}" data-next-href="${nextHref}"
+          aria-haspopup="menu" aria-expanded="false" aria-label="Opciones de ${path.title}">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+        </button>
       </summary>
       <div class="path-content">
         <p class="path-content-desc">${path.description}</p>
@@ -219,6 +302,153 @@ function renderPathAccordions(paths) {
       </div>
     </details>`;
   }).join('');
+}
+
+/* ─── Rutas guiadas — barra de control y menú (⋮) ─── */
+
+/** Deja la barra de control en sintonía con las preferencias activas. Se
+ *  vuelve a llamar tras cada render porque el estado vive en JS, no en el DOM. */
+function syncPathsControls() {
+  document.querySelectorAll('.rutas-stage-chip').forEach(chip => {
+    const on = chip.dataset.stage === pathsPrefs.stage;
+    chip.classList.toggle('is-active', on);
+    chip.setAttribute('aria-selected', String(on));
+  });
+  document.querySelectorAll('.rutas-view__btn').forEach(btn => {
+    const on = btn.dataset.view === pathsPrefs.view;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  const sort = document.getElementById('pathSort');
+  if (sort && sort.value !== pathsPrefs.sort) sort.value = pathsPrefs.sort;
+}
+
+function closePathMenu() {
+  const menu = document.getElementById('pathMenu');
+  if (!menu || menu.hidden) return;
+  menu.hidden = true;
+  menu.innerHTML = '';
+  document.querySelectorAll('.path-menu-btn[aria-expanded="true"]')
+    .forEach(b => b.setAttribute('aria-expanded', 'false'));
+}
+
+function openPathMenu(btn) {
+  const menu = document.getElementById('pathMenu');
+  const details = btn.closest('.path-accordion');
+  if (!menu || !details) return;
+  const isOpen = details.open;
+  const nextHref = btn.dataset.nextHref || '';
+  const startedCount = pathCompletedCount(LEARNING_PATHS.find(p => p.id === details.dataset.pathId) || { modules: [] });
+
+  menu.innerHTML = `
+    <button type="button" class="path-menu__item" role="menuitem" data-menu-action="toggle">
+      ${isOpen ? 'Ocultar módulos' : 'Ver módulos'}
+    </button>
+    ${nextHref ? `<a class="path-menu__item" role="menuitem" href="${nextHref}">${startedCount > 0 ? 'Continuar ruta' : 'Empezar ruta'} →</a>` : ''}
+    <span class="path-menu__sep" role="separator"></span>
+    <button type="button" class="path-menu__item path-menu__item--muted" role="menuitem" data-menu-action="collapse-all">
+      Colapsar todas las rutas
+    </button>`;
+
+  menu.hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  // Medir después de mostrarlo: en `hidden` el ancho es 0 y el menú quedaría
+  // pegado al borde derecho del botón en vez de alineado a su costado.
+  const rect = btn.getBoundingClientRect();
+  const width = menu.offsetWidth;
+  const height = menu.offsetHeight;
+  const left = Math.max(8, Math.min(rect.right - width, window.innerWidth - width - 8));
+  const below = rect.bottom + 6;
+  const top = below + height > window.innerHeight - 8 ? Math.max(8, rect.top - height - 6) : below;
+  menu.style.left = `${left}px`;
+  menu.style.top = `${top}px`;
+  menu.querySelector('.path-menu__item')?.focus();
+}
+
+/**
+ * Conecta filtros, orden, densidad, menú (⋮) y el auto-scroll al expandir.
+ * Todo por delegación: `renderPaths()` reemplaza el HTML de las filas en cada
+ * refresco de progreso, así que un listener por fila se perdería en el camino.
+ */
+export function initPathsControls({ onOpenProgress } = {}) {
+  const container = document.getElementById('pathsContainer');
+  if (!container) return;
+
+  document.querySelector('.rutas-stagebar')?.addEventListener('click', (e) => {
+    const chip = e.target.closest('.rutas-stage-chip');
+    if (!chip) return;
+    pathsPrefs.stage = chip.dataset.stage;
+    savePathsPrefs();
+    renderPaths();
+  });
+
+  document.getElementById('pathSort')?.addEventListener('change', (e) => {
+    pathsPrefs.sort = PATH_SORTS.has(e.target.value) ? e.target.value : PATHS_PREFS_DEFAULT.sort;
+    savePathsPrefs();
+    renderPaths();
+  });
+
+  document.querySelector('.rutas-view')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.rutas-view__btn');
+    if (!btn) return;
+    pathsPrefs.view = btn.dataset.view === 'grid' ? 'grid' : 'list';
+    savePathsPrefs();
+    renderPaths();
+  });
+
+  document.getElementById('rutasProgressBtn')?.addEventListener('click', () => onOpenProgress?.());
+
+  // El ⋮ vive dentro del <summary>: sin frenar el evento, abrir el menú
+  // también abriría/cerraría el acordeón.
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('.path-menu-btn');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const wasOpen = btn.getAttribute('aria-expanded') === 'true';
+    closePathMenu();
+    if (!wasOpen) openPathMenu(btn);
+  });
+
+  const menu = document.getElementById('pathMenu');
+  menu?.addEventListener('click', (e) => {
+    const item = e.target.closest('[data-menu-action]');
+    if (!item) { if (e.target.closest('a')) closePathMenu(); return; }
+    const btn = document.querySelector('.path-menu-btn[aria-expanded="true"]');
+    const details = btn?.closest('.path-accordion');
+    if (item.dataset.menuAction === 'toggle' && details) details.open = !details.open;
+    if (item.dataset.menuAction === 'collapse-all') {
+      document.querySelectorAll('.path-accordion').forEach(d => { d.open = false; });
+    }
+    closePathMenu();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#pathMenu') || e.target.closest('.path-menu-btn')) return;
+    closePathMenu();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePathMenu(); });
+  // position:fixed no sigue al scroll del contenedor: se cierra en vez de
+  // quedar flotando lejos de su fila.
+  document.querySelector('.content')?.addEventListener('scroll', closePathMenu, { passive: true });
+  window.addEventListener('resize', closePathMenu);
+
+  // Auto-scroll al expandir una ruta que se sale de la zona visible. `toggle`
+  // no burbujea, de ahí el listener en fase de captura.
+  container.addEventListener('toggle', (e) => {
+    const details = e.target.closest?.('.path-accordion');
+    if (!details || !details.open) return;
+    const scrollContainer = document.querySelector('.content');
+    if (!scrollContainer) return;
+    requestAnimationFrame(() => {
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const detailsRect = details.getBoundingClientRect();
+      if (detailsRect.bottom - containerRect.bottom <= 0) return;
+      const summaryRect = details.querySelector('.path-summary').getBoundingClientRect();
+      const summaryTop = summaryRect.top - containerRect.top + scrollContainer.scrollTop;
+      scrollContainer.scrollTo({ top: summaryTop - 12, behavior: 'smooth' });
+    });
+  }, true);
 }
 
 /** Tarjetas de "Mis estadísticas" — mismo lenguaje visual de tinted-card que

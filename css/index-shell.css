@@ -1232,10 +1232,10 @@
     /* Encabezado de etapa (Fundamentos / Intermedio / Avanzado), usado por el
        acordeón de "Rutas guiadas" (stageHeader() en dashboard-stats.js). */
     .rutas-stage-head {
-      margin: 18px 0 2px;
+      margin: 0 0 8px;
       display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
     }
-    .rutas-stage-head:first-child { margin-top: 0; }
+    .rutas-stage-head .rutas-stage-dot { align-self: center; }
     .rutas-stage-hint {
       font-size: .58rem; font-weight: var(--lp-weight-semibold);
       letter-spacing: .04em; text-transform: none; opacity: .75;
@@ -1511,8 +1511,132 @@
       .guide-title { font-size: .72rem; }
     }
 
-    /* ═══ MI PROGRESO — COLLAPSIBLE PATH CARDS ═══ */
-    .paths-head-row { display: flex; align-items: center; justify-content: flex-end; margin-bottom: 12px; }
+    /* ═══ RUTAS GUIADAS ═══
+       Rediseño 2026-08: barra de control (etapa · orden · densidad) + lista
+       agrupada en una sola tarjeta con separadores + columna lateral con el
+       progreso general. Antes era una pila de tarjetas sueltas con un único
+       control (Expandir/Colapsar todo) flotando arriba a la derecha. */
+
+    /* ─── Barra de control ─── */
+    .rutas-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .rutas-stagebar { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; min-width: 0; }
+    .rutas-stage-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 13px; border: 1.5px solid transparent; border-radius: var(--lp-radius-md);
+      background: transparent; color: var(--lp-ink-soft);
+      font: inherit; font-size: .74rem; font-weight: var(--lp-weight-semibold);
+      white-space: nowrap; cursor: pointer; transition: all .18s var(--lp-ease);
+    }
+    .rutas-stage-chip svg { width: 15px; height: 15px; }
+    .rutas-stage-chip:hover { background: var(--lp-surface-sunken); color: var(--lp-ink); }
+    .rutas-stage-chip.is-active {
+      background: var(--lp-chip-active-bg); color: var(--lp-chip-active-text);
+      border-color: var(--lp-chip-active-border); box-shadow: var(--lp-chip-active-shadow);
+    }
+    .rutas-stage-chip:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+    /* El punto de color es la única señal de etapa que se repite entre el chip
+       de filtro y el encabezado del grupo — deben usar el mismo token. */
+    .rutas-stage-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+      background: var(--lp-muted);
+    }
+    .rutas-stage-dot[data-stage-dot="foundations"] { background: var(--lp-cat-green); }
+    .rutas-stage-dot[data-stage-dot="intermediate"] { background: var(--lp-cat-amber); }
+    .rutas-stage-dot[data-stage-dot="advanced"] { background: var(--lp-cat-purple); }
+
+    .rutas-toolbar__right { display: flex; align-items: center; gap: 8px; }
+    .rutas-sort {
+      position: relative; display: flex; align-items: center; gap: 6px;
+      padding: 0 30px 0 12px; height: 36px;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-md); box-shadow: var(--lp-shadow-xs);
+    }
+    .rutas-sort__label { font-size: .72rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted); white-space: nowrap; }
+    .rutas-sort__select {
+      appearance: none; border: none; background: none; padding: 0;
+      font: inherit; font-size: .72rem; font-weight: var(--lp-weight-bold);
+      color: var(--lp-ink); cursor: pointer;
+    }
+    .rutas-sort__select:focus { outline: none; }
+    .rutas-sort:focus-within { border-color: var(--lp-accent); }
+    .rutas-sort__chev {
+      position: absolute; right: 10px; width: 13px; height: 13px;
+      color: var(--lp-muted); pointer-events: none;
+    }
+    .rutas-view {
+      display: flex; gap: 2px; padding: 3px; height: 36px;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-md); box-shadow: var(--lp-shadow-xs);
+    }
+    .rutas-view__btn {
+      width: 28px; display: flex; align-items: center; justify-content: center;
+      border: none; background: transparent; color: var(--lp-muted);
+      border-radius: var(--lp-radius-sm); cursor: pointer; transition: all .18s var(--lp-ease);
+    }
+    .rutas-view__btn svg { width: 15px; height: 15px; }
+    .rutas-view__btn:hover { color: var(--lp-ink); }
+    .rutas-view__btn.is-active { background: var(--lp-chip-active-bg); color: var(--lp-chip-active-text); }
+    .rutas-view__btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 1px; }
+
+    /* ─── Lista + columna lateral ─── */
+    .rutas-layout {
+      display: grid; grid-template-columns: minmax(0, 1fr) 258px;
+      gap: 18px; align-items: start;
+    }
+    .rutas-aside { display: grid; gap: 12px; position: sticky; top: 0; }
+    .rutas-progress-card {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 16px 16px 18px; gap: 10px;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-lg); box-shadow: var(--lp-shadow-sm);
+    }
+    .rutas-progress-card__art {
+      width: 100%; padding: 10px 0; background: var(--lp-bg-paper);
+      border-radius: var(--lp-radius-md);
+    }
+    .rutas-progress-card__art svg { display: block; width: 100%; height: 76px; }
+    .rutas-progress-card__title { margin: 0; font-size: .76rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink); }
+    .rutas-progress-card__ring {
+      width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center;
+      background: conic-gradient(var(--lp-accent) calc(var(--progress, 0) * 1%), color-mix(in srgb, var(--lp-accent) 14%, var(--lp-border)) 0);
+    }
+    .rutas-progress-card__ring > div {
+      width: 68px; height: 68px; border-radius: 50%; background: var(--lp-surface);
+      display: grid; place-items: center;
+    }
+    .rutas-progress-card__ring strong {
+      font-size: 1.1rem; font-weight: var(--lp-weight-extrabold);
+      font-variant-numeric: tabular-nums; color: var(--lp-ink);
+    }
+    .rutas-progress-card__stat { margin: 0; font-size: .66rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted); }
+    .rutas-progress-card__btn {
+      width: 100%; padding: 9px 12px; border: none; border-radius: var(--lp-radius-md);
+      background: var(--lp-accent); color: var(--lp-on-accent);
+      font: inherit; font-size: .74rem; font-weight: var(--lp-weight-bold);
+      cursor: pointer; transition: background .18s var(--lp-ease), transform .15s;
+    }
+    .rutas-progress-card__btn:hover { background: var(--lp-accent-hover); }
+    .rutas-progress-card__btn:active { transform: scale(.98); }
+    .rutas-tip {
+      padding: 14px; border-radius: var(--lp-radius-lg);
+      background: var(--lp-bg-paper); border: 1.5px dashed var(--lp-border);
+    }
+    .rutas-tip__head {
+      margin: 0 0 5px; display: flex; align-items: center; gap: 7px;
+      font-size: .72rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink);
+    }
+    .rutas-tip__text { margin: 0; font-size: .66rem; line-height: 1.5; color: var(--lp-ink-soft); }
+
+    @media (max-width: 1100px) {
+      .rutas-layout { grid-template-columns: 1fr; }
+      .rutas-aside { position: static; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
+    }
+
+    /* ─── Fila / tarjeta de ruta ─── */
+    .paths-head-row { display: flex; align-items: center; justify-content: flex-end; }
     .paths-head-row .sec-head { margin-bottom: 0; }
     .paths-actions { display: flex; gap: 4px; background: var(--lp-bg-paper); border-radius: var(--lp-radius-md); padding: 3px; }
     .paths-actions.paths-actions--topbar { display: none; }
@@ -1525,30 +1649,46 @@
     .paths-icon-btn:active { transform: scale(.92); }
     .paths-icon-btn svg { width: 14px; height: 14px; }
 
-    .paths-full { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .paths-full { display: grid; grid-template-columns: 1fr; gap: 4px; }
+    .rutas-stage + .rutas-stage { margin-top: 22px; }
+    /* Las rutas de una etapa van dentro de una sola tarjeta con separadores
+       (no tarjetas sueltas): el bloque lee como una lista continua y el punto
+       de color del encabezado es lo que las agrupa. */
+    .rutas-group {
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-lg); box-shadow: var(--lp-shadow-sm);
+      overflow: hidden;
+    }
+    .rutas-group > .path-accordion + .path-accordion { border-top: 1px solid var(--lp-border-subtle); }
 
     .path-accordion {
       --path-color: var(--lp-accent);
-      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
-      border-radius: var(--lp-radius-lg); box-shadow: var(--lp-shadow-sm);
-      overflow: hidden; transition: box-shadow .25s var(--lp-ease), border-color .25s;
+      transition: background .2s var(--lp-ease);
     }
-    .path-accordion:hover { box-shadow: var(--lp-shadow-md); }
-    .path-accordion[open] { border-color: var(--lp-border-strong); box-shadow: var(--lp-shadow-md); }
+    .path-accordion:hover { background: var(--lp-surface-sunken); }
+    .path-accordion[open] { background: var(--lp-surface); }
+    /* Sin chevron (el control a la derecha es el ⋮), así que el estado abierto
+       se marca con una barra de acento a la izquierda de la fila. */
+    .path-accordion[open] .path-summary { box-shadow: inset 3px 0 0 var(--lp-accent); }
 
     .path-summary {
-      display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px;
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) auto auto auto;
+      grid-template-areas:
+        "icon top next status menu"
+        "icon bar frac status menu";
+      align-items: center; row-gap: 7px; column-gap: 14px;
       padding: 14px 16px; cursor: pointer; list-style: none; user-select: none;
     }
     .path-summary::-webkit-details-marker { display: none; }
     .path-summary::marker { display: none; content: ''; }
     .path-summary-icon {
-      width: 36px; height: 36px; border-radius: var(--lp-radius-md);
+      grid-area: icon; align-self: center;
+      width: 40px; height: 40px; border-radius: var(--lp-radius-md);
       background: var(--lp-surface-sunken); border: 1px solid var(--lp-border-subtle);
-      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
     }
-    .path-summary-body { min-width: 0; }
-    .path-summary-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+    .path-summary-top { grid-area: top; display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap; }
     .path-summary-title { font-weight: var(--lp-weight-extrabold); font-size: .82rem; }
     .path-summary-cefr {
       font-family: var(--lp-font-mono); font-size: .56rem; font-weight: 700;
@@ -1556,11 +1696,74 @@
       border: 1px solid var(--lp-border-subtle);
       padding: 2px 6px; border-radius: var(--lp-radius-full);
     }
-    .path-summary-next { font-size: .62rem; font-weight: 700; color: var(--lp-accent); margin-left: auto; }
-    .path-summary-bar { display: flex; align-items: center; gap: 8px; }
-    .path-summary-bar-track { flex: 1; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
-    .path-summary-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
-    .path-summary-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
+    .path-summary-next {
+      grid-area: next; justify-self: end;
+      font-size: .62rem; font-weight: 700; color: var(--lp-accent); white-space: nowrap;
+    }
+    /* Ruta completada o con el siguiente paso bloqueado: no hay texto que
+       mostrar y la celda vacía dejaría un hueco en la columna. */
+    .path-summary-next:empty { display: none; }
+    .path-summary-bar { grid-area: bar; display: block; }
+    .path-summary-bar-track { display: block; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
+    .path-summary-bar-fill { display: block; height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
+    .path-summary-frac {
+      grid-area: frac; justify-self: end;
+      font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700;
+      color: var(--lp-muted); white-space: nowrap;
+    }
+
+    /* ─── Menú ⋮ de la fila ─── */
+    .path-menu-btn {
+      grid-area: menu; align-self: center;
+      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+      border: none; background: transparent; color: var(--lp-muted);
+      border-radius: var(--lp-radius-sm); cursor: pointer; transition: all .18s var(--lp-ease);
+    }
+    .path-menu-btn svg { width: 16px; height: 16px; }
+    .path-menu-btn:hover, .path-menu-btn[aria-expanded="true"] { background: var(--lp-surface-sunken); color: var(--lp-ink); }
+    .path-menu-btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 1px; }
+    .path-menu {
+      position: fixed; z-index: 60; min-width: 190px; padding: 5px;
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-md); box-shadow: var(--lp-shadow-lg);
+    }
+    .path-menu[hidden] { display: none; }
+    .path-menu__item {
+      display: block; width: 100%; padding: 8px 10px; text-align: left;
+      border: none; background: transparent; border-radius: var(--lp-radius-sm);
+      font: inherit; font-size: .72rem; font-weight: var(--lp-weight-semibold);
+      color: var(--lp-ink); text-decoration: none; cursor: pointer;
+    }
+    .path-menu__item:hover { background: var(--lp-surface-sunken); }
+    .path-menu__item:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: -2px; }
+    .path-menu__item--muted { color: var(--lp-muted); }
+    .path-menu__sep { display: block; height: 1px; margin: 4px 6px; background: var(--lp-border-subtle); }
+
+    /* ─── Vista de tarjetas ─── */
+    .paths-full--grid .rutas-group {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px; background: none; border: none; box-shadow: none; overflow: visible;
+    }
+    .paths-full--grid .path-accordion {
+      background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+      border-radius: var(--lp-radius-lg); box-shadow: var(--lp-shadow-sm);
+      align-self: start; overflow: hidden;
+    }
+    .paths-full--grid .rutas-group > .path-accordion + .path-accordion { border-top: 1.5px solid var(--lp-border); }
+    .paths-full--grid .path-summary {
+      grid-template-columns: 40px minmax(0, 1fr) auto;
+      grid-template-areas:
+        "icon top    menu"
+        "next next   next"
+        "bar  bar    frac"
+        "status status status";
+      row-gap: 9px;
+    }
+    .paths-full--grid .path-summary-next { justify-self: start; }
+    /* En tarjetas sí se reserva la línea del "Siguiente:" aunque esté vacía:
+       si no, las tarjetas de una misma fila desalinean barra y estado. */
+    .paths-full--grid .path-summary-next:empty { display: block; min-height: .95em; }
+    .paths-full--grid .path-summary-status { justify-self: start; }
 
     /* ─── STATS BREAKDOWN (Mis estadísticas — por categoría / por nivel) ───
        Reutiliza el lenguaje visual de tinted-card que ya usan tiles/hero-card/
@@ -1766,9 +1969,9 @@
        desde 861px ya son 2 (y nivel 3), así que la regla solo repetía lo que
        ya estaba puesto — 2026-08-16. */
 
-    .path-summary-right { display: flex; align-items: center; gap: 8px; }
     .path-summary-status {
-      font-size: .58rem; font-weight: 700; padding: 3px 9px; border-radius: var(--lp-radius-full);
+      grid-area: status; align-self: center;
+      font-size: .58rem; font-weight: 700; padding: 5px 11px; border-radius: var(--lp-radius-full);
       background: var(--lp-surface-sunken); color: var(--lp-muted);
       border: 1px solid var(--lp-border-subtle); white-space: nowrap;
     }
@@ -1778,8 +1981,6 @@
       border-color: color-mix(in srgb, var(--lp-accent) 18%, transparent);
     }
     .path-summary-status.completed { background: var(--lp-success-soft); color: var(--lp-success); border-color: transparent; }
-    .path-chevron { color: var(--lp-muted); transition: transform .3s var(--lp-ease); font-size: .65rem; }
-    .path-accordion[open] .path-chevron { transform: rotate(180deg); }
 
     /* Fondo --lp-bg-paper (en vez de heredar el blanco del summary) para que el
        cuerpo expandido se lea como "contenido dentro de la tarjeta padre" en vez
@@ -1857,16 +2058,18 @@
         min-width: 44px; min-height: 44px; width: 100%; height: 100%;
       }
       .paths-icon-btn svg { width: 12px; height: 12px; }
-      /* CEFR a la derecha del título; chevron en la misma fila; barra en la segunda. */
+      /* CEFR a la derecha del título; ⋮ en la misma fila; barra + fracción en
+         la segunda. .path-summary-top pasa a display:contents para que título
+         y CEFR caigan en celdas propias del grid de la fila. */
       .path-summary {
-        grid-template-columns: 30px 1fr auto auto;
+        grid-template-columns: 30px minmax(0, 1fr) auto auto;
         grid-template-areas:
-          "icon title cefr chev"
-          "icon bar   bar  bar";
+          "icon title cefr menu"
+          "icon bar   bar  frac";
         row-gap: 4px; column-gap: 8px; padding: 8px 10px; align-items: center;
       }
       .path-summary-icon { grid-area: icon; width: 30px; height: 30px; font-size: .85rem; }
-      .path-summary-body, .path-summary-top, .path-summary-right { display: contents; }
+      .path-summary-top { display: contents; }
       .path-summary-next { display: none; }
       .path-summary-title { grid-area: title; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; align-self: center; }
       /* Mobile: solo nivel CEFR — el estado (Sin empezar / En progreso / ✓)
@@ -1878,14 +2081,31 @@
         border-radius: var(--lp-radius-full);
       }
       .path-summary-bar { grid-area: bar; align-self: center; }
-      .path-chevron { grid-area: chev; align-self: center; font-size: .6rem; }
+      .path-menu-btn { grid-area: menu; align-self: center; width: 26px; height: 26px; }
+      .path-menu-btn svg { width: 14px; height: 14px; }
       .path-summary-bar-track { height: var(--lp-progress-height-compact); }
       .path-summary-frac { font-size: .58rem; }
 
-      /* Al expandir en mobile, el gap compacto (6px) deja muy poco aire entre
-         la tarjeta abierta y sus vecinas — se refuerza borde/sombra y se le
-         da más margen para que se note claramente cuál es la tarjeta padre. */
-      .path-accordion[open] { margin: 6px 0; border-width: 2px; box-shadow: var(--lp-shadow-lg); }
+      /* Barra de control: los chips de etapa se desplazan en horizontal y el
+         bloque de la derecha (orden · densidad · expandir) baja a su fila. */
+      .rutas-toolbar { gap: 8px; margin-bottom: 12px; }
+      .rutas-stagebar {
+        flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+        margin: 0 calc(-1 * clamp(16px, 3vw, 34px)); padding: 0 clamp(16px, 3vw, 34px);
+      }
+      .rutas-stagebar::-webkit-scrollbar { display: none; }
+      .rutas-toolbar__right { width: 100%; justify-content: space-between; }
+      .rutas-sort { flex: 1; min-width: 0; }
+      .rutas-layout { gap: 12px; }
+      .rutas-aside { grid-template-columns: 1fr; }
+      .rutas-progress-card { padding: 12px 14px 14px; }
+      .rutas-progress-card__art { display: none; }
+
+      /* Al expandir en mobile, la fila abierta tiene que despegarse de sus
+         vecinas dentro de la tarjeta agrupada: fondo propio + la barra de
+         acento más gruesa que en desktop. */
+      .path-accordion[open] { background: var(--lp-surface); }
+      .path-accordion[open] .path-summary { box-shadow: inset 4px 0 0 var(--lp-accent); }
 
       /* pm-meta (descripción del módulo dentro de una ruta expandida) envolvía
          libremente a 2-3 líneas — misma inconsistencia que .book-meta antes de
