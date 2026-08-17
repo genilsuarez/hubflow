@@ -48,16 +48,16 @@ export const CATEGORIES = {
     label: "🍽️ At the Restaurant",
     items: [
       // Los `term` de esta categoría ya son frases completas: no llevan `example`.
-      { term: "Table for two, please.", ipa: "/ˈteɪbəl fɔːr tuː pliːz/", es: "Mesa para dos, por favor.", meaning: "Used when asking to be seated", emoji: "🪑" },
-      { term: "Could I see the menu?", ipa: "/kʊd aɪ siː ðə ˈmɛnjuː/", es: "¿Podría ver el menú?", meaning: "Asking for the menu", emoji: "📖" },
-      { term: "I'd like the...", ipa: "/aɪd laɪk ðə/", es: "Me gustaría el/la...", meaning: "Polite way to order food", emoji: "🍽️" },
-      { term: "Is it spicy?", ipa: "/ɪz ɪt ˈspaɪsi/", es: "¿Es picante?", meaning: "Asking about spice level", emoji: "🌶️" },
-      { term: "Check, please.", ipa: "/tʃɛk pliːz/", es: "La cuenta, por favor.", meaning: "Asking for the bill (US English)", emoji: "🧾" },
-      { term: "Is service included?", ipa: "/ɪz ˈsɜːrvɪs ɪnˈkluːdɪd/", es: "¿Está incluido el servicio?", meaning: "Asking if the tip is already added", emoji: "💳" },
-      { term: "I'm allergic to nuts.", ipa: "/aɪm əˈlɜːrdʒɪk tuː nʌts/", es: "Soy alérgico a los frutos secos.", meaning: "Informing about a food allergy", emoji: "⚠️" },
-      { term: "Medium rare, please.", ipa: "/ˈmiːdiəm rɛr pliːz/", es: "Término medio, por favor.", meaning: "Specifying how you want meat cooked", emoji: "🥩" },
-      { term: "Can we split the bill?", ipa: "/kæn wiː splɪt ðə bɪl/", es: "¿Podemos dividir la cuenta?", meaning: "Asking to share the payment", emoji: "🤝" },
-      { term: "I'll have the same.", ipa: "/aɪl hæv ðə seɪm/", es: "Yo tomaré lo mismo.", meaning: "Ordering the same as someone else", emoji: "👍" },
+      { term: "Table for two, please.", ipa: "/ˈteɪbəl fɔːr tuː pliːz/", es: "Mesa para dos, por favor.", meaning: "Used when asking to be seated", emoji: "🪑", example: "Good evening. Table for two, please." },
+      { term: "Could I see the menu?", ipa: "/kʊd aɪ siː ðə ˈmɛnjuː/", es: "¿Podría ver el menú?", meaning: "Asking for the menu", emoji: "📖", example: "Could I see the menu, please?" },
+      { term: "I'd like the...", ipa: "/aɪd laɪk ðə/", es: "Me gustaría el/la...", meaning: "Polite way to order food", emoji: "🍽️", example: "I'd like the grilled fish, please." },
+      { term: "Is it spicy?", ipa: "/ɪz ɪt ˈspaɪsi/", es: "¿Es picante?", meaning: "Asking about spice level", emoji: "🌶️", example: "Is it spicy? I can't eat chilli." },
+      { term: "Check, please.", ipa: "/tʃɛk pliːz/", es: "La cuenta, por favor.", meaning: "Asking for the bill (US English)", emoji: "🧾", example: "That was lovely. Check, please." },
+      { term: "Is service included?", ipa: "/ɪz ˈsɜːrvɪs ɪnˈkluːdɪd/", es: "¿Está incluido el servicio?", meaning: "Asking if the tip is already added", emoji: "💳", example: "Is service included in the total?" },
+      { term: "I'm allergic to nuts.", ipa: "/aɪm əˈlɜːrdʒɪk tuː nʌts/", es: "Soy alérgico a los frutos secos.", meaning: "Informing about a food allergy", emoji: "⚠️", example: "Careful, I'm allergic to nuts." },
+      { term: "Medium rare, please.", ipa: "/ˈmiːdiəm rɛr pliːz/", es: "Término medio, por favor.", meaning: "Specifying how you want meat cooked", emoji: "🥩", example: "The steak, medium rare, please." },
+      { term: "Can we split the bill?", ipa: "/kæn wiː splɪt ðə bɪl/", es: "¿Podemos dividir la cuenta?", meaning: "Asking to share the payment", emoji: "🤝", example: "Can we split the bill three ways?" },
+      { term: "I'll have the same.", ipa: "/aɪl hæv ðə seɪm/", es: "Yo tomaré lo mismo.", meaning: "Ordering the same as someone else", emoji: "👍", example: "That sounds good, I'll have the same." },
     ]
   },
 };
