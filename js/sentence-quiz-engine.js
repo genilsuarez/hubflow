@@ -120,6 +120,30 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   function getData() { return categories[currentCat].items; }
 
   /**
+   * Study puede tener su propio mazo. Por defecto son los mismos items del
+   * quiz (frase con hueco al frente, respuesta detrás), que es lo que hacen
+   * los 40+ ejercicios existentes. Una categoría que declare `studyCards`
+   * enseña la regla antes de examinarla: `{ front, back, detail }`.
+   */
+  function getStudyDeck() {
+    const cat = categories[currentCat];
+    return cat.studyCards?.length ? cat.studyCards : cat.items;
+  }
+
+  /** Cara visible de una tarjeta, venga de `studyCards` o de un item de quiz. */
+  function studyFace(card) {
+    if (!card) return { front: '', back: '', detail: '' };
+    if (card.front != null) {
+      return { front: card.front, back: card.back || '', detail: card.detail || '' };
+    }
+    return {
+      front: studyBlankPlaceholder ? fillBlanks(card.sentence, studyBlankPlaceholder) : card.sentence,
+      back: Array.isArray(card.correct) ? card.correct.join(' / ') : card.correct,
+      detail: card.explain || '',
+    };
+  }
+
+  /**
    * ¿Este ejercicio ofrece pronunciación? Antes se deducía de que el icono de
    * la categoría fuera literalmente '🔊', lo que dejaba sin audio a las otras
    * categorías del MISMO ejercicio de pronunciación (plural-endings: solo
@@ -140,6 +164,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   }
 
   function getSpeakableText(item) {
+    // Una `studyCard` no tiene frase: lo pronunciable es su cara frontal.
+    if (item?.front != null) return String(item.front);
     if (!item?.sentence) return '';
     const text = studyBlankPlaceholder
       ? fillBlanks(item.sentence, studyBlankPlaceholder)
@@ -308,7 +334,11 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   }
 
   function initStudy() {
-    deck = shuffle(getData());
+    // Los items del quiz se barajan (son ejemplos intercambiables); las
+    // `studyCards` no, porque van de la regla general a los casos especiales
+    // y ese orden es el contenido. El botón 🔀 sigue disponible.
+    const studyDeck = getStudyDeck();
+    deck = categories[currentCat].studyCards?.length ? [...studyDeck] : shuffle(studyDeck);
     idx = 0;
     document.querySelector('[data-area="study"]').classList.add('show');
     renderStudyCard();
@@ -316,24 +346,23 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
   function renderStudyCard() {
     const item = deck[idx];
+    const face = studyFace(item);
 
     recordStudyItemSeen({
       contentId,
       storagePrefix: scoreKeyPrefix,
       category: currentCat,
-      term: item.sentence,
-      totalItems: getData().length,
+      term: face.front,
+      totalItems: getStudyDeck().length,
     });
 
     const card = document.getElementById('fcCard');
     card.classList.remove('flip');
     const fcEmoji = document.getElementById('fcEmoji');
     if (fcEmoji && !hidesCardIcon()) fcEmoji.textContent = categories[currentCat].icon;
-    document.getElementById('fcSentence').textContent = studyBlankPlaceholder
-      ? fillBlanks(item.sentence, studyBlankPlaceholder)
-      : item.sentence;
-    document.getElementById('fcAnswer').textContent = Array.isArray(item.correct) ? item.correct.join(' / ') : item.correct;
-    document.getElementById('fcExplain').textContent = item.explain;
+    document.getElementById('fcSentence').textContent = face.front;
+    document.getElementById('fcAnswer').textContent = face.back;
+    document.getElementById('fcExplain').textContent = face.detail;
     document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
     updProgress(idx + 1, deck.length);
     maybeAutoSpeak();

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plurals &amp; Possessives Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.js"></script>
+<script src="../js/lp-platform-urls.js"></script>
+<script src="../js/lp-nav-icons.js"></script>
+<script src="../js/lp-guest-reset.js"></script>
+<script src="../js/lp-login.js"></script>
+<script src="../js/lp-nav-helpers.js"></script>
+<script src="../js/lp-about-content.js"></script>
+<script src="../js/lp-about.js"></script>
+<link rel="stylesheet" href="../css/lp-about.css">
+<script src="../js/lp-input-zoom.js"></script>
+<script src="../js/guide-shell.js" defer></script>
+<link rel="stylesheet" href="../css/buttons.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.css">
+<link rel="stylesheet" href="../css/lp-nav-active.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;
+}
+[data-theme="dark"]{
+  --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;--yellow-light:#2D2510;
+--ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;
+  background:var(--bg);
+}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--yellow);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
+
+.rule-table{width:100%;border-collapse:separate;border-spacing:0;margin:12px 0;font-size:.8rem;
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;overflow:hidden;}
+.rule-table th{text-align:left;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);padding:10px 12px;background:var(--yellow-light);}
+[data-theme="dark"] .rule-table th{background:#2D2510;}
+.rule-table td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.rule-table td:first-child{font-weight:700;white-space:nowrap;}
+.rule-table code{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--green-dark);}
+[data-theme="dark"] .rule-table code{color:#6FE8A8;}
+.tbl-wrap{overflow-x:auto;}
+
+.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-card.neg{border-left:4px solid var(--red);}
+.rule-card.ok{border-left:4px solid var(--green);}
+.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
+.rule-desc strong{color:var(--blue-dark);}
+[data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
+.examples{display:flex;flex-wrap:wrap;gap:6px;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--green-light);color:var(--green-dark);}
+[data-theme="dark"] .ex{color:#6FE8A8;}
+.ex.neg-ex{background:var(--red-light);color:var(--red-dark);}
+[data-theme="dark"] .ex.neg-ex{color:#FF9F9F;}
+
+.cmp-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.cmp-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;}
+.cmp-card.a{border-top:4px solid var(--blue);}
+.cmp-card.b{border-top:4px solid var(--green);}
+.cmp-card.c{border-top:4px solid var(--yellow);}
+.cmp-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+.cmp-word{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;color:var(--blue-dark);margin-bottom:4px;}
+[data-theme="dark"] .cmp-word{color:#7AC7FF;}
+.cmp-meaning{font-size:.74rem;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.cmp-ex{font-size:.7rem;color:var(--muted);font-style:italic;line-height:1.4;}
+
+@media(max-width:480px){.page{padding:14px 12px 50px;}.cmp-pair{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+<link rel="stylesheet" href="../css/guide-layout.css">
+</head>
+<body>
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
+
+<div class="top-bar">
+  <span class="nav-title">Reference Guide</span>
+</div>
+
+<h1>Plurals <span class="accent">&amp; Possessives</span></h1>
+<p class="intro">Two endings that look identical and mean opposite things. A plural counts more than one; an apostrophe shows who owns what. Get the difference and the rest is spelling.</p>
+
+<h2>&#128218; Regular plurals — five spellings</h2>
+<div class="tbl-wrap">
+<table class="rule-table">
+  <thead><tr><th>The noun ends in&hellip;</th><th>Add</th><th>Examples</th></tr></thead>
+  <tbody>
+    <tr><td>anything else</td><td><code>+ s</code></td><td><code>book &rarr; books</code> &bull; <code>student &rarr; students</code></td></tr>
+    <tr><td>-s, -x, -ch, -sh</td><td><code>+ es</code></td><td><code>box &rarr; boxes</code> &bull; <code>dish &rarr; dishes</code> &bull; <code>watch &rarr; watches</code></td></tr>
+    <tr><td>consonant + y</td><td><code>y &rarr; ies</code></td><td><code>baby &rarr; babies</code> &bull; <code>city &rarr; cities</code></td></tr>
+    <tr><td>vowel + y</td><td><code>+ s</code></td><td><code>day &rarr; days</code> &bull; <code>boy &rarr; boys</code> &bull; <code>key &rarr; keys</code></td></tr>
+    <tr><td>-f / -fe</td><td><code>f &rarr; ves</code></td><td><code>knife &rarr; knives</code> &bull; <code>leaf &rarr; leaves</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; The y rule depends on the letter before the y</div>
+  <div class="rule-desc">Look at the letter <em>before</em> the y, not the y itself. A consonant before it (<strong>b</strong>aby, c<strong>it</strong>y) means <strong>y &rarr; ies</strong>. A vowel before it (d<strong>a</strong>y, b<strong>o</strong>y) means the y stays and you just add -s.</div>
+  <div class="examples">
+    <span class="ex">city &rarr; cities &#10003;</span>
+    <span class="ex neg-ex">day &rarr; daies &#10007;</span>
+    <span class="ex">day &rarr; days &#10003;</span>
+  </div>
+</div>
+
+<h2>&#127744; Irregular plurals — memorise these</h2>
+<div class="tbl-wrap">
+<table class="rule-table">
+  <thead><tr><th>Type</th><th>Singular &rarr; Plural</th></tr></thead>
+  <tbody>
+    <tr><td>Different word</td><td><code>person &rarr; people</code> &bull; <code>child &rarr; children</code></td></tr>
+    <tr><td>Vowel change a &rarr; e</td><td><code>man &rarr; men</code> &bull; <code>woman &rarr; women</code></td></tr>
+    <tr><td>Vowel change oo &rarr; ee</td><td><code>foot &rarr; feet</code> &bull; <code>tooth &rarr; teeth</code> &bull; <code>goose &rarr; geese</code></td></tr>
+    <tr><td>Vowel change ou &rarr; i</td><td><code>mouse &rarr; mice</code> &bull; <code>louse &rarr; lice</code></td></tr>
+    <tr><td>No change at all</td><td><code>sheep &rarr; sheep</code> &bull; <code>fish &rarr; fish</code> &bull; <code>deer &rarr; deer</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#128064; Written vs spoken</div>
+  <div class="rule-desc"><strong>Women</strong> changes its <em>first</em> vowel sound, not the one you changed in writing: /&#712;w&#650;m&#601;n/ &rarr; /&#712;w&#618;m&#618;n/. And <strong>people</strong> is already plural &mdash; never say "peoples" for a group of persons.</div>
+  <div class="examples">
+    <span class="ex">three people &#10003;</span>
+    <span class="ex neg-ex">three peoples &#10007;</span>
+    <span class="ex neg-ex">three persons &#10007;</span>
+  </div>
+</div>
+
+<h2>&#9997;&#65039; Possessive 's — who owns it</h2>
+<div class="tbl-wrap">
+<table class="rule-table">
+  <thead><tr><th>The owner is&hellip;</th><th>Add</th><th>Examples</th></tr></thead>
+  <tbody>
+    <tr><td>singular</td><td><code>'s</code></td><td><code>Tom's car</code> &bull; <code>the girl's bag</code></td></tr>
+    <tr><td>plural ending in -s</td><td><code>' only</code></td><td><code>my parents' house</code> &bull; <code>the students' books</code></td></tr>
+    <tr><td>plural NOT ending in -s</td><td><code>'s</code></td><td><code>children's toys</code> &bull; <code>men's team</code> &bull; <code>people's opinions</code></td></tr>
+    <tr><td>a name ending in -s</td><td><code>'s or '</code></td><td><code>James's car</code> = <code>James' car</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="rule-card ok">
+  <div class="rule-title">&#9989; One question decides it</div>
+  <div class="rule-desc">Ask: <strong>does the owner already end in -s?</strong> If yes and it's a plural, put the apostrophe after that s and stop. Otherwise add <strong>'s</strong>. The apostrophe always goes immediately after the owner &mdash; that's how a reader knows how many owners there are.</div>
+  <div class="examples">
+    <span class="ex">my sister's room = one sister</span>
+    <span class="ex">my sisters' room = two or more</span>
+  </div>
+</div>
+<div class="rule-card neg">
+  <div class="rule-title">&#10060; The mistake almost everyone makes</div>
+  <div class="rule-desc">A plural on its own <strong>never takes an apostrophe</strong>. If nothing is being owned, there is nothing to mark. The -s alone is enough.</div>
+  <div class="examples">
+    <span class="ex">I have two dogs. &#10003;</span>
+    <span class="ex neg-ex">I have two dog's. &#10007;</span>
+    <span class="ex">The dog's tail. &#10003; (the tail of the dog)</span>
+  </div>
+</div>
+
+<h2>&#129300; The same 's, three meanings</h2>
+<p class="intro" style="margin-bottom:12px;font-size:.86rem;">Written English uses one ending for three different things. Expanding it out loud tells you which one you have.</p>
+<div class="cmp-pair">
+  <div class="cmp-card a">
+    <div class="cmp-label">followed by adjective / noun / -ing</div>
+    <div class="cmp-word">'s = is</div>
+    <div class="cmp-meaning">The short form of <em>is</em>.</div>
+    <div class="cmp-ex">Sara's happy. &rarr; Sara is happy.<br>It's raining. &rarr; It is raining.</div>
+  </div>
+  <div class="cmp-card b">
+    <div class="cmp-label">followed by a past participle or "got"</div>
+    <div class="cmp-word">'s = has</div>
+    <div class="cmp-meaning">The short form of <em>has</em>.</div>
+    <div class="cmp-ex">She's finished. &rarr; She has finished.<br>He's got a car. &rarr; He has got a car.</div>
+  </div>
+</div>
+<div class="cmp-pair" style="grid-template-columns:1fr;">
+  <div class="cmp-card c">
+    <div class="cmp-label">followed by a noun that belongs to it</div>
+    <div class="cmp-word">'s = possession</div>
+    <div class="cmp-meaning">Not short for anything &mdash; it marks the owner.</div>
+    <div class="cmp-ex">Sara's book. &rarr; the book of Sara. ("Sara is book" and "Sara has book" are both impossible.)</div>
+  </div>
+</div>
+<div class="rule-card ok">
+  <div class="rule-title">&#9989; The substitution test</div>
+  <div class="rule-desc">Say the sentence with <strong>is</strong>. If it doesn't work, say it with <strong>has</strong>. If neither makes sense, the 's is a <strong>possessive</strong>.</div>
+  <div class="examples">
+    <span class="ex">John's tired &rarr; John is tired (is)</span>
+    <span class="ex">John's left &rarr; John has left (has)</span>
+    <span class="ex">John's car &rarr; neither (possession)</span>
+  </div>
+</div>
+<div class="rule-card warn">
+  <div class="rule-title">&#128161; One sentence can hold two of them</div>
+  <div class="rule-desc">Test each 's separately &mdash; they don't have to match.</div>
+  <div class="examples">
+    <span class="ex">That's my brother's jacket.</span>
+    <span class="ex">= That is my brother's jacket.</span>
+  </div>
+</div>
+
+<footer class="guide-footer">
+  <a href="../exercises/a1-plurals-possessives.html">&larr; Practice plurals &amp; possessives</a>
+</footer>
+
+</div>
+<script type="module" src="../js/guide-shell.js"></script>
+</body>
+</html>
