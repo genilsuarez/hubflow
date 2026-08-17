@@ -5,7 +5,7 @@
  *
  * catalog.js mantiene a mano dos cosas que en realidad se pueden calcular:
  *   - MODULE_DEPTH.items / .categories  → cuántos items y subcategorías tiene el módulo
- *   - PROGRESS_RULES  scoreKeys('x', [...]) → los nombres de las subcategorías
+ *   - PROGRESS_RULES_BASE  scoreKeys('x', [...]) → los nombres de las subcategorías
  *
  * Cuando alguien renombra o divide una categoría en un data file, esas copias
  * quedan desfasadas en silencio. Este script las recalcula desde la fuente real.
@@ -18,8 +18,8 @@
  *   node scripts/sync-catalog.mjs --check   # solo reporta, exit 1 si hay desfase (CI)
  *
  * Se salta deliberadamente las entradas ya derivadas en runtime (vocabDepth),
- * las de forma distinta (spellingScoreKeys, VOCABULARY_OVERVIEW_RULE) y los
- * módulos cuyo data file no expone CATEGORIES/LEVELS.
+ * las de forma distinta (spellingScoreKeys) y los módulos cuyo data file no
+ * expone CATEGORIES/LEVELS.
  */
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -30,11 +30,15 @@ import { ROOT_DIR, deriveModuleFacts } from './lib/derive-catalog.mjs';
 const CATALOG_PATH = path.join(ROOT_DIR, 'data', 'catalog.js');
 const checkOnly = process.argv.includes('--check');
 
-/** Aísla el cuerpo de `export const NAME = { ... };` para no editar fuera de él. */
+/**
+ * Aísla el cuerpo de `const NAME = { ... };` para no editar fuera de él.
+ * El `export` es opcional: PROGRESS_RULES_BASE es un const interno del que
+ * catalog.js deriva el export público.
+ */
 function blockOf(source, name) {
-  const start = source.indexOf(`export const ${name} = {`);
-  if (start === -1) return null;
-  const open = source.indexOf('{', start);
+  const hit = source.match(new RegExp(`^(?:export )?const ${name} = \\{`, 'm'));
+  if (!hit) return null;
+  const open = source.indexOf('{', hit.index);
   const end = source.indexOf('\n};', open);
   if (end === -1) return null;
   return { from: open, to: end, text: source.slice(open, end) };
@@ -115,10 +119,12 @@ const skipped = [];
   source = source.slice(0, block.from) + text + source.slice(block.to);
 }
 
-// ─── PROGRESS_RULES: nombres de subcategorías ──────────────────────────────
+// ─── PROGRESS_RULES_BASE: nombres de subcategorías ─────────────────────────
+// Se parchea la tabla literal, no el export `PROGRESS_RULES`, que catalog.js
+// deriva de ella con withStudyRequirement().
 {
-  const block = blockOf(source, 'PROGRESS_RULES');
-  if (!block) throw new Error('No se encontró PROGRESS_RULES en catalog.js');
+  const block = blockOf(source, 'PROGRESS_RULES_BASE');
+  if (!block) throw new Error('No se encontró PROGRESS_RULES_BASE en catalog.js');
   let text = block.text;
 
   for (const [id, fact] of facts) {
