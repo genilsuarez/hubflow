@@ -14,6 +14,7 @@ import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, 
 import { finishExercise } from './exercise-flow.js';
 import { speak, readAutoSpeak, writeAutoSpeak } from './speech.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
+import { initSwipe } from './swipe.js';
 
 const SPEAK_ICON = '🔊';
 
@@ -335,6 +336,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
   document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
   document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
+  initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
   function advanceCard(dir) {
     // Reaching the end of the deck going forward suggests what to do next
