@@ -11,6 +11,7 @@ import {
   shouldDeferStatsDisplay,
   syncSingleApp,
   markLocalCacheBootstrapped,
+  readScoreKeyBests,
   HUBFLOW_LOCAL_READY_KEY,
 } from './sync-engine.js';
 import { enrichHubflowContentEntry, checkLevelAdvancement } from './lp-progress-summary.js';
@@ -682,10 +683,53 @@ function syncScoreKeysFromActivityDoc() {
   return changed;
 }
 
+/**
+ * Reconstruye las claves de score-history desde el agregado `score_key_bests`
+ * (migración 027, cacheado por sync-engine).
+ *
+ * Es la única fuente que no depende de la ventana de 200 eventos de
+ * `activity_events`: syncScoreKeysFromActivityDoc solo ve los 200 más
+ * recientes, así que en un dispositivo distinto al que practicó, todo lo
+ * anterior a esa ventana nunca aparecía (medido 2026-08-17: 87 scoreKeys en
+ * la nube, 34 reconstruibles localmente — House & Rooms marcaba 2/8 con 8/8
+ * ya ganado). El agregado trae el máximo por clave, sin techo temporal.
+ *
+ * Escribe con el mismo criterio monotónico que recordScore(): solo si el dato
+ * de la nube supera el mejor local. Sin `context`, porque el agregado ya no
+ * conserva de qué intento salió — solo el puntaje, que es lo único que la
+ * matriz lee.
+ */
+function syncScoreKeysFromCloudBests() {
+  const bests = readScoreKeyBests('hubflow');
+  const entries = Object.entries(bests);
+  if (!entries.length) return false;
+
+  let changed = false;
+  for (const [scoreKey, rawPct] of entries) {
+    const pct = Math.max(0, Math.min(100, Number(rawPct) || 0));
+    if (pct <= 0) continue;
+    const history = readScoreHistory(scoreKey);
+    const currentBest = history.reduce((max, a) => Math.max(max, Number(a.pct) || 0), 0);
+    if (pct <= currentBest) continue;
+    const timestamp = new Date().toISOString();
+    try {
+      localStorage.setItem(
+        versionedKey(scoreKey),
+        JSON.stringify([{ pct, date: timestamp, timestamp }, ...history].slice(0, MAX_SCORE_HISTORY))
+      );
+      changed = true;
+    } catch {
+      /* ignore quota errors */
+    }
+  }
+  return changed;
+}
+
 export function hydrateHubFlowFromCloud() {
   reconcileHubflowProgressFromEvents();
   syncScoreKeysFromProgressDoc();
   syncScoreKeysFromActivityDoc();
+  syncScoreKeysFromCloudBests();
   return publishHubFlowProgress();
 }
 
@@ -832,8 +876,12 @@ let pendingCloudSync = false;
 if (typeof window !== 'undefined') {
   window.addEventListener('lp-cloud-hydrated', () => {
     if (pendingCloudSync) scheduleCloudSync();
-    reconcileHubflowProgressFromEvents();
     invalidateProjectionCache();
+    // hydrate completo (no solo reconcile): el evento llega justo después de
+    // que sync-engine escribió la caché de score_key_bests, y sin releer las
+    // claves de score-history acá el detalle granular recién aparecía en la
+    // siguiente recarga de la página.
+    hydrateHubFlowFromCloud();
     notifyHubFlowProgressUpdated();
   });
 }
@@ -861,6 +909,7 @@ function refreshHubFlowFromPeerSync() {
   invalidateProjectionCache();
   syncScoreKeysFromProgressDoc();
   syncScoreKeysFromActivityDoc();
+  syncScoreKeysFromCloudBests();
   notifyHubFlowProgressUpdated();
 }
 

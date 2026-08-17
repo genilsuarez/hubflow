@@ -315,11 +315,12 @@
           <button class="hero-card__alt" id="heroWhatIsLearnFlow" type="button" hidden>¿Qué es LearnFlow?</button>
         </div>
 
-        <!-- Los tres avisos de abajo pueden estar visibles a la vez (cada uno
-             lo decide su propio módulo, sin coordinarse entre sí) — este
+        <!-- Los avisos de nivel/placement pueden estar visibles a la vez (cada
+             uno lo decide su propio módulo, sin coordinarse entre sí) — este
              wrapper los apila en columna en vez de superponerlos, ya que
-             todos comparten la misma celda del grid (ver .resumen-hero
-             .hero-status-banners en index-shell.css). -->
+             comparten la misma celda del grid (ver .resumen-hero
+             .hero-status-banners en index-shell.css). El aviso de Study va
+             aparte, en una fila propia debajo de toda la hero. -->
         <div class="hero-status-banners" id="heroStatusBanners">
         <!-- LearnFlow Progression System — docs/to-do/learnflow-progression-system.md.
              Oculto por defecto; level-status.js lo muestra siempre que el nivel activo
@@ -346,6 +347,7 @@
           <span class="level-status-banner__text">Confirmaste nivel B2+ · Toma el examen en DeskFlow para desbloquear contenido avanzado.</span>
           <a class="level-status-banner__btn" href="#" target="_blank" rel="noopener">Ir a DeskFlow →</a>
         </div>
+        </div>
 
         <!-- Aviso de lanzamiento — Study ahora también cuenta para el ✓ de
              Aprobado (antes solo exigía el quiz). Módulos ya aprobados pueden
@@ -353,11 +355,10 @@
              docs/to-do/mastery-tiers-plan.md §4.4/§6 Fase 2. Descartable
              (js/dashboard-stats.js renderStudyMasteryBanner); solo se muestra
              a quien ya tenía progreso previo. -->
-        <div class="level-status-banner" id="studyMasteryBanner" hidden>
+        <div class="level-status-banner level-status-banner--full" id="studyMasteryBanner" hidden>
           <span class="level-status-banner__icon" aria-hidden="true">📖</span>
           <span class="level-status-banner__text">Ahora Study también cuenta para el ✓ — repasa tus módulos aprobados para que no pierdan el check.</span>
           <button type="button" class="level-status-banner__close" id="studyMasteryBannerClose" aria-label="Cerrar aviso">✕</button>
-        </div>
         </div>
         </div>
 

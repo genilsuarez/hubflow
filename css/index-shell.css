@@ -526,6 +526,18 @@
       .resumen-hero .level-status-banner__ring-label { font-size: .8rem; }
       .resumen-hero .level-status-banner__text { font-size: 0.85rem; }
       .resumen-hero .level-status-banner__btn { align-self: center; }
+      /* El aviso de Study no comparte columna con la hero-card ni con los
+         banners de nivel: ocupa una fila propia a todo el ancho, debajo de
+         ambos. Se usa 1 / 3 y no 1 / -1 porque las columnas del grid son
+         implícitas (no hay grid-template-columns) y -1 apuntaría a la línea
+         del grid explícito. */
+      .resumen-hero .level-status-banner--full {
+        grid-column: 1 / 3;
+        grid-row: 2;
+        align-items: center;
+        padding: 12px 18px;
+      }
+      .resumen-hero .level-status-banner--full .level-status-banner__text { font-size: 0.85rem; }
     }
 
     /* ─── HERO CARD (ejercicio sugerido) ─── */
