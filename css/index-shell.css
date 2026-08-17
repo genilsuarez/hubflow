@@ -916,7 +916,10 @@
       border-radius: var(--lp-radius-lg);
       background: color-mix(in srgb, var(--lp-gold) 12%, var(--lp-surface));
       border: 1.5px solid color-mix(in srgb, var(--lp-gold) 30%, var(--lp-border));
-      width: fit-content;
+      /* Ancho completo (antes fit-content): en mobile queda del mismo ancho
+         que el snapshot de arriba en vez de una píldora angosta que dejaba
+         la columna despareja — decisión del usuario 2026-08-16. */
+      width: auto;
     }
     .mastery-count[hidden] { display: none; }
     .mastery-count__icon {
@@ -1649,52 +1652,60 @@
            contenido — M4 2026-08. */
         grid-template-rows: auto auto auto auto auto;
         grid-template-areas:
-          "toprow   toprow"
-          "cathead  activity"
-          "catbody  activity"
+          "snapshot mastery"
           "lvlhead  activity"
-          "lvlbody  activity";
+          "lvlbody  activity"
+          "cathead  activity"
+          "catbody  activity";
         gap: 10px 16px;
         max-width: 960px;
         min-height: 0;
       }
-      /* Fila superior — snapshot + Maestría comparten "toprow" (las dos
-         columnas del grid) como un flex row: ambas tarjetas crecen para
-         llenar el ancho real en vez de que Maestría quede como una píldora
-         angosta con un vacío enorme al lado (M4 2026-08, reporte de usuario
-         "sigue sin verse bien... cuando está más de 1000px" — el tope de
-         ancho por sí solo no alcanzaba porque el hueco estaba DENTRO de la
-         fila, no fuera de la sección). */
+      /* Fila superior — snapshot y Maestría van cada uno a una celda del grid
+         (columnas "snapshot"/"mastery") en vez de a un flex row propio que
+         abarcaba las dos columnas: ese flex repartía el ancho con sus propios
+         flex-basis y el borde entre ambas tarjetas caía ~17px corrido
+         respecto de la separación real entre "Progreso por categoría" y
+         "Última actividad" — se veía desordenado (reporte de usuario
+         2026-08-16). Con display:contents el wrapper deja de generar caja y
+         las dos tarjetas heredan exactamente los mismos rieles que las filas
+         de abajo. */
       .section.active-section[data-key="mi-progreso"] .mi-progreso-top {
-        grid-area: toprow; flex-direction: row; align-items: stretch;
-        gap: 16px; margin-bottom: 0;
+        display: contents;
       }
       .section.active-section[data-key="mi-progreso"] .mi-progreso-top .progress-snapshot {
-        flex: 2 1 380px;
+        grid-area: snapshot; margin-bottom: 0;
       }
       .section.active-section[data-key="mi-progreso"] .mi-progreso-top .mastery-count {
-        flex: 1 1 260px; max-width: 420px; width: auto;
+        grid-area: mastery; width: auto; max-width: none;
         justify-content: flex-start;
       }
-      .section.active-section[data-key="mi-progreso"] #secHeadCategory { grid-area: cathead; margin-bottom: 0; }
-      .section.active-section[data-key="mi-progreso"] #secHeadCefr { grid-area: lvlhead; margin-bottom: 0; margin-top: 6px; }
+      /* Sin ningún módulo en Maestría la tarjeta va [hidden] y la celda
+         "mastery" queda vacía: el snapshot ocupa entonces las dos columnas
+         para no dejar medio ancho en blanco. */
+      .section.active-section[data-key="mi-progreso"]:has(#masteryCount[hidden]) .progress-snapshot {
+        grid-column: 1 / -1;
+      }
+      /* El margin-top de separación va en el segundo bloque de la columna
+         (ahora categoría, tras invertir el orden nivel→categoría). */
+      .section.active-section[data-key="mi-progreso"] #secHeadCefr { grid-area: lvlhead; margin-bottom: 0; }
+      .section.active-section[data-key="mi-progreso"] #secHeadCategory { grid-area: cathead; margin-bottom: 0; margin-top: 6px; }
       .section.active-section[data-key="mi-progreso"] #statsByCategory { grid-area: catbody; }
       .section.active-section[data-key="mi-progreso"] #statsByCefr { grid-area: lvlbody; }
       /* Columnas fijas (no auto-fill) — con auto-fill, categoría (4 ítems)
          quedaba pareja pero nivel (5 ítems, primo) siempre dejaba una fila
          final con una sola tarjeta y 2-3 columnas de hueco vacío al lado, y
          ese hueco crecía sin límite en monitores anchos porque el contenedor
-         no tenía tope de ancho. Por debajo de los 1200px la columna de
-         contenido (261-861px, ver .section grid-template-columns arriba)
-         todavía no tiene aire para 2 columnas sin truncar labels largos
-         ("Analysis & Production"), así que se queda en 1 sola columna ancha
-         hasta ese punto; de ahí en adelante pasa a 2 columnas con tope de
-         ancho, para que el "resto" de nivel sea como mucho media fila (mucho
-         menos notorio) y el tamaño de las tarjetas deje de depender del
-         monitor del usuario — M4 2026-08. */
+         no tenía tope de ancho. Categoría va a 2 columnas desde este mismo
+         quiebre (antes esperaba a 1200px): con 1 sola columna sus 4 tarjetas
+         apiladas dejaban el bloque ~126px más alto que "Última actividad" y
+         un hueco blanco al final de esa columna en ventanas de 861-1199px
+         — decisión del usuario 2026-08-16. Los labels largos ("Analysis &
+         Production") entran sin truncarse porque .stat-card ya los deja
+         hacer ellipsis y la columna de contenido tiene 3fr del ancho. */
       .section.active-section[data-key="mi-progreso"] #statsByCategory,
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
       /* Nivel usa 3 columnas en vez de 2 desde este mismo quiebre — a
          diferencia de categoría ("Analysis & Production"), las etiquetas de
@@ -1727,15 +1738,21 @@
         overflow-x: visible; overflow-y: auto;
         padding: 0; margin: 0; gap: 10px;
       }
-      /* Filas más altas (padding/ícono más grandes que el compacto original)
-         para que "Última actividad" quede a una altura comparable a las
-         .stat-card de categoría/nivel — M4 2026-08. */
+      /* Filas más altas que el compacto original (mobile) para que "Última
+         actividad" quede a una altura comparable a las .stat-card de
+         categoría/nivel — M4 2026-08. Alto exacto: con 4 actividades (el
+         máximo, MAX_LAST_ACTIVITIES en dashboard-stats.js) la columna es la
+         más alta de la fila y por lo tanto la que fija el alto del grid, así
+         que 15px de padding + ícono de 42 hacían que la última tarjeta
+         terminara ~11px por debajo de la última de "Progreso por categoría".
+         12px + ícono de 38 dejan la tarjeta en 65px de alto y ambos bloques
+         terminan al ras (reporte de usuario 2026-08-16). */
       .section.active-section[data-key="mi-progreso"] .la-card {
         width: 100%; flex: 0 0 auto; flex-direction: row;
-        text-align: left; padding: 15px 16px; gap: 14px;
+        text-align: left; padding: 12px 16px; gap: 14px;
       }
       .section.active-section[data-key="mi-progreso"] .la-card__body { flex: 1; min-width: 0; }
-      .section.active-section[data-key="mi-progreso"] .la-card__icon { width: 42px; height: 42px; font-size: 1.05rem; flex-shrink: 0; }
+      .section.active-section[data-key="mi-progreso"] .la-card__icon { width: 38px; height: 38px; font-size: 1rem; flex-shrink: 0; }
       .section.active-section[data-key="mi-progreso"] .la-card__score { flex-shrink: 0; }
 
       .section.active-section[data-key="mi-progreso"] #statsByCategory,
@@ -1745,17 +1762,9 @@
       }
     }
 
-    @media (min-width: 1200px) {
-      .section.active-section[data-key="mi-progreso"] #statsByCategory,
-      .section.active-section[data-key="mi-progreso"] #statsByCefr {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      /* Nivel se queda en 3 columnas (ver el mismo comentario en el
-         quiebre de 861px) — 2 filas para 5 niveles en vez de 3. */
-      .section.active-section[data-key="mi-progreso"] #statsByCefr {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
+    /* El quiebre de 1200px que subía categoría de 1 a 2 columnas se eliminó:
+       desde 861px ya son 2 (y nivel 3), así que la regla solo repetía lo que
+       ya estaba puesto — 2026-08-16. */
 
     .path-summary-right { display: flex; align-items: center; gap: 8px; }
     .path-summary-status {

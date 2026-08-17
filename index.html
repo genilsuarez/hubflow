@@ -463,11 +463,15 @@
         <div class="last-activities" id="lastActivities"></div>
         </div>
 
-        <div class="sec-head" id="secHeadCategory">Progreso por categoría</div>
-        <div class="stats-breakdown" id="statsByCategory"></div>
-
+        <!-- Nivel primero, categoría después — pedido del usuario 2026-08-16.
+             En desktop el orden real lo fija grid-template-areas (ver
+             index-shell.css, @media 861px); este orden del DOM es el que
+             manda en mobile y debe coincidir con el de las áreas. -->
         <div class="sec-head" id="secHeadCefr">Progreso por nivel</div>
         <div class="stats-breakdown" id="statsByCefr"></div>
+
+        <div class="sec-head" id="secHeadCategory">Progreso por categoría</div>
+        <div class="stats-breakdown" id="statsByCategory"></div>
       </section>
 
       <!--
