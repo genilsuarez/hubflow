@@ -304,7 +304,15 @@ export function syncBottomNavMode() {
 
   toggleGroup(BOTTOM_NAV.STUDY_NAV_IDS, profile !== 'study');
   toggleGroup(BOTTOM_NAV.PRACTICE_NAV_IDS, profile !== 'practice');
-  toggleGroup(BOTTOM_NAV.QUIZ_NAV_IDS, profile !== 'quiz');
+  // quizSkipBtn y quizNextBtn son mutuamente excluyentes según si la pregunta
+  // actual ya fue respondida — eso lo decide el motor del ejercicio con
+  // setQuizAnswered(), no este perfil. Si se fuerza quizSkipBtn a visible solo
+  // por estar en modo Quiz (sin mirar si quizNextBtn ya está mostrándose),
+  // cualquier re-sync (resize, rotación, cambio de mode-tab) lo reaparece
+  // encima de "Siguiente →" — los dos visibles a la vez.
+  const quizNextBtn = document.getElementById('quizNextBtn');
+  const questionAnswered = profile === 'quiz' && quizNextBtn && !quizNextBtn.hidden;
+  toggleGroup(BOTTOM_NAV.QUIZ_NAV_IDS, profile !== 'quiz' || questionAnswered);
   toggleGroup(BOTTOM_NAV.MATCH_NAV_IDS, profile !== 'match');
 
   if (profile !== 'battle') {

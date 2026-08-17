@@ -12,7 +12,7 @@ import { shuffle } from './array-utils.js';
 import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus } from './progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from './exercise-ui.js';
 import { finishExercise } from './exercise-flow.js';
-import { speak, readAutoSpeak, writeAutoSpeak } from './speech.js';
+import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from './speech.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 import { initSwipe } from './swipe.js';
 
@@ -34,6 +34,12 @@ const SPEAK_ICON = '🔊';
 // en el resto de items, sin cambiar su comportamiento.
 const acceptedAnswers = item => Array.isArray(item.correct) ? item.correct : [item.correct];
 const primaryAnswer = item => Array.isArray(item.correct) ? item.correct[0] : item.correct;
+// Casi siempre la opción elegida es literalmente lo que va en el hueco. En los
+// items de análisis (¿este 's es "is" o posesión?) la opción es una etiqueta
+// ("'s = is") y volcarla al hueco produce "John 's = possession car is new".
+// `item.fill` separa las dos cosas: la etiqueta se queda en el botón y en el
+// hueco entra el texto real de la frase.
+const blankFiller = item => item.fill != null ? item.fill : primaryAnswer(item);
 
 function fillBlanks(sentence, filler, wrap = t => t) {
   const holes = (sentence.match(/___/g) || []).length;
@@ -122,6 +128,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
    * `speech: true` al inicializar, o por categoría con `speech: true`.
    */
   function usesSpeakNav() {
+    if (!isSpeechAvailable()) return false;
     const cat = categories[currentCat];
     if (cat?.speech !== undefined) return Boolean(cat.speech);
     return speech || cat?.icon === SPEAK_ICON;
@@ -268,7 +275,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
           optsEl.querySelectorAll('.word-opt').forEach(b => { if (accepted.includes(b.dataset.val)) b.classList.add('correct'); });
         }
 
-        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, primaryAnswer(item), (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
+        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, blankFiller(item), (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
         document.getElementById('explainBox').textContent = item.explain;
 
         idx++;

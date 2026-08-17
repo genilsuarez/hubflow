@@ -53,18 +53,18 @@ export const CATEGORIES = {
   possessiveSVsIsContraction: {
     label: "'s = possession or is?",
     icon: '🤔',
-    options: ['possession', 'is'],
+    options: ["'s = is", "'s = possession"],
     items: [
-      { sentence: "Sara's happy today.", correct: 'is', explain: "Here 's is short for 'is' (Sara is happy)." },
-      { sentence: "This is Sara's book.", correct: 'possession', explain: "Here 's shows that the book belongs to Sara." },
-      { sentence: "My dog's very friendly.", correct: 'is', explain: "Here 's is short for 'is' (My dog is friendly)." },
-      { sentence: "My dog's tail is short.", correct: 'possession', explain: "Here 's shows possession — the tail belongs to the dog." },
-      { sentence: "It's raining today.", correct: 'is', explain: "Here it's is short for 'it is'." },
-      { sentence: "The car's engine is loud.", correct: 'possession', explain: "Here 's shows that the engine belongs to the car." },
-      { sentence: "He's a doctor.", correct: 'is', explain: "Here 's is short for 'is' (He is a doctor)." },
-      { sentence: "That's my brother's jacket.", correct: 'possession', explain: "The second 's shows the jacket belongs to the brother." },
-      { sentence: "John's tired after work.", correct: 'is', explain: "Here 's is short for 'is' (John is tired)." },
-      { sentence: "John's car is new.", correct: 'possession', explain: "Here 's shows that the car belongs to John." },
+      { sentence: "Sara___ happy today.", correct: "'s = is", fill: "'s", explain: "Replace 's with 'is': \"Sara is happy today\" works, so 's = is." },
+      { sentence: "This is Sara___ book.", correct: "'s = possession", fill: "'s", explain: "\"Sara is book\" makes no sense. A noun (book) follows, so 's = possession." },
+      { sentence: "My dog___ very friendly.", correct: "'s = is", fill: "'s", explain: "Replace 's with 'is': \"My dog is very friendly\" works, so 's = is." },
+      { sentence: "My dog___ tail is short.", correct: "'s = possession", fill: "'s", explain: "\"My dog is tail\" makes no sense. A noun (tail) follows, so 's = possession." },
+      { sentence: "It___ raining today.", correct: "'s = is", fill: "'s", explain: "Replace 's with 'is': \"It is raining today\" works, so 's = is." },
+      { sentence: "The car___ engine is loud.", correct: "'s = possession", fill: "'s", explain: "\"The car is engine\" makes no sense. A noun (engine) follows, so 's = possession." },
+      { sentence: "He___ a doctor.", correct: "'s = is", fill: "'s", explain: "Replace 's with 'is': \"He is a doctor\" works, so 's = is." },
+      { sentence: "That___ my brother's jacket.", correct: "'s = is", fill: "'s", explain: "Replace 's with 'is': \"That is my brother's jacket\" works. The second 's (brother's) is the possessive one." },
+      { sentence: "John___ tired after work.", correct: "'s = is", fill: "'s", explain: "Replace 's with 'is': \"John is tired after work\" works, so 's = is." },
+      { sentence: "John___ car is new.", correct: "'s = possession", fill: "'s", explain: "\"John is car\" makes no sense. A noun (car) follows, so 's = possession." },
     ]
   }
 };

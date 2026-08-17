@@ -216,6 +216,7 @@
         <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
         <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
         <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <button class="listen-btn" id="speakBtn" aria-pressed="false" aria-label="Pronunciación automática: OFF" style="width:44px;height:44px;border-radius:50%;border:2px solid var(--lp-cat-teal);background:rgba(61,127,127,.08);font-size:1.1rem;cursor:pointer;transition:all .2s;display:none;align-items:center;justify-content:center;flex-shrink:0;">🔇</button>
         <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
         <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
@@ -300,6 +301,7 @@ import { recordScore, recordStudyItemSeen } from '../js/progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../js/exercise-ui.js';
 import { finishExercise, advanceStudyCard, createMatchMode } from '../js/exercise-flow.js';
 import { initSwipe } from '../js/swipe.js';
+import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from '../js/speech.js';
 
 
 let currentCat = Object.keys(CATEGORIES)[0];
@@ -307,6 +309,35 @@ let mode = 'study';
 let deck = [], idx = 0, score = 0, total = 0;
 let timer = null;
 let timedSeconds = 0;
+let autoSpeak = readAutoSpeak();
+
+// ─── TTS toggle ───
+function syncSpeakBtn() {
+  const btn = document.getElementById('speakBtn');
+  if (!btn) return;
+  btn.setAttribute('aria-pressed', String(autoSpeak));
+  btn.classList.toggle('is-on', autoSpeak);
+  btn.textContent = autoSpeak ? '🔊' : '🔇';
+  const label = autoSpeak ? 'Pronunciación automática: ON' : 'Pronunciación automática: OFF';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+}
+
+if (isSpeechAvailable()) {
+  const speakBtn = document.getElementById('speakBtn');
+  if (speakBtn) {
+    speakBtn.style.display = '';
+    speakBtn.addEventListener('click', () => {
+      autoSpeak = !autoSpeak;
+      writeAutoSpeak(autoSpeak);
+      syncSpeakBtn();
+    });
+    syncSpeakBtn();
+  }
+} else {
+  const speakBtn = document.getElementById('speakBtn');
+  if (speakBtn) speakBtn.style.display = 'none';
+}
 
 // ─── Category bar ───
 sharedRenderCatBar({
@@ -337,6 +368,7 @@ function startMode() {
   else if (mode === 'battle') initBattle();
   else if (mode === 'timed') initQuiz(true);
   window.__syncBottomNavMode?.();
+  syncSpeakBtn();
 }
 
 function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
@@ -366,6 +398,7 @@ function renderStudyCard() {
   document.getElementById('fcExample').textContent = item.example;
   document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
   updProgress(idx + 1, deck.length);
+  if (autoSpeak) speak(item.verb);
 }
 
 document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
