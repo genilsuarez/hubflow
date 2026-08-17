@@ -1315,10 +1315,7 @@
     body[data-active="mi-progreso"] .topbar-greeting,
     body[data-active="rutas"] .topbar-greeting { display: flex; }
 
-    /* Expand/Collapse en topbar: solo visible en desktop + sección mi-progreso */
     @media (min-width: 861px) {
-      body[data-active="rutas"] .paths-actions.paths-actions--topbar { display: flex; }
-      body[data-active="rutas"] .paths-head-row { display: none; }
       /* Menú ☰ del topbar: solo mobile; en web la sidebar es persistente o el launcher flotante */
       .topbar-menu { display: none !important; }
     }
@@ -1402,8 +1399,7 @@
         text-overflow: ellipsis;
         max-width: 100%;
       }
-      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .lp-header-stats,
-      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .paths-actions--topbar {
+      body:not([data-active="resumen"]):not([data-active="mi-progreso"]):not([data-active="rutas"]) .lp-header-stats {
         display: none !important;
       }
       .topbar-greeting-sub { display: none; }
@@ -1530,14 +1526,19 @@
        control (Expandir/Colapsar todo) flotando arriba a la derecha. */
 
     /* ─── Barra de control ─── */
+    /* Ancho y gap de la columna lateral, compartidos por .rutas-layout y por
+       la barra de control: así el bloque de la derecha (orden · densidad)
+       cae exactamente sobre la tarjeta de progreso que va debajo. Sin esto
+       el bloque medía más que la columna y su borde izquierdo sobresalía. */
+    .rutas-toolbar, .rutas-layout { --rutas-aside-w: 258px; --rutas-aside-gap: 18px; }
     .rutas-toolbar {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 13px;
     }
     .rutas-stagebar { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; min-width: 0; }
     .rutas-stage-chip {
       display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 13px; border: 1.5px solid transparent; border-radius: var(--lp-radius-md);
+      padding: 6px 13px; border: 1.5px solid transparent; border-radius: var(--lp-radius-md);
       background: transparent; color: var(--lp-ink-soft);
       font: inherit; font-size: .74rem; font-weight: var(--lp-weight-semibold);
       white-space: nowrap; cursor: pointer; transition: all .18s var(--lp-ease);
@@ -1562,7 +1563,7 @@
     .rutas-toolbar__right { display: flex; align-items: center; gap: 8px; }
     .rutas-sort {
       position: relative; display: flex; align-items: center; gap: 6px;
-      padding: 0 30px 0 12px; height: 36px;
+      padding: 0 30px 0 12px; height: 31px;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border);
       border-radius: var(--lp-radius-md); box-shadow: var(--lp-shadow-xs);
     }
@@ -1579,7 +1580,7 @@
       color: var(--lp-muted); pointer-events: none;
     }
     .rutas-view {
-      display: flex; gap: 2px; padding: 3px; height: 36px;
+      display: flex; gap: 2px; padding: 2px; height: 31px;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border);
       border-radius: var(--lp-radius-md); box-shadow: var(--lp-shadow-xs);
     }
@@ -1595,8 +1596,8 @@
 
     /* ─── Lista + columna lateral ─── */
     .rutas-layout {
-      display: grid; grid-template-columns: minmax(0, 1fr) 258px;
-      gap: 18px; align-items: start;
+      display: grid; grid-template-columns: minmax(0, 1fr) var(--rutas-aside-w);
+      gap: var(--rutas-aside-gap); align-items: start;
     }
     .rutas-aside { display: grid; gap: 12px; position: sticky; top: 0; }
     .rutas-progress-card {
@@ -1642,6 +1643,30 @@
     }
     .rutas-tip__text { margin: 0; font-size: .66rem; line-height: 1.5; color: var(--lp-ink-soft); }
 
+    /* Mismo umbral que la columna lateral (abajo): solo cuando existe la
+       segunda columna tiene sentido calcar su ancho en la barra de control. */
+    @media (min-width: 1101px) {
+      .rutas-toolbar {
+        display: grid;
+        /* La 1ª y la 2ª columna suman el ancho de la lista (el gap entre la
+           2ª y la 3ª es el mismo del layout), así que expandir/colapsar
+           termina justo en el borde derecho de la lista. */
+        grid-template-columns: minmax(0, 1fr) auto var(--rutas-aside-w);
+        gap: var(--rutas-aside-gap);
+        align-items: center;
+      }
+      /* grid-row: 1 explícito en los tres: .paths-head-row va después del
+         grupo de la derecha en el DOM (para que en flex quede al final), y
+         sin fijar la fila el auto-placement lo empujaría a una segunda. */
+      .rutas-toolbar .rutas-stagebar { grid-column: 1; grid-row: 1; }
+      .rutas-toolbar .paths-head-row { grid-column: 2; grid-row: 1; }
+      .rutas-toolbar .rutas-toolbar__right { grid-column: 3; grid-row: 1; }
+      /* El select se estira para llenar la columna y el toggle queda pegado
+         al borde derecho — los dos bordes coinciden con la tarjeta. */
+      .rutas-toolbar__right { justify-content: space-between; }
+      .rutas-toolbar__right .rutas-sort { flex: 1; min-width: 0; }
+    }
+
     @media (max-width: 1100px) {
       .rutas-layout { grid-template-columns: 1fr; }
       .rutas-aside { position: static; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
@@ -1650,10 +1675,9 @@
     /* ─── Fila / tarjeta de ruta ─── */
     .paths-head-row { display: flex; align-items: center; justify-content: flex-end; }
     .paths-head-row .sec-head { margin-bottom: 0; }
-    .paths-actions { display: flex; gap: 4px; background: var(--lp-bg-paper); border-radius: var(--lp-radius-md); padding: 3px; }
-    .paths-actions.paths-actions--topbar { display: none; }
+    .paths-actions { display: flex; gap: 4px; background: var(--lp-bg-paper); border-radius: var(--lp-radius-md); padding: 3px 4px; }
     .paths-icon-btn {
-      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      width: 30px; height: 25px; display: flex; align-items: center; justify-content: center;
       color: var(--lp-muted); background: transparent; border: none;
       border-radius: var(--lp-radius-sm); cursor: pointer; transition: all .2s var(--lp-ease);
     }
@@ -1686,17 +1710,20 @@
     .path-summary {
       display: grid;
       grid-template-columns: 40px minmax(0, 1fr) auto auto auto;
+      /* El título se extiende sobre la columna donde iba el "Siguiente: X"
+         (se quitó por recargado); el nombre del próximo módulo sigue estando
+         al abrir la fila y en el menú ⋮ ("Continuar ruta"). */
       grid-template-areas:
-        "icon top next status menu"
+        "icon top top  status menu"
         "icon bar frac status menu";
-      align-items: center; row-gap: 7px; column-gap: 14px;
-      padding: 14px 16px; cursor: pointer; list-style: none; user-select: none;
+      align-items: center; row-gap: 6px; column-gap: 14px;
+      padding: 12px 16px; cursor: pointer; list-style: none; user-select: none;
     }
     .path-summary::-webkit-details-marker { display: none; }
     .path-summary::marker { display: none; content: ''; }
     .path-summary-icon {
       grid-area: icon; align-self: center;
-      width: 40px; height: 40px; border-radius: var(--lp-radius-md);
+      width: 37px; height: 37px; border-radius: var(--lp-radius-md);
       background: var(--lp-surface-sunken); border: 1px solid var(--lp-border-subtle);
       display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
     }
@@ -1708,13 +1735,6 @@
       border: 1px solid var(--lp-border-subtle);
       padding: 2px 6px; border-radius: var(--lp-radius-full);
     }
-    .path-summary-next {
-      grid-area: next; justify-self: end;
-      font-size: .62rem; font-weight: 700; color: var(--lp-accent); white-space: nowrap;
-    }
-    /* Ruta completada o con el siguiente paso bloqueado: no hay texto que
-       mostrar y la celda vacía dejaría un hueco en la columna. */
-    .path-summary-next:empty { display: none; }
     .path-summary-bar { grid-area: bar; display: block; }
     .path-summary-bar-track { display: block; height: var(--lp-progress-height); border-radius: var(--lp-radius-full); background: var(--lp-border); overflow: hidden; }
     .path-summary-bar-fill { display: block; height: 100%; border-radius: var(--lp-radius-full); background: var(--lp-accent); transition: width .5s var(--lp-ease); }
@@ -1767,20 +1787,26 @@
         align-self: start; overflow: hidden;
       }
       .paths-full--grid .rutas-group > .path-accordion + .path-accordion { border-top: 1.5px solid var(--lp-border); }
+      /* Tarjeta compacta: 3 filas en vez de 4 (~36% menos alto). El ícono
+         baja a 34px con menos padding y row-gap. La fila del medio era del
+         "Siguiente: X" + estado; sin ese texto queda solo el estado. */
       .paths-full--grid .path-summary {
-        grid-template-columns: 40px minmax(0, 1fr) auto;
+        grid-template-columns: 34px minmax(0, 1fr) auto;
         grid-template-areas:
           "icon top    menu"
-          "next next   next"
-          "bar  bar    frac"
-          "status status status";
-        row-gap: 9px;
+          "icon status status"
+          "bar  bar    frac";
+        row-gap: 4px; column-gap: 10px;
+        padding: 8px 12px;
       }
-      .paths-full--grid .path-summary-next { justify-self: start; }
-      /* En tarjetas sí se reserva la línea del "Siguiente:" aunque esté vacía:
-         si no, las tarjetas de una misma fila desalinean barra y estado. */
-      .paths-full--grid .path-summary-next:empty { display: block; min-height: .95em; }
-      .paths-full--grid .path-summary-status { justify-self: start; }
+      .paths-full--grid .path-summary-icon { width: 34px; height: 34px; font-size: .95rem; }
+      /* Sin wrap: si el chip CEFR cae a una segunda línea la tarjeta crece y
+         deja de alinear con sus vecinas de la misma fila — el título recorta
+         con ellipsis en su lugar. */
+      .paths-full--grid .path-summary-top { flex-wrap: nowrap; }
+      .paths-full--grid .path-summary-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .paths-full--grid .path-summary-cefr { flex: none; }
+      .paths-full--grid .path-summary-status { justify-self: start; padding: 3px 8px; }
     }
 
     /* ─── STATS BREAKDOWN (Mis estadísticas — por categoría / por nivel) ───
@@ -2084,11 +2110,10 @@
         grid-template-areas:
           "icon title cefr menu"
           "icon bar   bar  frac";
-        row-gap: 4px; column-gap: 8px; padding: 8px 10px; align-items: center;
+        row-gap: 3px; column-gap: 8px; padding: 6px 10px; align-items: center;
       }
       .path-summary-icon { grid-area: icon; width: 30px; height: 30px; font-size: .85rem; }
       .path-summary-top { display: contents; }
-      .path-summary-next { display: none; }
       .path-summary-title { grid-area: title; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; align-self: center; }
       /* Mobile: solo nivel CEFR — el estado (Sin empezar / En progreso / ✓)
          duplicaba info ya visible en la barra 0/7 y ocupaba una segunda píldora. */
@@ -2115,7 +2140,9 @@
         width: 100%; min-width: 0;
       }
       .rutas-stagebar::-webkit-scrollbar { display: none; }
-      .rutas-toolbar__right { width: 100%; justify-content: space-between; }
+      /* Segunda fila: el select ocupa el hueco y expandir/colapsar (hermano
+         de la barra, no del grupo) queda al final de esa misma fila. */
+      .rutas-toolbar__right { flex: 1; min-width: 0; }
       .rutas-sort { flex: 1; min-width: 0; }
       /* Densidad lista/tarjetas: en una sola columna las dos vistas dirían lo
          mismo, así que el toggle no se muestra. La vista de tarjetas tampoco
@@ -2125,9 +2152,18 @@
       .rutas-view { display: none; }
 
       .rutas-layout { gap: 12px; }
-      .rutas-aside { grid-template-columns: 1fr; }
-      .rutas-progress-card { padding: 12px 14px 14px; }
+      /* La columna lateral va al final del scroll en mobile, así que se
+         compacta: mismo contenido, menos aire (anillo, gaps y paddings). */
+      .rutas-aside { grid-template-columns: 1fr; gap: 9px; }
+      .rutas-progress-card { padding: 9px 14px 11px; gap: 6px; }
       .rutas-progress-card__art { display: none; }
+      .rutas-progress-card__ring { width: 58px; height: 58px; }
+      .rutas-progress-card__ring > div { width: 46px; height: 46px; }
+      .rutas-progress-card__ring strong { font-size: .82rem; }
+      .rutas-progress-card__btn { padding: 7px 12px; }
+      .rutas-tip { padding: 10px 12px; }
+      .rutas-tip__head { margin-bottom: 3px; }
+      .rutas-tip__text { line-height: 1.42; }
 
       /* Al expandir en mobile, la fila abierta tiene que despegarse de sus
          vecinas dentro de la tarjeta agrupada: fondo propio + la barra de

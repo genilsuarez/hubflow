@@ -241,12 +241,11 @@ function renderPathAccordions(paths) {
     const allDone = completedCount === total;
     const nextModule = path.modules.find(id => !isPathModuleCompleted(id));
     const nextMod = nextModule ? moduleMap.get(nextModule) : null;
-    // Una ruta no puede prometer "Siguiente: X" si X todavía está por encima
-    // del nivel activo — no es clickeable (ver locked más abajo).
+    // Una ruta no puede llevar al "siguiente" módulo si X todavía está por
+    // encima del nivel activo — no es clickeable (ver locked más abajo).
     const nextModLocked = nextMod && !levelUnlocks(nextMod.cefr, activeLevel);
     const statusLabel = allDone ? '✓ Completada' : completedCount > 0 ? 'En progreso' : 'Sin empezar';
     const statusClass = allDone ? ' completed' : completedCount > 0 ? ' in-progress' : '';
-    const nextText = allDone || nextModLocked ? '' : nextMod ? (completedCount > 0 ? 'Siguiente: ' : 'Empezar: ') + nextMod.title : '';
 
     const modulesHTML = path.modules.map((id, i) => {
       const mod = moduleMap.get(id);
@@ -287,7 +286,6 @@ function renderPathAccordions(paths) {
           <span class="path-summary-title">${path.title}</span>
           <span class="path-summary-cefr">${pathCefrRange(path)}</span>
         </span>
-        <span class="path-summary-next">${nextText}</span>
         <span class="path-summary-bar"><span class="path-summary-bar-track"><span class="path-summary-bar-fill" style="width:${pct}%"></span></span></span>
         <span class="path-summary-frac">${completedCount}/${total}</span>
         <span class="path-summary-status${statusClass}">${statusLabel}</span>
