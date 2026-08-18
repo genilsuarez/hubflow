@@ -121,6 +121,13 @@ export function initIrregularVerbs({ verbs, scoreKeyPrefix }) {
       }
       return;
     }
+    if (mode === 'quiz' || mode === 'timed') {
+      if (e.key === 'Enter') {
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
+      }
+      return;
+    }
     if (mode !== 'study') return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();

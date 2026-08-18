@@ -48,8 +48,15 @@ export function initTenses({ categories, scoreKeyPrefix }) {
     advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
   }
 
-  // Keyboard: Enter/Space = flip or advance, Arrows = navigate
+  // Keyboard: Enter/Space = flip or advance (study) / next (quiz+timed), Arrows = navigate
   document.addEventListener('keydown', e => {
+    if (mode === 'practice' || mode === 'timed') {
+      if (e.key === 'Enter') {
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
+      }
+      return;
+    }
     if (mode !== 'study') return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();

@@ -565,6 +565,13 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
   // Keyboard: Enter/Space = flip or advance, Arrows = navigate
   document.addEventListener('keydown', e => {
+    if (mode === 'practice' || mode === 'timed') {
+      if (e.key === 'Enter') {
+        const nextBtn = document.getElementById('quizNextBtn');
+        if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
+      }
+      return;
+    }
     if (mode !== 'study') return;
 
     // While the end-of-deck follow-up overlay is open, Enter/Space confirms

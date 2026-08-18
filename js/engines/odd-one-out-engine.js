@@ -142,8 +142,13 @@ export function initOddOneOut({ categories, scoreKeyPrefix }) {
     document.getElementById('progPct').textContent = '100%';
   }
 
-  // ─── Keyboard: 1-4 to select ───
+  // ─── Keyboard: 1-4 to select, Enter to advance after answering ───
   document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && answered) {
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
+      return;
+    }
     if (answered) return;
     const num = parseInt(e.key);
     if (num >= 1 && num <= 4) {
