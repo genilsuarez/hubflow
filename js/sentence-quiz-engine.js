@@ -255,6 +255,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   }
 
   function initPractice(timed) {
+    // Clean up any pending keyboard listener from the previous question
+    document.getElementById('wordOptions')?._cleanKeyOpt?.();
     deck = shuffle(getData());
     idx = 0; score = 0;
     total = Math.min(timed ? timedQuestionCount : deck.length, deck.length);
@@ -288,36 +290,56 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     const baseOpts = item.options || cat.options;
     const opts = shuffleOptions ? shuffle([...baseOpts]) : [...baseOpts];
     const optsEl = document.getElementById('wordOptions');
-    optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join('');
+    optsEl.innerHTML = opts.map((o, i) => `<button class="word-opt" data-val="${o}"><span class="word-opt__num">${i + 1}</span>${o}</button>`).join('');
+
+    function handleOptClick(btn) {
+      if (btn.classList.contains('disabled')) return;
+      optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
+
+      const chosen = btn.dataset.val;
+      const accepted = acceptedAnswers(item);
+      if (accepted.includes(chosen)) { btn.classList.add('correct'); score++; }
+      else {
+        btn.classList.add('wrong');
+        optsEl.querySelectorAll('.word-opt').forEach(b => { if (accepted.includes(b.dataset.val)) b.classList.add('correct'); });
+      }
+
+      document.getElementById('scText').innerHTML = fillBlanks(item.sentence, blankFiller(item), (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
+      document.getElementById('explainBox').textContent = item.explain;
+
+      idx++;
+      updProgress(idx, total);
+
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
+        setQuizAnswered(true);
+        nextBtn.onclick = () => renderPractice();
+        nextBtn.focus({ preventScroll: true });
+      } else {
+        setTimeout(renderPractice, 1400);
+      }
+    }
+
     optsEl.querySelectorAll('.word-opt').forEach(btn => {
-      btn.addEventListener('click', () => {
-        optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
-
-        const chosen = btn.dataset.val;
-        const accepted = acceptedAnswers(item);
-        if (accepted.includes(chosen)) { btn.classList.add('correct'); score++; }
-        else {
-          btn.classList.add('wrong');
-          optsEl.querySelectorAll('.word-opt').forEach(b => { if (accepted.includes(b.dataset.val)) b.classList.add('correct'); });
-        }
-
-        document.getElementById('scText').innerHTML = fillBlanks(item.sentence, blankFiller(item), (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
-        document.getElementById('explainBox').textContent = item.explain;
-
-        idx++;
-        updProgress(idx, total);
-
-        const nextBtn = document.getElementById('quizNextBtn');
-        if (nextBtn) {
-          nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
-          setQuizAnswered(true);
-          nextBtn.onclick = () => renderPractice();
-          nextBtn.focus({ preventScroll: true });
-        } else {
-          setTimeout(renderPractice, 1400);
-        }
-      });
+      btn.addEventListener('click', () => handleOptClick(btn));
     });
+
+    // Keyboard shortcut: press 1/2/3 to select the corresponding option
+    function onKeyOpt(e) {
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= opts.length) {
+        const btn = optsEl.querySelectorAll('.word-opt')[n - 1];
+        if (btn && !btn.classList.contains('disabled')) {
+          document.removeEventListener('keydown', onKeyOpt);
+          handleOptClick(btn);
+        }
+      }
+    }
+    document.addEventListener('keydown', onKeyOpt);
+    // Clean up listener when moving to next question or changing mode
+    optsEl._cleanKeyOpt = () => document.removeEventListener('keydown', onKeyOpt);
+
     updProgress(idx, total);
     maybeAutoSpeak();
   }

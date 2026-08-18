@@ -198,3 +198,33 @@ body { min-height: 100vh; padding: 0 14px; }
 [data-color="green"] .sentence-card .sc-text .blank { border-bottom-color: var(--lp-cat-green); color: var(--lp-cat-green); }
 [data-color="green"] .art-front .fc-term { color: var(--lp-cat-green); }
 [data-color="green"] .fc-back { background: color-mix(in srgb, var(--lp-cat-green) 10%, var(--lp-surface)); border-color: var(--lp-cat-green); }
+
+/* ── Option number badges (keyboard shortcuts 1/2/3) ───────────────────────── */
+[data-area="practice"] .word-opt {
+  position: relative;
+  padding-left: 2.6rem;
+}
+[data-area="practice"] .word-opt__num {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--lp-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 4px;
+  background: var(--lp-border);
+  color: var(--lp-muted);
+  line-height: 1;
+  pointer-events: none;
+  transition: background 0.15s, color 0.15s;
+}
+[data-area="practice"] .word-opt.correct .word-opt__num,
+[data-area="practice"] .word-opt.wrong .word-opt__num {
+  opacity: 0;
+}
