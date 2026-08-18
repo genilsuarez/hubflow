@@ -8,14 +8,14 @@
    13 near-identical copies inline in each exercises/*.html file.
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle } from './array-utils.js';
-import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus, getStars } from './progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from './exercise-ui.js';
-import { finishExercise } from './exercise-flow.js';
-import { RESULT_TITLES } from './result-copy.js';
-import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from './speech.js';
-import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
-import { initSwipe } from './swipe.js';
+import { shuffle } from '../array-utils.js';
+import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus, getStars } from '../progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
+import { finishExercise } from '../exercise-flow.js';
+import { RESULT_TITLES } from '../result-copy.js';
+import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from '../speech.js';
+import { createStudySpeakButton, insertInBottomNav } from '../ex-bottom-nav.js';
+import { initSwipe } from '../swipe.js';
 
 const SPEAK_ICON = '🔊';
 

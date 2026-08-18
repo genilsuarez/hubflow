@@ -16,6 +16,7 @@
 import { readFileSync, existsSync } from 'fs';
 import { fileURLToPath, pathToFileURL } from 'url';
 import path from 'path';
+import { engineOf } from '../../js/engines/manifest.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT_DIR = path.join(__dirname, '..', '..');
@@ -125,44 +126,39 @@ export async function deriveEmittedScoreKeys(modules) {
       categoryKeys = [...html.matchAll(/data-cat=["']([^"']+)["']/g)].map((m) => m[1]);
     }
 
-    for (const match of html.matchAll(/recordScore\(\s*`([^`]*\$\{currentCat\}[^`]*)`/g)) {
-      categoryKeys.forEach((cat) => emitted.add(match[1].replace('${currentCat}', cat)));
-    }
+    const engine = engineOf(html);
+    if (!engine) continue;
 
-    const scorePrefix = html.match(/scoreKeyPrefix:\s*['"]([^'"]+)['"]/)?.[1];
-    if (scorePrefix) {
-      categoryKeys.forEach((cat) => emitted.add(`${scorePrefix}-${cat}`));
-      // initSentenceQuiz's Study card llama recordStudyItemSeen() por cada
-      // carta vista (mastery-tiers-plan.md Fase 0) — igual que -quiz abajo,
-      // es incondicional para todo consumidor del engine.
-      if (html.includes('initSentenceQuiz')) {
-        categoryKeys.forEach((cat) => emitted.add(`${scorePrefix}-${cat}-study`));
-      }
-    }
+    const prefix = html.match(
+      new RegExp(`${engine.prefixField}:\\s*['"]([^'"]+)['"]`),
+    )?.[1];
+    if (!prefix) continue;
 
-    const storagePrefix = html.match(/storagePrefix:\s*['"]([^'"]+)['"]/)?.[1];
-    if (storagePrefix && html.includes('SpellingEngine')) {
+    // SpellingEngine: la clave lleva el modo, y los niveles son [data-cat].
+    if (engine.derive === 'spelling') {
       const modes = [...html.matchAll(/data-mode=["']([^"']+)["']/g)].map((m) => m[1]);
-      categoryKeys.forEach((cat) => modes.forEach((mode) => emitted.add(`${storagePrefix}-${cat}-${mode}`)));
-    } else if (storagePrefix && html.includes('FlashcardEngine')) {
-      categoryKeys.forEach((cat) => emitted.add(`${storagePrefix}-${cat}-quiz`));
-      // FlashcardEngine.renderStudyCard() llama recordStudyItemSeen() por
-      // cada carta vista — mismo motivo que arriba.
-      categoryKeys.forEach((cat) => emitted.add(`${storagePrefix}-${cat}-study`));
+      categoryKeys.forEach((cat) => modes.forEach((mode) => emitted.add(`${prefix}-${cat}-${mode}`)));
+      continue;
     }
 
-    // Shared Match mode (js/exercise-flow.js createMatchMode) — recordScore()
-    // lives in exercise-flow.js, not in the exercise HTML, so it can't match
-    // the generic recordScore(`...${currentCat}...`) scan above.
-    const matchScoreKey = html.match(/matchScoreKey:\s*['"]([^'"]+)['"]/)?.[1];
-    if (matchScoreKey) categoryKeys.forEach((cat) => emitted.add(`${matchScoreKey}-${cat}-match`));
-
-    // Copias inline del patrón Study de sentence-quiz-engine (11 ejercicios,
-    // ver docs/to-do/mastery-tiers-plan.md Fase 0) — llaman recordStudyItemSeen()
-    // con un storagePrefix literal en vez de importar el engine compartido.
-    for (const match of html.matchAll(/recordStudyItemSeen\(\s*\{[^}]*storagePrefix:\s*['"]([^'"]+)['"]/g)) {
-      categoryKeys.forEach((cat) => emitted.add(`${match[1]}-${cat}-study`));
+    // FlashcardEngine: emite además `-timed` y `-match` en las páginas que
+    // declaran esos modos, pero PROGRESS_RULES solo exige Quiz + Study — se
+    // deriva lo exigido, no todo lo que el runtime puede escribir.
+    if (engine.derive === 'flashcard') {
+      categoryKeys.forEach((cat) => {
+        emitted.add(`${prefix}-${cat}-quiz`);
+        emitted.add(`${prefix}-${cat}-study`);
+      });
+      continue;
     }
+
+    for (const suffix of engine.suffixes) {
+      const tail = suffix ? `-${suffix}` : '';
+      categoryKeys.forEach((cat) => emitted.add(`${prefix}-${cat}${tail}`));
+    }
+    // Match compartido (js/exercise-flow.js createMatchMode): recordScore()
+    // vive en exercise-flow.js, no en el engine.
+    if (engine.match) categoryKeys.forEach((cat) => emitted.add(`${prefix}-${cat}-match`));
   }
   return emitted;
 }

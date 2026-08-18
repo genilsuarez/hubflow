@@ -32,7 +32,11 @@ css/
   guide-layout.css  — Shared guide footer (.guide-footer)
   *-shell.css       — Per-engine-family styles
 js/
-  *-engine.js       — One engine per exercise family
+  engines/          — TODOS los motores de ejercicio, uno por familia. Ningún
+                      ejercicio lleva su motor inline en el HTML: la página solo
+                      importa su data file y llama al `init*()` del engine.
+    manifest.mjs    — Contrato de claves de progreso de cada engine (lo lee
+                      scripts/lib/derive-catalog.mjs; ver más abajo)
   nav-sections.js   — Secciones de nav (fuente única: index.html + exercise-shell.js)
   exercise-shell.js — Sidebar drawer, header; calls ex-bottom-nav.js
   ex-bottom-nav.js    — Bottom nav canonical (mirrors FluentFlow game-controls)
@@ -155,13 +159,46 @@ Al agregar/renombrar una sección: editar `nav-sections.js` **y** los dos espejo
 
 Each exercise imports one of these shared engines:
 
-| Engine | CSS | Modes | Examples |
-|--------|-----|-------|----------|
-| `flashcard-engine.js` | `flashcard-shell.css` | Study / Quiz / Match / Battle / Timed | vocabulary, opposites, pronunciation-study |
-| `spelling-engine.js` | `spelling-shell.css` | Beginner / Intermediate / Exceptions / God Mode | ed-spelling, ing-spelling, noun-adjuncts |
-| `sentence-quiz-engine.js` | `sentence-quiz.css` | Study / Practice / Timed + categories (`.cat-btn`) | articles, conditionals, inversions |
-| `typed-answer-engine.js` | `typed-answer-shell.css` | Study / Practice / Timed, typed response | paraphrasing, word-order, register-switch |
-| — (standalone) | `exercise-enhanced.css` | Page manages its own state | confusing-words, listening, error-hunt |
+Todos viven en `js/engines/`. **No quedan motores inline** — si un ejercicio
+necesita lógica propia, se crea su archivo aquí, no un `<script type="module">`
+con 300 líneas en el HTML (un motor inline es invisible para el mapeo del
+repo y se desincroniza en silencio del validador de progreso).
+
+| Engine | Modes | Páginas |
+|--------|-------|---------|
+| `flashcard-engine.js` | Study / Quiz / Match / Battle / Timed | 62 — vocabulary, opposites, pronunciation-study |
+| `sentence-quiz-engine.js` | Study / Practice / Timed | 58 — articles, conditionals, inversions |
+| `typed-answer-engine.js` | Study / Practice / Timed, respuesta escrita | 9 — paraphrasing, word-order, register-switch |
+| `spelling-engine.js` | Beginner / Intermediate / Exceptions / God Mode | 3 — ed-spelling, ing-spelling, noun-adjuncts |
+| `dictation-engine.js` | Practice / Timed, dictado con TTS | 1 — dictation-sprint |
+| `word-choice-engine.js` | Study / Practice / Timed, elegir del par | 4 — apostrophe-traps, confusing-verbs, grammar-confusions, lookalike-words |
+| `text-hunt-engine.js` | Hunt / Timed, marcar y corregir errores | 2 — error-hunt, punctuation-fix |
+| `phonics-engine.js` | Study / Practice / Timed / Match | 1 — phonics |
+| `phrasal-verbs-engine.js` | Study / Quiz / Timed / Match / Write / Sort | 1 — phrasal-verbs |
+| `irregular-verbs-engine.js` | Study / Quiz / Timed / Match / Sort / Write | 1 — irregular-verbs |
+| `verb-chunks-engine.js` | Study / Practice / Timed / Write / Sort | 1 — verb-chunks |
+| `prepositions-engine.js` | Study / Practice / Timed | 1 — prepositions |
+| `tenses-engine.js` | Study / Practice / Timed | 1 — tenses |
+| `word-formation-engine.js` | Study / Practice / Timed, respuesta escrita | 1 — word-formation |
+| `listening-engine.js` | Practice / Timed con TTS | 1 — listening |
+| `spelling-by-ear-engine.js` | Practice / Timed con TTS | 1 — spelling-by-ear |
+| `odd-one-out-engine.js` | Practice / Timed | 1 — odd-one-out |
+| `paragraph-cloze-engine.js` | Practice / Timed | 1 — paragraph-cloze |
+
+Cada engine tiene su `*-shell.css` cuando la familia comparte layout; los de una
+sola página usan `exercise-enhanced.css`.
+
+### manifest.mjs — el contrato de scoreKeys
+
+`js/engines/manifest.mjs` declara, por engine, qué sufijos de clave de progreso
+escribe (`-quiz`, `-timed`, `-study`, `-match`, `-write`, `-sort`, o ninguno).
+`scripts/lib/derive-catalog.mjs` lo importa para validar `PROGRESS_RULES`.
+
+**Al cambiar la clave que un engine pasa a `recordScore()` / `recordStudyItemSeen()`
+hay que actualizar su entrada en el manifiesto.** Antes esa convención se deducía
+con regex sobre el HTML de cada página, y un cambio dentro de un engine dejaba el
+validador ciego — así se acumularon 935 errores `CAT-SCOREKEY` sin que nada
+señalara la causa.
 
 Each family uses `[data-color="..."]` on its wrapper to pick up category color (`--lp-cat-*`).
 

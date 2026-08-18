@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Spelling Engine shell styles
-   Shared by the 3 pages built on js/spelling-engine.js
+   Shared by the 3 pages built on js/engines/spelling-engine.js
    (ed-spelling, ing-spelling, noun-adjuncts). Extracted
    2026-07-10 from identical inline <style> blocks — each page
    only varied its accent color (--c-ed/--c-ing/--c-noun, all

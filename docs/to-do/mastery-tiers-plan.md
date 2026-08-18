@@ -64,7 +64,7 @@ espacio para un segundo nivel.
 
 ### 2.4 Study hoy no guarda nada (hallazgo crítico para §1.1)
 
-Revisado [js/flashcard-engine.js](../../js/flashcard-engine.js) — el motor de Study en la mayoría
+Revisado [js/engines/flashcard-engine.js](../../js/engines/flashcard-engine.js) — el motor de Study en la mayoría
 de los módulos (49 módulos declaran `engine: 'flashcard'` en `MODULE_DEPTH`, más los que se
 calculan dinámicamente desde `vocabulary.js`). **Study no persiste ningún estado por item**: no
 hay `scoreKey`, no hay flag de "visto", no hay nada en localStorage salvo una preferencia de
@@ -172,7 +172,7 @@ excepción por fecha de corte):
 ## 6. Fases sugeridas (listo para implementar)
 
 0. **Instrumentar Study** (bloqueante — nada más puede leer un dato que no existe): agregar
-   tracking de "item visto" en [js/flashcard-engine.js](../../js/flashcard-engine.js) (y motores
+   tracking de "item visto" en [js/engines/flashcard-engine.js](../../js/engines/flashcard-engine.js) (y motores
    equivalentes de módulos no-flashcard, si Study aplica ahí) — un nuevo `scoreKey` o flag por
    item que se guarde en localStorage al navegar cada carta. Definir el contrato en
    `PROGRESS_RULES` igual que ya existe para quiz/write/etc.

@@ -11,11 +11,11 @@
    current category passed to renderPrompt (for a category badge).
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle } from './array-utils.js';
-import { recordScore, renderLessonProgress } from './progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs } from './exercise-ui.js';
-import { finishExercise } from './exercise-flow.js';
-import { setupPracticeBottomNav, setPracticeBottomNav } from './ex-bottom-nav.js';
+import { shuffle } from '../array-utils.js';
+import { recordScore, renderLessonProgress } from '../progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs } from '../exercise-ui.js';
+import { finishExercise } from '../exercise-flow.js';
+import { setupPracticeBottomNav, setPracticeBottomNav } from '../ex-bottom-nav.js';
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');

@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Flashcard Engine shell styles
-   Shared by the two js/flashcard-engine.js pages (vocabulary,
+   Shared by the two js/engines/flashcard-engine.js pages (vocabulary,
    pronunciation-study): compact header/mode-bar, the scrollable
    category selector with fade+expand, and the battle/match mode
    layouts. Extracted 2026-07-10 from an inline <style> block that

@@ -2,12 +2,12 @@
  * HubFlow — Flashcard/Vocabulary Engine
  * Shared logic for vocabulary exercises: Study, Quiz, Match, Battle, Timed.
  */
-import { shuffle } from './array-utils.js';
-import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen, refreshModuleCompletionMarks } from './progress-store.js';
-import { Timer, formatTime } from './exercise-ui.js';
-import { speak, isSpeechAvailable, hasVoiceForLang, readAutoSpeak, writeAutoSpeak } from './speech.js';
-import { initSwipe } from './swipe.js';
-import { RESULT_TITLES } from './result-copy.js';
+import { shuffle } from '../array-utils.js';
+import { recordScore, getStars, getScoreStatus, renderLessonProgress, recordStudyItemSeen, refreshModuleCompletionMarks } from '../progress-store.js';
+import { Timer, formatTime } from '../exercise-ui.js';
+import { speak, isSpeechAvailable, hasVoiceForLang, readAutoSpeak, writeAutoSpeak } from '../speech.js';
+import { initSwipe } from '../swipe.js';
+import { RESULT_TITLES } from '../result-copy.js';
 
 // Preferencia persistente del feedback sonoro de Match (mismo patrón que
 // el autospeak de speech.js: toggle on/off, apagado por defecto).

@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Typed Answer Practice shell styles
    Shared by the typed-answer exercises (paraphrasing, word-order,
-   register-switch, sentence-combining) built on js/typed-answer-engine.js.
+   register-switch, sentence-combining) built on js/engines/typed-answer-engine.js.
    Extracted 2026-07-10 from identical inline <style> blocks — only the
    prompt-display area (kw-* / wo-* / rs-* / sc-*) stays page-specific,
    since that's genuinely different per exercise.

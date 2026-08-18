@@ -3,12 +3,12 @@
    TTS dictation with word-diff scoring (dictation-sprint, etc.)
    ═══════════════════════════════════════════════════════ */
 
-import { shuffle } from './array-utils.js';
-import { recordScore, renderLessonProgress } from './progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar } from './exercise-ui.js';
-import { finishExercise } from './exercise-flow.js';
-import { isSpeechAvailable } from './speech.js';
-import { setupPracticeBottomNav, setPracticeBottomNav } from './ex-bottom-nav.js';
+import { shuffle } from '../array-utils.js';
+import { recordScore, renderLessonProgress } from '../progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar } from '../exercise-ui.js';
+import { finishExercise } from '../exercise-flow.js';
+import { isSpeechAvailable } from '../speech.js';
+import { setupPracticeBottomNav, setPracticeBottomNav } from '../ex-bottom-nav.js';
 
 function normalize(text) {
   return text.toLowerCase()
