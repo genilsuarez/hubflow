@@ -1003,3 +1003,12 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
     display: none !important;
   }
 }
+
+/* Verb hint shown inline on study flashcards: "sentence _____ (verb)" */
+.fc-verb-hint {
+  font-size: 0.875em;
+  font-weight: 400;
+  color: var(--lp-muted);
+  font-style: italic;
+  white-space: nowrap;
+}

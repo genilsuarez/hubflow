@@ -441,7 +441,13 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     card.classList.remove('flip');
     const fcEmoji = document.getElementById('fcEmoji');
     if (fcEmoji && !hidesCardIcon()) fcEmoji.textContent = categories[currentCat].icon;
-    document.getElementById('fcSentence').textContent = face.front;
+    const verbHintHtml = item.verb ? ` <span class="fc-verb-hint">(${item.verb})</span>` : '';
+    const fcSentenceEl = document.getElementById('fcSentence');
+    if (verbHintHtml) {
+      fcSentenceEl.innerHTML = face.front + verbHintHtml;
+    } else {
+      fcSentenceEl.textContent = face.front;
+    }
     document.getElementById('fcAnswer').textContent = face.back;
     document.getElementById('fcExplain').textContent = face.detail;
     document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
