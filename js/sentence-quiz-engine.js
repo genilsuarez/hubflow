@@ -9,9 +9,10 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from './array-utils.js';
-import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus } from './progress-store.js';
+import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus, getStars } from './progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from './exercise-ui.js';
 import { finishExercise } from './exercise-flow.js';
+import { RESULT_TITLES } from './result-copy.js';
 import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from './speech.js';
 import { createStudySpeakButton, insertInBottomNav } from './ex-bottom-nav.js';
 import { initSwipe } from './swipe.js';
@@ -347,13 +348,70 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   function finishPractice() {
     const elapsed = timerState.timedSeconds ? timerState.timedSeconds - (timerState.timer && timerState.timer.remaining != null ? timerState.timer.remaining : 0) : null;
     timerState.stop();
-    const pct = finishExercise({
-      correct: score, total, startMode, setMode: v => mode = v,
-      elapsedSeconds: elapsed,
-    });
-    const modeSuffix = mode === 'timed' ? '-timed' : '';
+
+    const pct = Math.round((score / total) * 100);
+    const stars = getStars(pct);
+    const modeSuffix = mode === 'timed' ? '-timed' : '-quiz';
     recordScore(`${scoreKeyPrefix}-${currentCat}${modeSuffix}`, pct);
     renderLessonProgress(contentId);
+
+    const overlay = document.getElementById('resultOverlay');
+    if (!overlay) return;
+
+    const timeHtml = elapsed != null
+      ? `<div class="result-time">⏱ ${formatTime(elapsed)}</div>`
+      : '';
+
+    // Igual que showResultOverlay en FlashcardEngine: sugerir la siguiente
+    // actividad pendiente del módulo en vez de dejar al usuario sin rumbo.
+    const suggestion = findStudyFollowUp();
+    const nextHtml = suggestion
+      ? `<div class="result-sub">Siguiente: ${suggestion.isNewCategory
+          ? `${categories[suggestion.cat]?.label || suggestion.cat} — 📖 Study`
+          : '🎯 Quiz'}</div>`
+      : '';
+    const primaryLabel = suggestion ? 'Continuar →' : '📖 Study';
+
+    overlay.innerHTML = `
+      <div class="result-box">
+        <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+        <div class="result-stars">
+          <span class="result-star ${stars >= 1 ? 'lit' : ''}">⭐</span>
+          <span class="result-star ${stars >= 2 ? 'lit' : ''}">⭐</span>
+          <span class="result-star ${stars >= 3 ? 'lit' : ''}">⭐</span>
+        </div>
+        <div class="result-title">${RESULT_TITLES[stars]}</div>
+        <div class="result-sub">${score}/${total} correctas — ${pct}%</div>
+        ${timeHtml}
+        ${nextHtml}
+        <div class="result-btns">
+          <button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Reintentar</button>
+          <button class="lp-btn lp-btn--purple" id="resultPrimary">${primaryLabel}</button>
+        </div>
+      </div>
+    `;
+    overlay.classList.add('show');
+
+    overlay.querySelector('#resultDismiss')?.addEventListener('click', () => {
+      overlay.classList.remove('show');
+    });
+    overlay.querySelector('#resultRestart')?.addEventListener('click', () => {
+      overlay.classList.remove('show');
+      startMode();
+    });
+    overlay.querySelector('#resultPrimary')?.addEventListener('click', () => {
+      overlay.classList.remove('show');
+      if (!suggestion) {
+        mode = 'study';
+        syncModeTabsActive('study');
+        startMode();
+        return;
+      }
+      if (suggestion.isNewCategory) switchToCategory(suggestion.cat);
+      mode = suggestion.mode;
+      syncModeTabsActive(mode);
+      startMode();
+    });
   }
 
   function initStudy() {
@@ -417,7 +475,11 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     renderStudyCard();
   }
 
-  function scoreKeyFor(cat) { return `${scoreKeyPrefix}-${cat}`; }
+  function scoreKeyFor(cat, mode = 'quiz') {
+    return mode === 'study'
+      ? `${scoreKeyPrefix}-${cat}`
+      : `${scoreKeyPrefix}-${cat}-${mode}`;
+  }
 
   /**
    * What to suggest once the Study deck is finished: Practice for the current
@@ -426,7 +488,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
    * key here, so there's a single next mode instead of a ranked list).
    */
   function findStudyFollowUp() {
-    if (!getScoreStatus(scoreKeyFor(currentCat)).passed) {
+    if (!getScoreStatus(scoreKeyFor(currentCat, 'quiz')).passed) {
       return { cat: currentCat, mode: 'practice', isNewCategory: false };
     }
     const catKeys = Object.keys(categories);
@@ -434,7 +496,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     for (let i = 1; i <= catKeys.length; i++) {
       const cat = catKeys[(startIdx + i) % catKeys.length];
       if (cat === currentCat) continue;
-      if (!getScoreStatus(scoreKeyFor(cat)).passed) return { cat, mode: 'study', isNewCategory: true };
+      if (!getScoreStatus(scoreKeyFor(cat, 'quiz')).passed) return { cat, mode: 'study', isNewCategory: true };
     }
     return null;
   }

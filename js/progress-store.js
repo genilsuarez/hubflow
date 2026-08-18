@@ -73,6 +73,40 @@ function migrateLegacyProjectionKeys() {
   });
 }
 
+/**
+ * Migración de scoreKeys legacy para sentence-quiz-engine.
+ * Antes del commit bd387a3 (2026-08-17) el engine guardaba scores sin sufijo
+ * de modo (ej. `contract-beContractions:v1`). Las reglas en PROGRESS_RULES
+ * ahora usan `-quiz` como sufijo. Esta función copia los datos de la clave
+ * sin sufijo a la nueva clave `-quiz` cuando la nueva está vacía.
+ * Se ejecuta una sola vez en el arranque.
+ */
+function migrateSentenceQuizScoreKeys() {
+  const MIGRATION_DONE_KEY = 'hf-sqe-quiz-suffix-migration-v1';
+  try { if (localStorage.getItem(MIGRATION_DONE_KEY) === '1') return; } catch { return; }
+
+  try {
+    Object.values(PROGRESS_RULES).forEach((rule) => {
+      if (!rule?.requiredActivities) return;
+      rule.requiredActivities.forEach((activity) => {
+        (activity.scoreKeys || []).forEach((key) => {
+          if (!key.endsWith('-quiz')) return;
+          const legacyKey = key.slice(0, -5); // strip '-quiz'
+          const newStorageKey = versionedKey(key);
+          const legacyStorageKey = versionedKey(legacyKey);
+          // Solo migrar si la nueva clave está vacía y la legacy tiene datos
+          const existing = localStorage.getItem(newStorageKey);
+          if (existing !== null) return;
+          const legacy = localStorage.getItem(legacyStorageKey);
+          if (!legacy) return;
+          try { localStorage.setItem(newStorageKey, legacy); } catch { /* quota */ }
+        });
+      });
+    });
+    localStorage.setItem(MIGRATION_DONE_KEY, '1');
+  } catch { /* localStorage bloqueado */ }
+}
+
 function toIsoTimestamp(value) {
   if (typeof value !== 'string' || !value.includes('T')) return null;
   const timestamp = Date.parse(value);
@@ -915,6 +949,7 @@ function refreshHubFlowFromPeerSync() {
 
 if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
   migrateLegacyProjectionKeys();
+  migrateSentenceQuizScoreKeys();
   hydrateHubFlowFromCloud();
   if (hasAnyLocalHubflowProgress()) {
     markLocalCacheBootstrapped();
@@ -1247,7 +1282,10 @@ export function getModuleMatrixProgress(contentId, { includeStudy = false } = {}
 function navigateToModeCell(cat, mode) {
   document.querySelector(`#catBar [data-cat="${cat}"], #levelBar [data-level="${cat}"]`)?.click();
   if (mode != null) {
-    document.querySelector(`.pill-bar [data-mode="${mode}"], .ex-header__modes [data-mode="${mode}"]`)?.click();
+    // sentence-quiz-engine stores scores under 'quiz'/'timed' keys but the pill
+    // button in HTML uses data-mode="practice" for the quiz mode.
+    const domMode = mode === 'quiz' ? 'practice' : mode;
+    document.querySelector(`.pill-bar [data-mode="${domMode}"], .ex-header__modes [data-mode="${domMode}"]`)?.click();
   }
 }
 
