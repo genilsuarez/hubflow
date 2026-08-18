@@ -2398,7 +2398,7 @@ const PROGRESS_RULES_BASE = {
 
   // Grammar rebalance — 33 → 50 módulos, 10 por nivel CEFR A1-C1.
   'a1-plurals-possessives': practiceRule(scoreKeys('pluralposs', ['regularPlurals', 'irregularPlurals', 'possessiveApostropheS', 'possessiveSVsIsContraction'], ['quiz', 'timed'])),
-  'a1-contractions': practiceRule(scoreKeys('contract', ['beContractions', 'negativeContractions', 'haveContractions', 'willContractions'], ['quiz', 'timed'])),
+  'a1-contractions': practiceRule(scoreKeys('contract', ['beContractions', 'negativeContractions', 'mixedContractions'], ['quiz', 'timed'])),
   'a1-imperatives': practiceRule(scoreKeys('imperative', ['affirmativeCommands', 'negativeCommands', 'pleaseRequests', 'letsSuggestions'], ['quiz', 'timed'])),
   'a1-some-any-quantity': practiceRule(scoreKeys('someany', ['someAffirmative', 'anyNegativeQuestion', 'muchVsMany', 'noVsNotAny'], ['quiz', 'timed'])),
   'a1-demonstratives': practiceRule(scoreKeys('demonstr', ['thisSingularNear', 'thatSingularFar', 'thesePluralNear', 'thosePluralFar'], ['quiz', 'timed'])),
@@ -2660,7 +2660,7 @@ export const MODULE_DEPTH = {
 
   // Grammar rebalance — 33 → 50 módulos, 10 por nivel CEFR A1-C1.
   'a1-plurals-possessives':      { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
-  'a1-contractions':             { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
+  'a1-contractions':             { engine: 'custom', items: 30, categories: 3, modes: 3, hasBattle: false },
   'a1-imperatives':              { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
   'a1-some-any-quantity':        { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
   'a1-demonstratives':           { engine: 'custom', items: 40, categories: 4, modes: 3, hasBattle: false },
