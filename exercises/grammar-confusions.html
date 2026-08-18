@@ -110,10 +110,14 @@
 import { CATEGORIES } from '../data/grammar-confusions.js';
 import { initWordChoice } from '../js/engines/word-choice-engine.js';
 
+const baseMap = {
+  'affect': /^(affect|affects|affected|affecting)$/i,
+  'effect': /^(effect|effects|effected|effecting)$/i,
+};
 initWordChoice({
   categories: CATEGORIES,
   scoreKeyPrefix: 'gconf',
-  baseMap: { 'affect': /^(affect|affects|affected|affecting)$/i, 'effect': /^(effect|effects|effected|effecting)$/i },
+  baseMap,
 });
 </script>
 

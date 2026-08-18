@@ -110,10 +110,23 @@
 import { CATEGORIES } from '../data/confusing-verbs.js';
 import { initWordChoice } from '../js/engines/word-choice-engine.js';
 
+const baseMap = {
+  'do':     /^(do|did|does|done|doing)$/i,
+  'make':   /^(make|made|makes|making)$/i,
+  'say':    /^(say|said|says|saying)$/i,
+  'tell':   /^(tell|told|tells|telling)$/i,
+  'bring':  /^(bring|brought|brings|bringing)$/i,
+  'take':   /^(take|took|takes|taken|taking)$/i,
+  'borrow': /^(borrow|borrowed|borrows|borrowing)$/i,
+  'lend':   /^(lend|lent|lends|lending)$/i,
+  'watch':  /^(watch|watched|watches|watching)$/i,
+  'look':   /^(look|looked|looks|looking)$/i,
+  'see':    /^(see|saw|sees|seen|seeing)$/i,
+};
 initWordChoice({
   categories: CATEGORIES,
   scoreKeyPrefix: 'cverb',
-  baseMap: { 'do': /^(do|did|does|done|doing)$/i, 'make': /^(make|made|makes|making)$/i, 'say': /^(say|said|says|saying)$/i, 'tell': /^(tell|told|tells|telling)$/i, 'bring': /^(bring|brought|brings|bringing)$/i, 'take': /^(take|took|takes|taken|taking)$/i, 'borrow': /^(borrow|borrowed|borrows|borrowing)$/i, 'lend': /^(lend|lent|lends|lending)$/i, 'watch': /^(watch|watched|watches|watching)$/i, 'look': /^(look|looked|looks|looking)$/i, 'see': /^(see|saw|sees|seen|seeing)$/i },
+  baseMap,
 });
 </script>
 

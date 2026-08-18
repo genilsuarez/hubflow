@@ -110,10 +110,14 @@
 import { CATEGORIES } from '../data/lookalike-words.js';
 import { initWordChoice } from '../js/engines/word-choice-engine.js';
 
+const baseMap = {
+  'complement': /^(complement|complements|complemented|complementing)$/i,
+  'compliment': /^(compliment|compliments|complimented|complimenting)$/i,
+};
 initWordChoice({
   categories: CATEGORIES,
   scoreKeyPrefix: 'look',
-  baseMap: { 'complement': /^(complement|complements|complemented|complementing)$/i, 'compliment': /^(compliment|compliments|complimented|complimenting)$/i },
+  baseMap,
 });
 </script>
 
