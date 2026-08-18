@@ -1141,19 +1141,24 @@ function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
   const modesFromKeys = new Set();
   let hasNoModeSuffix = false;
 
-  for (const act of matrixActivities) {
-    for (const key of act.scoreKeys) {
-      const parts = key.split('-');
-      const lastPart = parts[parts.length - 1];
-      if (knownModes.includes(lastPart)) {
-        parts.pop();
-        modesFromKeys.add(lastPart);
-      } else {
-        hasNoModeSuffix = true;
-      }
-      parts.shift(); // remove prefix
-      categoriesFromKeys.add(parts.join('-'));
+  // `masteryKeys` (catalog.js practiceRule) son modos extra — típicamente
+  // Timed — que no cuentan para Aprobado (no viven en requiredActivities)
+  // pero sí deben aparecer como columna de la matriz/Maestría, igual que
+  // Match/Timed ya aparecen para los módulos flashcard vía ENGINE_MODES_MAP
+  // más abajo. Sin esto, un módulo custom/tts con masteryKeys perdería esa
+  // columna del todo en vez de solo dejar de exigirla para el check ✓.
+  const masteryScoreKeys = Array.isArray(rule.masteryKeys) ? rule.masteryKeys : [];
+  for (const key of [...matrixActivities.flatMap((act) => act.scoreKeys), ...masteryScoreKeys]) {
+    const parts = key.split('-');
+    const lastPart = parts[parts.length - 1];
+    if (knownModes.includes(lastPart)) {
+      parts.pop();
+      modesFromKeys.add(lastPart);
+    } else {
+      hasNoModeSuffix = true;
     }
+    parts.shift(); // remove prefix
+    categoriesFromKeys.add(parts.join('-'));
   }
 
   let trackedModes = [...modesFromKeys];

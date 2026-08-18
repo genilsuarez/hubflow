@@ -193,8 +193,8 @@ export function renderAllShelves() {
     renderLevelBlock('grammar', level, grammar, activeLevel, levelJustBecameActive);
     renderLevelBlock('pronunciation', level, pronunciation, activeLevel, levelJustBecameActive);
     renderLevelBlock('analysis', level, analysis, activeLevel, levelJustBecameActive);
-    // Browse: las 4 categorías combinadas, en el mismo orden que catalog.js
-    // (ya viene agrupado por nivel → por categoría, ver data/catalog.js).
-    renderLevelBlock('all', level, [...vocab, ...pronunciation, ...grammar, ...analysis], activeLevel, levelJustBecameActive);
+    // Browse: las 4 categorías en el mismo orden que los chips del toolbar
+    // (Vocabulary → Grammar → Pronunciation → Analysis).
+    renderLevelBlock('all', level, [...vocab, ...grammar, ...pronunciation, ...analysis], activeLevel, levelJustBecameActive);
   });
 }

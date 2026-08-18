@@ -524,7 +524,10 @@ async function validateCatalog() {
   const wipIds = new Set(MODULES.filter((m) => m.wip).map((m) => m.id));
   const declaredScoreKeys = new Set(Object.entries(PROGRESS_RULES)
     .filter(([id]) => !wipIds.has(id))
-    .flatMap(([, rule]) => rule.requiredActivities.flatMap((activity) => activity.scoreKeys))
+    .flatMap(([, rule]) => [
+      ...rule.requiredActivities.flatMap((activity) => activity.scoreKeys),
+      ...(rule.masteryKeys ?? []),
+    ])
   );
   for (const key of emittedScoreKeys) {
     if (!declaredScoreKeys.has(key)) err('CAT-SCOREKEY', `runtime score key "${key}" has no progress rule`);
