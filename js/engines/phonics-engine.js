@@ -8,7 +8,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from '../array-utils.js';
-import { recordScore, recordStudyItemSeen } from '../progress-store.js';
+import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise, advanceStudyCard, createMatchMode } from '../exercise-flow.js';
 import { speak } from '../speech.js';
@@ -26,6 +26,30 @@ export function initPhonics({ categories, scoreKeyPrefix }) {
   let timer = null;
   let timedSeconds = 0;
   let currentWord = null;
+
+  // Returns the next pending activity.
+  // Keys: quiz=${prefix}-${cat}, timed=${prefix}-${cat}-timed, match=${prefix}-${cat}-match.
+  function findStudyFollowUp() {
+    const catKeys = Object.keys(categories);
+    const FOLLOW_MODES = [
+      { key: cat => `${scoreKeyPrefix}-${cat}-timed`, label: '⏱️ Timed', mode: 'timed' },
+      { key: cat => `${scoreKeyPrefix}-${cat}-match`, label: '🔗 Match', mode: 'match' },
+    ];
+    for (const m of FOLLOW_MODES) {
+      if (!getScoreStatus(m.key(currentCat)).passed) {
+        return { label: m.label, isNewCategory: false, onContinue: () => { mode = m.mode; startMode(); } };
+      }
+    }
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
+        return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
+      }
+    }
+    return null;
+  }
 
   // TTS — uses shared speak() from speech.js (object opts signature)
   function speakWord(text, rate = 0.85) {
@@ -316,6 +340,7 @@ export function initPhonics({ categories, scoreKeyPrefix }) {
     const pct = finishExercise({
       correct: score, total, startMode, setMode: v => mode = v,
       elapsedSeconds: elapsed,
+      suggestion: findStudyFollowUp(),
     });
     const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`${scoreKeyPrefix}-${currentCat}${_timedSuffix}`, pct);
   }

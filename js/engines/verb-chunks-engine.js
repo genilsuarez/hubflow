@@ -8,7 +8,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from '../array-utils.js';
-import { recordScore, recordStudyItemSeen } from '../progress-store.js';
+import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise, advanceStudyCard } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
@@ -25,6 +25,30 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
   let deck = [], idx = 0, score = 0, total = 0;
   let timer = null;
   let timedSeconds = 0;
+
+  // Returns the next pending activity.
+  // Keys: practice=${prefix}-${cat}, timed=${prefix}-${cat}-timed, write=${prefix}-${cat}-write.
+  function findStudyFollowUp() {
+    const catKeys = Object.keys(categories);
+    const FOLLOW_MODES = [
+      { key: cat => `${scoreKeyPrefix}-${cat}-timed`, label: '⏱️ Timed', mode: 'timed' },
+      { key: cat => `${scoreKeyPrefix}-${cat}-write`, label: '✍️ Write', mode: 'write' },
+    ];
+    for (const m of FOLLOW_MODES) {
+      if (!getScoreStatus(m.key(currentCat)).passed) {
+        return { label: m.label, isNewCategory: false, onContinue: () => { mode = m.mode; startMode(); } };
+      }
+    }
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
+        return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
+      }
+    }
+    return null;
+  }
 
   // ─── Category bar ───
   sharedRenderCatBar({
@@ -156,6 +180,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
     const pct = finishExercise({
       correct: score, total, startMode, setMode: v => mode = v,
       elapsedSeconds: elapsed,
+      suggestion: findStudyFollowUp(),
     });
     const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`${scoreKeyPrefix}-${currentCat}${_timedSuffix}`, pct);
   }
@@ -278,7 +303,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
   }
 
   function finishWrite() {
-    const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v });
+    const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v, suggestion: findStudyFollowUp() });
     recordScore(`${scoreKeyPrefix}-${currentCat}-write`, pct);
   }
 
@@ -435,7 +460,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
 
     sortState.score = correct;
 
-    const pct = finishExercise({ correct, total: sortState.total, startMode, setMode: v => mode = v });
+    const pct = finishExercise({ correct, total: sortState.total, startMode, setMode: v => mode = v, suggestion: findStudyFollowUp() });
     recordScore(`${scoreKeyPrefix}-${currentCat}-sort`, pct);
   }
 

@@ -8,7 +8,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from '../array-utils.js';
-import { recordScore, recordStudyItemSeen } from '../progress-store.js';
+import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
 import { finishExercise, advanceStudyCard, createMatchMode } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
@@ -26,6 +26,32 @@ export function initPhrasalVerbs({ categories, scoreKeyPrefix }) {
   let timer = null;
   let timedSeconds = 0;
   let autoSpeak = readAutoSpeak();
+
+  // Returns the next pending activity for this exercise.
+  // Keys: quiz=${prefix}-${cat}-quiz, timed=${prefix}-${cat}-timed, write=${prefix}-${cat}-write, match=${prefix}-${cat}-match.
+  function findStudyFollowUp() {
+    const catKeys = Object.keys(categories);
+    const FOLLOW_MODES = [
+      { key: cat => `${scoreKeyPrefix}-${cat}-timed`, label: '⏱️ Timed', mode: 'timed' },
+      { key: cat => `${scoreKeyPrefix}-${cat}-write`, label: '✍️ Write', mode: 'write' },
+      { key: cat => `${scoreKeyPrefix}-${cat}-match`, label: '🔗 Match', mode: 'match' },
+    ];
+    for (const m of FOLLOW_MODES) {
+      if (!getScoreStatus(m.key(currentCat)).passed) {
+        return { label: m.label, isNewCategory: false, onContinue: () => { mode = m.mode; startMode(); } };
+      }
+    }
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      const hasPending = [`${scoreKeyPrefix}-${cat}-quiz`, `${scoreKeyPrefix}-${cat}-timed`].some(k => !getScoreStatus(k).passed);
+      if (hasPending) {
+        return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
+      }
+    }
+    return null;
+  }
 
   // ─── TTS toggle ───
   function syncSpeakBtn() {
@@ -226,6 +252,7 @@ export function initPhrasalVerbs({ categories, scoreKeyPrefix }) {
     const pct = finishExercise({
       correct: score, total, startMode, setMode: v => mode = v,
       elapsedSeconds: elapsed,
+      suggestion: findStudyFollowUp(),
     });
     const _phMode = mode === 'timed' ? 'timed' : 'quiz'; recordScore(`${scoreKeyPrefix}-${currentCat}-${_phMode}`, pct);
   }
@@ -341,7 +368,7 @@ export function initPhrasalVerbs({ categories, scoreKeyPrefix }) {
   document.getElementById('skipBtn').addEventListener('click', () => { writeIdx++; renderWrite(); });
 
   function finishWrite() {
-    const pct = finishExercise({ correct: writeScore, total: writeTotal, startMode, setMode: v => mode = v });
+    const pct = finishExercise({ correct: writeScore, total: writeTotal, startMode, setMode: v => mode = v, suggestion: findStudyFollowUp() });
     recordScore(`${scoreKeyPrefix}-${currentCat}-write`, pct);
   }
 
@@ -507,7 +534,7 @@ export function initPhrasalVerbs({ categories, scoreKeyPrefix }) {
 
     sortState.score = correct;
 
-    const pct = finishExercise({ correct, total: sortState.total, startMode, setMode: v => mode = v });
+    const pct = finishExercise({ correct, total: sortState.total, startMode, setMode: v => mode = v, suggestion: findStudyFollowUp() });
     recordScore(`${scoreKeyPrefix}-${currentCat}-sort`, pct);
   }
 

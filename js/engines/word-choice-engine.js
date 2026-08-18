@@ -17,7 +17,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from '../array-utils.js';
-import { recordScore, recordStudyItemSeen } from '../progress-store.js';
+import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise, advanceStudyCard } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
@@ -44,6 +44,24 @@ export function initWordChoice({
   let deck = [], idx = 0, score = 0, total = 0;
   let timer = null;
   let timedSeconds = 0;
+
+  // Returns the next pending activity: pending timed in current cat → next cat study.
+  // Practice key = ${prefix}-${cat}, timed = ${prefix}-${cat}-timed.
+  function findStudyFollowUp() {
+    const catKeys = Object.keys(categories);
+    if (!getScoreStatus(`${scoreKeyPrefix}-${currentCat}-timed`).passed) {
+      return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; startMode(); } };
+    }
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
+        return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
+      }
+    }
+    return null;
+  }
 
   // ─── Category bar ───
   sharedRenderCatBar({
@@ -158,6 +176,7 @@ export function initWordChoice({
     const pct = finishExercise({
       correct: score, total, startMode, setMode: v => mode = v,
       elapsedSeconds: elapsed,
+      suggestion: findStudyFollowUp(),
     });
     const modeSuffix = mode === 'timed' ? '-timed' : '';
     recordScore(`${scoreKeyPrefix}-${currentCat}${modeSuffix}`, pct);

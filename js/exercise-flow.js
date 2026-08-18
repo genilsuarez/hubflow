@@ -9,8 +9,11 @@ import { recordScore, getStars } from './progress-store.js';
 import { syncModeTabsActive, formatTime } from './exercise-ui.js';
 import { RESULT_TITLES } from './result-copy.js';
 
-/** Show result overlay */
-function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSeconds }) {
+/** Show result overlay.
+ *  `suggestion` — optional { cat, mode, isNewCategory, label?, onContinue } from
+ *  the engine's findStudyFollowUp(). When present, adds "Siguiente: …" subtitle
+ *  and changes the primary button to "Continuar →" which calls suggestion.onContinue(). */
+function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSeconds, suggestion }) {
   const pct = Math.round((correct / total) * 100);
   const stars = getStars(pct);
   const titles = RESULT_TITLES;
@@ -18,6 +21,18 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
   const timeHtml = elapsedSeconds != null
     ? `<div class="result-time">⏱ ${formatTime(elapsedSeconds)}</div>`
     : '';
+
+  const nextHtml = suggestion
+    ? `<div class="result-sub result-next">Siguiente: ${suggestion.label}</div>`
+    : '';
+
+  // When there's a suggestion the primary is "Continuar →"; otherwise keep the
+  // previous behaviour: "Reintentar" primary + optional "Study" ghost.
+  const btnsHtml = suggestion
+    ? `<button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Reintentar</button>
+       <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>`
+    : `<button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Reintentar</button>
+       ${onStudy ? '<button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>' : ''}`;
 
   containerEl.innerHTML = `
     <div class="result-box">
@@ -30,10 +45,8 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
       <div class="result-title">${titles[stars]}</div>
       <div class="result-sub">${correct}/${total} correctas — ${pct}%</div>
       ${timeHtml}
-      <div class="result-btns">
-        <button class="lp-btn lp-btn--primary" id="resultRestart">🔄 Reintentar</button>
-        ${onStudy ? '<button class="lp-btn lp-btn--ghost" id="resultStudy">📖 Study</button>' : ''}
-      </div>
+      ${nextHtml}
+      <div class="result-btns">${btnsHtml}</div>
     </div>
   `;
   // Move overlay to body to escape .wrap stacking context (z-index: 1)
@@ -43,7 +56,7 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
   containerEl.classList.add('show');
 
   requestAnimationFrame(() => {
-    containerEl.querySelector('#resultClose').addEventListener('click', () => {
+    containerEl.querySelector('#resultClose')?.addEventListener('click', () => {
       containerEl.classList.remove('show');
     });
     containerEl.querySelector('#resultRestart')?.addEventListener('click', () => {
@@ -54,6 +67,10 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
       containerEl.classList.remove('show');
       onStudy();
     });
+    containerEl.querySelector('#resultContinue')?.addEventListener('click', () => {
+      containerEl.classList.remove('show');
+      suggestion.onContinue();
+    });
   });
 
   return pct;
@@ -61,16 +78,17 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
 
 /** Wraps showResult() with the containerEl/onRestart/onStudy boilerplate every standalone
  *  exercise repeats at its finish*() call sites. Pass `setMode` only for exercises that have
- *  a Study mode to jump back to — omit it (or pass nothing) to get onStudy: null, same as
- *  showResult(). recordScore() stays the caller's responsibility since its key/timing varies
- *  per exercise (some record before this call, some wrap it in requestAnimationFrame). */
-export function finishExercise({ correct, total, startMode, setMode, elapsedSeconds }) {
+ *  a Study mode to jump back to — omit it (or pass nothing) to get onStudy: null.
+ *  Pass `suggestion` (from the engine's findStudyFollowUp()) to show the "Siguiente:" hint
+ *  and "Continuar →" button. recordScore() stays the caller's responsibility. */
+export function finishExercise({ correct, total, startMode, setMode, elapsedSeconds, suggestion }) {
   return showResult({
     correct, total,
     containerEl: document.getElementById('resultOverlay'),
     onRestart: () => startMode(),
     onStudy: setMode ? () => { setMode('study'); syncModeTabsActive('study'); startMode(); } : null,
     elapsedSeconds,
+    suggestion,
   });
 }
 

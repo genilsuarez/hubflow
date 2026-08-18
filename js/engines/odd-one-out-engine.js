@@ -8,7 +8,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from '../array-utils.js';
-import { recordScore } from '../progress-store.js';
+import { recordScore, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise } from '../exercise-flow.js';
 
@@ -24,6 +24,23 @@ export function initOddOneOut({ categories, scoreKeyPrefix }) {
   let answered = false;
   let timer = null;
   let timedSeconds = 0;
+
+  // Returns pending timed mode if quiz passed but timed hasn't, then next category.
+  function findStudyFollowUp() {
+    const catKeys = Object.keys(categories);
+    if (!getScoreStatus(`${scoreKeyPrefix}-${currentCat}-timed`).passed) {
+      return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; startMode(); } };
+    }
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
+        return { label: `${categories[cat]?.label || cat} — 🎯 Quiz`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'quiz'; startMode(); } };
+      }
+    }
+    return null;
+  }
 
   // ─── Category bar ───
   sharedRenderCatBar({
@@ -135,7 +152,7 @@ export function initOddOneOut({ categories, scoreKeyPrefix }) {
   function finish() {
     stopTimer();
     const pct = Math.round((score / deck.length) * 100);
-    finishExercise({ correct: score, total: deck.length, startMode });
+    finishExercise({ correct: score, total: deck.length, startMode, suggestion: findStudyFollowUp() });
     const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`${scoreKeyPrefix}-${currentCat}${_timedSuffix}`, pct);
     document.getElementById('progFill').style.width = '100%';
     document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;
