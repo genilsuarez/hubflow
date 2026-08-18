@@ -33,38 +33,70 @@ export const CATEGORIES = {
       { sentence: "The shops ___ open on Sunday.", correct: "aren't", explain: "Aren't is short for 'are not'.", options: ["isn't", "aren't", "don't"] },
     ]
   },
-  haveContractions: {
-    label: 'Have Contractions',
-    icon: '🎒',
-    options: ["I've", "she's got", "we've"],
+  mixedContractions: {
+    label: 'Mixed Contractions',
+    icon: '🔀',
     items: [
-      { sentence: "My phone broke yesterday, so ___ got a new one.", correct: "I've", explain: "I've is short for 'I have'. The sentence is in first person.", options: ["I've", "she's", "we've"] },
-      { sentence: "My sister is very popular at school. ___ got two brothers and lots of friends.", correct: "she's got", explain: "She's got is short for 'she has got'. The subject is 'my sister' = she.", options: ["she's got", "I've got", "they've got"] },
-      { sentence: "Our class has a test tomorrow. ___ got a lot of homework tonight.", correct: "we've", explain: "We've is short for 'we have'. Our class = we.", options: ["we've", "I've", "he's"] },
-      { sentence: "My parents work really hard. ___ got a new car this year.", correct: "they've", explain: "They've is short for 'they have'. My parents = they.", options: ["they've", "she's", "I've"] },
-      { sentence: "My uncle is very successful. ___ got a big house in the countryside.", correct: "he's got", explain: "He's got is short for 'he has got'. The subject is 'my uncle' = he.", options: ["he's got", "we've got", "I've got"] },
-      { sentence: "That film is so good — ___ never seen anything like it.", correct: "I've", explain: "I've is short for 'I have'. The speaker is talking about their own experience.", options: ["I've", "she's", "he's"] },
-      { sentence: "Where is Emma? ___ already left the office.", correct: "she's", explain: "She's is short for 'she has' (used with a past participle). Emma = she.", options: ["she's", "I've", "we've"] },
-      { sentence: "The deadline was yesterday. ___ finished the project just in time.", correct: "we've", explain: "We've is short for 'we have'. The team = we.", options: ["we've", "he's", "they've"] },
-      { sentence: "The Garcias love exploring. ___ never been to Paris, but they want to go.", correct: "they've", explain: "They've is short for 'they have'. The Garcias = they.", options: ["they've", "we've", "I've"] },
-      { sentence: "I ate too much at lunch. ___ got a headache now.", correct: "I've", explain: "I've is short for 'I have'. The speaker is describing their own state.", options: ["I've", "she's", "you've"] },
-    ]
-  },
-  willContractions: {
-    label: 'Will Contractions',
-    icon: '🔮',
-    options: ["I'll", "we'll", "she'll"],
-    items: [
-      { sentence: "Don't worry about the meeting. ___ call you tomorrow with all the details.", correct: "I'll", explain: "I'll is short for 'I will'. The speaker is making a personal promise.", options: ["I'll", "we'll", "she'll"] },
-      { sentence: "Our team has a plan. ___ help you with that project.", correct: "we'll", explain: "We'll is short for 'we will'. Our team = we.", options: ["we'll", "I'll", "he'll"] },
-      { sentence: "My colleague has the address. ___ arrive at six o'clock.", correct: "she'll", explain: "She'll is short for 'she will'. My colleague = she.", options: ["she'll", "they'll", "we'll"] },
-      { sentence: "Ask David — ___ finish the report soon.", correct: "he'll", explain: "He'll is short for 'he will'. David = he.", options: ["he'll", "I'll", "you'll"] },
-      { sentence: "My parents are coming for the weekend. ___ visit us next week too.", correct: "they'll", explain: "They'll is short for 'they will'. My parents = they.", options: ["they'll", "we'll", "she'll"] },
-      { sentence: "Open it! ___ love this present.", correct: "you'll", explain: "You'll is short for 'you will'. The speaker is addressing the listener directly.", options: ["you'll", "I'll", "he'll"] },
-      { sentence: "Check the forecast — ___ be sunny tomorrow.", correct: "it'll", explain: "It'll is short for 'it will'. We use 'it' for weather.", options: ["it'll", "he'll", "we'll"] },
-      { sentence: "My flight is at 7 pm and traffic is terrible. ___ probably be late.", correct: "I'll", explain: "I'll is short for 'I will'. The speaker is predicting their own situation.", options: ["I'll", "she'll", "they'll"] },
-      { sentence: "This project is huge. ___ need more time to finish it.", correct: "we'll", explain: "We'll is short for 'we will'. The team = we.", options: ["we'll", "you'll", "it'll"] },
-      { sentence: "My friends got front-row seats. ___ enjoy the concert for sure.", correct: "they'll", explain: "They'll is short for 'they will'. My friends = they.", options: ["they'll", "she'll", "we'll"] },
+      {
+        sentence: "My phone broke yesterday, so ___ got a new one.",
+        correct: "I've",
+        explain: "I've is short for 'I have' — used here for a recent experience. I'll would mean a future action.",
+        options: ["I've", "I'll", "I'm"]
+      },
+      {
+        sentence: "Don't worry about the meeting. ___ call you tomorrow with all the details.",
+        correct: "I'll",
+        explain: "I'll is short for 'I will' — a promise about the future. I've would mean a past experience.",
+        options: ["I'll", "I've", "I'm"]
+      },
+      {
+        sentence: "Where is Emma? ___ already left the office.",
+        correct: "she's",
+        explain: "She's is short for 'she has' here (with a past participle). She'll would be a future promise.",
+        options: ["she's", "she'll", "she'd"]
+      },
+      {
+        sentence: "My colleague has the address. ___ arrive at six o'clock.",
+        correct: "she'll",
+        explain: "She'll is short for 'she will' — a future action. She's here would mean she has already arrived.",
+        options: ["she'll", "she's", "she'd"]
+      },
+      {
+        sentence: "The Garcias love exploring. ___ never been to Paris, but they want to go.",
+        correct: "they've",
+        explain: "They've is short for 'they have' — describing a life experience up to now. They'll is for future plans.",
+        options: ["they've", "they'll", "they're"]
+      },
+      {
+        sentence: "My parents are coming for the weekend. ___ visit us next week too.",
+        correct: "they'll",
+        explain: "They'll is short for 'they will' — a future visit. They've would mean they have already visited.",
+        options: ["they'll", "they've", "they're"]
+      },
+      {
+        sentence: "Our class has a test tomorrow. ___ got a lot of homework tonight.",
+        correct: "we've",
+        explain: "We've is short for 'we have' — describing the current situation. We'll is for what we will do.",
+        options: ["we've", "we'll", "we're"]
+      },
+      {
+        sentence: "This project is huge. ___ need more time to finish it.",
+        correct: "we'll",
+        explain: "We'll is short for 'we will' — predicting a future need. We've would mean we have already needed time.",
+        options: ["we'll", "we've", "we're"]
+      },
+      {
+        sentence: "Ask David — ___ finish the report soon.",
+        correct: "he'll",
+        explain: "He'll is short for 'he will' — a future action. He's here would mean he has already finished.",
+        options: ["he'll", "he's", "he'd"]
+      },
+      {
+        sentence: "Check the forecast — ___ be sunny tomorrow.",
+        correct: "it'll",
+        explain: "It'll is short for 'it will'. We use 'it' for weather predictions. It's would describe the weather now.",
+        options: ["it'll", "it's", "it'd"]
+      },
     ]
   }
 };

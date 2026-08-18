@@ -351,7 +351,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
       correct: score, total, startMode, setMode: v => mode = v,
       elapsedSeconds: elapsed,
     });
-    recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
+    const modeSuffix = mode === 'timed' ? '-timed' : '';
+    recordScore(`${scoreKeyPrefix}-${currentCat}${modeSuffix}`, pct);
     renderLessonProgress(contentId);
   }
 
