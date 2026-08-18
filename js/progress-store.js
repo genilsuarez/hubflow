@@ -1041,10 +1041,12 @@ function pillLabelText(btn) {
     .trim();
 }
 
-/** Orden visual de los mode tabs (`data-mode`) tal como se pintan en la página. */
+/** Orden visual de los mode tabs (`data-mode`) tal como se pintan en la página.
+ * `practice` se normaliza a `quiz` porque sentence-quiz-engine usa ese valor
+ * en el DOM pero graba las scoreKeys con el sufijo `-quiz`. */
 function readVisualModeOrder() {
   return [...document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]')]
-    .map((btn) => btn.dataset.mode)
+    .map((btn) => btn.dataset.mode === 'practice' ? 'quiz' : btn.dataset.mode)
     .filter(Boolean);
 }
 
