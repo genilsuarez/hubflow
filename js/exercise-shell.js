@@ -137,9 +137,15 @@ if (topBar) {
   // Sync counter: read from whichever engine's counter has content —
   // cada shell de ejercicio usa su propio id (flashcards, sentence-quiz,
   // typed-answer, word-hunt, etc.)
+  // Priority: prefer counters whose [data-area] parent is currently active (.show),
+  // so Quiz mode's scCounter wins over Study mode's fcCounter (which always has
+  // text but lives in a hidden area when Quiz/Timed is active).
   const COUNTER_IDS = ['fcCounter', 'scCounter', 'itemCounter', 'qCounter', 'dCounter', 'pcCounter', 'huntCounter'];
   function syncCounter() {
-    const text = COUNTER_IDS.map(id => document.getElementById(id)).find(el => el && el.textContent.trim())?.textContent.trim() || '';
+    const allEls = COUNTER_IDS.map(id => document.getElementById(id)).filter(el => el && el.textContent.trim());
+    // Prefer elements inside an active [data-area] (.show); fall back to any with content
+    const activeEl = allEls.find(el => el.closest('[data-area]')?.classList.contains('show')) || allEls[0];
+    const text = activeEl?.textContent.trim() || '';
     counterSlot.style.display = text ? '' : 'none';
     counterText.textContent = text;
   }
