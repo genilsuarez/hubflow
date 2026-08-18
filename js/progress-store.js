@@ -1317,7 +1317,9 @@ function openProgressDetail(contentId) {
   const mastered = Boolean(progress?.mastered);
   const rule = PROGRESS_RULES[contentId];
   const aprobadoCells = rule
-    ? rule.requiredActivities.reduce((sum, activity) => sum + activity.scoreKeys.length, 0)
+    ? rule.requiredActivities
+        .filter((activity) => activity.activityId !== 'study')
+        .reduce((sum, activity) => sum + activity.scoreKeys.length, 0)
     : null;
   const aprobadoPct = aprobadoCells != null && totalCells > 0
     ? Math.min(100, Math.round((aprobadoCells / totalCells) * 100))
@@ -1373,11 +1375,24 @@ function openProgressDetail(contentId) {
       <div class="pg-modal__tiers">
         <div class="pg-tier pg-tier--done ${completed ? 'is-reached' : ''}">
           <span class="pg-tier__icon" aria-hidden="true">✓</span>
-          <span class="pg-tier__text"><strong>Completado</strong>Study + Quiz al 100%</span>
+          <span class="pg-tier__text"><strong>Completado</strong>${(() => {
+            const completedModes = rule.requiredActivities
+              .filter(a => a.activityId !== 'study')
+              .flatMap(a => a.scoreKeys)
+              .map(k => { const parts = k.split('-'); const last = parts[parts.length - 1]; return ['quiz','match','write','timed','challenge'].includes(last) ? last : null; })
+              .filter(Boolean);
+            const uniqueModes = [...new Set(completedModes)];
+            const studyActivity = rule.requiredActivities.find(a => a.activityId === 'study');
+            const modeLabels = [
+              ...(studyActivity ? ['Study'] : []),
+              ...uniqueModes.map(m => MODE_SHORT[m] || m),
+            ];
+            return modeLabels.join(' + ') + ' al 100%';
+          })()}</span>
         </div>
         <div class="pg-tier pg-tier--mastery ${mastered ? 'is-reached' : ''}">
           <span class="pg-tier__icon" aria-hidden="true">👑</span>
-          <span class="pg-tier__text"><strong>Maestría</strong>Las 4 columnas al 100%</span>
+          <span class="pg-tier__text"><strong>Maestría</strong>Las ${displayModes.length} columnas al 100%</span>
         </div>
       </div>` : ''}
     </div>
