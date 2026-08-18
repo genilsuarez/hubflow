@@ -489,7 +489,7 @@ function finishQuiz() {
     correct: quizScore, total: quizTotal, startMode, setMode: v => mode = v,
     elapsedSeconds: elapsed,
   });
-  recordScore(`irr-${currentCat}-quiz`, pct);
+  const _irrMode = mode === 'timed' ? 'timed' : 'quiz'; recordScore(`irr-${currentCat}-${_irrMode}`, pct);
 }
 
 // ═══ MATCH (base ↔ past → pp) ═══

@@ -235,7 +235,8 @@ export function initDictationPractice({
     stopTimer();
     const pct = totalWords > 0 ? Math.round((totalScore / totalWords) * 100) : 0;
     finishExercise({ correct: totalScore, total: totalWords, startMode });
-    recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
+    const modeSuffix = mode === 'timed' ? '-timed' : '';
+    recordScore(`${scoreKeyPrefix}-${currentCat}${modeSuffix}`, pct);
     renderLessonProgress(contentId);
     document.getElementById('progFill').style.width = '100%';
     document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;

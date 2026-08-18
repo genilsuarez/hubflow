@@ -252,7 +252,7 @@ function finishPractice() {
   const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
   stopTimer();
   const pct = finishExercise({ correct: score, total, startMode, elapsedSeconds: elapsed });
-  recordScore(`listen-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`listen-${currentCat}${_timedSuffix}`, pct);
 }
 
 startMode();

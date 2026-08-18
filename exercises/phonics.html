@@ -475,7 +475,7 @@ function finishQuiz() {
     correct: score, total, startMode, setMode: v => mode = v,
     elapsedSeconds: elapsed,
   });
-  recordScore(`phonics-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`phonics-${currentCat}${_timedSuffix}`, pct);
 }
 
 // Init

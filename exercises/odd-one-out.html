@@ -253,7 +253,7 @@ function finish() {
   stopTimer();
   const pct = Math.round((score / deck.length) * 100);
   finishExercise({ correct: score, total: deck.length, startMode });
-  recordScore(`odd-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`odd-${currentCat}${_timedSuffix}`, pct);
   document.getElementById('progFill').style.width = '100%';
   document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;
   document.getElementById('progPct').textContent = '100%';

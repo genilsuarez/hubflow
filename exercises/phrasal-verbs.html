@@ -504,7 +504,7 @@ function finishQuiz() {
     correct: score, total, startMode, setMode: v => mode = v,
     elapsedSeconds: elapsed,
   });
-  recordScore(`phrasal-${currentCat}-quiz`, pct);
+  const _phMode = mode === 'timed' ? 'timed' : 'quiz'; recordScore(`phrasal-${currentCat}-${_phMode}`, pct);
 }
 
 // ═══ WRITE ═══

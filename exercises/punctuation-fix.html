@@ -368,7 +368,7 @@ function finishAll() {
     correct: Math.round(score), total: totalErrors, startMode,
     elapsedSeconds: elapsed,
   });
-  recordScore(`punct-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`punct-${currentCat}${_timedSuffix}`, pct);
   // Update progress to 100
   document.getElementById('progFill').style.width = '100%';
   document.getElementById('progTxt').textContent = `${deck.length} / ${deck.length}`;

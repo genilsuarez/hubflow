@@ -101,7 +101,7 @@ function renderItem() { if (idx >= total) { stopTimer(); finishPractice(); retur
 function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); input.value = `${val} → ${item.correct}`; } document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); const nextBtn = document.getElementById('quizNextBtn'); if (nextBtn) { nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →'; setQuizAnswered(true); nextBtn.onclick = () => renderItem(); nextBtn.focus({ preventScroll: true }); } else { setTimeout(renderItem, 1600); } }
 document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
 document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-function finishPractice() { const pct = finishExercise({ correct: score, total, startMode }); recordScore(`sbe-${currentCat}`, pct); }
+function finishPractice() { const pct = finishExercise({ correct: score, total, startMode }); const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`sbe-${currentCat}${_timedSuffix}`, pct); }
 startMode();
 </script>
 

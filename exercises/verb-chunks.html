@@ -377,7 +377,7 @@ function finishPractice() {
     correct: score, total, startMode, setMode: v => mode = v,
     elapsedSeconds: elapsed,
   });
-  recordScore(`vchunks-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`vchunks-${currentCat}${_timedSuffix}`, pct);
 }
 
 // ═══ STUDY ═══

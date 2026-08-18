@@ -235,7 +235,7 @@ function finishPractice() {
     correct: score, total, startMode, setMode: v => mode = v,
     elapsedSeconds: elapsed,
   });
-  recordScore(`cverb-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`cverb-${currentCat}${_timedSuffix}`, pct);
 }
 
 // ═══ STUDY ═══

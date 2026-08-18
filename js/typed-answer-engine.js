@@ -181,7 +181,8 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     timerState.stop();
     const pct = total > 0 ? Math.round((score / total) * 100) : 0;
     finishExercise({ correct: score, total, startMode });
-    recordScore(`${scoreKeyPrefix}-${currentCat}`, pct);
+    const modeSuffix = mode === 'timed' ? '-timed' : '';
+    recordScore(`${scoreKeyPrefix}-${currentCat}${modeSuffix}`, pct);
     renderLessonProgress(contentId);
   }
 

@@ -250,7 +250,7 @@ function finish() {
   stopTimer();
   const pct = blanksTotal > 0 ? Math.round((blanksCorrect / blanksTotal) * 100) : 0;
   finishExercise({ correct: blanksCorrect, total: blanksTotal, startMode });
-  recordScore(`paracloze-${currentCat}`, pct);
+  const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`paracloze-${currentCat}${_timedSuffix}`, pct);
   document.getElementById('progFill').style.width = '100%';
   document.getElementById('progTxt').textContent = `${total} / ${total}`;
   document.getElementById('progPct').textContent = '100%';
