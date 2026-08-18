@@ -73,7 +73,7 @@ export const CATEGORIES = {
     ]
   },
   perfectContrast: {
-    label: 'Perfect Simple vs Continuous',
+    label: 'Simple vs –ing',
     icon: '🟤',
     options: ['have done', 'have been doing'],
     items: [
@@ -90,7 +90,7 @@ export const CATEGORIES = {
     ]
   },
   haveHasHad: {
-    label: 'Have / Has / Had',
+    label: 'have · has · had',
     icon: '🔺',
     options: ['have', 'has', 'had'],
     items: [

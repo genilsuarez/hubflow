@@ -1502,7 +1502,7 @@ export function renderModuleCompletionMarks(contentId) {
   const studyMatrix = buildModuleMatrix(contentId, { includeStudy: true });
 
   document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]').forEach((btn) => {
-    const mode = btn.dataset.mode;
+    const mode = btn.dataset.mode === 'practice' ? 'quiz' : btn.dataset.mode;
     if (mode === 'study') {
       if (!studyMatrix || !studyMatrix.studyPassPct) return;
       const done = studyMatrix.categories.every(({ key }) => studyMatrix.cellFor(key, 'study').passed);

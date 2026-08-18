@@ -4,7 +4,7 @@
 // examen con la respuesta detrás y la regla no se enunciaba en ninguna parte.
 export const CATEGORIES = {
   regularPlurals: {
-    label: 'Regular Plurals',
+    label: 'Plural Rules',
     icon: '📚',
     options: ['book', 'books', "book's"],
     studyCards: [
@@ -54,7 +54,7 @@ export const CATEGORIES = {
     ]
   },
   possessiveApostropheS: {
-    label: "Possessive 's",
+    label: "Ownership: 's",
     icon: "✍️",
     options: ["'s", "s'", "s"],
     studyCards: [
@@ -82,7 +82,7 @@ export const CATEGORIES = {
     ]
   },
   possessiveSVsIsContraction: {
-    label: "'s = is, has or possession?",
+    label: "Decoding 's",
     icon: '🤔',
     options: ["'s = is", "'s = has", "'s = possession"],
     studyCards: [
