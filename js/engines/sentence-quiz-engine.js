@@ -11,7 +11,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus, getStars } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
-import { finishExercise, squeezeToggle, advanceStudyCard, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown } from '../exercise-flow.js';
+import { finishExercise, squeezeToggle, advanceStudyCard, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, handleOverlayKeydown } from '../exercise-flow.js';
 import { RESULT_TITLES } from '../result-copy.js';
 import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from '../speech.js';
 import { createStudySpeakButton, insertInBottomNav } from '../ex-bottom-nav.js';
@@ -386,7 +386,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
         ${nextHtml}
         <div class="result-btns">
           <button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Reintentar</button>
-          <button class="lp-btn lp-btn--purple" id="resultPrimary">${primaryLabel}</button>
+          <button class="lp-btn lp-btn--purple" id="resultContinue">${primaryLabel}</button>
         </div>
       </div>
     `;
@@ -399,7 +399,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
       overlay.classList.remove('show');
       startMode();
     });
-    overlay.querySelector('#resultPrimary')?.addEventListener('click', () => {
+    overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
       overlay.classList.remove('show');
       if (!suggestion) {
         mode = 'study';
@@ -522,6 +522,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
   // Keyboard: Enter/Space = flip or advance, Arrows = navigate
   document.addEventListener('keydown', e => {
+    if (handleOverlayKeydown(e)) return;
     if (mode === 'quiz' || mode === 'timed') { handleQuizNextKeydown(e); return; }
     if (mode !== 'study') return;
 

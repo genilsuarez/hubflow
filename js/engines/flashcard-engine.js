@@ -1227,7 +1227,7 @@ export class FlashcardEngine {
         ${nextHtml}
         <div class="result-btns">
           <button class="lp-btn lp-btn--ghost" id="resultRestart">🔄 Reintentar</button>
-          <button class="lp-btn lp-btn--purple" id="resultPrimary">${primaryLabel}</button>
+          <button class="lp-btn lp-btn--purple" id="resultContinue">${primaryLabel}</button>
         </div>
       </div>
     `;
@@ -1240,7 +1240,7 @@ export class FlashcardEngine {
       overlay.classList.remove('show');
       this.setMode(this.currentMode);
     });
-    overlay.querySelector('#resultPrimary')?.addEventListener('click', () => {
+    overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
       overlay.classList.remove('show');
       if (!suggestion) {
         this.setMode('study');
