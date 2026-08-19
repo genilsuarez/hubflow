@@ -1405,8 +1405,14 @@ function openProgressDetail(contentId) {
   const tierClass = mastered ? 'pg-modal__summary-pill--mastery' : completed ? 'pg-modal__summary-pill--done' : '';
   const tierIcon = mastered ? '👑' : completed ? '✓' : '';
   const clampedPct = Math.min(pct, 100);
-  const doneWidth = aprobadoPct != null ? Math.min(clampedPct, aprobadoPct) : clampedPct;
-  const masteryWidth = aprobadoPct != null ? Math.max(0, clampedPct - aprobadoPct) : 0;
+  // El dorado (Maestría) solo tiene sentido una vez que Aprobado ya se
+  // cumplió de verdad (`completed`, exige Study+Quiz en TODAS las
+  // categorías) — no basta con que el % agregado supere aprobadoPct, porque
+  // celdas de Timed en unas pocas categorías pueden empujar el % por encima
+  // del umbral mientras otras categorías siguen sin Quiz, mostrando avance
+  // de Maestría antes de tiempo.
+  const doneWidth = aprobadoPct != null ? (completed ? aprobadoPct : Math.min(clampedPct, aprobadoPct)) : clampedPct;
+  const masteryWidth = aprobadoPct != null && completed ? Math.max(0, clampedPct - aprobadoPct) : 0;
 
   const modal = document.createElement('div');
   modal.id = 'progressDetailModal';
