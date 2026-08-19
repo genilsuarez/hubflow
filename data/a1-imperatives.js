@@ -84,16 +84,16 @@ export const CATEGORIES = {
       { front: 'Who it includes', back: 'Speaker + listener(s)', detail: "\"Let's go\" means you and I go together — different from \"Go\" (only you)." },
     ],
     items: [
-      { sentence: "___ to the park.", correct: "Let's go", explain: "'Let's' + base verb makes a suggestion for 'you and me'." },
-      { sentence: "___ a movie tonight.", correct: "Let's watch", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's watch", "Let's to watch", "Lets watching"] },
-      { sentence: "___ dinner together.", correct: "Let's have", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's have", "Let's to have", "Lets have"] },
-      { sentence: "___ a break now.", correct: "Let's take", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's take", "Let's to take", "Lets taking"] },
-      { sentence: "___ home now.", correct: "Let's walk", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's walk", "Let's to walk", "Lets walk"] },
-      { sentence: "___ this exercise together.", correct: "Let's do", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's do", "Let's does", "Lets do"] },
-      { sentence: "___ some music.", correct: "Let's play", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's play", "Let's to play", "Lets play"] },
-      { sentence: "___ the bus today.", correct: "Let's take", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's take", "Let's to take", "Lets take"] },
-      { sentence: "___ our teacher a question.", correct: "Let's ask", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's ask", "Let's to ask", "Lets ask"] },
-      { sentence: "___ ready for the party.", correct: "Let's get", explain: "'Let's' + base verb makes a suggestion.", options: ["Let's get", "Let's to get", "Lets get"] },
+      { sentence: 'You want to suggest going to the cinema together. You say: "___"', correct: "Let's go to the cinema.", explain: "'Let's' includes the speaker — it's a shared suggestion, not a command.", options: ["Let's go to the cinema.", "Go to the cinema.", "Let's to go to the cinema."] },
+      { sentence: 'You want to suggest NOT going out tonight. You say: "___"', correct: "Let's not go out tonight.", explain: "The negative form is 'Let's not' + base verb — never 'Don't let's' in standard English.", options: ["Let's not go out tonight.", "Let's don't go out tonight.", "Not let's go out."] },
+      { sentence: '"Let\'s take a break." — Who does this include?', correct: 'The speaker and the listener(s)', explain: "'Let's' = Let us. It always includes the speaker. 'Take a break!' (no Let's) would only mean the listener.", options: ['The speaker and the listener(s)', 'Only the listener', 'Only the speaker'] },
+      { sentence: '"___ open the window — it\'s hot in here." You want to include yourself in the action.', correct: "Let's", explain: "'Let's' includes you and the other person. 'Please open' is a request to someone else alone.", options: ["Let's", "Please", "Don't"] },
+      { sentence: '"She ___ her daughter stay up late on weekends." (She gives permission.)', correct: 'lets', explain: "'Lets' (no apostrophe, 3rd person -s) = allows. Completely different from 'Let's' (the suggestion).", options: ['lets', "let's", 'let'] },
+      { sentence: 'Your friend says "Let\'s go for a walk." You agree. You reply: "___"', correct: "OK, let's!", explain: "'OK, let's!' is the natural short agreement. The verb is omitted after 'let's' in the response.", options: ["OK, let's!", "OK, let's to!", "OK, lets!"] },
+      { sentence: 'You want to suggest having dinner together, more formally. You say: "___"', correct: "Shall we have dinner together?", explain: "'Shall we...?' is a more formal equivalent of 'Let's...?' — both make inclusive suggestions.", options: ["Shall we have dinner together?", "Let's to have dinner together.", "We shall have dinner?"] },
+      { sentence: '"___ forget about the past and focus on the future." (Suggestion not to do something.)', correct: "Let's", explain: "'Let's forget...' is a suggestion. Followed immediately by a base verb — here 'forget'.", options: ["Let's", "Don't let's", "Let's to"] },
+      { sentence: '"The teacher ___ the students leave early." (The teacher gives permission.)', correct: 'lets', explain: "'Lets' (no apostrophe) = allows/permits. This is the verb 'let' + -s for 3rd person. Not a suggestion.", options: ['lets', "let's", 'let us'] },
+      { sentence: 'You want to suggest taking a taxi instead of walking. "___"', correct: "Let's take a taxi.", explain: "'Let's' + base verb is the standard form for inclusive suggestions.", options: ["Let's take a taxi.", "Let's to take a taxi.", "Lets take a taxi."] },
     ]
   }
 };
