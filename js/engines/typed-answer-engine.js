@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   HubFlow — Typed Answer Practice Engine
+   HubFlow — Typed Answer Quiz Engine
    Shared study/timed logic for exercises where the user types a free-form
    answer that's checked against one or more accepted strings (paraphrasing,
    word-order, register-switch, sentence-combining). Extracted 2026-07-10 —
@@ -15,7 +15,7 @@ import { shuffle } from '../array-utils.js';
 import { recordScore, renderLessonProgress } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise } from '../exercise-flow.js';
-import { setupPracticeBottomNav, setPracticeBottomNav } from '../ex-bottom-nav.js';
+import { setupAnswerBottomNav, setAnswerBottomNav } from '../ex-bottom-nav.js';
 
 function normalize(s) {
   return (s || '').toLowerCase().trim().replace(/[.,!?;:]+$/, '').replace(/\s+/g, ' ');
@@ -61,11 +61,11 @@ export function renderWordPills(items, renderItem = w => `<span class="wo-pill">
   document.getElementById('woPills').innerHTML = shuffle([...items]).map(renderItem).join('');
 }
 
-export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
+export function initTypedAnswerQuiz({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   renderLessonProgress(contentId);
 
   let currentCat = Object.keys(categories)[0];
-  let mode = 'practice';
+  let mode = 'quiz';
   let deck = [], idx = 0, score = 0, total = 0;
   let answered = false;
   const timerState = makeTimerState();
@@ -131,7 +131,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     input.disabled = false;
     input.focus();
 
-    setPracticeBottomNav({ check: true, next: false, skip: false });
+    setAnswerBottomNav({ check: true, next: false, skip: false });
 
     updProgress();
   }
@@ -176,7 +176,7 @@ export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId 
     answersEl.innerHTML = item.correct.map(a => `<div class="answer-item">${a}</div>`).join('');
     answersEl.classList.add('show');
 
-    setPracticeBottomNav({ check: false, next: true, skip: false });
+    setAnswerBottomNav({ check: false, next: true, skip: false });
   }
 
   document.getElementById('checkBtn').addEventListener('click', checkAnswer);

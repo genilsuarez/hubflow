@@ -36,7 +36,7 @@
   <header class="header">
     <h1>🎙️ Dictation Sprint</h1>
     <div class="pill-bar pill-bar--scroll" role="tablist">
-      <button class="pill-btn active" data-mode="practice" role="tab">📝 Practice</button>
+      <button class="pill-btn active" data-mode="quiz" role="tab">📝 Quiz</button>
       <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
     </div>
   </header>
@@ -98,9 +98,9 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/dictation-sprint.js';
-import { initDictationPractice } from '../js/engines/dictation-engine.js';
+import { initDictationQuiz } from '../js/engines/dictation-engine.js';
 
-initDictationPractice({
+initDictationQuiz({
   categories: CATEGORIES,
   scoreKeyPrefix: 'dict',
   contentId: 'dictation-sprint',

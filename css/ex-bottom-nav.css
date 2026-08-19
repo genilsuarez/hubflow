@@ -156,34 +156,34 @@
   white-space: nowrap;
 }
 
-/* ─── Practice mode (typed answer) ─── */
-.ex-bottom-nav--practice {
+/* ─── Answer mode (typed answer) ─── */
+.ex-bottom-nav--answer {
   justify-content: center;
   gap: 12px;
 }
 
-.ex-bottom-nav--practice .lesson-progress__detail,
-.ex-bottom-nav--practice .ex-bottom-nav__progress,
-.ex-bottom-nav--practice .typed-action-btn--check,
-.ex-bottom-nav--practice .typed-action-btn--next {
+.ex-bottom-nav--answer .lesson-progress__detail,
+.ex-bottom-nav--answer .ex-bottom-nav__progress,
+.ex-bottom-nav--answer .typed-action-btn--check,
+.ex-bottom-nav--answer .typed-action-btn--next {
   margin: 0;
 }
 
-.ex-bottom-nav--practice .typed-hint-btn,
-.ex-bottom-nav--practice .ex-bottom-nav__hint {
+.ex-bottom-nav--answer .typed-hint-btn,
+.ex-bottom-nav--answer .ex-bottom-nav__hint {
   font-size: 1.05rem;
 }
 
-.ex-bottom-nav--practice .typed-hint-btn.active,
-.ex-bottom-nav--practice .ex-bottom-nav__hint.active {
+.ex-bottom-nav--answer .typed-hint-btn.active,
+.ex-bottom-nav--answer .ex-bottom-nav__hint.active {
   border-color: var(--lp-accent);
   background: color-mix(in srgb, var(--lp-accent) 12%, transparent);
   color: var(--lp-accent-dark);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--lp-accent) 18%, transparent);
 }
 
-.ex-bottom-nav--practice .typed-action-btn--skip,
-.ex-bottom-nav--practice .ex-bottom-nav__skip {
+.ex-bottom-nav--answer .typed-action-btn--skip,
+.ex-bottom-nav--answer .ex-bottom-nav__skip {
   font-size: 1rem;
 }
 
@@ -200,7 +200,7 @@
 
 /* ─── Study mode layout ─── */
 @media (max-width: 767px) {
-  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--practice) {
+  body.shell-ready:has([data-area="study"].show) .ex-bottom-nav:not(.ex-bottom-nav--battle):not(.ex-bottom-nav--answer) {
     flex-wrap: nowrap;
     justify-content: center;
   }
@@ -210,7 +210,7 @@
  *
  * Canonical order (see ex-bottom-nav.js BOTTOM_NAV.ORDER):
  *   study:    📊 · 🔊 · 🔀 · ← · →
- *   practice: 📊 · ✓ · →
+ *   answer: 📊 · ✓ · →
  *   battle:   📊 · battle actions
  *
  * Desktop adds secondary icons before nav (shuffle, speak, hint, skip).
@@ -220,7 +220,7 @@
     --ex-bottom-nav-gap: 8px;
     --ex-bottom-nav-padding-y: 13px;
     --ex-bottom-nav-padding-x: 12px;
-    /* Default: practice/minimal (3 visible controls) */
+    /* Default: answer/minimal (3 visible controls) */
     --ex-bottom-nav-btn-size: clamp(
       44px,
       calc((100vw - 2 * var(--ex-bottom-nav-padding-x) - 2 * var(--ex-bottom-nav-gap)) / 3),
@@ -238,8 +238,8 @@
     --ex-bottom-nav-btn-ghost-font-size: 1.04rem;
     --ex-bottom-nav-detail-font-size: 1.04rem;
     --ex-bottom-nav-battle-font-size: 1.04rem;
-    --ex-bottom-nav-practice-hint-font-size: 1.09rem;
-    --ex-bottom-nav-practice-skip-font-size: 1.04rem;
+    --ex-bottom-nav-answer-hint-font-size: 1.09rem;
+    --ex-bottom-nav-answer-skip-font-size: 1.04rem;
   }
 
   .battle-actions:not(.ex-bottom-nav .battle-actions) {
@@ -357,7 +357,7 @@
     gap: var(--ex-bottom-nav-gap);
   }
 
-  .ex-bottom-nav--practice,
+  .ex-bottom-nav--answer,
   .ex-bottom-nav--minimal,
   .ex-bottom-nav--quiz,
   .ex-bottom-nav--match {
@@ -365,16 +365,16 @@
     gap: 12px;
   }
 
-  .ex-bottom-nav--practice .typed-hint-btn,
-  .ex-bottom-nav--practice .typed-action-btn--skip,
-  .ex-bottom-nav--practice .ex-bottom-nav__hint,
-  .ex-bottom-nav--practice .ex-bottom-nav__skip {
-    font-size: var(--ex-bottom-nav-practice-hint-font-size);
+  .ex-bottom-nav--answer .typed-hint-btn,
+  .ex-bottom-nav--answer .typed-action-btn--skip,
+  .ex-bottom-nav--answer .ex-bottom-nav__hint,
+  .ex-bottom-nav--answer .ex-bottom-nav__skip {
+    font-size: var(--ex-bottom-nav-answer-hint-font-size);
   }
 
-  .ex-bottom-nav--practice .typed-action-btn--check,
-  .ex-bottom-nav--practice .typed-action-btn--next,
-  .ex-bottom-nav--practice .ex-bottom-nav__primary-btn {
+  .ex-bottom-nav--answer .typed-action-btn--check,
+  .ex-bottom-nav--answer .typed-action-btn--next,
+  .ex-bottom-nav--answer .ex-bottom-nav__primary-btn {
     font-size: var(--ex-bottom-nav-btn-font-size);
   }
 

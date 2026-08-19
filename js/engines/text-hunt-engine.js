@@ -16,7 +16,7 @@ import { shuffle } from '../array-utils.js';
 import { recordScore } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise } from '../exercise-flow.js';
-import { setPracticeBottomNav } from '../ex-bottom-nav.js';
+import { setAnswerBottomNav } from '../ex-bottom-nav.js';
 
 /**
  * @param {object} cfg
@@ -80,7 +80,7 @@ export function initTextHunt({ categories, scoreKeyPrefix, timedDurationSeconds 
     checked = false;
 
     document.getElementById('huntCounter').textContent = `Text ${idx + 1} / ${deck.length}`;
-    setPracticeBottomNav({ check: true, next: false });
+    setAnswerBottomNav({ check: true, next: false });
     document.getElementById('huntExplanations').classList.remove('show');
     document.getElementById('correctionPanel').classList.remove('show');
 
@@ -203,7 +203,7 @@ export function initTextHunt({ categories, scoreKeyPrefix, timedDurationSeconds 
     }).join('');
     expContainer.classList.add('show');
 
-    setPracticeBottomNav({ check: false, next: true });
+    setAnswerBottomNav({ check: false, next: true });
   }
 
   // ─── Next ───

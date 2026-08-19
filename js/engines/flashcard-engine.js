@@ -864,7 +864,7 @@ export class FlashcardEngine {
     const pct = Math.round((this.quizScore / this.quizTotal) * 100);
     const activity = typeof this.config.getActivityId === 'function'
       ? this.config.getActivityId(this.currentCat)
-      : this.config.activityId || 'practice';
+      : this.config.activityId || 'quiz';
     const modeSuffix = this.currentMode === 'timed' ? 'timed' : 'quiz';
     recordScore(`${this.config.storagePrefix}-${this.currentCat}-${modeSuffix}`, pct, {
       contentId: this.config.contentId,

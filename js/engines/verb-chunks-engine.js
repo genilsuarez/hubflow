@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Verb Chunks Engine
-   Study / Practice / Timed / Write / Sort de patrones verbales.
+   Study / Quiz / Timed / Write / Sort de patrones verbales.
 
    Extraído 2026-08-17 del <script type="module"> inline de
    exercises/verb-chunks.html. Las claves de progreso emitidas no
@@ -27,7 +27,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
   let timedSeconds = 0;
 
   // Returns the next pending activity.
-  // Keys: practice=${prefix}-${cat}, timed=${prefix}-${cat}-timed, write=${prefix}-${cat}-write.
+  // Keys: quiz=${prefix}-${cat}, timed=${prefix}-${cat}-timed, write=${prefix}-${cat}-write.
   function findStudyFollowUp() {
     const FOLLOW_MODES = [
       { key: cat => `${scoreKeyPrefix}-${cat}-timed`, label: '⏱️ Timed', mode: 'timed' },
@@ -58,9 +58,9 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
   // ─── Mode switching ───
   wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
-  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipQuiz());
   function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
-  function skipPractice() { if (idx >= total) return; idx++; updProgress(idx, total); renderPractice(); }
+  function skipQuiz() { if (idx >= total) return; idx++; updProgress(idx, total); renderQuiz(); }
 
   function startMode() {
     stopTimer();
@@ -69,8 +69,8 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
     const sortBtn = document.getElementById('sortCheck');
     if (sortBtn && mode !== 'sort') sortBtn.style.display = 'none';
     setQuizAnswered(false);
-    if (mode === 'practice') initPractice(false);
-    else if (mode === 'timed') initPractice(true);
+    if (mode === 'quiz') initQuiz(false);
+    else if (mode === 'timed') initQuiz(true);
     else if (mode === 'study') initStudy();
     else if (mode === 'write') initWrite();
     else if (mode === 'sort') initSort();
@@ -106,12 +106,12 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
     return shuffle([...new Set([correct, ...picked])]).slice(0, 5);
   }
 
-  // ═══ PRACTICE / TIMED ═══
-  function initPractice(timed) {
+  // ═══ QUIZ / TIMED ═══
+  function initQuiz(timed) {
     deck = shuffle(getData());
     idx = 0; score = 0;
     total = Math.min(timed ? 12 : deck.length, deck.length);
-    document.querySelector('[data-area="practice"]').classList.add('show');
+    document.querySelector('[data-area="quiz"]').classList.add('show');
 
     if (timed) {
       document.getElementById('timerBar').classList.add('show');
@@ -119,15 +119,15 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
 
       timer = new Timer(timedSeconds,
         r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
-        () => finishPractice()
+        () => finishQuiz()
       );
       timer.start();
     }
-    renderPractice();
+    renderQuiz();
   }
 
-  function renderPractice() {
-    if (idx >= total) { finishPractice(); return; }
+  function renderQuiz() {
+    if (idx >= total) { finishQuiz(); return; }
     const item = deck[idx];
     const cat = categories[currentCat];
 
@@ -162,17 +162,17 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
         if (nextBtn) {
           nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
           setQuizAnswered(true);
-          nextBtn.onclick = () => renderPractice();
+          nextBtn.onclick = () => renderQuiz();
           nextBtn.focus({ preventScroll: true });
         } else {
-          setTimeout(renderPractice, 1400);
+          setTimeout(renderQuiz, 1400);
         }
       });
     });
     updProgress(idx, total);
   }
 
-  function finishPractice() {
+  function finishQuiz() {
     const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
     stopTimer();
     const pct = finishExercise({
@@ -232,7 +232,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
     deck = shuffle(getData());
     idx = 0; score = 0; total = deck.length;
     document.querySelector('[data-area="write"]').classList.add('show');
-    window.__setupPracticeBottomNav?.();
+    window.__setupAnswerBottomNav?.();
     renderWrite();
   }
 
@@ -486,7 +486,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
 
   // ─── Keyboard shortcuts ───
   document.addEventListener('keydown', e => {
-    if (mode === 'practice' || mode === 'timed') { handleQuizNextKeydown(e); return; }
+    if (mode === 'quiz' || mode === 'timed') { handleQuizNextKeydown(e); return; }
     if (mode !== 'study') return;
 
     handleStudyKeydown(e, { advanceCard });

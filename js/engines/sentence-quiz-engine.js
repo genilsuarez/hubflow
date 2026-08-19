@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Sentence Quiz Engine
-   Shared study/practice/timed logic for the multiple-choice
+   Shared study/quiz/timed logic for the multiple-choice
    sentence-completion exercises (modals, conditionals, clauses,
    comparisons, gerunds-infinitives, made-of, parts-of-speech,
    plural-endings, preferences, reported-speech, used-to,
@@ -86,8 +86,8 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   // para pasar sin puntuar — mismo patrón que el quiz de FlashcardEngine
   // (js/flashcard-engine.js handleQuizAnswer/skipQuiz). Los botones solo
   // existen en el markup de los ejercicios que los declaran; si no están,
-  // renderPractice() sigue avanzando solo tras una pausa (comportamiento previo).
-  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+  // renderQuiz() sigue avanzando solo tras una pausa (comportamiento previo).
+  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipQuiz());
 
   function setQuizAnswered(answered) {
     const nextBtn = document.getElementById('quizNextBtn');
@@ -96,11 +96,11 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     if (skipBtn) skipBtn.hidden = answered;
   }
 
-  function skipPractice() {
+  function skipQuiz() {
     if (idx >= total) return;
     idx++;
     updProgress(idx, total);
-    renderPractice();
+    renderQuiz();
   }
 
   function startMode() {
@@ -108,11 +108,11 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
     document.getElementById('timerBar').classList.remove('show');
     // Reset unconditionally on every mode switch (not just at the top of
-    // renderPractice) so #quizNextBtn never bleeds into Study/other areas —
+    // renderQuiz) so #quizNextBtn never bleeds into Study/other areas —
     // mirrors flashcard-engine.js hideAllAreas().
     setQuizAnswered(false);
-    if (mode === 'practice') initPractice(false);
-    else if (mode === 'timed') initPractice(true);
+    if (mode === 'quiz') initQuiz(false);
+    else if (mode === 'timed') initQuiz(true);
     else if (mode === 'study') initStudy();
     syncSpeakNavUI();
     window.__syncBottomNavMode?.();
@@ -255,13 +255,13 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     document.getElementById('progPct').textContent = pct + '%';
   }
 
-  function initPractice(timed) {
+  function initQuiz(timed) {
     // Clean up any pending keyboard listener from the previous question
     document.getElementById('wordOptions')?._cleanKeyOpt?.();
     deck = shuffle(getData());
     idx = 0; score = 0;
     total = Math.min(timed ? timedQuestionCount : deck.length, deck.length);
-    document.querySelector('[data-area="practice"]').classList.add('show');
+    document.querySelector('[data-area="quiz"]').classList.add('show');
 
     if (timed) {
       document.getElementById('timerBar').classList.add('show');
@@ -269,15 +269,15 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
       timerState.timer = new Timer(timerState.timedSeconds,
         r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
-        () => finishPractice()
+        () => finishQuiz()
       );
       timerState.timer.start();
     }
-    renderPractice();
+    renderQuiz();
   }
 
-  function renderPractice() {
-    if (idx >= total) { finishPractice(); return; }
+  function renderQuiz() {
+    if (idx >= total) { finishQuiz(); return; }
     const item = deck[idx];
     const cat = categories[currentCat];
 
@@ -315,10 +315,10 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
       if (nextBtn) {
         nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
         setQuizAnswered(true);
-        nextBtn.onclick = () => renderPractice();
+        nextBtn.onclick = () => renderQuiz();
         nextBtn.focus({ preventScroll: true });
       } else {
-        setTimeout(renderPractice, 1400);
+        setTimeout(renderQuiz, 1400);
       }
     }
 
@@ -345,7 +345,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     maybeAutoSpeak();
   }
 
-  function finishPractice() {
+  function finishQuiz() {
     const elapsed = timerState.timedSeconds ? timerState.timedSeconds - (timerState.timer && timerState.timer.remaining != null ? timerState.timer.remaining : 0) : null;
     timerState.stop();
 
@@ -479,14 +479,14 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   }
 
   /**
-   * What to suggest once the Study deck is finished: Practice for the current
+   * What to suggest once the Study deck is finished: Quiz for the current
    * category if not yet passed, else the first other category still pending —
-   * mirrors FlashcardEngine.findStudyFollowUp() (practice/timed share one score
+   * mirrors FlashcardEngine.findStudyFollowUp() (quiz/timed share one score
    * key here, so there's a single next mode instead of a ranked list).
    */
   function findStudyFollowUp() {
     if (!getScoreStatus(scoreKeyFor(currentCat, 'quiz')).passed) {
-      return { cat: currentCat, mode: 'practice', isNewCategory: false };
+      return { cat: currentCat, mode: 'quiz', isNewCategory: false };
     }
     const catKeys = Object.keys(categories);
     const startIdx = catKeys.indexOf(currentCat);
@@ -522,7 +522,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
   // Keyboard: Enter/Space = flip or advance, Arrows = navigate
   document.addEventListener('keydown', e => {
-    if (mode === 'practice' || mode === 'timed') { handleQuizNextKeydown(e); return; }
+    if (mode === 'quiz' || mode === 'timed') { handleQuizNextKeydown(e); return; }
     if (mode !== 'study') return;
 
     handleStudyKeydown(e, { advanceCard });

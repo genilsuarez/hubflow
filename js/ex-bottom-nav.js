@@ -4,7 +4,7 @@
    desktop/mobile visibility, button roles, and bar layout.
    ═══════════════════════════════════════════════════════ */
 
-/** @typedef {'study' | 'practice' | 'battle' | 'minimal' | 'hidden'} BottomNavProfile */
+/** @typedef {'study' | 'answer' | 'battle' | 'minimal' | 'hidden'} BottomNavProfile */
 
 /**
  * Edit visibility and order here. CSS reads `.ex-bottom-nav__desktop-only`
@@ -26,17 +26,17 @@ export const BOTTOM_NAV = {
    * Study-mode nav hidden entirely in battle.
    * `studySpeakBtn` NO está aquí: su visibilidad la decide el propio
    * sentence-quiz-engine (solo en ejercicios con `speech`), y debe seguir
-   * disponible en Practice/Timed — esos modos también pronuncian el item, así
+   * disponible en Quiz/Timed — esos modos también pronuncian el item, así
    * que ocultar el toggle dejaba al usuario sin forma de silenciarlo.
    */
   STUDY_NAV_IDS: ['shuffleBtn', 'prevBtn', 'nextBtn', 'speakBtn', 'listenBtn'],
 
   /**
    * Simétrico de STUDY_NAV_IDS: botones de práctica que se ocultan fuera del
-   * perfil `practice`. Necesario en páginas multi-modo (phrasal-verbs,
+   * perfil `answer`. Necesario en páginas multi-modo (phrasal-verbs,
    * verb-chunks, irregular-verbs), donde Write comparte barra con Study.
    */
-  PRACTICE_NAV_IDS: ['checkBtn', 'skipBtn', 'hintBtn'],
+  ANSWER_NAV_IDS: ['checkBtn', 'skipBtn', 'hintBtn'],
 
   /** Quiz/Timed: barra reducida (progreso + skip). Ver perfil `quiz`. */
   QUIZ_NAV_IDS: ['quizSkipBtn'],
@@ -70,9 +70,9 @@ export const BOTTOM_NAV = {
   /** Canonical left → right order per profile (FluentFlow game-controls parity). */
   ORDER: {
     study: ['lessonProgressBtn', 'speakBtn', 'listenBtn', 'studySpeakBtn', 'shuffleBtn', 'prevBtn', 'nextBtn'],
-    practice: ['lessonProgressBtn', 'hintBtn', 'checkBtn', 'nextBtn', 'skipBtn'],
+    answer: ['lessonProgressBtn', 'hintBtn', 'checkBtn', 'nextBtn', 'skipBtn'],
     battle: ['lessonProgressBtn'],
-    /** Tap-to-answer modes (sentence-quiz practice, listening, etc.) — progress only */
+    /** Tap-to-answer modes (sentence-quiz quiz, listening, etc.) — progress only */
     minimal: ['lessonProgressBtn'],
     /** Quiz/Timed — barra reducida: progreso + skip (sin nav de tarjetas/sonido). */
     quiz: ['lessonProgressBtn', 'studySpeakBtn', 'quizSkipBtn', 'quizNextBtn'],
@@ -141,7 +141,7 @@ export function getVisibleExerciseArea() {
  * En páginas de un solo modo (spelling, dictation) #checkBtn siempre está
  * activo. En las multi-modo (phrasal-verbs, verb-chunks, irregular-verbs) vive
  * dentro de `[data-area="write"]`: si se mirara solo su existencia, el perfil
- * sería `practice` también en Study y se ocultaría la navegación de tarjetas.
+ * sería `answer` también en Study y se ocultaría la navegación de tarjetas.
  */
 function isCheckBtnActive() {
   const checkBtn = document.getElementById('checkBtn');
@@ -169,18 +169,21 @@ export function resolveBottomNavProfile() {
   const area = getVisibleExerciseArea();
 
   if (mode === 'battle') return 'battle';
-  // 'quiz' es el área compartida por los modos Quiz y Timed (mismo markup,
-  // ver flashcard-engine.js initQuiz/initTimed) — ambos usan la barra reducida.
-  if (area === 'quiz' && BOTTOM_NAV.ORDER.quiz) return 'quiz';
   if (area === 'match' && BOTTOM_NAV.ORDER.match) return 'match';
 
-  if (isCheckBtnActive()) return 'practice';
+  // Antes del área: 12 páginas de respuesta escrita tienen su #checkBtn dentro
+  // del área Quiz, y necesitan la barra de escritura (comprobar/pista/saltar),
+  // no la reducida. Cuando ese área se llamaba `practice` el orden daba igual
+  // porque el atajo de abajo solo miraba `quiz`; al unificar ambos nombres en
+  // `quiz` (2026-08-19) este check tiene que ir primero o esas páginas se
+  // quedan sin botón Comprobar.
+  if (isCheckBtnActive()) return 'answer';
 
-  // Sentence-quiz engine (grammar/analysis/vocab/pronunciation) shares this
-  // area with FlashcardEngine's `quiz` area — same reduced bar (progreso +
-  // saltar/siguiente) when the page declares #quizSkipBtn/#quizNextBtn;
-  // pages that don't just show the progress button, same as before.
-  if (area === 'practice' || mode === 'practice' || mode === 'timed') return 'quiz';
+  // 'quiz' es el área compartida por los modos Quiz y Timed (mismo markup, ver
+  // flashcard-engine.js initQuiz/initTimed) y también por el sentence-quiz
+  // engine — todos usan la barra reducida (progreso + saltar/siguiente).
+  if (area === 'quiz' && BOTTOM_NAV.ORDER.quiz) return 'quiz';
+  if (mode === 'quiz' || mode === 'timed') return 'quiz';
 
   return 'study';
 }
@@ -287,7 +290,7 @@ export function syncBottomNavMode() {
     nav.classList.toggle('ex-bottom-nav--hidden', hideNav);
     nav.classList.remove('is-battle-hidden');
     nav.classList.toggle('ex-bottom-nav--battle', profile === 'battle');
-    nav.classList.toggle('ex-bottom-nav--practice', profile === 'practice');
+    nav.classList.toggle('ex-bottom-nav--answer', profile === 'answer');
     nav.classList.toggle('ex-bottom-nav--study', profile === 'study');
     nav.classList.toggle('ex-bottom-nav--minimal', profile === 'minimal');
     nav.classList.toggle('ex-bottom-nav--quiz', profile === 'quiz');
@@ -303,7 +306,7 @@ export function syncBottomNavMode() {
   });
 
   toggleGroup(BOTTOM_NAV.STUDY_NAV_IDS, profile !== 'study');
-  toggleGroup(BOTTOM_NAV.PRACTICE_NAV_IDS, profile !== 'practice');
+  toggleGroup(BOTTOM_NAV.ANSWER_NAV_IDS, profile !== 'answer');
   // quizSkipBtn y quizNextBtn son mutuamente excluyentes según si la pregunta
   // actual ya fue respondida — eso lo decide el motor del ejercicio con
   // setQuizAnswered(), no este perfil. Si se fuerza quizSkipBtn a visible solo
@@ -372,20 +375,20 @@ function removeHoistedControlWrapper(wrapper) {
 
 /** Auto-hoist check (+ optional next/hint/skip) into #exBottomNav. */
 export function setupContentBottomNav(attempt = 0) {
-  setupPracticeBottomNav(attempt);
+  setupAnswerBottomNav(attempt);
 }
 
 /**
  * Hoist #checkBtn (and optional #nextBtn, #hintBtn, #skipBtn) into #exBottomNav.
  * Spelling exercises only have checkBtn; typed-answer/dictation add next/hint/skip.
  */
-export function setupPracticeBottomNav(attempt = 0) {
+export function setupAnswerBottomNav(attempt = 0) {
   const checkBtn = document.getElementById('checkBtn');
   if (!checkBtn) return;
 
   const nav = ensureBottomNav({ force: true }) || getBottomNav();
   if (!nav) {
-    if (attempt < 40) setTimeout(() => setupPracticeBottomNav(attempt + 1), 50);
+    if (attempt < 40) setTimeout(() => setupAnswerBottomNav(attempt + 1), 50);
     return;
   }
 
@@ -456,14 +459,14 @@ export function setupPracticeBottomNav(attempt = 0) {
 
   removeHoistedControlWrapper(wrapper);
 
-  nav.classList.add('ex-bottom-nav--practice');
+  nav.classList.add('ex-bottom-nav--answer');
   applyRoleClasses();
-  reorderBottomNav('practice');
+  reorderBottomNav('answer');
   syncBottomNavMode();
 }
 
-export function setPracticeBottomNav({ check = true, next = false, skip = true } = {}) {
-  // No basta con `hidden`: en el perfil `practice`, toggleGroup() ya ha dejado
+export function setAnswerBottomNav({ check = true, next = false, skip = true } = {}) {
+  // No basta con `hidden`: en el perfil `answer`, toggleGroup() ya ha dejado
   // un `style.display = 'none'` inline sobre #nextBtn (está en STUDY_NAV_IDS),
   // y ese inline gana. Sin limpiarlo, typed-answer-engine se quedaba sin
   // ningún control visible tras responder — solo se podía avanzar con Enter.
@@ -537,7 +540,7 @@ if (typeof window !== 'undefined') {
   window.__relocateLessonProgressBtn = relocateProgressButton;
   window.__syncBottomNavMode = syncBottomNavMode;
   window.__syncBattleActionVisibility = syncBattleActionVisibility;
-  window.__setupPracticeBottomNav = setupPracticeBottomNav;
+  window.__setupAnswerBottomNav = setupAnswerBottomNav;
   window.__insertInBottomNav = insertInBottomNav;
   window.__finalizeBottomNavLayout = finalizeBottomNavLayout;
 }

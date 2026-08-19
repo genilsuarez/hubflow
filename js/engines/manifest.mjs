@@ -33,7 +33,7 @@ export const ENGINES = {
     suffixes: ['quiz', 'timed', 'study'],
   },
   'typed-answer-engine.js': {
-    init: 'initTypedAnswerPractice',
+    init: 'initTypedAnswerQuiz',
     prefixField: 'scoreKeyPrefix',
     suffixes: ['', 'timed'],
   },

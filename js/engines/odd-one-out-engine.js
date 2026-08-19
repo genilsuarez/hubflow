@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Odd One Out Engine
-   Practice / Timed: elegir la palabra que no pertenece al grupo.
+   Quiz / Timed: elegir la palabra que no pertenece al grupo.
 
    Extraído 2026-08-17 del <script type="module"> inline de
    exercises/odd-one-out.html. Las claves de progreso emitidas no

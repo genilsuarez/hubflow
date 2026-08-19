@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Listening Engine
-   Practice / Timed de comprensión auditiva con TTS.
+   Quiz / Timed de comprensión auditiva con TTS.
 
    Extraído 2026-08-17 del <script type="module"> inline de
    exercises/listening.html. Las claves de progreso emitidas no
@@ -22,7 +22,7 @@ export function initListening({ categories, scoreKeyPrefix }) {
   if (!isSpeechAvailable()) document.getElementById('noTts').classList.add('show');
 
   let currentCat = Object.keys(categories)[0];
-  let mode = 'practice';
+  let mode = 'quiz';
   let deck = [], idx = 0, score = 0, total = 0;
   let timer = null;
   let timedSeconds = 0;
@@ -38,16 +38,16 @@ export function initListening({ categories, scoreKeyPrefix }) {
 
   wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
-  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipQuiz());
   function setQuizAnswered(isAnswered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !isAnswered; if (skipBtn) skipBtn.hidden = isAnswered; }
-  function skipPractice() { if (answered || idx >= total) return; idx++; updProgress(idx, total); renderQuestion(); }
+  function skipQuiz() { if (answered || idx >= total) return; idx++; updProgress(idx, total); renderQuestion(); }
 
   function startMode() {
     stopTimer();
     document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
     document.getElementById('timerBar').classList.remove('show');
     setQuizAnswered(false);
-    initPractice(mode === 'timed');
+    initQuiz(mode === 'timed');
   }
 
   function stopTimer() { if (timer) { timer.stop(); timer = null; } timedSeconds = 0; }
@@ -66,11 +66,11 @@ export function initListening({ categories, scoreKeyPrefix }) {
 
   listenBtn.addEventListener('click', () => playCurrent());
 
-  function initPractice(timed) {
+  function initQuiz(timed) {
     deck = shuffle(getData());
     idx = 0; score = 0;
     total = Math.min(timed ? 8 : deck.length, deck.length);
-    document.querySelector('[data-area="practice"]').classList.add('show');
+    document.querySelector('[data-area="quiz"]').classList.add('show');
 
     if (timed) {
       document.getElementById('timerBar').classList.add('show');
@@ -78,7 +78,7 @@ export function initListening({ categories, scoreKeyPrefix }) {
 
       timer = new Timer(timedSeconds,
         r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
-        () => finishPractice()
+        () => finishQuiz()
       );
       timer.start();
     }
@@ -86,7 +86,7 @@ export function initListening({ categories, scoreKeyPrefix }) {
   }
 
   function renderQuestion() {
-    if (idx >= total) { finishPractice(); return; }
+    if (idx >= total) { finishQuiz(); return; }
     const item = deck[idx];
     answered = false;
 
@@ -131,7 +131,7 @@ export function initListening({ categories, scoreKeyPrefix }) {
     setTimeout(() => playCurrent(), 250);
   }
 
-  function finishPractice() {
+  function finishQuiz() {
     const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
     stopTimer();
     const pct = finishExercise({ correct: score, total, startMode, elapsedSeconds: elapsed });

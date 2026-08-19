@@ -40,7 +40,7 @@
   .listen-btn:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
   .listen-btn.playing { animation: pulse 1s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-  .practice-actions { display: flex; justify-content: center; gap: 8px; }
+  .quiz-actions { display: flex; justify-content: center; gap: 8px; }
 
   .sc-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); }
 
@@ -92,7 +92,7 @@
     <div class="cat-bar" id="catBar"></div>
 
     <div class="pill-bar">
-      <button class="pill-btn active" data-mode="practice">🎯 Quiz</button>
+      <button class="pill-btn active" data-mode="quiz">🎯 Quiz</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
@@ -109,11 +109,11 @@
       🔇 Tu navegador no soporta síntesis de voz (Web Speech API). Prueba en Chrome o Safari de escritorio.
     </div>
 
-    <!-- PRACTICE / TIMED -->
-    <div data-area="practice">
+    <!-- QUIZ / TIMED -->
+    <div data-area="quiz">
       <div class="sc-counter" id="scCounter"></div>
       <div class="word-options" id="wordOptions"></div>
-      <div class="practice-actions">
+      <div class="quiz-actions">
         <button class="listen-btn" id="playAudioBtn" aria-label="Play audio">🔊</button>
       </div>
       <div class="reveal-box" id="revealBox">Listen and choose the word you hear.</div>

@@ -34,7 +34,7 @@
   <header class="header">
     <h1>🔄 Key Word Transformation</h1>
     <div class="pill-bar pill-bar--scroll" role="tablist">
-      <button class="pill-btn active" data-mode="practice" role="tab">📝 Practice</button>
+      <button class="pill-btn active" data-mode="quiz" role="tab">📝 Quiz</button>
       <button class="pill-btn" data-mode="timed" role="tab">⏱️ Timed</button>
     </div>
   </header>
@@ -49,7 +49,7 @@
   <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">3:00</span></div>
 
   <div class="scroll-body">
-    <div data-area="practice" class="show">
+    <div data-area="quiz" class="show">
       <div class="kw-card">
         <p class="kw-instruction">Rewrite the sentence using the word in bold:</p>
         <div class="kw-source" id="kwSource"></div>
@@ -80,9 +80,9 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/paraphrasing.js';
-import { initTypedAnswerPractice } from '../js/engines/typed-answer-engine.js';
+import { initTypedAnswerQuiz } from '../js/engines/typed-answer-engine.js';
 
-initTypedAnswerPractice({
+initTypedAnswerQuiz({
   categories: CATEGORIES,
   scoreKeyPrefix: 'paraphrase',
   secondsPerQuestion: 30,

@@ -135,7 +135,7 @@ export function findNextPendingCategory({ categories, currentCat, isPending }) {
   return null;
 }
 
-/** Enter confirms the visible "Siguiente →" in Practice/Timed. Call it from the
+/** Enter confirms the visible "Siguiente →" in Quiz/Timed. Call it from the
  *  engine's own keydown listener while in a question mode. */
 export function handleQuizNextKeydown(e) {
   if (e.key !== 'Enter') return;

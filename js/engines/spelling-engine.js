@@ -6,7 +6,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, getStars, renderLessonProgress } from '../progress-store.js';
 import { updateProgress, Timer, formatTime } from '../exercise-ui.js';
-import { setupPracticeBottomNav } from '../ex-bottom-nav.js';
+import { setupAnswerBottomNav } from '../ex-bottom-nav.js';
 import { RESULT_TITLES } from '../result-copy.js';
 
 /** Max cards per session — random subset + shuffle on each level load / restart. */
@@ -48,7 +48,7 @@ export class SpellingEngine {
   /** Hoist check-all into centralized bottom nav once shell is ready. */
   mountBottomNavCheck() {
     const run = () => {
-      setupPracticeBottomNav();
+      setupAnswerBottomNav();
       window.__finalizeBottomNavLayout?.();
       window.__syncBottomNavMode?.();
     };

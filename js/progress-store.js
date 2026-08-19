@@ -14,7 +14,7 @@ import {
   readScoreKeyBests,
   HUBFLOW_LOCAL_READY_KEY,
 } from './sync-engine.js';
-import { enrichHubflowContentEntry, checkLevelAdvancement } from './lp-progress-summary.js';
+import { enrichHubflowContentEntry, checkLevelAdvancement, normalizeLegacyActivities } from './lp-progress-summary.js';
 
 const PROGRESS_STORAGE_KEY = 'learnflow:progress:hubflow:v1';
 const CATALOG_STORAGE_KEY = 'learnflow:catalog:hubflow:v1';
@@ -163,7 +163,7 @@ function invalidateProjectionCache() {
 /** Recalcula si un item guardado (local o nube) está realmente completo según
  * la regla vigente, en vez de confiar en su flag `completed` — que puede
  * arrastrar un `true` de cuando el módulo tenía menos scoreKeys requeridas.
- * Mira solo las activityId de `rule.requiredActivities` (siempre 'practice'/
+ * Mira solo las activityId de `rule.requiredActivities` (siempre 'quiz'/
  * 'study', ver catalog.js) — `item.activities` puede traer además entradas
  * "match"/"timed" (rastreadas para la matriz/Maestría vía resolveScoreActivity,
  * no exigidas para Aprobado) que no deben contar aquí. */
@@ -232,7 +232,11 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem, rule) {
   if (!scoreDerived) return projectionItem ? { ...projectionItem } : null;
   if (!projectionItem || !hasProgressSignal(projectionItem)) return scoreDerived;
 
-  const mergedActivities = { ...(projectionItem.activities || {}) };
+  // `projectionItem` viene de disco/nube y puede traer la actividad del modo
+  // Quiz con su nombre anterior ('practice'), que no casaría con el 'quiz'
+  // que produce la regla vigente — se quedarían como dos entradas sueltas y
+  // el módulo perdería el progreso ya guardado.
+  const mergedActivities = { ...normalizeLegacyActivities(projectionItem.activities || {}) };
   for (const [activityId, activity] of Object.entries(scoreDerived.activities || {})) {
     const existing = mergedActivities[activityId];
     if (!existing) {
@@ -274,7 +278,7 @@ function mergeHubflowProgressItem(scoreDerived, projectionItem, rule) {
   // `mergedActivities` puede traer además entradas "match"/"timed" —
   // resolveScoreActivity() ahora las registra en el ledger para que
   // sincronicen entre dispositivos (ver auditoría de House & Rooms), pero
-  // no son parte de `rule.requiredActivities` (siempre 'practice'/'study').
+  // no son parte de `rule.requiredActivities` (siempre 'quiz'/'study').
   // Solo esas cuentan para Aprobado — si se usara Object.values(mergedActivities)
   // completo, un módulo con Match/Timed sin terminar nunca mostraría el ✓
   // aunque Study+Quiz ya estén al 100%.
@@ -382,8 +386,8 @@ export function getContentProgress(contentId) {
   if (!merged) return merged;
   // La tarjeta y el modal "Progreso del módulo" ya usaban esta grilla
   // categoría×modo (getModuleMatrixProgress, incluye Match — que
-  // practice/study no cuentan) como fuente para el % que se ve. Pero
-  // merged.progressPct de arriba sale de otro cálculo (practice+study sin
+  // quiz/study no cuentan) como fuente para el % que se ve. Pero
+  // merged.progressPct de arriba sale de otro cálculo (quiz+study sin
   // Match) mezclado con el snapshot histórico ya subido a Supabase, que
   // puede haber quedado congelado de una versión vieja del catálogo — de ahí
   // que tarjeta y "% en la nube" pudieran mostrar números distintos con los
@@ -795,7 +799,7 @@ function resolveScoreActivity(key, context) {
   // jamás aparecía en otro, aunque "forzar sync" se corriera mil veces (ver
   // auditoría de House & Rooms divergiendo 31%/25% entre dos orígenes con
   // la misma cuenta). Se registran igual, con un activityId derivado de la
-  // propia clave — nunca 'practice'/'study' (los únicos nombres reales que
+  // propia clave — nunca 'quiz'/'study' (los únicos nombres reales que
   // usa PROGRESS_RULES) — para que jamás se mezclen con las actividades
   // exigidas al reconciliar el ledger genérico (applyHubflowActivityEvents
   // en lp-progress-summary.js, que agrupa por (contentId, activity) sin
@@ -805,8 +809,8 @@ function resolveScoreActivity(key, context) {
   // matriz y Maestría (que sí miran las 4 columnas) sincronicen entre
   // dispositivos.
   if (requestedContent && MODULES.some((module) => module.id === requestedContent)) {
-    const activityId = key.split('-').pop() || 'practice';
-    if (activityId === 'practice' || activityId === 'study') return null;
+    const activityId = key.split('-').pop() || 'quiz';
+    if (activityId === 'quiz' || activityId === 'study') return null;
     return {
       contentId: requestedContent,
       activity: { activityId, scoreKeys: [key], passScorePct: HUBFLOW_PASS_SCORE_PCT },
@@ -1064,8 +1068,8 @@ export function renderLessonProgress(contentId) {
    orden canónico MODE_ORDER + el orden de los scoreKeys. */
 
 const MODE_ORDER = ['quiz', 'match', 'timed', 'write', 'study', 'challenge', null];
-const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', null: 'Quiz' };
-const MODE_ICONS = { quiz: '⚡', match: '⇄', write: '✎', study: '◉', challenge: '◆', timed: '◷', null: '◉' };
+const MODE_SHORT = { quiz: 'Quiz', match: 'Match', write: 'Write', study: 'Study', challenge: 'Chall.', timed: 'Timed', sort: 'Sort', null: 'Quiz' };
+const MODE_ICONS = { quiz: '⚡', match: '⇄', write: '✎', study: '◉', challenge: '◆', timed: '◷', sort: '⇅', null: '◉' };
 
 /** Texto de un chip ignorando el badge de completado inyectado por esta capa. */
 function pillLabelText(btn) {
@@ -1076,18 +1080,22 @@ function pillLabelText(btn) {
     .trim();
 }
 
-/** Orden visual de los mode tabs (`data-mode`) tal como se pintan en la página.
- * `practice` se normaliza a `quiz` porque sentence-quiz-engine usa ese valor
- * en el DOM pero graba las scoreKeys con el sufijo `-quiz`. */
+/** Orden visual de los mode tabs (`data-mode`) tal como se pintan en la página. */
 function readVisualModeOrder() {
   return [...document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]')]
-    .map((btn) => btn.dataset.mode === 'practice' ? 'quiz' : btn.dataset.mode)
+    .map((btn) => btn.dataset.mode)
     .filter(Boolean);
 }
 
 /* Chips de sección: `#catBar [data-cat]` en la mayoría de motores,
-   `#levelBar [data-level]` en los de spelling (ed/ing/noun-adjuncts). */
-const SECTION_PILL_SELECTOR = '#catBar [data-cat], #levelBar [data-level]';
+   `#levelBar [data-level]` en los de spelling (ed/ing/noun-adjuncts), y
+   `.cat-bar [data-cat]` para irregular-verbs, cuya barra trae las categorías
+   escritas a mano en el HTML y es la única de las 86 sin `id="catBar"`. Sin
+   esa tercera variante la página no obtenía ni etiquetas reales de categoría
+   en el modal, ni marcas ✓ en sus chips, ni navegación al hacer clic en una
+   celda. Una lista de selectores no duplica elementos, así que las páginas que
+   tienen clase e id a la vez siguen contando cada chip una sola vez. */
+const SECTION_PILL_SELECTOR = '#catBar [data-cat], #levelBar [data-level], .cat-bar [data-cat]';
 
 /** Orden + etiqueta visual de los chips de sección de la página. */
 function readVisualCategories() {
@@ -1136,12 +1144,17 @@ function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
   const prefix = sampleKey.split('-')[0]; // e.g. "vocab", "ing", "art"
 
   // Extract unique categories from scoreKeys
-  const knownModes = ['quiz', 'match', 'write', 'study', 'challenge', 'timed'];
+  // 'sort' faltaba pese a estar en las scoreKeys de verb-chunks, phrasal-verbs
+  // e irregular-verbs: al no reconocerse como modo, `irr-all-sort` se leía como
+  // la categoría 'all-sort' — filas fantasma duplicando cada categoría, una
+  // columna Quiz espuria (hasNoModeSuffix) y un denominador inflado que hundía
+  // el % del módulo (irregular-verbs mostraba 48 celdas en vez de 24).
+  const knownModes = ['quiz', 'match', 'write', 'study', 'challenge', 'timed', 'sort'];
   const categoriesFromKeys = new Set();
   const modesFromKeys = new Set();
   let hasNoModeSuffix = false;
 
-  // `masteryKeys` (catalog.js practiceRule) son modos extra — típicamente
+  // `masteryKeys` (catalog.js quizRule) son modos extra — típicamente
   // Timed — que no cuentan para Aprobado (no viven en requiredActivities)
   // pero sí deben aparecer como columna de la matriz/Maestría, igual que
   // Match/Timed ya aparecen para los módulos flashcard vía ENGINE_MODES_MAP
@@ -1163,7 +1176,7 @@ function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
 
   let trackedModes = [...modesFromKeys];
 
-  // A key with no mode suffix (e.g. `tense-present`) IS the quiz/practice mode
+  // A key with no mode suffix (e.g. `tense-present`) IS the quiz mode
   // for modules like tenses/confusing-verbs — represented as `null`. It must be
   // tracked whenever it's present, not only when no other suffixed mode (like
   // 'timed') was also found, or the Quiz column silently disappears whenever
@@ -1234,9 +1247,9 @@ function buildModuleMatrix(contentId, { includeStudy = false } = {}) {
   const { passScorePct, studyPassPct, prefix, categoryKeys, trackedModes, hasNoModeSuffix, cellFor } = core;
 
   // Orden de columnas = orden de los mode tabs en pantalla; los modos rastreados
-  // que no tienen tab visible se anexan según el orden canónico. readVisualModeOrder
-  // siempre normaliza el tab "practice" a la string 'quiz', pero módulos como
-  // tenses/confusing-verbs graban ese modo SIN sufijo (representado como `null`
+  // que no tienen tab visible se anexan según el orden canónico. El tab se llama
+  // 'quiz' en el DOM, pero módulos como tenses/confusing-verbs graban ese modo
+  // SIN sufijo (representado como `null`
   // en trackedModes) — sin este ajuste 'quiz' nunca calza con `null` y la
   // columna Quiz desaparece del modal aunque sí esté siendo rastreada.
   const visualModes = readVisualModeOrder().map((m) => (hasNoModeSuffix && m === 'quiz' ? null : m));
@@ -1294,12 +1307,25 @@ export function getModuleMatrixProgress(contentId, { includeStudy = false } = {}
  * @param {string|null} mode
  */
 function navigateToModeCell(cat, mode) {
-  document.querySelector(`#catBar [data-cat="${cat}"], #levelBar [data-level="${cat}"]`)?.click();
-  if (mode != null) {
-    // sentence-quiz-engine stores scores under 'quiz'/'timed' keys but the pill
-    // button in HTML uses data-mode="practice" for the quiz mode.
-    const domMode = mode === 'quiz' ? 'practice' : mode;
-    document.querySelector(`.pill-bar [data-mode="${domMode}"], .ex-header__modes [data-mode="${domMode}"]`)?.click();
+  // Se reutiliza SECTION_PILL_SELECTOR (la misma lista que pinta las filas del
+  // modal) en vez de repetir los selectores aquí: así una barra de categorías
+  // nueva se soporta en un solo sitio y no puede quedar navegable a medias.
+  [...document.querySelectorAll(SECTION_PILL_SELECTOR)]
+    .find((btn) => (btn.dataset.cat ?? btn.dataset.level) === cat)
+    ?.click();
+
+  // La columna Quiz es la que más se equivocaba, por dos motivos a la vez:
+  //   1. Una scoreKey sin sufijo de modo (`tense-present`) ES el modo Quiz —
+  //      llega aquí como `mode == null` (ver hasNoModeSuffix en
+  //      computeModuleMatrixCore), y el `if (mode != null)` anterior la
+  //      descartaba, así que la celda cambiaba de categoría pero no de modo.
+  //   2. `hunt` es el nombre que error-hunt y punctuation-fix le dan a esa
+  //      misma columna, mientras el resto la llama `quiz`.
+  // Por eso se prueban ambos nombres y gana el que exista en la página.
+  const names = (mode == null || mode === 'quiz') ? ['quiz', 'hunt'] : [mode];
+  for (const name of names) {
+    const btn = document.querySelector(`.pill-bar [data-mode="${name}"], .ex-header__modes [data-mode="${name}"]`);
+    if (btn) { btn.click(); return; }
   }
 }
 
@@ -1369,9 +1395,7 @@ function openProgressDetail(contentId) {
   const mastered = Boolean(progress?.mastered);
   const rule = PROGRESS_RULES[contentId];
   const aprobadoCells = rule
-    ? rule.requiredActivities
-        .filter((activity) => activity.activityId !== 'study')
-        .reduce((sum, activity) => sum + activity.scoreKeys.length, 0)
+    ? rule.requiredActivities.reduce((sum, activity) => sum + activity.scoreKeys.length, 0)
     : null;
   const aprobadoPct = aprobadoCells != null && totalCells > 0
     ? Math.min(100, Math.round((aprobadoCells / totalCells) * 100))
@@ -1513,7 +1537,7 @@ export function renderModuleCompletionMarks(contentId) {
   const studyMatrix = buildModuleMatrix(contentId, { includeStudy: true });
 
   document.querySelectorAll('.pill-bar [data-mode], .ex-header__modes [data-mode]').forEach((btn) => {
-    const mode = btn.dataset.mode === 'practice' ? 'quiz' : btn.dataset.mode;
+    const mode = btn.dataset.mode;
     if (mode === 'study') {
       if (!studyMatrix || !studyMatrix.studyPassPct) return;
       const done = studyMatrix.categories.every(({ key }) => studyMatrix.cellFor(key, 'study').passed);

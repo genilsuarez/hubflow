@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   HubFlow — Dictation Practice Engine
+   HubFlow — Dictation Quiz Engine
    TTS dictation with word-diff scoring (dictation-sprint, etc.)
    ═══════════════════════════════════════════════════════ */
 
@@ -8,7 +8,7 @@ import { recordScore, renderLessonProgress } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar } from '../exercise-ui.js';
 import { finishExercise } from '../exercise-flow.js';
 import { isSpeechAvailable } from '../speech.js';
-import { setupPracticeBottomNav, setPracticeBottomNav } from '../ex-bottom-nav.js';
+import { setupAnswerBottomNav, setAnswerBottomNav } from '../ex-bottom-nav.js';
 
 function normalize(text) {
   return text.toLowerCase()
@@ -18,7 +18,7 @@ function normalize(text) {
     .trim();
 }
 
-export function initDictationPractice({
+export function initDictationQuiz({
   categories,
   scoreKeyPrefix = 'dict',
   contentId = 'dictation-sprint',
@@ -30,7 +30,7 @@ export function initDictationPractice({
   }
 
   let currentCat = Object.keys(categories)[0];
-  let mode = 'practice';
+  let mode = 'quiz';
   let deck = [];
   let idx = 0;
   let totalScore = 0;
@@ -115,7 +115,7 @@ export function initDictationPractice({
     document.getElementById('dPlayback').innerHTML = '';
     document.getElementById('playBtn').style.opacity = '';
     document.getElementById('playBtn').style.cursor = '';
-    setPracticeBottomNav({ check: true, next: false, skip: true });
+    setAnswerBottomNav({ check: true, next: false, skip: true });
     document.getElementById('dInput').focus();
     updateProgress();
   }
@@ -226,7 +226,7 @@ export function initDictationPractice({
     document.getElementById('dUserRow').hidden = pct === 100;
     document.getElementById('dCorrectRow').hidden = pct === 100;
     document.getElementById('dFeedback').classList.add('show');
-    setPracticeBottomNav({ check: false, next: true, skip: false });
+    setAnswerBottomNav({ check: false, next: true, skip: false });
     document.getElementById('playBtn').style.opacity = '';
     document.getElementById('playBtn').style.cursor = '';
   }
@@ -282,6 +282,6 @@ export function initDictationPractice({
   });
 
   startMode();
-  setupPracticeBottomNav();
+  setupAnswerBottomNav();
   autoPlayTwice();
 }

@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Phonics Engine
-   Study / Practice / Timed / Match de sonidos y grafías, con TTS.
+   Study / Quiz / Timed / Match de sonidos y grafías, con TTS.
 
    Extraído 2026-08-17 del <script type="module"> inline de
    exercises/phonics.html. Las claves de progreso emitidas no

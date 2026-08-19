@@ -56,7 +56,7 @@ export const CATEGORIES = {
     ],
   },
   mixed: {
-    label: 'Mixed Practice',
+    label: 'Mixed Quiz',
     icon: '🎲',
     items: [
       { sentences: ["The scientist discovered a new species.", "She had been researching for years."], correct: ["Having researched for years, the scientist discovered a new species."], hint: "Use 'having' + past participle", explain: "The years of research happened before the discovery." },

@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Paragraph Cloze Engine
-   Practice / Timed: rellenar varios huecos de un párrafo.
+   Quiz / Timed: rellenar varios huecos de un párrafo.
 
    Extraído 2026-08-17 del <script type="module"> inline de
    exercises/paragraph-cloze.html. Las claves de progreso emitidas no
@@ -11,7 +11,7 @@ import { shuffle } from '../array-utils.js';
 import { recordScore } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../exercise-ui.js';
 import { finishExercise } from '../exercise-flow.js';
-import { setPracticeBottomNav } from '../ex-bottom-nav.js';
+import { setAnswerBottomNav } from '../ex-bottom-nav.js';
 
 /**
  * @param {object} cfg
@@ -28,7 +28,7 @@ export function initParagraphCloze({ categories, scoreKeyPrefix }) {
   }
 
   let currentCat = Object.keys(categories)[0];
-  let mode = 'practice';
+  let mode = 'quiz';
   let deck = [], idx = 0, blanksCorrect = 0, blanksTotal = 0, total = 0;
   let checked = false;
   let timer = null;
@@ -84,7 +84,7 @@ export function initParagraphCloze({ categories, scoreKeyPrefix }) {
 
     updateStatus(item);
 
-    setPracticeBottomNav({ check: true, next: false });
+    setAnswerBottomNav({ check: true, next: false });
 
     const firstBlank = document.querySelector('.pc-blank[data-n="1"]');
     if (firstBlank) firstBlank.focus();
@@ -135,7 +135,7 @@ export function initParagraphCloze({ categories, scoreKeyPrefix }) {
     finalEl.textContent = item.explain;
     finalEl.style.display = 'block';
 
-    setPracticeBottomNav({ check: false, next: true });
+    setAnswerBottomNav({ check: false, next: true });
   }
 
   document.getElementById('checkBtn').addEventListener('click', checkAll);

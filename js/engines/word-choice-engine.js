@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    HubFlow — Word Choice Engine
-   Study / Practice / Timed para los ejercicios de "elegir la
+   Study / Quiz / Timed para los ejercicios de "elegir la
    palabra correcta del par": apostrophe-traps, confusing-verbs,
    grammar-confusions, lookalike-words.
 
@@ -10,7 +10,7 @@
 
    Claves de progreso emitidas (sin cambio respecto a las copias
    inline, para no huerfanizar el progreso ya guardado):
-     `${scoreKeyPrefix}-${cat}`         → Practice
+     `${scoreKeyPrefix}-${cat}`         → Quiz
      `${scoreKeyPrefix}-${cat}-timed`   → Timed
      `${scoreKeyPrefix}-${cat}-study`   → Study (recordStudyItemSeen)
    Declaradas en js/engines/manifest.mjs.
@@ -46,7 +46,7 @@ export function initWordChoice({
   let timedSeconds = 0;
 
   // Returns the next pending activity: pending timed in current cat → next cat study.
-  // Practice key = ${prefix}-${cat}, timed = ${prefix}-${cat}-timed.
+  // Quiz key = ${prefix}-${cat}, timed = ${prefix}-${cat}-timed.
   function findStudyFollowUp() {
     if (!getScoreStatus(`${scoreKeyPrefix}-${currentCat}-timed`).passed) {
       return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; syncModeTabsActive(mode); startMode(); } };
@@ -71,17 +71,17 @@ export function initWordChoice({
   // ─── Mode switching ───
   wireModeTabs({ getMode: () => mode, setMode: v => mode = v, onChange: startMode });
 
-  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipPractice());
+  document.getElementById('quizSkipBtn')?.addEventListener('click', () => skipQuiz());
   function setQuizAnswered(answered) { const nextBtn = document.getElementById('quizNextBtn'); const skipBtn = document.getElementById('quizSkipBtn'); if (nextBtn) nextBtn.hidden = !answered; if (skipBtn) skipBtn.hidden = answered; }
-  function skipPractice() { if (idx >= total) return; idx++; updProgress(idx, total); renderPractice(); }
+  function skipQuiz() { if (idx >= total) return; idx++; updProgress(idx, total); renderQuiz(); }
 
   function startMode() {
     stopTimer();
     document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show'));
     document.getElementById('timerBar').classList.remove('show');
     setQuizAnswered(false);
-    if (mode === 'practice') initPractice(false);
-    else if (mode === 'timed') initPractice(true);
+    if (mode === 'quiz') initQuiz(false);
+    else if (mode === 'timed') initQuiz(true);
     else if (mode === 'study') initStudy();
   }
 
@@ -92,12 +92,12 @@ export function initWordChoice({
   const updProgress = (current, t) => updateProgress(current, t,
     document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
 
-  // ═══ PRACTICE / TIMED ═══
-  function initPractice(timed) {
+  // ═══ QUIZ / TIMED ═══
+  function initQuiz(timed) {
     deck = shuffle(getData());
     idx = 0; score = 0;
     total = Math.min(timed ? timedQuestionCount : deck.length, deck.length);
-    document.querySelector('[data-area="practice"]').classList.add('show');
+    document.querySelector('[data-area="quiz"]').classList.add('show');
 
     if (timed) {
       document.getElementById('timerBar').classList.add('show');
@@ -105,11 +105,11 @@ export function initWordChoice({
 
       timer = new Timer(timedSeconds,
         r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r <= 10); },
-        () => finishPractice()
+        () => finishQuiz()
       );
       timer.start();
     }
-    renderPractice();
+    renderQuiz();
   }
 
   /** ¿Cuenta `chosen` como la respuesta de `item`? Acepta la forma base cuando
@@ -119,8 +119,8 @@ export function initWordChoice({
     return chosen === correct || chosen === item.correct || (baseMap[chosen] && baseMap[chosen].test(correct));
   }
 
-  function renderPractice() {
-    if (idx >= total) { finishPractice(); return; }
+  function renderQuiz() {
+    if (idx >= total) { finishQuiz(); return; }
     const item = deck[idx];
     const cat = categories[currentCat];
 
@@ -158,17 +158,17 @@ export function initWordChoice({
         if (nextBtn) {
           nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →';
           setQuizAnswered(true);
-          nextBtn.onclick = () => renderPractice();
+          nextBtn.onclick = () => renderQuiz();
           nextBtn.focus({ preventScroll: true });
         } else {
-          setTimeout(renderPractice, 1400);
+          setTimeout(renderQuiz, 1400);
         }
       });
     });
     updProgress(idx, total);
   }
 
-  function finishPractice() {
+  function finishQuiz() {
     const elapsed = timedSeconds ? timedSeconds - (timer && timer.remaining != null ? timer.remaining : 0) : null;
     stopTimer();
     const pct = finishExercise({
@@ -218,7 +218,7 @@ export function initWordChoice({
   });
 
   document.addEventListener('keydown', e => {
-    if (mode === 'practice' || mode === 'timed') { handleQuizNextKeydown(e); return; }
+    if (mode === 'quiz' || mode === 'timed') { handleQuizNextKeydown(e); return; }
     if (mode !== 'study') return;
 
     handleStudyKeydown(e, { advanceCard });

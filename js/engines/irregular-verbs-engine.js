@@ -405,7 +405,7 @@ export function initIrregularVerbs({ verbs, scoreKeyPrefix }) {
     writeIdx = 0; writeScore = 0;
     writeTotal = Math.min(10, writeDeck.length);
     document.querySelector('[data-area="write"]').classList.add('show');
-    window.__setupPracticeBottomNav?.();
+    window.__setupAnswerBottomNav?.();
     renderWrite();
   }
 

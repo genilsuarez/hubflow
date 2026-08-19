@@ -36,7 +36,7 @@
 }
 :is(.pill-btn, .lp-pill):hover { color: var(--lp-ink-soft); background: var(--lp-surface); }
 
-/* Mode pills — chip azul discreto homologado (Study/Practice/Timed/etc.) */
+/* Mode pills — chip azul discreto homologado (Study/Quiz/Timed/etc.) */
 .pill-bar :is(.pill-btn, .lp-pill).active,
 .pill-bar :is(.pill-btn, .lp-pill).active:is(.purple, .green, .red, .orange, .teal),
 .ex-header__modes :is(.pill-btn, .lp-pill).active,
