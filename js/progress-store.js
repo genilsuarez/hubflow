@@ -1054,6 +1054,10 @@ export function renderLessonProgress(contentId) {
   detailBtn.setAttribute('aria-label', `Ver detalle de progreso: ${summary}`);
   detailBtn.title = summary;
 
+  // Status indicator — green dot (completed) or gold dot (mastered)
+  detailBtn.classList.toggle('lesson-progress__detail--mastered', Boolean(progress.mastered));
+  detailBtn.classList.toggle('lesson-progress__detail--completed', Boolean(progress.completed) && !progress.mastered);
+
   if (typeof window !== 'undefined' && typeof window.__relocateLessonProgressBtn === 'function') {
     window.__relocateLessonProgressBtn();
   }

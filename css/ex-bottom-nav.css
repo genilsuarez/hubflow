@@ -108,6 +108,17 @@
   transform: scale(0.95);
 }
 
+/* ─── Status border (completed = green, mastered = gold) ─── */
+.lesson-progress__detail--completed {
+  border-color: var(--lp-success) !important;
+  box-shadow: 0 0 0 1px var(--lp-success) !important;
+}
+
+.lesson-progress__detail--mastered {
+  border-color: var(--lp-gold) !important;
+  box-shadow: 0 0 0 1px var(--lp-gold) !important;
+}
+
 /* ─── Battle mode ─── */
 .ex-bottom-nav .battle-actions,
 .ex-bottom-nav .battle-actions--nav {
