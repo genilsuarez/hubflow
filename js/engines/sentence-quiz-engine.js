@@ -295,6 +295,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
     function handleOptClick(btn) {
       if (btn.classList.contains('disabled')) return;
+      optsEl._cleanKeyOpt?.(); // clean up keyboard listener before processing click (prevents stale closure firing on next question)
       optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; });
 
       const chosen = btn.dataset.val;
