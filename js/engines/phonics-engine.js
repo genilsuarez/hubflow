@@ -10,7 +10,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
-import { finishExercise, advanceStudyCard, createMatchMode } from '../exercise-flow.js';
+import { finishExercise, advanceStudyCard, createMatchMode, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, findNextPendingCategory } from '../exercise-flow.js';
 import { speak } from '../speech.js';
 import { initSwipe } from '../swipe.js';
 
@@ -30,7 +30,6 @@ export function initPhonics({ categories, scoreKeyPrefix }) {
   // Returns the next pending activity.
   // Keys: quiz=${prefix}-${cat}, timed=${prefix}-${cat}-timed, match=${prefix}-${cat}-match.
   function findStudyFollowUp() {
-    const catKeys = Object.keys(categories);
     const FOLLOW_MODES = [
       { key: cat => `${scoreKeyPrefix}-${cat}-timed`, label: '⏱️ Timed', mode: 'timed' },
       { key: cat => `${scoreKeyPrefix}-${cat}-match`, label: '🔗 Match', mode: 'match' },
@@ -40,13 +39,12 @@ export function initPhonics({ categories, scoreKeyPrefix }) {
         return { label: m.label, isNewCategory: false, onContinue: () => { mode = m.mode; syncModeTabsActive(mode); startMode(); } };
       }
     }
-    const startIdx = catKeys.indexOf(currentCat);
-    for (let i = 1; i <= catKeys.length; i++) {
-      const cat = catKeys[(startIdx + i) % catKeys.length];
-      if (cat === currentCat) continue;
-      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
-        return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
-      }
+    const cat = findNextPendingCategory({
+      categories, currentCat,
+      isPending: c => !getScoreStatus(`${scoreKeyPrefix}-${c}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${c}-timed`).passed,
+    });
+    if (cat) {
+      return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
     }
     return null;
   }
@@ -139,7 +137,7 @@ export function initPhonics({ categories, scoreKeyPrefix }) {
     }
   });
 
-  document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
+  document.getElementById('fcCard').addEventListener('click', () => squeezeToggle(document.getElementById('fcCard'), 'flip'));
   document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
   document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
   document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
@@ -156,81 +154,20 @@ export function initPhonics({ categories, scoreKeyPrefix }) {
   }
 
   function showStudyFollowUp() {
-    const overlay = document.getElementById('resultOverlay');
-    if (!overlay) return;
     const suggestion = findStudyFollowUp();
-
-    const restudy = () => { overlay.classList.remove('show'); idx = 0; renderStudyCard(); };
-
-    if (suggestion) {
-      overlay.innerHTML = `
-        <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
-          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
-          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
-          <div class="result-sub">Siguiente: ${suggestion.label}</div>
-          <div class="result-btns">
-            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
-            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
-          </div>
-        </div>
-      `;
-      overlay.classList.add('show');
-      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
-        overlay.classList.remove('show');
-        suggestion.onContinue();
-        syncModeTabsActive(mode);
-      });
-      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
-      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
-    } else {
-      overlay.innerHTML = `
-        <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
-          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
-          <div class="result-title">¡Lección completa! 🎉</div>
-          <div class="result-sub">Aprobaste todas las categorías de esta lección.</div>
-          <div class="result-btns">
-            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
-            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
-          </div>
-        </div>
-      `;
-      overlay.classList.add('show');
-      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
-      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
-    }
+    showStudyFollowUpOverlay({
+      suggestion,
+      subtitle: suggestion ? `Siguiente: ${suggestion.label}` : '',
+      onContinue: () => { suggestion.onContinue(); syncModeTabsActive(mode); },
+      onRestudy: () => { idx = 0; renderStudyCard(); },
+    });
   }
 
   document.addEventListener('keydown', e => {
-    if (mode === 'quiz' || mode === 'timed') {
-      if (e.key === 'Enter') {
-        const nextBtn = document.getElementById('quizNextBtn');
-        if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
-      }
-      return;
-    }
+    if (mode === 'quiz' || mode === 'timed') { handleQuizNextKeydown(e); return; }
     if (mode !== 'study') return;
 
-    // While the end-of-deck follow-up overlay is open, Enter/Space confirms
-    // its primary action instead of flipping the (hidden) card underneath.
-    const overlay = document.getElementById('resultOverlay');
-    if (overlay && overlay.classList.contains('show')) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
-        primaryBtn?.click();
-      }
-      return;
-    }
-
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const card = document.getElementById('fcCard');
-      if (card.classList.contains('flip')) advanceCard(1);
-      else card.classList.add('flip');
-    } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
+    handleStudyKeydown(e, { advanceCard });
   });
 
   // ═══ QUIZ / TIMED ═══

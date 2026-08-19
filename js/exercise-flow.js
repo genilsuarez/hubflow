@@ -119,34 +119,164 @@ export function finishExercise({ correct, total, startMode, setMode, elapsedSeco
   });
 }
 
-/** Advances the Study-mode flashcard: crossfades out while flipped (so the answer
- *  face doesn't visibly snap back to the question), then renders the next/prev
- *  card and fades in. Falls straight through to renderCard() when not flipped. */
-export function advanceStudyCard(dir, { getIdx, setIdx, deckLength, renderCard, cardId = 'fcCard' }) {
-  const card = document.getElementById(cardId);
-  const inner = card.querySelector('.fc-inner');
-  if (card.classList.contains('flip') && inner) {
-    inner.style.transition = 'opacity .15s ease, transform .2s ease';
-    inner.style.opacity = '0';
-    card.classList.remove('flip');
-    let done = false;
-    const onDone = () => {
-      if (done) return; done = true;
-      inner.removeEventListener('transitionend', onDone);
-      inner.style.transition = 'none';
-      setIdx((getIdx() + dir + deckLength) % deckLength);
-      renderCard();
-      void inner.offsetHeight;
-      inner.style.transition = 'opacity .15s ease';
-      inner.style.opacity = '1';
-      setTimeout(() => { inner.style.transition = ''; }, 170);
-    };
-    inner.addEventListener('transitionend', onDone, { once: true });
-    setTimeout(onDone, 250);
+/** Walks the categories after `currentCat`, wrapping around, and returns the first
+ *  one `isPending` accepts (or null). Only the traversal is shared: which keys
+ *  count as pending, and what to do with the result, stay in each engine because
+ *  those are its own progress rules. Eight engines had this same wrap-around loop
+ *  hand-written before 2026-08-19. */
+export function findNextPendingCategory({ categories, currentCat, isPending }) {
+  const catKeys = Object.keys(categories);
+  const startIdx = catKeys.indexOf(currentCat);
+  for (let i = 1; i <= catKeys.length; i++) {
+    const cat = catKeys[(startIdx + i) % catKeys.length];
+    if (cat === currentCat) continue;
+    if (isPending(cat)) return cat;
+  }
+  return null;
+}
+
+/** Enter confirms the visible "Siguiente →" in Practice/Timed. Call it from the
+ *  engine's own keydown listener while in a question mode. */
+export function handleQuizNextKeydown(e) {
+  if (e.key !== 'Enter') return;
+  const nextBtn = document.getElementById('quizNextBtn');
+  if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
+}
+
+/** Study-mode keyboard: Enter/Space flips the card, or advances when it's already
+ *  flipped; arrows step through the deck. While the end-of-deck overlay is open it
+ *  confirms that overlay's primary action instead, so the shortcut never reaches
+ *  the hidden card underneath.
+ *
+ *  Blurring a focused BUTTON first is what stops a mouse-clicked "→" from eating
+ *  the next Space/Enter and re-firing itself. That guard existed in only three of
+ *  the nine copies of this handler before they were merged here on 2026-08-19 —
+ *  the other six silently lacked it. */
+export function handleStudyKeydown(e, { advanceCard, cardId = 'fcCard' }) {
+  const overlay = document.getElementById('resultOverlay');
+  if (overlay && overlay.classList.contains('show')) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
+      primaryBtn?.click();
+    }
     return;
   }
-  setIdx((getIdx() + dir + deckLength) % deckLength);
-  renderCard();
+
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
+      document.activeElement.blur();
+    }
+    const card = document.getElementById(cardId);
+    if (card.classList.contains('flip')) advanceCard(1);
+    else squeezeToggle(card, 'flip');
+  } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
+}
+
+/** The end-of-deck overlay every Study mode shows once the last card is reached:
+ *  "Continuar →" to the suggested next step, or a lesson-complete state when
+ *  there's nothing left. Markup and wiring were byte-identical in all ten engines
+ *  until 2026-08-19 — only the four hooks below ever differed, so a copy that
+ *  drifted was a bug waiting to happen.
+ *
+ *  `suggestion` — falsy renders the lesson-complete variant.
+ *  `subtitle`   — the "Siguiente: …" line (callers build their own label).
+ *  `onContinue` — runs after the overlay closes; omitted for the complete variant.
+ *  `onRestudy`  — resets the deck; the overlay closes before it runs. */
+export function showStudyFollowUpOverlay({
+  suggestion, subtitle, onContinue, onRestudy,
+  allDoneSub = 'Aprobaste todas las categorías de esta lección.',
+}) {
+  const overlay = document.getElementById('resultOverlay');
+  if (!overlay) return;
+
+  const restudy = () => { overlay.classList.remove('show'); onRestudy(); };
+
+  overlay.innerHTML = suggestion
+    ? `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
+          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
+          <div class="result-sub">${subtitle}</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
+          </div>
+        </div>
+      `
+    : `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+          <div class="result-title">¡Lección completa! 🎉</div>
+          <div class="result-sub">${allDoneSub}</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
+          </div>
+        </div>
+      `;
+  overlay.classList.add('show');
+
+  if (suggestion) {
+    overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
+      overlay.classList.remove('show');
+      onContinue();
+    });
+  }
+  overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+  overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+}
+
+/** Squeezes the card to zero width, swaps which face is visible while it's
+ *  invisible, then lets it un-squeeze — see components.css .fc-card comment.
+ *  Shared by every engine's Study-mode flip so they all match FlashcardEngine's
+ *  motion instead of snapping the flip instantly. */
+export function squeezeToggle(el, cls) {
+  if (!el || el.classList.contains('squeeze')) return;
+  el.classList.add('squeeze');
+  setTimeout(() => {
+    el.classList.toggle(cls);
+    el.classList.remove('squeeze');
+  }, 150);
+}
+
+/** Advances the Study-mode flashcard: slides+fades out (keeping the flipped face
+ *  visible via transform so it never flashes back to the question mid-fade — same
+ *  motion as FlashcardEngine.navCard()), then renders the next/prev card while
+ *  hidden and slides+fades it in from the opposite side. */
+export function advanceStudyCard(dir, { getIdx, setIdx, deckLength, renderCard, cardId = 'fcCard' }) {
+  const card = document.getElementById(cardId);
+  const inner = card?.querySelector('.fc-inner');
+  if (!card || !inner) return;
+
+  const isFlipped = card.classList.contains('flip');
+  const slideX = dir > 0 ? '-12px' : '12px';
+
+  inner.style.transition = 'opacity .12s ease, transform .12s ease';
+  inner.style.opacity = '0';
+  inner.style.transform = isFlipped
+    ? `rotateY(180deg) translateX(${dir > 0 ? '12px' : '-12px'})`
+    : `translateX(${slideX})`;
+
+  setTimeout(() => {
+    inner.style.transition = 'none';
+    card.classList.remove('flip');
+    inner.style.transform = `translateX(${dir > 0 ? '12px' : '-12px'})`;
+    inner.style.opacity = '0';
+
+    setIdx((getIdx() + dir + deckLength) % deckLength);
+    renderCard();
+    void inner.offsetHeight;
+
+    inner.style.transition = 'opacity .15s ease, transform .15s ease';
+    inner.style.opacity = '1';
+    inner.style.transform = '';
+    setTimeout(() => { inner.style.transition = ''; }, 170);
+  }, 130);
 }
 
 /** Shared "pair matching" mode: left/right columns of shuffled pills, click one

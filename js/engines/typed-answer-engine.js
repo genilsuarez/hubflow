@@ -53,6 +53,14 @@ function isMatch(userAnswer, correctArray) {
   return exact || fuzzy;
 }
 
+/** Shuffles `items` into the `#woPills` row — the prompt shape shared by every
+ *  reordering exercise (word-order, a1-sentence-build, a2-sentence-order use the
+ *  default pill markup; sentence-reordering passes its own renderItem). Lived
+ *  inline and byte-identical in each of those pages until 2026-08-19. */
+export function renderWordPills(items, renderItem = w => `<span class="wo-pill">${w}</span>`) {
+  document.getElementById('woPills').innerHTML = shuffle([...items]).map(renderItem).join('');
+}
+
 export function initTypedAnswerPractice({ categories, scoreKeyPrefix, contentId = null, secondsPerQuestion, warnThreshold = 20, renderPrompt }) {
   renderLessonProgress(contentId);
 

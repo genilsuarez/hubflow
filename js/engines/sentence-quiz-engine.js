@@ -11,7 +11,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, renderLessonProgress, recordStudyItemSeen, getScoreStatus, getStars } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, makeTimerState, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
-import { finishExercise } from '../exercise-flow.js';
+import { finishExercise, squeezeToggle, advanceStudyCard, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown } from '../exercise-flow.js';
 import { RESULT_TITLES } from '../result-copy.js';
 import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from '../speech.js';
 import { createStudySpeakButton, insertInBottomNav } from '../ex-bottom-nav.js';
@@ -455,7 +455,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
     maybeAutoSpeak();
   }
 
-  document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
+  document.getElementById('fcCard').addEventListener('click', () => squeezeToggle(document.getElementById('fcCard'), 'flip'));
   document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
   document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));
   document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
@@ -469,16 +469,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
       return;
     }
 
-    const card = document.getElementById('fcCard');
-    const inner = card.querySelector('.fc-inner');
-    if (card.classList.contains('flip')) {
-      inner.style.transition = 'none';
-      card.classList.remove('flip');
-      void inner.offsetHeight;
-      inner.style.transition = '';
-    }
-    idx = (idx + dir + deck.length) % deck.length;
-    renderStudyCard();
+    advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
   }
 
   function scoreKeyFor(cat, mode = 'quiz') {
@@ -513,95 +504,28 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
   }
 
   function showStudyFollowUp() {
-    const overlay = document.getElementById('resultOverlay');
-    if (!overlay) return;
     const suggestion = findStudyFollowUp();
-
-    const restudy = () => {
-      overlay.classList.remove('show');
-      idx = 0;
-      renderStudyCard();
-    };
-
-    if (suggestion) {
-      const subtitle = suggestion.isNewCategory
+    showStudyFollowUpOverlay({
+      suggestion,
+      subtitle: !suggestion ? '' : suggestion.isNewCategory
         ? `Siguiente: ${categories[suggestion.cat]?.label || suggestion.cat} — 📖 Study`
-        : 'Siguiente: 🎯 Quiz';
-
-      overlay.innerHTML = `
-        <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
-          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
-          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
-          <div class="result-sub">${subtitle}</div>
-          <div class="result-btns">
-            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
-            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
-          </div>
-        </div>
-      `;
-      overlay.classList.add('show');
-      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
-        overlay.classList.remove('show');
+        : 'Siguiente: 🎯 Quiz',
+      onContinue: () => {
         if (suggestion.isNewCategory) switchToCategory(suggestion.cat);
         mode = suggestion.mode;
         syncModeTabsActive(mode);
         startMode();
-      });
-      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
-      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
-    } else {
-      overlay.innerHTML = `
-        <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
-          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
-          <div class="result-title">¡Lección completa! 🎉</div>
-          <div class="result-sub">Aprobaste todas las categorías de esta lección.</div>
-          <div class="result-btns">
-            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
-            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
-          </div>
-        </div>
-      `;
-      overlay.classList.add('show');
-      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
-      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
-    }
+      },
+      onRestudy: () => { idx = 0; renderStudyCard(); },
+    });
   }
 
   // Keyboard: Enter/Space = flip or advance, Arrows = navigate
   document.addEventListener('keydown', e => {
-    if (mode === 'practice' || mode === 'timed') {
-      if (e.key === 'Enter') {
-        const nextBtn = document.getElementById('quizNextBtn');
-        if (nextBtn && !nextBtn.hidden) { e.preventDefault(); nextBtn.click(); }
-      }
-      return;
-    }
+    if (mode === 'practice' || mode === 'timed') { handleQuizNextKeydown(e); return; }
     if (mode !== 'study') return;
 
-    // While the end-of-deck follow-up overlay is open, Enter/Space confirms
-    // its primary action instead of flipping the (hidden) card underneath.
-    const overlay = document.getElementById('resultOverlay');
-    if (overlay && overlay.classList.contains('show')) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
-        primaryBtn?.click();
-      }
-      return;
-    }
-
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
-        document.activeElement.blur();
-      }
-      const card = document.getElementById('fcCard');
-      if (card.classList.contains('flip')) advanceCard(1);
-      else card.classList.add('flip');
-    } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
+    handleStudyKeydown(e, { advanceCard });
   });
 
   startMode();

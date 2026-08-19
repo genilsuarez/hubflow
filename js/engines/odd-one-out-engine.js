@@ -10,7 +10,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
-import { finishExercise } from '../exercise-flow.js';
+import { finishExercise, findNextPendingCategory } from '../exercise-flow.js';
 
 /**
  * @param {object} cfg
@@ -27,17 +27,15 @@ export function initOddOneOut({ categories, scoreKeyPrefix }) {
 
   // Returns pending timed mode if quiz passed but timed hasn't, then next category.
   function findStudyFollowUp() {
-    const catKeys = Object.keys(categories);
     if (!getScoreStatus(`${scoreKeyPrefix}-${currentCat}-timed`).passed) {
       return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; syncModeTabsActive(mode); startMode(); } };
     }
-    const startIdx = catKeys.indexOf(currentCat);
-    for (let i = 1; i <= catKeys.length; i++) {
-      const cat = catKeys[(startIdx + i) % catKeys.length];
-      if (cat === currentCat) continue;
-      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
-        return { label: `${categories[cat]?.label || cat} — 🎯 Quiz`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'quiz'; syncModeTabsActive(mode); startMode(); } };
-      }
+    const cat = findNextPendingCategory({
+      categories, currentCat,
+      isPending: c => !getScoreStatus(`${scoreKeyPrefix}-${c}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${c}-timed`).passed,
+    });
+    if (cat) {
+      return { label: `${categories[cat]?.label || cat} — 🎯 Quiz`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'quiz'; syncModeTabsActive(mode); startMode(); } };
     }
     return null;
   }

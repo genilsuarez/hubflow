@@ -8,6 +8,7 @@ import { Timer, formatTime } from '../exercise-ui.js';
 import { speak, isSpeechAvailable, hasVoiceForLang, readAutoSpeak, writeAutoSpeak } from '../speech.js';
 import { initSwipe } from '../swipe.js';
 import { RESULT_TITLES } from '../result-copy.js';
+import { showStudyFollowUpOverlay } from '../exercise-flow.js';
 
 // Preferencia persistente del feedback sonoro de Match (mismo patrón que
 // el autospeak de speech.js: toggle on/off, apagado por defecto).
@@ -719,63 +720,27 @@ export class FlashcardEngine {
   }
 
   showStudyFollowUp() {
-    const overlay = document.getElementById('resultOverlay');
-    if (!overlay) return;
     const suggestion = this.findStudyFollowUp();
-
-    const restudy = () => {
-      overlay.classList.remove('show');
-      this.cardIdx = 0;
-      this.renderStudyCard();
-      this.updateStudyProgress();
-    };
-
-    if (suggestion) {
-      const modeLabel = MODE_META[suggestion.mode] || suggestion.mode;
-      const subtitle = suggestion.isNewCategory
+    const modeLabel = suggestion ? (MODE_META[suggestion.mode] || suggestion.mode) : '';
+    showStudyFollowUpOverlay({
+      suggestion,
+      subtitle: !suggestion ? '' : suggestion.isNewCategory
         ? `Siguiente: ${this.categories[suggestion.cat]?.label || suggestion.cat} — ${modeLabel}`
-        : `Siguiente: ${modeLabel}`;
-
-      overlay.innerHTML = `
-        <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
-          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
-          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
-          <div class="result-sub">${subtitle}</div>
-          <div class="result-btns">
-            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
-            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
-          </div>
-        </div>
-      `;
-      overlay.classList.add('show');
-      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
-        overlay.classList.remove('show');
+        : `Siguiente: ${modeLabel}`,
+      onContinue: () => {
         if (suggestion.isNewCategory) {
           this.currentCat = suggestion.cat;
           this.renderCatBar();
         }
         this.setMode(suggestion.mode);
-      });
-      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
-      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
-    } else {
-      overlay.innerHTML = `
-        <div class="result-box">
-          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
-          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
-          <div class="result-title">¡Lección completa! 🎉</div>
-          <div class="result-sub">Aprobaste todos los modos de esta lección.</div>
-          <div class="result-btns">
-            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
-            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
-          </div>
-        </div>
-      `;
-      overlay.classList.add('show');
-      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
-      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
-    }
+      },
+      onRestudy: () => {
+        this.cardIdx = 0;
+        this.renderStudyCard();
+        this.updateStudyProgress();
+      },
+      allDoneSub: 'Aprobaste todos los modos de esta lección.',
+    });
   }
 
   // ═══ QUIZ ═══

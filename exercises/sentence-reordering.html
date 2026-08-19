@@ -94,18 +94,15 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/sentence-reordering.js';
-import { shuffle } from '../js/array-utils.js';
-import { initTypedAnswerPractice } from '../js/engines/typed-answer-engine.js';
+import { initTypedAnswerPractice, renderWordPills } from '../js/engines/typed-answer-engine.js';
 
 initTypedAnswerPractice({
   categories: CATEGORIES,
   scoreKeyPrefix: 'sentreorder',
   secondsPerQuestion: 35,
   renderPrompt(item) {
-    const shuffled = shuffle([...item.sentences]);
-    document.getElementById('woPills').innerHTML = shuffled
-      .map(s => `<div class="sr-item"><span class="sr-item__label">${s.label}</span><span>${s.text}</span></div>`)
-      .join('');
+    renderWordPills(item.sentences,
+      s => `<div class="sr-item"><span class="sr-item__label">${s.label}</span><span>${s.text}</span></div>`);
   },
 });
 </script>

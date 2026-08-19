@@ -96,16 +96,14 @@
 
 <script type="module">
 import { CATEGORIES } from '../data/word-order.js';
-import { shuffle } from '../js/array-utils.js';
-import { initTypedAnswerPractice } from '../js/engines/typed-answer-engine.js';
+import { initTypedAnswerPractice, renderWordPills } from '../js/engines/typed-answer-engine.js';
 
 initTypedAnswerPractice({
   categories: CATEGORIES,
   scoreKeyPrefix: 'wordorder',
   secondsPerQuestion: 25,
   renderPrompt(item) {
-    const pills = shuffle([...item.words]);
-    document.getElementById('woPills').innerHTML = pills.map(w => `<span class="wo-pill">${w}</span>`).join('');
+    renderWordPills(item.words);
   },
 });
 </script>
