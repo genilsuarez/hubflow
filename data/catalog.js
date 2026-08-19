@@ -2314,7 +2314,7 @@ const PROGRESS_RULES_BASE = {
   'ed-spelling': practiceRule(spellingScoreKeys('ed')),
   'irregular-verbs': practiceRule(scoreKeys('irr', ['all', 'common', 'intermediate', 'advanced'], ['quiz', 'timed', 'write', 'match', 'sort'])),
   'word-formation': practiceRule(scoreKeys('wf', ['nouns', 'adjectives', 'negatives', 'mixed'], ['', 'timed'])),
-  tenses: practiceRule(scoreKeys('tense', ['present', 'past', 'future', 'perfect', 'perfectContrast', 'haveHasHad'], ['', 'timed'])),
+  tenses: practiceRule(scoreKeys('tense', ['present', 'past', 'future', 'perfect', 'perfectContrast', 'haveHasHad'], ['']), scoreKeys('tense', ['present', 'past', 'future', 'perfect', 'perfectContrast', 'haveHasHad'], ['timed'])),
   'reported-speech': practiceRule(scoreKeys('rs', ['backshift', 'timePlace', 'reportedQuestions'], ['quiz']), scoreKeys('rs', ['backshift', 'timePlace', 'reportedQuestions'], ['timed'])),
   conditionals: practiceRule(scoreKeys('cond', ['identifyType', 'connectors', 'mixedConditionals'], ['quiz']), scoreKeys('cond', ['identifyType', 'connectors', 'mixedConditionals'], ['timed'])),
   'used-to': practiceRule(scoreKeys('usedto', ['stateException', 'accustomed'], ['quiz']), scoreKeys('usedto', ['stateException', 'accustomed'], ['timed'])),

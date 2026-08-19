@@ -55,20 +55,47 @@ function showResult({ correct, total, containerEl, onRestart, onStudy, elapsedSe
   }
   containerEl.classList.add('show');
 
+  // The quiz's own "Siguiente/Ver resultado →" button (#quizNextBtn) lives
+  // outside this overlay and stays visible underneath it once the last
+  // question finishes. Every engine's keydown handler gates Enter on
+  // `!quizNextBtn.hidden`, so without hiding it, Enter here would re-fire
+  // that stale button's onclick (re-render the last question) — hiding it
+  // makes each engine's own handler return as a no-op on Enter, so it never
+  // calls preventDefault() and the listener below still gets to run.
+  const staleNextBtn = document.getElementById('quizNextBtn');
+  if (staleNextBtn) staleNextBtn.hidden = true;
+
+  // Enter/Space activates the primary action while the overlay is open. Not
+  // relying on native "Enter activates the focused button" here — DOM focus
+  // right after this innerHTML swap proved unreliable to key straight into a
+  // click across browsers/engines, so this listens explicitly instead. It's
+  // registered on document AFTER each engine's own keydown handler (added at
+  // page init), so it runs later in the same dispatch and can still act even
+  // though it doesn't call stopPropagation on the earlier one.
+  const onOverlayKeydown = (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    const primaryBtn = containerEl.querySelector('#resultContinue') || containerEl.querySelector('#resultRestart');
+    primaryBtn?.click();
+  };
+  document.addEventListener('keydown', onOverlayKeydown);
+  const closeOverlay = () => {
+    containerEl.classList.remove('show');
+    document.removeEventListener('keydown', onOverlayKeydown);
+  };
+
   requestAnimationFrame(() => {
-    containerEl.querySelector('#resultClose')?.addEventListener('click', () => {
-      containerEl.classList.remove('show');
-    });
+    containerEl.querySelector('#resultClose')?.addEventListener('click', closeOverlay);
     containerEl.querySelector('#resultRestart')?.addEventListener('click', () => {
-      containerEl.classList.remove('show');
+      closeOverlay();
       onRestart();
     });
     containerEl.querySelector('#resultStudy')?.addEventListener('click', () => {
-      containerEl.classList.remove('show');
+      closeOverlay();
       onStudy();
     });
     containerEl.querySelector('#resultContinue')?.addEventListener('click', () => {
-      containerEl.classList.remove('show');
+      closeOverlay();
       suggestion.onContinue();
     });
   });

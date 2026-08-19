@@ -9,7 +9,7 @@
 
 import { shuffle } from '../array-utils.js';
 import { recordScore, getScoreStatus } from '../progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs } from '../exercise-ui.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress as sharedUpdateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
 import { finishExercise } from '../exercise-flow.js';
 
 /**
@@ -29,14 +29,14 @@ export function initOddOneOut({ categories, scoreKeyPrefix }) {
   function findStudyFollowUp() {
     const catKeys = Object.keys(categories);
     if (!getScoreStatus(`${scoreKeyPrefix}-${currentCat}-timed`).passed) {
-      return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; startMode(); } };
+      return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; syncModeTabsActive(mode); startMode(); } };
     }
     const startIdx = catKeys.indexOf(currentCat);
     for (let i = 1; i <= catKeys.length; i++) {
       const cat = catKeys[(startIdx + i) % catKeys.length];
       if (cat === currentCat) continue;
       if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
-        return { label: `${categories[cat]?.label || cat} — 🎯 Quiz`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'quiz'; startMode(); } };
+        return { label: `${categories[cat]?.label || cat} — 🎯 Quiz`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'quiz'; syncModeTabsActive(mode); startMode(); } };
       }
     }
     return null;

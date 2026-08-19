@@ -14,7 +14,7 @@ export const CATEGORIES = {
       { sentence: 'He ___ TV right now.', correct: 'is watching', verb: 'watch', options: ['is watching', 'watches', 'watch', 'watched'], explain: 'Present continuous: action happening now → is + -ing.' },
       { sentence: 'I ___ coffee every morning.', correct: 'drink', verb: 'drink', options: ['drink', 'drinks', 'am drinking', 'drank'], explain: 'Present simple, 1st person: I drink.' },
       { sentence: 'Look! It ___ outside.', correct: 'is raining', verb: 'rain', options: ['is raining', 'rains', 'rained', 'rain'], explain: 'Present continuous: happening at this moment → is raining.' },
-      { sentence: 'She ___ speak three languages.', correct: 'can', options: ['can', 'cans', 'is canning', 'could'], explain: 'Modal verb "can" + base form. No -s for 3rd person.' },
+      { sentence: 'She ___ speak three languages.', correct: 'can', options: ['can', 'cans', 'could', 'is able to'], explain: 'Modal verb "can" + base form. No -s for 3rd person; "could" is past, "is able to" needs "to" + base verb.' },
       { sentence: 'Water ___ at 100 degrees Celsius.', correct: 'boils', verb: 'boil', options: ['boils', 'is boiling', 'boil', 'boiled'], explain: 'Present simple for scientific facts / permanent truths.' },
       { sentence: 'We ___ a meeting at 3 pm today.', correct: 'are having', verb: 'have', options: ['are having', 'have', 'has', 'had'], explain: 'Present continuous for scheduled future arrangements.' },
       { sentence: 'The train ___ at 9:15 every morning.', correct: 'leaves', verb: 'leave', options: ['leaves', 'is leaving', 'leave', 'left'], explain: 'Present simple for timetables and schedules.' },

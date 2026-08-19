@@ -9,7 +9,7 @@
 
 import { shuffle } from '../array-utils.js';
 import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../exercise-ui.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
 import { finishExercise, advanceStudyCard } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
 
@@ -29,7 +29,7 @@ export function initTenses({ categories, scoreKeyPrefix }) {
     // First: check pending modes in current cat
     for (const m of MODES) {
       if (!getScoreStatus(m.key(currentCat)).passed) {
-        return { label: m.label, isNewCategory: false, onContinue: () => { mode = m.suffix ? 'timed' : 'practice'; startMode(); } };
+        return { label: m.label, isNewCategory: false, onContinue: () => { mode = m.suffix ? 'timed' : 'practice'; syncModeTabsActive(mode); startMode(); } };
       }
     }
     // Then: next category with any pending mode
@@ -70,7 +70,60 @@ export function initTenses({ categories, scoreKeyPrefix }) {
   initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
   function advanceCard(dir) {
+    // Reaching the end of the deck going forward suggests what to do next
+    // instead of silently wrapping back to card 1 — same UX as FlashcardEngine.
+    if (dir > 0 && idx === deck.length - 1) {
+      showStudyFollowUp();
+      return;
+    }
     advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
+  }
+
+  function showStudyFollowUp() {
+    const overlay = document.getElementById('resultOverlay');
+    if (!overlay) return;
+    const suggestion = findStudyFollowUp();
+
+    const restudy = () => { overlay.classList.remove('show'); idx = 0; renderStudyCard(); };
+
+    if (suggestion) {
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
+          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
+          <div class="result-sub">Siguiente: ${suggestion.label}</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
+        overlay.classList.remove('show');
+        suggestion.onContinue();
+        syncModeTabsActive(mode);
+      });
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    } else {
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+          <div class="result-title">¡Lección completa! 🎉</div>
+          <div class="result-sub">Aprobaste todas las categorías de esta lección.</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    }
   }
 
   // Keyboard: Enter/Space = flip or advance (study) / next (quiz+timed), Arrows = navigate
@@ -83,6 +136,19 @@ export function initTenses({ categories, scoreKeyPrefix }) {
       return;
     }
     if (mode !== 'study') return;
+
+    // While the end-of-deck follow-up overlay is open, Enter/Space confirms
+    // its primary action instead of flipping the (hidden) card underneath.
+    const overlay = document.getElementById('resultOverlay');
+    if (overlay && overlay.classList.contains('show')) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
+        primaryBtn?.click();
+      }
+      return;
+    }
+
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (document.activeElement && document.activeElement.tagName === 'BUTTON') {

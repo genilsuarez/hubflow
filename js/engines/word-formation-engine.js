@@ -8,8 +8,8 @@
    ═══════════════════════════════════════════════════════ */
 
 import { shuffle } from '../array-utils.js';
-import { recordScore, recordStudyItemSeen } from '../progress-store.js';
-import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs } from '../exercise-ui.js';
+import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
+import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
 import { finishExercise, advanceStudyCard } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
 
@@ -32,13 +32,29 @@ export function initWordFormation({ categories, scoreKeyPrefix }) {
   function startMode() { stopTimer(); document.querySelectorAll('[data-area]').forEach(a => a.classList.remove('show')); document.getElementById('timerBar').classList.remove('show'); setQuizAnswered(false); if (mode === 'practice') initPractice(false); else if (mode === 'timed') initPractice(true); else initStudy(); }
   function stopTimer() { if (timer) { timer.stop(); timer = null; } }
   function getData() { return categories[currentCat].items; }
+  // Returns { label, isNewCategory, onContinue } or null — mirrors sentence-quiz-engine.
+  function findStudyFollowUp() {
+    const catKeys = Object.keys(categories);
+    if (!getScoreStatus(`${scoreKeyPrefix}-${currentCat}-timed`).passed) {
+      return { label: '⏱️ Timed', isNewCategory: false, onContinue: () => { mode = 'timed'; syncModeTabsActive(mode); startMode(); } };
+    }
+    const startIdx = catKeys.indexOf(currentCat);
+    for (let i = 1; i <= catKeys.length; i++) {
+      const cat = catKeys[(startIdx + i) % catKeys.length];
+      if (cat === currentCat) continue;
+      if (!getScoreStatus(`${scoreKeyPrefix}-${cat}`).passed || !getScoreStatus(`${scoreKeyPrefix}-${cat}-timed`).passed) {
+        return { label: `${categories[cat]?.label || cat} — 📖 Study`, isNewCategory: true, onContinue: () => { currentCat = cat; mode = 'study'; startMode(); } };
+      }
+    }
+    return null;
+  }
   const updProgress = (c, t) => updateProgress(c, t, document.getElementById('progFill'), document.getElementById('progTxt'), document.getElementById('progPct'));
   function initPractice(timed) { deck = shuffle(getData()); idx = 0; score = 0; answered = false; total = Math.min(timed ? 10 : deck.length, deck.length); document.querySelector('[data-area="practice"]').classList.add('show'); if (timed) { document.getElementById('timerBar').classList.add('show'); timer = new Timer(total*8, r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r<=10); }, () => finishPractice()); timer.start(); } renderPractice(); }
   function renderPractice() { if (idx >= total) { stopTimer(); finishPractice(); return; } answered = false; setQuizAnswered(false); const item = deck[idx]; document.getElementById('scIcon').textContent = categories[currentCat].icon; document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>'); document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; document.getElementById('rootWord').textContent = `Root: ${item.root}`; const input = document.getElementById('answerInput'); input.value = ''; input.className = 'answer-input'; input.disabled = false; input.focus(); updProgress(idx, total); }
   function checkAnswer() { if (answered) return; const input = document.getElementById('answerInput'); const val = input.value.trim().toLowerCase(); const item = deck[idx]; if (!val) return; answered = true; input.disabled = true; const correct = val === item.correct.toLowerCase(); if (correct) { input.classList.add('correct'); score++; } else { input.classList.add('wrong'); } document.getElementById('scText').innerHTML = item.sentence.replace('___', `<span class="blank">${item.correct}</span>`); document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); const nextBtn = document.getElementById('quizNextBtn'); if (nextBtn) { nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →'; setQuizAnswered(true); nextBtn.onclick = () => renderPractice(); nextBtn.focus({ preventScroll: true }); } else { setTimeout(renderPractice, 1600); } }
   document.getElementById('answerInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
   document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-  function finishPractice() { const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v }); const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`${scoreKeyPrefix}-${currentCat}${_timedSuffix}`, pct); }
+  function finishPractice() { const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v, suggestion: findStudyFollowUp() }); const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`${scoreKeyPrefix}-${currentCat}${_timedSuffix}`, pct); }
   function initStudy() { deck = shuffle(getData()); idx = 0; document.querySelector('[data-area="study"]').classList.add('show'); renderStudyCard(); }
   function renderStudyCard() { const item = deck[idx]; recordStudyItemSeen({ storagePrefix: scoreKeyPrefix, category: currentCat, term: item.sentence, totalItems: getData().length }); document.getElementById('fcCard').classList.remove('flip'); document.getElementById('fcEmoji').textContent = categories[currentCat].icon; document.getElementById('fcSentence').textContent = item.sentence.replace('___', '_____'); document.getElementById('fcRoot').textContent = `Root: ${item.root}`; document.getElementById('fcAnswer').textContent = item.correct; document.getElementById('fcExplain').textContent = item.explain; document.getElementById('fcCounter').textContent = `${idx+1} / ${deck.length}`; updProgress(idx+1, deck.length); }
   document.getElementById('fcCard').addEventListener('click', () => document.getElementById('fcCard').classList.toggle('flip'));
@@ -48,12 +64,78 @@ export function initWordFormation({ categories, scoreKeyPrefix }) {
   initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
   function advanceCard(dir) {
+    // Reaching the end of the deck going forward suggests what to do next
+    // instead of silently wrapping back to card 1 — same UX as FlashcardEngine.
+    if (dir > 0 && idx === deck.length - 1) {
+      showStudyFollowUp();
+      return;
+    }
     advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
+  }
+
+  function showStudyFollowUp() {
+    const overlay = document.getElementById('resultOverlay');
+    if (!overlay) return;
+    const suggestion = findStudyFollowUp();
+
+    const restudy = () => { overlay.classList.remove('show'); idx = 0; renderStudyCard(); };
+
+    if (suggestion) {
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">📖</div>
+          <div class="result-title">¡Tarjetas repasadas! 🎉</div>
+          <div class="result-sub">Siguiente: ${suggestion.label}</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <button class="lp-btn lp-btn--purple" id="resultContinue">Continuar →</button>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultContinue')?.addEventListener('click', () => {
+        overlay.classList.remove('show');
+        suggestion.onContinue();
+        syncModeTabsActive(mode);
+      });
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    } else {
+      overlay.innerHTML = `
+        <div class="result-box">
+          <button class="result-close" id="resultDismiss" aria-label="Cerrar">✕</button>
+          <div style="font-size:3rem;margin-bottom:8px;">🏆</div>
+          <div class="result-title">¡Lección completa! 🎉</div>
+          <div class="result-sub">Aprobaste todas las categorías de esta lección.</div>
+          <div class="result-btns">
+            <button class="lp-btn lp-btn--ghost" id="resultRestudy">🔄 Repasar de nuevo</button>
+            <a class="lp-btn lp-btn--purple" href="../index.html">Salir</a>
+          </div>
+        </div>
+      `;
+      overlay.classList.add('show');
+      overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
+      overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+    }
   }
 
   // Keyboard: Enter/Space = flip or advance, Arrows = navigate
   document.addEventListener('keydown', e => {
     if (mode !== 'study') return;
+
+    // While the end-of-deck follow-up overlay is open, Enter/Space confirms
+    // its primary action instead of flipping the (hidden) card underneath.
+    const overlay = document.getElementById('resultOverlay');
+    if (overlay && overlay.classList.contains('show')) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
+        primaryBtn?.click();
+      }
+      return;
+    }
+
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (document.activeElement && document.activeElement.tagName === 'BUTTON') {

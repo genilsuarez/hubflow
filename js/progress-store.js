@@ -1163,9 +1163,13 @@ function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
 
   let trackedModes = [...modesFromKeys];
 
-  // If no mode suffix found, it's a single-mode exercise (practice)
-  if (hasNoModeSuffix && trackedModes.length === 0) {
-    trackedModes = [null]; // null means "no suffix in key"
+  // A key with no mode suffix (e.g. `tense-present`) IS the quiz/practice mode
+  // for modules like tenses/confusing-verbs — represented as `null`. It must be
+  // tracked whenever it's present, not only when no other suffixed mode (like
+  // 'timed') was also found, or the Quiz column silently disappears whenever
+  // the module also tracks Timed.
+  if (hasNoModeSuffix) {
+    trackedModes = [null, ...trackedModes];
   }
 
   // Determine all possible modes based on engine type
@@ -1212,6 +1216,7 @@ function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
     prefix,
     categoryKeys: [...categoriesFromKeys],
     trackedModes,
+    hasNoModeSuffix,
     cellFor,
   };
 }
@@ -1226,11 +1231,15 @@ function computeModuleMatrixCore(contentId, { includeStudy = false } = {}) {
 function buildModuleMatrix(contentId, { includeStudy = false } = {}) {
   const core = computeModuleMatrixCore(contentId, { includeStudy });
   if (!core) return null;
-  const { passScorePct, studyPassPct, prefix, categoryKeys, trackedModes, cellFor } = core;
+  const { passScorePct, studyPassPct, prefix, categoryKeys, trackedModes, hasNoModeSuffix, cellFor } = core;
 
   // Orden de columnas = orden de los mode tabs en pantalla; los modos rastreados
-  // que no tienen tab visible se anexan según el orden canónico.
-  const visualModes = readVisualModeOrder();
+  // que no tienen tab visible se anexan según el orden canónico. readVisualModeOrder
+  // siempre normaliza el tab "practice" a la string 'quiz', pero módulos como
+  // tenses/confusing-verbs graban ese modo SIN sufijo (representado como `null`
+  // en trackedModes) — sin este ajuste 'quiz' nunca calza con `null` y la
+  // columna Quiz desaparece del modal aunque sí esté siendo rastreada.
+  const visualModes = readVisualModeOrder().map((m) => (hasNoModeSuffix && m === 'quiz' ? null : m));
   const displayModes = [
     ...visualModes.filter((m) => trackedModes.includes(m)),
     ...MODE_ORDER.filter((m) => trackedModes.includes(m) && !visualModes.includes(m)),
@@ -1422,8 +1431,10 @@ function openProgressDetail(contentId) {
             const completedModes = rule.requiredActivities
               .filter(a => a.activityId !== 'study')
               .flatMap(a => a.scoreKeys)
-              .map(k => { const parts = k.split('-'); const last = parts[parts.length - 1]; return ['quiz','match','write','timed','challenge'].includes(last) ? last : null; })
-              .filter(Boolean);
+              // Un sufijo desconocido (ej. `tense-present`, sin sufijo de modo)
+              // es el modo Quiz sin marcar — no un modo a ignorar, ver `hasNoModeSuffix`
+              // en computeModuleMatrixCore().
+              .map(k => { const parts = k.split('-'); const last = parts[parts.length - 1]; return ['quiz','match','write','timed','challenge'].includes(last) ? last : 'quiz'; });
             const uniqueModes = [...new Set(completedModes)];
             const studyActivity = rule.requiredActivities.find(a => a.activityId === 'study');
             const modeLabels = [
