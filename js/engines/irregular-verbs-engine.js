@@ -10,7 +10,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
-import { finishExercise, advanceStudyCard, createMatchMode, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown } from '../exercise-flow.js';
+import { finishExercise, createMatchMode, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, createStudyNav } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
 
 /**
@@ -119,25 +119,14 @@ export function initIrregularVerbs({ verbs, scoreKeyPrefix }) {
   document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); cardIdx = 0; renderCard(); });
   initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
-  function advanceCard(dir) {
-    // Reaching the end of the deck going forward suggests what to do next
-    // instead of silently wrapping back to card 1 — same UX as FlashcardEngine.
-    if (dir > 0 && cardIdx === deck.length - 1) {
-      showStudyFollowUp();
-      return;
-    }
-    advanceStudyCard(dir, { getIdx: () => cardIdx, setIdx: v => cardIdx = v, deckLength: deck.length, renderCard });
-  }
-
-  function showStudyFollowUp() {
-    const suggestion = findStudyFollowUp();
-    showStudyFollowUpOverlay({
-      suggestion,
-      subtitle: suggestion ? `Siguiente: ${suggestion.label}` : '',
-      onContinue: () => { suggestion.onContinue(); syncModeTabsActive(mode); },
-      onRestudy: () => { cardIdx = 0; renderCard(); },
-    });
-  }
+  const { advanceCard, showFollowUp: showStudyFollowUp } = createStudyNav({
+    getIdx: () => cardIdx, setIdx: v => cardIdx = v,
+    getDeckLength: () => deck.length,
+    renderCard: renderCard,
+    findFollowUp: findStudyFollowUp,
+    onContinue: s => { s.onContinue(); syncModeTabsActive(mode); },
+    onRestudy: () => { cardIdx = 0; renderCard(); },
+  });
 
   document.addEventListener('keydown', e => {
     if (mode === 'battle') {

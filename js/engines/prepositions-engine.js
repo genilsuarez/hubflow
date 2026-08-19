@@ -10,7 +10,7 @@
 import { shuffle } from '../array-utils.js';
 import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-store.js';
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
-import { finishExercise, advanceStudyCard, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, findNextPendingCategory } from '../exercise-flow.js';
+import { finishExercise, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, findNextPendingCategory, createStudyNav } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
 
 /**
@@ -177,25 +177,14 @@ export function initPrepositions({ categories, scoreKeyPrefix }) {
   document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle(deck); idx = 0; renderStudyCard(); });
   initSwipe(document.querySelector('[data-area="study"]'), { onNext: () => advanceCard(1), onPrev: () => advanceCard(-1) });
 
-  function advanceCard(dir) {
-    // Reaching the end of the deck going forward suggests what to do next
-    // instead of silently wrapping back to card 1 — same UX as FlashcardEngine.
-    if (dir > 0 && idx === deck.length - 1) {
-      showStudyFollowUp();
-      return;
-    }
-    advanceStudyCard(dir, { getIdx: () => idx, setIdx: v => idx = v, deckLength: deck.length, renderCard: renderStudyCard });
-  }
-
-  function showStudyFollowUp() {
-    const suggestion = findStudyFollowUp();
-    showStudyFollowUpOverlay({
-      suggestion,
-      subtitle: suggestion ? `Siguiente: ${suggestion.label}` : '',
-      onContinue: () => { suggestion.onContinue(); syncModeTabsActive(mode); },
-      onRestudy: () => { idx = 0; renderStudyCard(); },
-    });
-  }
+  const { advanceCard, showFollowUp: showStudyFollowUp } = createStudyNav({
+    getIdx: () => idx, setIdx: v => idx = v,
+    getDeckLength: () => deck.length,
+    renderCard: renderStudyCard,
+    findFollowUp: findStudyFollowUp,
+    onContinue: s => { s.onContinue(); syncModeTabsActive(mode); },
+    onRestudy: () => { idx = 0; renderStudyCard(); },
+  });
 
   document.addEventListener('keydown', e => {
     if (mode === 'practice' || mode === 'timed') { handleQuizNextKeydown(e); return; }

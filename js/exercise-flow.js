@@ -153,26 +153,54 @@ export function handleQuizNextKeydown(e) {
  *  the nine copies of this handler before they were merged here on 2026-08-19 —
  *  the other six silently lacked it. */
 export function handleStudyKeydown(e, { advanceCard, cardId = 'fcCard' }) {
-  const overlay = document.getElementById('resultOverlay');
-  if (overlay && overlay.classList.contains('show')) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const primaryBtn = overlay.querySelector('#resultContinue') || overlay.querySelector('#resultRestudy');
-      primaryBtn?.click();
-    }
-    return;
-  }
+  if (handleOverlayKeydown(e)) return;
 
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
-    if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
-      document.activeElement.blur();
-    }
-    const card = document.getElementById(cardId);
-    if (card.classList.contains('flip')) advanceCard(1);
-    else squeezeToggle(card, 'flip');
+    flipOrAdvanceCard(advanceCard, cardId);
   } else if (e.key === 'ArrowRight') { e.preventDefault(); advanceCard(1); }
   else if (e.key === 'ArrowLeft') { e.preventDefault(); advanceCard(-1); }
+}
+
+/** Enter/Space confirm the result overlay's primary action, Escape dismisses it.
+ *  Returns true when the overlay was open, so callers stop before acting on the
+ *  card underneath.
+ *
+ *  The selector chains cover both overlay markups — showStudyFollowUpOverlay's
+ *  (#resultContinue / #resultRestudy / #resultDismiss) and showResult's
+ *  (#resultContinue / #resultRestart / #resultClose). Note the primary chain
+ *  deliberately never targets `.lp-btn--purple`: in the lesson-complete variant
+ *  that button is the "Salir" link, and Enter must not navigate out of the
+ *  lesson. Before 2026-08-19 flashcard-engine did target it, and aimed Escape at
+ *  an id the result overlay does not have. */
+export function handleOverlayKeydown(e) {
+  const overlay = document.getElementById('resultOverlay');
+  if (!overlay || !overlay.classList.contains('show')) return false;
+
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    const primary = overlay.querySelector('#resultContinue')
+      || overlay.querySelector('#resultRestudy')
+      || overlay.querySelector('#resultRestart');
+    primary?.click();
+  } else if (e.key === 'Escape') {
+    e.preventDefault();
+    (overlay.querySelector('#resultDismiss') || overlay.querySelector('#resultClose'))?.click();
+  }
+  return true;
+}
+
+/** Space/Enter on a Study card: reveal the answer, or move on if it's already
+ *  revealed. Blurring a focused BUTTON first is what stops a mouse-clicked "→"
+ *  from eating the next keypress and re-firing itself instead. */
+export function flipOrAdvanceCard(advanceCard, cardId = 'fcCard') {
+  if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
+    document.activeElement.blur();
+  }
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  if (card.classList.contains('flip')) advanceCard(1);
+  else squeezeToggle(card, 'flip');
 }
 
 /** The end-of-deck overlay every Study mode shows once the last card is reached:
@@ -229,6 +257,41 @@ export function showStudyFollowUpOverlay({
   }
   overlay.querySelector('#resultRestudy')?.addEventListener('click', restudy);
   overlay.querySelector('#resultDismiss')?.addEventListener('click', restudy);
+}
+
+/** Wires a Study deck's navigation: returns the `advanceCard(dir)` every engine
+ *  binds to its →/← buttons, swipe and keyboard, plus the `showFollowUp()` that
+ *  runs when the deck ends.
+ *
+ *  Owning both together is the point: the "last card going forward opens the
+ *  follow-up instead of wrapping to card 1" rule lived hand-written in eight
+ *  engines until 2026-08-19, so changing how a deck ends meant eight edits.
+ *
+ *  `findFollowUp` returns the engine's own suggestion (its progress rules stay
+ *  its own); `onContinue` receives that suggestion. */
+export function createStudyNav({
+  getIdx, setIdx, getDeckLength, renderCard, findFollowUp,
+  onContinue, onRestudy, allDoneSub, cardId = 'fcCard',
+  subtitleFor = s => `Siguiente: ${s.label}`,
+}) {
+  function showFollowUp() {
+    const suggestion = findFollowUp();
+    showStudyFollowUpOverlay({
+      suggestion,
+      subtitle: suggestion ? subtitleFor(suggestion) : '',
+      onContinue: () => onContinue(suggestion),
+      onRestudy,
+      ...(allDoneSub ? { allDoneSub } : {}),
+    });
+  }
+
+  function advanceCard(dir) {
+    const deckLength = getDeckLength();
+    if (dir > 0 && getIdx() === deckLength - 1) { showFollowUp(); return; }
+    advanceStudyCard(dir, { getIdx, setIdx, deckLength, renderCard, cardId });
+  }
+
+  return { advanceCard, showFollowUp };
 }
 
 /** Squeezes the card to zero width, swaps which face is visible while it's

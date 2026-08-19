@@ -8,7 +8,7 @@ import { Timer, formatTime } from '../exercise-ui.js';
 import { speak, isSpeechAvailable, hasVoiceForLang, readAutoSpeak, writeAutoSpeak } from '../speech.js';
 import { initSwipe } from '../swipe.js';
 import { RESULT_TITLES } from '../result-copy.js';
-import { showStudyFollowUpOverlay } from '../exercise-flow.js';
+import { showStudyFollowUpOverlay, handleOverlayKeydown, flipOrAdvanceCard, squeezeToggle } from '../exercise-flow.js';
 
 // Preferencia persistente del feedback sonoro de Match (mismo patrón que
 // el autospeak de speech.js: toggle on/off, apagado por defecto).
@@ -283,29 +283,18 @@ export class FlashcardEngine {
 
     // Battle card tap-to-flip (mobile) — mirrors the Space/Enter peek shortcut above
     document.getElementById('battleCard')?.addEventListener('click', () => {
-      this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
+      squeezeToggle(document.getElementById('battleCard'), 'flipped');
     });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
-      const overlay = document.getElementById('resultOverlay');
-      if (overlay?.classList.contains('show')) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          overlay.querySelector('.result-btns .lp-btn--purple')?.click();
-        } else if (e.key === 'Escape') {
-          e.preventDefault();
-          overlay.querySelector('#resultDismiss')?.click();
-        }
-        return;
-      }
+      if (handleOverlayKeydown(e)) return;
+
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         switch (this.currentMode) {
           case 'study': {
-            const flipped = document.getElementById('fcCard')?.classList.contains('flip');
-            if (flipped) this.navCard(1);
-            else this.flipCard();
+            flipOrAdvanceCard(d => this.navCard(d));
             break;
           }
           case 'battle': {
@@ -319,7 +308,7 @@ export class FlashcardEngine {
             } else if (cardFlipped) {
               this.battleNext(); // peeked → skip & advance
             } else {
-              this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
+              squeezeToggle(document.getElementById('battleCard'), 'flipped');
             }
             break;
           }
@@ -621,19 +610,8 @@ export class FlashcardEngine {
     this.renderQuiz();
   }
 
-  // Squeezes the card to zero width, swaps which face is visible while it's
-  // invisible, then lets it un-squeeze — see components.css .fc-card comment.
-  squeezeToggle(el, cls) {
-    if (!el || el.classList.contains('squeeze')) return;
-    el.classList.add('squeeze');
-    setTimeout(() => {
-      el.classList.toggle(cls);
-      el.classList.remove('squeeze');
-    }, 150);
-  }
-
   flipCard() {
-    this.squeezeToggle(document.getElementById('fcCard'), 'flip');
+    squeezeToggle(document.getElementById('fcCard'), 'flip');
   }
 
   navCard(delta) {
@@ -1092,14 +1070,14 @@ export class FlashcardEngine {
   battleClaim(player) {
     this.battle.claimer = player;
     this.battle.phase = 'judge';
-    this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
+    squeezeToggle(document.getElementById('battleCard'), 'flipped');
     this._setBattleInstruction(`Player ${player} claimed! Correct?`);
     this.showBattleActions('judge');
   }
 
   battleSkip() {
     this.battle.phase = 'next';
-    this.squeezeToggle(document.getElementById('battleCard'), 'flipped');
+    squeezeToggle(document.getElementById('battleCard'), 'flipped');
     this._setBattleInstruction('Saltado — sin puntos');
     this.showBattleActions('next');
   }
