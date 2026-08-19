@@ -2,11 +2,23 @@
  * Text Cohesion Data — choose the correct reference word (it/this/these/the former.../so...)
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bugs corregidos:
+// - advancedCohesion: "mine is one that's cheap and reliable" era lógicamente
+//   contradictorio (acabas de decir que necesitas uno nuevo). Corregido.
+// - advancedCohesion: 4 items con molde idéntico "such a [adj] [noun] that..."
+//   reducidos a 2 y el molde se diversificó con "so + adjetivo/adverbio + that".
 export const CATEGORIES = {
   referenceWords: {
     label: 'Reference Words',
     icon: '🧵',
     options: ['it', 'this', 'these', 'the former', 'the latter'],
+    studyCards: [
+      { front: 'it / these', back: 'referencia a una cosa singular / varias cosas mencionadas antes', detail: '"I bought a new phone. It is very fast." · "We visited Paris and Rome. These are both amazing cities."' },
+      { front: 'this', back: 'referencia a toda una situación o idea previa', detail: '"My sister lost her keys again. This happens every week." (this = todo lo anterior, no un objeto concreto)' },
+      { front: 'the former / the latter', back: 'primero mencionado / segundo mencionado (de dos opciones)', detail: '"He was offered a manager role and an assistant role. The former paid more." (the former = manager role)' },
+    ],
     items: [
       { sentence: 'I bought a new phone. ___ is very fast.', correct: 'it', explain: '"It" refers back to the single thing just mentioned (the phone).' },
       { sentence: 'The team lost the match, but they played well. ___ surprised the fans.', correct: 'this', explain: '"This" can refer back to a whole previous idea or situation.' },
@@ -34,12 +46,17 @@ export const CATEGORIES = {
     label: 'Advanced Cohesion',
     icon: '🔍',
     options: ['so', 'such', 'one', 'neither', 'either'],
+    studyCards: [
+      { front: 'so / either', back: '"I think so" sustituye una cláusula | "either" acuerda con negativo', detail: '"Is he coming? I hope so." (so = yes, he is coming) · "I can\'t swim, and she can\'t either." (either acuerda con negativo)' },
+      { front: 'one', back: 'sustituye un sustantivo contable singular ya mencionado', detail: '"My umbrella broke, so I need to buy a new one." (one = an umbrella, no repite el sustantivo)' },
+      { front: 'such / neither', back: '"such a/an + adj + noun" para énfasis | "neither" = ninguno de los dos', detail: '"It was such a difficult exam that students cried." · "Neither Tom nor Ana called; neither of them remembered."' },
+    ],
     items: [
       { sentence: 'Is he coming to the party? I hope ___.', correct: 'so', explain: '"I hope so" substitutes for the whole clause "he is coming".' },
       { sentence: "I don't like coffee, and my brother doesn't ___.", correct: 'either', explain: '"Either" agrees with a negative statement.' },
       { sentence: 'Neither Tom nor Ana called; ___ of them remembered.', correct: 'neither', explain: '"Neither" refers back to both people, meaning "not one nor the other".' },
       { sentence: 'It was ___ a difficult exam that many students cried.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
-      { sentence: "I need a new phone — mine is ___ that's cheap and reliable.", correct: 'one', explain: '"One" substitutes for a countable noun already mentioned ("a phone").' },
+      { sentence: "My old phone stopped working — I need to buy a new ___.", correct: 'one', explain: '"One" substitutes for a countable noun already mentioned ("a phone").' },
       { sentence: "She said she'd help, and I believe ___.", correct: 'so', explain: '"I believe so" substitutes for the whole idea just stated.' },
       { sentence: "He can't swim, and she can't ___.", correct: 'either', explain: '"Either" agrees with a negative statement.' },
       { sentence: 'It was ___ an amazing concert that we stayed for the encore.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
@@ -48,11 +65,11 @@ export const CATEGORIES = {
       { sentence: 'Are they moving to a new house? I think ___.', correct: 'so', explain: '"I think so" substitutes for the whole clause just mentioned.' },
       { sentence: "I can't drive, and my sister can't ___.", correct: 'either', explain: '"Either" agrees with a negative statement.' },
       { sentence: 'Neither the manager nor the assistant showed up; ___ explained why.', correct: 'neither', explain: '"Neither" refers back to both people, meaning "not one nor the other".' },
-      { sentence: 'It was ___ a boring lecture that half the class fell asleep.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
+      { sentence: 'The traffic was ___ heavy that the journey took three hours.', correct: 'so', explain: '"So" + adjective + "that" emphasizes the degree (different pattern from "such a noun").' },
       { sentence: "My umbrella broke, so I need to buy a new ___.", correct: 'one', explain: '"One" substitutes for the countable noun "umbrella".' },
       { sentence: 'Will it rain tomorrow? The forecast says ___.', correct: 'so', explain: '"The forecast says so" substitutes for the whole idea just stated.' },
       { sentence: "I haven't finished the book, and he hasn't ___.", correct: 'either', explain: '"Either" agrees with a negative statement.' },
-      { sentence: 'It was ___ a long journey that everyone fell asleep on the bus.', correct: 'such', explain: '"Such" + a/an + adjective + noun emphasizes the degree.' },
+      { sentence: 'She drove ___ fast that she got a speeding ticket.', correct: 'so', explain: '"So" + adverb + "that" emphasizes the degree of the action.' },
       { sentence: "I don't own a bicycle, but I'd like ___.", correct: 'one', explain: '"One" substitutes for the countable noun "bicycle".' },
       { sentence: '___ of the applicants had enough experience for the role.', correct: 'neither', explain: '"Neither" means "not one of the two candidates".' },
     ]

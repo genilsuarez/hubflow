@@ -1,8 +1,17 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bug corregido: disPrefix, item "They decided to dissolve the contract" →
+// "dissolve a contract" es poco natural; lo idiomático es "terminate/cancel a
+// contract". Corregido el item y su explain.
 export const CATEGORIES = {
   unPrefix: {
     label: 'Un- Prefix',
     icon: '🚫',
     options: ['unhappy', 'inhappy', 'dishappy'],
+    studyCards: [
+      { front: 'un-', back: 'el prefijo negativo más versátil del inglés', detail: 'unhappy · unclear · unfair · unacceptable · unstable · uncertain · untidy. Si tienes duda del prefijo correcto, prueba "un-" primero.' },
+      { front: 'un- para participios y estados', back: 'unexpected · unhelpful · unwise', detail: 'Muchos adjetivos formados de participios o estados toman "un-": unexpected, unopened, unfinished.' },
+    ],
     items: [
       { sentence: 'She felt ___ about the news.', correct: 'unhappy', explain: "'Un-' is the negative prefix for 'happy'." },
       { sentence: 'The instructions were ___.', correct: 'unclear', explain: "'Un-' is the negative prefix for 'clear'.", options: ['unclear', 'inclear', 'disclear'] },
@@ -20,15 +29,19 @@ export const CATEGORIES = {
     label: 'Dis- Prefix',
     icon: '➖',
     options: ['disagree', 'undagree', 'inagree'],
+    studyCards: [
+      { front: 'dis-', back: 'negación, inversión o separación', detail: 'disagree · dissatisfied · disqualify · disappear · discourage · disprove · disconnect · disorganize' },
+      { front: 'dis- + encourage = discourage', back: 'dis- invierte la dirección del verbo "encourage"', detail: '"Encourage" = dar ánimo. "Discourage" = quitar el ánimo. El prefijo dis- añade el significado opuesto.' },
+    ],
     items: [
       { sentence: 'I ___ with your opinion.', correct: 'disagree', explain: "'Dis-' is the negative prefix for 'agree'." },
       { sentence: 'She was ___ with the service.', correct: 'dissatisfied', explain: "'Dis-' is the negative prefix for 'satisfied'.", options: ['dissatisfied', 'unsatisfied', 'insatisfied'] },
       { sentence: 'He tried to ___ the committee.', correct: 'disqualify', explain: "'Dis-' is the negative prefix for 'qualify'.", options: ['disqualify', 'unqualify', 'inqualify'] },
       { sentence: 'The audience began to ___.', correct: 'disappear', explain: "'Dis-' is the negative prefix for 'appear'.", options: ['disappear', 'unappear', 'inappear'] },
-      { sentence: 'She felt ___ by his answer.', correct: 'discouraged', explain: "'Dis-' is the negative prefix for 'encouraged'.", options: ['discouraged', 'uncouraged', 'incouraged'] },
-      { sentence: 'They decided to ___ the contract.', correct: 'dissolve', explain: "'Dis-' combines with 'solve' to form 'dissolve' (to end).", options: ['dissolve', 'unsolve', 'insolve'] },
+      { sentence: 'She felt ___ by his answer.', correct: 'discouraged', explain: "'Dis-' reverses the meaning of 'encourage': to dis-courage = to take away courage/motivation.", options: ['discouraged', 'uncouraged', 'incouraged'] },
+      { sentence: 'They decided to ___ the contract.', correct: 'terminate', explain: "'Terminate a contract' is the natural collocation — dissolve is used for partnerships or organisations, not individual contracts.", options: ['terminate', 'dissolve', 'discontract'] },
       { sentence: 'His actions ___ the whole team.', correct: 'disorganized', explain: "'Dis-' is the negative prefix for 'organized'.", options: ['disorganized', 'unorganized', 'inorganized'] },
-      { sentence: 'The teacher will ___ any cheating.', correct: 'discourage', explain: "'Dis-' is the negative prefix for 'encourage'.", options: ['discourage', 'uncourage', 'incourage'] },
+      { sentence: 'The teacher will ___ any cheating.', correct: 'discourage', explain: "'Dis-' reverses 'encourage': to discourage = to take away motivation.", options: ['discourage', 'uncourage', 'incourage'] },
       { sentence: 'She wanted to ___ the rumor.', correct: 'disprove', explain: "'Dis-' is the negative prefix for 'prove'.", options: ['disprove', 'unprove', 'inprove'] },
       { sentence: 'He was ___ from the club.', correct: 'disconnected', explain: "'Dis-' is the negative prefix for 'connected'.", options: ['disconnected', 'unconnected', 'inconnected'] },
     ]
@@ -37,6 +50,10 @@ export const CATEGORIES = {
     label: 'Im-, In-, Ir- Prefixes',
     icon: '🔀',
     options: ['impossible', 'inpossible', 'unpossible'],
+    studyCards: [
+      { front: 'Regla de asimilación fonética', back: 'in- cambia su letra final para sonar mejor', detail: 'in- + possible → im-possible (p) · in- + rational → ir-rational (r) · in- + logical → il-logical (l) · in- + mature → im-mature (m)' },
+      { front: 'Regla rápida', back: 'P/B → im- · R → ir- · L → il- · resto → in-', detail: 'impossible · irresponsible · illogical · inaccurate · incomplete · invisible · irreversible' },
+    ],
     items: [
       { sentence: 'It was ___ to finish on time.', correct: 'impossible', explain: "'Im-' is used before words starting with 'p': possible → impossible." },
       { sentence: 'The results were ___.', correct: 'inaccurate', explain: "'In-' is the negative prefix for 'accurate'.", options: ['inaccurate', 'unaccurate', 'imaccurate'] },
@@ -54,6 +71,9 @@ export const CATEGORIES = {
     label: '-less Suffix',
     icon: '🔚',
     options: ['harmless', 'unharm', 'harmnot'],
+    studyCards: [
+      { front: '-less = "without"', back: 'adjetivo que describe ausencia de algo', detail: 'harmless (without harm) · helpless (without help) · hopeless (without hope) · meaningless (without meaning)' },
+    ],
     items: [
       { sentence: 'The spider was completely ___.', correct: 'harmless', explain: "'-less' means 'without': harm + less = without harm." },
       { sentence: 'His comment was ___.', correct: 'meaningless', explain: "'-less' means 'without': meaning + less = without meaning.", options: ['meaningless', 'unmeaning', 'inmeaning'] },

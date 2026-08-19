@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   summarizingConnectors: {
     label: 'Summarizing Connectors',
     icon: '📌',
     options: ['In short', 'To sum up', 'Overall', 'In a nutshell'],
+    studyCards: [
+      { front: 'Overall / To sum up', back: 'resumen general / cierre con punto final', detail: '"Overall, things turned out better than expected." · "To sum up, we recommend proceeding with caution."' },
+      { front: 'In short / In a nutshell', back: 'conclusión concisa o directa', detail: '"In short, the plan simply won\'t work." (directo) · "In a nutshell, it\'s a good investment." (muy breve, informal-formal)' },
+    ],
     items: [
       { sentence: '___, the project was a success despite the initial setbacks.', correct: 'Overall', explain: '"Overall" summarizes a general impression after weighing several points.' },
       { sentence: '___, we recommend proceeding with caution.', correct: 'To sum up', explain: '"To sum up" closes a discussion with a final recommendation.' },
@@ -24,6 +30,9 @@ export const CATEGORIES = {
     label: 'Summarizing Verbs',
     icon: '✍️',
     options: ['summarizes', 'highlights', 'outlines', 'concludes'],
+    studyCards: [
+      { front: 'summarizes / outlines / highlights / concludes', back: 'verbos de reporte para describir lo que dice un texto', detail: 'summarizes = versión condensada del todo · outlines = lista estructurada de puntos · highlights = énfasis en lo importante · concludes = juicio final.' },
+    ],
     items: [
       { sentence: 'The article ___ that renewable energy is the future.', correct: 'concludes', explain: '"Concludes" reports the final judgment of a text.' },
       { sentence: 'The report ___ the main challenges facing the industry.', correct: 'outlines', explain: '"Outlines" reports a structured list of points.' },
@@ -44,6 +53,10 @@ export const CATEGORIES = {
     label: 'Conciseness Markers',
     icon: '🎯',
     options: ['Essentially', 'In essence', 'briefly', 'Put simply'],
+    studyCards: [
+      { front: 'Essentially / In essence', back: 'reducir algo complejo a su núcleo', detail: '"Essentially, the plan failed because of poor timing." · "In essence, this is a story about resilience." Más reflexivo que "In short".' },
+      { front: 'Put simply / briefly', back: 'introducir una reafirmación directa o una explicación corta', detail: '"Put simply, we need more time." (reafirmación llana) · "Let me explain briefly: the results were mixed." (explicación condensada)' },
+    ],
     items: [
       { sentence: '___, the plan failed because of poor timing.', correct: 'Essentially', explain: '"Essentially" reduces a complex situation to its core cause.' },
       { sentence: '___, we ran out of funding.', correct: 'Put simply', explain: '"Put simply" introduces a plain, direct restatement.' },

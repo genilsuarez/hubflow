@@ -1,8 +1,15 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   pastSimpleRegular: {
     label: 'Past Simple — Regular',
     icon: '⏮️',
     options: ['walked', 'walk', 'walking'],
+    studyCards: [
+      { front: 'Regla general', back: 'verbo + -ed', detail: 'walk → walked · cook → cooked · finish → finished' },
+      { front: 'Consonante + y → -ied', back: 'y cambia a i antes de -ed', detail: 'study → studied · carry → carried · try → tried' },
+      { front: 'Todas las personas: igual forma', back: 'I/you/he/she/it/we/they + -ed', detail: '"She walked" y "I walked" — el pasado simple no cambia con la persona (a diferencia del presente).' },
+    ],
     items: [
       { sentence: 'I ___ to school yesterday.', correct: 'walked', verb: 'walk', explain: "Regular verbs add -ed in the past simple." },
       { sentence: 'She ___ the door before she left.', correct: 'closed', verb: 'close', explain: "Regular verbs add -ed in the past simple.", options: ['closed', 'close', 'closing'] },
@@ -20,6 +27,10 @@ export const CATEGORIES = {
     label: 'Past Simple — Irregular',
     icon: '🌀',
     options: ['went', 'goed', 'go'],
+    studyCards: [
+      { front: 'Los irregulares no siguen ninguna regla', back: 'hay que aprenderlos de memoria', detail: 'go → went · buy → bought · eat → ate · lose → lost · have → had' },
+      { front: 'Trampa: no añadir -ed a irregulares', back: '"goed", "buyed", "eated" no existen', detail: 'Si el verbo es irregular, su pasado simple es una palabra completamente distinta.' },
+    ],
     items: [
       { sentence: 'I ___ to the beach last summer.', correct: 'went', verb: 'go', explain: "'Go' is irregular: go → went." },
       { sentence: 'She ___ a beautiful dress.', correct: 'bought', verb: 'buy', explain: "'Buy' is irregular: buy → bought.", options: ['bought', 'buyed', 'buy'] },
@@ -37,6 +48,11 @@ export const CATEGORIES = {
     label: 'Past Continuous — Form',
     icon: '⏳',
     options: ['was reading', 'reading', 'read'],
+    studyCards: [
+      { front: 'Forma', back: 'was/were + verbo-ing', detail: 'I was reading. · She was cooking. · They were watching TV.' },
+      { front: 'was vs were', back: 'I/he/she/it → was | you/we/they → were', detail: 'I was studying. · She was writing. · We were walking.' },
+      { front: 'Uso', back: 'acción en progreso en un momento pasado', detail: '"I was reading a book when you called." (lectura en curso, llamada la interrumpió)' },
+    ],
     items: [
       { sentence: 'I ___ a book when you called.', correct: 'was reading', verb: 'read', explain: "Past continuous: was/were + verb-ing." },
       { sentence: 'They ___ football when it started to rain.', correct: 'were playing', verb: 'play', explain: "Past continuous: was/were + verb-ing.", options: ['were playing', 'was playing', 'played'] },
@@ -54,6 +70,11 @@ export const CATEGORIES = {
     label: 'Simple vs Continuous (When)',
     icon: '⚖️',
     options: ['was cooking, arrived', 'cooked, was arriving'],
+    studyCards: [
+      { front: 'Acción de fondo (larga) → continuous', back: 'was/were + -ing', detail: '"I was cooking dinner when she arrived." (cocinar = fondo, llegada = interrupción)' },
+      { front: 'Acción que interrumpe (corta) → simple', back: 'past simple', detail: '"While I was waiting, I lost my keys." (esperar = fondo, perder = acción puntual dentro)' },
+      { front: 'Clave: "when" o "while"', back: '"when" → suele introducir la interrupción | "while" → suele introducir el fondo', detail: '"While she was sleeping, the phone rang." · "She was sleeping when the phone rang." — misma idea, distinto conector.' },
+    ],
     items: [
       { sentence: 'I ___ dinner when she ___.', correct: 'was cooking, arrived', explain: "Longer background action (was cooking) is interrupted by a shorter action (arrived)." },
       { sentence: 'She ___ TV when the phone ___.', correct: 'was watching, rang', explain: "Longer background action interrupted by a shorter one.", options: ['was watching, rang', 'watched, was ringing'] },

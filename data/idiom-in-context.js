@@ -2,11 +2,18 @@
  * Idiom in Context Data — choose the correct idiom to complete a passage
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   everydayIdioms: {
     label: 'Everyday Idioms',
     icon: '🗯️',
     options: ['piece of cake', 'break the ice', 'under the weather', 'cost an arm and a leg', 'once in a blue moon', 'hit the sack', 'spill the beans', 'keep an eye on', 'call it a day', 'hit the books'],
+    studyCards: [
+      { front: 'piece of cake · under the weather · cost an arm and a leg', back: 'muy fácil · sentirse mal · ser muy caro', detail: '"The exam was a piece of cake." · "I feel under the weather." · "That bag cost an arm and a leg."' },
+      { front: 'break the ice · once in a blue moon · hit the sack', back: 'romper el hielo · muy raramente · irse a la cama', detail: '"He told a joke to break the ice." · "We see each other once in a blue moon." · "I\'ll hit the sack early."' },
+      { front: 'spill the beans · keep an eye on · call it a day · hit the books', back: 'revelar un secreto · vigilar · parar de trabajar · estudiar', detail: '"She spilled the beans." · "Keep an eye on my bag." · "Let\'s call it a day." · "I need to hit the books."' },
+    ],
     items: [
       { sentence: 'The exam was so easy, it was a ___.', correct: 'piece of cake', explain: '"A piece of cake" = something very easy.' },
       { sentence: 'I felt a bit ___ this morning, so I stayed home.', correct: 'under the weather', explain: '"Under the weather" = feeling slightly unwell.' },
@@ -34,6 +41,11 @@ export const CATEGORIES = {
     label: 'Business & Formal Idioms',
     icon: '💼',
     options: ['think outside the box', 'get the ball rolling', 'on the same page', 'back to the drawing board', 'raise the bar', 'touch base', 'cut corners', 'learn the ropes', 'keep in the loop', 'go the extra mile'],
+    studyCards: [
+      { front: 'get the ball rolling · back to the drawing board · think outside the box', back: 'empezar · volver a planear desde cero · pensar con creatividad', detail: '"Let\'s get the ball rolling." · "The design failed — back to the drawing board." · "We need to think outside the box."' },
+      { front: 'on the same page · raise the bar · touch base · cut corners', back: 'estar de acuerdo · elevar el estándar · contactar brevemente · hacer las cosas de forma descuidada', detail: '"Is everyone on the same page?" · "Their service raised the bar." · "Let\'s touch base next week." · "Don\'t cut corners on safety."' },
+      { front: 'learn the ropes · keep in the loop · go the extra mile', back: 'aprender el oficio · mantener informado · hacer más de lo esperado', detail: '"New employees need time to learn the ropes." · "I\'ll keep you in the loop." · "She always goes the extra mile."' },
+    ],
     items: [
       { sentence: "Let's ___ and start the meeting.", correct: 'get the ball rolling', explain: '"Get the ball rolling" = start something in motion.' },
       { sentence: "The design failed, so it's ___ for the whole team.", correct: 'back to the drawing board', explain: '"Back to the drawing board" = starting the planning process over.' },

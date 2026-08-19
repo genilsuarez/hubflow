@@ -3,11 +3,18 @@
  * Categories: Structure words (than/as/the), Irregular forms
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   structure: {
     label: 'Structure',
     icon: '⚖️',
     options: ['than', 'as', 'the'],
+    studyCards: [
+      { front: 'comparativo → than', back: 'more interesting than · better than', detail: 'Siempre "than" después de un comparativo, nunca "that" o "as".' },
+      { front: 'as...as', back: 'igualdad o desigualdad con negación', detail: '"She\'s as smart as her brother." · "He\'s not as tall as his brother." (not as...as = menos que)' },
+      { front: 'the + superlativo', back: 'el/la más', detail: '"It was the best decision." · "This is the most beautiful place." Los superlativos siempre van con "the".' },
+    ],
     items: [
       { sentence: 'This book is more interesting ___ the last one.', correct: 'than', explain: 'Comparatives are followed by "than".' },
       { sentence: 'She\'s as smart ___ her brother.', correct: 'as', explain: '"As + adjective + as" expresses equality.' },
@@ -25,6 +32,10 @@ export const CATEGORIES = {
     label: 'Irregular Forms',
     icon: '🔁',
     options: ['better', 'worse', 'further', 'best', 'worst', 'furthest'],
+    studyCards: [
+      { front: 'good → better → best | bad → worse → worst', back: 'los dos únicos irregulares de uso frecuente', detail: '"This is much better." · "That was the worst meal I\'ve had." Nunca "more good" o "most bad".' },
+      { front: 'far → further / farther → furthest / farthest', back: 'distancia física o "más allá / adicional"', detail: '"How much further is the station?" (distancia) · "I need further information." (adicional, no distancia)' },
+    ],
     items: [
       { sentence: 'This restaurant is much ___ than the one we tried last week.', correct: 'better', explain: '"Good" → comparative "better" (irregular).' },
       { sentence: 'My cold got ___ overnight.', correct: 'worse', explain: '"Bad" → comparative "worse" (irregular).' },
@@ -42,6 +53,10 @@ export const CATEGORIES = {
     label: 'Double Comparatives',
     icon: '📈',
     options: ['the more', 'the less', 'the better', 'the harder', 'the longer', 'the sooner'],
+    studyCards: [
+      { front: 'The + comparativo... the + comparativo', back: 'cuanto más X, más Y', detail: '"The more you practise, the better you get." Las dos mitades usan "the + comparative".' },
+      { front: 'Ambas partes cambian en paralelo', back: 'both clauses must mirror the structure', detail: '"The harder you work, the better the results." No es posible empezar una con "the" y la otra sin.' },
+    ],
     items: [
       { sentence: '___ you practise, the better you get.', correct: 'the more', explain: 'Double comparative: "the more... the more/better" — both clauses use "the + comparative".' },
       { sentence: 'The harder you work, ___ the results.', correct: 'the better', explain: '"The harder... the better" — a parallel double comparative.' },

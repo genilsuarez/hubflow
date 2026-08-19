@@ -1,8 +1,15 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   toBeAffirmative: {
     label: 'To Be — Affirmative',
     icon: '😊',
     options: ['am', 'is', 'are'],
+    studyCards: [
+      { front: 'I → am', back: 'solo para "I", siempre', detail: 'I am a student. · I am from Mexico. (nunca "I is" o "I are")' },
+      { front: 'he / she / it → is', back: '3ª persona singular', detail: 'She is a doctor. · It is a nice day. · My brother is tall.' },
+      { front: 'you / we / they → are', back: '2ª persona y plural', detail: 'You are very kind. · We are at home. · They are my friends. · My parents are happy.' },
+    ],
     items: [
       { sentence: 'I ___ a student.', correct: 'am', explain: '"I" always goes with "am".' },
       { sentence: 'She ___ a doctor.', correct: 'is', explain: '"She/he/it" go with "is".' },
@@ -20,6 +27,11 @@ export const CATEGORIES = {
     label: 'To Be — Negative',
     icon: '🙅',
     options: ["am not", "isn't", "aren't"],
+    studyCards: [
+      { front: 'I am not', back: 'no tiene forma contraída con "am"', detail: '"I\'m not" es correcto, pero nunca "I amn\'t". Única excepción en todo el sistema.' },
+      { front: 'he/she/it → isn\'t', back: 'is not → isn\'t', detail: 'She isn\'t at school. · It isn\'t cold today.' },
+      { front: 'you/we/they → aren\'t', back: 'are not → aren\'t', detail: 'They aren\'t ready. · We aren\'t late.' },
+    ],
     items: [
       { sentence: 'I ___ hungry right now.', correct: 'am not', explain: '"I am not" has no short form for "am".' },
       { sentence: "She ___ at school today.", correct: "isn't", explain: '"is not" contracts to "isn\'t" with she/he/it.' },
@@ -37,6 +49,11 @@ export const CATEGORIES = {
     label: 'Have / Has',
     icon: '🎒',
     options: ['have', 'has'],
+    studyCards: [
+      { front: 'I / you / we / they → have', back: 'todos excepto 3ª persona singular', detail: 'I have a new phone. · They have a big house.' },
+      { front: 'he / she / it → has', back: '3ª persona singular', detail: 'She has two brothers. · My cat has blue eyes.' },
+      { front: 'Regla rápida', back: 'Si usas "is/does" con ese sujeto → "has". Si usas "are/do" → "have"', detail: '"She is/does/has" forman un grupo. "They are/do/have" forman otro.' },
+    ],
     items: [
       { sentence: 'I ___ a new phone.', correct: 'have', explain: 'I/you/we/they use "have".' },
       { sentence: 'She ___ two brothers.', correct: 'has', explain: 'She/he/it use "has".' },
@@ -54,6 +71,10 @@ export const CATEGORIES = {
     label: 'To Be — Questions',
     icon: '❓',
     options: ['Am', 'Is', 'Are'],
+    studyCards: [
+      { front: 'Inversión: be + sujeto + complemento?', back: 'el verbo se pone antes del sujeto', detail: '"She is tired." → "Is she tired?" (is pasa al principio)' },
+      { front: 'Am I...? / Is he/she/it...? / Are you/we/they...?', back: 'mismas reglas que afirmativo, solo invierte', detail: 'Am I late? · Is she a teacher? · Are they at home?' },
+    ],
     items: [
       { sentence: '___ you ready?', correct: 'Are', explain: 'Questions start with the "be" form that matches the subject.' },
       { sentence: '___ she a teacher?', correct: 'Is', explain: '"She" takes "is".' },

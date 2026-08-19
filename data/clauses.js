@@ -2,11 +2,17 @@
  * Clauses Data — relative clauses (who/which/that/whose/where/when)
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   people: {
     label: 'People',
     icon: '🧑',
     options: ['who', 'whose'],
+    studyCards: [
+      { front: 'who', back: 'persona — sujeto u objeto de la cláusula', detail: '"The man who called is my uncle." (sujeto) · "She married a man who she met." (objeto)' },
+      { front: 'whose', back: 'posesión — de quién (persona o cosa)', detail: '"The woman whose car was stolen." · "I need a phone whose battery lasts all day." (también para cosas)' },
+    ],
     items: [
       { sentence: 'The man ___ called yesterday is my uncle.', correct: 'who', explain: '"Who" introduces a clause about a person (subject).' },
       { sentence: "She's the woman ___ car was stolen.", correct: 'whose', explain: '"Whose" shows possession.' },
@@ -24,6 +30,9 @@ export const CATEGORIES = {
     label: 'Things',
     icon: '🧩',
     options: ['which', 'who'],
+    studyCards: [
+      { front: 'which', back: 'cosas, animales, ideas', detail: '"The laptop which I bought still works." · "The bus which goes to the airport leaves hourly." Nunca "who" para cosas.' },
+    ],
     items: [
       { sentence: 'The company ___ makes this product is French.', correct: 'which', explain: '"Which" introduces a clause about a thing, not "who" (that\'s only for people).' },
       { sentence: 'The laptop ___ I bought last year still works perfectly.', correct: 'which', explain: '"Which" introduces a clause about a thing.' },
@@ -41,6 +50,9 @@ export const CATEGORIES = {
     label: 'Place & Time',
     icon: '🕒',
     options: ['where', 'when'],
+    studyCards: [
+      { front: 'where / when', back: 'lugar / tiempo', detail: '"This is the house where I grew up." · "I remember the day when we met." Funcionan como "in which" y "at which" en versión no formal.' },
+    ],
     items: [
       { sentence: 'This is the house ___ I grew up.', correct: 'where', explain: '"Where" introduces a clause about a place.' },
       { sentence: 'I remember the day ___ we first met.', correct: 'when', explain: '"When" introduces a clause about a time.' },
@@ -58,6 +70,11 @@ export const CATEGORIES = {
     label: 'That or Which',
     icon: '✂️',
     options: ['that', 'which'],
+    studyCards: [
+      { front: 'that', back: 'cláusula definitoria — sin comas', detail: '"The book that I bought was expensive." Identifica de cuál se habla. "That" nunca va entre comas.' },
+      { front: 'which', back: 'cláusula no definitoria — con comas, o tras preposición', detail: '"My car, which I bought last year, keeps breaking down." · "The meeting was postponed, which annoyed everyone." (que = toda la idea)' },
+      { front: 'Después de "the only / everything / something / all"', back: 'siempre "that"', detail: '"Everything that he said." · "The only one that works." Estos antecedentes no admiten "which".' },
+    ],
     items: [
       { sentence: 'The book ___ I bought yesterday was expensive.', correct: 'that', explain: 'Defining clause (no commas) — "that" is the natural choice.' },
       { sentence: 'My car, ___ I bought last year, keeps breaking down.', correct: 'which', explain: 'Non-defining clause (commas) — "that" is never possible here.' },

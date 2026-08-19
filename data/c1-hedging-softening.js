@@ -1,8 +1,13 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   modalHedges: {
     label: 'Modal Hedges',
     icon: '🌫️',
     options: ['might', 'will', 'must'],
+    studyCards: [
+      { front: 'might / could / may', back: 'suavizan una afirmación, dejan margen de duda', detail: '"This might be an overstatement." · "It could be argued that..." · "The results may suggest a correlation." Evitan el tono absoluto de "will" o "must".' },
+    ],
     items: [
       { sentence: "This ___ be a slight overstatement, but I think it's worth considering.", correct: 'might', explain: "'Might' softens a claim, making it less direct and more tentative." },
       { sentence: "It ___ be argued that the data is inconclusive.", correct: 'could', explain: "'Could' softens an argument, presenting it as one possible view.", options: ['could', 'will', 'must'] },
@@ -20,6 +25,9 @@ export const CATEGORIES = {
     label: 'Tentative Language',
     icon: '🤔',
     options: ['It seems that', 'It is', 'It must be'],
+    studyCards: [
+      { front: 'Frases tentativas — presentan una idea como impresión, no como hecho', back: 'It seems/appears that · I would suggest/argue that · It is possible that · It could be said that', detail: '"It appears that the plan needs adjustments." · "I would argue that there might be a better solution." Más débil que "It is clear that" o "I know that".' },
+    ],
     items: [
       { sentence: "___ the plan needs some adjustments.", correct: 'It seems that', explain: "'It seems that' softens a statement, presenting it as an impression rather than a fact." },
       { sentence: "___ this could be improved.", correct: 'It appears that', explain: "'It appears that' softens a statement as a tentative observation.", options: ['It appears that', 'It is that', 'It must be'] },
@@ -37,6 +45,9 @@ export const CATEGORIES = {
     label: 'Softening Adverbs',
     icon: '🕊️',
     options: ['somewhat', 'extremely', 'completely'],
+    studyCards: [
+      { front: 'somewhat / rather / fairly / partly / perhaps / arguably', back: 'adverbios que suavizan sin negar', detail: '"The results were somewhat disappointing." · "The plan seems rather flawed." · "This is arguably the most efficient method." Evitan las afirmaciones absolutas.' },
+    ],
     items: [
       { sentence: "The results were ___ disappointing.", correct: 'somewhat', explain: "'Somewhat' softens an adjective, making the statement less absolute." },
       { sentence: "This is ___ a valid concern.", correct: 'arguably', explain: "'Arguably' softens a claim, presenting it as debatable rather than certain.", options: ['arguably', 'definitely', 'undeniably'] },
@@ -54,6 +65,9 @@ export const CATEGORIES = {
     label: 'Indirect Disagreement',
     icon: '🙅‍♀️',
     options: ["I see your point, but", "You're wrong because", "That's completely false"],
+    studyCards: [
+      { front: 'Estructura de desacuerdo cortés', back: 'Reconocer el punto del otro → introducir el contraste → dar perspectiva alternativa', detail: '"I see your point, but I\'m not sure I fully agree." · "With all due respect, there might be another way to look at this." Nunca atacar la persona.' },
+    ],
     items: [
       { sentence: "___ I'm not sure I fully agree.", correct: "I see your point, but", explain: "This phrase softens disagreement by acknowledging the other person's view first." },
       { sentence: "___ have you considered the alternative?", correct: "That's an interesting idea, but", explain: "This phrase softens disagreement by validating the idea before questioning it.", options: ["That's an interesting idea, but", "You're wrong, so", "That's absurd, but"] },

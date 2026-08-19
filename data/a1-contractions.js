@@ -1,8 +1,15 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   beContractions: {
     label: 'Be Contractions',
     icon: '🔗',
     options: ["I'm", "you're", "she's"],
+    studyCards: [
+      { front: 'I am → I\'m · you are → you\'re · he/she/it is → he\'s / she\'s / it\'s', back: 'Sujeto + am/is/are → contraction', detail: 'I\'m a student. · She\'s tired. · It\'s raining. (pronombre + apóstrofe + forma corta)' },
+      { front: 'we are → we\'re · they are → they\'re', back: 'Plurales y grupos', detail: '"Tom and I" = we → we\'re. "Sarah and Ben" = they → they\'re.' },
+      { front: 'Cuándo NO contraer', back: 'Al final de frase, siempre forma larga', detail: '"Yes, I am." (no "Yes, I\'m.") · "Yes, she is." (no "Yes, she\'s.")' },
+    ],
     items: [
       { sentence: 'My name is Alex. ___ a student.', correct: "I'm", explain: "I'm is short for 'I am'. Alex is speaking about himself.", options: ["I'm", "you're", "he's"] },
       { sentence: 'This is my sister. ___ very kind.', correct: "she's", explain: "She's is short for 'she is'.", options: ["she's", "they're", "I'm"] },
@@ -20,6 +27,11 @@ export const CATEGORIES = {
     label: 'Negative Contractions',
     icon: '🚫',
     options: ["don't", "doesn't", "isn't"],
+    studyCards: [
+      { front: 'do not → don\'t · does not → doesn\'t', back: 'Negativo presente simple', detail: 'I don\'t like coffee. · She doesn\'t eat meat. (3ª persona → doesn\'t, nunca "don\'t")' },
+      { front: 'is not → isn\'t · are not → aren\'t', back: 'Negativo to be', detail: 'It isn\'t raining. · They aren\'t at school.' },
+      { front: 'have not → haven\'t · has not → hasn\'t', back: 'Negativo presente perfecto', detail: 'I haven\'t finished. · He hasn\'t finished. (3ª persona → hasn\'t)' },
+    ],
     items: [
       { sentence: "I ___ like coffee.", correct: "don't", explain: "Don't is short for 'do not'.", options: ["don't", "doesn't", "isn't"] },
       { sentence: "She ___ like coffee.", correct: "doesn't", explain: "Doesn't is short for 'does not'.", options: ["don't", "doesn't", "aren't"] },
@@ -36,6 +48,11 @@ export const CATEGORIES = {
   mixedContractions: {
     label: 'Mixed Contractions',
     icon: '🔀',
+    studyCards: [
+      { front: 'I\'ve / she\'s / they\'ve (con participio)', back: 'have/has → experiencia o resultado reciente', detail: 'I\'ve got a new phone. · She\'s left. · They\'ve never been to Paris.' },
+      { front: 'I\'ll / she\'ll / they\'ll', back: 'will → promesa, predicción o decisión futura', detail: 'I\'ll call you tomorrow. · She\'ll arrive at six.' },
+      { front: 'Trampa: she\'s puede ser is o has', back: 'Mira lo que viene después', detail: '"She\'s happy" = she IS. · "She\'s finished" = she HAS. El participio pasado tras \'s indica has.' },
+    ],
     items: [
       {
         sentence: "My phone broke yesterday, so ___ got a new one.",

@@ -4,11 +4,18 @@
  * 20 items per category
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   basics: {
     label: 'Basics',
     icon: '📘',
     options: ['a', 'an', 'the', '∅'],
+    studyCards: [
+      { front: 'a / an — primera mención o cualquiera del grupo', back: 'a + consonante | an + sonido vocal', detail: '"a university" (sonido /juː/) · "an hour" (h muda) · "an MBA" (letra M → /ɛm/).' },
+      { front: 'the — referencia específica o única', back: 'ambos saben de qué se habla, o hay una sola', detail: '"Close the door." (ambos saben cuál) · "The sun is shining." (hay una sola)' },
+      { front: '∅ — sin artículo: conceptos generales y abstractos', back: 'plurales y no contables en sentido general', detail: '"I love chocolate." · "Life is short." · "Water is essential." (conceptos generales, sin caso específico)' },
+    ],
     items: [
       { sentence: 'She is ___ honest person.', correct: 'an', explain: 'Use "an" before silent "h" (honest → vowel sound).' },
       { sentence: 'I saw ___ elephant at the zoo.', correct: 'an', explain: 'Use "an" before vowel sounds (elephant).' },
@@ -36,6 +43,10 @@ export const CATEGORIES = {
     label: 'Geographic',
     icon: '🌍',
     options: ['the', '∅'],
+    studyCards: [
+      { front: '"the" en geografía', back: 'ríos, océanos, mares, desiertos, cordilleras, canales, países plurales o con "Kingdom/States/Republic"', detail: 'the Amazon · the Pacific · the Sahara · the Alps · the United Kingdom · the Philippines' },
+      { front: '∅ en geografía', back: 'países (la mayoría), ciudades, lagos "Lake X", continentes, montañas individuales, aeropuertos', detail: 'France · Madrid · Lake Geneva · South America · Mount Everest · Heathrow Airport' },
+    ],
     items: [
       { sentence: 'She lives in ___ United Kingdom.', correct: 'the', explain: 'Countries with Kingdom/States/Republic → "the".' },
       { sentence: '___ Amazon is the longest river.', correct: 'the', explain: 'River names use "the".' },
@@ -63,6 +74,11 @@ export const CATEGORIES = {
     label: 'Fixed Expressions',
     icon: '🔒',
     options: ['a', 'the', '∅'],
+    studyCards: [
+      { front: '∅ — instituciones como actividad o propósito', back: 'go to school / university / hospital (como paciente) / prison (como preso) / bed / sea', detail: '"She goes to school." · "He is in prison." · "He went to bed." (propósito, no lugar físico)' },
+      { front: '"the" — lugar físico específico', back: 'the hospital (de visita) · the gym · the cinema · the radio · the piano', detail: '"She went to the hospital to visit." · "I play the piano." · "I listen to the radio."' },
+      { front: 'a/an — expresiones fijas con artículo', back: 'a headache · a cold · a break · go for a walk · have a great time', detail: '"I have a headache." · "Let\'s go for a walk." · "Take a break." (siempre singular indefinido)' },
+    ],
     items: [
       { sentence: 'She goes to ___ school every day.', correct: '∅', explain: '"Go to school" (activity) → no article.' },
       { sentence: 'He went to ___ bed early.', correct: '∅', explain: '"Go to bed" (sleep) → no article.' },
@@ -90,6 +106,10 @@ export const CATEGORIES = {
     label: 'In Context',
     icon: '💬',
     options: ['a', 'an', 'the', '∅'],
+    studyCards: [
+      { front: 'Primera mención → a/an · Segunda mención → the', back: 'la primera vez es "nueva información"; la segunda ya se conoce', detail: '"She bought a dress. The dress was blue." (a → the al volver a mencionar)' },
+      { front: '∅ para idiomas, the + adjetivo sustantivado, the same', back: 'English / French sin artículo | the rich, the poor | the same', detail: '"English is spoken worldwide." · "The rich should help the poor." · "They went to the same school."' },
+    ],
     items: [
       { sentence: '___ water is essential for life.', correct: '∅', explain: 'General uncountable nouns → no article.' },
       { sentence: 'I like ___ dogs. They are friendly.', correct: '∅', explain: 'General plural nouns → no article.' },
@@ -114,9 +134,13 @@ export const CATEGORIES = {
     ]
   },
   noThe: {
-    label: 'Never Use "The"',
+    label: 'Usually No Article',
     icon: '🚫',
     options: ['the', '∅'],
+    studyCards: [
+      { front: '∅ — regla general', back: 'nombres propios, idiomas, asignaturas, deportes, comidas, días, meses, festividades', detail: 'Sarah · Mandarin · Maths · tennis · Christmas · Monday · April — ninguno lleva "the".' },
+      { front: 'Excepciones importantes', back: '"the" en apellidos plurales, "The Hague", y para distinguir entre dos personas del mismo nombre', detail: '"We invited the Hammonds." · "She works in The Hague." · "Do you mean the Andy who lives down the road?"' },
+    ],
     items: [
       { sentence: '___ Sarah is my best friend.', correct: '∅', explain: 'Personal names never take "the".' },
       { sentence: 'They moved to ___ Germany.', correct: '∅', explain: 'Most country names take no article.' },

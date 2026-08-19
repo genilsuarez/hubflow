@@ -2,13 +2,22 @@
  * Word Stress Quiz Data — commonly mispronounced words by Spanish speakers
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bug corregido: 'comfortable' tenía explain "COM-fter-ble" — estilo de
+// transcripción inconsistente con el resto del archivo. Corregido a
+// "COM-for-ta-ble (4 sílabas; 1ª sílaba tónica)".
 export const CATEGORIES = {
   commonWords: {
     label: 'Everyday Words',
     icon: '🗣️',
     options: ['1st syllable', '2nd syllable', '3rd syllable'],
+    studyCards: [
+      { front: 'Palabras de uso frecuente con 1ª sílaba tónica', back: 'NEC-es-sary · VEJ-ta-ble · IN-tres-ting · TEM-pra-ture · CHOC-lit · COM-for-ta-ble', detail: 'Muchos hispanohablantes acentúan la 2ª sílaba por influencia del español. La primera sílaba es la tónica.' },
+      { front: 'Palabras con 2ª o 3ª sílaba tónica', back: 'es-PESH-ally · pho-TOG-ra-phy · de-VEL-op-ment | un-der-STAND · af-ter-NOON · en-gi-NEER', detail: 'Comprueba que "especially" no suena "ES-pe-cially". "Photography" se acentúa en la 2ª, igual que en español "fotografía", pero la forma cambia.' },
+    ],
     items: [
-      { sentence: 'comfortable', correct: '1st syllable', explain: 'COM-fter-ble — many learners wrongly stress the 2nd syllable.' },
+      { sentence: 'comfortable', correct: '1st syllable', explain: 'COM-for-ta-ble (4 syllables; 1st syllable stressed) — many learners wrongly stress the 2nd.' },
       { sentence: 'especially', correct: '2nd syllable', explain: 'es-PESH-ally.' },
       { sentence: 'photography', correct: '2nd syllable', explain: 'pho-TOG-ra-phy (compare: PHOto, photoGRAPHic — stress moves!).' },
       { sentence: 'necessary', correct: '1st syllable', explain: 'NEC-es-sary.' },
@@ -34,6 +43,9 @@ export const CATEGORIES = {
     label: 'Stress-Shifting Families',
     icon: '🔀',
     options: ['1st syllable', '2nd syllable', '3rd syllable'],
+    studyCards: [
+      { front: 'Sufijo -ic / -ical / -tion / -ian / -eous', back: 'mueve el acento a la sílaba inmediatamente anterior al sufijo', detail: 'PHO-to → pho-to-GRAPH-ic · E-con-o-my → e-co-NOM-ic · HIS-to-ry → his-TOR-ic · PROD-uct → pro-DUC-tion · MA-gic → ma-GI-cian' },
+    ],
     items: [
       { sentence: 'photograph', correct: '1st syllable', explain: 'PHO-to-graph — the root keeps the stress.' },
       { sentence: 'photographic', correct: '3rd syllable', explain: 'pho-to-GRAPH-ic — the "-ic" suffix pulls the stress onto itself.' },
@@ -61,6 +73,9 @@ export const CATEGORIES = {
     label: 'Verb–Noun Stress Pairs',
     icon: '🔁',
     options: ['1st syllable', '2nd syllable'],
+    studyCards: [
+      { front: 'Sustantivo → 1ª sílaba · Verbo → 2ª sílaba', back: 'REC-ord (noun) · re-CORD (verb)', detail: 'Aplica a: record, permit, present, conflict, object, increase, export, protest, impact, update. La función gramatical determina el acento.' },
+    ],
     items: [
       { sentence: 'record (noun)', correct: '1st syllable', explain: 'REC-ord (noun) — stress on first syllable.' },
       { sentence: 'record (verb)', correct: '2nd syllable', explain: 're-CORD (verb) — stress on second syllable.' },

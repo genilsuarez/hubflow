@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   referenceWords: {
     label: 'This / That / These / Those',
     icon: '👉',
     options: ['this', 'that', 'these', 'those'],
+    studyCards: [
+      { front: 'this / these (referencia cercana o reciente)', back: 'un hecho recién enunciado o un conjunto reciente', detail: '"The company announced profits, and this came as a surprise." · "He proposed solutions, but these were rejected."' },
+      { front: 'that / those (referencia distante o anterior)', back: 'algo enunciado antes o con más distancia', detail: '"The results were inconclusive, and that frustrated the researchers." · "They cited older studies, but those have since been disproven."' },
+    ],
     items: [
       { sentence: 'The company announced record profits, and ___ came as a surprise to analysts.', correct: 'this', explain: '"This" refers back to the single fact just stated.' },
       { sentence: 'He proposed several solutions, but ___ were all rejected.', correct: 'these', explain: '"These" refers back to a plural set of items just mentioned.' },
@@ -20,6 +26,9 @@ export const CATEGORIES = {
     label: 'The Former / The Latter',
     icon: '🔀',
     options: ['the former', 'the latter'],
+    studyCards: [
+      { front: 'the former / the latter', back: 'el primero mencionado / el segundo mencionado (de dos)', detail: '"Between science and art, the former relies on evidence." (science = 1st) · "...the latter on emotion." (art = 2nd)' },
+    ],
     items: [
       { sentence: 'Between science and art, ___ relies more on empirical evidence.', correct: 'the former', explain: '"The former" refers to the first of two items mentioned (science).' },
       { sentence: 'Between science and art, ___ often relies on emotional expression.', correct: 'the latter', explain: '"The latter" refers to the second of two items mentioned (art).' },
@@ -37,6 +46,10 @@ export const CATEGORIES = {
     label: 'Cohesive Linkers',
     icon: '🔗',
     options: ['Consequently', 'Meanwhile', 'Nonetheless', 'Similarly'],
+    studyCards: [
+      { front: 'Consequently / Meanwhile', back: 'resultado directo / dos acciones simultáneas', detail: '"Sales dropped. Consequently, costs were cut." · "He studied. Meanwhile, his sister prepared for an interview."' },
+      { front: 'Nonetheless / Similarly', back: 'contraste inesperado / punto comparable', detail: '"It rained. Nonetheless, the match continued." · "One study found X. Similarly, a second confirmed the trend."' },
+    ],
     items: [
       { sentence: 'Sales dropped significantly. ___, the company had to cut costs.', correct: 'Consequently', explain: '"Consequently" introduces a direct result.' },
       { sentence: 'The rain continued all day. ___, the match was not canceled.', correct: 'Nonetheless', explain: '"Nonetheless" introduces an unexpected contrast.' },
@@ -54,6 +67,11 @@ export const CATEGORIES = {
     label: 'It / This / That (Discourse)',
     icon: '🧵',
     options: ['it', 'this', 'that'],
+    studyCards: [
+      { front: 'it (referencia a sustantivo singular)', back: 'un objeto, persona o concepto específico ya nombrado', detail: '"The proposal seems promising, but it still requires approval." (it = the proposal)' },
+      { front: 'it (sujeto "dummy")', back: 'sujeto vacío para comentarios generales', detail: '"It is worth noting that costs have risen." · "It has become difficult to find housing." (it no refiere a nada)' },
+      { front: 'this / that (referencia a situación)', back: 'toda una situación o afirmación anterior', detail: '"They canceled without warning; this upset many partners." · "She said she would resign. That surprised no one."' },
+    ],
     items: [
       { sentence: 'The proposal seems promising, but ___ still requires approval.', correct: 'it', explain: '"It" refers back to a specific single noun ("the proposal").' },
       { sentence: '___ is worth noting that costs have risen sharply.', correct: 'it', explain: '"It" here is a dummy subject introducing a comment, not referring to a noun.' },

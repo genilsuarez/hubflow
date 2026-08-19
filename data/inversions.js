@@ -3,11 +3,18 @@
  * Categories: Identify the inversion type, Complete with correct structure, Rewrite using inversion
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   identify: {
     label: 'Which type?',
     icon: '🔄',
     options: ['Negative adverb', 'Only + time', 'So/Such...that', 'No sooner/Hardly'],
+    studyCards: [
+      { front: 'Adverbio negativo al frente', back: 'Never / Rarely / Little / Under no circumstances → auxiliar + sujeto', detail: '"Never have I seen..." · "Little did they know..." · "Under no circumstances should you..."' },
+      { front: 'Only + expresión temporal', back: '"Only after/when/once..." → did/had + sujeto en la cláusula principal', detail: '"Only after the meeting did he realise..." · "Only when she spoke did I recognise her."' },
+      { front: 'No sooner/Hardly · So/Such...that · Conditional inversion', back: 'narrativa · énfasis · formal si', detail: '"Hardly had they left when..." · "So tired was she that..." · "Were I in your shoes, I would..."' },
+    ],
     items: [
       { sentence: 'Never have I seen such a beautiful sunset.', correct: 'Negative adverb', explain: 'Negative adverb (never) at front → auxiliary + subject inversion.' },
       { sentence: 'Only after the meeting did he realise his mistake.', correct: 'Only + time', explain: '"Only after/when/once..." fronted → inversion in main clause.' },
@@ -25,6 +32,9 @@ export const CATEGORIES = {
     label: 'Complete',
     icon: '✏️',
     options: ['had I', 'did she', 'have we', 'does he'],
+    studyCards: [
+      { front: 'Auxiliar correcto en la inversión', back: 'Simple presente → does/do · Simple pasado → did · Perfect → have/has/had', detail: '"Rarely does he complain." · "Not only did she forget..." · "Never have we seen..." · "Hardly had I sat down..."' },
+    ],
     items: [
       { sentence: 'Never ___ seen anything like it.', correct: 'have we', explain: 'Never + have + subject — present perfect inversion.' },
       { sentence: 'Not only ___ forget the meeting, she also lost the files.', correct: 'did she', explain: 'Not only + did + subject — past simple inversion.' },
@@ -42,6 +52,9 @@ export const CATEGORIES = {
     label: 'Rewrite',
     icon: '🔁',
     options: ['Not only did he pass, he also got top marks.', 'Never had she felt so alone.', 'Only after checking twice did I find the error.', 'Hardly had they left when the storm hit.', 'Only then did she realise the truth.', 'Seldom have we faced such a challenge.', 'No sooner had I sat down than the doorbell rang.', 'Under no circumstances should you sign this.', 'Little did they know what was coming.', 'Rarely has she spoken in public.'],
+    studyCards: [
+      { front: 'Patrón de reescritura', back: 'Mueve el adverbio negativo/restrictivo al frente, luego invierte auxiliar y sujeto', detail: '"She had never felt so alone." → "Never had she felt so alone." El auxiliar pasa antes del sujeto.' },
+    ],
     items: [
       { sentence: 'He passed the exam. He also got top marks. (Not only...)', correct: 'Not only did he pass, he also got top marks.', explain: '"Not only + inversion, (but) also + normal order" — combines two facts with emphasis.' },
       { sentence: 'She had never felt so alone in her life. (Never...)', correct: 'Never had she felt so alone.', explain: 'Move "never" to front → had + subject inversion.' },
@@ -59,6 +72,10 @@ export const CATEGORIES = {
     label: 'Conditional Inversion',
     icon: '🎩',
     options: ['Were', 'Had', 'Should'],
+    studyCards: [
+      { front: 'Were / Had / Should = If (formal)', back: 'reemplaza "if" en condicionales formales', detail: '"If I were you..." → "Were I you..." · "If we had known..." → "Had we known..." · "If you should need help..." → "Should you need help..."' },
+      { front: 'Uso', back: 'escritura formal, cartas de negocio, inglés escrito avanzado', detail: '"Should you require further assistance, do not hesitate to contact us." Equivale a "If you should require..."' },
+    ],
     items: [
       { sentence: '___ I in your shoes, I would take the job.', correct: 'Were', explain: 'Formal inversion of "If I were" — Were + subject + complement.' },
       { sentence: '___ we known about the strike, we would have taken the train.', correct: 'Had', explain: 'Formal inversion of a third conditional: "If we had known..."' },

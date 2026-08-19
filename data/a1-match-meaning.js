@@ -1,8 +1,17 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bug menor corregido: label de `timeExpressions` era "Time of Day" pero incluye
+// today/tomorrow. Actualizado a "Time Expressions" para ser honesto con el contenido.
 export const CATEGORIES = {
   politeExpressions: {
     label: 'Polite Expressions',
     icon: '🙏',
     options: ['Hello', 'Goodbye', 'Please', 'Thank you', 'Sorry', 'Excuse me'],
+    studyCards: [
+      { front: 'Hello / Goodbye', back: 'saludar al llegar / al irse', detail: 'Hello al ver a alguien por primera vez en el día. Goodbye al marcharte.' },
+      { front: 'Please / Thank you', back: 'pedir con cortesía / mostrar gratitud', detail: '"Please" va al hacer una petición. "Thank you" va al recibir algo o cuando alguien te ayuda.' },
+      { front: 'Sorry / Excuse me', back: 'disculparse / pedir paso o atención', detail: '"Sorry" = me equivoqué o te hice daño. "Excuse me" = quiero pasar o quiero interrumpir.' },
+    ],
     items: [
       { sentence: 'You meet a friend in the morning. You say:', correct: 'Hello', explain: '"Hello" is used when you first see someone.' },
       { sentence: 'You are leaving a party. You say:', correct: 'Goodbye', explain: '"Goodbye" is used when you leave.' },
@@ -24,6 +33,11 @@ export const CATEGORIES = {
     label: 'Feelings',
     icon: '😊',
     options: ['happy', 'sad', 'tired', 'hungry', 'thirsty', 'scared'],
+    studyCards: [
+      { front: 'hungry / thirsty', back: 'necesitas comida / necesitas agua', detail: 'Hungry = quieres comer. Thirsty = quieres beber. Ambos indican una necesidad física.' },
+      { front: 'happy / sad', back: 'feliz / triste', detail: 'Happy = buenas noticias, logros. Sad = pérdida, mala noticia.' },
+      { front: 'tired / scared', back: 'cansado / asustado', detail: 'Tired = necesitas descanso (poco sueño, ejercicio). Scared = miedo (araña, oscuridad, ruido extraño).' },
+    ],
     items: [
       { sentence: 'You want to eat something. You feel ___.', correct: 'hungry', explain: '"Hungry" means you need food.' },
       { sentence: 'You want to drink something. You feel ___.', correct: 'thirsty', explain: '"Thirsty" means you need water.' },
@@ -41,9 +55,13 @@ export const CATEGORIES = {
     ]
   },
   timeExpressions: {
-    label: 'Time of Day',
+    label: 'Time Expressions',
     icon: '🕐',
     options: ['morning', 'afternoon', 'evening', 'night', 'today', 'tomorrow'],
+    studyCards: [
+      { front: 'Partes del día', back: 'morning → afternoon → evening → night', detail: 'morning: amanecer hasta el mediodía. afternoon: 12pm-6pm. evening: desde que anochece. night: cuando todos duermen.' },
+      { front: 'today / tomorrow', back: 'hoy / mañana', detail: 'today = este día en curso. tomorrow = el día siguiente. Se usan sin "the": "today" no "the today".' },
+    ],
     items: [
       { sentence: 'The sun just came up. It is ___.', correct: 'morning', explain: '"Morning" is the early part of the day.' },
       { sentence: "It's 3 PM. It is ___.", correct: 'afternoon', explain: '"Afternoon" is between noon and evening.' },

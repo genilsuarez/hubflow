@@ -2,11 +2,17 @@
  * Made Of / From / With / Out Of Data
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   materialVsTransformed: {
     label: 'Made Of / From',
     icon: '🧱',
     options: ['made of', 'made from'],
+    studyCards: [
+      { front: 'made of', back: 'el material es reconocible en el producto final', detail: '"This table is made of wood." (el madera sigue siendo madera) · "This ring is made of gold."' },
+      { front: 'made from', back: 'el material se transforma y ya no es reconocible', detail: '"Wine is made from grapes." (las uvas ya no son reconocibles) · "Paper is made from wood pulp."' },
+    ],
     items: [
       { sentence: 'This table is ___ wood.', correct: 'made of', explain: 'The material is still recognisable in the final product → "made of".' },
       { sentence: 'Wine is ___ grapes.', correct: 'made from', explain: 'The original material is transformed and no longer recognisable → "made from".' },
@@ -24,6 +30,10 @@ export const CATEGORIES = {
     label: 'Made With / Out Of',
     icon: '♻️',
     options: ['made with', 'made out of'],
+    studyCards: [
+      { front: 'made with', back: 'un ingrediente entre varios en una receta o producto', detail: '"This cake is made with fresh eggs and butter." El ingrediente coexiste con otros.' },
+      { front: 'made out of', back: 'material reutilizado o uso creativo/inesperado', detail: '"She made a sculpture out of old newspapers." · "He built a boat out of old pallets." Énfasis en el ingenio.' },
+    ],
     items: [
       { sentence: 'This cake is ___ fresh eggs and butter.', correct: 'made with', explain: '"Made with" lists an ingredient among several, not the whole substance.' },
       { sentence: 'She made a sculpture ___ old newspapers.', correct: 'made out of', explain: '"Made out of" emphasizes an unusual or creative use of material.' },

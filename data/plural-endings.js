@@ -3,11 +3,19 @@
  * The same voicing rule governs plural nouns, third-person verbs, and possessives.
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js. El ejercicio trabaja con pronunciación, así que las
+// studyCards explican la regla fonética antes de examinarla.
 export const CATEGORIES = {
   pluralNouns: {
     label: 'Plural Nouns',
     icon: '🔊',
     options: ['/s/', '/z/', '/ɪz/'],
+    studyCards: [
+      { front: '/s/', back: 'después de consonante sorda (p, t, k, f, th sorda)', detail: 'cats /s/ · books /s/ · cups /s/ · months /s/ · laughs /s/. La voz no vibra al final → /s/ también sin voz.' },
+      { front: '/z/', back: 'después de consonante sonora o vocal', detail: 'dogs /z/ · cars /z/ · boys /z/ · dreams /z/ · trees /z/. La voz vibra al final → continúa vibrando con /z/.' },
+      { front: '/ɪz/', back: 'después de sibilante (s, z, sh, ch, ge/dge, x)', detail: 'buses /ɪz/ · watches /ɪz/ · kisses /ɪz/ · judges /ɪz/ · pages /ɪz/. Necesita sílaba extra para separar dos sibilantes.' },
+    ],
     items: [
       { sentence: 'cats', correct: '/s/', explain: 'After voiceless consonants (p, t, k, f) → /s/.' },
       { sentence: 'dogs', correct: '/z/', explain: 'After voiced consonants and vowels → /z/.' },
@@ -35,6 +43,9 @@ export const CATEGORIES = {
     label: 'Third-Person Verbs',
     icon: '🏃',
     options: ['/s/', '/z/', '/ɪz/'],
+    studyCards: [
+      { front: 'Misma regla que los plurales', back: '/s/ · /z/ · /ɪz/ según el sonido final del verbo', detail: 'he stops /s/ · she runs /z/ · it watches /ɪz/. La -s de la 3ª persona sigue exactamente la misma regla de sonoridad.' },
+    ],
     items: [
       { sentence: 'he stops', correct: '/s/', explain: '"P" is voiceless → /s/.' },
       { sentence: 'she runs', correct: '/z/', explain: '"N" is voiced → /z/.' },
@@ -62,6 +73,9 @@ export const CATEGORIES = {
     label: "Possessive 's",
     icon: '🔑',
     options: ['/s/', '/z/', '/ɪz/'],
+    studyCards: [
+      { front: 'El apóstrofe + s también sigue la regla de sonoridad', back: '/s/ · /z/ · /ɪz/ según el sonido final del nombre', detail: "the cat's /s/ · the dog's /z/ · the boss's /ɪz/. Mismo mecanismo que plurales y verbos." },
+    ],
     items: [
       { sentence: "the cat's toy", correct: '/s/', explain: '"T" is voiceless → /s/.' },
       { sentence: "the dog's bone", correct: '/z/', explain: '"G" is voiced → /z/.' },

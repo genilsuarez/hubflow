@@ -2,11 +2,17 @@
  * Passive Voice Data — identify the tense used, and choose the correct auxiliary
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   tense: {
     label: 'Which Tense?',
     icon: '🎭',
     options: ['Present Simple', 'Past Simple', 'Present Perfect', 'Future'],
+    studyCards: [
+      { front: 'Pasiva — fórmula base', back: 'be (en el tiempo correcto) + participio pasado', detail: 'Present Simple: is/are spoken. Past Simple: was/were built. Future: will be published. Present Perfect: has/have been signed.' },
+      { front: 'Identificar el tiempo', back: 'mira el auxiliar "be", no el participio', detail: '"was built" → was = past simple passive. "has been signed" → has been = present perfect passive. El participio siempre es el mismo.' },
+    ],
     items: [
       { sentence: 'The bridge was built in 1932.', correct: 'Past Simple', explain: '"was built" — passive past simple (was/were + past participle).' },
       { sentence: 'English is spoken all over the world.', correct: 'Present Simple', explain: '"is spoken" — passive present simple (am/is/are + past participle).' },
@@ -24,6 +30,10 @@ export const CATEGORIES = {
     label: 'Choose the Auxiliary',
     icon: '🛠️',
     options: ['is', 'was', 'are', 'were', 'has been', 'have been', 'will be'],
+    studyCards: [
+      { front: 'Concordancia sujeto en pasiva', back: 'singular → is/was/has been | plural → are/were/have been', detail: '"The window was broken." (singular) · "These shoes are made in Italy." (plural)' },
+      { front: 'Tiempo en pasiva', back: 'mira la referencia de tiempo en la frase', detail: 'yesterday/last week → was/were. routine → is/are. already/recently → has/have been. tomorrow/next → will be.' },
+    ],
     items: [
       { sentence: 'The window ___ broken by the storm.', correct: 'was', explain: 'Singular subject, past simple passive: "was broken".' },
       { sentence: 'These shoes ___ made in Italy.', correct: 'are', explain: 'Plural subject, present simple passive: "are made".' },
@@ -41,6 +51,11 @@ export const CATEGORIES = {
     label: 'By + Agent',
     icon: '🕵️',
     options: ['by', 'with', 'through', 'by being'],
+    studyCards: [
+      { front: 'by', back: 'introduce el agente (quién hace la acción)', detail: '"The painting was created by a local artist." · "She was surprised by the announcement." Agente = quien actúa.' },
+      { front: 'with', back: 'introduce el instrumento o herramienta', detail: '"The door was opened with a key." · "The cake was cut with a sharp knife." El instrumento no actúa solo.' },
+      { front: 'through', back: 'introduce el medio, proceso o método', detail: '"The problem was solved through careful analysis." · "Success is achieved through persistence." No es una persona ni un objeto físico.' },
+    ],
     items: [
       { sentence: 'The painting was created ___ a local artist.', correct: 'by', explain: '"By" introduces the agent (the doer) in a passive sentence.' },
       { sentence: 'The door was opened ___ a key.', correct: 'with', explain: '"With" introduces the instrument/tool, not the agent (the key did not act independently).' },

@@ -2,11 +2,18 @@
  * Reported Speech Data — tense backshift, time/place changes
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   backshift: {
     label: 'Tense Backshift',
     icon: '⏪',
     options: ['was', 'had', 'would', 'could', 'had to'],
+    studyCards: [
+      { front: 'Regla general', back: 'todo retrocede un tiempo atrás', detail: 'Present simple → past simple. Present perfect → past perfect. Will → would. Can → could. Must → had to.' },
+      { front: '"She said she ___ tired."', back: 'am → was', detail: '"I am tired" → She said she WAS tired. El presente simple se convierte en pasado simple.' },
+      { front: 'Excepciones', back: 'No hay backshift si la situación sigue siendo verdad, o con "that"', detail: '"He said that Paris is in France." (sigue siendo verdad → no backsift necesario)' },
+    ],
     items: [
       { sentence: '"I am tired," she said. → She said she ___ tired.', correct: 'was', explain: 'Present simple ("am") → past simple ("was") in reported speech.' },
       { sentence: '"I will call you," he said. → He said he ___ call me.', correct: 'would', explain: '"Will" → "would" in reported speech.' },
@@ -24,6 +31,10 @@ export const CATEGORIES = {
     label: 'Time & Place Words',
     icon: '🕰️',
     options: ['that day', 'the next day', 'the day before', 'there', 'then'],
+    studyCards: [
+      { front: 'Palabras de tiempo', back: 'today → that day | tomorrow → the next day | yesterday → the day before | now → then', detail: '"I\'m busy today" → she said she was busy THAT DAY. "I\'ll call tomorrow" → he said he\'d call THE NEXT DAY.' },
+      { front: 'Palabras de lugar', back: 'here → there', detail: '"I arrived here" → he said he had arrived THERE. El punto de referencia cambia de quién habla a quién informa.' },
+    ],
     items: [
       { sentence: '"I\'ll see you tomorrow," she said. → She said she\'d see me ___.', correct: 'the next day', explain: '"Tomorrow" → "the next day" in reported speech.' },
       { sentence: '"I arrived here yesterday," he said. → He said he had arrived ___.', correct: 'there', explain: '"Here" → "there" in reported speech.' },
@@ -41,6 +52,11 @@ export const CATEGORIES = {
     label: 'Reported Questions',
     icon: '❓',
     options: ['if', 'whether', 'what', 'where', 'when', 'why', 'how'],
+    studyCards: [
+      { front: 'Preguntas de Sí/No → if/whether', back: '"She asked if/whether I was coming."', detail: 'Las preguntas de sí/no no llevan la palabra-wh original → se introduce con "if" o "whether" (son intercambiables).' },
+      { front: 'Preguntas-wh → conservar la palabra-wh', back: '"He asked me WHERE I lived."', detail: '"Where do you live?" → He asked where I LIVED. El orden pasa a ser de frase afirmativa (sujeto + verbo).' },
+      { front: 'Trampa: no más auxiliar "do/does/did"', back: 'desaparece el auxiliar en preguntas reportadas', detail: '"What time DOES it start?" → She asked WHEN it STARTED. "Do" desaparece; el tiempo del verbo retrocede.' },
+    ],
     items: [
       { sentence: '"Are you coming?" she asked. → She asked ___ I was coming.', correct: ['if', 'whether'], explain: 'Yes/no questions use "if" or "whether" in reported speech — both are correct here.' },
       { sentence: '"Where do you live?" he asked. → He asked me ___ I lived.', correct: 'where', explain: 'Wh-questions keep the question word; word order becomes statement order.' },

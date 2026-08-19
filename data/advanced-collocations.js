@@ -3,11 +3,18 @@
  * Categories: Academic/Formal, Hedging Language, Reporting Verbs
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   academic: {
     label: 'Academic',
     icon: '🎓',
     options: ['carry out', 'draw conclusions', 'raise awareness', 'pose a threat'],
+    studyCards: [
+      { front: 'carry out', back: 'carry out a study / experiment / research', detail: 'Verbo formal para "conducir/realizar". Never "make a study" or "do a research".' },
+      { front: 'draw conclusions / raise awareness', back: 'deducir conclusiones / crear conciencia', detail: '"Draw conclusions from the data." · "The campaign aims to raise awareness of climate change."' },
+      { front: 'pose a threat / risk / challenge', back: 'representar una amenaza', detail: '"Rising sea levels pose a threat to coastal communities." Formal; nunca "make a threat".' },
+    ],
     items: [
       { sentence: 'The researchers ___ an extensive study on climate patterns.', correct: 'carry out', explain: '"Carry out a study/experiment/research" — standard academic collocation for conducting research.' },
       { sentence: 'Based on these findings, we can ___ about consumer behaviour.', correct: 'draw conclusions', explain: '"Draw conclusions" — formal way to state what the evidence suggests.' },
@@ -25,6 +32,11 @@ export const CATEGORIES = {
     label: 'Hedging',
     icon: '🛡️',
     options: ['it would appear that', 'to a certain extent', 'it is widely acknowledged', 'there is a tendency to'],
+    studyCards: [
+      { front: 'it would appear that / it would seem that', back: 'afirmación cautelosa, tentativa', detail: '"It would appear that the policy has had minimal impact." Más suave que "it is clear that".' },
+      { front: 'it is widely acknowledged / accepted / recognised', back: 'atribuye la idea al consenso general', detail: '"It is widely acknowledged that exercise improves mental health." El escritor no lo afirma solo.' },
+      { front: 'to a certain extent / there is a tendency to', back: 'acuerdo parcial / descripción de tendencia', detail: '"To a certain extent, this is true, but…" · "There is a tendency to sensationalise findings."' },
+    ],
     items: [
       { sentence: '___ the new policy has had minimal impact on employment rates.', correct: 'it would appear that', explain: '"It would appear that" — cautious, tentative claim; softer than "it is clear that".' },
       { sentence: 'The results support the hypothesis, ___, but further research is needed.', correct: 'to a certain extent', explain: '"To a certain extent" — partially agrees while leaving room for doubt.' },
@@ -42,6 +54,11 @@ export const CATEGORIES = {
     label: 'Reporting Verbs',
     icon: '📝',
     options: ['acknowledge', 'contend', 'refute', 'advocate'],
+    studyCards: [
+      { front: 'acknowledge', back: 'admitir / reconocer (a menudo debilidades)', detail: '"The authors acknowledge that their study has limitations." Neutral, no implica que estén de acuerdo.' },
+      { front: 'contend / argue', back: 'argumentar con fuerza (en disputa)', detail: '"Critics contend that the approach is flawed." Señala que hay desacuerdo.' },
+      { front: 'refute / advocate', back: 'refutar (con evidencia) / defender públicamente una causa', detail: '"The defence refuted the evidence." · "Many experts advocate renewable energy." Advocate para posiciones/políticas.' },
+    ],
     items: [
       { sentence: 'The authors ___ that their study has several limitations.', correct: 'acknowledge', explain: '"Acknowledge" = admit/accept (often used for weaknesses or counterpoints).' },
       { sentence: 'Critics ___ that the government\'s approach is fundamentally flawed.', correct: 'contend', explain: '"Contend" = argue strongly (often used when there is disagreement).' },
@@ -59,6 +76,11 @@ export const CATEGORIES = {
     label: 'Cause & Effect',
     icon: '⚙️',
     options: ['give rise to', 'stem from', 'bring about', 'have implications for'],
+    studyCards: [
+      { front: 'give rise to / bring about', back: 'causar → consecuencia', detail: '"Urbanisation gives rise to infrastructure pressure." · "Movements bring about reform." Formal, para causas grandes.' },
+      { front: 'stem from', back: 'originarse en (trazar la causa)', detail: '"The conflict stems from deep-seated tensions." Mira hacia atrás, al origen.' },
+      { front: 'have implications for', back: 'tener consecuencias para', detail: '"Budget cuts will have implications for workforce development." Señala efectos sin precisarlos.' },
+    ],
     items: [
       { sentence: 'Rapid urbanisation can ___ significant pressure on public infrastructure.', correct: 'give rise to', explain: '"Give rise to" — formal way to say "cause/produce", especially for problems or consequences.' },
       { sentence: 'Many of the social inequalities observed today ___ historical injustice.', correct: 'stem from', explain: '"Stem from" — means "originate from", used to trace a cause back to its source.' },
@@ -76,6 +98,11 @@ export const CATEGORIES = {
     label: 'Critical Thinking',
     icon: '🧠',
     options: ['call into question', 'take into account', 'shed light on', 'weigh up the evidence'],
+    studyCards: [
+      { front: 'call into question', back: 'cuestionar, poner en duda', detail: '"New findings call into question the original conclusions." Levanta dudas serias.' },
+      { front: 'take into account / shed light on', back: 'considerar un factor / aclarar algo oscuro', detail: '"Take into account all stakeholders." · "The study sheds light on the causes of poverty."' },
+      { front: 'weigh up the evidence', back: 'evaluar todas las pruebas antes de decidir', detail: '"Jurors must weigh up the evidence carefully." Proceso deliberado antes de una conclusión.' },
+    ],
     items: [
       { sentence: 'These new findings ___ the validity of the original conclusions.', correct: 'call into question', explain: '"Call into question" — formal collocation meaning to cast doubt on something.' },
       { sentence: 'Any fair assessment must ___ both short- and long-term consequences.', correct: 'take into account', explain: '"Take into account" — consider a factor when making a decision or judgement.' },

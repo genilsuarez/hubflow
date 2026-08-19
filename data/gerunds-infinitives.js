@@ -2,11 +2,17 @@
  * Gerunds & Infinitives Data — verb + -ing vs verb + to-infinitive
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   gerundVerbs: {
     label: 'Gerund (-ing)',
     icon: '🔁',
     options: ['doing', 'to do'],
+    studyCards: [
+      { front: 'Verbos que van con gerundio (-ing)', back: 'enjoy · avoid · finish · suggest · admit · practise · deny · keep · miss · consider', detail: '"I enjoy doing it." · "She admitted doing it wrong." · "He keeps doing it." MNEMÓNICA: DREAMS (Deny, Regret, Enjoy, Avoid, Mind, Suggest).' },
+      { front: 'Trampa', back: 'Nunca "enjoy to do" o "avoid to do"', detail: '"I enjoy to do" es un error muy frecuente en español. Estos verbos solo aceptan -ing.' },
+    ],
     items: [
       { sentence: 'I enjoy ___ my homework early.', correct: 'doing', explain: '"Enjoy" is followed by the -ing form (gerund).' },
       { sentence: 'They avoided ___ the difficult questions.', correct: 'doing', explain: '"Avoid" is followed by the -ing form.' },
@@ -24,6 +30,10 @@ export const CATEGORIES = {
     label: 'Infinitive (to-)',
     icon: '➡️',
     options: ['doing', 'to do'],
+    studyCards: [
+      { front: 'Verbos que van con to-infinitivo', back: 'want · decide · promise · agree · plan · offer · pretend · manage · expect · hope', detail: '"She wants to do it." · "We managed to do it before the deadline." · "They hoped to finish."' },
+      { front: 'Trampa', back: 'Nunca "want doing" o "decide doing"', detail: '"I want doing it" es incorrecto. Estos verbos solo aceptan to + base verb.' },
+    ],
     items: [
       { sentence: 'She wants ___ her homework early today.', correct: 'to do', explain: '"Want" is followed by the to-infinitive.' },
       { sentence: 'He decided ___ his homework before dinner.', correct: 'to do', explain: '"Decide" is followed by the to-infinitive.' },

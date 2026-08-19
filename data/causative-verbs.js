@@ -3,11 +3,18 @@
  * Categories: Choose the verb (active causative), Passive causative (have/get + object + past participle)
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   chooseVerb: {
     label: 'Which causative verb?',
     icon: '🛠️',
     options: ['have', 'get', 'make', 'let', 'help'],
+    studyCards: [
+      { front: 'have / get + person + verb', back: 'alguien hace algo por ti', detail: '"I have the mechanic check my brakes." (have = arrangas el servicio) · "She got her landlord to fix it." (get = persuadir, lleva "to")' },
+      { front: 'make + person + verb', back: 'obligar sin opción', detail: '"The teacher made the students rewrite their essays." Sin "to" — es la norma de make.' },
+      { front: 'let + person + verb / help + person + verb', back: 'dar permiso / asistir', detail: '"Let" = dar permiso (let + base). "Help" = asistir (help + base o to + base). "Will you let me go?" · "Could you help me carry this?"' },
+    ],
     items: [
       { sentence: 'I always ___ the mechanic check my brakes before a long trip.', correct: 'have', explain: '"Have" + person + base verb: you arrange for someone to do something (a service).' },
       { sentence: 'Did she ___ her brother to help her move house?', correct: 'get', explain: '"Get" + person + to-infinitive: you persuade someone to do something.' },
@@ -25,6 +32,11 @@ export const CATEGORIES = {
     label: 'Passive Causative',
     icon: '🧾',
     options: ['painted', 'washed', 'delivered', 'cleaned', 'cut', 'fixed'],
+    studyCards: [
+      { front: 'have + object + past participle', back: 'alguien más lo hace por ti (formal/neutro)', detail: '"I had my car washed." · "She had her hair cut." El sujeto arregla que otro lo haga.' },
+      { front: 'get + object + past participle', back: 'igual que have, un poco más informal', detail: '"I got my laptop fixed." · "She got the carpets cleaned." Get es más coloquial que have.' },
+      { front: 'Trampa: el verbo va en participio pasado, no en base', back: 'nunca "have my car wash"', detail: '"I had my car washed." (✓) vs "I had my car wash." (✗) — el participio pasado es obligatorio.' },
+    ],
     items: [
       { sentence: 'I had my car ___ last weekend.', correct: 'washed', explain: 'Passive causative: "have" + object + past participle — someone else did it for you.' },
       { sentence: 'She got her hair ___ at the new salon.', correct: 'cut', explain: '"Get" + object + past participle also works, slightly more informal than "have".' },

@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bug corregido: label '-ness / -ness Nouns' (copy-paste) → '-ness / -ance / -ence Nouns'.
 export const CATEGORIES = {
   verbToNounTion: {
     label: '-tion Nouns',
     icon: '📄',
     options: ['decision', 'implementation', 'investigation', 'organization'],
+    studyCards: [
+      { front: 'Verbo → sustantivo con -tion', back: 'decide → decision · implement → implementation · investigate → investigation · organize → organization', detail: 'El sufijo -tion (o -ation, -ition) convierte verbos en sustantivos abstractos. Es el sufijo nominalizador más frecuente en inglés académico.' },
+    ],
     items: [
       { sentence: 'The committee made a ___ to postpone the vote.', correct: 'decision', explain: '"Decide" → "decision".' },
       { sentence: 'The ___ of the new policy took several months.', correct: 'implementation', explain: '"Implement" → "implementation".' },
@@ -20,6 +26,9 @@ export const CATEGORIES = {
     label: '-ment Nouns',
     icon: '📈',
     options: ['development', 'achievement', 'agreement', 'improvement'],
+    studyCards: [
+      { front: 'Verbo → sustantivo con -ment', back: 'develop → development · achieve → achievement · agree → agreement · improve → improvement', detail: '-ment es otro sufijo nominalizador común, frecuente con verbos que describen procesos o estados.' },
+    ],
     items: [
       { sentence: 'The ___ of the new drug took ten years.', correct: 'development', explain: '"Develop" → "development".' },
       { sentence: 'Winning the award was a great ___.', correct: 'achievement', explain: '"Achieve" → "achievement".' },
@@ -37,6 +46,9 @@ export const CATEGORIES = {
     label: '-ity Nouns',
     icon: '⚖️',
     options: ['difficulty', 'stability', 'popularity', 'ability'],
+    studyCards: [
+      { front: 'Adjetivo → sustantivo con -ity', back: 'able → ability · stable → stability · difficult → difficulty · popular → popularity', detail: '-ity convierte adjetivos en sustantivos abstractos. Cuidado con los cambios de ortografía: "difficult" → "difficulty" (y no "difficultity").' },
+    ],
     items: [
       { sentence: "The exam tested students' ___ to solve problems quickly.", correct: 'ability', explain: '"Able" → "ability".' },
       { sentence: 'The country enjoyed years of political ___.', correct: 'stability', explain: '"Stable" → "stability".' },
@@ -51,9 +63,12 @@ export const CATEGORIES = {
     ]
   },
   adjectiveToNounNess: {
-    label: '-ness / -ness Nouns',
+    label: '-ness / -ance / -ence Nouns',
     icon: '🔍',
     options: ['awareness', 'effectiveness', 'weakness', 'fairness'],
+    studyCards: [
+      { front: '-ness → sustantivo de adjetivo', back: 'aware → awareness · effective → effectiveness · weak → weakness · fair → fairness', detail: '-ness es el sufijo más versátil: se puede añadir a casi cualquier adjetivo. "Awareness" = estado de ser consciente.' },
+    ],
     items: [
       { sentence: 'The campaign raised public ___ about climate change.', correct: 'awareness', explain: '"Aware" → "awareness".' },
       { sentence: 'The new method proved its ___ in trials.', correct: 'effectiveness', explain: '"Effective" → "effectiveness".' },

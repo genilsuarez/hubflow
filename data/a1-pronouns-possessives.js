@@ -1,8 +1,15 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   subjectPronouns: {
     label: 'Subject Pronouns',
     icon: '🙋',
     options: ['I', 'You', 'He', 'She', 'It', 'We', 'They'],
+    studyCards: [
+      { front: 'I · you · he · she · it · we · they', back: 'hacen la acción (sujeto)', detail: 'She is a doctor. (sujeto de "is") · They work together. (sujeto de "work")' },
+      { front: 'he / she / it', back: 'singular + tercera persona → verbo + s', detail: 'She works. · He likes. · It rains. (nunca "she work" o "he like")' },
+      { front: 'we = yo + otro(s)', back: 'incluye siempre al hablante', detail: '"Peter and I" = we. "My team and I" = we. Si no incluyes al hablante → they.' },
+    ],
     items: [
       { sentence: 'Maria is my sister. ___ is 20 years old.', correct: 'She', explain: 'Maria is a girl, so we replace her name with "She".' },
       { sentence: 'Tom is my brother. ___ is a student.', correct: 'He', explain: 'Tom is a boy, so we replace his name with "He".' },
@@ -20,6 +27,11 @@ export const CATEGORIES = {
     label: 'Object Pronouns',
     icon: '👉',
     options: ['me', 'you', 'him', 'her', 'it', 'us', 'them'],
+    studyCards: [
+      { front: 'me · you · him · her · it · us · them', back: 'reciben la acción (objeto)', detail: 'Give it to her. (her = objeto de "give to") · Can you help me? (me = objeto de "help")' },
+      { front: 'him / her / them', back: 'he → him · she → her · they → them', detail: 'I know him. (Tom = he → him) · Call her. (Maria = she → her)' },
+      { front: 'Trampa: you e it no cambian', back: 'you e it son iguales como sujeto y objeto', detail: '"You helped me" (you = sujeto) · "I helped you" (you = objeto). It: "It broke" vs "I fixed it".' },
+    ],
     items: [
       { sentence: 'This letter is for Maria. Please give it to ___.', correct: 'her', explain: 'Maria is a girl, so the object pronoun is "her".' },
       { sentence: "I don't know Tom. Can you introduce me to ___?", correct: 'him', explain: 'Tom is a boy, so the object pronoun is "him".' },
@@ -37,6 +49,11 @@ export const CATEGORIES = {
     label: 'Possessive Adjectives',
     icon: '📖',
     options: ['my', 'your', 'his', 'her', 'its', 'our', 'their'],
+    studyCards: [
+      { front: 'my · your · his · her · its · our · their', back: 'van ANTES de un sustantivo', detail: 'my book · her umbrella · its tail (sin apóstrofe). Nunca van solos al final de frase.' },
+      { front: 'its (adjetivo posesivo)', back: 'sin apóstrofe', detail: '"The dog wagged its tail." (its = de él/ella, el perro). "It\'s" con apóstrofe = it is. Dos palabras distintas.' },
+      { front: 'Sujeto → adjetivo posesivo', back: 'I→my · he→his · she→her · they→their', detail: 'Misma lógica que los pronombres sujeto, solo cambia la forma.' },
+    ],
     items: [
       { sentence: 'This is ___ book.', correct: 'my', explain: '"I" → "my" before a noun.' },
       { sentence: 'Is this ___ car?', correct: 'your', explain: '"You" → "your" before a noun.' },
@@ -54,6 +71,11 @@ export const CATEGORIES = {
     label: 'Possessive Pronouns',
     icon: '🎁',
     options: ['mine', 'yours', 'his', 'hers', 'ours', 'theirs'],
+    studyCards: [
+      { front: 'mine · yours · his · hers · ours · theirs', back: 'van SOLOS, sin sustantivo después', detail: '"This book is mine." (no "my"). "That car is hers." (no "her car" en la misma frase).' },
+      { front: 'Adjetivo posesivo → pronombre posesivo', back: 'my→mine · your→yours · her→hers · our→ours · their→theirs', detail: '"his" y "its" son iguales en ambas formas. "hers/ours/yours/theirs" añaden -s.' },
+      { front: 'Trampa: hers/ours/theirs no tienen apóstrofe', back: 'nunca: her\'s / our\'s / their\'s', detail: 'A diferencia de "Tom\'s car", los pronombres posesivos nunca llevan apóstrofe.' },
+    ],
     items: [
       { sentence: 'This book is ___. (it belongs to me)', correct: 'mine', explain: '"Mine" replaces "my book" — no noun needed after it.' },
       { sentence: 'Is that car ___? (does it belong to you)', correct: 'yours', explain: '"Yours" replaces "your car".' },

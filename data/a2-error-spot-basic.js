@@ -1,8 +1,18 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Nota: el ejercicio se llama "Error Spot Basic" en el catálogo pero su mecánica
+// es fill-in-the-blank, no detección de errores. Los labels se han actualizado
+// para reflejar el contenido real.
 export const CATEGORIES = {
   doesntVsDont: {
     label: "Don't / Doesn't",
     icon: '🚫',
     options: ["doesn't", "don't"],
+    studyCards: [
+      { front: 'don\'t', back: 'I / you / we / they + negative present simple', detail: 'I don\'t like coffee. · They don\'t have a car. · We don\'t need help.' },
+      { front: 'doesn\'t', back: 'he / she / it + negative present simple', detail: 'She doesn\'t like vegetables. · It doesn\'t matter. · My dog doesn\'t bark much.' },
+      { front: 'Trampa: doesn\'t + base verb (sin -s)', back: '"She doesn\'t work" nunca "She doesn\'t works"', detail: 'La -s del presente ya está en "doesn\'t". El verbo siguiente va en base form.' },
+    ],
     items: [
       { sentence: 'She ___ like vegetables.', correct: "doesn't", explain: 'He/she/it use "doesn\'t" in negative present simple.' },
       { sentence: 'They ___ have a car.', correct: "don't", explain: 'I/you/we/they use "don\'t" in negative present simple.' },
@@ -24,6 +34,11 @@ export const CATEGORIES = {
     label: 'Was / Were',
     icon: '⏪',
     options: ['was', 'were'],
+    studyCards: [
+      { front: 'was', back: 'I / he / she / it — past of "be"', detail: 'I was at home. · She was very tired. · It was a good movie.' },
+      { front: 'were', back: 'you / we / they — past of "be"', detail: 'They were at the party. · We were late. · You were right.' },
+      { front: 'Trampa: "you" siempre → were', back: 'incluso "you" singular va con "were"', detail: '"You were right." (nunca "you was right", aunque solo hables de una persona).' },
+    ],
     items: [
       { sentence: 'I ___ at home yesterday.', correct: 'was', explain: '"I" takes "was" in the past simple of "be".' },
       { sentence: 'They ___ at the party.', correct: 'were', explain: '"They" takes "were".' },
@@ -44,6 +59,11 @@ export const CATEGORIES = {
     label: 'Go / Goes',
     icon: '🚶',
     options: ['go', 'goes'],
+    studyCards: [
+      { front: 'go', back: 'I / you / we / they + present simple', detail: 'I go to the gym. · They go on vacation every summer.' },
+      { front: 'goes', back: 'he / she / it + present simple', detail: 'She goes to work by train. · My brother goes to school by bus.' },
+      { front: '-es en vez de -s', back: 'go, do, have → goes, does, has', detail: 'Los tres verbos más comunes toman -es en 3ª persona, no solo -s. Siguen la misma regla que goes.' },
+    ],
     items: [
       { sentence: 'She ___ to work by train.', correct: 'goes', explain: 'He/she/it add -es to "go" in the present simple.' },
       { sentence: 'I ___ to the gym every day.', correct: 'go', explain: 'I/you/we/they use the base form "go".' },

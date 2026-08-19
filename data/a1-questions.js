@@ -1,8 +1,15 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   whWords: {
     label: 'Wh- Question Words',
     icon: '❓',
     options: ['What', 'Where', 'When', 'Who', 'Why', 'How'],
+    studyCards: [
+      { front: 'What / Who / Where', back: 'qué · quién · dónde', detail: 'What is your name? · Who is that man? · Where do you live?' },
+      { front: 'When / Why / How', back: 'cuándo · por qué · cómo', detail: 'When is your birthday? · Why are you late? · How are you feeling?' },
+      { front: 'How: no empieza con "wh-" pero funciona igual', back: 'pregunta sobre manera, estado o cantidad', detail: 'How are you? · How much? · How many? · How old are you?' },
+    ],
     items: [
       { sentence: '___ is your name?', correct: 'What', explain: '"What" asks for information about a thing or idea.' },
       { sentence: '___ do you live?', correct: 'Where', explain: '"Where" asks about a place.' },
@@ -24,6 +31,11 @@ export const CATEGORIES = {
     label: 'Do / Does',
     icon: '🤔',
     options: ['Do', 'Does'],
+    studyCards: [
+      { front: 'Do', back: 'I / you / we / they', detail: 'Do you like coffee? · Do they have a car?' },
+      { front: 'Does', back: 'he / she / it', detail: 'Does she work here? · Does it rain a lot? (3ª persona singular)' },
+      { front: 'Trampa: Does + base verb (sin -s)', back: '"Does she work?" nunca "Does she works?"', detail: 'La -s del presente ya está en Does. El verbo siguiente vuelve a su forma base.' },
+    ],
     items: [
       { sentence: '___ you like coffee?', correct: 'Do', explain: 'I/you/we/they use "Do" to form questions.' },
       { sentence: '___ she work here?', correct: 'Does', explain: 'He/she/it use "Does" to form questions.' },
@@ -44,6 +56,11 @@ export const CATEGORIES = {
     label: 'Is / Are',
     icon: '❔',
     options: ['Is', 'Are'],
+    studyCards: [
+      { front: 'Is', back: 'he / she / it + sustantivo singular', detail: 'Is she at home? · Is the store open? · Is this your book?' },
+      { front: 'Are', back: 'you / we / they + sustantivo plural', detail: 'Are you a teacher? · Are they ready? · Are your shoes new?' },
+      { front: 'Orden en preguntas', back: 'Is/Are + sujeto + complemento?', detail: '"Is she a teacher?" (Is + she + complement). En afirmativo es al revés: "She is a teacher."' },
+    ],
     items: [
       { sentence: '___ you a teacher?', correct: 'Are', explain: '"You" takes "Are".' },
       { sentence: '___ she at home?', correct: 'Is', explain: '"She" takes "Is".' },

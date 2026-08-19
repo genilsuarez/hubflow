@@ -1,8 +1,13 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   wasGoingTo: {
     label: 'Was/Were Going To',
     icon: '⏮️🔮',
     options: ['was going to call', 'will call', 'would call'],
+    studyCards: [
+      { front: 'was/were going to + base verb', back: 'plan o intención del pasado que no se cumplió', detail: '"She was going to call me, but she never did." · "I was going to study abroad, but my plans changed." — la intención existía, algo la impidió.' },
+    ],
     items: [
       { sentence: "She said she ___ me later, but she never did.", correct: 'was going to call', explain: "'Was/were going to' expresses a past plan or intention that often didn't happen." },
       { sentence: "They ___ leave early, but they got delayed.", correct: 'were going to', explain: "'Was/were going to' expresses a past plan that changed.", options: ['were going to', 'will', 'would'] },
@@ -20,6 +25,9 @@ export const CATEGORIES = {
     label: "'Would' as Future-in-the-Past",
     icon: '🔮',
     options: ['would become', 'will become', 'was becoming'],
+    studyCards: [
+      { front: '"would" como futuro visto desde el pasado', back: 'lo que entonces era "will" se convierte en "would" al narrar', detail: '"No one knew that he would become famous." (= en ese momento, "he will become" desde el presente hubiera sido la frase).' },
+    ],
     items: [
       { sentence: "No one knew that he ___ famous.", correct: 'would become', explain: "'Would' can express a future action as seen from a point in the past." },
       { sentence: "She didn't realize that this decision ___ her whole life.", correct: 'would change', explain: "'Would' expresses a future action from a past viewpoint.", options: ['would change', 'will change', 'was changing'] },
@@ -37,6 +45,9 @@ export const CATEGORIES = {
     label: 'Reported Future Tense',
     icon: '💬',
     options: ['would arrive', 'will arrive', 'arrived'],
+    studyCards: [
+      { front: '"will" en estilo directo → "would" en estilo indirecto', back: '"The train will arrive." → She said the train would arrive.', detail: 'El backshift del futuro es: will → would. Aplica también a "will have" → "would have".' },
+    ],
     items: [
       { sentence: "She said the train ___ at noon. (original: 'The train will arrive at noon.')", correct: 'would arrive', explain: "In reported speech, 'will' changes to 'would'." },
       { sentence: "He told me he ___ the report by Friday. (original: 'I will finish the report by Friday.')", correct: 'would finish', explain: "In reported speech, 'will' changes to 'would'.", options: ['would finish', 'will finish', 'finished'] },
@@ -54,6 +65,9 @@ export const CATEGORIES = {
     label: 'Future Perfect in the Past',
     icon: '✅⏮️',
     options: ['would have finished', 'will have finished', 'had finished'],
+    studyCards: [
+      { front: '"will have + participio" → "would have + participio"', back: 'futuro perfecto en estilo indirecto', detail: '"By June, I will have finished." → She said that by June, she would have finished. Doble retroceso temporal.' },
+    ],
     items: [
       { sentence: "She said that by June, she ___ her degree. (original: 'By June, I will have finished my degree.')", correct: 'would have finished', explain: "In reported speech, 'will have' changes to 'would have'." },
       { sentence: "He told me that by 2020, the company ___ its goals. (original: 'By 2020, the company will have achieved its goals.')", correct: 'would have achieved', explain: "In reported speech, 'will have' changes to 'would have'.", options: ['would have achieved', 'will have achieved', 'had achieved'] },

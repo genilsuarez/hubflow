@@ -1,8 +1,19 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// NOTA sobre presentDeductionPossible y pastDeductionPossible: el `correct`
+// de cada item es deliberadamente un array con las 3 opciones — might/could/may
+// son sinónimos para posibilidad débil sin clave contextual que discrimine.
+// No es un bug; es una decisión pedagógica correcta. Las studyCards explican
+// por qué son equivalentes en estos contextos.
 export const CATEGORIES = {
   presentDeductionCertain: {
     label: 'Present — Certain',
     icon: '🔒',
     options: ['must be', "can't be"],
+    studyCards: [
+      { front: 'must be', back: 'deducción segura POSITIVA (presente)', detail: '"He\'s not answering — he must be busy." La evidencia apunta a UNA sola conclusión lógica.' },
+      { front: "can't be", back: 'deducción segura NEGATIVA (presente)', detail: '"That can\'t be right; the numbers don\'t add up." La evidencia hace que algo sea lógicamente imposible.' },
+    ],
     items: [
       { sentence: "He's not answering his phone. He ___ busy.", correct: 'must be', explain: '"Must be" expresses a confident positive deduction.' },
       { sentence: 'She knows everything about Paris. She ___ from there.', correct: 'must be', explain: '"Must be" expresses a confident positive deduction.' },
@@ -20,6 +31,10 @@ export const CATEGORIES = {
     label: 'Present — Possible',
     icon: '🔓',
     options: ['might be', 'could be', 'may be'],
+    studyCards: [
+      { front: 'might be / could be / may be', back: 'posibilidad débil — los tres son intercambiables aquí', detail: '"She might be / could be / may be at the office." Sin evidencia fuerte que elija uno, los tres son igualmente correctos.' },
+      { front: 'Diferencia de registro y énfasis', back: '"may" más formal · "might" más tentativo · "could" más especulativo', detail: 'En la práctica los hablantes nativos los intercambian libremente en contextos de posibilidad débil.' },
+    ],
     items: [
       // "might be" / "could be" / "may be" are near-perfect synonyms for weak
       // present possibility — none of these sentences give a textual cue that
@@ -40,6 +55,10 @@ export const CATEGORIES = {
     label: 'Past — Certain',
     icon: '🔒',
     options: ['must have', "can't have", "couldn't have"],
+    studyCards: [
+      { front: 'must have + participio', back: 'deducción segura positiva sobre el pasado', detail: '"The lights are on — someone must have forgotten to turn them off." (la única explicación lógica)' },
+      { front: "can't have / couldn't have + participio", back: 'imposibilidad en el pasado', detail: '"She can\'t have / couldn\'t have done it — she was with me." Los dos son equivalentes; couldn\'t have es quizás más enfático.' },
+    ],
     items: [
       { sentence: 'The lights are on. Someone ___ forgotten to turn them off.', correct: 'must have', explain: '"Must have" + past participle expresses certainty about the past.' },
       { sentence: "He ___ left already; his car isn't here.", correct: 'must have', explain: '"Must have" + past participle expresses certainty about the past.' },
@@ -57,6 +76,9 @@ export const CATEGORIES = {
     label: 'Past — Possible',
     icon: '🔓',
     options: ['might have', 'could have', 'may have'],
+    studyCards: [
+      { front: 'might have / could have / may have + participio', back: 'posibilidad incierta sobre el pasado — los tres son intercambiables', detail: '"She might have / could have / may have missed the bus." Sin clave contextual que discrimine, todos son igualmente correctos.' },
+    ],
     items: [
       // Same overlap as presentDeductionPossible: "might/could/may have" are
       // near-perfect synonyms for weak past possibility with no textual cue

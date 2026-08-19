@@ -1,11 +1,26 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bugs corregidos:
+// - compoundNouns: "firefighter at the hospital" → "at the station" (contexto coherente).
+// - compoundVerbs: "withdraw from her job" (no idiomático) → "resign from her job".
+//   "reschedule"/"overestimate" son prefijos, no compuestos — se conservan con
+//   explicaciones corregidas.
+// - compoundAdjectives: "a easy-going" → "an easy-going".
+//   "highly-skilled" con guion → "highly skilled" sin guion (adverbio -ly no lleva guion).
+// - hyphenationRules: "second hand" (dos palabras) → "secondhand" (una palabra)
+//   en posición predicativa. Corregida la opción y el explain.
 export const CATEGORIES = {
   compoundNouns: {
     label: 'Compound Nouns',
     icon: '🧩',
     options: ['toothbrush', 'tooth brush', 'brushtooth'],
+    studyCards: [
+      { front: 'Compound nouns: one word, two words, or hyphenated', back: 'toothbrush (1) · weather forecast (2) · job title (2) · air conditioner (2)', detail: 'No hay regla fija — hay que aprenderlos. Los más comunes se escriben como una sola palabra.' },
+      { front: 'Trampa: no añadir -s al primer elemento', back: '"toothbrushes" no "teethbrush"', detail: 'El primer componente de un compound noun no toma plural: "toothbrushes", "playgrounds", "guidebooks".' },
+    ],
     items: [
       { sentence: 'I forgot to pack my ___.', correct: 'toothbrush', explain: "'Toothbrush' is a compound noun written as one word." },
-      { sentence: 'She works as a ___ at the hospital.', correct: 'firefighter', explain: "'Firefighter' is a compound noun written as one word.", options: ['firefighter', 'fire fighter', 'fighterfire'] },
+      { sentence: 'She works as a ___ at the station.', correct: 'firefighter', explain: "'Firefighter' is a compound noun written as one word.", options: ['firefighter', 'fire fighter', 'fighterfire'] },
       { sentence: 'The ___ was full of interesting articles.', correct: 'newspaper', explain: "'Newspaper' is a compound noun written as one word.", options: ['newspaper', 'news paper', 'paper news'] },
       { sentence: 'He checked the ___ before leaving.', correct: 'weather forecast', explain: "'Weather forecast' is a compound noun written as two words.", options: ['weather forecast', 'weatherforecast', 'forecastweather'] },
       { sentence: 'The children played in the ___.', correct: 'playground', explain: "'Playground' is a compound noun written as one word.", options: ['playground', 'play ground', 'groundplay'] },
@@ -20,49 +35,62 @@ export const CATEGORIES = {
     label: 'Compound Adjectives',
     icon: '🎨',
     options: ['well-known', 'wellknown', 'known-well'],
+    studyCards: [
+      { front: 'Antes del sustantivo → guion', back: 'a well-known actor · a last-minute decision · a home-cooked meal', detail: 'Los compuestos adjetivales se guionan cuando modifican al sustantivo directamente.' },
+      { front: 'Después de "be" → sin guion (en general)', back: 'The actor is well known. · The decision was last minute.', detail: 'En posición predicativa el guion suele desaparecer, aunque muchos hablantes lo mantienen.' },
+      { front: 'Trampa: adverbios en -ly + participio NO llevan guion', back: 'a highly skilled professional (sin guion)', detail: '"highly skilled", "badly damaged", "recently built" — el adverbio en -ly ya modifica directamente al participio.' },
+    ],
     items: [
       { sentence: 'She is a ___ actress.', correct: 'well-known', explain: "'Well-known' is a compound adjective, hyphenated before a noun." },
       { sentence: 'He gave a ___ speech.', correct: 'thought-provoking', explain: "'Thought-provoking' is a compound adjective, hyphenated before a noun.", options: ['thought-provoking', 'thoughtprovoking', 'provoking-thought'] },
       { sentence: 'It was a ___ decision.', correct: 'last-minute', explain: "'Last-minute' is a compound adjective, hyphenated before a noun.", options: ['last-minute', 'lastminute', 'minute-last'] },
       { sentence: 'They live in a ___ neighborhood.', correct: 'middle-class', explain: "'Middle-class' is a compound adjective, hyphenated before a noun.", options: ['middle-class', 'middleclass', 'class-middle'] },
-      { sentence: 'She has a ___ attitude towards life.', correct: 'easy-going', explain: "'Easy-going' is a compound adjective, hyphenated before a noun.", options: ['easy-going', 'easygoing', 'going-easy'] },
+      { sentence: 'She has an ___ attitude towards life.', correct: 'easy-going', explain: "'Easy-going' is a compound adjective, hyphenated before a noun. Note: 'an' before vowel sound /iː/.", options: ['easy-going', 'easygoing', 'going-easy'] },
       { sentence: 'It was a ___ effort by the whole team.', correct: 'well-organized', explain: "'Well-organized' is a compound adjective, hyphenated before a noun.", options: ['well-organized', 'wellorganized', 'organized-well'] },
       { sentence: 'He bought a ___ car.', correct: 'second-hand', explain: "'Second-hand' is a compound adjective, hyphenated before a noun.", options: ['second-hand', 'secondhand', 'hand-second'] },
-      { sentence: 'She is a ___ professional.', correct: 'highly-skilled', explain: "'Highly-skilled' is a compound adjective, hyphenated before a noun.", options: ['highly-skilled', 'highlyskilled', 'skilled-highly'] },
+      { sentence: 'She is a ___ professional.', correct: 'highly skilled', explain: "Adverbs ending in -ly do NOT take a hyphen before a noun: 'highly skilled' (no hyphen).", options: ['highly skilled', 'highly-skilled', 'skilled-highly'] },
       { sentence: 'It was a ___ meal.', correct: 'home-cooked', explain: "'Home-cooked' is a compound adjective, hyphenated before a noun.", options: ['home-cooked', 'homecooked', 'cooked-home'] },
       { sentence: 'He has a ___ personality.', correct: 'good-natured', explain: "'Good-natured' is a compound adjective, hyphenated before a noun.", options: ['good-natured', 'goodnatured', 'natured-good'] },
     ]
   },
   compoundVerbs: {
-    label: 'Compound Verbs',
+    label: 'Compound Verbs & Prefixed Verbs',
     icon: '⚡',
     options: ['babysit', 'baby sit', 'sitbaby'],
+    studyCards: [
+      { front: 'Compound verbs: dos raíces combinadas', back: 'babysit · double-check · outgrow · showcase', detail: 'Se forman uniendo dos palabras con significado propio. "Babysit" = baby + sit.' },
+      { front: 'Prefixed verbs: prefijo + raíz', back: 'upgrade · overhaul · streamline · reschedule · overestimate', detail: 'Los prefijos (up-, over-, re-, out-) modifican el verbo base. Una sola palabra.' },
+    ],
     items: [
       { sentence: 'She often ___ for her neighbors.', correct: 'babysits', explain: "'Babysit' is a compound verb written as one word.", options: ['babysits', 'baby sits', 'sitsbaby'] },
-      { sentence: 'He needs to ___ his old computer.', correct: 'upgrade', explain: "'Upgrade' is a compound verb written as one word.", options: ['upgrade', 'up grade', 'gradeup'] },
+      { sentence: 'He needs to ___ his old computer.', correct: 'upgrade', explain: "'Upgrade' uses the prefix 'up-', written as one word.", options: ['upgrade', 'up grade', 'gradeup'] },
       { sentence: 'They will ___ the new product next month.', correct: 'showcase', explain: "'Showcase' is a compound verb written as one word.", options: ['showcase', 'show case', 'caseshow'] },
-      { sentence: 'She had to ___ the plan quickly.', correct: 'overhaul', explain: "'Overhaul' is a compound verb written as one word.", options: ['overhaul', 'over haul', 'haulover'] },
-      { sentence: 'He will ___ the meeting for next week.', correct: 'reschedule', explain: "'Reschedule' is formed with the prefix re-, written as one word.", options: ['reschedule', 're schedule', 'schedulere'] },
+      { sentence: 'She had to ___ the plan quickly.', correct: 'overhaul', explain: "'Overhaul' uses the prefix 'over-', written as one word.", options: ['overhaul', 'over haul', 'haulover'] },
+      { sentence: 'He will ___ the meeting for next week.', correct: 'reschedule', explain: "'Reschedule' uses the prefix 're-', meaning to schedule again.", options: ['reschedule', 're schedule', 'schedulere'] },
       { sentence: 'They want to ___ the whole system.', correct: 'streamline', explain: "'Streamline' is a compound verb written as one word.", options: ['streamline', 'stream line', 'linestream'] },
-      { sentence: 'She decided to ___ from her job.', correct: 'withdraw', explain: "'Withdraw' is a compound verb written as one word.", options: ['withdraw', 'with draw', 'drawwith'] },
-      { sentence: 'He tends to ___ his abilities.', correct: 'overestimate', explain: "'Overestimate' is formed with the prefix over-, written as one word.", options: ['overestimate', 'over estimate', 'estimateover'] },
+      { sentence: 'She decided to ___ from her job.', correct: 'resign', explain: "'Resign from a job' is the natural collocation. 'Withdraw' collocates with competitions or agreements, not jobs.", options: ['resign', 'withdraw', 'retire'] },
+      { sentence: 'He tends to ___ his abilities.', correct: 'overestimate', explain: "'Overestimate' uses the prefix 'over-', meaning to estimate too highly.", options: ['overestimate', 'over estimate', 'estimateover'] },
       { sentence: 'They will ___ the results tomorrow.', correct: 'double-check', explain: "'Double-check' is a compound verb, often hyphenated.", options: ['double-check', 'doublecheck', 'check-double'] },
-      { sentence: 'She wants to ___ her old habits.', correct: 'outgrow', explain: "'Outgrow' is a compound verb written as one word.", options: ['outgrow', 'out grow', 'growout'] },
+      { sentence: 'She wants to ___ her old habits.', correct: 'outgrow', explain: "'Outgrow' uses the prefix 'out-', written as one word.", options: ['outgrow', 'out grow', 'growout'] },
     ]
   },
   hyphenationRules: {
     label: 'Hyphenation Rules',
     icon: '➖',
     options: ['a well-known actor', 'the actor is well known', 'a well known actor'],
+    studyCards: [
+      { front: 'Antes del sustantivo → guion', back: 'a well-known actor · a last-minute decision · a thought-provoking book', detail: 'La regla es consistente: compound adjective + noun → hyphen.' },
+      { front: 'Después de "be" → normalmente sin guion', back: 'The actor is well known. · The decision was last minute.', detail: '"Second-hand" puede también escribirse "secondhand" (una sola palabra) en posición predicativa.' },
+    ],
     items: [
       { sentence: 'She is ___. (before the noun, hyphenated)', correct: 'a well-known actor', explain: "Compound adjectives are hyphenated when placed before the noun." },
       { sentence: 'The actor ___. (after the verb, not hyphenated)', correct: 'is well known', explain: "Compound adjectives are usually not hyphenated after the verb 'be'.", options: ['is well known', 'is well-known', 'is wellknown'] },
       { sentence: 'He made a ___ decision. (before the noun)', correct: 'last-minute', explain: "Compound adjectives are hyphenated when placed before the noun.", options: ['last-minute', 'last minute', 'lastminute'] },
       { sentence: 'The decision was made ___. (after the verb)', correct: 'at the last minute', explain: "As a phrase after the verb, it isn't hyphenated as a compound adjective.", options: ['at the last minute', 'at the last-minute', 'at the lastminute'] },
       { sentence: 'This is a ___ book. (before the noun)', correct: 'thought-provoking', explain: "Compound adjectives are hyphenated when placed before the noun.", options: ['thought-provoking', 'thought provoking', 'thoughtprovoking'] },
-      { sentence: 'The book is ___. (after the verb)', correct: 'thought provoking', explain: "After the verb 'be', it's often written without a hyphen.", options: ['thought provoking', 'thought-provoking', 'thoughtprovoking'] },
+      { sentence: 'The book is ___. (after the verb)', correct: 'thought provoking', explain: "After the verb 'be', compound adjectives are often written without a hyphen.", options: ['thought provoking', 'thought-provoking', 'thoughtprovoking'] },
       { sentence: 'She bought a ___ car. (before the noun)', correct: 'second-hand', explain: "Compound adjectives are hyphenated when placed before the noun.", options: ['second-hand', 'second hand', 'secondhand'] },
-      { sentence: 'The car is ___. (after the verb)', correct: 'second hand', explain: "As a description after 'be', 'second hand' is often written without a hyphen.", options: ['second hand', 'second-hand', 'secondhand'] },
+      { sentence: 'The car is ___. (after the verb)', correct: 'secondhand', explain: "In predicative position, 'second-hand' is often written as one word 'secondhand'.", options: ['secondhand', 'second-hand', 'second hand'] },
       { sentence: 'It was a ___ effort. (before the noun)', correct: 'well-organized', explain: "Compound adjectives are hyphenated when placed before the noun.", options: ['well-organized', 'well organized', 'wellorganized'] },
       { sentence: 'The event was ___. (after the verb)', correct: 'well organized', explain: "After 'be', it's often written without a hyphen.", options: ['well organized', 'well-organized', 'wellorganized'] },
     ]

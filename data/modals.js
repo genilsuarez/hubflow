@@ -3,11 +3,18 @@
  * Categories: Meaning (ability/possibility/deduction/advice), Obligation, Be supposed to
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   meaning: {
     label: 'Meaning in Context',
     icon: '🧭',
     options: ['can', 'could', 'must', 'might', 'should', 'shall', 'will'],
+    studyCards: [
+      { front: 'can (presente) / could (pasado)', back: 'habilidad y permiso informal', detail: '"She can speak four languages." · "Could you swim at age five?" · "Can/Could I borrow your pen?" (permiso, could es más formal)' },
+      { front: 'must / should', back: 'obligación fuerte / consejo o recomendación', detail: '"You must wear a seatbelt — it\'s the law." (obligación) · "You should see a doctor." (recomendación)' },
+      { front: 'might / will / shall', back: 'posibilidad débil / promesa-predicción / sugerencia (I/we)', detail: '"It might rain later." · "I will take care of it." (promesa) · "Shall we order dessert?" (sugerencia)' },
+    ],
     items: [
       { sentence: '___ you swim when you were five?', correct: 'could', explain: '"Could" expresses past ability.' },
       { sentence: "It's cloudy — it ___ rain later.", correct: ['might', 'could'], explain: '"Might" expresses a weaker possibility — "could" works equally well here for the same weak possibility.' },
@@ -25,6 +32,11 @@ export const CATEGORIES = {
     label: 'Obligation & Rules',
     icon: '⚖️',
     options: ['must', "mustn't", 'have to', "don't have to", 'should'],
+    studyCards: [
+      { front: 'must vs have to', back: 'must = obligación interna / have to = obligación externa', detail: '"I must finish this report." (yo me lo impongo) · "I have to finish it — my boss said so." (viene de fuera)' },
+      { front: 'mustn\'t vs don\'t have to', back: 'mustn\'t = PROHIBIDO / don\'t have to = NO es obligatorio', detail: '"You mustn\'t smoke here." (prohibido) ≠ "You don\'t have to come." (opcional, sin obligación)' },
+      { front: 'should', back: 'consejo, recomendación (más débil que must)', detail: '"You should see a dentist twice a year." No es obligación — es lo que se recomienda.' },
+    ],
     items: [
       { sentence: 'I ___ finish this report by 5pm — my boss said so.', correct: 'have to', explain: '"Have to" expresses an obligation imposed from outside (the boss).' },
       { sentence: "I ___ be strict with myself about deadlines — it's my own rule.", correct: 'must', explain: '"Must" expresses an obligation the speaker imposes on themselves.' },
@@ -42,6 +54,11 @@ export const CATEGORIES = {
     label: '"Be supposed to"',
     icon: '📋',
     options: ['is supposed to', 'was supposed to', "isn't supposed to"],
+    studyCards: [
+      { front: 'is supposed to', back: 'lo que se espera o está programado (presente)', detail: '"The train is supposed to arrive at platform 4." = lo que dice el horario / lo que se espera.' },
+      { front: 'was supposed to', back: 'expectativa que NO se cumplió (pasado)', detail: '"The meeting was supposed to start at 9, but it\'s already 9:15." Se esperaba pero no ocurrió.' },
+      { front: 'isn\'t supposed to', back: 'no está permitido / no es el comportamiento esperado', detail: '"A student isn\'t supposed to eat in the library." = contra las reglas. "The machine isn\'t supposed to make that noise." = algo falla.' },
+    ],
     items: [
       { sentence: "The meeting ___ start at 9, but it's already 9:15.", correct: 'was supposed to', explain: 'An expectation or plan that was NOT met, in the past.' },
       { sentence: "A student ___ eat in the library — it's against the rules.", correct: "isn't supposed to", explain: '"Isn\'t supposed to" = not allowed / against the rules.' },
@@ -59,6 +76,11 @@ export const CATEGORIES = {
     label: 'Past Deduction',
     icon: '🔍',
     options: ['must have', 'can\'t have', 'might have', 'should have'],
+    studyCards: [
+      { front: 'must have + participio', back: 'deducción segura sobre el pasado', detail: '"She\'s not answering — she must have gone to bed." (la única explicación lógica)' },
+      { front: 'can\'t have + participio', back: 'certeza de que NO pudo haber pasado', detail: '"He can\'t have forgotten — he never misses a birthday." (imposible según la evidencia)' },
+      { front: 'might have / should have + participio', back: 'posibilidad incierta / arrepentimiento o reproche', detail: '"She might have taken the wrong bus." (una posibilidad) · "I should have studied harder." (me arrepiento)' },
+    ],
     items: [
       { sentence: 'She\'s not answering — she ___ gone to bed already.', correct: 'must have', explain: '"Must have" = strong certainty about the past based on evidence.' },
       { sentence: 'He ___ forgotten — he never misses a birthday.', correct: 'can\'t have', explain: '"Can\'t have" = certainty that something was NOT possible.' },

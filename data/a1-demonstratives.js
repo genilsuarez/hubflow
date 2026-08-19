@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   thisSingularNear: {
     label: 'This (singular, near)',
     icon: '👉',
     options: ['this', 'that', 'these'],
+    studyCards: [
+      { front: 'this', back: 'singular + cerca del hablante', detail: 'This is my book. (en mi mano) · I like this shirt. (la que llevo)' },
+      { front: 'Contraste this / that', back: 'this = cerca | that = lejos', detail: 'This pen is mine. (en mi escritorio) vs. That pen is yours. (en tu escritorio)' },
+    ],
     items: [
       { sentence: '___ is my book. (in my hand)', correct: 'this', explain: "'This' is for one thing near you." },
       { sentence: '___ pen is mine. (on my desk)', correct: 'this', explain: "'This' is for one thing near you." },
@@ -20,6 +26,10 @@ export const CATEGORIES = {
     label: 'That (singular, far)',
     icon: '👈',
     options: ['that', 'this', 'those'],
+    studyCards: [
+      { front: 'that', back: 'singular + lejos o en el pasado', detail: 'That building is very tall. (a lo lejos) · That was a great movie. (la semana pasada)' },
+      { front: 'that también para el pasado reciente', back: 'algo mencionado antes o ya ocurrido', detail: '"That was amazing!" tras ver algo → referencia temporal, no distancia física.' },
+    ],
     items: [
       { sentence: '___ is my car. (across the street)', correct: 'that', explain: "'That' is for one thing far from you." },
       { sentence: '___ building is very tall. (in the distance)', correct: 'that', explain: "'That' is for one thing far from you." },
@@ -37,6 +47,10 @@ export const CATEGORIES = {
     label: 'These (plural, near)',
     icon: '👉👉',
     options: ['these', 'those', 'this'],
+    studyCards: [
+      { front: 'these', back: 'plural + cerca del hablante', detail: 'These are my books. (en mis manos) · I like these shoes. (las que llevo)' },
+      { front: 'this → these | that → those', back: 'Singular → plural, manteniendo la distancia', detail: 'this book → these books (cerca) · that book → those books (lejos)' },
+    ],
     items: [
       { sentence: '___ are my books. (in my hands)', correct: 'these', explain: "'These' is for more than one thing near you." },
       { sentence: '___ shoes are new. (on my feet)', correct: 'these', explain: "'These' is for more than one thing near you." },
@@ -54,6 +68,10 @@ export const CATEGORIES = {
     label: 'Those (plural, far)',
     icon: '👈👈',
     options: ['those', 'these', 'that'],
+    studyCards: [
+      { front: 'those', back: 'plural + lejos o en el pasado', detail: 'Those mountains are beautiful. (a lo lejos) · Those were great years. (en el pasado)' },
+      { front: 'Los 4 demostrativos — resumen', back: 'cerca: this (sing) / these (pl) | lejos: that (sing) / those (pl)', detail: 'La distancia y el número son los únicos dos factores. No hay género (no existe "thiso"/"thisa").' },
+    ],
     items: [
       { sentence: '___ are my cousins. (standing across the room)', correct: 'those', explain: "'Those' is for more than one thing far from you." },
       { sentence: '___ mountains are beautiful. (in the distance)', correct: 'those', explain: "'Those' is for more than one thing far from you." },

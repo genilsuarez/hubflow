@@ -2,11 +2,18 @@
  * Used To Data — used to vs would (states), used to vs be used to vs get used to
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   stateException: {
     label: 'Used To vs Would',
     icon: '🕰️',
     options: ['used to', 'would'],
+    studyCards: [
+      { front: '"Used to" + base verb', back: 'hábito o estado pasado que ya no existe', detail: '"I used to be shy." · "She used to have a dog." Funciona con acciones Y estados.' },
+      { front: '"Would" + base verb', back: 'acción habitual pasada (NO estados)', detail: '"Every summer, we would go fishing." · "She would always bring cake." Solo acciones repetidas, NUNCA estados (be/have/like/know).' },
+      { front: 'Trampa: estados solo aceptan "used to"', back: '"would" es imposible con verbos de estado', detail: '"I used to believe in ghosts." (✓) · "I would believe in ghosts." (✗). Believe/like/know/own/live → solo used to.' },
+    ],
     items: [
       { sentence: 'I ___ be really shy at school.', correct: 'used to', explain: 'For past STATES (be, have, like, know, own...) only "used to" works — "would" is impossible.' },
       { sentence: 'She ___ have a dog when she was a kid.', correct: 'used to', explain: '"Have" (possession) is a state → only "used to", never "would".' },
@@ -24,6 +31,11 @@ export const CATEGORIES = {
     label: 'Used To / Be Used To / Get Used To',
     icon: '🔄',
     options: ['used to', 'am used to', 'am getting used to'],
+    studyCards: [
+      { front: '"used to" + base verb', back: 'hábito del pasado (ya no ocurre)', detail: '"I used to smoke, but I quit." · "She used to live in the countryside." El pasado, no el presente.' },
+      { front: '"be used to" + -ing/noun', back: 'ya estoy acostumbrado (estado presente)', detail: '"I am used to waking up early." · "She is used to the cold." Resultado de haberse adaptado.' },
+      { front: '"get used to" + -ing/noun', back: 'proceso de adaptación (en progreso)', detail: '"I am getting used to driving on the left." · "He\'s getting used to the noise." Todavía en ajuste.' },
+    ],
     items: [
       { sentence: "I ___ waking up early now — it wasn't easy at first, but I'm managing.", correct: 'am getting used to', explain: '"Get used to" + -ing = the ongoing process of becoming accustomed.' },
       { sentence: 'I ___ the cold weather here after living here for years.', correct: 'am used to', explain: '"Be used to" + noun/-ing = already accustomed (a settled state).' },

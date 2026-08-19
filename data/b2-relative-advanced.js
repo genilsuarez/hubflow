@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   whoWhomWhose: {
     label: 'Who / Whom / Whose',
     icon: '🙋',
     options: ['who', 'whom', 'whose'],
+    studyCards: [
+      { front: 'who (sujeto) / whom (objeto o tras preposición)', back: 'who = hace la acción · whom = recibe la acción', detail: '"She\'s the woman WHO helped me." (who = sujeto de helped) · "The person WHOM I spoke to." (whom = objeto de spoke to)' },
+      { front: 'whose (posesión)', back: 'antes de un sustantivo — para personas y cosas', detail: '"This is the man WHOSE car was stolen." · "I need a phone WHOSE battery lasts all day." (whose = de quien/cual)' },
+    ],
     items: [
       { sentence: 'This is the man ___ car was stolen.', correct: 'whose', explain: '"Whose" shows possession before a noun.' },
       { sentence: "She's the woman ___ helped me yesterday.", correct: 'who', explain: '"Who" replaces the subject of the relative clause.' },
@@ -20,6 +26,10 @@ export const CATEGORIES = {
     label: 'Which / That',
     icon: '🔗',
     options: ['which', 'that'],
+    studyCards: [
+      { front: 'that (cláusula definitoria — sin comas)', back: 'identifica de cuál se habla', detail: '"The car THAT I bought last year broke down." Eliminar la cláusula cambia el significado.' },
+      { front: 'which (cláusula no definitoria — entre comas)', back: 'información extra, prescindible', detail: '"My phone, WHICH is only a year old, stopped working." Eliminar la cláusula no cambia la identidad del sujeto.' },
+    ],
     items: [
       { sentence: 'The book, ___ I read last summer, was amazing.', correct: 'which', explain: 'Non-defining clauses (with commas, extra information) use "which", never "that".' },
       { sentence: 'The car ___ I bought last year broke down already.', correct: 'that', explain: 'Defining clauses (essential information, no commas) commonly use "that".' },
@@ -37,6 +47,9 @@ export const CATEGORIES = {
     label: 'Preposition + Which',
     icon: '🧩',
     options: ['in which', 'on which', 'with which', 'for which'],
+    studyCards: [
+      { front: 'Preposición + which (formal)', back: 'misma preposición que usarías al final', detail: '"The hotel in which we stayed." = "The hotel which we stayed IN." El registro formal mueve la preposición al frente.' },
+    ],
     items: [
       { sentence: 'The hotel ___ we stayed had a great pool.', correct: 'in which', explain: '"Stay in a hotel" → "the hotel in which we stayed".' },
       { sentence: 'This is the reason ___ she left.', correct: 'for which', explain: '"A reason for something" → "the reason for which she left".' },
@@ -54,6 +67,9 @@ export const CATEGORIES = {
     label: 'Reduced Clauses (-ing)',
     icon: '🏃',
     options: ['living', 'working', 'sitting', 'waiting'],
+    studyCards: [
+      { front: 'Cláusula relativa activa → -ing', back: '"who is/was + -ing" → solo el participio', detail: '"The man who is sitting next to me." → "The man SITTING next to me." Mismo sujeto, acción en curso.' },
+    ],
     items: [
       { sentence: 'The man ___ next to me on the plane was very talkative.', correct: 'sitting', explain: 'Reduces "who was sitting" — active, ongoing action.' },
       { sentence: 'People ___ in big cities often complain about traffic.', correct: 'living', explain: 'Reduces "who live" — active, ongoing action.' },
@@ -71,6 +87,9 @@ export const CATEGORIES = {
     label: 'Reduced Clauses (-ed)',
     icon: '📜',
     options: ['written', 'built', 'made', 'used'],
+    studyCards: [
+      { front: 'Cláusula relativa pasiva → participio pasado', back: '"which was/were + participio" → solo el participio', detail: '"The book which was written by that author." → "The book WRITTEN by that author." Significado pasivo implícito.' },
+    ],
     items: [
       { sentence: 'The book ___ by that author became a bestseller.', correct: 'written', explain: 'Reduces "which was written" — passive meaning.' },
       { sentence: 'The bridge ___ last year is already famous.', correct: 'built', explain: 'Reduces "which was built" — passive meaning.' },

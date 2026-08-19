@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   willVsGoingTo: {
     label: 'Will vs Going To',
     icon: '🔮',
     options: ['will help', "'m going to visit"],
+    studyCards: [
+      { front: 'will', back: 'decisión espontánea · promesa · predicción de opinión', detail: '"The phone is ringing — I\'ll answer it." (ahora) · "I promise I\'ll call." · "I think it will rain." (opinión)' },
+      { front: 'going to', back: 'plan decidido antes · predicción con evidencia visible', detail: '"I\'m going to visit my grandma next weekend." (ya decidido) · "Look at those clouds — it\'s going to rain!" (evidencia ahora)' },
+    ],
     items: [
       { sentence: "I think it ___ rain tomorrow. (a prediction/opinion)", correct: 'will', explain: "'Will' is used for predictions based on opinion.", options: ['will', "'m going to"] },
       { sentence: "Look at those clouds! It ___ rain. (evidence now)", correct: "'s going to", explain: "'Going to' is used for predictions based on present evidence.", options: ["'s going to", 'will'] },
@@ -20,6 +26,10 @@ export const CATEGORIES = {
     label: 'Present Continuous for Future',
     icon: '📅',
     options: ["'m meeting", 'will meet', "'m going to meet"],
+    studyCards: [
+      { front: 'Present Continuous para el futuro', back: 'plan fijo con hora, lugar o persona concretos', detail: '"I\'m meeting my friends tonight." · "She\'s flying to London on Tuesday." (billete ya comprado, cita ya concertada)' },
+      { front: 'Diferencia clave', back: 'going to = intención · present continuous = compromiso concreto', detail: '"I\'m going to study medicine" (intención) vs "I\'m starting university on Monday" (inscripción ya hecha).' },
+    ],
     items: [
       { sentence: "I ___ my friends tonight. (fixed arrangement)", correct: "'m meeting", verb: 'meet', explain: "Present continuous is used for fixed future arrangements with a specific time/place." },
       { sentence: "She ___ to London next Tuesday. (booked flight)", correct: "'s flying", verb: 'fly', explain: "Present continuous is used for fixed future arrangements.", options: ["'s flying", 'will fly', 'flies'] },
@@ -37,6 +47,9 @@ export const CATEGORIES = {
     label: 'Future Continuous',
     icon: '⏳',
     options: ['will be working', 'will work', 'is working'],
+    studyCards: [
+      { front: 'will be + -ing', back: 'acción en progreso en un momento futuro específico', detail: '"This time tomorrow, I will be working on my project." · "At 8pm tonight, she will be cooking." (ya estará en curso)' },
+    ],
     items: [
       { sentence: "This time tomorrow, I ___ on my project.", correct: 'will be working', verb: 'work', explain: "Future continuous describes an action in progress at a specific future time." },
       { sentence: "At 8pm tonight, she ___ dinner.", correct: 'will be cooking', verb: 'cook', explain: "Future continuous: will be + verb-ing.", options: ['will be cooking', 'will cook', 'is cooking'] },
@@ -54,6 +67,9 @@ export const CATEGORIES = {
     label: 'Future Perfect',
     icon: '✅',
     options: ['will have finished', 'will finish', 'will be finishing'],
+    studyCards: [
+      { front: 'will have + participio pasado', back: 'acción completada antes de un punto futuro', detail: '"By 6pm, I will have finished my homework." · "By next year, she will have graduated." La clave es "by" o "by the time...".' },
+    ],
     items: [
       { sentence: "By 6pm, I ___ my homework.", correct: 'will have finished', verb: 'finish', explain: "Future perfect: will have + past participle, for actions completed before a future time." },
       { sentence: "By next year, she ___ university.", correct: 'will have graduated', verb: 'graduate', explain: "Future perfect: will have + past participle.", options: ['will have graduated', 'will graduate', 'will be graduating'] },

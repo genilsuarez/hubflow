@@ -1,8 +1,15 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   soNotSubstitution: {
     label: 'So / Not',
     icon: '🔁',
     options: ['so', 'not'],
+    studyCards: [
+      { front: '"I think so / I hope so / I believe so"', back: 'sustituye una cláusula afirmativa', detail: '"Is she coming? I think so." = I think she is coming. "So" reemplaza la cláusula completa.' },
+      { front: '"I hope not / I\'m afraid not"', back: 'sustituye una cláusula negativa', detail: '"Will it rain? I hope not." = I hope it will not rain. "Not" reemplaza la cláusula negativa completa.' },
+      { front: 'Trampa: "I don\'t think so" (no "I think not")', back: 'en inglés moderno, la negación va en el verbo, no en "so"', detail: '"I don\'t think so" (correcto) vs "I think not" (muy formal/arcaico). El negativo idiomático es con el auxiliar negado.' },
+    ],
     items: [
       { sentence: "Will it rain tomorrow? I hope ___ — we've planned a picnic.", correct: 'not', explain: '"I hope not" substitutes for "I hope it will not rain" — the picnic gives away which answer is hoped for.' },
       { sentence: 'Is she coming? I think ___ — I saw her name on the guest list.', correct: 'so', explain: '"I think so" substitutes for "I think she is coming" — the guest list is the evidence for "so".' },
@@ -20,6 +27,9 @@ export const CATEGORIES = {
     label: 'Auxiliary Ellipsis',
     icon: '✂️',
     options: ['does', 'did', 'has', 'can'],
+    studyCards: [
+      { front: 'Ellipsis con auxiliar', back: 'el auxiliar solo reemplaza el verbo + complemento completo', detail: '"She works harder than he does." (does = works). El auxiliar debe concordar en tiempo y persona con el sujeto nuevo.' },
+    ],
     items: [
       { sentence: 'She works harder than he ___.', correct: 'does', explain: 'The auxiliary "does" replaces the repeated verb "works".' },
       { sentence: 'They finished before we ___.', correct: 'did', explain: 'The auxiliary "did" replaces the repeated verb "finished".' },
@@ -37,6 +47,9 @@ export const CATEGORIES = {
     label: 'One / Ones',
     icon: '1️⃣',
     options: ['one', 'ones'],
+    studyCards: [
+      { front: 'one / ones', back: 'sustituye un sustantivo contable (singular / plural)', detail: '"I don\'t like this shirt; I prefer the blue one." (one = shirt) · "These shoes are nice, but I like the black ones." (ones = shoes)' },
+    ],
     items: [
       { sentence: "I don't like this shirt; I prefer the blue ___.", correct: 'one', explain: '"One" replaces a singular noun (shirt).' },
       { sentence: 'These shoes are nice, but I like the black ___.', correct: 'ones', explain: '"Ones" replaces a plural noun (shoes).' },
@@ -54,6 +67,9 @@ export const CATEGORIES = {
     label: 'Do So / Did So',
     icon: '➡️',
     options: ['do so', 'did so'],
+    studyCards: [
+      { front: 'do so / did so', back: 'sustituye un verbo + complemento completo (más formal que "do it")', detail: '"If you want to leave early, you may do so." · "He promised to help, and he did so willingly." Más formal que "do it"; no funciona con verbos intransitivos.' },
+    ],
     items: [
       { sentence: 'If you want to leave early, you may ___.', correct: 'do so', explain: '"Do so" replaces "leave early" in the present/future.' },
       { sentence: 'He promised to help, and he ___ willingly.', correct: 'did so', explain: '"Did so" replaces "helped" in the past.' },

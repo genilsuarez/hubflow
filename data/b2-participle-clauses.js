@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   presentParticipleClauses: {
     label: 'Present Participle Clauses',
     icon: '🏃',
     options: ['Walking', 'Walked', 'To walk'],
+    studyCards: [
+      { front: 'Verb-ing clause: acción simultánea o razón', back: 'mismo sujeto que la cláusula principal', detail: '"Walking down the street, I saw an old friend." (caminaba mientras veía al amigo) · "Feeling tired, she went to bed." (razón)' },
+      { front: 'Trampa: ambos sujetos deben ser el mismo', back: 'dangling participle si no lo son', detail: '"Arriving at the station, the train left." (✗) → ¿Quién llegó? Debe ser el mismo que en la cláusula principal.' },
+    ],
     items: [
       { sentence: "___ down the street, I saw an old friend.", correct: 'Walking', explain: "Present participle clauses (verb-ing) describe an action happening at the same time as the main clause." },
       { sentence: "___ tired, she decided to go to bed early.", correct: 'Feeling', explain: "Present participle clauses describe a simultaneous state or action.", options: ['Feeling', 'Felt', 'To feel'] },
@@ -20,6 +26,9 @@ export const CATEGORIES = {
     label: 'Past Participle Clauses',
     icon: '📦',
     options: ['Written', 'Writing', 'Wrote'],
+    studyCards: [
+      { front: 'Past participle clause: significado pasivo', back: '(having been) + participio, sin decirlo', detail: '"Written in 1990, the book is still popular." = "(Having been) written in 1990…" El sujeto recibe la acción.' },
+    ],
     items: [
       { sentence: "___ in 1990, the book is still popular today.", correct: 'Written', explain: "Past participle clauses have a passive meaning: (having been) written." },
       { sentence: "___ by the storm, the roof needed repairs.", correct: 'Damaged', explain: "Past participle clauses have a passive meaning.", options: ['Damaged', 'Damaging', 'Damage'] },
@@ -37,6 +46,9 @@ export const CATEGORIES = {
     label: 'Perfect Participle Clauses',
     icon: '⏱️',
     options: ['Having finished', 'Finishing', 'Finished'],
+    studyCards: [
+      { front: 'Having + participio pasado: acción anterior', back: 'la acción del participio ocurre ANTES que la principal', detail: '"Having finished his homework, he went out to play." (primero terminó, luego salió). Más formal que "after finishing".' },
+    ],
     items: [
       { sentence: "___ his homework, he went out to play.", correct: 'Having finished', explain: "The perfect participle (having + past participle) shows an action completed before the main clause." },
       { sentence: "___ the letter, she sealed the envelope.", correct: 'Having written', explain: "The perfect participle shows a completed prior action.", options: ['Having written', 'Writing', 'Written'] },
@@ -54,6 +66,11 @@ export const CATEGORIES = {
     label: 'Reducing Relative Clauses',
     icon: '✂️',
     options: ['sitting', 'who is sitting', 'sits'],
+    studyCards: [
+      { front: 'Cláusula activa → participio presente (-ing)', back: '"who is sitting" → "sitting"', detail: '"The man sitting next to me..." (= who is sitting). Activo, en curso.' },
+      { front: 'Cláusula pasiva → participio pasado (-ed)', back: '"that was sent" → "sent"', detail: '"The letter sent to me last week..." (= that was sent). Pasivo.' },
+      { front: 'Cláusula perfecta → having + participio', back: '"who have finished" → "having finished"', detail: '"Students having finished the exam should leave." (acción completada antes)' },
+    ],
     items: [
       { sentence: "The man ___ next to me is my uncle. (= who is sitting)", correct: 'sitting', explain: "An active relative clause 'who is sitting' can be reduced to the present participle 'sitting'." },
       { sentence: "The letter ___ to me last week finally arrived. (= that was sent)", correct: 'sent', explain: "A passive relative clause 'that was sent' can be reduced to the past participle 'sent'.", options: ['sent', 'sending', 'who was sent'] },

@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   someAffirmative: {
     label: 'Some (affirmative)',
     icon: '➕',
     options: ['some', 'any'],
+    studyCards: [
+      { front: 'some', back: 'frases afirmativas', detail: 'I have some apples. · There is some milk. · She bought some books.' },
+      { front: 'some en preguntas: ofrecimiento o petición cortés', back: 'contexto positivo → some', detail: '"Would you like some coffee?" (oferta). "Could I have some water?" (petición cortés). Aquí no se usa "any".' },
+    ],
     items: [
       { sentence: 'I have ___ apples.', correct: 'some', explain: "'Some' is used in affirmative sentences." },
       { sentence: 'There is ___ milk in the fridge.', correct: 'some', explain: "'Some' is used in affirmative sentences." },
@@ -20,6 +26,10 @@ export const CATEGORIES = {
     label: 'Any (negative & questions)',
     icon: '❓',
     options: ['any', 'some'],
+    studyCards: [
+      { front: 'any', back: 'negativas y preguntas (neutras)', detail: 'I don\'t have any money. · Is there any milk left? · Do they have any questions?' },
+      { front: 'Regla rápida', back: 'Negativa o pregunta neutra → any. Afirmativa → some.', detail: '"I have some..." vs "I don\'t have any..." vs "Do you have any...?"' },
+    ],
     items: [
       { sentence: 'I don\'t have ___ apples.', correct: 'any', explain: "'Any' is used in negative sentences." },
       { sentence: 'Is there ___ milk left?', correct: 'any', explain: "'Any' is used in questions." },
@@ -37,6 +47,11 @@ export const CATEGORIES = {
     label: 'Much vs Many',
     icon: '📊',
     options: ['much', 'many'],
+    studyCards: [
+      { front: 'many + contable plural', back: 'puedes contar uno por uno', detail: 'many books · many friends · many chairs (1 chair, 2 chairs...)' },
+      { front: 'much + incontable', back: 'no se puede contar individualmente', detail: 'much water · much time · much money (no existe "one money"...)' },
+      { front: 'Truco rápido', back: '¿Tiene plural? → many. ¿No tiene plural? → much.', detail: '"information" no tiene plural → much information. "questions" sí tiene plural → many questions.' },
+    ],
     items: [
       { sentence: 'How ___ books do you have?', correct: 'many', explain: "'Many' is used with countable plural nouns like 'books'." },
       { sentence: 'How ___ water do you drink?', correct: 'much', explain: "'Much' is used with uncountable nouns like 'water'." },
@@ -54,6 +69,11 @@ export const CATEGORIES = {
     label: 'No vs Not Any',
     icon: '🚫',
     options: ['no', "don't have any"],
+    studyCards: [
+      { front: 'no + sustantivo', back: 'frase afirmativa con negación en el sustantivo', detail: 'I have no money. · There is no milk. (el verbo va en positivo)' },
+      { front: 'not any + verbo negativo', back: 'frase negativa con verbo negado', detail: 'I don\'t have any money. · There isn\'t any milk. (el verbo lleva not/n\'t)' },
+      { front: 'Misma idea, dos estructuras', back: '"no" = "not any" en significado', detail: '"I have no friends" = "I don\'t have any friends." No mezclar: "I don\'t have no" es incorrecto en inglés.' },
+    ],
     items: [
       { sentence: 'I have ___ money.', correct: 'no', explain: "'No' + noun replaces 'not any' + noun in an affirmative-form sentence." },
       { sentence: 'I ___ money.', correct: "don't have any", explain: "'Not any' is used with a negative verb form.", options: ["don't have any", "have no any", "not have"] },

@@ -3,11 +3,23 @@
  * Categories: Identify the type (Zero/First/Second/Third), Connectors (if/unless/provided that/as long as)
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bug corregido: mixedConditionals tenía 4/10 items con exactamente el mismo
+// molde "If she/I/he were + adjetivo, would have...". Se diversificaron los
+// items para cubrir ambas direcciones del mixed conditional (past→present y
+// present→past) con variedad de estructuras.
 export const CATEGORIES = {
   identifyType: {
     label: 'Which type?',
     icon: '🔀',
     options: ['Zero', 'First', 'Second', 'Third'],
+    studyCards: [
+      { front: 'Zero: if + present, present', back: 'verdad universal o científica', detail: '"If you heat ice, it melts." · "If you mix blue and yellow, you get green." Siempre verdad.' },
+      { front: 'First: if + present, will + base', back: 'posibilidad real futura', detail: '"If it rains tomorrow, we will cancel the picnic." Puede pasar realmente.' },
+      { front: 'Second: if + past simple, would + base', back: 'hipótesis improbable en el presente', detail: '"If I won the lottery, I would travel." · "If I were you, I would apologise." Usa "were" para todos los sujetos.' },
+      { front: 'Third: if + past perfect, would have + participio', back: 'situación imposible en el pasado', detail: '"If she had studied harder, she would have passed." Ya no puede ocurrir.' },
+    ],
     items: [
       { sentence: 'If you heat ice, it melts.', correct: 'Zero', explain: 'General truth/fact → Zero Conditional (if + present, present).' },
       { sentence: 'If it rains tomorrow, we will cancel the picnic.', correct: 'First', explain: 'Real future possibility → First Conditional (if + present, will + base).' },
@@ -25,6 +37,10 @@ export const CATEGORIES = {
     label: 'Connectors',
     icon: '🔗',
     options: ['if', 'unless', 'provided that', 'as long as'],
+    studyCards: [
+      { front: 'unless = if...not', back: 'introduce una condición negativa', detail: '"You\'ll miss the bus unless you hurry." = "...if you don\'t hurry."' },
+      { front: 'as long as / provided that', back: 'condición que DEBE cumplirse para que algo ocurra', detail: '"You can borrow my car as long as you return it by 6." · "Provided that all terms are met, we\'ll sign." (provided = más formal)' },
+    ],
     items: [
       { sentence: "You'll miss the bus ___ you hurry up.", correct: 'unless', explain: '"Unless" = "if...not" — introduces a negative condition.' },
       { sentence: "I'll come to the party ___ I finish work on time.", correct: 'if', explain: '"If" introduces a simple, neutral condition.' },
@@ -42,17 +58,21 @@ export const CATEGORIES = {
     label: 'Mixed Conditionals',
     icon: '🔀',
     options: ['would have', 'would', 'had', 'were'],
+    studyCards: [
+      { front: 'Pasado → Presente: if + past perfect, would + base', back: 'una acción pasada no ocurrida tiene efecto en el presente', detail: '"If I had studied law, I would be a lawyer now." (no estudié → no soy abogado ahora)' },
+      { front: 'Presente → Pasado: if + past simple, would have + participio', back: 'una característica presente hubiera cambiado el pasado', detail: '"If she were more patient, she would have finished the project." (su naturaleza → consecuencia pasada)' },
+    ],
     items: [
       { sentence: 'If I ___ studied law, I would be a lawyer now.', correct: 'had', explain: 'Mixed conditional: past perfect in the if-clause (unreal past action) + would + base for present result.' },
       { sentence: 'If she ___ more patient, she would have finished the project.', correct: 'were', explain: 'Mixed conditional: unreal present character + would have for a past consequence.' },
-      { sentence: 'If I had slept better last night, I ___ feel so tired now.', correct: 'would', explain: 'Unreal past cause → present result: "would + base" in the result clause (contracted: wouldn\'t feel).' },
+      { sentence: 'If I had slept better last night, I ___ feel so tired now.', correct: 'would', explain: 'Unreal past cause → present result: "would + base" in the result clause.' },
       { sentence: 'If he ___ taken the job offer, he would be living abroad now.', correct: 'had', explain: 'Past perfect in the if-clause; "would + be + -ing" for the present state.' },
-      { sentence: 'If I ___ braver, I would have asked for the promotion.', correct: 'were', explain: 'Unreal present quality → missed past opportunity.' },
       { sentence: 'She ___ been able to help if she had known about the problem.', correct: 'would have', explain: 'Unreal past: "would have + past participle" in the result clause.' },
-      { sentence: 'If I ___ a morning person, I would have caught that flight.', correct: 'were', explain: 'Present character (I am not a morning person) → past missed event.' },
       { sentence: 'If they ___ invested earlier, they would be wealthy now.', correct: 'had', explain: 'Past perfect in if-clause + "would be" for present result.' },
       { sentence: 'I ___ passed the exam if I had started revising earlier.', correct: 'would have', explain: '"Would have + past participle" in the result clause of a third conditional.' },
       { sentence: 'If he ___ more disciplined, he would have met his deadline.', correct: 'were', explain: 'Present character flaw → unreal past result.' },
+      { sentence: 'If she ___ a risk-taker, she would have launched the business years ago.', correct: 'were', explain: 'Present character (she is not a risk-taker) → missed past opportunity.' },
+      { sentence: 'If I ___ kept that old car, it would be worth a lot of money now.', correct: 'had', explain: 'Past perfect in the if-clause; "would be" for present value.' },
     ]
   }
 };

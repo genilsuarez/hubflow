@@ -3,11 +3,18 @@
  * Categories: Expression choice, Structure (to/than/that/∅)
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   expression: {
     label: 'Which expression?',
     icon: '💭',
     options: ['prefer', 'would prefer', 'would rather'],
+    studyCards: [
+      { front: 'prefer (present simple)', back: 'preferencia general, siempre o casi siempre', detail: '"I prefer dogs to cats in general." · "She prefers classical music to pop." Señales: "in general", "generally speaking", "always".' },
+      { front: 'would prefer', back: 'preferencia en esta ocasión específica', detail: '"Right now, I would prefer pizza to pasta for dinner." Más formal; + to-infinitivo o + sustantivo.' },
+      { front: 'would rather', back: 'preferencia específica, informal; + base verb', detail: '"I would rather stay home tonight." · "I\'d rather not go." Nunca "would rather to stay".' },
+    ],
     items: [
       { sentence: 'I ___ dogs to cats in general.', correct: 'prefer', explain: 'General, ongoing preference → "prefer" (present simple).' },
       { sentence: 'They ___ tea to coffee — it\'s always been their favourite.', correct: 'prefer', explain: 'General, ongoing preference → "prefer".' },
@@ -25,6 +32,11 @@ export const CATEGORIES = {
     label: 'Structure (to/than/that/∅)',
     icon: '🧩',
     options: ['to', 'than', 'that', '∅'],
+    studyCards: [
+      { front: 'prefer X to Y (no "than")', back: '"to" compara las dos opciones en "prefer"', detail: '"I prefer dogs to cats." / "I prefer cycling to running." Trampa: "prefer X than Y" es incorrecto.' },
+      { front: 'would rather X than Y / would rather + base verb', back: '"than" compara en "would rather" | sin "to" antes del verbo', detail: '"I\'d rather stay home than go out." · "I\'d rather not go." (nunca "would rather to")' },
+      { front: 'would prefer + to-infinitivo / prefer that + clause', back: '"would prefer" lleva "to" | "prefer that" es formal', detail: '"I\'d prefer to eat at home tonight." · "I prefer that guests remove their shoes." (formal)' },
+    ],
     items: [
       { sentence: 'I prefer dogs ___ cats.', correct: 'to', explain: '"Prefer" + noun + "to" + noun.' },
       { sentence: 'She prefers to walk rather ___ drive.', correct: 'than', explain: '"Rather than" compares two actions.' },

@@ -3,11 +3,17 @@
  * Categories: Some/Any, Much/Many, Few/Little, A lot / A little
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperativas.js.
 export const CATEGORIES = {
   someany: {
     label: 'Some / Any',
     icon: '🔀',
     options: ['some', 'any'],
+    studyCards: [
+      { front: 'some', back: 'afirmativas + ofertas/peticiones (contexto positivo)', detail: '"I have some money." · "Would you like some coffee?" (oferta) · "Can I have some water?" (petición cortés)' },
+      { front: 'any', back: 'negativas y preguntas neutras', detail: '"There isn\'t any milk left." · "Do you have any questions?" · "Did you find any information?"' },
+    ],
     items: [
       { sentence: 'I have ___ money in my wallet.', correct: 'some', explain: 'Use "some" in affirmative sentences.' },
       { sentence: 'Do you have ___ questions?', correct: 'any', explain: 'Use "any" in questions.' },
@@ -25,6 +31,10 @@ export const CATEGORIES = {
     label: 'Much / Many',
     icon: '📊',
     options: ['much', 'many'],
+    studyCards: [
+      { front: 'many + contable plural', back: 'puedes contar uno por uno → many', detail: '"How many people / books / languages?" Tiene plural real.' },
+      { front: 'much + incontable', back: 'no tiene plural real → much', detail: '"How much money / water / time / information / noise?" No dices "one money, two moneys..."' },
+    ],
     items: [
       { sentence: 'How ___ money do you have?', correct: 'much', explain: 'Use "much" with uncountable nouns (money).' },
       { sentence: 'How ___ people came to the party?', correct: 'many', explain: 'Use "many" with countable plural nouns (people).' },
@@ -42,6 +52,11 @@ export const CATEGORIES = {
     label: 'Few / Little',
     icon: '🤏',
     options: ['few', 'little', 'a few', 'a little'],
+    studyCards: [
+      { front: 'few / little — negativo', back: 'casi ninguno / casi nada (connotación negativa)', detail: '"Few students passed." (casi ninguno — malo) · "We have little time." (casi nada — urgencia)' },
+      { front: 'a few / a little — positivo', back: 'algunos / un poco (connotación positiva)', detail: '"I have a few friends." (algunos — suficiente) · "Add a little salt." (un poco — cantidad positiva)' },
+      { front: 'few / a few + contable | little / a little + incontable', back: 'mismo contraste de contable/incontable que many/much', detail: '"a few minutes" (contable) · "a little time" (incontable)' },
+    ],
     items: [
       { sentence: 'I have ___ friends, so I\'m never lonely.', correct: 'a few', explain: '"A few" (countable) = some, a positive amount.' },
       { sentence: 'She has ___ money, so she can\'t buy it.', correct: 'little', explain: '"Little" (uncountable) = almost none, negative sense.' },
@@ -59,6 +74,11 @@ export const CATEGORIES = {
     label: 'A lot / Enough',
     icon: '⚖️',
     options: ['a lot of', 'enough', 'too much', 'too many'],
+    studyCards: [
+      { front: 'a lot of', back: 'gran cantidad, contable e incontable (positivo)', detail: '"She has a lot of books." · "I drink a lot of water." Funciona en ambos tipos de nombre.' },
+      { front: 'enough', back: 'la cantidad suficiente (ni más ni menos)', detail: '"Do we have enough chairs?" (¿lo justo?) · "We don\'t have enough money." (falta)' },
+      { front: 'too much / too many', back: 'exceso: too much (incontable) / too many (contable)', detail: '"There is too much traffic." · "There are too many people." Implica un problema.' },
+    ],
     items: [
       { sentence: 'She has ___ books — hundreds of them.', correct: 'a lot of', explain: '"A lot of" works with both countable and uncountable nouns.' },
       { sentence: 'Do we have ___ chairs for everyone?', correct: 'enough', explain: '"Enough" = the right/sufficient amount.' },

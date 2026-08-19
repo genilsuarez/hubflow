@@ -2,11 +2,18 @@
  * Parts of Speech Data — identify the word in CAPS
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   contentWords: {
     label: 'Content Words',
     icon: '🔤',
     options: ['Noun', 'Verb', 'Adjective', 'Adverb'],
+    studyCards: [
+      { front: 'Noun / Verb', back: 'cosa o persona / acción o estado', detail: 'Noun: dog, happiness, freedom (pueden ir con "the/a"). Verb: runs, waited, danced (con sujeto).' },
+      { front: 'Adjective / Adverb', back: 'describe un nombre / describe un verbo, adjetivo u otro adverbio', detail: 'Adjective: quick fox, terrible mistake (antes del nombre o tras "be"). Adverb: speaks SLOWLY, sings BEAUTIFULLY (modifica el verbo).' },
+      { front: 'Truco: los adverbios suelen terminar en -ly', back: 'pero no todos los -ly son adverbios', detail: '"Quickly, beautifully" → adverbios. Pero "lovely, friendly" → adjetivos. Mira qué modifica la palabra.' },
+    ],
     items: [
       { sentence: 'She sings BEAUTIFULLY every morning.', correct: 'Adverb', explain: 'Describes how she sings → adverb.' },
       { sentence: 'The DOG barked loudly.', correct: 'Noun', explain: 'Names a person, place, or thing → noun.' },
@@ -24,6 +31,10 @@ export const CATEGORIES = {
     label: 'Function Words',
     icon: '🔗',
     options: ['Pronoun', 'Preposition', 'Conjunction', 'Interjection'],
+    studyCards: [
+      { front: 'Pronoun / Preposition', back: 'sustituye un nombre / relación entre dos cosas', detail: 'Pronoun: she, her, them, whose. Preposition: on, under, in (siempre seguida de un nombre o pronombre).' },
+      { front: 'Conjunction / Interjection', back: 'conecta cláusulas / expresa emoción suelta', detail: 'Conjunction: because, and, but (une frases). Interjection: wow, ouch (fuera de la estructura gramatical).' },
+    ],
     items: [
       { sentence: "WOW, that's an amazing view!", correct: 'Interjection', explain: 'A short word expressing emotion, standing apart from the sentence → interjection.' },
       { sentence: 'I put the book ON the table.', correct: 'Preposition', explain: 'Shows the relationship (position) between "book" and "table" → preposition.' },

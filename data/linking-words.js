@@ -2,11 +2,21 @@
  * Linking Words & Connectors Data — cohesive devices for contrast/addition and cause/result
  */
 
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
+// Bug crítico corregido: concessionPurpose, item "He whispered ___ not wake
+// the baby." (correct: 'so that') producía "He whispered so that not wake the
+// baby." — agramatical. Corregido a "so as not to".
 export const CATEGORIES = {
   contrastAddition: {
     label: 'Contrast & Addition',
     icon: '🔗',
     options: ['however', 'moreover', 'in addition', 'on the other hand', 'nevertheless'],
+    studyCards: [
+      { front: 'however / nevertheless', back: 'contraste: sin embargo / aun así', detail: '"The hotel was expensive. However, it was worth it." · "She studied hard. Nevertheless, she failed." (nevertheless = a pesar del hecho previo)' },
+      { front: 'moreover / in addition', back: 'adición: además (mismo tono)', detail: '"The car is fast. Moreover, it\'s fuel-efficient." · "It has a garden. In addition, it\'s near the beach." (refuerzan con info extra)' },
+      { front: 'on the other hand', back: 'contrasta dos perspectivas del mismo tema', detail: '"He\'s a great cook. On the other hand, he\'s a terrible cleaner." (mismo sujeto, dos caras)' },
+    ],
     items: [
       { sentence: 'The hotel was expensive. ___, it was worth every penny.', correct: 'however', explain: '"However" introduces a contrast with the previous sentence.' },
       { sentence: 'She studied hard for the exam. ___, she still failed.', correct: 'nevertheless', explain: '"Nevertheless" = despite the previous fact, a contrasting result still happens.' },
@@ -28,6 +38,10 @@ export const CATEGORIES = {
     label: 'Cause & Result',
     icon: '➡️',
     options: ['therefore', 'as a result', 'since', 'due to', 'consequently'],
+    studyCards: [
+      { front: 'therefore / consequently / as a result', back: 'introducen el resultado (después de la causa)', detail: '"She missed too many classes. Consequently, she failed." · "He hadn\'t slept; therefore, he made mistakes." (therefore = más lógico/formal)' },
+      { front: 'since / due to', back: 'introducen la causa', detail: '"Since traffic was heavy, we arrived late." (since = cláusula) · "The flight was cancelled due to bad weather." (due to + sustantivo)' },
+    ],
     items: [
       { sentence: 'It rained heavily all night. ___, the streets were flooded by morning.', correct: 'as a result', explain: '"As a result" introduces the direct consequence of the rain.' },
       { sentence: '___ traffic was heavy, we arrived twenty minutes late.', correct: 'since', explain: '"Since" introduces a reason at the start of a sentence.' },
@@ -47,12 +61,17 @@ export const CATEGORIES = {
   concessionPurpose: {
     label: 'Concession & Purpose',
     icon: '🎯',
-    options: ['although', 'in order to', 'despite', 'so that', 'even though'],
+    options: ['although', 'in order to', 'despite', 'so that', 'even though', 'so as'],
+    studyCards: [
+      { front: 'although / even though', back: 'concesión: a pesar de que + cláusula', detail: '"Although it was raining, we went for a walk." · "Even though he was tired, he kept working." (even though = más enfático)' },
+      { front: 'despite / in spite of', back: 'concesión: a pesar de + sustantivo/-ing', detail: '"Despite the cold weather, they held the event outside." · "Despite his best efforts, it failed." (despite + noun, no cláusula)' },
+      { front: 'in order to / so that', back: 'propósito: para + infinitivo | para que + cláusula', detail: '"She studied hard in order to pass." (in order to + base verb) · "He turned off his phone so that nobody could disturb him." (so that + subject + verb)' },
+    ],
     items: [
       { sentence: '___ it was raining, we went for a walk.', correct: 'although', explain: '"Although" introduces a concession — the rain did not stop them.' },
       { sentence: 'She studied hard ___ pass her exams.', correct: 'in order to', explain: '"In order to" expresses purpose — why she studied.' },
       { sentence: '___ the cold weather, they held the event outside.', correct: 'despite', explain: '"Despite" + noun phrase introduces a concession.' },
-      { sentence: 'He whispered ___ not wake the baby.', correct: 'so that', explain: '"So that" introduces the intended result.' },
+      { sentence: 'He whispered ___ not disturb the baby.', correct: 'so as', explain: '"So as not to + base verb" expresses a negative purpose. ("So that not wake" is ungrammatical — "so as not to" is the correct form.)' },
       { sentence: '___ he was tired, he kept working until midnight.', correct: 'even though', explain: '"Even though" is stronger than "although" — emphasizes the contrast.' },
       { sentence: 'She wore a coat ___ keep warm in the cold wind.', correct: 'in order to', explain: '"In order to" + infinitive gives the reason for an action.' },
       { sentence: '___ his best efforts, the project still failed.', correct: 'despite', explain: '"Despite" + noun phrase shows the effort did not prevent the outcome.' },

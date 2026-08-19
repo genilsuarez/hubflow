@@ -1,8 +1,14 @@
+// `studyCards` enseña la REGLA antes de examinarla en Quiz. Mismo patrón que
+// a1-imperatives.js.
 export const CATEGORIES = {
   negativeAdverbialInversion: {
     label: 'Negative Adverbial Inversion',
     icon: '🔄',
     options: ['had I', 'did I', 'have I', 'was I'],
+    studyCards: [
+      { front: 'Adverbio negativo al frente → inversión auxiliar + sujeto', back: 'Never / Rarely / Seldom / Little / Not once / Not until', detail: '"Never have I seen such a sunset." · "Rarely have I met someone so talented." · "Little did I know what awaited me."' },
+      { front: 'Auxiliar correcto', back: 'presente perfecto → have/has · pasado simple → did · "was/were" → was/were · past perfect → had', detail: '"No sooner had I arrived..." · "Never before was I so nervous." · "Not once did I complain."' },
+    ],
     items: [
       { sentence: 'Never ___ seen such a beautiful sunset.', correct: 'have I', explain: '"Never" fronted triggers subject-auxiliary inversion with "have".' },
       { sentence: 'Rarely ___ met someone so talented.', correct: 'have I', explain: '"Rarely" fronted triggers subject-auxiliary inversion with "have".' },
@@ -20,6 +26,10 @@ export const CATEGORIES = {
     label: 'So / Such Inversion',
     icon: '❗',
     options: ['So', 'Such'],
+    studyCards: [
+      { front: 'So + adjetivo + was + sujeto', back: '"So great was the pressure that he gave up."', detail: '"So" precede a un adjetivo. Luego invierte: "So loud was the music that neighbors complained."' },
+      { front: 'Such + was + sustantivo', back: '"Such was her surprise that she could not speak."', detail: '"Such" precede a un sustantivo (sin adjetivo) o "such a + adj + noun": "Such a shock was the news that she fainted."' },
+    ],
     items: [
       { sentence: '___ was her surprise that she could not speak.', correct: 'Such', explain: '"Such" + "was" + noun phrase fronts for emphasis.' },
       { sentence: '___ great was the pressure that he gave up.', correct: 'So', explain: '"So" + adjective + "was" fronts for emphasis.' },
@@ -37,6 +47,9 @@ export const CATEGORIES = {
     label: 'Only... Inversion',
     icon: '🔑',
     options: ['did she', 'did he', 'was I', 'could we'],
+    studyCards: [
+      { front: 'Only after/when/by + expresión → inversión en la cláusula principal', back: '"Only after the meeting did she understand."', detail: '"Only" + expresión temporal o modal dispara la inversión. El auxiliar va antes del sujeto en la cláusula principal.' },
+    ],
     items: [
       { sentence: 'Only after the meeting ___ understand the full plan.', correct: 'did she', explain: '"Only after" fronted triggers subject-auxiliary inversion.' },
       { sentence: 'Only when he apologized ___ satisfied.', correct: 'was I', explain: '"Only when" fronted triggers subject-auxiliary inversion.' },
@@ -54,6 +67,9 @@ export const CATEGORIES = {
     label: '"So do I" Agreement',
     icon: '🤝',
     options: ['so do I', 'so did I', 'so am I', 'so have I'],
+    studyCards: [
+      { front: '"So + auxiliar + I" — acuerdo positivo', back: 'el auxiliar refleja el tiempo del verbo original', detail: '"She loves music, and so do I." (do = loves) · "He finished, and so did I." · "She is thrilled, and so am I." · "They have visited, and so have I."' },
+    ],
     items: [
       { sentence: 'She loves classical music, and ___.', correct: 'so do I', explain: 'Present simple agreement uses "so do I".' },
       { sentence: 'He finished the marathon, and ___.', correct: 'so did I', explain: 'Past simple agreement uses "so did I".' },
