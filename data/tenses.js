@@ -73,7 +73,7 @@ export const CATEGORIES = {
     ]
   },
   perfectContrast: {
-    label: 'Simple vs –ing',
+    label: 'Perfect vs Perfect –ing',
     icon: '🟤',
     options: ['have done', 'have been doing'],
     items: [
