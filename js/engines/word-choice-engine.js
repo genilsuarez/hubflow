@@ -181,8 +181,21 @@ export function initWordChoice({
   }
 
   // ═══ STUDY ═══
+  /**
+   * Igual que sentence-quiz-engine.js: una categoría que declare `studyCards`
+   * enseña la regla del par de palabras (`{front, back, detail}`) antes de
+   * examinarla en Quiz. Sin esto, Study mostraba las mismas frases del Quiz
+   * con la respuesta detrás — el examen disfrazado de flashcard, sin ninguna
+   * regla general enunciada en ningún lado.
+   */
+  function getStudyDeck() {
+    const cat = categories[currentCat];
+    return cat.studyCards?.length ? cat.studyCards : cat.items;
+  }
+
   function initStudy() {
-    deck = shuffle(getData());
+    const studyDeck = getStudyDeck();
+    deck = categories[currentCat].studyCards?.length ? [...studyDeck] : shuffle(studyDeck);
     idx = 0;
     document.querySelector('[data-area="study"]').classList.add('show');
     renderStudyCard();
@@ -190,14 +203,16 @@ export function initWordChoice({
 
   function renderStudyCard() {
     const item = deck[idx];
-    recordStudyItemSeen({ storagePrefix: scoreKeyPrefix, category: currentCat, term: item.sentence, totalItems: getData().length });
+    const isRuleCard = item.front != null;
+    const term = isRuleCard ? item.front : item.sentence;
+    recordStudyItemSeen({ storagePrefix: scoreKeyPrefix, category: currentCat, term, totalItems: getStudyDeck().length });
     const card = document.getElementById('fcCard');
     card.classList.remove('flip');
     document.getElementById('fcEmoji').textContent = categories[currentCat].icon;
-    document.getElementById('fcSentence').innerHTML = item.sentence.replace('___', '___');
-    document.getElementById('fcHint').textContent = `${categories[currentCat].label}`;
-    document.getElementById('fcAnswer').textContent = item.correct;
-    document.getElementById('fcExplain').textContent = item.explain;
+    document.getElementById('fcSentence').innerHTML = isRuleCard ? item.front : item.sentence.replace('___', '___');
+    document.getElementById('fcHint').textContent = isRuleCard ? '' : categories[currentCat].label;
+    document.getElementById('fcAnswer').textContent = isRuleCard ? item.back : item.correct;
+    document.getElementById('fcExplain').textContent = isRuleCard ? (item.detail || '') : item.explain;
     document.getElementById('fcCounter').textContent = `${idx + 1} / ${deck.length}`;
     updProgress(idx + 1, deck.length);
   }

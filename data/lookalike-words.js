@@ -1,13 +1,22 @@
+// `studyCards` enseña la REGLA del par antes de examinarla en Quiz. Antes
+// Study mostraba las mismas 10 frases del Quiz con la respuesta detrás — el
+// examen disfrazado de flashcard, sin la regla enunciada en ningún lado.
+// Mismo patrón que sentence-quiz-engine.js / a1-plurals-possessives.js.
 export const CATEGORIES = {
   'principal-principle': {
     label: "Principal / Principle",
     icon: "🏫",
     pairs: ["principal","principle"],
+    studyCards: [
+      { front: 'principal', back: 'noun: head of a school · adjective: main', detail: 'The school principal · the principal reason (la más importante)' },
+      { front: 'principle', back: 'noun: a fundamental rule or value', detail: 'Honesty is a principle. · on principle (por convicción)' },
+      { front: 'Cómo recordar', back: "'-PLE' como en 'ruLE'", detail: "'principLE' termina como 'ruLE' (una regla). 'principAL' termina como 'A person' (una persona: el director)." },
+    ],
     items: [
       { sentence: "The school ___ gave a speech.", correct: "principal", explain: "'Principal' (noun) = the head of a school." },
       { sentence: "Honesty is her guiding ___.", correct: "principle", explain: "'Principle' = a fundamental value or rule." },
       { sentence: "That's my ___ concern about the plan.", correct: "principal", explain: "'Principal' (adjective) = main, most important." },
-      { sentence: "He refused on ___ .", correct: "principle", explain: "'On principle' = as a matter of values." },
+      { sentence: "He refused on ___.", correct: "principle", explain: "'On principle' = as a matter of values." },
       { sentence: "She was called to the ___'s office.", correct: "principal", explain: "'Principal' = the head of the school." },
       { sentence: "The basic ___ of physics is simple.", correct: "principle", explain: "'Principle' = a fundamental rule or law." },
       { sentence: "The company's main ___ is customer satisfaction.", correct: "principle", explain: "'Principle' = a fundamental value." },
@@ -20,6 +29,11 @@ export const CATEGORIES = {
     label: "Complement / Compliment",
     icon: "💬",
     pairs: ["complement","compliment"],
+    studyCards: [
+      { front: 'complement (E)', back: 'to go well with / complete', detail: 'This wine will complement the meal. · The two colours complement each other.' },
+      { front: 'compliment (I)', back: 'praise, a kind remark', detail: 'She gave me a nice compliment. · He paid her a compliment.' },
+      { front: 'Cómo recordar', back: "'complIment' = 'I' like it", detail: "Un cumplido (compliment) es algo que a 'I' (yo) me gusta oír. Complement con E va con 'complEte'." },
+    ],
     items: [
       { sentence: "She gave me a nice ___ on my work.", correct: "compliment", explain: "'Compliment' = a piece of praise." },
       { sentence: "This wine will ___ the meal perfectly.", correct: "complement", explain: "'Complement' (verb) = to go well with something." },
@@ -37,6 +51,11 @@ export const CATEGORIES = {
     label: "Desert / Dessert",
     icon: "🍰",
     pairs: ["desert","dessert"],
+    studyCards: [
+      { front: 'desert (1 "s")', back: 'noun: dry region · verb: to abandon', detail: 'The Sahara is a desert. · Don\'t desert your friends.' },
+      { front: 'dessert (2 "s")', back: 'noun: postre', detail: "What's for dessert? · Ice cream is my favourite dessert." },
+      { front: 'Cómo recordar', back: 'Dessert tiene doble "S" porque quieres doble ración', detail: "Postre (dessert) es lo que quieres 'more of' — doble S de 'sweet, sweet'. Desert (desierto) tiene una sola S, como su escasa vegetación." },
+    ],
     items: [
       { sentence: "The Sahara is a huge ___.", correct: "desert", explain: "'Desert' (one 'S') = a dry, sandy region." },
       { sentence: "What's for ___ tonight?", correct: "dessert", explain: "'Dessert' (dos 'S') = postre." },
@@ -54,6 +73,11 @@ export const CATEGORIES = {
     label: "Weather / Whether",
     icon: "🌦️",
     pairs: ["weather","whether"],
+    studyCards: [
+      { front: 'weather', back: 'el clima/tiempo atmosférico', detail: "The weather is lovely today. · Check the weather forecast." },
+      { front: 'whether', back: 'introduce una alternativa/duda', detail: "I don't know whether to go or stay. · She asked whether I was coming." },
+      { front: 'Cómo recordar', back: "'whETHer' se parece a 'ETHer' (u opción A o B)", detail: "'Whether' siempre presenta una elección o duda entre opciones, casi como 'if'. 'Weather' nunca introduce una cláusula." },
+    ],
     items: [
       { sentence: "The ___ is lovely today.", correct: "weather", explain: "'Weather' = the state of the atmosphere." },
       { sentence: "I don't know ___ to go or stay.", correct: "whether", explain: "'Whether' = introduces an alternative." },

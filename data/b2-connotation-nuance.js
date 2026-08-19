@@ -1,8 +1,18 @@
+// `studyCards` enseña la REGLA de connotación antes de examinarla en Quiz.
+// Antes Study mostraba las mismas 10 frases del Quiz con la respuesta
+// detrás — el examen disfrazado de flashcard. Mismo patrón que
+// a1-plurals-possessives.js.
 export const CATEGORIES = {
   thinSkinnySlim: {
     label: 'Thin / Skinny / Slim',
     icon: '🧍',
     options: ['skinny', 'slim', 'thin'],
+    studyCards: [
+      { front: 'slim', back: 'positivo, cumplido', detail: 'You look amazing, so slim! · a slim athletic build' },
+      { front: 'skinny', back: 'negativo, preocupación', detail: "He's too skinny, he needs to eat more. · a worryingly skinny model" },
+      { front: 'thin', back: 'neutral, sin juicio', detail: 'Naturally thin · thin paper · a thin laptop (también sirve para objetos)' },
+      { front: 'La misma idea, tres tonos', back: 'skinny (mal) — thin (neutral) — slim (bien)', detail: 'Elige según la actitud que quieres transmitir, no solo el hecho físico.' },
+    ],
     items: [
       { sentence: 'You look amazing, so ___ in that dress!', correct: 'slim', explain: '"Slim" has a positive, complimentary connotation.' },
       { sentence: "He's too ___; he needs to eat more, poor thing.", correct: 'skinny', explain: '"Skinny" often carries a negative or worried connotation.' },
@@ -20,6 +30,12 @@ export const CATEGORIES = {
     label: 'Cheap / Affordable',
     icon: '💵',
     options: ['cheap', 'inexpensive', 'affordable'],
+    studyCards: [
+      { front: 'cheap', back: 'precio bajo Y calidad baja', detail: 'The hotel was cheap but the walls were paper-thin. (juicio negativo)' },
+      { front: 'affordable', back: 'precio bajo, buen valor (positivo)', detail: 'An affordable flight that still had good reviews.' },
+      { front: 'inexpensive', back: 'precio bajo, neutral', detail: 'An inexpensive option, without sacrificing quality. (sin juicio de calidad)' },
+      { front: 'Misma idea, distinto tono', back: 'cheap (mal) — inexpensive (neutral) — affordable (bien)', detail: 'Los tres significan "poco dinero", pero "cheap" insinúa mala calidad.' },
+    ],
     items: [
       { sentence: 'This restaurant is surprisingly ___ for such great food.', correct: 'affordable', explain: '"Affordable" has a positive connotation — good value.' },
       { sentence: 'The hotel was ___ but the walls were paper-thin and the service was terrible.', correct: 'cheap', explain: '"Cheap" implies low price AND low quality.' },
@@ -37,6 +53,12 @@ export const CATEGORIES = {
     label: 'Old / Elderly / Ancient',
     icon: '⏳',
     options: ['old', 'elderly', 'ancient'],
+    studyCards: [
+      { front: 'elderly', back: 'personas mayores, término respetuoso', detail: 'My elderly grandmother · that elderly gentleman' },
+      { front: 'old', back: 'neutral, común para objetos', detail: 'My phone is getting old. · My car is quite old.' },
+      { front: 'ancient', back: 'extremadamente antiguo, histórico', detail: 'Ancient ruins · from the Roman Empire · a tradition going back centuries' },
+      { front: 'Regla de oro', back: 'personas → elderly, nunca "old people" en tono formal', detail: '"Old" para personas puede sonar brusco; "ancient" es solo para historia/objetos, nunca para personas vivas.' },
+    ],
     items: [
       { sentence: 'My ___ grandmother still walks every morning.', correct: 'elderly', explain: '"Elderly" is the respectful term for older people.' },
       { sentence: 'This vase is ___, from the Roman Empire.', correct: 'ancient', explain: '"Ancient" describes something extremely old, from history.' },
@@ -54,6 +76,12 @@ export const CATEGORIES = {
     label: 'Happy / Glad / Thrilled',
     icon: '😊',
     options: ['happy', 'glad', 'thrilled', 'pleased'],
+    studyCards: [
+      { front: 'happy', back: 'general, neutral', detail: 'She felt happy just relaxing at home.' },
+      { front: 'glad', back: 'sobre algo específico (noticia, favor)', detail: "I'm glad you could make it. · Glad to hear the news." },
+      { front: 'pleased', back: 'formal, mesurado', detail: "I'm pleased with the results. · We are pleased to announce..." },
+      { front: 'thrilled', back: 'emoción intensa, más fuerte que happy', detail: 'We were absolutely thrilled when we won!' },
+    ],
     items: [
       { sentence: "I'm ___ you could make it to the party!", correct: 'glad', explain: '"Glad" is a common, everyday way to express relief or pleasure about a specific thing.' },
       { sentence: 'We were absolutely ___ when we won the championship!', correct: 'thrilled', explain: '"Thrilled" expresses intense excitement, stronger than "happy".' },
@@ -71,6 +99,12 @@ export const CATEGORIES = {
     label: 'Reporting Verbs',
     icon: '💬',
     options: ['whispered', 'shouted', 'mumbled', 'announced'],
+    studyCards: [
+      { front: 'whispered', back: 'muy bajo, en secreto', detail: 'She whispered the secret so no one else could hear.' },
+      { front: 'shouted', back: 'muy alto, a menudo con enojo', detail: 'He shouted angrily when he saw the mess.' },
+      { front: 'mumbled', back: 'bajo y poco claro (vergüenza, timidez)', detail: "He mumbled something under his breath, I couldn't understand it." },
+      { front: 'announced', back: 'formal, público', detail: 'The company announced record profits.' },
+    ],
     items: [
       { sentence: 'She ___ the secret so no one else could hear.', correct: 'whispered', explain: '"Whispered" means spoken very quietly.' },
       { sentence: 'He ___ angrily when he saw the mess.', correct: 'shouted', explain: '"Shouted" means spoken very loudly, often in anger.' },

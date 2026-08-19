@@ -168,9 +168,23 @@ export function initDashboardFilters() {
     const crossSection = q.length > 0;
     let anyVisible = false;
 
+    // "Browse" (data-key="all") agrega los módulos de vocab+grammar+pronunciation+
+    // analysis (ver renderAllShelves() en dashboard-shelves.js) — es un superset,
+    // no una sección independiente. Sin esta exclusión, una búsqueda cross-section
+    // promueve tanto "all" como su categoría original y la misma tarjeta aparece
+    // duplicada en pantalla. Solo una de las dos gana: "all" a menos que la sección
+    // activa sea justo una de las 4 categorías.
+    const CATEGORY_KEYS = ['vocab', 'grammar', 'pronunciation', 'analysis'];
+    const activeKey = document.querySelector('.section.active-section')?.dataset.key;
+    const browseWins = !CATEGORY_KEYS.includes(activeKey);
+
     sections.forEach(sec => {
       if (sec.dataset.key === 'resumen') { sec.classList.toggle('search-visible', false); return; }
       const isActive = sec.classList.contains('active-section');
+      if (crossSection && !isActive) {
+        if (browseWins && CATEGORY_KEYS.includes(sec.dataset.key)) { sec.classList.remove('search-visible'); return; }
+        if (!browseWins && sec.dataset.key === 'all') { sec.classList.remove('search-visible'); return; }
+      }
       const shelfOrGuides = sec.querySelectorAll('.shelf, .guides');
       if (!shelfOrGuides.length) return;
       let sectionVisible = false;

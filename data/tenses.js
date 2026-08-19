@@ -1,6 +1,11 @@
 /**
  * Tenses Data — choose the correct verb form
  * Categories: Present, Past, Future, Perfect
+ *
+ * `studyCards` enseña la REGLA de cada tiempo verbal antes de examinarla en
+ * Quiz. Antes Study mostraba las mismas 10 frases del Quiz con la respuesta
+ * detrás — el examen disfrazado de flashcard, sin la regla general
+ * enunciada en ningún lado. Mismo patrón que a1-plurals-possessives.js.
  */
 
 export const CATEGORIES = {
@@ -8,6 +13,12 @@ export const CATEGORIES = {
     label: 'Present',
     icon: '🔵',
     options: ['do', 'does', 'is doing', 'are doing'],
+    studyCards: [
+      { front: 'Present Simple', back: 'habits, facts, schedules', detail: 'I drink coffee every morning. · Water boils at 100°C. · The train leaves at 9:15.' },
+      { front: 'Present Continuous', back: 'happening right now, or future arrangement', detail: 'He is watching TV right now. · We are having a meeting at 3pm today.' },
+      { front: '3rd person -s', back: 'he/she/it + verb+s', detail: 'She goes, he watches, it rains. (nunca "she go")' },
+      { front: 'Negative 3rd person', back: "doesn't + base verb", detail: "She doesn't like vegetables. (nunca \"she doesn't likes\")" },
+    ],
     items: [
       { sentence: 'She ___ to work every day.', correct: 'goes', verb: 'go', options: ['goes', 'go', 'is going', 'going'], explain: 'Present simple, 3rd person: she goes.' },
       { sentence: 'They ___ football on Saturdays.', correct: 'play', verb: 'play', options: ['play', 'plays', 'are playing', 'played'], explain: 'Present simple, plural subject: they play.' },
@@ -25,6 +36,12 @@ export const CATEGORIES = {
     label: 'Past',
     icon: '🟠',
     options: ['did', 'was', 'were', 'had'],
+    studyCards: [
+      { front: 'Past Simple', back: 'finished action at a specific past time', detail: 'I went to the cinema yesterday. · They lived in London for five years.' },
+      { front: 'Past Continuous', back: 'was/were + -ing, action in progress', detail: 'She was sleeping when I called. · We were having dinner when the phone rang.' },
+      { front: 'Past Perfect', back: 'had + past participle, before another past event', detail: 'He had read the book before the film came out. (primero leyó, luego salió la película)' },
+      { front: 'Regla de oro', back: 'dos acciones pasadas → la más antigua va en Past Perfect', detail: 'While I was waiting for the bus, it started to rain. (la espera ya estaba en curso cuando empezó a llover)' },
+    ],
     items: [
       { sentence: 'I ___ to the cinema yesterday.', correct: 'went', verb: 'go', options: ['went', 'go', 'gone', 'going'], explain: 'Past simple irregular: go → went.' },
       { sentence: 'She ___ sleeping when I called.', correct: 'was', options: ['was', 'is', 'were', 'been'], explain: 'Past continuous: was/were + -ing. She (singular) → was.' },
@@ -42,6 +59,12 @@ export const CATEGORIES = {
     label: 'Future',
     icon: '🟢',
     options: ['will', 'going to', 'shall', "'ll"],
+    studyCards: [
+      { front: 'will', back: 'spontaneous decision, promise, prediction (opinion)', detail: "I will help you with that. · Don't worry, I won't forget." },
+      { front: 'going to', back: 'planned intention, or prediction (evidence)', detail: "She is going to visit her parents. · Look at those clouds! It's going to rain." },
+      { front: 'Present tenses for future', back: 'timetables (simple) vs personal plans (continuous)', detail: 'The plane leaves at 6:30. (horario fijo) · We are having dinner tonight. (plan personal)' },
+      { front: 'Future Perfect / Continuous', back: 'will have + participio / will be + -ing', detail: 'By next year, she will have graduated. · This time tomorrow I will be lying on the beach.' },
+    ],
     items: [
       { sentence: 'I ___ help you with that.', correct: 'will', verb: 'help', options: ['will', 'going to', 'am', 'do'], explain: 'Spontaneous decision / offer: will + base verb.' },
       { sentence: 'She ___ visit her parents next weekend.', correct: 'is going to', verb: 'visit', options: ['is going to', 'will', 'does', 'has'], explain: 'Planned intention: be going to + base verb.' },
@@ -59,6 +82,12 @@ export const CATEGORIES = {
     label: 'Perfect',
     icon: '🟣',
     options: ['have', 'has', 'had', "'ve"],
+    studyCards: [
+      { front: 'Present Perfect', back: 'have/has + participio, pasado sin fecha exacta, conectado al presente', detail: 'They have never been to Japan. · She has lived here since 2015.' },
+      { front: 'Past Perfect', back: 'had + participio, antes de otro momento pasado', detail: 'He had already left when I arrived. (se fue antes de que yo llegara)' },
+      { front: 'Future Perfect', back: 'will have + participio, completado antes de un punto futuro', detail: 'By 2030, they will have completed the project.' },
+      { front: 'Resultado visible ahora', back: 'present perfect cuando el efecto sigue', detail: "She has lost her keys — she can't find them anywhere. (todavía las tiene perdidas)" },
+    ],
     items: [
       { sentence: 'I ___ just finished my homework.', correct: 'have', verb: 'finish', options: ['have', 'has', 'had', 'am'], explain: 'Present perfect: I have just finished (recent past).' },
       { sentence: 'She ___ lived here since 2015.', correct: 'has', verb: 'live', options: ['has', 'have', 'had', 'is'], explain: 'Present perfect: She has lived (duration up to now).' },
@@ -76,6 +105,11 @@ export const CATEGORIES = {
     label: 'Perfect vs Perfect –ing',
     icon: '🟤',
     options: ['have done', 'have been doing'],
+    studyCards: [
+      { front: 'Present Perfect SIMPLE', back: 'have + past participle — el resultado', detail: "I have read the book — I know how it ends. (terminado, importa el resultado)" },
+      { front: 'Present Perfect CONTINUOUS', back: 'have been + -ing — la duración/actividad', detail: "I have been reading this book for three hours — my eyes hurt. (importa el proceso, no si terminó)" },
+      { front: 'Pista: cantidad vs. duración', back: 'un número concreto → simple; "for/since + tiempo" → continuous', detail: "She has written five emails (simple, resultado contable) vs. She has been writing emails all morning (continuous, duración)." },
+    ],
     items: [
       { sentence: "I ___ (read) the book — I know how it ends.", correct: 'have read', options: ['have read', 'have been reading'], explain: 'Present perfect SIMPLE: focus on the completed result (the book is finished).' },
       { sentence: "I ___ (read) this book for three hours — my eyes hurt.", correct: 'have been reading', options: ['have read', 'have been reading'], explain: 'Present perfect CONTINUOUS: focus on the duration/ongoing activity, with visible evidence.' },
@@ -93,6 +127,12 @@ export const CATEGORIES = {
     label: 'have · has · had',
     icon: '🔺',
     options: ['have', 'has', 'had'],
+    studyCards: [
+      { front: 'have', back: 'I / you / we / they + present perfect', detail: 'I have been waiting since noon. · They have never been so happy.' },
+      { front: 'has', back: 'he / she / it (singular) + present perfect', detail: 'She has been living in Rome for a decade. · The team has won three matches.' },
+      { front: 'had', back: 'past perfect, cualquier sujeto', detail: 'By the time we arrived, the film had already started.' },
+      { front: 'Trampa: fecha pasada cerrada', back: '"last year" / fecha específica → past simple, no perfect', detail: '"My sister did finish her degree last year" — no "has finished", porque "last year" es un momento pasado ya cerrado.' },
+    ],
     items: [
       { sentence: 'I ___ been waiting here since noon.', correct: 'have', verb: 'wait', explain: '"I" + present perfect → have been.' },
       { sentence: 'She ___ been living in Rome for a decade.', correct: 'has', verb: 'live', explain: '3rd person singular + present perfect → has been.' },

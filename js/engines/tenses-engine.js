@@ -58,8 +58,34 @@ export function initTenses({ categories, scoreKeyPrefix }) {
   function initQuiz(timed) { deck = shuffle(getData()); idx = 0; score = 0; total = Math.min(timed ? 10 : deck.length, deck.length); document.querySelector('[data-area="quiz"]').classList.add('show'); if (timed) { document.getElementById('timerBar').classList.add('show'); timer = new Timer(total*7, r => { const el = document.getElementById('timerDisplay'); el.textContent = formatTime(r); el.classList.toggle('warn', r<=10); }, () => finishQuiz()); timer.start(); } renderQuiz(); }
   function renderQuiz() { if (idx >= total) { stopTimer(); finishQuiz(); return; } const item = deck[idx]; document.getElementById('scIcon').textContent = categories[currentCat].icon; document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>'); document.getElementById('scCounter').textContent = `${idx+1} / ${total}`; document.getElementById('explainBox').textContent = ''; setQuizAnswered(false); const opts = shuffle([...(item.options || categories[currentCat].options)]); const optsEl = document.getElementById('wordOptions'); optsEl.innerHTML = opts.map(o => `<button class="word-opt" data-val="${o}">${o}</button>`).join(''); optsEl.querySelectorAll('.word-opt').forEach(btn => btn.addEventListener('click', () => { optsEl.querySelectorAll('.word-opt').forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; }); if (btn.dataset.val === item.correct) { btn.classList.add('correct'); score++; } else { btn.classList.add('wrong'); optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); }); } document.getElementById('scText').innerHTML = item.sentence.replace('___', `<span class="blank">${item.correct}</span>`); document.getElementById('explainBox').textContent = item.explain; idx++; updProgress(idx, total); const nextBtn = document.getElementById('quizNextBtn'); if (nextBtn) { nextBtn.textContent = idx >= total ? 'Ver resultado →' : 'Siguiente →'; setQuizAnswered(true); nextBtn.onclick = () => renderQuiz(); nextBtn.focus({ preventScroll: true }); } else { setTimeout(renderQuiz, 1400); } })); updProgress(idx, total); }
   function finishQuiz() { const pct = finishExercise({ correct: score, total, startMode, setMode: v => mode = v, suggestion: findStudyFollowUp() }); const _timedSuffix = mode === 'timed' ? '-timed' : ''; recordScore(`${scoreKeyPrefix}-${currentCat}${_timedSuffix}`, pct); }
-  function initStudy() { deck = shuffle(getData()); idx = 0; document.querySelector('[data-area="study"]').classList.add('show'); renderStudyCard(); }
-  function renderStudyCard() { const item = deck[idx]; recordStudyItemSeen({ storagePrefix: scoreKeyPrefix, category: currentCat, term: item.sentence, totalItems: getData().length }); document.getElementById('fcCard').classList.remove('flip'); document.getElementById('fcEmoji').textContent = categories[currentCat].icon; const sentenceText = item.sentence.replace('___', '_____'); const verbHintHtml = item.verb ? ` <span class="fc-verb-hint">(${item.verb})</span>` : ''; document.getElementById('fcSentence').innerHTML = sentenceText + verbHintHtml; document.getElementById('fcAnswer').textContent = item.correct; document.getElementById('fcExplain').textContent = item.explain; document.getElementById('fcCounter').textContent = `${idx+1} / ${deck.length}`; updProgress(idx+1, deck.length); }
+  // Igual que sentence-quiz-engine.js: una categoría que declare `studyCards`
+  // enseña la regla del tiempo verbal (`{front, back, detail}`) antes de
+  // examinarla en Quiz. Sin esto, Study mostraba las mismas frases del Quiz
+  // con la respuesta detrás — el examen disfrazado de flashcard, sin ninguna
+  // regla general enunciada en ningún lado.
+  function getStudyDeck() { const cat = categories[currentCat]; return cat.studyCards?.length ? cat.studyCards : cat.items; }
+  function initStudy() { const studyDeck = getStudyDeck(); deck = categories[currentCat].studyCards?.length ? [...studyDeck] : shuffle(studyDeck); idx = 0; document.querySelector('[data-area="study"]').classList.add('show'); renderStudyCard(); }
+  function renderStudyCard() {
+    const item = deck[idx];
+    const isRuleCard = item.front != null;
+    const term = isRuleCard ? item.front : item.sentence;
+    recordStudyItemSeen({ storagePrefix: scoreKeyPrefix, category: currentCat, term, totalItems: getStudyDeck().length });
+    document.getElementById('fcCard').classList.remove('flip');
+    document.getElementById('fcEmoji').textContent = categories[currentCat].icon;
+    if (isRuleCard) {
+      document.getElementById('fcSentence').innerHTML = item.front;
+      document.getElementById('fcAnswer').textContent = item.back;
+      document.getElementById('fcExplain').textContent = item.detail || '';
+    } else {
+      const sentenceText = item.sentence.replace('___', '_____');
+      const verbHintHtml = item.verb ? ` <span class="fc-verb-hint">(${item.verb})</span>` : '';
+      document.getElementById('fcSentence').innerHTML = sentenceText + verbHintHtml;
+      document.getElementById('fcAnswer').textContent = item.correct;
+      document.getElementById('fcExplain').textContent = item.explain;
+    }
+    document.getElementById('fcCounter').textContent = `${idx+1} / ${deck.length}`;
+    updProgress(idx+1, deck.length);
+  }
   document.getElementById('fcCard').addEventListener('click', () => squeezeToggle(document.getElementById('fcCard'), 'flip'));
   document.getElementById('nextBtn').addEventListener('click', () => advanceCard(1));
   document.getElementById('prevBtn').addEventListener('click', () => advanceCard(-1));

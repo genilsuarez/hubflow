@@ -1,8 +1,18 @@
+// `studyCards` enseña la colocación fija como REGLA antes de examinarla en
+// Quiz. Antes Study mostraba las mismas 10 frases del Quiz con la respuesta
+// detrás — el examen disfrazado de flashcard. Mismo patrón que
+// a1-plurals-possessives.js.
 export const CATEGORIES = {
   verbNounCollocations: {
     label: 'Verb + Noun',
     icon: '🤝',
     options: ['draw', 'reach', 'strike', 'forge'],
+    studyCards: [
+      { front: 'reach', back: 'reach an agreement / a consensus / a compromise', detail: 'Llegar a un acuerdo tras negociar.' },
+      { front: 'forge', back: 'forge an alliance / a partnership / a bond', detail: 'Crear una conexión fuerte, con esfuerzo, entre partes.' },
+      { front: 'strike', back: 'strike a balance', detail: 'Encontrar el punto medio entre dos cosas opuestas.' },
+      { front: 'draw', back: 'draw a conclusion', detail: 'Deducir algo a partir de evidencia o datos.' },
+    ],
     items: [
       { sentence: 'After much debate, the committee managed to ___ a consensus.', correct: 'reach', explain: '"Reach a consensus" is a fixed collocation.' },
       { sentence: 'The two countries decided to ___ an alliance.', correct: 'forge', explain: '"Forge an alliance" is a fixed collocation.' },
@@ -20,6 +30,12 @@ export const CATEGORIES = {
     label: 'Intensifying Adjectives',
     icon: '❗',
     options: ['sheer', 'utter', 'blatant', 'stark'],
+    studyCards: [
+      { front: 'sheer', back: 'sheer luck / determination', detail: '"Puro, completo" — intensifica sin juicio negativo.' },
+      { front: 'utter', back: 'utter nonsense / disbelief', detail: 'Intensifica sustantivos abstractos negativos.' },
+      { front: 'blatant', back: 'blatant lie / disregard', detail: 'Obvio y descarado, sin vergüenza.' },
+      { front: 'stark', back: 'stark contrast / difference', detail: 'Marcadamente obvio, que salta a la vista.' },
+    ],
     items: [
       { sentence: 'It was ___ nonsense from start to finish.', correct: 'utter', explain: '"Utter nonsense" intensifies a negative abstract noun.' },
       { sentence: 'The contrast between the two designs was ___.', correct: 'stark', explain: '"Stark contrast" describes something strikingly obvious.' },
@@ -37,6 +53,12 @@ export const CATEGORIES = {
     label: 'Verb + Adverb',
     icon: '💪',
     options: ['firmly', 'strongly', 'deeply', 'wholeheartedly'],
+    studyCards: [
+      { front: 'firmly', back: 'firmly believe', detail: 'Convicción estable, sin dudas.' },
+      { front: 'strongly', back: 'strongly recommend / disagree / oppose', detail: 'El intensificador más versátil de este grupo.' },
+      { front: 'deeply', back: 'deeply regret / moved', detail: 'Emoción profunda, a menudo dolorosa o conmovedora.' },
+      { front: 'wholeheartedly', back: 'wholeheartedly support / embrace', detail: 'Con todo el corazón, sin reservas.' },
+    ],
     items: [
       { sentence: 'She ___ believes that education is a right.', correct: 'firmly', explain: '"Firmly believe" is a fixed collocation.' },
       { sentence: 'We ___ recommend that you read the instructions first.', correct: 'strongly', explain: '"Strongly recommend" is a fixed collocation.' },
@@ -54,6 +76,12 @@ export const CATEGORIES = {
     label: 'Prepositional Phrases',
     icon: '🔗',
     options: ['prone to', 'subject to', 'conducive to', 'indicative of'],
+    studyCards: [
+      { front: 'prone to', back: 'likely to suffer from', detail: 'This area is prone to flooding. (vulnerabilidad, riesgo)' },
+      { front: 'subject to', back: 'dependent on / affected by', detail: 'Prices are subject to change. (condicionado a algo externo)' },
+      { front: 'conducive to', back: 'making something more likely to happen', detail: 'A quiet room is conducive to studying. (favorece un resultado positivo)' },
+      { front: 'indicative of', back: 'suggesting evidence of', detail: 'These symptoms are indicative of stress. (es una señal de)' },
+    ],
     items: [
       { sentence: 'This area is ___ flooding during the rainy season.', correct: 'prone to', explain: '"Prone to" means likely to suffer from something.' },
       { sentence: 'All prices are ___ change without notice.', correct: 'subject to', explain: '"Subject to" means likely to be affected by something.' },

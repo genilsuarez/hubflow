@@ -1,8 +1,18 @@
+// `studyCards` enseña la REGLA de registro antes de examinarla en Quiz.
+// Antes Study mostraba las mismas 10 frases del Quiz con la respuesta
+// detrás — el examen disfrazado de flashcard. Mismo patrón que
+// a1-plurals-possessives.js.
 export const CATEGORIES = {
   getObtainReceive: {
     label: 'Get / Obtain / Receive',
     icon: '📥',
     options: ['get', 'obtain', 'receive'],
+    studyCards: [
+      { front: 'get', back: 'informal, cotidiano', detail: "Can you get me a coffee? · I'll get the tickets online." },
+      { front: 'obtain', back: 'formal, requisitos oficiales', detail: 'Candidates must obtain a valid certificate.' },
+      { front: 'receive', back: 'neutral-formal, comunicación oficial', detail: 'You should receive them by email shortly.' },
+      { front: 'Regla rápida', back: 'informal → get · trámite/requisito → obtain · llega algo a ti → receive', detail: 'Los tres significan "conseguir/recibir" pero el registro cambia con el contexto.' },
+    ],
     items: [
       { sentence: 'Please find attached the documents; you should ___ them by email shortly.', correct: 'receive', explain: '"Receive" is the neutral-formal choice for official communication.' },
       { sentence: "Can you ___ me a coffee while you're up?", correct: 'get', explain: '"Get" is the everyday, informal choice.' },
@@ -20,6 +30,12 @@ export const CATEGORIES = {
     label: 'Ask / Request / Inquire',
     icon: '❔',
     options: ['ask', 'request', 'inquire'],
+    studyCards: [
+      { front: 'ask', back: 'informal, neutral', detail: "Can I ask you a question? · Don't be afraid to ask for help." },
+      { front: 'request', back: 'formal, negocios/oficial', detail: 'We would like to request further information.' },
+      { front: 'inquire', back: 'formal, alternativa escrita a "ask"', detail: "I'm writing to inquire about the status of my application." },
+      { front: 'Regla rápida', back: 'hablado/informal → ask · escrito/negocios → request o inquire', detail: 'inquire suele ir con "about"; request suele llevar objeto directo.' },
+    ],
     items: [
       { sentence: 'Can I ___ you a question?', correct: 'ask', explain: '"Ask" is the everyday, neutral choice.' },
       { sentence: 'We would like to ___ further information regarding your proposal.', correct: 'request', explain: '"Request" is the formal choice, common in business writing.' },
@@ -37,13 +53,19 @@ export const CATEGORIES = {
     label: 'Contact / Reach Out',
     icon: '📞',
     options: ['get in touch', 'contact', 'reach out'],
+    studyCards: [
+      { front: 'contact', back: 'formal, neutral, verbo transitivo', detail: 'Please contact our support team. (contact + objeto directo, sin preposición)' },
+      { front: 'get in touch (with)', back: 'semi-formal, cotidiano', detail: "I'll get in touch with you. (necesita 'with' antes de la persona)" },
+      { front: 'reach out (to)', back: 'business-casual, tono cálido', detail: "She decided to reach out to an old friend. (necesita 'to' antes de la persona)" },
+      { front: 'Trampa de preposición', back: "'get in touch' y 'reach out' necesitan with/to", detail: "'Contact' no lleva preposición (contact her), pero 'get in touch WITH her' y 'reach out TO her' sí." },
+    ],
     items: [
       { sentence: 'Please feel free to ___ our support team at any time.', correct: 'contact', explain: '"Contact" is the formal, neutral choice for official communication.' },
       { sentence: "I'll ___ with you as soon as I have news.", correct: 'get in touch', explain: '"Get in touch" is a common, semi-formal way to say you will contact someone.' },
       { sentence: "We'd like to ___ to discuss a potential partnership.", correct: 'reach out', explain: '"Reach out" is a common business-casual way to initiate contact.' },
       { sentence: 'For further assistance, please ___ our office.', correct: 'contact', explain: '"Contact" is the formal, neutral choice for official communication.' },
       { sentence: 'Just ___ if you need anything!', correct: 'reach out', explain: '"Reach out" has a warm, casual tone.' },
-      { sentence: "I've been trying to ___ you all week.", correct: 'get in touch', explain: '"Get in touch" is common in everyday, semi-formal contexts.' },
+      { sentence: "I've been trying to ___ with you all week.", correct: 'get in touch', explain: '"Get in touch with" is common in everyday, semi-formal contexts — needs "with" before the person.' },
       { sentence: 'Kindly ___ the HR department for more details.', correct: 'contact', explain: '"Contact" is the formal, neutral choice for official communication.' },
       { sentence: 'She decided to ___ to an old friend.', correct: 'reach out', explain: '"Reach out" has a warm, personal tone.' },
       { sentence: 'Please ___ us via the form below.', correct: 'contact', explain: '"Contact" is the formal, neutral choice for official communication.' },
@@ -54,6 +76,12 @@ export const CATEGORIES = {
     label: 'Buy / Purchase / Acquire',
     icon: '🛍️',
     options: ['buy', 'purchase', 'acquire'],
+    studyCards: [
+      { front: 'buy', back: 'informal, cotidiano', detail: 'I need to buy some milk. · Where did you buy that jacket?' },
+      { front: 'purchase', back: 'formal, orientado a negocios', detail: 'Customers can purchase tickets online.' },
+      { front: 'acquire', back: 'formal, empresas/activos valiosos, implica esfuerzo', detail: 'The company plans to acquire a smaller competitor.' },
+      { front: 'Regla rápida', back: 'cosas del día a día → buy · transacciones formales → purchase · empresas/activos → acquire', detail: '"Acquire" casi nunca se usa para compras pequeñas cotidianas.' },
+    ],
     items: [
       { sentence: 'Customers can ___ tickets online or at the box office.', correct: 'purchase', explain: '"Purchase" is the formal, business-oriented choice.' },
       { sentence: 'I need to ___ some milk on my way home.', correct: 'buy', explain: '"Buy" is the everyday, informal choice.' },
@@ -71,6 +99,11 @@ export const CATEGORIES = {
     label: 'Kids / Children',
     icon: '🧒',
     options: ['kids', 'children', 'offspring'],
+    studyCards: [
+      { front: 'kids', back: 'informal, cálido, cotidiano', detail: 'The kids were playing in the yard. · My kids love the park.' },
+      { front: 'children', back: 'neutral, formal, oficial', detail: 'This program is for children aged 5-12. · The school reported that all children passed.' },
+      { front: 'Regla rápida', back: 'conversación casual → kids · documentos/reglas/informes → children', detail: 'En un aviso oficial o formulario, siempre "children"; hablando con amigos, "kids" suena natural.' },
+    ],
     items: [
       { sentence: 'How many ___ do you have?', correct: 'children', explain: '"Children" is the neutral, standard word.' },
       { sentence: 'The ___ were playing in the yard all afternoon.', correct: 'kids', explain: '"Kids" is the informal, everyday word.' },
