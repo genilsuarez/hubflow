@@ -428,7 +428,14 @@ function buildHubFlowSummary(contentStates) {
   };
 }
 
-/** Unified summary — same rules as DeskFlow portal and learnflow:progress:hubflow:v1. */
+/**
+ * Resumen unificado — misma cifra que debe ver DeskFlow/LearnFlow en
+ * learnflow:progress:hubflow:v1. Antes se hacía Math.max(computed, stored):
+ * HubFlow podía mostrar el conteo de score-keys en vivo (p. ej. 15) mientras
+ * el documento compartido seguía en un valor más bajo (p. ej. 12) que es lo
+ * único que LearnFlow sabe leer. Si hay desfase, se republica la proyección
+ * para que ambas apps vean el mismo "X de Y".
+ */
 function getHubFlowProgressSummary() {
   if (reconcileHubflowProgressFromEvents()) {
     invalidateProjectionCache();
@@ -436,17 +443,17 @@ function getHubFlowProgressSummary() {
   const contentStates = MODULES.map((module) => getContentProgress(module.id)).filter(Boolean);
   const computed = buildHubFlowSummary(contentStates);
   const stored = readProjectionDoc()?.summary;
-  if (!stored) return computed;
+  if (!stored) {
+    publishHubFlowProgress();
+    return computed;
+  }
 
-  return {
-    progressPct: Math.max(computed.progressPct ?? 0, stored.progressPct ?? 0),
-    completedContent: Math.max(computed.completedContent ?? 0, stored.completedContent ?? 0),
-    totalContent: MODULES.length,
-    attemptedContent: Math.max(computed.attemptedContent ?? 0, stored.attemptedContent ?? 0),
-    completedActivities: Math.max(computed.completedActivities ?? 0, stored.completedActivities ?? 0),
-    totalActivities: Math.max(computed.totalActivities ?? 0, stored.totalActivities ?? 0),
-    attemptedActivities: Math.max(computed.attemptedActivities ?? 0, stored.attemptedActivities ?? 0),
-  };
+  const drifted = (computed.completedContent ?? 0) !== (stored.completedContent ?? 0)
+    || (computed.attemptedContent ?? 0) !== (stored.attemptedContent ?? 0)
+    || (computed.totalContent ?? 0) !== (stored.totalContent ?? 0)
+    || Math.round(computed.progressPct ?? 0) !== Math.round(stored.progressPct ?? 0);
+  if (drifted) publishHubFlowProgress();
+  return computed;
 }
 
 export function isContentCompleted(contentId) {

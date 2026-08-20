@@ -446,10 +446,14 @@ body.shell-ready:has(#exBottomNav #checkBtn) .scroll-body > div:has(> #checkBtn)
 
 /* Fallback when @custom-media from breakpoints.css is unavailable in this sheet */
 @media (max-width: 767px) {
-  body.shell-ready:has(#exBottomNav:not([hidden])) .lp-footer,
-  body.shell-ready:has(#exBottomNav:not([hidden])) .depth-banner,
-  body.shell-ready:has(#exBottomNav:not([hidden])) .depth-bell {
+  body.shell-ready:has(#exBottomNav:not([hidden])) .lp-footer {
     display: none !important;
+  }
+  body.shell-ready:has(#exBottomNav:not([hidden])) .depth-banner {
+    bottom: max(
+      calc(var(--ex-bottom-nav-scroll-reserve) + 12px),
+      calc(var(--ex-bottom-nav-min-height) + env(safe-area-inset-bottom) + 12px)
+    );
   }
 
   /* Preferred: nav pinned as flex sibling below .scroll-body inside .wrap */

@@ -123,8 +123,6 @@ body > .shell { flex: 1 1 auto; min-height: 0; width: 100%; }
 .lp-footer__meta { font-family: var(--lp-font-mono); font-size: 9px; font-weight: 700; color: var(--lp-muted); letter-spacing: .08em; text-transform: uppercase; }
 .lp-footer__link { margin-left: auto; font-size: 11px; color: var(--lp-muted); text-decoration: underline; }
 .lp-footer__link:hover { color: var(--lp-ink-soft); }
-.lp-footer .depth-bell { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
-.lp-footer .depth-bell:hover { transform: translate(-50%, -50%) scale(1.15); }
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar { transition: none; }
@@ -197,9 +195,10 @@ body.has-sidebar {
   z-index: 50;
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
   gap: 6px; padding: 10px 20px;
+  max-width: min(92vw, 420px);
   background: color-mix(in srgb, var(--lp-ink) 92%, var(--lp-surface));
   border: 1px solid color-mix(in srgb, var(--lp-ink) 60%, transparent);
-  border-radius: var(--lp-radius-full);
+  border-radius: var(--lp-radius-lg);
   font-size: .72rem; font-weight: 500; color: var(--lp-ink-inverse);
   box-shadow: 0 6px 24px rgba(0,0,0,.25);
   animation: depthSlideUp .4s var(--lp-ease);
@@ -225,6 +224,17 @@ body.has-sidebar .depth-banner {
   background: color-mix(in srgb, var(--lp-cat-teal) 22%, transparent);
   color: var(--lp-cat-teal);
 }
+.depth-banner__guide {
+  flex-basis: 100%; justify-content: center;
+  display: flex; align-items: center; gap: 4px;
+  margin-top: 4px; padding-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--lp-ink-inverse) 20%, transparent);
+  color: inherit; text-decoration: underline; text-underline-offset: 2px;
+  font-weight: 700;
+}
+[data-theme="dark"] .depth-banner__guide {
+  border-top-color: color-mix(in srgb, var(--lp-ink) 15%, transparent);
+}
 .depth-banner__close {
   margin-left: 6px; background: none; border: none; color: var(--lp-ink-inverse);
   font-size: 1.1rem; line-height: 1; cursor: pointer; opacity: .6;
@@ -242,26 +252,14 @@ body.has-sidebar .depth-banner {
   .depth-banner--fade { transition: opacity .3s; transform: translateX(-50%); }
 }
 
-/* ─── Depth bell (re-show toast) ─── */
-.depth-bell {
-  background: none; border: none; cursor: pointer;
-  font-size: .65rem; line-height: 1; padding: 0; margin: 0;
-  opacity: .5; transition: opacity .2s, transform .2s;
-}
-/* Hit-area táctil 44px, mismo patrón que :is(.cat-btn, .lp-pill) (H3/1.9) —
-   único elemento del footer, sin vecinos con los que solapar. */
-.depth-bell::after {
-  content: ''; position: absolute; left: 50%; top: 50%;
-  transform: translate(-50%, -50%); width: 44px; height: 44px;
-}
-.depth-bell:hover { opacity: 1; transform: scale(1.15); }
-.depth-bell:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; }
+/* ─── Depth bell (re-show toast) — vive en el header (.top-bar__end),
+   estilo circular heredado de .lp-icon-btn; solo el tamaño del emoji se ajusta. ─── */
+.depth-bell { font-size: 1rem; }
 
-/* En mobile el footer de firma y el sistema de toast/campana de profundidad
-   de módulo se ocultan — son ruido secundario en pantallas chicas y el resto
-   de las apps no tiene equivalente en su vista mobile. */
+/* En mobile el footer de firma se oculta (ruido secundario en pantallas chicas,
+   sin equivalente en el resto de las apps); la campana vive en el header y
+   el toast que abre sigue siendo visible (reposicionado sobre el bottom nav
+   en exercise-enhanced.css / ex-bottom-nav.css cuando aplica). */
 @media (max-width: 860px) {
-  .lp-footer,
-  .depth-banner,
-  .depth-bell { display: none; }
+  .lp-footer { display: none; }
 }

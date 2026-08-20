@@ -163,5 +163,38 @@ export const CATEGORIES = {
       { sentence: 'She is studying ___ law at Oxford.', correct: '∅', explain: 'Academic disciplines studied at university → no article.' },
       { sentence: '___ Lake Titicaca is the highest navigable lake.', correct: '∅', explain: 'Lakes named "Lake X" take no article.' }
     ]
+  },
+  hSound: {
+    label: 'The H Trap: a or an?',
+    icon: '🔤',
+    options: ['a', 'an'],
+    studyCards: [
+      { front: 'La regla es por el SONIDO, no por la letra', back: 'a → antes de sonido consonántico | an → antes de sonido vocálico', detail: '"a university" (empieza /juː/ = consonante) · "an umbrella" (empieza /ʌ/ = vocal). La letra no importa — el sonido sí.' },
+      { front: 'H que SÍ suena → "a"', back: '/h/ es un sonido consonántico', detail: 'a house /haʊs/ · a hotel /hoʊˈtel/ · a hamburger · a history book · a happy dog. Tip: en español suenan con "j" suave.' },
+      { front: 'H muda → "an"', back: 'La H no suena → empieza en vocal', detail: 'an hour /ˈaʊər/ · an honest person /ˈɒnɪst/ · an honor · an heir /er/. Vienen del francés — la H se "traga".' },
+      { front: 'Trampa clásica: university vs umbrella', back: 'a university (suena /juː/) | an umbrella (suena /ʌ/)', detail: 'Ambas empiezan con U, pero solo "umbrella" empieza con sonido vocálico. Siempre di la palabra en voz alta.' },
+    ],
+    items: [
+      { sentence: 'I waited for ___ hour before the meeting started.', correct: 'an', explain: '"Hour" has a silent H — it sounds like /ˈaʊər/, starting with a vowel → "an hour".' },
+      { sentence: 'She stayed in ___ hotel near the airport.', correct: 'a', explain: '"Hotel" starts with a voiced /h/ sound → consonant → "a hotel".' },
+      { sentence: 'He is ___ honest man — everyone trusts him.', correct: 'an', explain: '"Honest" has a silent H — it sounds like /ˈɒnɪst/, starting with a vowel → "an honest".' },
+      { sentence: 'We live in ___ house at the end of the street.', correct: 'a', explain: '"House" starts with a voiced /h/ sound → consonant → "a house".' },
+      { sentence: 'She received ___ honorary degree from the university.', correct: 'an', explain: '"Honorary" has a silent H — it sounds like /ˈɒnərəri/, starting with a vowel → "an honorary".' },
+      { sentence: 'He ordered ___ hamburger and fries.', correct: 'a', explain: '"Hamburger" starts with a voiced /h/ sound → consonant → "a hamburger".' },
+      { sentence: 'It was ___ historic moment for the country.', correct: 'a', explain: '"Historic" starts with a voiced /h/ sound → /hɪˈstɒrɪk/ → consonant → "a historic". (Both "a" and "an" are heard in formal speech, but "a" is more standard today.)' },
+      { sentence: 'She is the ___ heir to the family fortune.', correct: 'an', explain: '"Heir" has a silent H — it sounds like /er/, starting with a vowel → "an heir".' },
+      { sentence: 'He is ___ happy child who loves to play outside.', correct: 'a', explain: '"Happy" starts with a voiced /h/ sound → consonant → "a happy".' },
+      { sentence: 'This is ___ honour I will never forget.', correct: 'an', explain: '"Honour" has a silent H — it sounds like /ˈɒnər/, starting with a vowel → "an honour".' },
+      { sentence: 'She wrote ___ history of modern art.', correct: 'a', explain: '"History" starts with a voiced /h/ sound → /ˈhɪstəri/ → consonant → "a history".' },
+      { sentence: 'It takes ___ half hour to get there by train.', correct: 'a', explain: '"Half" starts with a voiced /h/ sound → /hɑːf/ → consonant → "a half". (Compare: "an hour" — the H is silent there.)' },
+      { sentence: 'She is ___ herbalist who grows her own plants.', correct: 'an', explain: 'In British English, "herbalist" has a silent H → /ˈɜːrbəlɪst/ → vowel sound → "an herbalist". (In US English "herb" sounds /hɜːrb/, so "a" is used instead.)', options: ['a', 'an'] },
+      { sentence: 'We saw ___ helicopter fly over the city.', correct: 'a', explain: '"Helicopter" starts with a voiced /h/ sound → consonant → "a helicopter".' },
+      { sentence: 'She told ___ hilarious joke that made everyone laugh.', correct: 'a', explain: '"Hilarious" starts with a voiced /h/ sound → consonant → "a hilarious".' },
+      { sentence: 'The contract was signed by ___ heir apparent.', correct: 'an', explain: '"Heir" has a silent H → /er/ → vowel sound → "an heir apparent".' },
+      { sentence: 'He had ___ high fever and needed to rest.', correct: 'a', explain: '"High" starts with a voiced /h/ sound → consonant → "a high fever".' },
+      { sentence: 'It was ___ horrible accident, but no one was seriously hurt.', correct: 'a', explain: '"Horrible" starts with a voiced /h/ sound → consonant → "a horrible".' },
+      { sentence: 'She works for ___ humanitarian organisation.', correct: 'a', explain: '"Humanitarian" starts with /hjuː/ — a consonant-like sound (same as "university") → "a humanitarian".' },
+      { sentence: 'We have ___ half-hour break between sessions.', correct: 'a', explain: '"Half" starts with a voiced /h/ sound → "a half-hour break". This contrasts with "an hour" where the H is silent.' },
+    ]
   }
 };

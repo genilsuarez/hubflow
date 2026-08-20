@@ -586,21 +586,29 @@ syncBattleProgressPlacement();
 function buildDepthBanner() {
   if (!currentModule) return;
   const depth = getModuleDepth(currentModule.id);
-  if (!depth) return;
+  const guideHref = currentModule.guide ? `../${currentModule.guide}` : null;
+  if (!depth && !guideHref) return;
 
-  const parts = [`<strong>${depth.items}</strong> items`];
-  if (depth.categories > 1) parts.push(`<strong>${depth.categories}</strong> categorías`);
-  parts.push(`<strong>${depth.modes}</strong> modos`);
-  if (depth.hasBattle) parts.push(`<span class="depth-banner__battle">⚔️ Battle 2P</span>`);
+  const parts = [];
+  if (depth) {
+    parts.push(`<strong>${depth.items}</strong> items`);
+    if (depth.categories > 1) parts.push(`<strong>${depth.categories}</strong> categorías`);
+    parts.push(`<strong>${depth.modes}</strong> modos`);
+    if (depth.hasBattle) parts.push(`<span class="depth-banner__battle">⚔️ Battle 2P</span>`);
+  }
+  const bannerHTML = parts.join('<span class="depth-banner__sep">·</span>') +
+    (guideHref ? `<a class="depth-banner__guide" href="${guideHref}">📘 Ver guía de estudio</a>` : '');
 
-  const bannerHTML = parts.join('<span class="depth-banner__sep">·</span>');
+  addHeaderBell();
+  // El toast automático solo interrumpe cuando hay algo nuevo que anunciar
+  // (profundidad de módulo); si el módulo solo tiene guía, la campana del
+  // header queda disponible sin toast — evita ruido en la mayoría de módulos.
+  if (depth) showBanner();
 
-  showBanner(bannerHTML);
-
-  function showBanner(html) {
+  function showBanner() {
     const banner = document.createElement('div');
     banner.className = 'depth-banner';
-    banner.innerHTML = html +
+    banner.innerHTML = bannerHTML +
       '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
     banner.setAttribute('role', 'status');
     document.body.appendChild(banner);
@@ -608,26 +616,25 @@ function buildDepthBanner() {
     const dismiss = () => {
       clearTimeout(autoDismiss);
       banner.classList.add('depth-banner--fade');
-      setTimeout(() => { banner.remove(); showDepthBell(html); }, 600);
+      setTimeout(() => banner.remove(), 600);
     };
     const autoDismiss = setTimeout(dismiss, 5000);
     banner.querySelector('.depth-banner__close').addEventListener('click', dismiss);
   }
 
-  function showDepthBell(html) {
-    const footer = document.querySelector('.lp-footer');
-    if (!footer) return;
-    const meta = footer.querySelector('.lp-footer__meta');
+  function addHeaderBell() {
+    const end = document.querySelector('.top-bar__end');
+    if (!end) return;
     const bell = document.createElement('button');
-    bell.className = 'depth-bell';
-    bell.setAttribute('aria-label', 'Mostrar información del módulo');
-    bell.textContent = '🔔';
-    if (meta) meta.after(bell);
-    else footer.appendChild(bell);
+    bell.type = 'button';
+    bell.className = 'lp-icon-btn depth-bell';
+    bell.setAttribute('aria-label', 'Información del módulo');
+    bell.innerHTML = '<span aria-hidden="true">🔔</span>';
+    end.insertBefore(bell, end.firstChild);
 
     bell.addEventListener('click', () => {
-      bell.remove();
-      showBanner(html);
+      document.querySelector('.depth-banner')?.remove();
+      showBanner();
     });
   }
 }
