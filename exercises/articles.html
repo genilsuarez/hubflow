@@ -24,16 +24,6 @@
 <link rel="stylesheet" href="../css/lp-nav-active.css">
 <link rel="stylesheet" href="../css/lp-about.css">
 <link rel="stylesheet" href="../css/sentence-quiz.css">
-<style>
-  /* Cross-link — unique to this page, not part of the shared quiz shell */
-  .cross-link {
-    display: flex; align-items: center; gap: 8px; margin-top: 16px; padding: 10px 14px;
-    background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-sm);
-    font-size: .7rem; font-weight: 700; color: var(--lp-ink-soft); text-decoration: none;
-    transition: border-color .2s, transform .2s;
-  }
-  .cross-link:hover { border-color: var(--lp-cat-blue); transform: translateX(4px); }
-</style>
 </head>
 <body>
 <div class="wrap" data-color="azure">
@@ -98,11 +88,6 @@
         <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
       </div>
     </div>
-
-    <!-- Cross-link to FluentFlow (R5) -->
-    <a class="cross-link" id="ffLink" href="https://genilsuarez.github.io/fluentflow/#/module/completion-articles-basics-a1">
-      🚀 Deepen in FluentFlow → Articles A1–A2 progression modules
-    </a>
   </div>
 
   <div class="result-overlay" id="resultOverlay"></div>
@@ -111,15 +96,6 @@
 <script type="module">
 import { CATEGORIES } from '../data/articles.js';
 import { initSentenceQuiz } from '../js/engines/sentence-quiz-engine.js';
-
-// appHref() already resolves local dev vs production on its own, so this needs
-// no hostname guard of its own — it just overrides the static production href.
-if (window.LPPlatformUrls) {
-  document.getElementById('ffLink').href = window.LPPlatformUrls.appHref(
-    'fluentflow',
-    '/#/module/completion-articles-basics-a1'
-  );
-}
 
 initSentenceQuiz({
   categories: CATEGORIES,
