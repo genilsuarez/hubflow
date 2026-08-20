@@ -113,6 +113,14 @@
   text-align: center; background: var(--lp-surface);
   border-radius: var(--lp-radius-lg);
   border: 1.5px solid var(--lp-border); box-shadow: var(--lp-shadow-sm);
+  /* Red de seguridad: la altura de .fc-card es fija (position:absolute
+     en ambas caras, necesario para el flip 3D — ver comentario arriba de
+     .fc-card). Con el contenido real esto nunca se activa (probado hasta
+     72 caracteres, el front más largo del dataset, envuelve en 3 líneas
+     sin desbordar); si un front futuro es más largo, esto evita que el
+     texto se salga del borde redondeado en vez de romper el layout. */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .fc-back {
   display: none;

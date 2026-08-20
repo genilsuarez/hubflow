@@ -591,13 +591,13 @@ function buildDepthBanner() {
 
   const parts = [];
   if (depth) {
-    parts.push(`<strong>${depth.items}</strong> items`);
-    if (depth.categories > 1) parts.push(`<strong>${depth.categories}</strong> categorías`);
-    parts.push(`<strong>${depth.modes}</strong> modos`);
-    if (depth.hasBattle) parts.push(`<span class="depth-banner__battle">⚔️ Battle 2P</span>`);
+    parts.push(`<span class="depth-banner__row"><strong>${depth.items}</strong> items</span>`);
+    if (depth.categories > 1) parts.push(`<span class="depth-banner__row"><strong>${depth.categories}</strong> categorías</span>`);
+    parts.push(`<span class="depth-banner__row"><strong>${depth.modes}</strong> modos</span>`);
+    if (depth.hasBattle) parts.push(`<span class="depth-banner__row depth-banner__battle">⚔️ Battle 2P</span>`);
   }
-  const bannerHTML = parts.join('<span class="depth-banner__sep">·</span>') +
-    (guideHref ? `<a class="depth-banner__guide" href="${guideHref}">📘 Ver guía de estudio</a>` : '');
+  const bannerHTML = parts.join('<span class="depth-banner__sep" aria-hidden="true">·</span>') +
+    (guideHref ? `<a class="depth-banner__row depth-banner__guide" href="${guideHref}">📘 Ver guía de estudio</a>` : '');
 
   addHeaderBell();
   // El toast automático solo interrumpe cuando hay algo nuevo que anunciar
