@@ -13,12 +13,12 @@
 
 /* ─── TOKENS ─── */
 :root {
-  /* Surface & Paper */
-  --lp-bg: #FFFFFF;
-  --lp-bg-paper: #F7F4EF;
+  /* Surface & Paper — cards float on a soft paper ground */
+  --lp-bg: #F7F4EF;
+  --lp-bg-paper: #F3EFE8;
   --lp-surface: #FFFFFF;
   --lp-surface-raised: #FFFFFF;
-  --lp-surface-sunken: #F3F0EA;
+  --lp-surface-sunken: #EFEBE4;
 
   /* Borders */
   --lp-border: #E2DAD0;
@@ -210,22 +210,22 @@
   --lp-header-tag-tracking: 0.06em;
 }
 
-/* ─── DARK MODE — slate suave (alineado con DeskFlow) ─── */
+/* ─── DARK MODE — slate neutro (color fuerte solo en iconos/estados) ─── */
 [data-theme="dark"] {
-  --lp-bg: #181B20;
-  --lp-bg-paper: #1E2228;
-  --lp-surface: #252930;
-  --lp-surface-raised: #2B3038;
-  --lp-surface-sunken: #14171C;
+  --lp-bg: #12151A;
+  --lp-bg-paper: #161A20;
+  --lp-surface: #1A1E24;
+  --lp-surface-raised: #20252D;
+  --lp-surface-sunken: #0E1116;
 
-  --lp-border: #353B45;
-  --lp-border-strong: #454C58;
-  --lp-border-subtle: #2A2F38;
+  --lp-border: #303641;
+  --lp-border-strong: #3E4654;
+  --lp-border-subtle: #262B34;
 
   --lp-ink: #E8EAED;
   --lp-ink-soft: #A8B0BC;
   --lp-muted: #828C9C;
-  --lp-ink-inverse: #181B20;
+  --lp-ink-inverse: #12151A;
 
   --lp-accent-soft: #1A2744;
   --lp-accent-text: #93c5fd;

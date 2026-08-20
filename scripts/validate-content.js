@@ -342,7 +342,7 @@ async function validateNavSections() {
   // Las 4 categorías (+ "all"/Browse, que las combina) se agrupan en un
   // acordeón por nivel CEFR (<details id="acc-${catKey}-${level}">), no por
   // subcategoría — la subcategoría (donde existe) vive como tag dentro de la
-  // tarjeta (ver pillsHTML en dashboard-shelves.js).
+  // tarjeta (ver book-topic / subcategory en dashboard-shelves.js).
   for (const catKey of ['all', 'vocab', 'grammar', 'pronunciation', 'analysis']) {
     for (const level of TAGS.cefr) {
       const sub = html.match(

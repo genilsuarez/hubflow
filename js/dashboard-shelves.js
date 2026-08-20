@@ -6,22 +6,18 @@
    ═══════════════════════════════════════════════════════ */
 
 import { MODULES, CATEGORIES, SUBCATEGORIES, getModuleDepth } from '../data/catalog.js';
-import { getContentProgress } from './progress-store.js';
-import { getActiveLevel, levelUnlocks, LEVEL_ORDER } from './lp-progress-summary.js';
+import { getContentProgress, getModuleMatrixProgress } from './progress-store.js';
+import { getActiveLevel, LEVEL_ORDER } from './lp-progress-summary.js';
 
 const CATEGORY_SPINE = Object.fromEntries(Object.entries(CATEGORIES).map(([k, c]) => [k, c.spine]));
 const MECHANIC_PRIORITY = ['tts', 'timed', 'quiz', 'study', 'write', 'match'];
-const MECHANIC_LABEL = { tts: '🔊 Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
+const MECHANIC_LABEL = { tts: 'Audio', timed: 'Timed', quiz: 'Quiz', study: 'Study', write: 'Write', match: 'Match' };
 
-function pillsHTML(mod) {
-  const pills = [`<span class="pill lvl">${mod.cefr.toUpperCase()}</span>`];
-  const subLabel = SUBCATEGORIES[mod.subcategory];
-  if (subLabel) pills.push(`<span class="pill">${subLabel}</span>`);
-  const mechanics = mod.tags.filter(t => MECHANIC_PRIORITY.includes(t))
-    .sort((a, b) => MECHANIC_PRIORITY.indexOf(a) - MECHANIC_PRIORITY.indexOf(b))
-    .slice(0, 2);
-  mechanics.forEach(t => pills.push(`<span class="pill">${MECHANIC_LABEL[t]}</span>`));
-  return pills.join('');
+function primaryMechanic(mod) {
+  const mechanics = mod.tags
+    .filter((t) => MECHANIC_PRIORITY.includes(t))
+    .sort((a, b) => MECHANIC_PRIORITY.indexOf(a) - MECHANIC_PRIORITY.indexOf(b));
+  return mechanics[0] || 'study';
 }
 
 function titleHTML(mod) {
@@ -58,31 +54,80 @@ function metaHTML(mod) {
 function depthHTML(mod) {
   const depth = getModuleDepth(mod.id);
   if (!depth) return '';
-  const parts = [];
-  parts.push(`<span class="book-depth__stat"><strong>${depth.items}</strong> items</span>`);
-  if (depth.categories > 1) parts.push(`<span class="book-depth__stat"><strong>${depth.categories}</strong> cat</span>`);
+  const parts = [`<span class="book-depth__stat"><strong>${depth.items}</strong> items</span>`];
+  if (depth.categories > 1) {
+    parts.push(`<span class="book-depth__stat"><strong>${depth.categories}</strong> cat</span>`);
+  }
   parts.push(`<span class="book-depth__stat"><strong>${depth.modes}</strong> modos</span>`);
-  const battle = depth.hasBattle ? `<span class="book-depth__battle">⚔️ 2P</span>` : '';
-  return `<div class="book-depth">${parts.join('<span style="opacity:.4">·</span>')}${battle}</div>`;
+  if (depth.hasBattle) {
+    parts.push(`<span class="book-depth__battle">⚔️ 2P</span>`);
+  }
+  return `<div class="book-depth">${parts.join('<span class="book-depth__sep" aria-hidden="true">·</span>')}</div>`;
+}
+
+function progressCounts(mod, progress) {
+  const matrix = getModuleMatrixProgress(mod.id, { includeStudy: true });
+  const depth = getModuleDepth(mod.id);
+  const total = (matrix && matrix.total > 0)
+    ? matrix.total
+    : (depth?.items ?? 0);
+
+  if (progress?.completed) {
+    return { done: total, total, pct: 100 };
+  }
+
+  // Misma fuente para fracción y % — evita "8/16 · 100%" cuando la grilla
+  // y progressPct venían de caminos distintos.
+  if (matrix && matrix.total > 0) {
+    const pct = Math.round(Math.max(matrix.progressPct, progress?.progressPct ?? 0));
+    const done = Math.min(matrix.total, Math.max(matrix.passed, Math.round((pct / 100) * matrix.total)));
+    return { done, total: matrix.total, pct };
+  }
+
+  const pct = Math.round(progress?.progressPct ?? 0);
+  const done = Math.round((pct / 100) * total);
+  return { done, total, pct };
 }
 
 function progressHTML(mod) {
   const progress = getContentProgress(mod.id);
   if (!progress) return '';
-  // progress.progressPct ya incorpora la grilla categoría×modo (ver
-  // getContentProgress en progress-store.js) — evita que la tarjeta muestre
-  // un % distinto al del modal "Progreso del módulo" para el mismo módulo,
-  // sin recalcular la matriz dos veces por tarjeta.
-  const pct = Math.round(progress.progressPct);
+  const { done, total, pct } = progressCounts(mod, progress);
+  const crown = progress.mastered
+    ? `<span class="book-progress__crown" role="img" aria-label="Maestría">👑</span>`
+    : '';
+
+  let state = 'idle';
+  let status = 'Sin empezar';
   if (progress.completed) {
-    // Corona (Maestría) junto al check — nivel encima de Aprobado, nunca en su
-    // lugar. Ver docs/to-do/mastery-tiers-plan.md §4.1/§5.
-    const crown = progress.mastered
-      ? `<span class="book-progress__crown" role="img" aria-label="Maestría">👑</span>`
-      : '';
-    return `<div class="book-progress book-progress--done" aria-label="${progress.mastered ? 'Completado — Maestría' : 'Completado'}"><span class="book-progress__check">✓</span>${crown}<span class="book-progress__bar"><span class="book-progress__fill" style="width:100%"></span></span></div>`;
+    state = 'done';
+    status = progress.mastered ? 'Maestría' : 'Completado';
+  } else if (pct > 0) {
+    state = 'active';
+    status = 'En progreso';
   }
-  return `<div class="book-progress" aria-label="${pct}% completado"><span class="book-progress__bar"><span class="book-progress__fill" style="width:${pct}%"></span></span><span class="book-progress__pct">${pct}%</span></div>`;
+
+  const nums = total > 0
+    ? `<span class="book-progress__nums">${done} / ${total} · ${pct}%</span>`
+    : `<span class="book-progress__nums">${pct}%</span>`;
+
+  return `<div class="book-progress book-progress--${state}" aria-label="${status}: ${pct}%">
+    ${nums}
+    <span class="book-progress__bar" aria-hidden="true"><span class="book-progress__fill" style="width:${pct}%"></span></span>
+    <span class="book-progress__status">${state === 'done' ? `<span class="book-progress__check">✓</span>${crown}` : ''}${status}</span>
+  </div>`;
+}
+
+function footHTML(mod, progress) {
+  const topic = SUBCATEGORIES[mod.subcategory] || '';
+  const mechanic = MECHANIC_LABEL[primaryMechanic(mod)] || 'Study';
+  let cta = `${mechanic} →`;
+  if (progress?.completed) cta = 'Repasar →';
+  else if ((progress?.progressPct ?? 0) > 0) cta = 'Continuar →';
+  const topicHtml = topic
+    ? `<span class="book-topic">${topic}</span>`
+    : `<span class="book-topic" aria-hidden="true"></span>`;
+  return `<div class="book-foot">${topicHtml}<span class="book-cta">${cta}</span></div>`;
 }
 
 /** La franja de color de la tarjeta sale de la categoría del propio módulo,
@@ -90,28 +135,30 @@ function progressHTML(mod) {
  * mismo nivel mezcla módulos de las 4 categorías con distinto color. */
 function bookCardHTML(mod) {
   const cls = CATEGORY_SPINE[mod.category] || '';
+  const progress = getContentProgress(mod.id);
   return `<a class="book ${cls}" href="${mod.exercise}" data-id="${mod.id}" data-tags="${mod.tags.join(',')}" data-cefr="${mod.cefr}">
-    <div class="book-spine"></div>
-    <div class="book-icon">${mod.icon}</div>
+    <div class="book-icon" aria-hidden="true">${mod.icon}</div>
     <div class="book-body">
-      <div class="book-title">${titleHTML(mod)}</div>
+      <div class="book-head">
+        <div class="book-title">${titleHTML(mod)}</div>
+        <span class="book-cefr">${mod.cefr.toUpperCase()}</span>
+      </div>
       ${metaHTML(mod)}
       ${depthHTML(mod)}
-      <div class="book-pills">${pillsHTML(mod)}</div>
       ${progressHTML(mod)}
+      ${footHTML(mod, progress)}
     </div>
   </a>`;
 }
 
-/** Progreso agregado de un nivel: X/Y módulos completados + barra — mismo
- * criterio que el header de unidad de FluentFlow (ProgressionDashboard). */
+/** Progreso agregado de un nivel: X/Y módulos completados + % + barra. */
 function levelProgressHTML(modules) {
   const total = modules.length;
-  const completed = modules.filter(m => getContentProgress(m.id).completed).length;
+  const completed = modules.filter((m) => getContentProgress(m.id).completed).length;
   const pct = total ? Math.round((completed / total) * 100) : 0;
   return `<span class="subsec-progress">
+    <span class="subsec-stats">${completed} de ${total} completados · ${pct}%</span>
     <span class="subsec-bar"><span class="subsec-bar__fill" style="width:${pct}%"></span></span>
-    <span class="subsec-stats">${completed}/${total}</span>
   </span>`;
 }
 
@@ -182,8 +229,8 @@ export function renderAllShelves() {
   const levelJustBecameActive = activeLevel !== lastSeenActiveLevel;
   lastSeenActiveLevel = activeLevel;
 
-  LEVEL_ORDER.forEach(level => {
-    const atLevel = (cat) => MODULES.filter(m => m.category === cat && m.cefr === level);
+  LEVEL_ORDER.forEach((level) => {
+    const atLevel = (cat) => MODULES.filter((m) => m.category === cat && m.cefr === level);
     const vocab = atLevel('vocab');
     const grammar = atLevel('grammar');
     const pronunciation = atLevel('pronunciation');

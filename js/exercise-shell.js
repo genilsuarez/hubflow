@@ -66,6 +66,33 @@ function getExerciseBackUrl() {
   return `../index.html?section=${target}`;
 }
 
+/**
+ * Prefer history.back() when we arrived from the HubFlow index in this tab.
+ * That restores bfcache (instant) and keeps the history stack sane — location.assign
+ * used to push a third entry (index → exercise → index), so the browser Back
+ * button returned to the exercise instead of leaving HubFlow.
+ * Fallback to assign for deep links, refreshed exercises, or when back is a no-op.
+ */
+function navigateBackFromExercise() {
+  const fallbackUrl = getExerciseBackUrl();
+  const canUseHistory = sessionStorage.getItem('hf-history-back') === '1';
+  if (canUseHistory && window.history.length > 1) {
+    sessionStorage.removeItem('hf-history-back');
+    let left = false;
+    const markLeft = () => { left = true; };
+    window.addEventListener('pagehide', markLeft, { once: true });
+    history.back();
+    window.setTimeout(() => {
+      window.removeEventListener('pagehide', markLeft);
+      if (!left && /\/exercises\//.test(location.pathname)) {
+        location.assign(fallbackUrl);
+      }
+    }, 400);
+    return;
+  }
+  location.assign(fallbackUrl);
+}
+
 function setupExerciseBackLink(link) {
   if (!link || link.dataset.backBound) return;
   link.dataset.backBound = '1';
@@ -74,8 +101,11 @@ function setupExerciseBackLink(link) {
   link.setAttribute('aria-label', 'Volver');
   link.setAttribute('title', 'Volver');
   link.addEventListener('click', (e) => {
+    if (e.defaultPrevented) return;
+    if (e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
-    location.assign(getExerciseBackUrl());
+    navigateBackFromExercise();
   });
 }
 
@@ -366,6 +396,8 @@ function buildSidebar() {
   sidebar.querySelectorAll('.sb-nav .sb-item').forEach(item => {
     item.addEventListener('click', () => {
       sessionStorage.setItem('hf-back-section', item.getAttribute('href').split('section=')[1]);
+      // Leaving via sidebar (not ←): don't let a later exercise misuse history.back
+      sessionStorage.removeItem('hf-history-back');
     });
   });
 
@@ -671,6 +703,11 @@ function buildDepthBanner() {
   }
 }
 
+// Reveal as soon as chrome + bottom nav are in place — depth banner / footer
+// are non-blocking and used to keep body opacity:0 longer than necessary.
+document.body.classList.add('shell-ready');
+finalizeBottomNavLayout();
+
 buildDepthBanner();
 
 // ─── Footer ────────────────────────────────────────────────────────────────────
@@ -688,7 +725,3 @@ buildFooter();
 
 // Cat-bar: wrap + expand badge before first paint (no load-time scroll hint).
 initCatBarExpander({ hintOnLoad: false });
-
-// Reveal the page now that DOM restructuring is done
-document.body.classList.add('shell-ready');
-finalizeBottomNavLayout();

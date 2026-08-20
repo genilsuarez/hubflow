@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://genilsuarez.github.io/hubflow/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <meta name="theme-color" content="#ffffff" id="metaThemeColor">
   <meta name="color-scheme" content="light" id="metaColorScheme">
   <script>
@@ -34,7 +34,7 @@
       var t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('lp-theme');
       var dark = t === 'dark';
       if (dark) {
-        document.getElementById('metaThemeColor').content = '#181B20';
+        document.getElementById('metaThemeColor').content = '#12151A';
         document.getElementById('metaColorScheme').content = 'dark';
         document.documentElement.setAttribute('data-theme', 'dark');
       }
@@ -90,27 +90,22 @@
   </script>
   <style>
     /* Critical: prevent flash while external CSS loads */
-    body { background: #FFFFFF; color: #2C2418; }
-    [data-theme="dark"] body { background: #181B20; color: #E8EAED; }
+    body { background: #F7F4EF; color: #2C2418; }
+    [data-theme="dark"] body { background: #12151A; color: #E8EAED; }
     /* El HTML estático ya pinta los encabezados de cada subsección (A1, A2...)
        antes de que el <script type="module"> — que importa
        ~11 archivos JS por separado — termine de cargar y rellenar las tarjetas.
        En redes lentas eso se ve como "títulos sin contenido debajo". Se oculta
        .content por defecto y se revela recién cuando el primer render (síncrono,
        ver boot script al final del body) terminó — con un timeout de seguridad
-       por si el script falla. Lo mismo aplica, con un margen más largo, al volver
-       de un ejercicio con sesión activa: el progreso recién cambió y viene un
-       re-render con datos de la nube (ver exercise-shell.js — recarga completa,
-       no SPA — y data-boot-syncing más abajo).  */
-    html:not([data-app-ready]) .content,
-    html[data-boot-syncing] .content { opacity: 0; transform: translateY(4px); }
+       por si el script falla. */
+    html:not([data-app-ready]) .content { opacity: 0; transform: translateY(4px); }
     .content {
       opacity: 1;
       transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
     @media (prefers-reduced-motion: reduce) {
-      html:not([data-app-ready]) .content,
-      html[data-boot-syncing] .content { opacity: 1; transform: none; }
+      html:not([data-app-ready]) .content { opacity: 1; transform: none; }
       .content { transition: none; }
     }
   </style>
@@ -887,6 +882,11 @@
   </section>
 </div>
 
+<link rel="modulepreload" href="./data/catalog.js">
+<link rel="modulepreload" href="./js/progress-store.js">
+<link rel="modulepreload" href="./js/sync-engine.js">
+<link rel="modulepreload" href="./js/dashboard-shelves.js">
+<link rel="modulepreload" href="./js/dashboard-stats.js">
 <script type="module">
 import { MODULES, CATEGORIES, getModuleDepth } from './data/catalog.js';
 import { NAV_SECTION_KEYS } from './js/nav-sections.js';
@@ -1146,7 +1146,9 @@ import { initLevelStatus } from './js/level-status.js';
 
   const VALID_SECTIONS = new Set(NAV_SECTION_KEYS);
 
-  // Remember active HubFlow section when opening an exercise (PWA — no history.back).
+  // Remember active HubFlow section when opening an exercise.
+  // hf-history-back lets the exercise ← button use history.back() (bfcache)
+  // instead of location.assign, which used to push a duplicate index entry.
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[href]');
     if (!link) return;
@@ -1154,6 +1156,7 @@ import { initLevelStatus } from './js/level-status.js';
     if (!/(?:^|\/)exercises\//.test(href)) return;
     const active = document.body.dataset.active;
     if (active) sessionStorage.setItem('hf-back-section', active);
+    sessionStorage.setItem('hf-history-back', '1');
   }, true);
 
   const paramSection = new URLSearchParams(location.search).get('section');
@@ -1161,34 +1164,10 @@ import { initLevelStatus } from './js/level-status.js';
   const initSection = paramSection || storedSection;
   if (storedSection) sessionStorage.removeItem('hf-back-section');
 
-  // Volver de un ejercicio con sesión activa: el progreso recién cambió, así
-  // que viene un refresh de stats desde la nube (ver hubflow-progress-updated
-  // / lp-cloud-hydrated más arriba). Ocultar el contenido hasta que llegue (o
-  // hasta un timeout corto) evita ver el render local y luego todo reconstruido
-  // encima — el "carga por pedazos" reportado al volver a Todas las lecciones.
-  function hasStoredSupabaseSession() {
-    try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (!/^sb-.+-auth-token$/.test(key || '')) continue;
-        const parsed = JSON.parse(localStorage.getItem(key) || 'null');
-        if (parsed?.access_token || parsed?.currentSession?.access_token) return true;
-      }
-    } catch { /* noop */ }
-    return false;
-  }
-  if (storedSection && hasStoredSupabaseSession()) {
-    document.documentElement.dataset.bootSyncing = '1';
-    let revealed = false;
-    const reveal = () => {
-      if (revealed) return;
-      revealed = true;
-      delete document.documentElement.dataset.bootSyncing;
-    };
-    window.setTimeout(reveal, 2000);
-    window.addEventListener('lp-cloud-hydrated', reveal, { once: true });
-    window.addEventListener('lp-stats-ready', reveal, { once: true });
-  }
+  // Al volver de un ejercicio, mostrar ya el progreso local (data-app-ready).
+  // La hidratación de nube sigue en background vía lp-cloud-hydrated /
+  // scheduleRefreshHomeStats — ocultar .content hasta 2s hacía sentir el
+  // dashboard "roto" o lento al pulsar atrás.
 
   setActive(VALID_SECTIONS.has(initSection) ? initSection : 'resumen');
   delete document.documentElement.dataset.initSection;
@@ -1219,6 +1198,7 @@ import { initLevelStatus } from './js/level-status.js';
         sessionStorage.removeItem('hf-back-section');
         setActive(s);
       }
+      document.documentElement.setAttribute('data-app-ready', '1');
     }
   });
 })();

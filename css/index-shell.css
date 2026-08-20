@@ -196,21 +196,27 @@
     /* Progreso agregado del nivel (X/Y completados + barra), a la derecha del
        header — mismo patrón que el header de unidad de FluentFlow. */
     .subsec-label { text-transform: uppercase; }
-    .subsec-progress { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .subsec-progress {
+      margin-left: auto; display: flex; align-items: center; gap: 10px; min-width: 0;
+    }
     .subsec-stats {
-      font-size: .62rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-ink-soft);
-      background: var(--lp-surface); border: 1px solid var(--lp-border); border-radius: var(--lp-radius-sm);
-      padding: 2px 7px; white-space: nowrap; letter-spacing: 0; text-transform: none;
+      font-size: .62rem; font-weight: var(--lp-weight-semibold); color: var(--lp-ink-soft);
+      white-space: nowrap; letter-spacing: 0; text-transform: none;
+      overflow: hidden; text-overflow: ellipsis;
     }
     .subsec-bar {
-      width: 70px; height: var(--lp-progress-height, 4px); border-radius: var(--lp-radius-full);
-      background: var(--lp-border); overflow: hidden;
+      width: 88px; height: var(--lp-progress-height, 4px); border-radius: var(--lp-radius-full);
+      background: var(--lp-border); overflow: hidden; flex-shrink: 0;
     }
     .subsec-bar__fill {
       display: block; height: 100%; border-radius: var(--lp-radius-full);
       background: var(--lp-accent); transition: width .3s ease;
     }
-    @media (max-width: 639px) { .subsec-bar { width: 44px; } }
+    @media (max-width: 639px) {
+      .subsec-progress { gap: 6px; }
+      .subsec-stats { font-size: .55rem; max-width: 42vw; }
+      .subsec-bar { width: 52px; }
+    }
 
     /* ─── FILTER MENU (homologado con FluentFlow UnifiedFilter) ─── */
     .filter-menu { position: relative; flex-shrink: 0; }
@@ -1166,80 +1172,147 @@
       }
     }
 
-    /* ─── MODULE CARDS (compact grid) ─── */
-    .shelf { display: grid; grid-template-columns: 1fr; gap: 6px; }
+    /* ─── MODULE CARDS (library hierarchy: title → meta → progress → CTA) ─── */
+    .shelf { display: grid; grid-template-columns: 1fr; gap: 8px; }
     @media (min-width: 768px) { .shelf { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { .shelf { grid-template-columns: repeat(3, 1fr); } }
     .book {
       --spine: var(--lp-cat-blue);
       display: grid;
-      grid-template-columns: 34px 1fr;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
+      grid-template-columns: 36px 1fr;
+      align-items: start;
+      gap: 10px;
+      padding: 10px 12px;
+      min-height: 120px;
       border-radius: var(--lp-radius-lg);
       text-decoration: none;
       color: var(--lp-ink);
       overflow: hidden;
     }
-    .book .book-icon { width: 34px; height: 34px; min-width: 34px; min-height: 34px; font-size: .85em; }
+    .book .book-icon {
+      width: 36px; height: 36px; min-width: 36px; min-height: 36px;
+      font-size: .9em; margin-top: 1px;
+    }
 
     .book-spine { display: none; }
-    .book-title { font-weight: var(--lp-weight-extrabold); font-size: .70rem; line-height: 1.25; display: flex; align-items: center; gap: 5px; }
-    .book-title code {
-      font-family: var(--lp-font-mono); font-weight: var(--lp-weight-bold); font-size: .8em;
-      color: var(--spine); background: color-mix(in srgb, var(--spine) 14%, transparent); padding: 3px 6px; border-radius: 5px;
+    .book-body {
+      display: flex; flex-direction: column; gap: 3px;
+      min-width: 0; min-height: 100%;
     }
-    .book-meta {
-      font-size: .55rem; color: var(--lp-ink-soft); font-weight: var(--lp-weight-medium); margin-top: 2px; line-height: 1.3;
+    .book-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 8px;
+    }
+    .book-title {
+      font-weight: var(--lp-weight-extrabold); font-size: .78rem; line-height: 1.25;
+      letter-spacing: -0.01em; min-width: 0;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
-    .book-pills { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
-    .pill {
-      font-size: .49rem; font-weight: var(--lp-weight-extrabold); padding: 3px 7px; border-radius: 5px;
-      background: var(--lp-bg-paper); color: var(--lp-ink-soft); border: 1px solid var(--lp-border); letter-spacing: .02em;
+    .book-title code {
+      font-family: var(--lp-font-mono); font-weight: var(--lp-weight-bold); font-size: .8em;
+      color: var(--spine); background: color-mix(in srgb, var(--spine) 12%, transparent);
+      padding: 2px 5px; border-radius: 4px;
     }
-    .pill.lvl { background: color-mix(in srgb, var(--spine) 14%, var(--lp-surface)); color: var(--spine); border-color: color-mix(in srgb, var(--spine) 35%, transparent); font-weight: var(--lp-weight-extrabold); }
-
-    /* Depth badges (always visible) */
+    .book-cefr {
+      flex-shrink: 0;
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold);
+      letter-spacing: .04em; line-height: 1;
+      padding: 4px 7px; border-radius: 999px;
+      color: var(--spine);
+      background: color-mix(in srgb, var(--spine) 12%, var(--lp-surface));
+      border: 1px solid color-mix(in srgb, var(--spine) 28%, transparent);
+    }
+    .book-meta {
+      font-size: .58rem; color: var(--lp-muted); font-weight: var(--lp-weight-medium);
+      line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+    }
     .book-depth {
-      display: flex; align-items: center; gap: 5px; margin-top: 2px;
-      font-size: .51rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted);
-      line-height: 1; min-height: 11.6px;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px;
+      font-size: .52rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted);
+      line-height: 1.2;
     }
+    .book-depth__sep { opacity: .45; }
     .book-depth__stat { display: inline-flex; align-items: center; gap: 2px; }
     .book-depth__stat strong { color: var(--lp-ink-soft); font-weight: var(--lp-weight-extrabold); }
     .book-depth__battle {
       display: inline-flex; align-items: center; gap: 2px;
       background: color-mix(in srgb, var(--lp-cat-teal) 14%, transparent);
       color: var(--lp-cat-teal); font-weight: var(--lp-weight-extrabold);
-      padding: 2px 5px; border-radius: 4px; font-size: .47rem; letter-spacing: .02em;
+      padding: 1px 5px; border-radius: 4px; font-size: .47rem; letter-spacing: .02em;
     }
 
-    /* Card progress bar */
+    /* Explicit progress: nums → bar → status */
     .book-progress {
-      display: flex; align-items: center; gap: 5px; margin-top: 4px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "nums nums"
+        "bar status";
+      align-items: center;
+      gap: 3px 8px;
+      margin-top: 4px;
+    }
+    .book-progress__nums {
+      grid-area: nums;
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold);
+      font-variant-numeric: tabular-nums; color: var(--lp-ink-soft);
+      letter-spacing: .01em;
     }
     .book-progress__bar {
-      flex: 1; height: 3px; border-radius: var(--lp-radius-full);
-      overflow: hidden;
+      grid-area: bar;
+      height: 3px; border-radius: var(--lp-radius-full); overflow: hidden;
+      background: var(--lp-border);
     }
     .book-progress__fill {
       display: block; height: 100%; border-radius: var(--lp-radius-full);
       transition: width .3s ease;
+      background: var(--spine);
     }
-    .book-progress--done .book-progress__fill {
-      background: var(--lp-success);
+    .book-progress--done .book-progress__fill { background: var(--lp-success); }
+    .book-progress--done .book-progress__nums { color: var(--lp-success); }
+    .book-progress--idle .book-progress__nums { color: var(--lp-muted); font-weight: var(--lp-weight-semibold); }
+    .book-progress__status {
+      grid-area: status;
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: .5rem; font-weight: var(--lp-weight-bold);
+      color: var(--lp-muted); white-space: nowrap;
     }
-    .book-progress__pct {
-      min-width: 2.5ch; text-align: right; font-variant-numeric: tabular-nums; font-size: .85rem;
-    }
+    .book-progress--done .book-progress__status { color: var(--lp-success); }
+    .book-progress--active .book-progress__status { color: var(--spine); }
     .book-progress__check {
-      font-size: .51rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-success);
+      font-size: .55rem; font-weight: var(--lp-weight-extrabold); color: var(--lp-success);
     }
-    .book-progress__crown {
-      font-size: .68rem; line-height: 1; flex-shrink: 0;
+    .book-progress__crown { font-size: .62rem; line-height: 1; }
+
+    .book-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-top: auto; padding-top: 6px;
+      border-top: 1px solid color-mix(in srgb, var(--lp-border) 80%, transparent);
     }
+    .book-topic {
+      font-size: .52rem; font-weight: var(--lp-weight-semibold);
+      color: var(--lp-muted); letter-spacing: .02em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+    }
+    .book-cta {
+      flex-shrink: 0;
+      font-size: .58rem; font-weight: var(--lp-weight-extrabold);
+      color: var(--spine); letter-spacing: .01em;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .book:hover .book-cta,
+    .book:focus-visible .book-cta {
+      transform: translateX(2px);
+    }
+
+    /* Legacy pill styles kept for paths / other surfaces that still use them */
+    .book-pills { display: none; }
+    .pill {
+      font-size: .49rem; font-weight: var(--lp-weight-extrabold); padding: 3px 7px; border-radius: 5px;
+      background: var(--lp-bg-paper); color: var(--lp-ink-soft); border: 1px solid var(--lp-border); letter-spacing: .02em;
+    }
+    .pill.lvl { background: color-mix(in srgb, var(--spine) 14%, var(--lp-surface)); color: var(--spine); border-color: color-mix(in srgb, var(--spine) 35%, transparent); font-weight: var(--lp-weight-extrabold); }
 
     /* Encabezado de etapa (Fundamentos / Intermedio / Avanzado), usado por el
        acordeón de "Rutas guiadas" (stageHeader() en dashboard-stats.js). */
@@ -1474,40 +1547,34 @@
       }
       .topbar-greeting-title { font-size: var(--lp-header-title-size); }
 
-      /* .book-pills solo se revela con :hover/:focus-within — en mobile eso
-         nunca ocurre (no hay hover, y el tap navega directo), así que quedaba
-         como espacio en blanco reservado sin motivo al final de cada tarjeta
-         de módulo. Se saca del flujo por completo. */
-      .book-pills { display: none; }
-      /* Las descripciones del catálogo son largas (100-156 caracteres) — a 2
-         líneas ya se cortaban a mitad de palabra ("...36…"). Se recorta a 1
-         línea: sigue sin decir todo, pero al menos no queda un fragmento raro
-         a medio cortar, y la tarjeta baja de altura. */
-      .book-title { font-size: .72rem; line-height: 1.15; }
-      .book-body { padding: 0; }
-      .book-progress__pct { font-size: 0.88rem; }
+      /* Tarjetas de módulo: densidad mobile sin perder la jerarquía nueva */
+      .book { padding: 9px 10px; gap: 8px; min-height: 0; }
+      .book .book-icon { width: 32px; height: 32px; min-width: 32px; min-height: 32px; font-size: .82em; }
+      .book-title { font-size: .72rem; line-height: 1.2; }
+      .book-cefr { font-size: .52rem; padding: 3px 6px; }
+      .book-body { padding: 0; gap: 2px; }
       .book-meta {
         -webkit-line-clamp: 1;
-        font-size: .56rem;
-        margin-top: 2px;
+        font-size: .54rem;
         line-height: 1.25;
       }
       .book-depth {
-        margin-top: 2px;
-        font-size: .55rem;
-        gap: 4px;
+        font-size: .5rem;
+        gap: 3px 5px;
       }
       .book-depth__battle {
-        padding: 1px 5px;
-        font-size: .5rem;
+        padding: 1px 4px;
+        font-size: .48rem;
       }
-      .book-progress {
-        margin-top: 4px;
-        gap: 4px;
-      }
+      .book-progress { margin-top: 3px; gap: 2px 6px; }
+      .book-progress__nums { font-size: .54rem; }
       .book-progress__bar { height: 3px; }
-      .book-progress__check { font-size: .55rem; }
-      .book-progress__crown { font-size: .62rem; }
+      .book-progress__status { font-size: .48rem; }
+      .book-progress__check { font-size: .52rem; }
+      .book-progress__crown { font-size: .58rem; }
+      .book-foot { padding-top: 5px; }
+      .book-topic { font-size: .48rem; }
+      .book-cta { font-size: .54rem; }
 
       /* Guías de referencia: usaban más gap entre tarjetas (11px vs 7px de
          .shelf) y más padding interno (11/14/11/10 vs 9/12/9/8 de .book-body)
