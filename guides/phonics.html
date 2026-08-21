@@ -99,6 +99,8 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 .word-stress-form{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;color:#8a6508;}
 [data-theme="dark"] .word-stress-form{color:#E8C468;}
 .word-stress-form .cap{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;}
+.word-ipa{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--red-dark);margin-top:4px;}
+[data-theme="dark"] .word-ipa{color:#FF9F9F;}
 
 /* SILENT LETTERS */
 .silent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:12px 0;}
@@ -113,6 +115,8 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 .silent-card .sl-rule{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:6px;}
 .silent-card .sl-words{font-size:.72rem;line-height:1.6;color:var(--text);}
 .silent-card .sl-words em{font-style:normal;color:var(--red);font-weight:700;text-decoration:line-through;}
+.silent-card .sl-ipa{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--red-dark);margin-top:6px;line-height:1.6;}
+[data-theme="dark"] .silent-card .sl-ipa{color:#FF9F9F;}
 
 /* TIP BOX */
 .tip-box{
@@ -252,18 +256,18 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 <h2 id="word-stress-quiz">&#128483;&#65039; Word Stress: Common Mistakes</h2>
 <p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:12px;">Spanish speakers often stress the wrong syllable in these common English words &mdash; here's where the stress really falls.</p>
 <div class="word-grid">
-  <div class="word-card"><div class="word-stress-form"><span class="cap">COM</span>-for-ta-ble</div></div>
-  <div class="word-card"><div class="word-stress-form">es-<span class="cap">PESH</span>-a-lly</div></div>
-  <div class="word-card"><div class="word-stress-form">pho-<span class="cap">TOG</span>-ra-phy</div></div>
-  <div class="word-card"><div class="word-stress-form"><span class="cap">NEC</span>-es-sa-ry</div></div>
-  <div class="word-card"><div class="word-stress-form">de-<span class="cap">VEL</span>-op-ment</div></div>
-  <div class="word-card"><div class="word-stress-form"><span class="cap">VEDGE</span>-ta-ble</div></div>
-  <div class="word-card"><div class="word-stress-form"><span class="cap">IN</span>-tres-ting</div></div>
-  <div class="word-card"><div class="word-stress-form"><span class="cap">TEM</span>-pra-ture</div></div>
-  <div class="word-card"><div class="word-stress-form">un-der-<span class="cap">STAND</span></div></div>
-  <div class="word-card"><div class="word-stress-form">af-ter-<span class="cap">NOON</span></div></div>
-  <div class="word-card"><div class="word-stress-form">en-gi-<span class="cap">NEER</span></div></div>
-  <div class="word-card"><div class="word-stress-form">im-<span class="cap">POR</span>-tant</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">COM</span>-for-ta-ble</div><div class="word-ipa">/ˈkʌmf.tə.bəl/</div></div>
+  <div class="word-card"><div class="word-stress-form">es-<span class="cap">PESH</span>-a-lly</div><div class="word-ipa">/ɪˈspɛʃ.əl.i/</div></div>
+  <div class="word-card"><div class="word-stress-form">pho-<span class="cap">TOG</span>-ra-phy</div><div class="word-ipa">/fəˈtɒɡ.rə.fi/</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">NEC</span>-es-sa-ry</div><div class="word-ipa">/ˈnɛs.ə.sər.i/</div></div>
+  <div class="word-card"><div class="word-stress-form">de-<span class="cap">VEL</span>-op-ment</div><div class="word-ipa">/dɪˈvɛl.əp.mənt/</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">VEDGE</span>-ta-ble</div><div class="word-ipa">/ˈvɛdʒ.tə.bəl/</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">IN</span>-tres-ting</div><div class="word-ipa">/ˈɪn.trɪs.tɪŋ/</div></div>
+  <div class="word-card"><div class="word-stress-form"><span class="cap">TEM</span>-pra-ture</div><div class="word-ipa">/ˈtɛm.prə.tʃər/</div></div>
+  <div class="word-card"><div class="word-stress-form">un-der-<span class="cap">STAND</span></div><div class="word-ipa">/ˌʌn.dəˈstænd/</div></div>
+  <div class="word-card"><div class="word-stress-form">af-ter-<span class="cap">NOON</span></div><div class="word-ipa">/ˌɑːf.təˈnuːn/</div></div>
+  <div class="word-card"><div class="word-stress-form">en-gi-<span class="cap">NEER</span></div><div class="word-ipa">/ˌɛn.dʒɪˈnɪər/</div></div>
+  <div class="word-card"><div class="word-stress-form">im-<span class="cap">POR</span>-tant</div><div class="word-ipa">/ɪmˈpɔː.tənt/</div></div>
 </div>
 
 <!-- SILENT LETTERS -->
@@ -273,41 +277,49 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
     <div class="sl-letter">k</div>
     <div class="sl-rule">Silent before N</div>
     <div class="sl-words"><em>k</em>now &bull; <em>k</em>nife &bull; <em>k</em>nee &bull; <em>k</em>nock &bull; <em>k</em>night</div>
+    <div class="sl-ipa">/nəʊ/ &bull; /naɪf/ &bull; /niː/ &bull; /nɒk/ &bull; /naɪt/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">w</div>
     <div class="sl-rule">Silent before R</div>
     <div class="sl-words"><em>w</em>rite &bull; <em>w</em>rong &bull; <em>w</em>rap &bull; <em>w</em>rist &bull; <em>w</em>reck</div>
+    <div class="sl-ipa">/raɪt/ &bull; /rɒŋ/ &bull; /ræp/ &bull; /rɪst/ &bull; /rɛk/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">b</div>
     <div class="sl-rule">Silent after M / before T</div>
     <div class="sl-words">clim<em>b</em> &bull; lam<em>b</em> &bull; bom<em>b</em> &bull; dou<em>b</em>t &bull; de<em>b</em>t</div>
+    <div class="sl-ipa">/klaɪm/ &bull; /læm/ &bull; /bɒm/ &bull; /daʊt/ &bull; /dɛt/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">h</div>
     <div class="sl-rule">Silent at start (common words)</div>
     <div class="sl-words"><em>h</em>our &bull; <em>h</em>onest &bull; <em>h</em>onor &bull; <em>h</em>eir</div>
+    <div class="sl-ipa">/aʊər/ &bull; /ˈɒn.ɪst/ &bull; /ˈɒn.ər/ &bull; /ɛər/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">g</div>
     <div class="sl-rule">Silent before N</div>
     <div class="sl-words"><em>g</em>nat &bull; si<em>g</em>n &bull; forei<em>g</em>n &bull; desi<em>g</em>n &bull; <em>g</em>nome</div>
+    <div class="sl-ipa">/næt/ &bull; /saɪn/ &bull; /ˈfɒr.ɪn/ &bull; /dɪˈzaɪn/ &bull; /nəʊm/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">l</div>
     <div class="sl-rule">Silent in common words</div>
     <div class="sl-words">wa<em>l</em>k &bull; ta<em>l</em>k &bull; ha<em>l</em>f &bull; ca<em>l</em>m &bull; cou<em>l</em>d &bull; shou<em>l</em>d</div>
+    <div class="sl-ipa">/wɔːk/ &bull; /tɔːk/ &bull; /hɑːf/ &bull; /kɑːm/ &bull; /kʊd/ &bull; /ʃʊd/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">t</div>
     <div class="sl-rule">Silent in -sten, -stle</div>
     <div class="sl-words">lis<em>t</em>en &bull; fas<em>t</em>en &bull; cas<em>t</em>le &bull; whis<em>t</em>le &bull; Chris<em>t</em>mas</div>
+    <div class="sl-ipa">/ˈlɪs.ən/ &bull; /ˈfɑːs.ən/ &bull; /ˈkɑː.səl/ &bull; /ˈwɪs.əl/ &bull; /ˈkrɪs.məs/</div>
   </div>
   <div class="silent-card">
     <div class="sl-letter">p</div>
     <div class="sl-rule">Silent before S, N (Greek origin)</div>
     <div class="sl-words"><em>p</em>sychology &bull; <em>p</em>neumonia &bull; recei<em>p</em>t</div>
+    <div class="sl-ipa">/saɪˈkɒl.ə.dʒi/ &bull; /njuːˈməʊ.ni.ə/ &bull; /rɪˈsiːt/</div>
   </div>
 </div>
 
@@ -317,6 +329,5 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 </footer>
 
 </div>
-<script type="module" src="../js/guide-shell.min.js"></script>
 </body>
 </html>
