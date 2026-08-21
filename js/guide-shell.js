@@ -7,6 +7,12 @@
 (function () {
   'use strict';
 
+  // Algunas páginas de guía incluyen este script dos veces (bug recurrente
+  // en la plantilla de generación). Sin este guard, la segunda ejecución
+  // reconstruye el hamburger/sidebar y produce un botón duplicado/roto.
+  if (window.__hfGuideShellInit) return;
+  window.__hfGuideShellInit = true;
+
   var NAVIGATION_MODE_KEY = 'hf-navigation-mode';
 
   function navigationMode() {
