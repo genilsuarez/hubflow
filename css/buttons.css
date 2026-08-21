@@ -159,7 +159,7 @@
   .top-bar > a.lp-icon-btn,
   .top-bar .top-bar__start .lp-icon-btn,
   .top-bar .top-bar__end .lp-icon-btn,
-  .top-bar .top-bar__end button.lp-icon-btn[aria-controls="exerciseSidebar"] {
+  .top-bar > button.lp-icon-btn[aria-controls] {
     border: none;
     border-radius: var(--lp-radius-md);
     background: transparent;
@@ -174,7 +174,7 @@
   .top-bar > a.lp-icon-btn:hover,
   .top-bar .top-bar__start .lp-icon-btn:hover,
   .top-bar .top-bar__end .lp-icon-btn:hover,
-  .top-bar .top-bar__end button.lp-icon-btn[aria-controls="exerciseSidebar"]:hover {
+  .top-bar > button.lp-icon-btn[aria-controls]:hover {
     background: color-mix(in srgb, var(--lp-ink) 5%, transparent);
     border-color: transparent;
     box-shadow: none;
@@ -187,7 +187,7 @@
   .top-bar > a.lp-icon-btn:active,
   .top-bar .top-bar__start .lp-icon-btn:active,
   .top-bar .top-bar__end .lp-icon-btn:active,
-  .top-bar .top-bar__end button.lp-icon-btn[aria-controls="exerciseSidebar"]:active {
+  .top-bar > button.lp-icon-btn[aria-controls]:active {
     background: color-mix(in srgb, var(--lp-ink) 9%, transparent);
     transform: scale(0.97);
   }

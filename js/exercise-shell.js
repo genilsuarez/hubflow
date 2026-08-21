@@ -286,7 +286,7 @@ function buildSidebar() {
         <h1>HubFlow</h1>
         <span class="sb-tag">LearnFlow</span>
       </div>
-      <button class="lp-icon-btn nav-mode-toggle" id="sbNavModeToggle" type="button" aria-label="${navigationMode() === 'sidebar' ? 'Usar navegación flotante' : 'Usar barra lateral fija'}" title="${navigationMode() === 'sidebar' ? 'Oculta la barra lateral' : 'Fijar barra lateral'}"><span aria-hidden="true">◫</span></button>
+      <button class="lp-icon-btn lp-icon-btn--sm nav-mode-toggle" id="sbNavModeToggle" type="button" aria-label="${navigationMode() === 'sidebar' ? 'Usar navegación flotante' : 'Usar barra lateral fija'}" title="${navigationMode() === 'sidebar' ? 'Oculta la barra lateral' : 'Fijar barra lateral'}"><span aria-hidden="true">◫</span></button>
     </div>
     <nav class="sb-nav" id="sbNav">
       ${primaryItems}

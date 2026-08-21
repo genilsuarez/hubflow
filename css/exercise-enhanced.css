@@ -340,7 +340,7 @@ h1 {
 }
 
 .ex-header__modes {
-  padding: 6px 8px;
+  padding: 8px 10px;
   background: var(--lp-bg-paper);
   border-bottom: 1px solid var(--lp-border-subtle);
 }
@@ -352,10 +352,10 @@ h1 {
   margin: 0;
   box-shadow: none;
   border: 1.5px solid var(--lp-border);
-  border-radius: var(--lp-radius-sm);
+  border-radius: var(--lp-radius-lg);
   background: var(--lp-bg-paper);
-  padding: 3px;
-  gap: 4px;
+  padding: 5px;
+  gap: 6px;
   overflow: hidden;
 }
 .ex-mode-indicator {
@@ -384,9 +384,9 @@ h1 {
   z-index: 1;
   flex: 1 1 0;
   min-width: 0;
-  min-height: 44px;
-  padding: 8px 10px;
-  font-size: 0.68rem;
+  min-height: 46px;
+  padding: 10px 12px;
+  font-size: 0.8rem;
   text-align: center;
   background: transparent !important;
   border: 1.5px solid transparent !important;

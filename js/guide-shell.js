@@ -43,14 +43,16 @@
     if (window.LpNavHelpers) window.LpNavHelpers.toggleTheme();
   }
 
-  // NAV items — mirrors the primary nav from exercise-shell
+  // NAV items primarios — deben coincidir con las entradas `primary: true`
+  // de js/nav-sections.js (fuente única compartida por index.html y
+  // exercise-shell.js). guide-shell.js no es un módulo ES (ver cabecera del
+  // archivo) así que no puede importar ese archivo directamente; esta lista
+  // se copia a mano y hay que mantenerla sincronizada si nav-sections.js cambia.
   var NAV_ITEMS = [
-    { key: 'home',     href: '../index.html',              icon: 'home',    label: 'Inicio' },
-    { key: 'all',      href: '../index.html?section=all',  icon: 'book',    label: 'Ejercicios' },
-    { key: 'grammar',  href: '../index.html?section=grammar', icon: 'grammar', label: 'Grammar' },
-    { key: 'vocab',    href: '../index.html?section=vocab',   icon: 'star',    label: 'Vocabulary' },
-    { key: 'reading',  href: '../index.html?section=reading', icon: 'reading', label: 'Reading' },
-    { key: 'guides',   href: '../index.html?section=guides',  icon: 'guide',   label: 'Guides',  active: true },
+    { key: 'resumen',     href: '../index.html',                     icon: 'home',  label: 'Inicio' },
+    { key: 'all',         href: '../index.html?section=all',         icon: 'book',  label: 'Ejercicios' },
+    { key: 'rutas',       href: '../index.html?section=rutas',       icon: 'route', label: 'Rutas guiadas' },
+    { key: 'mi-progreso', href: '../index.html?section=mi-progreso', icon: 'chart', label: 'Mis estadísticas' },
   ];
 
   function renderItems() {
@@ -83,7 +85,7 @@
       + '<div class="sb-brand">'
       +   '<span class="sb-mark" aria-hidden="true">H</span>'
       +   '<div><h1>HubFlow</h1><span class="sb-tag">LearnFlow</span></div>'
-      +   '<button class="lp-icon-btn nav-mode-toggle" id="sbNavModeToggle" type="button"'
+      +   '<button class="lp-icon-btn lp-icon-btn--sm nav-mode-toggle" id="sbNavModeToggle" type="button"'
       +     ' aria-label="Cambiar modo de navegación" title="Cambiar modo de navegación">'
       +     '<span aria-hidden="true">◫</span></button>'
       + '</div>'
