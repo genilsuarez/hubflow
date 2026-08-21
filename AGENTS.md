@@ -17,7 +17,8 @@ Part of the Learn Platform (alongside DeskFlow, FluentFlow, and LyricFlow).
 ```
 index.html          — Dashboard SPA: categories + "Mi Progreso" (learning paths)
 exercises/          — 44 exercise pages, one per topic
-guides/             — 24 reference pages (rules, tables, quick lookup)
+guides/             — 44 reference pages (rules, tables, quick lookup). Cobertura completa:
+                      los 150 módulos de catalog.js apuntan a una guía (muchos vía #ancla).
 data/
   catalog.js        — Metadata for 61 modules (title, category, CEFR, scoreKey...)
   *.js              — One data file per exercise topic
@@ -30,6 +31,7 @@ css/
   lp-nav-active.css — Active nav item (copy of scripts/)
   lp-about.css      — About modal styles (copy of scripts/)
   guide-layout.css  — Shared guide footer (.guide-footer)
+  guide-sections.css— Primitivas .gx-* de las secciones de guía (tablas, cards, tips)
   *-shell.css       — Per-engine-family styles
 js/
   engines/          — TODOS los motores de ejercicio, uno por familia. Ningún

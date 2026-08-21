@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentence Building Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230D9488'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.min.js"></script>
+<script src="../js/lp-platform-urls.min.js" defer></script>
+<script src="../js/lp-nav-icons.min.js" defer></script>
+<script src="../js/lp-guest-reset.min.js" defer></script>
+<script src="../js/lp-login.min.js" defer></script>
+<script src="../js/lp-nav-helpers.min.js" defer></script>
+<script src="../js/lp-about-content.min.js" defer></script>
+<script src="../js/lp-about.min.js" defer></script>
+<link rel="stylesheet" href="../css/lp-about.min.css">
+<script src="../js/lp-input-zoom.min.js" defer></script>
+<script src="../js/guide-shell.min.js" defer></script>
+<link rel="stylesheet" href="../css/buttons.min.css">
+<link rel="stylesheet" href="../css/sidebar.min.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.min.css">
+<link rel="stylesheet" href="../css/lp-nav-active.min.css">
+<link rel="stylesheet" href="../css/base.min.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
+  --yellow-light:#2D2510;--purple-light:#221A30;--teal-light:#1A2D2D;
+  --ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;
+  --yellow:#E8C468;--teal:#5ED4CC;--purple:#C4A5FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;background:var(--bg);}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--teal);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:24px;line-height:1.6;}
+@media(max-width:480px){.page{padding:14px 12px 50px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+<link rel="stylesheet" href="../css/guide-layout.min.css">
+<link rel="stylesheet" href="../css/guide-sections.min.css">
+</head>
+<body>
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
+
+<div class="top-bar">
+  <span class="nav-title">Reference Guide</span>
+</div>
+
+<h1>Sentence <span class="accent">Building</span></h1>
+<p class="intro">How an English sentence is assembled, how to put scrambled words back in order, and how to fuse two short sentences into one.</p>
+
+<nav class="gx-jump" aria-label="Secciones de la guía">
+  <a href="#core-order">Core order</a>
+  <a href="#reordering">Reordering</a>
+  <a href="#combining">Combining</a>
+</nav>
+
+<h2 class="gx-h2" id="core-order">&#129513; The Core Order</h2>
+<div class="gx-sub">English word order is rigid. The subject stays, the verb follows, and the extras have fixed slots.</div>
+<div class="gx-scroll"><table class="gx-table">
+  <thead><tr><th>Subject</th><th>Verb</th><th>Object</th><th>Manner</th><th>Place</th><th>Time</th></tr></thead>
+  <tbody>
+    <tr><td class="gx-k">She</td><td class="gx-k">read</td><td class="gx-k">the letter</td><td class="gx-note">quietly</td><td class="gx-note">in the kitchen</td><td class="gx-note">last night</td></tr>
+    <tr><td class="gx-k">We</td><td class="gx-k">play</td><td class="gx-k">football</td><td class="gx-note">—</td><td class="gx-note">at the park</td><td class="gx-note">on Sundays</td></tr>
+  </tbody>
+</table></div>
+<div class="gx-pair">
+  <div class="gx-ok">I speak English <b>well</b>.</div>
+  <div class="gx-no">I speak <b>well</b> English.</div>
+</div>
+<p class="gx-p">Nothing separates a verb from its direct object. Adverbs of manner go after the object, never between verb and object.</p>
+<div class="gx-tip"><b>Time can move to the front</b> for emphasis — <i>Last night she read the letter</i> — but place and manner cannot: <i class="gx-hl">In the kitchen she read the letter</i> is possible but marked, and <i>Quietly she read the letter</i> is literary.</div>
+
+<h2 class="gx-h2" id="reordering">&#128260; Putting Scrambled Words Back</h2>
+<div class="gx-sub">A repeatable procedure instead of guessing.</div>
+<ol class="gx-list">
+  <li><b>Find the verb.</b> It anchors everything else.</li>
+  <li><b>Find who does it</b> — that is the subject, and it goes first.</li>
+  <li><b>Attach the object</b> immediately after the verb.</li>
+  <li><b>Slot the extras</b> in manner &rarr; place &rarr; time order.</li>
+  <li><b>Check the capital letter and the full stop</b> — they tell you which word starts and ends.</li>
+</ol>
+<div class="gx-grid">
+  <div class="gx-card"><div class="gx-card-t">Scrambled</div><div class="gx-card-ex">yesterday / the / to / went / park / we</div></div>
+  <div class="gx-card"><div class="gx-card-t">Rebuilt</div><div class="gx-card-ex">We went to the park yesterday.</div></div>
+</div>
+<div class="gx-warn"><b>Question word order is different:</b> the auxiliary jumps before the subject — <i>Where <b>did you</b> go?</i> If the scrambled set contains <i>did</i>, <i>do</i>, <i>is</i> or a wh-word, build a question, not a statement.</div>
+
+<h2 class="gx-h2" id="combining">&#128279; Combining Two Sentences Into One</h2>
+<div class="gx-sub">Four moves cover almost every combining task.</div>
+<div class="gx-grid">
+  <div class="gx-card"><div class="gx-card-t">Coordination</div><div class="gx-card-d">Equal weight: and, but, so, or.</div><div class="gx-card-ex">It rained. We stayed in.<br>&rarr; It rained, <b>so</b> we stayed in.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Subordination</div><div class="gx-card-d">One idea becomes background: because, although, when, if.</div><div class="gx-card-ex">&rarr; <b>Because</b> it rained, we stayed in.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Relative clause</div><div class="gx-card-d">Merge a repeated noun with who / which / that.</div><div class="gx-card-ex">The man called. He lives next door.<br>&rarr; The man <b>who</b> lives next door called.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Participle</div><div class="gx-card-d">Same subject, shorter result.</div><div class="gx-card-ex">She opened the door. She saw him.<br>&rarr; <b>Opening</b> the door, she saw him.</div></div>
+</div>
+<div class="gx-pair">
+  <div class="gx-ok"><b>Although</b> he was tired, he kept working.</div>
+  <div class="gx-no"><b>Although</b> he was tired, <b>but</b> he kept working.</div>
+</div>
+<p class="gx-p">One connector per link. Spanish allows <i>aunque… pero…</i>; English treats the second connector as a repetition and marks it wrong.</p>
+
+
+<footer class="guide-footer">
+  <a href="../exercises/a1-sentence-build.html">&larr; Practice sentence building</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -833,6 +833,71 @@
             <div class="guide-icon">🧩</div>
             <div class="guide-body"><div class="guide-title">Word Order Untangled</div><div class="guide-tag">Structure</div></div>
           </a>
+          <a class="guide-link g-grammar" href="guides/a1-grammar-basics.html" data-tags="grammar,a1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧱</div>
+            <div class="guide-body"><div class="guide-title">Grammar Basics</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/questions.html" data-tags="grammar,a1,a2">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">❓</div>
+            <div class="guide-body"><div class="guide-title">Asking Questions</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/sentence-building.html" data-tags="grammar,writing,a1,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🧩</div>
+            <div class="guide-body"><div class="guide-title">Sentence Building</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/past-tenses.html" data-tags="grammar,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">⏱️</div>
+            <div class="guide-body"><div class="guide-title">Past Tenses</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/adverbs.html" data-tags="grammar,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🎯</div>
+            <div class="guide-body"><div class="guide-title">Adverbs in Place</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-verbs" href="guides/future-forms.html" data-tags="grammar,b1,b2">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔮</div>
+            <div class="guide-body"><div class="guide-title">Future Forms</div><div class="guide-tag">Verbs</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/advanced-syntax.html" data-tags="grammar,c1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🌟</div>
+            <div class="guide-body"><div class="guide-title">Advanced Syntax</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/register.html" data-tags="writing,vocabulary,b2,c1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🎭</div>
+            <div class="guide-body"><div class="guide-title">Register &amp; Tone</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/paraphrasing.html" data-tags="writing,grammar,b2,c1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔧</div>
+            <div class="guide-body"><div class="guide-title">Paraphrasing &amp; Summary</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-structure" href="guides/discourse.html" data-tags="writing,b2,c1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">💬</div>
+            <div class="guide-body"><div class="guide-title">Discourse &amp; Argument</div><div class="guide-tag">Structure</div></div>
+          </a>
+          <a class="guide-link g-grammar" href="guides/error-spotting.html" data-tags="grammar,writing,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🔍</div>
+            <div class="guide-body"><div class="guide-title">Error Spotting</div><div class="guide-tag">Grammar</div></div>
+          </a>
+          <a class="guide-link g-words" href="guides/reading-cloze.html" data-tags="vocabulary,writing,a1,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">📖</div>
+            <div class="guide-body"><div class="guide-title">Reading &amp; Cloze</div><div class="guide-tag">Words</div></div>
+          </a>
+          <a class="guide-link g-sound" href="guides/dictation.html" data-tags="listening,pronunciation,a2,b1">
+            <div class="guide-spine"></div>
+            <div class="guide-icon">🎧</div>
+            <div class="guide-body"><div class="guide-title">Dictation Strategy</div><div class="guide-tag">Sound</div></div>
+          </a>
         </div>
       </section>
 
@@ -1160,14 +1225,14 @@ import { initLevelStatus } from './js/level-status.js';
 
   const VALID_SECTIONS = new Set(NAV_SECTION_KEYS);
 
-  // Remember active HubFlow section when opening an exercise.
-  // hf-history-back lets the exercise ← button use history.back() (bfcache)
+  // Remember active HubFlow section when opening an exercise or guide.
+  // hf-history-back lets the exercise/guide ← button use history.back() (bfcache)
   // instead of location.assign, which used to push a duplicate index entry.
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[href]');
     if (!link) return;
     const href = link.getAttribute('href') || '';
-    if (!/(?:^|\/)exercises\//.test(href)) return;
+    if (!/(?:^|\/)(?:exercises|guides)\//.test(href)) return;
     const active = document.body.dataset.active;
     if (active) sessionStorage.setItem('hf-back-section', active);
     sessionStorage.setItem('hf-history-back', '1');

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discourse Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237C5AF6'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.min.js"></script>
+<script src="../js/lp-platform-urls.min.js" defer></script>
+<script src="../js/lp-nav-icons.min.js" defer></script>
+<script src="../js/lp-guest-reset.min.js" defer></script>
+<script src="../js/lp-login.min.js" defer></script>
+<script src="../js/lp-nav-helpers.min.js" defer></script>
+<script src="../js/lp-about-content.min.js" defer></script>
+<script src="../js/lp-about.min.js" defer></script>
+<link rel="stylesheet" href="../css/lp-about.min.css">
+<script src="../js/lp-input-zoom.min.js" defer></script>
+<script src="../js/guide-shell.min.js" defer></script>
+<link rel="stylesheet" href="../css/buttons.min.css">
+<link rel="stylesheet" href="../css/sidebar.min.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.min.css">
+<link rel="stylesheet" href="../css/lp-nav-active.min.css">
+<link rel="stylesheet" href="../css/base.min.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
+  --yellow-light:#2D2510;--purple-light:#221A30;--teal-light:#1A2D2D;
+  --ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;
+  --yellow:#E8C468;--teal:#5ED4CC;--purple:#C4A5FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;background:var(--bg);}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--purple);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:24px;line-height:1.6;}
+@media(max-width:480px){.page{padding:14px 12px 50px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+<link rel="stylesheet" href="../css/guide-layout.min.css">
+<link rel="stylesheet" href="../css/guide-sections.min.css">
+</head>
+<body>
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
+
+<div class="top-bar">
+  <span class="nav-title">Reference Guide</span>
+</div>
+
+<h1>Discourse <span class="accent">&amp; Argument</span></h1>
+<p class="intro">How a long text is organised, how an argument is built and answered, and how idioms behave once they are inside a real context.</p>
+
+<nav class="gx-jump" aria-label="Secciones de la guía">
+  <a href="#structure">Text structure</a>
+  <a href="#argumentation">Argumentation</a>
+  <a href="#idiom-in-context">Idiom in context</a>
+</nav>
+
+<h2 class="gx-h2" id="structure">&#129513; How a Text Is Organised</h2>
+<div class="gx-sub">Every paragraph does a job. Naming the job is how you read fast and write clearly.</div>
+<div class="gx-scroll"><table class="gx-table">
+  <thead><tr><th>Move</th><th>Signals</th></tr></thead>
+  <tbody>
+    <tr><td class="gx-k">Frame the topic</td><td class="gx-note">In recent years… · The question of X has…</td></tr>
+    <tr><td class="gx-k">State the claim</td><td class="gx-note">This article argues… · It can be shown that…</td></tr>
+    <tr><td class="gx-k">Elaborate</td><td class="gx-note">That is to say… · In other words…</td></tr>
+    <tr><td class="gx-k">Exemplify</td><td class="gx-note">For instance… · A case in point is…</td></tr>
+    <tr><td class="gx-k">Concede</td><td class="gx-note">Admittedly… · While it is true that…</td></tr>
+    <tr><td class="gx-k">Counter</td><td class="gx-note">However… · Nevertheless… · That said…</td></tr>
+    <tr><td class="gx-k">Conclude</td><td class="gx-note">On balance… · The evidence therefore points to…</td></tr>
+  </tbody>
+</table></div>
+<div class="gx-tip"><b>Theme position carries emphasis.</b> Whatever stands first in a sentence is what the sentence is about. Starting successive sentences with the same element is what makes a paragraph feel coherent.</div>
+
+<h2 class="gx-h2" id="argumentation">&#9878;&#65039; Building an Argument</h2>
+<div class="gx-grid">
+  <div class="gx-card"><div class="gx-card-t">Claim</div><div class="gx-card-d">What you assert. One sentence, no hedging yet.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Grounds</div><div class="gx-card-d">Data, examples, sources. Concrete.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Warrant</div><div class="gx-card-d">Why the grounds support the claim — the step most writers skip.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Qualifier</div><div class="gx-card-d">The scope: <i>in most cases</i>, <i>where funding allows</i>.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Rebuttal</div><div class="gx-card-d">The strongest objection, stated fairly and answered.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Restatement</div><div class="gx-card-d">The claim again, now narrowed by everything above.</div></div>
+</div>
+<div class="gx-scroll"><table class="gx-table">
+  <thead><tr><th>Weak move</th><th>Stronger move</th></tr></thead>
+  <tbody>
+    <tr><td class="gx-note">Everyone knows that…</td><td class="gx-k">Survey data from 2024 indicate that…</td></tr>
+    <tr><td class="gx-note">Opponents are simply wrong.</td><td class="gx-k">This objection holds only if we assume…</td></tr>
+    <tr><td class="gx-note">It is obvious that…</td><td class="gx-k">Three factors support this reading…</td></tr>
+    <tr><td class="gx-note">X causes Y.</td><td class="gx-k">X is strongly associated with Y, though causality remains unclear.</td></tr>
+  </tbody>
+</table></div>
+<div class="gx-warn"><b>Concession is not weakness.</b> <i>While the cost argument has force, it overlooks…</i> reads as stronger than ignoring the objection, because it shows you have tested your own claim.</div>
+
+<h2 class="gx-h2" id="idiom-in-context">&#128173; Idiom in Context</h2>
+<div class="gx-sub">An idiom's dictionary meaning is only half of it; the other half is where it is allowed to appear.</div>
+<div class="gx-scroll"><table class="gx-table">
+  <thead><tr><th>Idiom</th><th>Meaning</th><th>Fits</th></tr></thead>
+  <tbody>
+    <tr><td class="gx-k">a blessing in disguise</td><td class="gx-note">bad at first, good later</td><td class="gx-note">neutral, spoken or written</td></tr>
+    <tr><td class="gx-k">to bite the bullet</td><td class="gx-note">accept something unpleasant</td><td class="gx-note">informal to neutral</td></tr>
+    <tr><td class="gx-k">the elephant in the room</td><td class="gx-note">the obvious issue nobody names</td><td class="gx-note">business, journalism</td></tr>
+    <tr><td class="gx-k">to move the goalposts</td><td class="gx-note">change the criteria unfairly</td><td class="gx-note">criticism, negative tone</td></tr>
+    <tr><td class="gx-k">by the same token</td><td class="gx-note">for the same reason</td><td class="gx-note">formal, argumentative</td></tr>
+    <tr><td class="gx-k">to cut corners</td><td class="gx-note">skip steps to save time</td><td class="gx-note">always disapproving</td></tr>
+  </tbody>
+</table></div>
+<div class="gx-tip"><b>Idioms are fixed.</b> <i>Spill the beans</i> — not <i>spill the peas</i>; <i>on cloud nine</i> — not <i>on cloud eight</i>. Changing a word does not soften an idiom, it breaks it.</div>
+<p class="gx-p">Test three things before using one: does the <span class="gx-hl">register</span> match, is the <span class="gx-hl">attitude</span> (approving or critical) the one you intend, and does the surrounding grammar let the idiom keep its fixed form?</p>
+
+
+<footer class="guide-footer">
+  <a href="../exercises/c1-discourse-analysis.html">&larr; Practice discourse analysis</a>
+</footer>
+
+</div>
+</body>
+</html>

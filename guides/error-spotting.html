@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error Spotting Guide | HubFlow</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230D9488'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<script src="../js/lp-theme.min.js"></script>
+<script src="../js/lp-platform-urls.min.js" defer></script>
+<script src="../js/lp-nav-icons.min.js" defer></script>
+<script src="../js/lp-guest-reset.min.js" defer></script>
+<script src="../js/lp-login.min.js" defer></script>
+<script src="../js/lp-nav-helpers.min.js" defer></script>
+<script src="../js/lp-about-content.min.js" defer></script>
+<script src="../js/lp-about.min.js" defer></script>
+<link rel="stylesheet" href="../css/lp-about.min.css">
+<script src="../js/lp-input-zoom.min.js" defer></script>
+<script src="../js/guide-shell.min.js" defer></script>
+<link rel="stylesheet" href="../css/buttons.min.css">
+<link rel="stylesheet" href="../css/sidebar.min.css">
+<link rel="stylesheet" href="../css/exercise-enhanced.min.css">
+<link rel="stylesheet" href="../css/lp-nav-active.min.css">
+<link rel="stylesheet" href="../css/base.min.css">
+<style>
+:root{
+  --bg:#FFFFFF;--text:#2C2418;--muted:#9C8E7C;--surface:#FFFFFF;--border:#E8E0D4;
+  --ink-soft:#5E5041;
+  --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
+  --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
+  --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --teal:#0D9488;--teal-light:#E0F7F5;
+}
+[data-theme="dark"]{
+  --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
+  --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
+  --yellow-light:#2D2510;--purple-light:#221A30;--teal-light:#1A2D2D;
+  --ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;
+  --yellow:#E8C468;--teal:#5ED4CC;--purple:#C4A5FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;background:var(--bg);}
+.page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
+h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
+h1 .accent{font-style:italic;color:var(--teal);}
+.intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:24px;line-height:1.6;}
+@media(max-width:480px){.page{padding:14px 12px 50px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+<link rel="stylesheet" href="../css/guide-layout.min.css">
+<link rel="stylesheet" href="../css/guide-sections.min.css">
+</head>
+<body>
+<a class="skip-link" href="#guideMain">Saltar al contenido</a>
+
+<div class="page" id="guideMain">
+
+<div class="top-bar">
+  <span class="nav-title">Reference Guide</span>
+</div>
+
+<h1>Error <span class="accent">Spotting</span></h1>
+<p class="intro">The mistakes that survive every proofread, ranked by how often they appear — plus a fixed order for checking a sentence.</p>
+
+<nav class="gx-jump" aria-label="Secciones de la guía">
+  <a href="#top-errors">Top errors</a>
+  <a href="#spanish-traps">Spanish traps</a>
+  <a href="#checklist">Checklist</a>
+</nav>
+
+<h2 class="gx-h2" id="top-errors">&#128269; The Recurring Errors</h2>
+<div class="gx-sub">Nine patterns account for most of what a proofreader marks.</div>
+<div class="gx-scroll"><table class="gx-table">
+  <thead><tr><th>Error</th><th>Wrong</th><th>Right</th></tr></thead>
+  <tbody>
+    <tr><td class="gx-k">Subject-verb agreement</td><td class="gx-note">He <b>go</b> to work.</td><td class="gx-note">He <b>goes</b> to work.</td></tr>
+    <tr><td class="gx-k">Double past</td><td class="gx-note">Did you <b>went</b>?</td><td class="gx-note">Did you <b>go</b>?</td></tr>
+    <tr><td class="gx-k">Double negative</td><td class="gx-note">I <b>don't know nothing</b>.</td><td class="gx-note">I don't know <b>anything</b>.</td></tr>
+    <tr><td class="gx-k">Article missing</td><td class="gx-note">I am <b>teacher</b>.</td><td class="gx-note">I am <b>a</b> teacher.</td></tr>
+    <tr><td class="gx-k">Plural after number</td><td class="gx-note">three <b>book</b></td><td class="gx-note">three <b>books</b></td></tr>
+    <tr><td class="gx-k">Preposition</td><td class="gx-note">depend <b>of</b></td><td class="gx-note">depend <b>on</b></td></tr>
+    <tr><td class="gx-k">Adjective / adverb</td><td class="gx-note">She sings <b>beautiful</b>.</td><td class="gx-note">She sings <b>beautifully</b>.</td></tr>
+    <tr><td class="gx-k">Word order</td><td class="gx-note">I like <b>very much</b> pizza.</td><td class="gx-note">I like pizza <b>very much</b>.</td></tr>
+    <tr><td class="gx-k">Run-on</td><td class="gx-note">It rained<b>,</b> we stayed in.</td><td class="gx-note">It rained<b>, so</b> we stayed in.</td></tr>
+  </tbody>
+</table></div>
+
+<h2 class="gx-h2" id="spanish-traps">&#127466;&#127480; Traps Specific to Spanish Speakers</h2>
+<div class="gx-grid">
+  <div class="gx-card"><div class="gx-card-t">Subject dropped</div><div class="gx-card-d">Spanish allows it; English needs a subject in every clause.</div><div class="gx-card-ex">✗ Is raining.<br>✓ <b>It</b> is raining.</div></div>
+  <div class="gx-card"><div class="gx-card-t">People + singular verb</div><div class="gx-card-d"><i>People</i> is already plural.</div><div class="gx-card-ex">✗ People is nice.<br>✓ People <b>are</b> nice.</div></div>
+  <div class="gx-card"><div class="gx-card-t">Information / advice</div><div class="gx-card-d">Uncountable — no plural, no <i>an</i>.</div><div class="gx-card-ex">✗ informations, an advice<br>✓ <b>some information</b>, <b>a piece of advice</b></div></div>
+  <div class="gx-card"><div class="gx-card-t">Adjective agreement</div><div class="gx-card-d">English adjectives never take -s.</div><div class="gx-card-ex">✗ reds cars<br>✓ <b>red</b> cars</div></div>
+  <div class="gx-card"><div class="gx-card-t">for vs since</div><div class="gx-card-d">for + duration, since + starting point.</div><div class="gx-card-ex">✗ since two years<br>✓ <b>for</b> two years / <b>since</b> 2024</div></div>
+  <div class="gx-card"><div class="gx-card-t">Explain me</div><div class="gx-card-d"><i>explain</i>, <i>say</i> and <i>suggest</i> take <i>to</i>.</div><div class="gx-card-ex">✗ Explain me the rule.<br>✓ Explain the rule <b>to me</b>.</div></div>
+</div>
+
+<h2 class="gx-h2" id="checklist">&#9989; A Fixed Checking Order</h2>
+<div class="gx-sub">Scan for one thing at a time. Reading "for mistakes" in general finds fewer than five focused passes.</div>
+<ol class="gx-list">
+  <li><b>Verb</b> — does it agree with its subject, and is the tense right?</li>
+  <li><b>Nouns</b> — singular or plural, countable or not, article present?</li>
+  <li><b>Small words</b> — prepositions, <i>a/the</i>, <i>this/these</i>.</li>
+  <li><b>Word class</b> — should that adjective be an adverb?</li>
+  <li><b>Order and punctuation</b> — adverb position, comma splices, capitals.</li>
+</ol>
+<div class="gx-tip"><b>Read it aloud.</b> Most errors that survive a silent read are audible: a missing <i>-s</i>, a doubled negative, a comma splice that leaves you out of breath.</div>
+
+
+<footer class="guide-footer">
+  <a href="../exercises/error-hunt.html">&larr; Practice error hunting</a>
+</footer>
+
+</div>
+</body>
+</html>
