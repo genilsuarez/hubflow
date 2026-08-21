@@ -142,6 +142,30 @@ check('borra la proyección y el ledger de las tres apps', () => {
   assertEqual(store.getItem('learnflow:activity:hubflow:v1'), null, 'ledger de actividad');
 });
 
+check('borra las flags local-ready y los cursores de revisión', () => {
+  const store = seedFullState();
+  store.setItem('learnflow:hubflow:local-ready:v1', '1');
+  store.setItem('learnflow:lyricflow:local-ready:v1', '1');
+  store.setItem('lp-sync-revision', '30');
+  store.setItem('lp-sync-revision:user-a:vanilla', '30');
+
+  guestReset.clearGuestLocalProgress();
+
+  // Las flags le dicen a hasLocalStatsCache() (sync-engine.js) que ya hay
+  // proyección publicada. Si sobreviven a un localStorage recién vaciado,
+  // downloadOnLogin marca cloudHydrated=true en su rama de error y habilita el
+  // push con estado vacío. HubFlow ya limpiaba la suya en su listener de
+  // 'lp-guest-reset', pero ese listener solo existe en páginas de HubFlow: un
+  // reset hecho desde DeskFlow o LyricFlow las dejaba vivas.
+  assertEqual(store.getItem('learnflow:hubflow:local-ready:v1'), null, 'flag de hubflow');
+  assertEqual(store.getItem('learnflow:lyricflow:local-ready:v1'), null, 'flag de lyricflow');
+  // El cursor de revisión (migración 026) es por usuario y por motor; un
+  // residuo hace que el arranque compare contra un número ajeno y concluya
+  // "al día" sin pullear nada.
+  assertEqual(store.getItem('lp-sync-revision'), null, 'cursor global legacy');
+  assertEqual(store.getItem('lp-sync-revision:user-a:vanilla'), null, 'cursor por usuario');
+});
+
 check('conserva las claves de catálogo', () => {
   const store = seedFullState();
   guestReset.clearGuestLocalProgress();
