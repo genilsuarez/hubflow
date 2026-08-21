@@ -300,8 +300,9 @@ body.has-sidebar .depth-banner {
 .depth-bell { font-size: 1rem; }
 
 /* En mobile el footer de firma se oculta (ruido secundario en pantallas chicas,
-   sin equivalente en el resto de las apps); la campana vive en el header y
-   el toast que abre sigue siendo visible (reposicionado sobre el bottom nav
+   sin equivalente en el resto de las apps). La campana vive en el header; el
+   toast no se abre solo en ≤767px (exercise-shell.js) — solo al tocar la
+   campana. Cuando abre, sigue visible (reposicionado sobre el bottom nav
    en exercise-enhanced.css / ex-bottom-nav.css cuando aplica). */
 @media (max-width: 860px) {
   .lp-footer { display: none; }

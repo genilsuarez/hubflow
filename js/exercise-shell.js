@@ -682,10 +682,11 @@ function buildDepthBanner() {
   }
 
   addHeaderBell();
-  // El toast automático solo interrumpe cuando hay algo nuevo que anunciar
-  // (profundidad de módulo); si el módulo solo tiene guía, la campana del
-  // header queda disponible sin toast — evita ruido en la mayoría de módulos.
-  if (depth) showBanner();
+  // Desktop: toast automático solo si hay profundidad de módulo (guía sola =
+  // campana sin toast). Mobile: nunca auto-abrir — la campana del header
+  // sigue disponible; el toast compite con bottom nav y pantallas chicas.
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
+  if (depth && !isMobile) showBanner();
 
   function addHeaderBell() {
     const end = document.querySelector('.top-bar__end');
