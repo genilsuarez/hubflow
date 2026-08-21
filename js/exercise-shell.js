@@ -632,15 +632,31 @@ function buildDepthBanner() {
   const guideHref = currentModule.guide ? `../${currentModule.guide}` : null;
   if (!depth && !guideHref) return;
 
-  const parts = [];
+  const chips = [];
   if (depth) {
-    parts.push(`<span class="depth-banner__row"><strong>${depth.items}</strong> items</span>`);
-    if (depth.categories > 1) parts.push(`<span class="depth-banner__row"><strong>${depth.categories}</strong> categorías</span>`);
-    parts.push(`<span class="depth-banner__row"><strong>${depth.modes}</strong> modos</span>`);
-    if (depth.hasBattle) parts.push(`<span class="depth-banner__row depth-banner__battle">⚔️ Battle 2P</span>`);
+    chips.push(`<span class="depth-banner__chip"><strong>${depth.items}</strong> items</span>`);
+    if (depth.categories > 1) {
+      chips.push(`<span class="depth-banner__chip"><strong>${depth.categories}</strong> categorías</span>`);
+    }
+    chips.push(`<span class="depth-banner__chip"><strong>${depth.modes}</strong> modos</span>`);
+    if (depth.hasBattle) {
+      chips.push('<span class="depth-banner__chip depth-banner__chip--battle">⚔️ Battle 2P</span>');
+    }
   }
-  const bannerHTML = parts.join('<span class="depth-banner__sep" aria-hidden="true">·</span>') +
-    (guideHref ? `<a class="depth-banner__row depth-banner__guide" href="${guideHref}">📘 Ver guía de estudio</a>` : '');
+
+  const statsHTML = chips.length
+    ? `<div class="depth-banner__stats">${chips.join('')}</div>`
+    : '';
+  const guideHTML = guideHref
+    ? `<a class="depth-banner__guide" href="${guideHref}"><span aria-hidden="true">📘</span> Ver guía de estudio</a>`
+    : '';
+  const eyebrowHTML = depth
+    ? '<p class="depth-banner__eyebrow">Contenido del módulo</p>'
+    : (guideHref ? '<p class="depth-banner__eyebrow">Guía de estudio</p>' : '');
+
+  const bannerHTML =
+    '<button type="button" class="depth-banner__close lp-icon-btn lp-icon-btn--sm" aria-label="Cerrar">&times;</button>' +
+    `<div class="depth-banner__inner">${eyebrowHTML}${statsHTML}${guideHTML}</div>`;
 
   let activeBanner = null;
   let autoDismiss = null;
@@ -673,8 +689,7 @@ function buildDepthBanner() {
     document.querySelectorAll('.depth-banner').forEach((el) => el.remove());
     const banner = document.createElement('div');
     banner.className = 'depth-banner';
-    banner.innerHTML = bannerHTML +
-      '<button class="depth-banner__close" aria-label="Cerrar">&times;</button>';
+    banner.innerHTML = bannerHTML;
     banner.setAttribute('role', 'status');
     document.body.appendChild(banner);
     activeBanner = banner;
