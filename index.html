@@ -25,7 +25,25 @@
   <meta name="twitter:image" content="https://genilsuarez.github.io/hubflow/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Fuentes sin bloquear el render: se cargan como preload y se
+       promueven a stylesheet al llegar. display=swap ya estaba puesto. -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"></noscript>
+  <!-- Precarga del grafo de módulos del dashboard (evita cascada de round-trips) -->
+  <link rel="modulepreload" href="./data/catalog.js">
+  <link rel="modulepreload" href="./js/nav-sections.js">
+  <link rel="modulepreload" href="./js/progress-store.js">
+  <link rel="modulepreload" href="./js/lp-auth-setup.js">
+  <link rel="modulepreload" href="./js/lp-supabase.js">
+  <link rel="modulepreload" href="./js/vendor/supabase-js.min.js">
+  <link rel="modulepreload" href="./js/sync-engine.js">
+  <link rel="modulepreload" href="./js/dashboard-shelves.js">
+  <link rel="modulepreload" href="./js/dashboard-hero.js">
+  <link rel="modulepreload" href="./js/dashboard-stats.js">
+  <link rel="modulepreload" href="./js/dashboard-filters.js">
+  <link rel="modulepreload" href="./js/dashboard-nav.js">
+  <link rel="modulepreload" href="./js/level-status.js">
   <meta name="theme-color" content="#ffffff" id="metaThemeColor">
   <meta name="color-scheme" content="light" id="metaColorScheme">
   <script>
@@ -883,11 +901,6 @@
   </section>
 </div>
 
-<link rel="modulepreload" href="./data/catalog.js">
-<link rel="modulepreload" href="./js/progress-store.js">
-<link rel="modulepreload" href="./js/sync-engine.js">
-<link rel="modulepreload" href="./js/dashboard-shelves.js">
-<link rel="modulepreload" href="./js/dashboard-stats.js">
 <script type="module">
 import { MODULES, CATEGORIES, getModuleDepth } from './data/catalog.js';
 import { NAV_SECTION_KEYS } from './js/nav-sections.js';
