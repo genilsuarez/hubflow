@@ -41,13 +41,13 @@ const CANONICAL_SCRIPTS = [
   'lp-about.js',
 ];
 const CANONICAL_BASE_STYLES = [
-  'base.css',
-  'components.css',
-  'buttons.css',
-  'exercise-enhanced.css',
-  'sidebar.css',
-  'lp-nav-active.css',
-  'lp-about.css',
+  'base.min.css',
+  'components.min.css',
+  'buttons.min.css',
+  'exercise-enhanced.min.css',
+  'sidebar.min.css',
+  'lp-nav-active.min.css',
+  'lp-about.min.css',
 ];
 
 const CANONICAL_SCRIPT_BLOCK = CANONICAL_SCRIPTS.map((s) => `<script src="../js/${s}"></script>`).join('\n');

@@ -1,0 +1,1 @@
+body{min-height:100vh}.cat-bar{display:flex;gap:4px;margin-bottom:8px;overflow-x:auto;scrollbar-width:none}.cat-bar::-webkit-scrollbar{display:none}.scroll-body{padding:8px 0 30px}[data-area]{display:none;flex-direction:column;align-items:center;width:100%}[data-area].show{display:flex}
