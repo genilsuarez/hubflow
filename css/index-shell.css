@@ -127,7 +127,7 @@
     }
 
     .lp-header-stats {
-      display: flex; align-items: center; gap: 0; height: var(--lp-score-height); min-width: 180px; padding: 0 var(--lp-score-padding-x);
+      display: flex; align-items: center; gap: 0; height: var(--lp-score-height); min-width: 220px; padding: 0 var(--lp-score-padding-x);
       background: var(--lp-score-bg); border: var(--lp-score-border-width) solid var(--lp-score-border); border-radius: var(--lp-score-radius);
       box-shadow: var(--lp-score-shadow); font-family: var(--lp-score-font-family); font-size: var(--lp-score-font-size); font-weight: var(--lp-score-font-weight);
       color: var(--lp-score-label-color); flex-shrink: 0; position: absolute; left: 50%; transform: translateX(-50%);

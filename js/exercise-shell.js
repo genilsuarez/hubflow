@@ -504,6 +504,16 @@ function wrapModeStage() {
   scrollBody.insertBefore(stage, bottomNav);
 }
 
+/** Place sibling #explainBox between prompt and options (DOM + a11y order). */
+function normalizeQuizExplainSlot() {
+  document.querySelectorAll('[data-area="quiz"]').forEach((quiz) => {
+    const explain = quiz.querySelector(':scope > #explainBox, :scope > .explain-box');
+    const opts = quiz.querySelector(':scope > .word-options, :scope > #wordOptions');
+    if (!explain || !opts || explain.parentElement !== quiz) return;
+    quiz.insertBefore(explain, opts);
+  });
+}
+
 function resetModeStageScroll() {
   const stage = document.querySelector('.ex-mode-stage');
   const scrollBody = document.querySelector('.scroll-body');
@@ -608,6 +618,7 @@ document.addEventListener('click', (e) => {
 restructureExerciseHeader();
 setupModeTabIndicator();
 wrapModeStage();
+normalizeQuizExplainSlot();
 ensureBottomNav();
 if (currentModule) {
   renderLessonProgress(currentModule.id);

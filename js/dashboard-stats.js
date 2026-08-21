@@ -108,28 +108,33 @@ export function renderLastActivities() {
 
 export function refreshHeaderStats(animateReveal = false) {
   const progressStats = getProgressStats();
+  const statsEl = document.querySelector('.lp-header-stats');
   const totalEl = document.getElementById('psTotal');
   const masteredEl = document.getElementById('psMastered');
-  const sesGroup = totalEl?.closest('.lp-header-stats__group');
+  const masteredLabel = document.getElementById('psMasteredLabel');
+  const attemptsGroup = totalEl?.closest('.lp-header-stats__group');
   const divider = document.querySelector('.lp-header-stats__divider');
   const attempts = progressStats.totalAttempts || 0;
   const completed = progressStats.completedContent || 0;
   const total = progressStats.totalContent || 0;
   const hasActivity = attempts > 0 || completed > 0;
 
-  // M2 — "0 ses · 0/150" en usuario nuevo lee como app vacía. El 150 es la
-  // propuesta de valor y se mantiene; lo que se oculta es el "0 ses" y el
-  // "0/" del completado, no el catálogo. display:none inline — `.lp-header-
-  // stats__group { display: flex }` empata en especificidad con `[hidden]`
-  // y gana por venir después en la cascada, así que el atributo no alcanza.
-  if (sesGroup) sesGroup.style.display = hasActivity ? '' : 'none';
+  // M2 — "0 intentos · 0/150" en usuario nuevo lee como app vacía. El 150 es la
+  // propuesta de valor y se mantiene; lo que se oculta es el contador de
+  // intentos y el "0/" del completado, no el catálogo. display:none inline —
+  // `.lp-header-stats__group { display: flex }` empata en especificidad con
+  // `[hidden]` y gana por venir después en la cascada, así que el atributo no alcanza.
+  if (attemptsGroup) attemptsGroup.style.display = hasActivity ? '' : 'none';
   if (divider) divider.style.display = hasActivity ? '' : 'none';
 
   if (!hasActivity) {
+    if (masteredLabel) masteredLabel.hidden = true;
     masteredEl.textContent = `${total} disponibles`;
+    statsEl?.setAttribute('aria-label', `${total} ejercicios disponibles en el catálogo`);
     return;
   }
 
+  if (masteredLabel) masteredLabel.hidden = false;
   if (animateReveal && attempts > 0) animateText(totalEl, 0, attempts);
   else totalEl.textContent = String(attempts);
   if (animateReveal && completed > 0) {
@@ -137,6 +142,10 @@ export function refreshHeaderStats(animateReveal = false) {
   } else {
     masteredEl.textContent = `${completed}/${total}`;
   }
+  statsEl?.setAttribute(
+    'aria-label',
+    `${attempts} intentos de práctica, ${completed} de ${total} ejercicios aprobados`
+  );
 }
 
 const isPathModuleCompleted = isContentCompleted;
