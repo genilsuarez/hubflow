@@ -194,6 +194,33 @@
     }
   }
 
+  // Botón "atrás" del header — mismo patrón que exercise-shell.js: preferir
+  // history.back() (bfcache, instantáneo) cuando llegamos a la guía desde el
+  // índice de HubFlow en esta pestaña, y volver siempre a la sección
+  // "guías de referencia" (única sección desde la que se enlazan guías).
+  function getGuideBackUrl() {
+    var stored = sessionStorage.getItem('hf-back-section');
+    return '../index.html?section=' + (stored || 'guides');
+  }
+
+  function navigateBackFromGuide() {
+    var fallbackUrl = getGuideBackUrl();
+    var canUseHistory = sessionStorage.getItem('hf-history-back') === '1';
+    if (canUseHistory && window.history.length > 1) {
+      sessionStorage.removeItem('hf-history-back');
+      var left = false;
+      var markLeft = function () { left = true; };
+      window.addEventListener('pagehide', markLeft, { once: true });
+      history.back();
+      window.setTimeout(function () {
+        window.removeEventListener('pagehide', markLeft);
+        if (!left) location.assign(fallbackUrl);
+      }, 400);
+      return;
+    }
+    location.assign(fallbackUrl);
+  }
+
   function init() {
     var topBar = document.querySelector('.top-bar');
     if (!topBar) return;
@@ -215,6 +242,20 @@
       if (h1) navTitle.textContent = h1.textContent.trim();
     }
 
+    // Create back link
+    var backLink = document.createElement('a');
+    backLink.className = 'nav-back lp-icon-btn';
+    backLink.href = getGuideBackUrl();
+    backLink.innerHTML = navIcon('arrow-left') || '<span aria-hidden="true">←</span>';
+    backLink.setAttribute('aria-label', 'Volver');
+    backLink.setAttribute('title', 'Volver');
+    backLink.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      navigateBackFromGuide();
+    });
+    topBar.prepend(backLink);
+
     // Create hamburger button
     var hamburgerBtn = document.createElement('button');
     hamburgerBtn.type = 'button';
@@ -224,7 +265,7 @@
     hamburgerBtn.setAttribute('aria-controls', 'guideSidebar');
     hamburgerBtn.setAttribute('aria-expanded', 'false');
 
-    topBar.prepend(hamburgerBtn);
+    topBar.append(hamburgerBtn);
 
     buildSidebar(hamburgerBtn);
   }
