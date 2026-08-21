@@ -30,15 +30,15 @@ const EXERCISES_DIR = path.join(ROOT, 'exercises');
 const CHECK_ONLY = process.argv.includes('--check');
 
 const CANONICAL_SCRIPTS = [
-  'lp-theme.js',
-  'lp-input-zoom.js',
-  'lp-nav-icons.js',
-  'lp-platform-urls.js',
-  'lp-guest-reset.js',
-  'lp-login.js',
-  'lp-nav-helpers.js',
-  'lp-about-content.js',
-  'lp-about.js',
+  'lp-theme.min.js',
+  'lp-input-zoom.min.js',
+  'lp-nav-icons.min.js',
+  'lp-platform-urls.min.js',
+  'lp-guest-reset.min.js',
+  'lp-login.min.js',
+  'lp-nav-helpers.min.js',
+  'lp-about-content.min.js',
+  'lp-about.min.js',
 ];
 const CANONICAL_BASE_STYLES = [
   'base.min.css',

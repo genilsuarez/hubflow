@@ -760,14 +760,29 @@ export class FlashcardEngine {
     const textEl = document.getElementById('quizText');
     const optsEl = document.getElementById('quizOptions');
 
+    // Derive question labels based on relation type
+    const isOpposite = item.relation === '↔';
+    const isSynonym  = item.relation === '≈';
+
     if (qType === 'termFromDesc') {
       if (emojiEl) emojiEl.textContent = item.emoji;
-      if (labelEl) labelEl.textContent = '¿Qué término corresponde?';
-      if (textEl) textEl.textContent = meaning + (item.time ? ` (${item.time})` : '');
+      if (labelEl) {
+        if (isOpposite) labelEl.textContent = `¿Cuál es el opuesto de "${meaning}"?`;
+        else if (isSynonym) labelEl.textContent = `¿Cuál es el sinónimo de "${meaning}"?`;
+        else labelEl.textContent = '¿Qué término corresponde?';
+      }
+      if (textEl) {
+        if (isOpposite || isSynonym) textEl.textContent = '';
+        else textEl.textContent = meaning + (item.time ? ` (${item.time})` : '');
+      }
     } else {
-      if (emojiEl) emojiEl.textContent = '❓';
-      if (labelEl) labelEl.textContent = `¿Qué significa "${item.term}"?`;
-      if (textEl) textEl.textContent = `${item.emoji} ${item.term}`;
+      if (emojiEl) emojiEl.textContent = item.emoji;
+      if (labelEl) {
+        if (isOpposite) labelEl.textContent = `¿Cuál es el opuesto de "${item.term}"?`;
+        else if (isSynonym) labelEl.textContent = `¿Cuál es el sinónimo de "${item.term}"?`;
+        else labelEl.textContent = `¿Qué significa "${item.term}"?`;
+      }
+      if (textEl) textEl.textContent = isOpposite || isSynonym ? '' : `${item.emoji} ${item.term}`;
     }
 
     // Generate options
