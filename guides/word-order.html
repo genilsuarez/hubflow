@@ -28,47 +28,151 @@
   --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
   --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
   --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
-  --yellow:#B8860B;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
   --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
 }
 [data-theme="dark"]{
   --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
   --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
   --yellow-light:#2D2510;--purple-light:#221A30;--orange-light:#2D2510;--teal-light:#1A2D2D;
---ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  background:var(--bg);
+  --ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;background:var(--bg);}
 .page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
-
 
 h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
 h1 .accent{font-style:italic;color:var(--blue);}
 .intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
 h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
 
+/* SVOMPT VISUAL BLOCK */
+.svompt-box{
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  padding:18px;margin:16px 0;overflow-x:auto;
+}
+.svompt-title{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+.svompt-chain{display:flex;align-items:stretch;gap:0;min-width:560px;}
+.svompt-block{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  border-radius:0;position:relative;
+}
+.svompt-block:first-child .sb-inner{border-radius:10px 0 0 10px;}
+.svompt-block:last-child .sb-inner{border-radius:0 10px 10px 0;}
+.sb-inner{
+  width:100%;padding:10px 6px 8px;text-align:center;
+  border:1.5px solid var(--border);border-right:none;
+}
+.svompt-block:last-child .sb-inner{border-right:1.5px solid var(--border);}
+.sb-letter{font-family:'DM Serif Display',serif;font-size:1.4rem;font-weight:400;margin-bottom:2px;}
+.sb-full{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;}
+.sb-example{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text);}
+.sb-s{background:var(--blue-light);}
+.sb-s .sb-letter{color:var(--blue-dark);}
+[data-theme="dark"] .sb-s .sb-letter{color:#7AC7FF;}
+.sb-v{background:var(--green-light);}
+.sb-v .sb-letter{color:var(--green-dark);}
+[data-theme="dark"] .sb-v .sb-letter{color:#6FE8A8;}
+.sb-o{background:var(--orange-light);}
+.sb-o .sb-letter{color:var(--orange);}
+.sb-m{background:var(--purple-light);}
+.sb-m .sb-letter{color:var(--purple);}
+[data-theme="dark"] .sb-m .sb-letter{color:#C4A5FF;}
+.sb-p{background:var(--teal-light);}
+.sb-p .sb-letter{color:var(--teal);}
+[data-theme="dark"] .sb-p .sb-letter{color:#5ED4CC;}
+.sb-t{background:var(--yellow-light);}
+.sb-t .sb-letter{color:#8a6508;}
+[data-theme="dark"] .sb-t .sb-letter{color:#E8C468;}
+
+.svompt-sentence{
+  font-family:'JetBrains Mono',monospace;font-size:.76rem;margin-top:14px;
+  line-height:1.8;text-align:center;padding:8px;background:var(--bg);border-radius:8px;
+  border:1px solid var(--border);
+}
+.s-s{color:var(--blue-dark);font-weight:700;}
+[data-theme="dark"] .s-s{color:#7AC7FF;}
+.s-v{color:var(--green-dark);font-weight:700;}
+[data-theme="dark"] .s-v{color:#6FE8A8;}
+.s-o{color:var(--orange);font-weight:700;}
+.s-m{color:var(--purple);font-weight:700;}
+[data-theme="dark"] .s-m{color:#C4A5FF;}
+.s-p{color:var(--teal);font-weight:700;}
+[data-theme="dark"] .s-p{color:#5ED4CC;}
+.s-t{color:#8a6508;font-weight:700;}
+[data-theme="dark"] .s-t{color:#E8C468;}
+
+/* ADVERB POSITION CARDS */
+.adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.adv-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;
+}
+.adv-card.pos{border-top:4px solid var(--green);}
+.adv-card.neg{border-top:4px solid var(--red);}
+.adv-tag{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.adv-tag.pos{color:var(--green-dark);}
+[data-theme="dark"] .adv-tag.pos{color:#6FE8A8;}
+.adv-tag.neg{color:var(--red-dark);}
+[data-theme="dark"] .adv-tag.neg{color:#FF9F9F;}
+.adv-rule{font-size:.78rem;font-weight:700;margin-bottom:6px;color:var(--text);}
+.adv-sub{font-size:.7rem;color:var(--muted);margin-bottom:8px;}
+.adv-examples{display:flex;flex-direction:column;gap:4px;}
+.adv-ex{font-family:'JetBrains Mono',monospace;font-size:.69rem;padding:4px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--border);}
+.adv-ex .hi{font-weight:700;}
+.adv-ex.pos-ex .hi{color:var(--green-dark);}
+[data-theme="dark"] .adv-ex.pos-ex .hi{color:#6FE8A8;}
+.adv-ex.neg-ex .hi{color:var(--red-dark);}
+[data-theme="dark"] .adv-ex.neg-ex .hi{color:#FF9F9F;}
+
+/* RULE CARD */
 .rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
-.rule-card.warn{border-left:4px solid var(--blue);}
+.rule-card.warn{border-left:4px solid var(--yellow);}
+.rule-card.inv{border-left:4px solid var(--red);}
 .rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
 .rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
-.rule-desc strong{color:#1A4FA8;}
+.rule-desc strong{color:var(--blue-dark);}
 [data-theme="dark"] .rule-desc strong{color:#7AC7FF;}
 .examples{display:flex;flex-wrap:wrap;gap:6px;}
-.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--blue-light);color:#1A4FA8;}
+.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--blue-light);color:var(--blue-dark);}
 [data-theme="dark"] .ex{color:#7AC7FF;}
+.ex.bad{background:var(--red-light);color:var(--red-dark);text-decoration:line-through;}
+[data-theme="dark"] .ex.bad{color:#FF9F9F;}
 
-.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
-.sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
-.sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
-.sum-table tr:last-child td{border-bottom:none;}
-.sum-table .q{font-family:'JetBrains Mono',monospace;font-weight:700;color:#1A4FA8;}
-[data-theme="dark"] .sum-table .q{color:#7AC7FF;}
-.sum-table .usage{font-size:.7rem;color:var(--muted);}
+/* QUESTION VS STATEMENT */
+.qs-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.qs-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px;}
+.qs-card.stmt{border-top:4px solid var(--blue);}
+.qs-card.qst{border-top:4px solid var(--orange);}
+.qs-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.qs-label.stmt{color:var(--blue-dark);}
+[data-theme="dark"] .qs-label.stmt{color:#7AC7FF;}
+.qs-label.qst{color:var(--orange);}
+.qs-formula{font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;margin-bottom:8px;padding:6px 10px;border-radius:8px;background:var(--bg);border:1px solid var(--border);}
+.qs-ex{font-size:.74rem;font-style:italic;color:var(--muted);line-height:1.5;}
 
-@media(max-width:480px){.page{padding:14px 12px 50px;}}
+/* QUICK REF TABLE */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0;}
+.ref-table{
+  width:100%;border-collapse:collapse;font-size:.76rem;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;
+}
+.ref-table thead tr{background:color-mix(in srgb,var(--blue) 10%,var(--bg));}
+.ref-table th{
+  font-weight:800;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue-dark);padding:11px 14px;border-bottom:2px solid var(--border);text-align:left;
+}
+[data-theme="dark"] .ref-table th{color:#7AC7FF;}
+.ref-table td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:.76rem;}
+.ref-table tr:last-child td{border-bottom:none;}
+.ref-table .struct{font-weight:800;color:var(--text);}
+.ref-table .formula{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--blue-dark);}
+[data-theme="dark"] .ref-table .formula{color:#7AC7FF;}
+
+@media(max-width:480px){
+  .page{padding:14px 12px 50px;}
+  .adv-grid{grid-template-columns:1fr;}
+  .qs-pair{grid-template-columns:1fr;}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 </style>
 <link rel="stylesheet" href="../css/guide-layout.min.css">
@@ -85,53 +189,153 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
 <h1>Word Order <span class="accent">Untangled</span></h1>
 <p class="intro">English word order is far stricter than Spanish — here's the skeleton every sentence hangs on.</p>
 
-<h2>&#127959; Basic Word Order (SVOMPT)</h2>
+<!-- SVOMPT VISUAL -->
+<h2>&#127959; Basic Word Order — SVOMPT</h2>
+<div class="svompt-box">
+  <div class="svompt-title">Subject · Verb · Object · Manner · Place · Time</div>
+  <div class="svompt-chain">
+    <div class="svompt-block">
+      <div class="sb-inner sb-s">
+        <div class="sb-letter">S</div>
+        <div class="sb-full">Subject</div>
+        <div class="sb-example">She</div>
+      </div>
+    </div>
+    <div class="svompt-block">
+      <div class="sb-inner sb-v">
+        <div class="sb-letter">V</div>
+        <div class="sb-full">Verb</div>
+        <div class="sb-example">drank</div>
+      </div>
+    </div>
+    <div class="svompt-block">
+      <div class="sb-inner sb-o">
+        <div class="sb-letter">O</div>
+        <div class="sb-full">Object</div>
+        <div class="sb-example">coffee</div>
+      </div>
+    </div>
+    <div class="svompt-block">
+      <div class="sb-inner sb-m">
+        <div class="sb-letter">M</div>
+        <div class="sb-full">Manner</div>
+        <div class="sb-example">quickly</div>
+      </div>
+    </div>
+    <div class="svompt-block">
+      <div class="sb-inner sb-p">
+        <div class="sb-letter">P</div>
+        <div class="sb-full">Place</div>
+        <div class="sb-example">at the café</div>
+      </div>
+    </div>
+    <div class="svompt-block">
+      <div class="sb-inner sb-t">
+        <div class="sb-letter">T</div>
+        <div class="sb-full">Time</div>
+        <div class="sb-example">this morning</div>
+      </div>
+    </div>
+  </div>
+  <div class="svompt-sentence">
+    <span class="s-s">She</span> <span class="s-v">drank</span> <span class="s-o">coffee</span> <span class="s-m">quickly</span> <span class="s-p">at the café</span> <span class="s-t">this morning</span>.
+  </div>
+</div>
 <div class="rule-card">
-  <div class="rule-title">Subject + Verb + Object + Manner + Place + Time</div>
-  <div class="rule-desc">Unlike Spanish, English rarely moves the subject or object around for style — the order is fixed.</div>
-  <div class="examples"><span class="ex">She (S) drank (V) coffee (O) quickly (M) at the café (P) this morning (T).</span></div>
+  <div class="rule-title">&#128161; Unlike Spanish</div>
+  <div class="rule-desc">English rarely moves the subject or object for style — the order is fixed. Time and place can sometimes move to the front for emphasis, but manner almost never does.</div>
+  <div class="examples">
+    <span class="ex">This morning she drank coffee quickly at the café. ✓</span>
+    <span class="ex bad">Coffee she drank quickly. ✗</span>
+  </div>
 </div>
 
+<!-- ADVERB PLACEMENT -->
 <h2>&#8987; Adverb Placement</h2>
-<div class="rule-card">
-  <div class="rule-title">Frequency adverbs go mid-sentence</div>
-  <div class="rule-desc"><strong>Always, often, never, usually</strong> go between the subject and the main verb — but after "to be".</div>
-  <div class="examples">
-    <span class="ex">She always drinks coffee.</span>
-    <span class="ex">She is always late.</span>
+<div class="adv-grid">
+  <div class="adv-card pos">
+    <div class="adv-tag pos">Frequency adverbs</div>
+    <div class="adv-rule">Before the main verb</div>
+    <div class="adv-sub">always · often · usually · never · rarely · sometimes</div>
+    <div class="adv-examples">
+      <div class="adv-ex pos-ex">She <span class="hi">always</span> drinks coffee.</div>
+      <div class="adv-ex pos-ex">He <span class="hi">never</span> arrives late.</div>
+    </div>
+  </div>
+  <div class="adv-card neg">
+    <div class="adv-tag neg">After "to be"</div>
+    <div class="adv-rule">Adverb comes after be</div>
+    <div class="adv-sub">is · are · was · were · been</div>
+    <div class="adv-examples">
+      <div class="adv-ex neg-ex">She is <span class="hi">always</span> late.</div>
+      <div class="adv-ex neg-ex">They are <span class="hi">usually</span> quiet.</div>
+    </div>
   </div>
 </div>
-<div class="rule-card warn">
-  <div class="rule-title">&#128161; Never at the start = inversion</div>
-  <div class="rule-desc">Putting a negative adverb (never, rarely, hardly) at the front of a sentence for emphasis forces question-word-order in the main clause.</div>
-  <div class="examples"><span class="ex">Never have I seen such a mess.</span></div>
+
+<!-- INVERSION -->
+<h2>&#128260; Negative Fronting &amp; Inversion</h2>
+<div class="rule-card inv">
+  <div class="rule-title">&#10071; Negative adverb at start = inversion</div>
+  <div class="rule-desc">Putting <strong>never</strong>, <strong>rarely</strong>, <strong>hardly</strong>, <strong>seldom</strong>, or <strong>not only</strong> at the front forces question-style word order for emphasis.</div>
+  <div class="examples">
+    <span class="ex">Never have I seen such a mess.</span>
+    <span class="ex">Rarely does she complain.</span>
+    <span class="ex">Not only did he lie, but he also stole.</span>
+    <span class="ex bad">Never I have seen such a mess. ✗</span>
+  </div>
 </div>
 
+<!-- QUESTIONS -->
 <h2>&#10067; Question Word Order</h2>
-<div class="rule-card">
-  <div class="rule-title">Auxiliary + Subject + Verb</div>
-  <div class="rule-desc">Questions invert the subject and the auxiliary verb. Wh-questions add the question word first.</div>
-  <div class="examples">
-    <span class="ex">Do you exercise often?</span>
-    <span class="ex">How often do you exercise?</span>
+<div class="qs-pair">
+  <div class="qs-card stmt">
+    <div class="qs-label stmt">Statement</div>
+    <div class="qs-formula">Subject + Aux/Verb + …</div>
+    <div class="qs-ex">You <strong>do</strong> exercise often.<br>She <strong>has</strong> finished the report.</div>
+  </div>
+  <div class="qs-card qst">
+    <div class="qs-label qst">Yes/No Question</div>
+    <div class="qs-formula">Aux + Subject + Verb + …</div>
+    <div class="qs-ex"><strong>Do</strong> you exercise often?<br><strong>Has</strong> she finished the report?</div>
+  </div>
+</div>
+<div class="qs-pair">
+  <div class="qs-card qst">
+    <div class="qs-label qst">Wh- Question</div>
+    <div class="qs-formula">Wh- + Aux + Subject + Verb</div>
+    <div class="qs-ex"><strong>How often</strong> do you exercise?<br><strong>Where</strong> has she gone?</div>
+  </div>
+  <div class="qs-card stmt">
+    <div class="qs-label stmt">Subject Question</div>
+    <div class="qs-formula">Wh- + Verb (no inversion!)</div>
+    <div class="qs-ex"><strong>Who</strong> called you? (not "who did call")<br><strong>What</strong> happened?</div>
   </div>
 </div>
 
-<h2>Quick Reference</h2>
-<table class="sum-table">
-  <thead><tr><th>Structure</th><th>Order</th></tr></thead>
-  <tbody>
-    <tr><td class="q">Statement</td><td class="usage">Subject + Verb + Object + Manner + Place + Time</td></tr>
-    <tr><td class="q">Frequency adverb</td><td class="usage">before the main verb, after "to be"</td></tr>
-    <tr><td class="q">Yes/No question</td><td class="usage">Auxiliary + Subject + Verb</td></tr>
-    <tr><td class="q">Wh- question</td><td class="usage">Wh-word + Auxiliary + Subject + Verb</td></tr>
-  </tbody>
-</table>
+<!-- QUICK REF -->
+<h2>&#128203; Quick Reference</h2>
+<div class="table-scroll">
+  <table class="ref-table">
+    <thead>
+      <tr><th>Structure</th><th>Formula</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="struct">Statement</td><td class="formula">S + V + O + Manner + Place + Time</td></tr>
+      <tr><td class="struct">Frequency adverb</td><td class="formula">before main verb · after "to be"</td></tr>
+      <tr><td class="struct">Yes/No question</td><td class="formula">Aux + S + V + …</td></tr>
+      <tr><td class="struct">Wh- question</td><td class="formula">Wh- + Aux + S + V + …</td></tr>
+      <tr><td class="struct">Subject question</td><td class="formula">Who/What + Verb (no inversion)</td></tr>
+      <tr><td class="struct">Negative fronting</td><td class="formula">Neg. adverb + Aux + S + V (inversion)</td></tr>
+    </tbody>
+  </table>
+</div>
 
 <footer class="guide-footer">
   <a href="../exercises/word-order.html">&larr; Practice word order</a>
 </footer>
 
 </div>
+<script type="module" src="../js/guide-shell.min.js"></script>
 </body>
 </html>

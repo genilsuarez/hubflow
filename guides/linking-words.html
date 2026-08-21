@@ -28,45 +28,129 @@
   --red:#FF6B6B;--blue:#2F6FD8;--green:#2FA86B;
   --red-light:#FFECEC;--blue-light:#EAF2FC;--green-light:#E4F5EC;
   --red-dark:#CC3333;--blue-dark:#1A4FA8;--green-dark:#156C42;
-  --yellow:#B8860B;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
+  --yellow:#C8790A;--yellow-light:#FDF0DC;--purple:#7C5AF6;--purple-light:#EEE9FE;
   --orange:#E8720D;--orange-light:#FEF0E5;--teal:#0D9488;--teal-light:#E0F7F5;
 }
 [data-theme="dark"]{
   --bg:#181B20;--text:#E8EAED;--muted:#7A8494;--surface:#252930;--border:#353B45;
   --red-light:#3D1A1A;--blue-light:#1A2A3D;--green-light:#1A2D20;
   --yellow-light:#2D2510;--purple-light:#221A30;--orange-light:#2D2510;--teal-light:#1A2D2D;
---ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  background:var(--bg);
+  --ink-soft:#B5ADA2;--red-dark:#FF9F9F;--blue-dark:#7AC7FF;--green-dark:#6FE8A8;--yellow:#E8C468;--orange:#F4A861;--teal:#5ED4CC;--purple:#C4A5FF;
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;background:var(--bg);}
 .page{max-width:720px;margin:0 auto;padding:20px 16px 60px;position:relative;z-index:1;}
-
 
 h1{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin-bottom:8px;line-height:1.05;letter-spacing:-.02em;}
 h1 .accent{font-style:italic;color:var(--teal);}
 .intro{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--ink-soft);margin-bottom:28px;line-height:1.6;}
 h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px;}
 
-.rule-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
-.rule-card.warn{border-left:4px solid var(--teal);}
-.rule-title{font-weight:800;font-size:.86rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-.rule-desc{font-size:.8rem;line-height:1.5;margin-bottom:8px;}
-.rule-desc strong{color:#0D6E64;}
-[data-theme="dark"] .rule-desc strong{color:#5ED4CC;}
-.examples{display:flex;flex-wrap:wrap;gap:6px;}
-.ex{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.7rem;padding:3px 10px;border-radius:50px;background:var(--teal-light);color:#0D6E64;}
-[data-theme="dark"] .ex{color:#5ED4CC;}
+/* FUNCTION SECTION — card with left accent + chip grid */
+.fn-section{margin-bottom:24px;}
+.fn-header{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  border-radius:14px;margin-bottom:10px;border:1.5px solid transparent;
+}
+.fn-header.add{background:var(--blue-light);border-color:color-mix(in srgb,var(--blue) 30%,transparent);}
+.fn-header.contrast{background:var(--orange-light);border-color:color-mix(in srgb,var(--orange) 30%,transparent);}
+.fn-header.cause{background:var(--yellow-light);border-color:color-mix(in srgb,var(--yellow) 30%,transparent);}
+.fn-header.result{background:var(--green-light);border-color:color-mix(in srgb,var(--green) 30%,transparent);}
+.fn-header.purpose{background:var(--purple-light);border-color:color-mix(in srgb,var(--purple) 30%,transparent);}
+.fn-icon{font-size:1.2rem;flex-shrink:0;}
+.fn-name{font-weight:800;font-size:.9rem;}
+.fn-name.add{color:var(--blue-dark);}
+.fn-name.contrast{color:var(--orange);}
+.fn-name.cause{color:#8a6508;}
+.fn-name.result{color:var(--green-dark);}
+.fn-name.purpose{color:var(--purple);}
+[data-theme="dark"] .fn-name.add{color:#7AC7FF;}
+[data-theme="dark"] .fn-name.cause{color:#E8C468;}
+[data-theme="dark"] .fn-name.result{color:#6FE8A8;}
+.fn-desc{font-size:.72rem;color:var(--muted);font-weight:600;margin-top:1px;}
 
-.sum-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:14px 0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
-.sum-table th{font-weight:800;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;}
-.sum-table td{padding:8px 12px;border-bottom:1px solid var(--border);}
-.sum-table tr:last-child td{border-bottom:none;}
-.sum-table .q{font-family:'JetBrains Mono',monospace;font-weight:700;color:#0D6E64;}
-[data-theme="dark"] .sum-table .q{color:#5ED4CC;}
-.sum-table .usage{font-size:.7rem;color:var(--muted);}
+/* CONNECTOR CHIPS */
+.chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px;}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.72rem;
+  padding:5px 12px;border-radius:50px;border:1.5px solid transparent;
+  cursor:default;transition:transform .15s;
+}
+.chip:hover{transform:translateY(-1px);}
+.chip.add{background:var(--blue-light);border-color:color-mix(in srgb,var(--blue) 40%,transparent);color:var(--blue-dark);}
+.chip.contrast{background:var(--orange-light);border-color:color-mix(in srgb,var(--orange) 40%,transparent);color:var(--orange);}
+.chip.cause{background:var(--yellow-light);border-color:color-mix(in srgb,var(--yellow) 40%,transparent);color:#8a6508;}
+.chip.result{background:var(--green-light);border-color:color-mix(in srgb,var(--green) 40%,transparent);color:var(--green-dark);}
+.chip.purpose{background:var(--purple-light);border-color:color-mix(in srgb,var(--purple) 40%,transparent);color:var(--purple);}
+[data-theme="dark"] .chip.add{color:#7AC7FF;}
+[data-theme="dark"] .chip.cause{color:#E8C468;}
+[data-theme="dark"] .chip.result{color:#6FE8A8;}
+[data-theme="dark"] .chip.purpose{color:#C4A5FF;}
+
+/* EXAMPLE ROW */
+.ex-row{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 12px;margin-top:8px;font-size:.76rem;line-height:1.6;color:var(--text);
+}
+.ex-row strong{font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+.ex-row.add strong{color:var(--blue-dark);}
+.ex-row.contrast strong{color:var(--orange);}
+.ex-row.cause strong{color:#8a6508;}
+.ex-row.result strong{color:var(--green-dark);}
+.ex-row.purpose strong{color:var(--purple);}
+[data-theme="dark"] .ex-row.add strong{color:#7AC7FF;}
+[data-theme="dark"] .ex-row.cause strong{color:#E8C468;}
+[data-theme="dark"] .ex-row.result strong{color:#6FE8A8;}
+[data-theme="dark"] .ex-row.purpose strong{color:#C4A5FF;}
+
+/* RULE NOTE (tip-box style) */
+.rule-note{
+  background:var(--yellow-light);border:1.5px solid color-mix(in srgb,var(--yellow) 40%,transparent);
+  border-left:4px solid var(--yellow);border-radius:12px;padding:12px 14px;margin:10px 0;
+}
+.rule-note .rn-title{font-weight:800;font-size:.78rem;color:#8a6508;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+[data-theme="dark"] .rule-note .rn-title{color:#E8C468;}
+.rule-note .rn-body{font-size:.76rem;line-height:1.5;color:var(--text);}
+.rule-note .rn-body strong{font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+
+/* QUICK REFERENCE TABLE */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0;}
+.ref-table{
+  width:100%;border-collapse:collapse;font-size:.76rem;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;
+}
+.ref-table thead tr{background:color-mix(in srgb,var(--teal) 12%,var(--bg));}
+.ref-table th{
+  font-weight:800;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--teal);padding:11px 14px;border-bottom:2px solid var(--border);text-align:left;
+}
+[data-theme="dark"] .ref-table th{color:#5ED4CC;}
+.ref-table td{padding:9px 14px;border-bottom:1px solid var(--border);}
+.ref-table tr:last-child td{border-bottom:none;}
+.ref-table .fn{font-weight:800;font-size:.76rem;}
+.ref-table .fn.add{color:var(--blue-dark);}
+.ref-table .fn.contrast{color:var(--orange);}
+.ref-table .fn.cause{color:#8a6508;}
+.ref-table .fn.result{color:var(--green-dark);}
+.ref-table .fn.purpose{color:var(--purple);}
+[data-theme="dark"] .ref-table .fn.add{color:#7AC7FF;}
+[data-theme="dark"] .ref-table .fn.cause{color:#E8C468;}
+[data-theme="dark"] .ref-table .fn.result{color:#6FE8A8;}
+.ref-table .words{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text);}
+.ref-table .note{font-size:.68rem;color:var(--muted);}
+
+/* POSITION BADGES */
+.pos-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;}
+.pos-badge{
+  font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:50px;
+  background:var(--surface);border:1.5px solid var(--border);color:var(--muted);
+}
+.pos-badge.sent-start{background:var(--green-light);border-color:color-mix(in srgb,var(--green) 30%,transparent);color:var(--green-dark);}
+[data-theme="dark"] .pos-badge.sent-start{color:#6FE8A8;}
+.pos-badge.mid{background:var(--blue-light);border-color:color-mix(in srgb,var(--blue) 30%,transparent);color:var(--blue-dark);}
+[data-theme="dark"] .pos-badge.mid{color:#7AC7FF;}
+.pos-badge.both{background:var(--purple-light);border-color:color-mix(in srgb,var(--purple) 30%,transparent);color:var(--purple);}
+[data-theme="dark"] .pos-badge.both{color:#C4A5FF;}
 
 @media(max-width:480px){.page{padding:14px 12px 50px;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
@@ -82,63 +166,180 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;margin:28px 0 1
   <span class="nav-title">Reference Guide</span>
 </div>
 
-<h1>Linking Words <span class="accent">& Connectors</span></h1>
+<h1>Linking Words <span class="accent">&amp; Connectors</span></h1>
 <p class="intro">The glue that turns a list of sentences into a paragraph that flows — organised by what job each connector does.</p>
 
+<!-- ADDITION -->
 <h2>&#10133; Addition</h2>
-<div class="rule-card">
-  <div class="rule-title">Adding another point</div>
-  <div class="rule-desc"><strong>Moreover</strong>, <strong>in addition</strong> and <strong>furthermore</strong> introduce a reinforcing point — usually more formal than "also" or "and".</div>
-  <div class="examples">
-    <span class="ex">The car is fast. Moreover, it's fuel-efficient.</span>
-    <span class="ex">In addition, membership is affordable.</span>
+<div class="fn-section">
+  <div class="fn-header add">
+    <span class="fn-icon">&#8853;</span>
+    <div>
+      <div class="fn-name add">Adding another point</div>
+      <div class="fn-desc">Reinforce or stack onto a previous idea — usually more formal than "also" or "and"</div>
+    </div>
+  </div>
+  <div class="chip-grid">
+    <span class="chip add">moreover</span>
+    <span class="chip add">furthermore</span>
+    <span class="chip add">in addition</span>
+    <span class="chip add">also</span>
+    <span class="chip add">besides</span>
+    <span class="chip add">what is more</span>
+    <span class="chip add">not only… but also</span>
+  </div>
+  <div class="ex-row add">
+    <strong>Moreover</strong>, the new system is 40% faster. &bull;
+    <strong>In addition</strong>, membership is affordable. &bull;
+    <strong>Not only</strong> is it cheap, <strong>but it also</strong> works offline.
   </div>
 </div>
 
+<!-- CONTRAST -->
 <h2>&#8646; Contrast</h2>
-<div class="rule-card">
-  <div class="rule-title">Signalling the opposite</div>
-  <div class="rule-desc"><strong>However</strong> and <strong>nevertheless</strong> introduce a contrast with what was just said. <strong>On the other hand</strong> presents a second side of the same topic.</div>
-  <div class="examples">
-    <span class="ex">She studied hard. However, she still failed.</span>
-    <span class="ex">He's a great cook. On the other hand, he's a terrible cleaner.</span>
+<div class="fn-section">
+  <div class="fn-header contrast">
+    <span class="fn-icon">&#8596;</span>
+    <div>
+      <div class="fn-name contrast">Signalling the opposite</div>
+      <div class="fn-desc">Introduce a counter-point, concession, or unexpected result</div>
+    </div>
+  </div>
+  <div class="chip-grid">
+    <span class="chip contrast">however</span>
+    <span class="chip contrast">nevertheless</span>
+    <span class="chip contrast">nonetheless</span>
+    <span class="chip contrast">on the other hand</span>
+    <span class="chip contrast">whereas</span>
+    <span class="chip contrast">although / though</span>
+    <span class="chip contrast">even though</span>
+    <span class="chip contrast">despite / in spite of</span>
+  </div>
+  <div class="ex-row contrast">
+    She studied hard. <strong>However</strong>, she still failed. &bull;
+    <strong>Although</strong> it was expensive, we bought it. &bull;
+    <strong>Despite</strong> the rain, we went for a walk.
   </div>
 </div>
 
-<h2>&#8658; Cause &amp; Result</h2>
-<div class="rule-card">
-  <div class="rule-title">Explaining why, or what happened next</div>
-  <div class="rule-desc"><strong>Since</strong> and <strong>due to</strong> introduce a reason. <strong>Therefore</strong>, <strong>as a result</strong> and <strong>consequently</strong> introduce the outcome.</div>
-  <div class="examples">
-    <span class="ex">Since traffic was heavy, we arrived late.</span>
-    <span class="ex">It rained all night. As a result, the streets flooded.</span>
+<!-- CAUSE -->
+<h2>&#128161; Cause</h2>
+<div class="fn-section">
+  <div class="fn-header cause">
+    <span class="fn-icon">&#8594;</span>
+    <div>
+      <div class="fn-name cause">Explaining why</div>
+      <div class="fn-desc">Introduce the reason behind a statement or situation</div>
+    </div>
+  </div>
+  <div class="chip-grid">
+    <span class="chip cause">because</span>
+    <span class="chip cause">since</span>
+    <span class="chip cause">as</span>
+    <span class="chip cause">due to</span>
+    <span class="chip cause">owing to</span>
+    <span class="chip cause">on account of</span>
+  </div>
+  <div class="ex-row cause">
+    <strong>Since</strong> traffic was heavy, we arrived late. &bull;
+    The flight was cancelled <strong>due to</strong> bad weather. &bull;
+    <strong>Because</strong> she was tired, she went to bed early.
+  </div>
+  <div class="rule-note">
+    <div class="rn-title">&#9888;&#65039; <strong>due to</strong> vs <strong>because</strong></div>
+    <div class="rn-body"><strong>due to</strong> and <strong>owing to</strong> take a noun phrase — not a full clause. <strong>because</strong> takes subject + verb.</div>
   </div>
 </div>
 
-<div class="rule-card warn">
-  <div class="rule-title">&#128161; "Due to" vs "because of"</div>
-  <div class="rule-desc">Both are followed by a <strong>noun phrase</strong>, not a full clause — <strong>because</strong> (without "of") is the one that takes a subject + verb.</div>
-  <div class="examples">
-    <span class="ex">The flight was cancelled due to bad weather.</span>
-    <span class="ex">The flight was cancelled because the weather was bad.</span>
+<!-- RESULT -->
+<h2>&#10145; Result</h2>
+<div class="fn-section">
+  <div class="fn-header result">
+    <span class="fn-icon">&#128311;</span>
+    <div>
+      <div class="fn-name result">What happened next</div>
+      <div class="fn-desc">Introduce the outcome or consequence of a previous statement</div>
+    </div>
+  </div>
+  <div class="chip-grid">
+    <span class="chip result">therefore</span>
+    <span class="chip result">as a result</span>
+    <span class="chip result">consequently</span>
+    <span class="chip result">hence</span>
+    <span class="chip result">thus</span>
+    <span class="chip result">so</span>
+  </div>
+  <div class="ex-row result">
+    It rained all night. <strong>As a result</strong>, the streets flooded. &bull;
+    He didn't prepare. <strong>Consequently</strong>, he failed the exam.
   </div>
 </div>
 
-<h2>Quick Reference</h2>
-<table class="sum-table">
-  <thead><tr><th>Function</th><th>Connectors</th></tr></thead>
-  <tbody>
-    <tr><td class="q">Addition</td><td class="usage">moreover, in addition, furthermore, also</td></tr>
-    <tr><td class="q">Contrast</td><td class="usage">however, nevertheless, on the other hand, whereas</td></tr>
-    <tr><td class="q">Cause</td><td class="usage">since, due to, because, owing to</td></tr>
-    <tr><td class="q">Result</td><td class="usage">therefore, as a result, consequently, so</td></tr>
-  </tbody>
-</table>
+<!-- PURPOSE -->
+<h2>&#127919; Purpose</h2>
+<div class="fn-section">
+  <div class="fn-header purpose">
+    <span class="fn-icon">&#127919;</span>
+    <div>
+      <div class="fn-name purpose">Expressing intent or goal</div>
+      <div class="fn-desc">Show what something is meant to achieve</div>
+    </div>
+  </div>
+  <div class="chip-grid">
+    <span class="chip purpose">so that</span>
+    <span class="chip purpose">in order to</span>
+    <span class="chip purpose">to (+ infinitive)</span>
+    <span class="chip purpose">in order that</span>
+    <span class="chip purpose">lest</span>
+  </div>
+  <div class="ex-row purpose">
+    She spoke slowly <strong>so that</strong> everyone could understand. &bull;
+    He trained hard <strong>in order to</strong> make the team.
+  </div>
+</div>
+
+<!-- QUICK REFERENCE TABLE -->
+<h2>&#128203; Quick Reference</h2>
+<div class="table-scroll">
+  <table class="ref-table">
+    <thead>
+      <tr><th>Function</th><th>Connectors</th><th>Position</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="fn add">Addition</td>
+        <td class="words">moreover, furthermore, in addition, also</td>
+        <td><span class="pos-badge sent-start">sentence start</span></td>
+      </tr>
+      <tr>
+        <td class="fn contrast">Contrast</td>
+        <td class="words">however, nevertheless, whereas, although</td>
+        <td><span class="pos-badge both">start or mid</span></td>
+      </tr>
+      <tr>
+        <td class="fn cause">Cause</td>
+        <td class="words">because, since, as, due to, owing to</td>
+        <td><span class="pos-badge mid">mid-sentence</span></td>
+      </tr>
+      <tr>
+        <td class="fn result">Result</td>
+        <td class="words">therefore, as a result, consequently, hence</td>
+        <td><span class="pos-badge sent-start">sentence start</span></td>
+      </tr>
+      <tr>
+        <td class="fn purpose">Purpose</td>
+        <td class="words">so that, in order to, to + infinitive</td>
+        <td><span class="pos-badge mid">mid-sentence</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <footer class="guide-footer">
   <a href="../exercises/linking-words.html">&larr; Practice linking words</a>
 </footer>
 
 </div>
+<script type="module" src="../js/guide-shell.min.js"></script>
 </body>
 </html>
