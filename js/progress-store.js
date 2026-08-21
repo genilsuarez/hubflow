@@ -12,6 +12,7 @@ import {
   syncSingleApp,
   markLocalCacheBootstrapped,
   readScoreKeyBests,
+  ensureCloudHydrated,
   HUBFLOW_LOCAL_READY_KEY,
 } from './sync-engine.js';
 import { enrichHubflowContentEntry, checkLevelAdvancement, normalizeLegacyActivities } from './lp-progress-summary.js';
@@ -940,6 +941,7 @@ function scheduleCloudSync() {
     if (!authed || window.lpGuestReset?.isExplicitLogout?.()) return;
     if (!isCloudHydrated()) {
       pendingCloudSync = true;
+      ensureCloudHydrated();
       return;
     }
     pendingCloudSync = false;
