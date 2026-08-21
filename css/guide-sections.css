@@ -187,3 +187,21 @@
   .gx-h2 { font-size: 1.06rem; }
   .gx-table { font-size: .72rem; }
 }
+
+/* Puntero "ver también" — el mecanismo con el que una guía cede un tema a otra
+ * en vez de repetirlo. Ver la campaña de deduplicación (un tema, una casa). */
+.gx-see {
+  display: block;
+  font-size: .76rem;
+  line-height: 1.55;
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1.5px dashed var(--border, var(--lp-border));
+  border-radius: 10px;
+  color: var(--muted, var(--lp-ink-soft));
+  text-decoration: none;
+}
+.gx-see:hover,
+.gx-see:focus-visible { border-color: var(--blue, var(--lp-accent)); }
+.gx-see b { color: var(--blue-dark, var(--lp-accent)); }
+.gx-see::before { content: '→ '; font-weight: 800; color: var(--blue, var(--lp-accent)); }
