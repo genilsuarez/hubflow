@@ -549,6 +549,10 @@
                 <span class="progress-snapshot__stat-label">Ejercicios completados</span>
                 <span class="progress-snapshot__stat-value" id="snapshotStat">0/0</span>
               </div>
+              <div class="progress-snapshot__stat-block">
+                <span class="progress-snapshot__stat-label">Intentos</span>
+                <span class="progress-snapshot__stat-value" id="snapshotAttempts">0</span>
+              </div>
             </div>
           </div>
           <div class="progress-snapshot__bar" aria-hidden="true">
@@ -578,7 +582,7 @@
              index-shell.css, @media 861px); este orden del DOM es el que
              manda en mobile y debe coincidir con el de las áreas. -->
         <div class="sec-head" id="secHeadCefr">Progreso por nivel</div>
-        <div class="stats-breakdown" id="statsByCefr"></div>
+        <div class="stats-breakdown stats-breakdown--grid" id="statsByCefr"></div>
 
         <div class="sec-head" id="secHeadCategory">Progreso por categoría</div>
         <div class="stats-breakdown" id="statsByCategory"></div>

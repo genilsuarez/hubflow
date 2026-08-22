@@ -2042,57 +2042,88 @@
        resto del dashboard (M4 2026-08). */
     .stats-breakdown {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 7px;
+      grid-template-columns: 1fr;
+      gap: 4px;
       margin-bottom: 14px;
     }
-    /* ~30% más compacta en vertical que la versión anterior — pedido
-       explícito del usuario. M4 2026-08. */
+
+    /* ─── PROGRESO POR NIVEL — grilla de píldoras (ref. LyricFlow) ───
+       3 celdas por fila en vez de la lista de una columna que usa
+       "Progreso por categoría": los códigos CEFR son cortos (A1…C1) y caben
+       bien en celdas angostas, mostrando más niveles por pantalla. */
+    .stats-breakdown--grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .stat-pill-card {
+      --stat-color: var(--lp-accent);
+      display: flex; flex-direction: column; gap: 7px;
+      padding: 9px 11px;
+      border-radius: var(--lp-radius-lg);
+      border: 1.5px solid var(--lp-border);
+      background: var(--lp-surface);
+    }
+    .stat-pill-card__top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .stat-pill-card__badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 2px 9px;
+      border-radius: var(--lp-radius-full);
+      border: 1.5px solid color-mix(in srgb, var(--stat-color) 40%, transparent);
+      background: color-mix(in srgb, var(--stat-color) 12%, transparent);
+      color: var(--stat-color);
+      font-size: .66rem; font-weight: 800; line-height: 1.5;
+    }
+    .stat-pill-card .stats-bar-frac {
+      font-family: var(--lp-font-mono); font-size: .62rem; font-weight: 700; color: var(--lp-muted);
+    }
+    .stat-pill-card .stats-bar-track { width: 100%; }
+
+    /* Fila compacta de una sola línea (icono · label · barra · fracción/%),
+       inspirada en las filas "Por nivel" de LyricFlow — más densa que la
+       tarjeta de dos líneas anterior, cabe más contenido sin scroll. */
     .stat-card {
       --stat-color: var(--lp-accent);
-      display: flex; align-items: center; gap: 9px;
-      padding: 10px 14px;
-      border-radius: var(--lp-radius-lg);
-      border: 1.5px solid color-mix(in srgb, var(--stat-color) 24%, var(--lp-border));
-      background: linear-gradient(
-        165deg,
-        color-mix(in srgb, var(--stat-color) 11%, var(--lp-surface)) 0%,
-        color-mix(in srgb, var(--stat-color) 3%, var(--lp-surface)) 60%,
-        var(--lp-surface) 100%
-      );
-      box-shadow:
-        0 1px 2px color-mix(in srgb, var(--stat-color) 8%, transparent),
-        0 3px 10px color-mix(in srgb, var(--stat-color) 10%, transparent);
-      transition: box-shadow .2s var(--lp-ease), border-color .2s var(--lp-ease);
+      /* Grid en vez de flex, con TODAS las columnas fijas salvo el label
+         (icono, barra y "frac · %" al final) — así las columnas quedan
+         alineadas entre filas como una cuadrícula real. Con la columna de
+         metadata en "auto" (ancho según su propio texto: "10/50 20%" vs
+         "0/25 0%") cada fila recalculaba un ancho de label distinto y la
+         barra arrancaba en una posición distinta según la fila — fijar
+         también esa columna es lo que arregla el desalineamiento. */
+      display: grid; grid-template-columns: auto minmax(30px, 1fr) 84px 68px; align-items: center; gap: 8px;
+      padding: 6px 10px;
+      border-radius: var(--lp-radius-md);
+      border: 1.5px solid color-mix(in srgb, var(--stat-color) 22%, var(--lp-border));
+      background: color-mix(in srgb, var(--stat-color) 5%, var(--lp-surface));
+      transition: background .2s var(--lp-ease), border-color .2s var(--lp-ease);
     }
     .stat-card:hover {
       border-color: color-mix(in srgb, var(--stat-color) 40%, var(--lp-border));
-      box-shadow:
-        0 2px 4px color-mix(in srgb, var(--stat-color) 10%, transparent),
-        0 6px 16px color-mix(in srgb, var(--stat-color) 16%, transparent);
+      background: color-mix(in srgb, var(--stat-color) 9%, var(--lp-surface));
     }
     .stat-card__icon {
-      width: 27px; height: 27px; flex: 0 0 27px;
+      width: 19px; height: 19px; flex: 0 0 19px;
       border-radius: 50%; display: grid; place-items: center;
       background: var(--stat-color); color: var(--lp-ink-inverse);
-      font-size: .68rem; font-weight: 800; line-height: 1;
-      box-shadow: 0 3px 8px color-mix(in srgb, var(--stat-color) 32%, transparent);
+      font-size: .54rem; font-weight: 800; line-height: 1;
     }
-    .stat-card__icon--text { font-size: .52rem; letter-spacing: .01em; font-family: var(--lp-font-mono); }
-    .stat-card__body { min-width: 0; flex: 1; }
-    .stat-card__top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin-bottom: 3px; }
+    .stat-card__icon--text { font-size: .42rem; letter-spacing: .01em; font-family: var(--lp-font-mono); }
     .stat-card__label {
-      font-size: .66rem; font-weight: 700; color: var(--lp-ink-soft);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+      flex: 0 1 auto; min-width: 0;
+      font-size: .64rem; font-weight: 700; color: var(--lp-ink-soft);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .stat-card__meta {
+      display: flex; align-items: baseline; justify-content: flex-end; gap: 5px;
     }
     .stat-card__pct {
       font-family: var(--lp-font-mono); font-size: .66rem; font-weight: 800;
       color: var(--stat-color); flex-shrink: 0;
     }
-    .stats-bar { display: flex; align-items: center; }
-    .stats-bar-track { flex: 1; height: 4px; border-radius: var(--lp-radius-full); background: color-mix(in srgb, var(--stat-color) 14%, var(--lp-surface-sunken)); overflow: hidden; }
-    .stats-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--stat-color); transition: width .5s var(--lp-ease); }
-    .stats-bar-frac { display: block; margin-top: 2px; font-family: var(--lp-font-mono); font-size: .55rem; font-weight: 700; color: var(--lp-muted); }
+    .stats-bar { display: flex; align-items: center; flex: 1; min-width: 24px; }
+    .stats-bar-track { flex: 1; height: 4px; border-radius: var(--lp-radius-full); background: color-mix(in srgb, var(--stat-color) 14%, var(--lp-surface-sunken)); overflow: hidden; display: block; }
+    .stats-bar-fill { height: 100%; border-radius: var(--lp-radius-full); background: var(--stat-color); transition: width .5s var(--lp-ease); display: block; }
+    .stats-bar-frac { font-family: var(--lp-font-mono); font-size: .6rem; font-weight: 700; color: var(--lp-muted); white-space: nowrap; }
 
     /* En web (≥861px) "Mis estadísticas" pasa a una grid de 2 columnas —
        snapshot + última actividad en una barra lateral angosta, categoría y
@@ -2163,29 +2194,23 @@
       .section.active-section[data-key="mi-progreso"] #secHeadCategory { grid-area: cathead; margin-bottom: 0; margin-top: 6px; }
       .section.active-section[data-key="mi-progreso"] #statsByCategory { grid-area: catbody; }
       .section.active-section[data-key="mi-progreso"] #statsByCefr { grid-area: lvlbody; }
-      /* Columnas fijas (no auto-fill) — con auto-fill, categoría (4 ítems)
-         quedaba pareja pero nivel (5 ítems, primo) siempre dejaba una fila
-         final con una sola tarjeta y 2-3 columnas de hueco vacío al lado, y
-         ese hueco crecía sin límite en monitores anchos porque el contenedor
-         no tenía tope de ancho. Categoría va a 2 columnas desde este mismo
-         quiebre (antes esperaba a 1200px): con 1 sola columna sus 4 tarjetas
-         apiladas dejaban el bloque ~126px más alto que "Última actividad" y
-         un hueco blanco al final de esa columna en ventanas de 861-1199px
-         — decisión del usuario 2026-08-16. Los labels largos ("Analysis &
-         Production") entran sin truncarse porque .stat-card ya los deja
-         hacer ellipsis y la columna de contenido tiene 3fr del ancho. */
-      .section.active-section[data-key="mi-progreso"] #statsByCategory,
-      .section.active-section[data-key="mi-progreso"] #statsByCefr {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      /* Nivel usa 3 columnas en vez de 2 desde este mismo quiebre — a
-         diferencia de categoría ("Analysis & Production"), las etiquetas de
-         nivel son 2 caracteres (A1…C1) y entran sin apretarse. Con 5 niveles
-         eso da 2 filas en vez de 3, para que el bloque completo quede a la
-         misma altura que "Última actividad" en vez de sobrepasarla — pedido
+      /* Nivel usa 3 columnas: las etiquetas CEFR son 2 caracteres (A1…C1) y
+         entran sin apretarse en la tarjeta-píldora. Con 5 niveles eso da 2
+         filas en vez de 3, para que el bloque completo quede a la misma
+         altura que "Última actividad" en vez de sobrepasarla — pedido
          explícito del usuario (M4 2026-08). */
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      /* Categoría va a 1 columna (ancho completo) — a diferencia de nivel,
+         sus labels son largos ("Analysis & Production") y la fila ahora
+         reserva una columna de barra a ancho fijo (ver .stat-card, pedido
+         del usuario de que todas las barras midan lo mismo): en 2 columnas
+         no quedaba espacio para el label sin truncar. Las filas son lo
+         bastante compactas para que el bloque siga cerca de la altura de
+         "Última actividad" pese a ir en una sola columna. */
+      .section.active-section[data-key="mi-progreso"] #statsByCategory {
+        grid-template-columns: 1fr;
       }
 
       .section.active-section[data-key="mi-progreso"] .mi-progreso-activity {

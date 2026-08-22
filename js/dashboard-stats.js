@@ -24,6 +24,7 @@ export function renderProgressSnapshot(animateReveal = false, { onOpenProgress }
   const pctEl = document.getElementById('snapshotPct');
   const statEl = document.getElementById('snapshotStat');
   const pathsEl = document.getElementById('snapshotPaths');
+  const attemptsEl = document.getElementById('snapshotAttempts');
   const barFillEl = document.getElementById('snapshotBarFill');
   const exercises = MODULES.filter(m => m.exercise && m.category !== 'guides');
   const total = exercises.length;
@@ -44,6 +45,7 @@ export function renderProgressSnapshot(animateReveal = false, { onOpenProgress }
   barFillEl.style.width = `${pct}%`;
   pathsEl.textContent = String(activePaths);
   statEl.textContent = `${completed}/${total}`;
+  attemptsEl.textContent = String(defer ? 0 : (getProgressStats().totalAttempts || 0));
   snapshot.setAttribute(
     'aria-label',
     `Progreso HubFlow: ${pct} por ciento, ${completed} de ${total} ejercicios, ${activePaths} rutas activas`
@@ -467,27 +469,35 @@ function statsBarRow({ label, done, total, icon, color, iconText }) {
   const iconCls = iconText ? 'stat-card__icon stat-card__icon--text' : 'stat-card__icon';
   return `<div class="stat-card"${style}>
     <span class="${iconCls}" aria-hidden="true">${icon || '📘'}</span>
-    <div class="stat-card__body">
-      <div class="stat-card__top">
-        <span class="stat-card__label">${label}</span>
-        <span class="stat-card__pct">${pct}%</span>
-      </div>
-      <div class="stats-bar">
-        <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${pct}%"></div></div>
-      </div>
-      <span class="stats-bar-frac">${done}/${total}</span>
-    </div>
+    <span class="stat-card__label">${label}</span>
+    <span class="stats-bar"><span class="stats-bar-track"><span class="stats-bar-fill" style="width:${pct}%"></span></span></span>
+    <span class="stat-card__meta"><span class="stats-bar-frac">${done}/${total}</span><span class="stat-card__pct">${pct}%</span></span>
   </div>`;
 }
 
 const CATEGORY_ICONS = { vocab: '🧠', grammar: '✏️', pronunciation: '🔊', analysis: '🔍' };
 
-/** Metáfora de crecimiento por nivel CEFR — de semilla a trofeo — y una
- * escala de intensidad sobre --lp-accent para que el color exprese
- * progresión en vez de reutilizar los colores de categoría (que ya
- * significan otra cosa en el resto del dashboard). */
-const CEFR_ICONS = { a1: '🌱', a2: '🌿', b1: '🪴', b2: '🌳', c1: '🏆' };
-const CEFR_INTENSITY = { a1: 40, a2: 55, b1: 70, b2: 85, c1: 100 };
+/** Un color por nivel CEFR (mismo criterio que .level-badge en LyricFlow:
+ * verde→teal→azul→ámbar→morado según se sube de nivel) en vez de una escala
+ * de intensidad de un solo color — así cada píldora se distingue de un
+ * vistazo en la grilla de "Por nivel". */
+const CEFR_COLOR_VARS = { a1: '--lp-cat-green', a2: '--lp-cat-teal', b1: '--lp-cat-blue', b2: '--lp-cat-amber', c1: '--lp-cat-purple' };
+
+/** Tarjeta-píldora de "Progreso por nivel" — grilla de celdas cortas
+ * (badge + fracción arriba, barra ancha abajo), igual a la de LyricFlow,
+ * en vez de la fila de una línea usada para categorías (labels largos no
+ * caben en una celda angosta). */
+function statsPillCard({ label, done, total, color }) {
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const style = color ? ` style="--stat-color:${color}"` : '';
+  return `<div class="stat-pill-card"${style}>
+    <div class="stat-pill-card__top">
+      <span class="stat-pill-card__badge">${label}</span>
+      <span class="stats-bar-frac">${done}/${total}</span>
+    </div>
+    <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
 
 const STUDY_MASTERY_BANNER_DISMISSED_KEY = 'hf-study-mastery-banner-dismissed';
 
@@ -564,11 +574,10 @@ export function renderStatsBreakdown() {
       label: level.toUpperCase(),
       done: mods.filter(m => isContentCompleted(m.id)).length,
       total: mods.length,
-      icon: CEFR_ICONS[level],
-      color: `color-mix(in srgb, var(--lp-accent) ${CEFR_INTENSITY[level] ?? 60}%, var(--lp-border-strong))`,
+      color: `var(${CEFR_COLOR_VARS[level] ?? '--lp-accent'})`,
     };
   }).filter(row => row.total > 0);
 
   catEl.innerHTML = byCategory.map(statsBarRow).join('');
-  cefrEl.innerHTML = byCefr.map(statsBarRow).join('');
+  cefrEl.innerHTML = byCefr.map(statsPillCard).join('');
 }
