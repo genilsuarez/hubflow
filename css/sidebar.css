@@ -200,8 +200,8 @@ body.has-sidebar {
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
-  width: min(92vw, 380px);
-  padding: 12px 14px 14px;
+  width: min(calc(100vw - 24px), 520px);
+  padding: 10px 12px 11px;
   background: color-mix(in srgb, var(--lp-surface) 94%, var(--lp-bg-paper));
   border: 1.5px solid var(--lp-border);
   border-radius: var(--lp-radius-lg);
@@ -214,6 +214,7 @@ body.has-sidebar {
 @media (min-width: 861px) {
   .depth-banner {
     top: calc(var(--lp-header-height) + 12px);
+    width: min(calc(100vw - 48px), 560px);
   }
 }
 [data-theme="dark"] .depth-banner {
@@ -241,8 +242,8 @@ body.has-sidebar .depth-banner {
 
 .depth-banner__inner {
   display: grid;
-  gap: 10px;
-  padding-right: 30px;
+  gap: 8px;
+  padding-right: 26px;
 }
 
 .depth-banner__eyebrow {
@@ -258,18 +259,18 @@ body.has-sidebar .depth-banner {
 .depth-banner__stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
 .depth-banner__chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 5px 10px;
+  padding: 4px 9px;
   border-radius: var(--lp-radius-full);
   border: 1px solid var(--lp-border-subtle);
   background: var(--lp-bg-paper);
-  font-size: .68rem;
+  font-size: .66rem;
   font-weight: 500;
   color: var(--lp-ink-soft);
   white-space: nowrap;
@@ -294,13 +295,13 @@ body.has-sidebar .depth-banner {
   justify-content: center;
   gap: 6px;
   width: 100%;
-  min-height: 36px;
-  padding: 8px 12px;
+  min-height: 32px;
+  padding: 6px 10px;
   border-radius: var(--lp-radius-md);
   border: 1px solid color-mix(in srgb, var(--lp-accent) 28%, transparent);
   background: var(--lp-accent-soft);
   color: var(--lp-accent-text);
-  font-size: .72rem;
+  font-size: .7rem;
   font-weight: 700;
   text-decoration: none;
   transition: background .15s ease, border-color .15s ease, transform .15s ease;
@@ -330,21 +331,31 @@ body.has-sidebar .depth-banner {
   .depth-banner__guide:hover { transform: none; }
 }
 
+@media (min-width: 641px) {
+  .depth-banner__stats {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .depth-banner__stats::-webkit-scrollbar { display: none; }
+}
+
 @media (max-width: 640px) {
   .depth-banner {
-    width: min(92vw, 360px);
-    padding: 12px;
+    width: min(calc(100vw - 20px), 400px);
+    padding: 10px;
   }
   .depth-banner__inner {
-    padding-right: 28px;
-    gap: 8px;
+    padding-right: 24px;
+    gap: 7px;
   }
   .depth-banner__stats {
-    gap: 5px;
+    gap: 4px;
+    flex-wrap: wrap;
   }
   .depth-banner__chip {
-    font-size: .66rem;
-    padding: 4px 9px;
+    font-size: .64rem;
+    padding: 3px 8px;
   }
 }
 
