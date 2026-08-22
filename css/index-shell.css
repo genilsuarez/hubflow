@@ -1652,16 +1652,14 @@
       .tile .tile-desc, .tile .tile-chev { display: none; }
       .tile .tile-count { white-space: normal; }
       .tile::after { display: none; }
-      .tile-soon { grid-column: 1 / -1; padding: 13px 14px; }
-      .tile-soon__sub { font-size: .7rem; }
+      .tile-soon { display: none; }
       .home-sec-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .home-sec-head__copy { display: none; }
       .home-sec-head__title { font-size: 1.1rem; }
       .home-welcome__title { font-size: 1.28rem; }
       .home-welcome__sub { font-size: .8rem; }
       .resumen-hero { padding: 14px 14px 16px; gap: 10px; margin-bottom: 16px; }
-      .home-help { flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 12px; }
-      .home-help__sep { display: none; }
-      .home-help__tagline { margin-left: 0; }
+      .home-help { display: none; }
       .tile {
         display: grid;
         grid-template-columns: 36px 1fr;
