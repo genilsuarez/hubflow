@@ -173,8 +173,18 @@ if (topBar) {
   const COUNTER_IDS = ['fcCounter', 'scCounter', 'itemCounter', 'qCounter', 'dCounter', 'pcCounter', 'huntCounter'];
   function syncCounter() {
     const allEls = COUNTER_IDS.map(id => document.getElementById(id)).filter(el => el && el.textContent.trim());
-    // Prefer elements inside an active [data-area] (.show); fall back to any with content
-    const activeEl = allEls.find(el => el.closest('[data-area]')?.classList.contains('show')) || allEls[0];
+    // Prefer elements inside an active [data-area] (.show)
+    let activeEl = allEls.find(el => el.closest('[data-area]')?.classList.contains('show'));
+    if (!activeEl) {
+      // Modes without their own counter (Match, Battle) must NOT inherit the
+      // hidden Study/Quiz counter — it freezes at a stale "1 / 10". Use the
+      // session progress label, which every mode keeps updated.
+      const hasActiveArea = !!document.querySelector('[data-area].show');
+      const progTxt = document.getElementById('progTxt');
+      activeEl = hasActiveArea
+        ? (progTxt?.textContent.trim() ? progTxt : null)
+        : allEls[0];
+    }
     const text = activeEl?.textContent.trim() || '';
     counterSlot.style.display = text ? '' : 'none';
     counterText.textContent = text;
@@ -183,7 +193,13 @@ if (topBar) {
   // Observe scroll-body for text changes from engines
   const scrollBody = document.querySelector('.scroll-body');
   if (scrollBody) {
-    new MutationObserver(syncCounter).observe(scrollBody, { childList: true, subtree: true, characterData: true });
+    new MutationObserver(syncCounter).observe(scrollBody, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+  }
+  // Session progress lives in .header (outside .scroll-body) — observe it too so
+  // counterless modes keep ticking.
+  const headerEl = document.querySelector('.header');
+  if (headerEl) {
+    new MutationObserver(syncCounter).observe(headerEl, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] });
   }
   // Sync on mode pill clicks
   document.querySelectorAll('[data-mode]').forEach(btn => {

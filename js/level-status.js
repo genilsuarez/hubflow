@@ -25,6 +25,7 @@ const LEVEL_COLORS = { a1: '#22c55e', a2: '#eab308', b1: '#f97316', b2: '#ef4444
 export function refreshLevelStatusBanner() {
   const banner = document.getElementById('levelStatusBanner');
   const text = document.getElementById('levelStatusBannerText');
+  const title = document.getElementById('levelStatusBannerTitle');
   const link = document.getElementById('levelStatusBannerLink');
   const ringFill = document.getElementById('levelStatusBannerRingFill');
   const ringPct = document.getElementById('levelStatusBannerRingPct');
@@ -55,8 +56,10 @@ export function refreshLevelStatusBanner() {
   if (ringFill) ringFill.setAttribute('stroke-dasharray', `${normalized}, 100`);
   if (ringPct) ringPct.textContent = hubflowDone ? '✓' : `${hubflowPct}%`;
 
+  if (title) title.textContent = `Tu progreso en el nivel ${upperLevel}`;
+
   if (hubflowDone) {
-    text.textContent = `Nivel ${upperLevel} · ya hiciste tu parte en HubFlow. Tu nivel es compartido con FluentFlow y LyricFlow — revisa qué falta.`;
+    text.textContent = 'Ya hiciste tu parte en HubFlow. Tu nivel es compartido con FluentFlow y LyricFlow — revisa qué falta.';
     if (link) {
       link.hidden = false;
       link.target = '_blank';
@@ -67,7 +70,7 @@ export function refreshLevelStatusBanner() {
       }
     }
   } else {
-    text.textContent = `Nivel ${upperLevel} · te falta ${HUBFLOW_THRESHOLD_PCT - hubflowPct}% en HubFlow para avanzar de nivel.`;
+    text.textContent = `Te falta ${HUBFLOW_THRESHOLD_PCT - hubflowPct}% en HubFlow para avanzar de nivel.`;
     if (link) {
       // Lleva a "Explorar" sin filtrar por nivel — no se abre en pestaña
       // nueva porque es navegación dentro de la misma app. section=all

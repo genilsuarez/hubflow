@@ -306,6 +306,14 @@
       <!-- RESUMEN -->
       <section class="section active-section" data-key="resumen" data-lp-home>
         <div class="resumen-hero" id="resumenHero">
+        <!-- Saludo de la home. Reemplaza visualmente a la variante
+             .hero-card--welcome de #heroCard (que queda oculta mientras no
+             haya progreso): la tarjeta solo aparece cuando ya hay una
+             sugerencia real que ofrecer. -->
+        <div class="home-welcome">
+          <h2 class="home-welcome__title">Bienvenido a <span class="home-welcome__brand">Hub<em>Flow</em></span> <span aria-hidden="true">👋</span></h2>
+          <p class="home-welcome__sub">Tu espacio de aprendizaje, con <span id="homeWelcomeCount">150</span> ejercicios que te ayudarán a desarrollar nuevas habilidades.</p>
+        </div>
         <div class="hero-card" id="heroCard">
           <a class="hero-card__launch" id="heroLaunch" href="#" aria-disabled="true" tabindex="-1">
             <span class="hero-card__icon" id="heroIcon" aria-hidden="true"></span>
@@ -342,7 +350,19 @@
             </svg>
             <span class="level-status-banner__ring-label" id="levelStatusBannerRingPct">0%</span>
           </div>
-          <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
+          <span class="level-status-banner__copy">
+            <span class="level-status-banner__title" id="levelStatusBannerTitle">Tu progreso</span>
+            <span class="level-status-banner__text" id="levelStatusBannerText">Tu nivel es compartido entre FluentFlow, HubFlow y LyricFlow. Ya hiciste tu parte aquí — revisa qué falta.</span>
+          </span>
+          <span class="level-status-banner__art" aria-hidden="true">
+            <svg viewBox="0 0 120 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 66 L38 22 L58 48 L74 30 L114 66 Z" fill="currentColor" opacity=".16"/>
+              <path d="M38 22 L52 40 L44 44 L30 34 Z" fill="currentColor" opacity=".3"/>
+              <path d="M74 30 L74 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+              <path d="M74 7 L96 12 L74 19 Z" fill="currentColor" opacity=".55"/>
+              <path d="M100 30 l7 -7 M104 42 l9 0 M99 51 l7 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".35"/>
+            </svg>
+          </span>
           <a class="level-status-banner__btn" id="levelStatusBannerLink" href="#" target="_blank" rel="noopener">Ver progreso global →</a>
         </div>
 
@@ -397,13 +417,34 @@
           })();
         </script>
 
-        <div class="sec-head">Explora por tema</div>
+        <div class="home-sec-head">
+          <div class="home-sec-head__copy">
+            <h3 class="home-sec-head__title">Explora por tema</h3>
+            <p class="home-sec-head__sub">Elige un tema y comienza a practicar con ejercicios diseñados para tu progreso.</p>
+          </div>
+          <button type="button" class="home-sec-head__link js-nav-target" data-target="all">Ver todos los temas <span aria-hidden="true">→</span></button>
+        </div>
         <div class="tiles">
-          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><div class="tile-copy"><div class="tile-title">Vocabulary &amp; Words</div><div class="tile-count" data-count-for="vocab">0 ejercicios</div></div></button>
-          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><div class="tile-copy"><div class="tile-title">Grammar &amp; Spelling</div><div class="tile-count" data-count-for="grammar">0 ejercicios</div></div></button>
-          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><div class="tile-copy"><div class="tile-title">Pronunciation</div><div class="tile-count" data-count-for="pronunciation">0 ejercicios</div></div></button>
-          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><div class="tile-copy"><div class="tile-title">Analysis &amp; Production</div><div class="tile-count" data-count-for="analysis">0 ejercicios</div></div></button>
-          <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><div class="tile-copy"><div class="tile-title">Guías de referencia</div><div class="tile-count" data-count-for="guides">0 guías</div></div></button>
+          <button class="tile v" data-target="vocab"><span class="tile-icon">🧠</span><div class="tile-copy"><div class="tile-title">Vocabulary &amp; Words</div><div class="tile-count" data-count-for="vocab">0 ejercicios</div></div><span class="tile-chev" aria-hidden="true">›</span><div class="tile-desc">Amplía tu vocabulario para comunicarte con confianza.</div></button>
+          <button class="tile g" data-target="grammar"><span class="tile-icon">✏️</span><div class="tile-copy"><div class="tile-title">Grammar &amp; Spelling</div><div class="tile-count" data-count-for="grammar">0 ejercicios</div></div><span class="tile-chev" aria-hidden="true">›</span><div class="tile-desc">Domina la gramática y mejora tu ortografía.</div></button>
+          <button class="tile p" data-target="pronunciation"><span class="tile-icon">🔊</span><div class="tile-copy"><div class="tile-title">Pronunciation</div><div class="tile-count" data-count-for="pronunciation">0 ejercicios</div></div><span class="tile-chev" aria-hidden="true">›</span><div class="tile-desc">Mejora tu pronunciación y habla con más fluidez.</div></button>
+          <button class="tile a" data-target="analysis"><span class="tile-icon">🔍</span><div class="tile-copy"><div class="tile-title">Analysis &amp; Production</div><div class="tile-count" data-count-for="analysis">0 ejercicios</div></div><span class="tile-chev" aria-hidden="true">›</span><div class="tile-desc">Analiza, crea y produce contenido en inglés.</div></button>
+          <button class="tile r" data-target="guides"><span class="tile-icon">📚</span><div class="tile-copy"><div class="tile-title">Guías de referencia</div><div class="tile-count" data-count-for="guides">0 guías</div></div><span class="tile-chev" aria-hidden="true">›</span><div class="tile-desc">Recursos útiles para tu aprendizaje continuo.</div></button>
+          <!-- Placeholder no interactivo: ocupa el hueco de la 2ª fila junto a
+               Guías en vez de dejar la retícula coja. -->
+          <div class="tile-soon" aria-hidden="true">
+            <span class="tile-soon__icon">☆</span>
+            <span class="tile-soon__title">Más temas y contenido próximamente</span>
+            <span class="tile-soon__sub">Seguimos creando nuevas experiencias de aprendizaje para ti.</span>
+          </div>
+        </div>
+
+        <div class="home-help">
+          <span class="home-help__icon" aria-hidden="true">💡</span>
+          <span class="home-help__text">¿Necesitas ayuda para comenzar?</span>
+          <span class="home-help__sep" aria-hidden="true"></span>
+          <button type="button" class="home-help__link" id="homeHelpAbout">Conoce más sobre HubFlow</button>
+          <span class="home-help__tagline">Tu aprendizaje, nuestro propósito <span aria-hidden="true">💙</span></span>
         </div>
 
       </section>
@@ -1105,6 +1146,15 @@ import { initLevelStatus } from './js/level-status.js';
     }
   });
 
+  // Saludo de la home — mismo conteo que el subtítulo del topbar
+  const welcomeCount = document.getElementById('homeWelcomeCount');
+  if (welcomeCount) welcomeCount.textContent = String(MODULES.length);
+
+  // "Conoce más sobre HubFlow" — abre el modal About de LearnFlow
+  document.getElementById('homeHelpAbout')?.addEventListener('click', (event) => {
+    if (typeof lpAbout !== 'undefined') lpAbout.open(event);
+  });
+
   // Resumen subtitle — full on desktop, compact on mobile (≤480px via .tgs-short)
   function formatItemsK(roundedItems) {
     if (roundedItems >= 1000) {
@@ -1142,7 +1192,7 @@ import { initLevelStatus } from './js/level-status.js';
 
   // ─── SECTION SWITCHING (SPA nav) ───
   const sections = document.querySelectorAll('.section');
-  const navButtons = document.querySelectorAll('.sb-item, .tile, .catalog-chip');
+  const navButtons = document.querySelectorAll('.sb-item, .tile, .catalog-chip, .js-nav-target');
   const content = document.querySelector('.content');
   const topbarStats = document.querySelector('.lp-header-stats');
   const topbarGreeting = document.querySelector('.topbar-greeting');
