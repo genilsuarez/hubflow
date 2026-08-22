@@ -1656,8 +1656,7 @@
       .home-sec-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .home-sec-head__copy { display: none; }
       .home-sec-head__title { font-size: 1.1rem; }
-      .home-welcome__title { font-size: 1.28rem; }
-      .home-welcome__sub { font-size: .8rem; }
+      .home-welcome { display: none; }
       .resumen-hero { padding: 14px 14px 16px; gap: 10px; margin-bottom: 16px; }
       .home-help { display: none; }
       .tile {
