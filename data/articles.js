@@ -72,7 +72,7 @@ export const CATEGORIES = {
   },
   expressions: {
     label: 'Fixed Expressions',
-    icon: '🔒',
+    icon: '📌',
     options: ['a', 'the', '∅'],
     studyCards: [
       { front: '∅ — instituciones como actividad o propósito', back: 'go to school / university / hospital (como paciente) / prison (como preso) / bed / sea', detail: '"She goes to school." · "He is in prison." · "He went to bed." (propósito, no lugar físico)' },
