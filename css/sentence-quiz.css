@@ -84,13 +84,21 @@ body { min-height: 100vh; padding: 0 14px; }
   margin-bottom: 0;
   flex-shrink: 0;
 }
+/* NO usar display:flex aquí encima de contenido mixto (texto + <span
+   class="blank">): flex trata cada nodo de texto y cada elemento hijo como
+   un "flex item" separado, así que la frase se partía en 3 columnas
+   independientes ("antes del hueco" | hueco | "después del hueco"), cada una
+   ajustando línea por su cuenta — de ahí el texto reordenado ("This" / "is"
+   en una columna angosta a la izquierda, "most interesting film I've /
+   seen." en otra a la derecha). `margin: auto 0` centra verticalmente el
+   bloque DENTRO del flex-column del padre (.sentence-card) sin convertir el
+   propio texto en un contenedor flex — el texto fluye normal, como un único
+   párrafo, y `text-align: center` (heredado de .sentence-card) centra cada
+   línea ya ajustada. Bug reportado 2026-08-22. */
 [data-area="quiz"] .sentence-card .sc-text {
   font-size: 1.1rem;
   line-height: 1.35;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: auto 0;
 }
 [data-area="quiz"] .sentence-card .sc-counter {
   margin-top: 0;
@@ -184,8 +192,15 @@ body { min-height: 100vh; padding: 0 14px; }
    de espacio real, la palabra anterior y el span quedaban pegados (sin
    espacio real entre ellos no hay dónde partir) y el texto se reordenaba de
    forma rara al ajustar línea (bug reportado 2026-08-22). */
+/* min-width más chico (antes 50px): antes del acierto el span solo lleva un
+   "?" (~9px), así que 50px dejaba ~20px de aire vacío a cada lado del
+   símbolo, centrado en un hueco que se leía flotando, desconectado de las
+   palabras vecinas ("is" ... "?" ... "most"). 28px alcanza para las
+   respuestas cortas ("the", "an", "∅") sin ese exceso de aire; las más
+   largas ("must have") igual crecen por su propio contenido, min-width es
+   solo un piso. */
 .sentence-card .sc-text .blank {
-  display: inline-block; min-width: 50px; border-bottom: 2.5px dashed transparent;
+  display: inline-block; min-width: 28px; border-bottom: 2.5px dashed transparent;
   font-weight: 700;
 }
 .sentence-card .sc-counter {
