@@ -177,6 +177,17 @@ export function initCatBarExpander({
     }).observe(wrapper, { attributes: true, attributeFilter: ['class'] });
     new ResizeObserver(updateFades).observe(bar);
 
+    // El "+N" salía vacío en algunos celulares hasta que el usuario tocaba
+    // la barra: el primer cálculo (rAF de abajo) corre antes de que
+    // 'Newsreader'/mono terminen de cargar, mide los pills con la fuente de
+    // reemplazo (más angosta) y los da por "visibles" — el ResizeObserver de
+    // arriba no lo detecta porque el ancho del propio `bar` no cambia, solo
+    // el de sus hijos. Recalcular cuando las fuentes ya cargaron (y con un
+    // setTimeout de respaldo para navegadores sin document.fonts) corrige el
+    // conteo sin esperar a que el usuario haga scroll.
+    document.fonts?.ready?.then(updateFades).catch(() => {});
+    setTimeout(updateFades, 500);
+
     if (hintOnLoad) {
       setTimeout(() => runCatBarScrollHint(bar, wrapper, expandBtn), 400);
     }
