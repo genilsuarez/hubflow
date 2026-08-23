@@ -178,13 +178,16 @@ body { min-height: 100vh; padding: 0 14px; }
   font-family: var(--lp-font-display); font-size: 1.15rem; font-weight: 500;
   color: var(--lp-ink); line-height: 1.5;
 }
+/* Sin padding horizontal: el espacio literal de la frase ("word ___ word")
+   ya separa el span del texto y, a diferencia del padding, sigue siendo un
+   punto válido donde el navegador puede cortar de línea — con padding en vez
+   de espacio real, la palabra anterior y el span quedaban pegados (sin
+   espacio real entre ellos no hay dónde partir) y el texto se reordenaba de
+   forma rara al ajustar línea (bug reportado 2026-08-22). */
 .sentence-card .sc-text .blank {
   display: inline-block; min-width: 50px; border-bottom: 2.5px dashed transparent;
-  font-weight: 700; padding: 0 4px;
+  font-weight: 700;
 }
-/* El hueco pegado a un signo ("___," / "___.") no debe llevar el padding
-   derecho: se leía como un espacio antes de la puntuación ("remain , the"). */
-.sentence-card .sc-text .blank--tight { padding-right: 0; }
 .sentence-card .sc-counter {
   font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 8px;
 }

@@ -16,17 +16,10 @@ import { RESULT_TITLES } from '../result-copy.js';
 import { speak, isSpeechAvailable, readAutoSpeak, writeAutoSpeak } from '../speech.js';
 import { createStudySpeakButton, insertInBottomNav } from '../ex-bottom-nav.js';
 import { initSwipe } from '../swipe.js';
+import { fillBlanks, blankHTML } from '../blank-fill.js';
 
 const SPEAK_ICON = '🔊';
 
-/**
- * Rellena todos los huecos de la frase, no solo el primero: hay items con dos
- * `___` cuya respuesta viene como par ("was cooking, arrived"). Con un
- * `.replace('___', ...)` la respuesta entera caía en el primer hueco y el
- * segundo se quedaba literal ("We were eating, went dinner when the lights ___
- * off."). Si el número de partes coincide con el de huecos se reparten en
- * orden; si no, la respuesta va al primer hueco y el resto queda marcado.
- */
 // Casi todo item.correct es un string único. Algunos puntos gramaticales
 // (used-to vs would para acciones repetidas: "would" siempre es correcto ahí,
 // pero "used to" TAMBIÉN lo es — es la forma general) tienen más de una
@@ -41,24 +34,6 @@ const primaryAnswer = item => Array.isArray(item.correct) ? item.correct[0] : it
 // `item.fill` separa las dos cosas: la etiqueta se queda en el botón y en el
 // hueco entra el texto real de la frase.
 const blankFiller = item => item.fill != null ? item.fill : primaryAnswer(item);
-
-function fillBlanks(sentence, filler, wrap = t => t) {
-  const holes = (sentence.match(/___/g) || []).length;
-  const parts = (holes > 1 && typeof filler === 'string' && filler.split(',').length === holes)
-    ? filler.split(',').map(s => s.trim())
-    : null;
-  let i = -1;
-  // 334 frases tienen el hueco pegado a un signo ("___,", "___."). El span
-  // relleno tiene padding a ambos lados para separarse del texto; contra
-  // puntuación ese padding se leía como un espacio espurio ("remain , the").
-  // El próximo carácter tras el hueco decide si se suprime ese lado.
-  return sentence.replace(/___/g, (match, offset) => {
-    i++;
-    const next = sentence[offset + match.length];
-    const tight = next && /[,.;:!?)]/.test(next);
-    return wrap(parts ? parts[i] : (i === 0 ? filler : '?'), tight);
-  });
-}
 
 export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null, shuffleOptions = true, studyBlankPlaceholder = null, timedQuestionCount = 10, speech = false }) {
   renderLessonProgress(contentId);
@@ -283,7 +258,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
 
     const scIcon = document.getElementById('scIcon');
     if (scIcon && !hidesCardIcon()) scIcon.textContent = cat.icon;
-    document.getElementById('scText').innerHTML = fillBlanks(item.sentence, '?', (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
+    document.getElementById('scText').innerHTML = blankHTML(item.sentence, '?');
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
     setQuizAnswered(false);
@@ -306,7 +281,7 @@ export function initSentenceQuiz({ categories, scoreKeyPrefix, contentId = null,
         optsEl.querySelectorAll('.word-opt').forEach(b => { if (accepted.includes(b.dataset.val)) b.classList.add('correct'); });
       }
 
-      document.getElementById('scText').innerHTML = fillBlanks(item.sentence, blankFiller(item), (t, tight) => `<span class="blank${tight ? ' blank--tight' : ''}">${t}</span>`);
+      document.getElementById('scText').innerHTML = blankHTML(item.sentence, blankFiller(item));
       document.getElementById('explainBox').textContent = item.explain;
 
       idx++;

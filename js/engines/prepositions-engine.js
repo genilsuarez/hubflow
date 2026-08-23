@@ -12,6 +12,7 @@ import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-st
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
 import { finishExercise, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, findNextPendingCategory, createStudyNav } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
+import { blankHTML } from '../blank-fill.js';
 
 /**
  * @param {object} cfg
@@ -100,7 +101,7 @@ export function initPrepositions({ categories, scoreKeyPrefix }) {
     const cat = categories[currentCat];
 
     document.getElementById('scIcon').textContent = cat.icon;
-    document.getElementById('scText').innerHTML = item.sentence.replace('___', '<span class="blank">?</span>');
+    document.getElementById('scText').innerHTML = blankHTML(item.sentence, '?');
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
     setQuizAnswered(false);
@@ -119,7 +120,7 @@ export function initPrepositions({ categories, scoreKeyPrefix }) {
           optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.correct) b.classList.add('correct'); });
         }
 
-        document.getElementById('scText').innerHTML = item.sentence.replace('___', `<span class="blank">${item.correct}</span>`);
+        document.getElementById('scText').innerHTML = blankHTML(item.sentence, item.correct);
         document.getElementById('explainBox').textContent = item.explain;
 
         idx++;

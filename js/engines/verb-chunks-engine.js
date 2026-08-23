@@ -12,6 +12,7 @@ import { recordScore, recordStudyItemSeen, getScoreStatus } from '../progress-st
 import { Timer, formatTime, renderCatBar as sharedRenderCatBar, updateProgress, wireModeTabs, syncModeTabsActive } from '../exercise-ui.js';
 import { finishExercise, squeezeToggle, showStudyFollowUpOverlay, handleStudyKeydown, handleQuizNextKeydown, findNextPendingCategory, createStudyNav } from '../exercise-flow.js';
 import { initSwipe } from '../swipe.js';
+import { blankHTML } from '../blank-fill.js';
 
 /**
  * @param {object} cfg
@@ -132,7 +133,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
     const cat = categories[currentCat];
 
     document.getElementById('scIcon').textContent = cat.icon;
-    document.getElementById('scText').innerHTML = item.gap.replace('___', '<span class="blank">?</span>');
+    document.getElementById('scText').innerHTML = blankHTML(item.gap, '?');
     document.getElementById('scHint').textContent = item.es;
     document.getElementById('scCounter').textContent = `${idx + 1} / ${total}`;
     document.getElementById('explainBox').textContent = '';
@@ -152,7 +153,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
           optsEl.querySelectorAll('.word-opt').forEach(b => { if (b.dataset.val === item.prep) b.classList.add('correct'); });
         }
 
-        document.getElementById('scText').innerHTML = item.gap.replace('___', `<span class="blank">${item.prep}</span>`);
+        document.getElementById('scText').innerHTML = blankHTML(item.gap, item.prep);
         document.getElementById('explainBox').textContent = item.example;
 
         idx++;
@@ -249,7 +250,7 @@ export function initVerbChunks({ categories, scoreKeyPrefix }) {
       document.getElementById('writeVerb').textContent = item.pattern;
     }
     document.getElementById('writeHint').textContent = item.es;
-    document.getElementById('writeGap').innerHTML = item.gap.replace('___', '<span class="blank"></span>');
+    document.getElementById('writeGap').innerHTML = blankHTML(item.gap, '');
 
     const input = document.getElementById('writeInput');
     input.value = '';
