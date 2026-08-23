@@ -607,12 +607,19 @@
 }
 .cat-bar::-webkit-scrollbar { display: none; }
 
-.word-options { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 480px; }
+/* Grid en vez de flex-wrap (homologado con .quiz-options de flashcard-engine,
+   ver AGENTS.md "Homologación de opciones de quiz"): con flex-wrap, 4 opciones
+   cortas cabían las 4 por fila y cada botón quedaba en ~90px — chico y
+   apretado en celular, más con el badge de número (`.word-opt__num`) comiéndose
+   la mitad del ancho disponible. El grid de 2 columnas (1 en mobile) le da a
+   cada opción la mitad (o el 100%) del ancho del contenedor sin importar
+   cuántas opciones haya. */
+.word-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 480px; }
 .word-opt {
   font-family: var(--lp-font-body); font-weight: var(--lp-weight-bold); font-size: .88rem;
   padding: 12px 20px; border-radius: var(--lp-radius-md); border: 1.5px solid var(--lp-border);
   background: var(--lp-surface); color: var(--lp-ink); cursor: pointer;
-  transition: all .2s var(--lp-ease); min-width: 60px; text-align: center;
+  transition: all .2s var(--lp-ease); text-align: center;
 }
 .word-opt:hover:not(.disabled) { border-color: var(--lp-cat-blue); background: color-mix(in srgb, var(--lp-cat-blue) 8%, transparent); transform: translateY(-2px); }
 .word-opt.correct { border-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success-dark); }
@@ -620,7 +627,10 @@
 .word-opt.disabled { cursor: default; opacity: .7; }
 [data-theme="dark"] .word-opt.correct { color: color-mix(in srgb, var(--lp-success) 55%, white); }
 [data-theme="dark"] .word-opt.wrong { color: color-mix(in srgb, var(--lp-error) 45%, white); }
-@media (max-width: 639px) { .word-opt { min-width: 50px; padding: 10px 14px; font-size: .8rem; } }
+@media (max-width: 639px) {
+  .word-options { grid-template-columns: 1fr; gap: 8px; }
+  .word-opt { padding: 14px 16px; font-size: .88rem; min-height: 52px; }
+}
 
 /* ─── PILL BAR MOBILE: scroll when tabs don't fit (e.g. 5 modes) ─── */
 @media (max-width: 639px) {

@@ -13,18 +13,11 @@ body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; padding: 0 14p
 /* .header and h1 sizing → exercise-enhanced.css (single source of truth) */
 h1 { display: flex; align-items: center; gap: 6px; }
 
-/* Category selector — pill sizing (wrapper/expander → components.css) */
-#catBar :is(.pill-btn, .lp-pill) {
-  flex: 0 0 auto;
-  padding: 5px 11px;
-  font-size: .64rem;
-  min-height: unset;
-  white-space: nowrap;
-}
-
-/* Mode bar */
-.header .pill-bar:not(.pill-bar--scroll) { padding: 2px; gap: 1px; margin-bottom: 2px; }
-.header .pill-bar:not(.pill-bar--scroll) :is(.pill-btn, .lp-pill) { padding: 3px 8px; font-size: .65rem; min-height: unset; }
+/* Category selector + mode bar pill sizing: homologado en
+   .ex-header__scope/.ex-header__modes (css/exercise-enhanced.css) desde
+   2026-08-23 — ver AGENTS.md "Homologación de header/pills". Antes vivía
+   solo acá, así que las 90+ páginas fuera de flashcard-engine.js quedaban
+   con chips visiblemente más grandes que Body & Appearance. */
 
 /* Compact progress */
 #progressWrap { margin-bottom: 0; }

@@ -248,6 +248,88 @@ See `docs/mi-progreso-decisions.md` for full details.
 - Mobile-first responsive
 - Category colors via `--lp-cat-*` tokens
 
+### Homologación de header/pills (2026-08-23)
+
+Referencia: **Body & Appearance** (`body-appearance.html`, flashcard-engine). Todo ejercicio
+que use `.header` (mano o `FlashcardEngine.renderShell()`) termina con el mismo DOM tras
+`restructureExerciseHeader()` en `js/exercise-shell.js`: `.header.ex-control-panel` →
+`.ex-header__scope` (categorías) + `.ex-header__modes` (Study/Quiz/Timed…) + `.ex-header__progress`.
+Eso ya estaba homologado — lo que NO estaba homologado era el tamaño.
+
+`css/flashcard-shell.css` traía un override compacto (`padding`/`font-size`/`min-height`) que
+solo aplicaba a las 2 páginas de `flashcard-engine.js` (vocabulary, pronunciation-study, y de
+paso todas las páginas `renderShell()` como body-appearance). Las ~90 páginas restantes
+(sentence-quiz, spelling-typing, typed-answer, dictation, standalone…) no tenían ese override,
+así que caían en el tamaño base de `exercise-enhanced.css` — sensiblemente más grande
+(chips de categoría de 44px de alto vs 27px, pills de modo de 44px vs 23px). El resultado:
+Articles (y cualquier ejercicio fuera de flashcard) se veía "más grande/tosco" que Body & Appearance
+aunque la estructura fuera idéntica.
+
+**Decisión:** el tamaño compacto de flashcard-shell.css pasa a ser el default de TODOS los
+ejercicios, movido a `.ex-header__scope`/`.ex-header__modes` en `css/exercise-enhanced.css`
+(single source of truth, ya que ahí vive el resto de la homologación). `flashcard-shell.css`
+ya no redefine nada — quedaría idéntico al default y sería duplicación.
+
+- Chips de categoría (`.cat-btn`/`.pill-btn` dentro de `.ex-header__scope`): `padding: 5px 11px;
+  font-size: .64rem; min-height: unset;`
+- Pills de modo (`.pill-btn` dentro de `.ex-header__modes`): `padding: 3px 8px; font-size: .65rem;
+  min-height: unset;` con el contenedor `.pill-bar` en `padding: 2px; gap: 1px;`
+- Sin breakpoint aparte para mobile — el tamaño compacto ya es el mismo en cualquier ancho
+  (antes `@media (max-width:639px)` volvía a agrandar todo a 44px, así que mobile y desktop
+  quedaban inconsistentes entre sí además de entre engines).
+- El área táctil de 44×44px se preserva vía el `::after` invisible ya definido en
+  `css/components.css` (`:is(.cat-btn, .lp-pill)::after` / `:is(.pill-btn, .lp-pill)::after`) —
+  compactar el tamaño visual no reduce el hit-area real.
+- `.ex-mode-indicator` (el fondo deslizante detrás del pill activo) se mide por JS en tiempo de
+  ejecución (`setupModeTabIndicator()`), así que se adapta solo al nuevo tamaño sin tocarlo.
+
+Si un nuevo engine/CSS de shell agrega su propio override de tamaño para `.cat-btn`/`.pill-btn`,
+es casi seguro un homologación rota — debe heredar del default en `exercise-enhanced.css`, no
+redefinirlo.
+
+### Homologación de opciones de quiz — `.word-opt`/`.word-options` (2026-08-23)
+
+Mismo síntoma que el header: `.word-opt` (opciones de respuesta múltiple, componente compartido
+por sentence-quiz-engine, word-choice-engine, tenses-engine, prepositions-engine,
+verb-chunks-engine, phrasal-verbs-engine, irregular-verbs-engine, listening-engine,
+phonics-engine) se veía "chico" en celular: `.word-options` era `display:flex; flex-wrap:wrap`,
+así que 4 opciones cortas cabían las 4 en una fila y cada botón quedaba en ~87px de ancho — peor
+aún en sentence-quiz-engine, donde el badge de número (`.word-opt__num`, atajo de teclado 1-4)
+reservaba `padding-left: 2.6rem` fijos, dejando ~32px reales para el texto.
+
+**Decisión:** `.word-options` pasa a grid de 2 columnas (`components.css`, base para todos los
+engines) — cada opción se reparte la mitad del ancho en vez de encogerse a su contenido. Una
+sola columna en mobile (`@media max-width:639px`) le da a cada botón el 100% del ancho.
+
+Caso aparte: `[data-area="quiz"] .word-options` en `sentence-quiz.css` tiene su propio sistema de
+alto fijo (`--lp-mcq-options-h`, "anti-jump": el card de la frase + las opciones ocupan siempre la
+misma altura al cambiar de pregunta, para que la página no salte). Ahí el flex-wrap tenía un bug
+más severo: con `flex-direction:column` + `flex-wrap:wrap` y una altura reservada de apenas
+27-58px, cada botón (más alto que eso) saltaba a su propia "columna" en vez de bajar de fila —
+degeneraba en el mismo problema de ancho angosto. Se cambió a grid real de 2 columnas
+(`grid-auto-rows: 1fr`, reparte alto entre las filas que hagan falta) y se subió el presupuesto de
+alto (`--lp-mcq-mode-h`).
+
+Dos formas en que un engine cuelga los botones — la regla de grid cubre ambas:
+- Directo de `.word-options` (sentence-quiz-engine, tenses-engine…): `.word-options:has(> .word-opt)`.
+- Anidados en `.word-options__choices` con `.explain-box` como hermano (word-choice-engine, que
+  necesita el explain-box fuera de la grilla de opciones): el grid va en `.word-options__choices`,
+  `.word-options` (el wrapper externo) se queda `flex-direction:column` apilando choices + explain.
+
+Si un ejercicio nuevo agrega su propia altura fija para el área de opciones, debe dejar espacio
+para al menos 2 filas de `.word-opt` a tamaño legible — no asumir que 4 opciones cortas entran en
+una sola fila.
+
+**Corrección 2026-08-23 (mismo día, ronda 2):** los primeros valores (`--lp-mcq-mode-h: 260/225px`,
+`--lp-mcq-prompt-h: 110/88px` desktop/mobile) resultaron insuficientes para `.sc-text` de 2 líneas
+— "Parts of Speech" tiene frases largas ("He speaks SLOWLY so everyone understands.") que con
+`overflow:hidden` se cortaban a la mitad. `.sc-text` no reduce su font-size en mobile, así que el
+espacio que necesita tampoco baja — de ahí que ya no haya breakpoint mobile para estas variables:
+**`--lp-mcq-mode-h: 270px`, `--lp-mcq-prompt-h: 136px`** (fijos, sin `@media`), suficientes para
+icono + 2 líneas de `.sc-text` a 1.1rem + contador, en cualquier ancho. Antes de tocar estos
+números de nuevo: probar con la frase más larga del dataset más largo (`parts-of-speech.js`,
+`data/*.js` en general), no solo con las cortas de Articles.
+
 ## Button system
 
 `css/buttons.css` defines the 3 shared primitives: `.lp-btn` (action), `.lp-icon-btn` (circular icon), `.lp-pill` (tab). Min hit-area 44×44px.

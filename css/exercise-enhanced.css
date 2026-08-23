@@ -338,6 +338,14 @@ h1 {
 .ex-header__scope #levelBar::-webkit-scrollbar {
   display: none;
 }
+/* Tamaño compacto homologado (antes exclusivo de flashcard-shell.css — ver
+   AGENTS.md "Homologación de header/pills 2026-08-23"): mismo chip visual en
+   los 90+ ejercicios, sin depender de qué engine arma la página. */
+.ex-header__scope :is(.cat-btn, .pill-btn, .lp-pill) {
+  padding: 5px 11px;
+  font-size: .64rem;
+  min-height: unset;
+}
 
 .ex-header__modes {
   padding: 8px 10px;
@@ -354,8 +362,8 @@ h1 {
   border: 1.5px solid var(--lp-border);
   border-radius: var(--lp-radius-lg);
   background: var(--lp-bg-paper);
-  padding: 5px;
-  gap: 6px;
+  padding: 2px;
+  gap: 1px;
   overflow: hidden;
 }
 .ex-mode-indicator {
@@ -384,9 +392,9 @@ h1 {
   z-index: 1;
   flex: 1 1 0;
   min-width: 0;
-  min-height: 46px;
-  padding: 10px 12px;
-  font-size: 0.8rem;
+  min-height: unset;
+  padding: 3px 8px;
+  font-size: .65rem;
   text-align: center;
   background: transparent !important;
   border: 1.5px solid transparent !important;
@@ -611,20 +619,8 @@ h1 {
 @media (max-width: 639px) {
   .ex-header__scope { padding: 6px 8px 4px; }
   .ex-header__modes { padding: 4px 6px; }
-  .ex-header__modes .pill-bar {
-    gap: 3px;
-    padding: 3px;
-  }
   .ex-header__modes :is(.pill-btn, .lp-pill) {
     flex: 1 1 0;
-    min-height: 44px;
-    padding: 8px 6px;
-    font-size: clamp(0.62rem, 2.6vw, 0.7rem);
-  }
-  .ex-header__scope :is(.cat-btn, .lp-pill) {
-    font-size: clamp(0.62rem, 2.6vw, 0.68rem);
-    padding: 8px 10px;
-    min-height: 44px;
   }
   .ex-progress-row { padding: 6px 10px; gap: 3px; }
   .ex-progress-row--session {

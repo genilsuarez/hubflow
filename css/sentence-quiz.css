@@ -17,12 +17,24 @@ body { min-height: 100vh; padding: 0 14px; }
 [data-area] { display: none; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
 [data-area].show { display: flex; }
 
-/* Align MCQ quiz / study stacks across mode switches (matches flashcard 230px) */
+/* Align MCQ quiz / study stacks across mode switches (matches flashcard 230px).
+   --lp-mcq-options-h reparte el alto fijo entre sentence-card y las opciones —
+   con 4 opciones cortas cabiendo antes en una sola fila apretada, 58px (96px
+   sin explain-box) alcanzaba. Con .word-opt en grid de 2 columnas (ver
+   AGENTS.md "Homologación de opciones de quiz") 2 opciones pueden necesitar
+   2 filas, así que el presupuesto sube para que cada botón siga siendo
+   cómodo de tocar en vez de aplastarse verticalmente.
+   --lp-mcq-prompt-h también subió (2026-08-23): con overflow:hidden, una
+   frase que envuelve a 2 líneas (icono + 2 líneas de .sc-text a 1.1rem +
+   contador) necesita ~130px reales — con menos, el texto se corta a la mitad
+   ("parts-of-speech": "He speaks SLOWLY so everyone / understands." cortado
+   en "understands"). Sin diferencia mobile/desktop: .sc-text no reduce su
+   font-size en mobile, así que el espacio que necesita tampoco baja. */
 .wrap:has(.ex-mode-stage) {
-  --lp-mcq-mode-h: 230px;
-  --lp-mcq-prompt-h: 130px;
+  --lp-mcq-mode-h: 270px;
+  --lp-mcq-prompt-h: 136px;
   --lp-mcq-stack-gap: 4px;
-  --lp-mcq-explain-slot: 38px;
+  --lp-mcq-explain-slot: 34px;
   --lp-mcq-options-h: calc(var(--lp-mcq-mode-h) - var(--lp-mcq-prompt-h) - var(--lp-mcq-stack-gap));
 }
 
@@ -118,13 +130,26 @@ body { min-height: 100vh; padding: 0 14px; }
   box-sizing: border-box;
 }
 
+/* Grid (no flex-column-wrap): con flex-direction:column + wrap, un botón más
+   alto que --lp-mcq-options-h saltaba a su propia columna en vez de bajar de
+   fila — cada opción terminaba angosta (solo su ancho de contenido) en vez de
+   repartirse el ancho disponible. El grid de 2 columnas reparte alto y ancho
+   de verdad entre las filas que hagan falta (1 fila si son 2 opciones, 2 si
+   son 3-4).
+   Dos casos según el engine: sentence-quiz-engine/tenses-engine/etc. cuelgan
+   los `.word-opt` directo de `.word-options` (ese es el que pasa a grid);
+   word-choice-engine los anida en `.word-options__choices` (para poder poner
+   el explain-box como hermano debajo) — ahí el grid va en el wrapper interno
+   y el externo se queda flex-column apilando choices + explain. */
+[data-area="quiz"] .word-options:has(> .word-opt),
 [data-area="quiz"] .word-options__choices {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
   align-content: center;
+  gap: 6px;
+}
+[data-area="quiz"] .word-options__choices {
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
@@ -226,12 +251,7 @@ body { min-height: 100vh; padding: 0 14px; }
 .scroll-body { padding: 8px 0 30px; }
 
 @media (max-width: 639px) {
-  .wrap:has(.ex-mode-stage) {
-    --lp-mcq-mode-h: 165px;
-    --lp-mcq-prompt-h: 102px;
-    --lp-mcq-explain-slot: 32px;
-  }
-  [data-area="quiz"] .word-opt { min-height: 52px; }
+  [data-area="quiz"] .word-opt { min-height: 44px; }
 }
 
 /* ─── Category color variants ─────────────────────────────────────────── */

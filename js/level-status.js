@@ -14,8 +14,7 @@
    ═══════════════════════════════════════════════════════ */
 
 import { getActiveLevel, getCombinedLevelProgress } from './lp-progress-summary.js';
-
-const HUBFLOW_THRESHOLD_PCT = 50;
+import { getThreshold } from './lp-completion-config.js';
 
 /** Misma paleta por nivel que dashboard-filters.js usa en los chips de CEFR —
  * se reutiliza aquí para que el ring del banner y los filtros hablen el mismo
@@ -34,6 +33,7 @@ export function refreshLevelStatusBanner() {
   const level = getActiveLevel();
   const upperLevel = level.toUpperCase();
   const progress = getCombinedLevelProgress(level);
+  const HUBFLOW_THRESHOLD_PCT = getThreshold('hubflow');
   const hubflowPct = Math.round(progress.hubflow.progressPct);
   const hubflowDone = hubflowPct >= HUBFLOW_THRESHOLD_PCT;
   const allDone = hubflowDone && progress.fluentflow.progressPct >= 100 && progress.lyricflow.progressPct >= 100;
@@ -89,7 +89,8 @@ export function initLevelStatus() {
   refreshLevelStatusBanner();
   window.addEventListener('hubflow-progress-updated', refreshLevelStatusBanner);
   window.addEventListener('lp-level-advanced-locally', refreshLevelStatusBanner);
+  window.addEventListener('lp-completion-config-changed', refreshLevelStatusBanner);
   window.addEventListener('storage', (event) => {
-    if (event.key === 'lp-level') refreshLevelStatusBanner();
+    if (event.key === 'lp-level' || event.key === 'lp-completion-config') refreshLevelStatusBanner();
   });
 }
