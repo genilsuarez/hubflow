@@ -340,12 +340,17 @@ export class SpellingEngine {
     if (streakBar) streakBar.classList.toggle('show', this.streak > 0);
     if (streakBar && this.streak > 0) streakBar.textContent = `🔥 ${this.streak} streak`;
 
-    // Check button
+    // Check button — reaplica el hoist al bottom-nav en vez de restaurar un
+    // texto cacheado ("✓ Check All"): ese cache se tomaba ANTES de que
+    // setupAnswerBottomNav lo reetiquetara a solo "✓", así que cada reset
+    // (cambio de nivel/modo) volvía a meter el texto largo original dentro
+    // del botón circular compacto del bottom-nav — se veía roto/envuelto
+    // (bug reportado 2026-08-22).
     const checkBtn = document.getElementById('checkBtn');
     if (checkBtn && !this.checked) {
       checkBtn.disabled = false;
-      checkBtn.textContent = this.checkBtnLabel ||= checkBtn.textContent;
       checkBtn.onclick = null;
+      setupAnswerBottomNav();
     }
   }
 

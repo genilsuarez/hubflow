@@ -280,10 +280,11 @@
   color: var(--lp-ink); margin-bottom: 2px;
 }
 .word-card__input {
-  width: 100%; font-family: var(--lp-font-mono); font-weight: var(--lp-weight-semibold);
+  width: 100%; box-sizing: border-box; font-family: var(--lp-font-mono); font-weight: var(--lp-weight-semibold);
   font-size: .72rem; text-align: center; padding: 4px 6px;
   border-radius: 4px; border: 1.5px solid var(--lp-border);
   background: var(--lp-bg-paper); color: var(--lp-ink); outline: none;
+  overflow: hidden; text-overflow: ellipsis;
   transition: border-color .2s, box-shadow .2s;
 }
 .word-card__input:focus { border-color: var(--lp-accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--lp-accent) 10%, transparent); }

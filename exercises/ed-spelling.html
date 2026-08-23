@@ -58,11 +58,6 @@
       <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
     </div>
 
-    <div class="legend">
-      <span><span class="dot red"></span> Just add -ed</span>
-      <span><span class="dot blue"></span> Drop -e / Change -y</span>
-      <span><span class="dot green"></span> Double consonant</span>
-    </div>
   </div>
 
   <div class="scroll-body">
@@ -86,9 +81,7 @@ new SpellingEngine({
   storagePrefix: 'ed',
   contentId: 'ed-spelling',
   accentColor: '--c-ed',
-  rules: ['red', 'blue', 'green'],
-  hasColorPicker: true,
-  inputPlaceholder: 'type -ed form...',
+  inputPlaceholder: 'type answer',
   getPrompt: (item) => item.verb,
   getAnswer: (item) => item.ans,
   checkAnswer: (userInput, item) => userInput === item.ans.toLowerCase(),
