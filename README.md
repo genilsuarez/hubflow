@@ -80,8 +80,8 @@ Cada ejercicio importa uno de estos motores compartidos según su tipo:
 | Motor | CSS asociado | Patrón de modos | Ejemplos |
 |---|---|---|---|
 | `flashcard-engine.js` | `flashcard-shell.css` | Study / Quiz / Match / Battle / Timed | vocabulary, opposites, pronunciation-study |
-| `spelling-engine.js` | `spelling-shell.css` | Niveles: Beginner / Intermediate / Exceptions / God Mode | ed-spelling, ing-spelling, noun-adjuncts |
-| `sentence-quiz-engine.js` | `sentence-quiz.css` | Study / Practice / Timed + categorías (`.cat-btn`) | articles, conditionals, inversions, cleft-emphasis... |
+| `spelling-typing-engine.js` | `spelling-shell.css` | Niveles: Beginner / Intermediate / Exceptions / God Mode | ed-spelling, ing-spelling |
+| `sentence-quiz-engine.js` | `sentence-quiz.css` | Study / Practice / Timed + categorías (`.cat-btn`) | articles, conditionals, inversions, cleft-emphasis, noun-adjuncts... |
 | `typed-answer-engine.js` | `typed-answer-shell.css` | Study / Practice / Timed, respuesta escrita | paraphrasing, word-order, register-switch... |
 | — (standalone) | `exercise-enhanced.css` | Cada página maneja su propio estado | confusing-words, listening, error-hunt... |
 

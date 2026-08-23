@@ -116,10 +116,10 @@ export const ENGINES = {
     // Los modos jugables los declara cada página (`modes: [...]`), no el engine.
     derive: 'flashcard',
   },
-  'spelling-engine.js': {
-    init: 'SpellingEngine',
+  'spelling-typing-engine.js': {
+    init: 'initSpellingTyping',
     prefixField: 'storagePrefix',
-    // La clave es `${prefix}-${nivel}-${modo}`: los niveles son [data-cat] y
+    // La clave es `${prefix}-${nivel}-${modo}`: los niveles son [data-level] y
     // los modos [data-mode] de la página.
     derive: 'spelling',
   },

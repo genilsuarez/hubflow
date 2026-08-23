@@ -25,6 +25,73 @@
 <link rel="stylesheet" href="../css/lp-about.min.css">
 <link rel="stylesheet" href="../css/spelling-shell.min.css">
 <style>
+  /* Una palabra a la vez (ver js/engines/spelling-typing-engine.js) en vez del
+     grid paginado de tarjetas — mismo lenguaje visual que word-formation.html /
+     spelling-by-ear.html: tarjeta grande + input grande, sin saltar entre cajas
+     chicas. .scroll-body no trae flex/centrado propio (lo definían las áreas
+     [data-area] que este ejercicio ya no usa, al no tener vistas distintas por
+     modo), así que se centra acá. Mismo rediseño aplicado a ed-spelling.html
+     2026-08-22. */
+  .scroll-body { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  /* Study (flashcard) y Challenge/Timed (tipear) son vistas distintas —
+     antes Study mostraba el mismo input+check que un quiz, calificando cada
+     respuesta como correcta/incorrecta en un modo pensado para aprender sin
+     presión. [data-area] alterna cuál de las dos se muestra (mismo mecanismo
+     que word-formation.html / spelling-by-ear.html). */
+  [data-area] { display: none; flex-direction: column; align-items: center; width: 100%; gap: 14px; }
+  [data-area].show { display: flex; }
+  .fc-card { max-width: 720px; height: 220px; }
+  .fc-back { background: color-mix(in srgb, var(--c-ing) 10%, var(--lp-surface)); border-color: var(--c-ing); }
+  /* El input vive DENTRO de la tarjeta (antes quedaba suelto debajo, como una
+     caja huérfana sin relación visual con la palabra). Una sola tarjeta =
+     "palabra + tu respuesta". */
+  .sentence-card {
+    width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border);
+    border-radius: var(--lp-radius-lg); padding: 28px 20px 24px; text-align: center; box-shadow: var(--lp-shadow-sm);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .sentence-card .sc-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .sentence-card .sc-text { font-family: var(--lp-font-display); font-size: 1.6rem; font-weight: 600; color: var(--lp-ink); margin-bottom: 20px; }
+  .sentence-card .sc-counter { font-size: .62rem; font-weight: 700; color: var(--lp-muted); margin-top: 18px; }
+  /* display:contents: el <form> no debe generar su propia caja — el input
+     y el botón siguen siendo hijos directos del flex-column de la tarjeta.
+     El form en sí es lo que hace que el "Enter"/"Ir" del teclado del celular
+     dispare el mismo submit que tocar el botón (con solo un keydown="Enter"
+     en el input, varios teclados virtuales nunca llegan a emitir esa tecla y
+     el check no se disparaba). */
+  #answerForm { display: contents; }
+  /* Subrayado en vez de caja con borde completo — mismo lenguaje visual que
+     el hueco punteado (.blank) del resto de los ejercicios de la app, así
+     lee como "la respuesta va acá" en vez de un campo de formulario genérico
+     desconectado del resto de la tarjeta. */
+  .answer-field { position: relative; width: 200px; max-width: 100%; }
+  .answer-input {
+    width: 100%; box-sizing: border-box; padding: 16px 14px 6px; font-size: 1.15rem; text-align: center;
+    border: none; border-bottom: 3px solid var(--lp-border-strong); border-radius: var(--lp-radius-sm) var(--lp-radius-sm) 0 0;
+    background: var(--lp-surface-sunken); color: var(--lp-ink); outline: none;
+    transition: border-color .2s, background-color .2s; font-family: var(--lp-font-mono); font-weight: 700;
+  }
+  .answer-input:focus { border-bottom-color: var(--c-ing); background: color-mix(in srgb, var(--c-ing) 8%, var(--lp-surface-sunken)); }
+  .answer-input.correct { border-bottom-color: var(--lp-success); background: var(--lp-success-soft); color: var(--lp-success); }
+  .answer-input.wrong { border-bottom-color: var(--lp-error); background: var(--lp-error-soft); color: var(--lp-error); }
+  /* Label flotante (Material Design) en vez de placeholder-only: un
+     placeholder desaparece apenas se escribe y el campo se queda sin
+     ninguna pista de qué es — la label sube arriba del input en vez de
+     desaparecer. `input.placeholder=" "` (espacio, invisible) es lo que
+     activa :placeholder-shown para saber si el input está vacío. Centrada
+     bajo la palabra (translateX(-50%) centra el propio ancho de la label,
+     sin depender de text-align) — igual que el input. */
+  .answer-field__label {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap;
+    font-size: .95rem; font-family: var(--lp-font-mono); font-weight: 600; color: var(--lp-muted);
+    pointer-events: none; transition: top .15s ease, font-size .15s ease, color .15s ease, letter-spacing .15s ease;
+  }
+  .answer-input:focus + .answer-field__label,
+  .answer-input:not(:placeholder-shown) + .answer-field__label {
+    top: 9px; transform: translate(-50%, 0); font-size: .58rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--c-ing);
+  }
+  .answer-input.correct + .answer-field__label { color: var(--lp-success); }
+  .answer-input.wrong + .answer-field__label { color: var(--lp-error); }
 </style>
 </head>
 <body>
@@ -39,7 +106,6 @@
   <div class="header">
     <h1><span class="h1-suffix">-ing</span> Spelling <span class="h1-label">Rules</span></h1>
 
-    <!-- Levels (same cat-bar pattern as other exercises) -->
     <div class="cat-bar" id="levelBar">
       <button class="cat-btn active" data-level="beginner">🌱 Beginner</button>
       <button class="cat-btn" data-level="intermediate">📗 Intermediate</button>
@@ -47,59 +113,84 @@
       <button class="cat-btn" data-level="god">💀 God Mode</button>
     </div>
 
-    <!-- Mode bar -->
     <div class="pill-bar">
       <button class="pill-btn active" data-mode="study">📖 Study</button>
       <button class="pill-btn" data-mode="challenge">⚡ Challenge</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
-    <!-- Lives & Streak -->
-    <div id="livesBar"></div>
-    <div id="streakBar"></div>
-
-    <!-- Progress -->
     <div class="progress">
       <div class="progress__labels"><span id="progTxt">0 / 12</span><span id="progPct">0%</span></div>
       <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
     </div>
 
-    <!-- Legend -->
-    <div class="legend">
-      <span><span class="dot red"></span> Just add -ing</span>
-      <span><span class="dot blue"></span> Drop -e / Change</span>
-      <span><span class="dot green"></span> Double consonant</span>
-    </div>
   </div>
 
-  <!-- Card Grid -->
   <div class="scroll-body">
-    <div class="card-grid" id="cardGrid"></div>
-    <div class="check-area">
-      <button class="lp-btn lp-btn--primary" id="checkBtn">✓ Check All</button>
+
+    <div data-area="quiz">
+      <div class="sentence-card">
+        <div class="sc-icon" id="scIcon"></div>
+        <div class="sc-text" id="scText"></div>
+        <form id="answerForm">
+          <div class="answer-field">
+            <input class="answer-input" id="answerInput" type="text" placeholder=" " autocomplete="off" autocapitalize="off" spellcheck="false">
+            <label class="answer-field__label" for="answerInput">Your answer</label>
+          </div>
+          <button class="lp-btn lp-btn--primary" id="checkBtn" type="submit">Check ✓</button>
+        </form>
+        <div class="sc-counter" id="scCounter"></div>
+      </div>
+      <div class="explain-box" id="explainBox"></div>
     </div>
+
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 12</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face">
+            <div class="fc-emoji" id="fcEmoji"></div>
+            <div class="fc-term" id="fcTerm"></div>
+            <div class="fc-hint">tap to see answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-term" id="fcAnswer" style="font-size:1.4rem;color:var(--lp-success)"></div>
+            <div class="fc-detail" id="fcExplain"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Result Overlay -->
+  <!-- .fc-nav queda FUERA de .scroll-body (hijo directo de .wrap, como en
+       word-formation.html) para quedar fijo al pie en vez de scrollear con
+       el contenido. Cada barra lleva su propio [data-area] para mostrarse
+       solo en su modo. -->
+  <div class="fc-nav" data-area="quiz">
+    <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+    <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
+  </div>
+  <div class="fc-nav" data-area="study">
+    <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
+    <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
+    <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+  </div>
+
   <div class="result-overlay" id="resultOverlay"></div>
 </div>
 
 <script type="module">
 import { LEVELS } from '../data/ing-words.js';
-import { SpellingEngine } from '../js/engines/spelling-engine.js';
+import { initSpellingTyping } from '../js/engines/spelling-typing-engine.js';
 
-new SpellingEngine({
-  title: '-ing Spelling Rules',
-  suffix: '-ing',
+initSpellingTyping({
   levels: LEVELS,
+  levelIcons: { beginner: '🌱', intermediate: '📗', exceptions: '⚡', god: '💀' },
   storagePrefix: 'ing',
-  contentId: 'ing-spelling',
-  accentColor: '--c-ing',
-  rules: ['red', 'blue', 'green'],
-  hasColorPicker: true,
-  inputPlaceholder: 'type answer',
   getPrompt: (item) => item.verb,
   getAnswer: (item) => item.ans,
+  getExplain: (item) => item.why,
   checkAnswer: (userInput, item) => userInput === item.ans.toLowerCase(),
 });
 </script>

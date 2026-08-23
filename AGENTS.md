@@ -169,9 +169,9 @@ repo y se desincroniza en silencio del validador de progreso).
 | Engine | Modes | Páginas |
 |--------|-------|---------|
 | `flashcard-engine.js` | Study / Quiz / Match / Battle / Timed | 62 — vocabulary, opposites, pronunciation-study |
-| `sentence-quiz-engine.js` | Study / Practice / Timed | 58 — articles, conditionals, inversions |
+| `sentence-quiz-engine.js` | Study / Practice / Timed | 59 — articles, conditionals, inversions, noun-adjuncts |
 | `typed-answer-engine.js` | Study / Practice / Timed, respuesta escrita | 9 — paraphrasing, word-order, register-switch |
-| `spelling-engine.js` | Beginner / Intermediate / Exceptions / God Mode | 3 — ed-spelling, ing-spelling, noun-adjuncts |
+| `spelling-typing-engine.js` | Beginner / Intermediate / Exceptions / God Mode | 2 — ed-spelling, ing-spelling |
 | `dictation-engine.js` | Practice / Timed, dictado con TTS | 1 — dictation-sprint |
 | `word-choice-engine.js` | Study / Practice / Timed, elegir del par | 4 — apostrophe-traps, confusing-verbs, grammar-confusions, lookalike-words |
 | `text-hunt-engine.js` | Hunt / Timed, marcar y corregir errores | 2 — error-hunt, punctuation-fix |
@@ -288,9 +288,9 @@ Imported via `@import` in `css/components.css` (all exercise pages load it).
 | Engine / family | Exercises | Bottom nav |
 |-----------------|-----------|------------|
 | `flashcard-engine.js` | vocabulary, opposites, pronunciation-study | study: fc-nav hoisted · quiz/match: hidden · battle: claim/judge/next |
-| `sentence-quiz-engine.js` | articles, conditionals, clauses, … (13) | study: shuffle/prev/next · practice/timed: minimal (tap options) |
+| `sentence-quiz-engine.js` | articles, conditionals, clauses, noun-adjuncts, … (14) | study: shuffle/prev/next · practice/timed: minimal (tap options) |
 | `typed-answer-engine.js` | paraphrasing, word-order, register-switch, sentence-combining, key-word-transformation | practice: check/next/hint hoisted |
-| `spelling-engine.js` | ed-spelling, ing-spelling, noun-adjuncts | practice: check hoisted (`setupPracticeBottomNav`) |
+| `spelling-typing-engine.js` | ed-spelling, ing-spelling | study: fc-nav hoisted · quiz/timed: check hoisted |
 | `dictation-engine.js` | dictation-sprint | practice: check/next/skip hoisted |
 | Standalone inline | error-hunt, paragraph-cloze | practice: auto-hoist via `setupContentBottomNav()` |
 | Standalone inline | listening, spelling-by-ear, odd-one-out | minimal (no check button) |

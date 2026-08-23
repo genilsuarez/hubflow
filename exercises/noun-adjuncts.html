@@ -23,52 +23,66 @@
 <link rel="stylesheet" href="../css/sidebar.min.css">
 <link rel="stylesheet" href="../css/lp-nav-active.min.css">
 <link rel="stylesheet" href="../css/lp-about.min.css">
-<link rel="stylesheet" href="../css/spelling-shell.min.css">
+<link rel="stylesheet" href="../css/sentence-quiz.min.css">
 </head>
 <body>
 <div class="wrap" data-color="green">
   <div class="top-bar">
     <a href="../index.html" class="lp-icon-btn" aria-label="Volver a HubFlow" title="Volver a HubFlow">←</a>
-    <div class="timer-bar" id="timerBar">
-      <span class="timer-display" id="timerDisplay">1:00</span>
-    </div>
   </div>
 
   <div class="header">
-    <h1>Noun <span class="h1-suffix">Adjuncts</span> <span class="h1-label">Compounds</span></h1>
+    <h1>🧩 Noun <span class="h1-suffix">Adjuncts</span></h1>
 
-    <div class="cat-bar" id="levelBar">
-      <button class="cat-btn active" data-level="beginner">🌱 Beginner</button>
-      <button class="cat-btn" data-level="intermediate">📗 Intermediate</button>
-      <button class="cat-btn" data-level="exceptions">⚡ Exceptions</button>
-      <button class="cat-btn" data-level="god">💀 God Mode</button>
-    </div>
+    <div class="cat-bar" id="catBar"></div>
 
     <div class="pill-bar">
       <button class="pill-btn active" data-mode="study">📖 Study</button>
-      <button class="pill-btn" data-mode="challenge">⚡ Challenge</button>
+      <button class="pill-btn" data-mode="quiz">🎯 Quiz</button>
       <button class="pill-btn" data-mode="timed">⏱️ Timed</button>
     </div>
 
-    <div id="livesBar"></div>
-    <div id="streakBar"></div>
+    <div class="timer-bar" id="timerBar"><span class="timer-display" id="timerDisplay">1:00</span></div>
 
     <div class="progress">
-      <div class="progress__labels"><span id="progTxt">0 / 12</span><span id="progPct">0%</span></div>
+      <div class="progress__labels"><span id="progTxt">0 / 10</span><span id="progPct">0%</span></div>
       <div class="progress__track"><div class="progress__fill" id="progFill"></div></div>
-    </div>
-
-    <div class="legend">
-      <span><span class="dot red"></span> Genitivo 's / of</span>
-      <span><span class="dot blue"></span> Noun + Noun</span>
-      <span><span class="dot green"></span> -ing nominal</span>
     </div>
   </div>
 
   <div class="scroll-body">
-    <div class="card-grid" id="cardGrid"></div>
-    <div class="check-area">
-      <button class="lp-btn lp-btn--primary" id="checkBtn">✓ Check All</button>
+    <div data-area="quiz">
+      <div class="sentence-card">
+        <div class="sc-icon" id="scIcon"></div>
+        <div class="sc-text" id="scText"></div>
+        <div class="sc-counter" id="scCounter"></div>
+      </div>
+      <div class="word-options" id="wordOptions"></div>
+      <div class="explain-box" id="explainBox"></div>
+    </div>
+
+    <div data-area="study">
+      <div class="fc-count" id="fcCounter">1 / 10</div>
+      <div class="fc-card" id="fcCard">
+        <div class="fc-inner">
+          <div class="fc-face">
+            <div class="fc-emoji" id="fcEmoji">🧩</div>
+            <div class="fc-term" id="fcSentence"></div>
+            <div class="fc-hint">tap to see answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-term" id="fcAnswer" style="font-size:1.4rem;color:var(--lp-success)"></div>
+            <div class="fc-detail" id="fcExplain"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="lp-btn lp-btn--ghost" id="shuffleBtn">🔀</button>
+        <button class="lp-btn lp-btn--ghost" id="prevBtn">←</button>
+        <button class="lp-btn lp-btn--primary" id="nextBtn">→</button>
+        <button class="lp-btn lp-btn--ghost" id="quizSkipBtn">⏭ Saltar</button>
+        <button class="lp-btn lp-btn--purple" id="quizNextBtn" hidden>Siguiente →</button>
+      </div>
     </div>
   </div>
 
@@ -76,29 +90,10 @@
 </div>
 
 <script type="module">
-import { LEVELS } from '../data/noun-adjuncts-data.js';
-import { SpellingEngine } from '../js/engines/spelling-engine.js';
+import { CATEGORIES } from '../data/noun-adjuncts-data.js';
+import { initSentenceQuiz } from '../js/engines/sentence-quiz-engine.js';
 
-new SpellingEngine({
-  title: 'Noun Adjuncts',
-  suffix: 'compounds',
-  levels: LEVELS,
-  storagePrefix: 'noun',
-  contentId: 'noun-adjuncts',
-  accentColor: '--c-noun',
-  rules: ['red', 'blue', 'green'],
-  hasColorPicker: true,
-  inputType: 'select',
-  inputPlaceholder: 'choose modifier...',
-  getPrompt: (item) => item.prompt,
-  getAnswer: (item) => item.modifier,
-  checkAnswer: (userInput, item) => {
-    const correct = item.modifier.toLowerCase();
-    if (userInput === correct) return true;
-    if (item.accept && item.accept.map(a => a.toLowerCase()).includes(userInput)) return true;
-    return false;
-  },
-});
+initSentenceQuiz({ categories: CATEGORIES, scoreKeyPrefix: 'noun' });
 </script>
 
 <script type="module" src="../js/exercise-shell.js"></script>

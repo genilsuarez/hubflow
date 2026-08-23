@@ -78,7 +78,7 @@ for (const mod of MODULES) {
 
 // Además: `engine` en MODULE_DEPTH solo debe decir 'flashcard'/'spelling' si el
 // ejercicio importa ese motor — es lo que fuerza columnas que no existen.
-const ENGINE_FILE = { flashcard: 'flashcard-engine.js', spelling: 'spelling-engine.js' };
+const ENGINE_FILE = { flashcard: 'flashcard-engine.js', spelling: 'spelling-typing-engine.js' };
 for (const mod of MODULES) {
   const engine = MODULE_DEPTH[mod.id]?.engine;
   if (!ENGINE_FILE[engine] || !mod.exercise || !existsSync(mod.exercise)) continue;
