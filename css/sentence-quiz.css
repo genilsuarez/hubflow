@@ -117,6 +117,10 @@ body { min-height: 100vh; padding: 0 14px; }
   flex-shrink: 0;
 }
 
+/* padding-top: el hover/selected de .word-opt sube el botón con
+   translateY(-2px) (components.css); sin este aire, la fila de arriba
+   queda pegada al borde de este contenedor (overflow:hidden por el
+   presupuesto de alto fijo) y ese -2px se recorta contra el borde. */
 [data-area="quiz"] .word-options {
   height: var(--lp-mcq-options-h);
   min-height: var(--lp-mcq-options-h);
@@ -126,6 +130,7 @@ body { min-height: 100vh; padding: 0 14px; }
   flex-direction: column;
   justify-content: center;
   gap: 4px;
+  padding-top: 3px;
   overflow: hidden;
   box-sizing: border-box;
 }

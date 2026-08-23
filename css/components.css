@@ -449,10 +449,16 @@
   background: linear-gradient(to right, var(--lp-bg-paper), transparent);
   border-radius: var(--lp-radius-sm) 0 0 var(--lp-radius-sm);
 }
+/* Ancho > que .cat-expand-btn (~42px): antes el fade medía 48px y el botón
+   sticky ya tapaba casi toda esa franja, así que el degradado quedaba oculto
+   detrás del botón y el pill se veía cortado en seco contra un borde duro
+   (bug reportado 2026-08-23, "Waist" tapado a la mitad por "+2"). Con 96px,
+   el primer ~48% queda opaco (tapado por el botón, no importa) y el resto
+   sí se ve — el texto del pill se desvanece ANTES de llegar al botón. */
 .cat-scroll-wrapper::after {
   right: 0;
-  width: 48px;
-  background: linear-gradient(to left, var(--lp-bg-paper) 40%, transparent);
+  width: 96px;
+  background: linear-gradient(to left, var(--lp-bg-paper) 48%, transparent);
   border-radius: 0 var(--lp-radius-sm) var(--lp-radius-sm) 0;
 }
 .cat-scroll-wrapper.fade-left::before { opacity: 1; }
@@ -483,15 +489,15 @@
   order: 1;
   position: sticky;
   right: 0;
-  min-width: 40px;
-  height: 40px;
-  padding: 0 10px;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 9px;
   border-radius: var(--lp-radius-full, 999px);
   border: none;
   background: var(--lp-accent);
   color: var(--lp-on-accent);
   font-family: var(--lp-font-mono);
-  font-size: .7rem;
+  font-size: .62rem;
   font-weight: var(--lp-weight-bold);
   cursor: pointer;
   display: flex;
