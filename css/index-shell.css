@@ -1658,7 +1658,28 @@
       .home-sec-head__title { font-size: 1.1rem; }
       .home-welcome { display: none; }
       .resumen-hero { padding: 14px 14px 16px; gap: 10px; margin-bottom: 16px; }
-      .home-help { display: none; }
+      .home-help {
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 10px 12px;
+        font-size: 0.7rem;
+      }
+      .home-help__question {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+      .home-help__text {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
+      .home-help__sep { display: none; }
+      .home-help__link { margin-left: 0; flex: 0 0 auto; white-space: nowrap; }
+      .home-help__tagline { display: none; }
       .tile {
         display: grid;
         grid-template-columns: 36px 1fr;
