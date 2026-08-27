@@ -201,6 +201,16 @@ repo y se desincroniza en silencio del validador de progreso).
 Cada engine tiene su `*-shell.css` cuando la familia comparte layout; los de una
 sola página usan `exercise-enhanced.css`.
 
+**`formatLabel` icon-only rompe el modal "Progreso del módulo" (fix 2026-08-27):**
+`renderCatBar()` (`exercise-ui.js`) siempre fija `title`/`aria-label` al label completo del chip,
+pero el texto **visible** lo decide `formatLabel`. `phonics-engine.js` es el único motor que pasa
+`formatLabel: (k, cat) => cat.icon` (solo ícono, sin texto, para ahorrar espacio con 4+ categorías).
+`readVisualCategories()` en `progress-store.js` leía ese texto visible para las filas del modal de
+detalle — con el chip solo-ícono, la fila salía con el emoji y sin nombre. Fix: si el texto visible
+no trae ninguna letra (`/\p{L}/u`), usa `btn.title` como fallback (`progress-store.js:1120`). Si se
+agrega un motor nuevo con `formatLabel` icon-only, este fallback ya lo cubre — pero si el label real
+llega a incluir dígitos o símbolos sin letras (poco probable), revisar esa regex.
+
 ### manifest.mjs — el contrato de scoreKeys
 
 `js/engines/manifest.mjs` declara, por engine, qué sufijos de clave de progreso
@@ -229,6 +239,14 @@ This is a GPU-compositor race in `backface-visibility` under frame pressure, not
 once (verified by sampling every animation frame's computed `display`), so it cannot glitch this way
 regardless of browser or device load. **Do not reintroduce `rotateY`/`backface-visibility`/`perspective`
 for card flips in this codebase — reach for the squeeze pattern instead.**
+
+**Fixed 2026-08-27 in `irregular-verbs.html` / `phrasal-verbs.html`:** their `.battle-card` (Battle
+mode, hand-authored, not via `flashcard-engine.js`) still used the old `rotateY`/`backface-visibility`
+CSS in an inline `<style>` block, predating this rule — Battle showed the card mirrored/upside-down
+for a frame. Migrated both to the squeeze pattern and switched their `battleClaim()` from
+`classList.add('flipped')` to `squeezeToggle()`. **When auditing for this bug, grep inline `<style>`
+blocks in `exercises/*.html` too, not just the shared CSS files** — a hand-authored Battle card is
+invisible to a search scoped to `components.css`/`flashcard-shell.css`.
 
 ## Mi Progreso — Learning paths
 
