@@ -352,6 +352,21 @@ h1 {
   background: var(--lp-bg-paper);
   border-bottom: 1px solid var(--lp-border-subtle);
 }
+/* overflow-x:auto (no "hidden"): con 6-7 modos (irregular-verbs,
+   phrasal-verbs) `flex:1 1 0` + `min-width:0` en cada pill (abajo) los
+   obligaba a encogerse por debajo del ancho de su propio texto — quedaban
+   amontonados e ilegibles en vez de desbordar con scroll. Quitar
+   `min-width:0` restaura el mínimo de contenido (min-content) que da flexbox
+   por defecto, así que con pocos modos siguen repartiéndose el ancho normal
+   (les sobra espacio, nunca llegan a su min-content) y con muchos el bar
+   desborda y scrollea en vez de aplastarse. Bug reportado 2026-08-24. */
+/* radius-md (10px) + padding 3px, no radius-lg (14px) + padding 2px: con el
+   pill activo pegado a 3.5px del borde, el radio de 14px del contenedor le
+   comía la esquina redondeada al indicador (`.ex-mode-indicator`) — se veía
+   como una medialuna en vez de un óvalo completo (bug reportado 2026-08-24).
+   overflow-x:auto (scroll con 6-7 modos) recorta cualquier cosa que no entre
+   en esa curva, así que hace falta más aire entre el borde del contenedor y
+   el primer pill. */
 .ex-header__modes .pill-bar {
   position: relative;
   isolation: isolate;
@@ -360,12 +375,16 @@ h1 {
   margin: 0;
   box-shadow: none;
   border: 1.5px solid var(--lp-border);
-  border-radius: var(--lp-radius-lg);
+  border-radius: var(--lp-radius-md);
   background: var(--lp-bg-paper);
-  padding: 2px;
+  padding: 4px;
   gap: 1px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.ex-header__modes .pill-bar::-webkit-scrollbar { display: none; }
 .ex-mode-indicator {
   position: absolute;
   top: 0;
@@ -391,11 +410,11 @@ h1 {
   position: relative;
   z-index: 1;
   flex: 1 1 0;
-  min-width: 0;
   min-height: unset;
   padding: 3px 8px;
   font-size: .65rem;
   text-align: center;
+  white-space: nowrap;
   background: transparent !important;
   border: 1.5px solid transparent !important;
   box-shadow: none !important;
@@ -806,12 +825,6 @@ body:not(.shell-ready) .scroll-body:has(.ex-bottom-nav:not([hidden])) {
   .header { padding: 0; margin-bottom: 6px; }
   h1 { margin-bottom: 4px; }
   .ex-header__modes .pill-bar { margin-bottom: 0; }
-  .ex-header__modes :is(.pill-btn, .lp-pill) {
-    flex: 1 1 0;
-    min-height: 44px;
-    padding: 8px 6px;
-    font-size: clamp(0.62rem, 2.6vw, 0.7rem);
-  }
   /* Legacy headers not homologated via exercise-shell */
   .header:not(.ex-control-panel) :is(.pill-btn, .lp-pill) {
     font-size: 0.52rem;

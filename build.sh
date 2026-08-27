@@ -44,6 +44,11 @@ fi
 # ─── Minificar CSS ──────────────────────────────────────────────────────────────
 # Regenera *.min.css desde el fuente legible antes de cada commit, así el
 # minificado nunca queda desactualizado. Ver scripts/minify-css.sh.
+# NOTA: esto sigue siendo necesario para los ~194 exercises/*.html y
+# guides/*.html, que cargan estos .min.js/.min.css directamente (no pasan
+# por el bundler). El dashboard (index.html) es distinto: CI Build lo
+# bundlea automáticamente vía `npm run build` (Vite) — ver main.js y
+# vite.config.js — así que NO hace falta correr nada manual para ese.
 
 echo "🎨 Minificando CSS..."
 scripts/minify-css.sh

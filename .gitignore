@@ -16,10 +16,8 @@ playwright-report/
 
 # Node
 node_modules/
-package.json
 npm-debug.log*
 
 # Scripts de un solo uso (auditorías, QA temporal)
 scripts/tmp/
-
-vite.config.js
+dist/

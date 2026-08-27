@@ -106,8 +106,11 @@ export function initIrregularVerbs({ verbs, scoreKeyPrefix }) {
     document.getElementById('fcBase').textContent = v.base;
     document.getElementById('fcIpa').textContent = v.ipa || '';
     document.getElementById('fcBackBase').textContent = v.base;
+    document.getElementById('fcBackIpa').textContent = v.ipa || '';
     document.getElementById('fcBackPast').textContent = v.past;
+    document.getElementById('fcBackPastIpa').textContent = v.pastIpa || '';
     document.getElementById('fcBackPP').textContent = v.pp;
+    document.getElementById('fcBackPPIpa').textContent = v.ppIpa || '';
     document.getElementById('fcBackEs').textContent = v.es;
     document.getElementById('fcCounter').textContent = `${cardIdx + 1} / ${deck.length}`;
     updProgress(cardIdx + 1, deck.length);

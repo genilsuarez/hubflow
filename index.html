@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="js/lp-input-zoom.min.js" defer></script>
   <title>HubFlow — Ejercicios interactivos de inglés gratis</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23B8860B'/%3E%3Cpath d='M9 8h14v16H9z' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M12 12h8M12 16h6' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
   <link rel="manifest" href="manifest.json">
@@ -30,20 +29,6 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"></noscript>
-  <!-- Precarga del grafo de módulos del dashboard (evita cascada de round-trips) -->
-  <link rel="modulepreload" href="./data/catalog.js">
-  <link rel="modulepreload" href="./js/nav-sections.js">
-  <link rel="modulepreload" href="./js/progress-store.js">
-  <link rel="modulepreload" href="./js/lp-auth-setup.js">
-  <link rel="modulepreload" href="./js/lp-supabase.js">
-  <link rel="modulepreload" href="./js/vendor/supabase-js.min.js">
-  <link rel="modulepreload" href="./js/sync-engine.js">
-  <link rel="modulepreload" href="./js/dashboard-shelves.js">
-  <link rel="modulepreload" href="./js/dashboard-hero.js">
-  <link rel="modulepreload" href="./js/dashboard-stats.js">
-  <link rel="modulepreload" href="./js/dashboard-filters.js">
-  <link rel="modulepreload" href="./js/dashboard-nav.js">
-  <link rel="modulepreload" href="./js/level-status.js">
   <meta name="theme-color" content="#fcfbf9" id="metaThemeColor">
   <meta name="color-scheme" content="light" id="metaColorScheme">
   <script>
@@ -58,20 +43,9 @@
       }
     })();
   </script>
-  <script src="js/lp-theme.min.js"></script>
-  <script src="js/lp-platform-urls.min.js" defer></script>
-  <script src="js/lp-nav-icons.min.js" defer></script>
-  <script src="js/lp-analytics.min.js" defer></script>
-  <script src="js/lp-cookie-consent.min.js" defer></script>
-  <script src="js/lp-nav-helpers.min.js" defer></script>
-  <script src="js/lp-guest-reset.min.js" defer></script>
-  <script src="js/lp-login.min.js" defer></script>
-  <script src="js/lp-login-nudge.min.js" defer></script>
-  <script src="js/lp-placement-banner.min.js" defer></script>
-  <script src="js/lp-about-content.min.js" defer></script>
-  <script src="js/lp-about.min.js" defer></script>
-  <script src="js/lp-settings.min.js" defer></script>
-  <script src="js/lp-dev-tools.min.js" defer></script>
+  <script src="js/lp-theme.js"></script>
+  <link rel="stylesheet" href="/main.css">
+  <script type="module" src="/main.js"></script>
   <script>var navigationMode=localStorage.getItem('lp-navigation-mode');document.documentElement.dataset.navigationMode=navigationMode==='floating'?'floating':'sidebar'</script>
   <script>
     // Dev utility: ?reset=full clears all HubFlow progress in the real browser
@@ -98,9 +72,10 @@
     // (NAV-SYNC) si divergen. 'resumen' debe seguir primero — el filtro es `> 0`.
     (function() {
       var vs = ['resumen','rutas','mi-progreso','all','vocab','grammar','pronunciation','analysis','guides'];
+      var h = location.hash.slice(1);
       var p = new URLSearchParams(location.search).get('section');
       var s = sessionStorage.getItem('hf-back-section');
-      var target = p || s;
+      var target = h || p || s;
       if (target && vs.indexOf(target) > 0) {
         document.documentElement.dataset.initSection = target;
       }
@@ -135,16 +110,6 @@
     }, 4000);
   </script>
   <noscript><style>html:not([data-app-ready]) .content { opacity: 1 !important; transform: none !important; }</style></noscript>
-  <link rel="stylesheet" href="css/base.min.css">
-  <link rel="stylesheet" href="css/buttons.min.css">
-  <link rel="stylesheet" href="css/sidebar.min.css">
-  <link rel="stylesheet" href="css/lp-nav-active.min.css">
-  <link rel="stylesheet" href="css/lp-tinted-surface.min.css">
-  <link rel="stylesheet" href="css/lp-about.min.css">
-  <link rel="stylesheet" href="css/lp-settings.min.css">
-  <link rel="stylesheet" href="css/lp-dev-tools.min.css">
-  <link rel="stylesheet" href="css/lp-cookie-consent.min.css">
-  <link rel="stylesheet" href="css/index-shell.min.css">
 
 </head>
 <body>
@@ -229,9 +194,10 @@
       // script de <head> (validate-content.js falla con NAV-SYNC si divergen).
       (function() {
         var vs = ['resumen','rutas','mi-progreso','all','vocab','grammar','pronunciation','analysis','guides'];
+        var h = location.hash.slice(1);
         var p = new URLSearchParams(location.search).get('section');
         var s = sessionStorage.getItem('hf-back-section');
-        var target = p || s;
+        var target = h || p || s;
         var idx = target ? vs.indexOf(target) : -1;
         var isSecondary = idx > 2;
         var isDesktop = window.innerWidth >= 861;
@@ -517,9 +483,11 @@
                   <circle cx="24" cy="64" r="5.5" fill="var(--lp-accent)" stroke="var(--lp-surface)" stroke-width="2"/>
                 </svg>
               </div>
-              <p class="rutas-progress-card__title">Tu progreso general</p>
               <div class="rutas-progress-card__ring" id="rutasProgressRing"><div><strong id="rutasProgressPct">0%</strong></div></div>
-              <p class="rutas-progress-card__stat" id="rutasProgressStat">0 de 0 estrellas</p>
+              <div class="rutas-progress-card__body">
+                <p class="rutas-progress-card__title">Tu progreso general</p>
+                <p class="rutas-progress-card__stat" id="rutasProgressStat">0 de 0 estrellas</p>
+              </div>
               <button type="button" class="rutas-progress-card__btn" id="rutasProgressBtn">Ver mi progreso</button>
             </div>
             <div class="rutas-tip">
@@ -1231,10 +1199,15 @@ import { initLevelStatus } from './js/level-status.js';
     sub.hidden = true;
   }
 
-  function setActive(target) {
+  function setActive(target, { updateHash = false } = {}) {
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target && (b.classList.contains('sb-item') || b.classList.contains('catalog-chip'))));
     sections.forEach(s => s.classList.toggle('active-section', s.dataset.key === target));
     document.body.dataset.active = target;
+    // Reflect the section in the URL so reload/share/back-forward keep the
+    // user where they were, instead of always resetting to 'resumen'.
+    if (updateHash && location.hash.slice(1) !== target) {
+      history.pushState(null, '', `${location.pathname}${location.search}#${target}`);
+    }
     const isOverview = OVERVIEW_SECTIONS.has(target);
     const isSecondaryTopbar = !isOverview;
     nav.syncTopbarNavButtons(isSecondaryTopbar);
@@ -1259,7 +1232,7 @@ import { initLevelStatus } from './js/level-status.js';
   navButtons.forEach(b => {
     if (!b.dataset.target) return;
     b.addEventListener('click', () => {
-      setActive(b.dataset.target);
+      setActive(b.dataset.target, { updateHash: true });
       nav.setNavigationDrawerOpen(false);
     });
   });
@@ -1293,9 +1266,10 @@ import { initLevelStatus } from './js/level-status.js';
     sessionStorage.setItem('hf-history-back', '1');
   }, true);
 
+  const hashSection = location.hash.slice(1);
   const paramSection = new URLSearchParams(location.search).get('section');
   const storedSection = sessionStorage.getItem('hf-back-section');
-  const initSection = paramSection || storedSection;
+  const initSection = hashSection || paramSection || storedSection;
   if (storedSection) sessionStorage.removeItem('hf-back-section');
 
   // Al volver de un ejercicio, mostrar ya el progreso local (data-app-ready).
@@ -1311,6 +1285,15 @@ import { initLevelStatus } from './js/level-status.js';
   // revelar .content ahora evita el hueco entre HTML estático (solo encabezados)
   // y el módulo JS terminando de poblar las tarjetas.
   document.documentElement.setAttribute('data-app-ready', '1');
+
+  // Atrás/adelante del navegador navega entre secciones del dashboard
+  // (mismo patrón que DeskFlow) en vez de salir de la página. setActive()
+  // ya actualiza el hash en los clicks (arriba); acá solo respondemos al
+  // cambio que el navegador ya hizo.
+  window.addEventListener('popstate', () => {
+    const target = location.hash.slice(1);
+    setActive(VALID_SECTIONS.has(target) ? target : 'resumen');
+  });
 
   // Handle bfcache restore (history.back from exercise)
   window.addEventListener('pageshow', function(e) {

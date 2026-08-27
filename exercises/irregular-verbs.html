@@ -35,10 +35,50 @@
   .verb-front .fc-term { font-size: 1.8rem; color: var(--lp-cat-amber); }
   .fc-ipa { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--muted); letter-spacing: .02em; margin-top: 2px; min-height: 1.1em; }
   .fc-back { background: var(--lp-accent-soft); border-color: var(--lp-cat-amber); }
-  .verb-forms { display: flex; flex-direction: column; gap: 6px; align-items: center; }
-  .verb-forms .vf-row { display: flex; gap: 8px; align-items: baseline; }
-  .verb-forms .vf-label { font-size: .6rem; font-weight: 700; color: var(--lp-muted); text-transform: uppercase; width: 70px; text-align: right; }
-  .verb-forms .vf-val { font-family: var(--lp-font-display); font-size: 1.1rem; font-weight: 600; color: var(--lp-ink); }
+
+  /* Cadena Base → Past → P. Part.: la línea vertical + los puntos a la
+     izquierda de cada fila (::before) refuerzan visualmente que son 3 pasos
+     de la MISMA conjugación, no 3 datos sueltos — el color pasa de neutro
+     (base, ya se ve grande en el frente) a ámbar (past/p.part., lo nuevo que
+     esta tarjeta enseña). La traducción no es un paso más: va aparte, como
+     chip, después de la cadena. */
+  .verb-forms { display: flex; flex-direction: column; gap: 2px; position: relative; padding-left: 8px; }
+  .verb-forms::before {
+    content: ''; position: absolute; left: 8px; top: 11px; bottom: 11px; width: 1.5px;
+    background: linear-gradient(to bottom, var(--lp-border-strong), var(--lp-cat-amber));
+  }
+  .verb-forms .vf-row { display: grid; grid-template-columns: 78px 1fr; align-items: center; gap: 10px; padding: 4px 0 4px 16px; position: relative; }
+  /* El punto/chip de Base usaba --lp-border (#E7E3DC, casi blanco): contra el
+     fondo claro de .fc-back se veía "apagado"/difuminado en vez de neutro.
+     --lp-muted da contraste real sin competir con el ámbar de past/p.part. */
+  .verb-forms .vf-row::before {
+    content: ''; position: absolute; left: -1px; top: 50%; translate: -50% -50%;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--lp-muted);
+    box-shadow: 0 0 0 3px var(--lp-surface);
+  }
+  .verb-forms .vf-row--past::before, .verb-forms .vf-row--pp::before { background: var(--lp-cat-amber); }
+  .verb-forms .vf-label {
+    font-size: .58rem; font-weight: 800; letter-spacing: .03em; color: var(--lp-ink-soft); text-transform: uppercase;
+    text-align: center; padding: 3px 6px; border-radius: var(--lp-radius-full, 999px);
+    background: var(--lp-surface); border: 1px solid var(--lp-border-strong);
+  }
+  .verb-forms .vf-row--past .vf-label, .verb-forms .vf-row--pp .vf-label {
+    color: var(--lp-cat-amber); background: color-mix(in srgb, var(--lp-cat-amber) 14%, var(--lp-bg-paper));
+    border-color: color-mix(in srgb, var(--lp-cat-amber) 40%, var(--lp-border));
+  }
+  .verb-forms .vf-val { font-family: var(--lp-font-display); font-size: 1.15rem; font-weight: 700; color: var(--lp-ink); }
+  .verb-forms .vf-row--base .vf-val { font-weight: 500; color: var(--lp-muted); }
+  .verb-forms .vf-val-group { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+  .verb-forms .vf-ipa { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--lp-muted); }
+
+  .vf-translation {
+    display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 6px 16px;
+    border-radius: var(--lp-radius-full, 999px);
+    background: color-mix(in srgb, var(--lp-cat-amber) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--lp-cat-amber) 22%, transparent);
+  }
+  .vf-translation .vf-flag { font-size: 1rem; line-height: 1; }
+  .vf-translation .vf-val { font-family: var(--lp-font-display); font-style: italic; font-size: 1rem; font-weight: 600; color: var(--lp-ink); }
 
   /* Quiz styles */
   .quiz-card { width: 100%; max-width: 720px; background: var(--lp-surface); border: 1.5px solid var(--lp-border); border-radius: var(--lp-radius-lg); padding: 18px; text-align: center; box-shadow: var(--lp-shadow-sm); }
@@ -198,11 +238,11 @@
           </div>
           <div class="fc-face fc-back">
             <div class="verb-forms">
-              <div class="vf-row"><span class="vf-label">Base</span><span class="vf-val" id="fcBackBase"></span></div>
-              <div class="vf-row"><span class="vf-label">Past</span><span class="vf-val" id="fcBackPast"></span></div>
-              <div class="vf-row"><span class="vf-label">P. Part.</span><span class="vf-val" id="fcBackPP"></span></div>
-              <div class="vf-row"><span class="vf-label">🇪🇸</span><span class="vf-val" id="fcBackEs"></span></div>
+              <div class="vf-row vf-row--base"><span class="vf-label">Base</span><span class="vf-val-group"><span class="vf-val" id="fcBackBase"></span><span class="vf-ipa" id="fcBackIpa"></span></span></div>
+              <div class="vf-row vf-row--past"><span class="vf-label">Past</span><span class="vf-val-group"><span class="vf-val" id="fcBackPast"></span><span class="vf-ipa" id="fcBackPastIpa"></span></span></div>
+              <div class="vf-row vf-row--pp"><span class="vf-label">P. Part.</span><span class="vf-val-group"><span class="vf-val" id="fcBackPP"></span><span class="vf-ipa" id="fcBackPPIpa"></span></span></div>
             </div>
+            <div class="vf-translation"><span class="vf-flag">🇪🇸</span><span class="vf-val" id="fcBackEs"></span></div>
           </div>
         </div>
       </div>

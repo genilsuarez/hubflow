@@ -1808,20 +1808,24 @@
     .rutas-toolbar__right { display: flex; align-items: center; gap: 8px; }
     .rutas-sort {
       position: relative; display: flex; align-items: center; gap: 6px;
-      padding: 0 30px 0 12px; height: 31px;
+      padding: 0 12px; height: 31px;
       background: var(--lp-surface); border: 1.5px solid var(--lp-border);
       border-radius: var(--lp-radius-md); box-shadow: var(--lp-shadow-xs);
     }
     .rutas-sort__label { font-size: .72rem; font-weight: var(--lp-weight-semibold); color: var(--lp-muted); white-space: nowrap; }
+    /* flex:1 + padding-right propio (en vez de reservar el espacio de la
+       flecha con padding en .rutas-sort) para que el <select> cubra también
+       la zona donde se ve el chevron — si no, ese hueco cae fuera de su
+       área clicable y el chevron (pointer-events:none) no abre nada. */
     .rutas-sort__select {
-      appearance: none; border: none; background: none; padding: 0;
+      appearance: none; border: none; background: none; padding: 0 20px 0 0;
       font: inherit; font-size: .72rem; font-weight: var(--lp-weight-bold);
-      color: var(--lp-ink); cursor: pointer;
+      color: var(--lp-ink); cursor: pointer; flex: 1; min-width: 0;
     }
     .rutas-sort__select:focus { outline: none; }
     .rutas-sort:focus-within { border-color: var(--lp-accent); }
     .rutas-sort__chev {
-      position: absolute; right: 10px; width: 13px; height: 13px;
+      position: absolute; right: 12px; width: 13px; height: 13px;
       color: var(--lp-muted); pointer-events: none;
     }
     .rutas-view {
@@ -1857,6 +1861,7 @@
     }
     .rutas-progress-card__art svg { display: block; width: 100%; height: 76px; }
     .rutas-progress-card__title { margin: 0; font-size: .76rem; font-weight: var(--lp-weight-bold); color: var(--lp-ink); }
+    .rutas-progress-card__body { display: contents; }
     .rutas-progress-card__ring {
       width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center;
       background: conic-gradient(var(--lp-accent) calc(var(--progress, 0) * 1%), color-mix(in srgb, var(--lp-accent) 14%, var(--lp-border)) 0);
@@ -2410,10 +2415,11 @@
         width: 100%; min-width: 0;
       }
       .rutas-stagebar::-webkit-scrollbar { display: none; }
-      /* Segunda fila: el select ocupa el hueco y expandir/colapsar (hermano
-         de la barra, no del grupo) queda al final de esa misma fila. */
-      .rutas-toolbar__right { flex: 1; min-width: 0; }
-      .rutas-sort { flex: 1; min-width: 0; }
+      /* Segunda fila: el select queda a su ancho natural (estirarlo a todo
+         el hueco dejaba un vacío enorme entre el valor y la flecha) y
+         expandir/colapsar (hermano de la barra, no del grupo) queda al
+         final de esa misma fila vía justify-content:space-between. */
+      .rutas-toolbar__right { flex: 0 1 auto; }
       /* Densidad lista/tarjetas: en una sola columna las dos vistas dirían lo
          mismo, así que el toggle no se muestra. La vista de tarjetas tampoco
          aplica acá (su CSS vive en un min-width: 640px), de modo que una
@@ -2425,12 +2431,20 @@
       /* La columna lateral va al final del scroll en mobile, así que se
          compacta: mismo contenido, menos aire (anillo, gaps y paddings). */
       .rutas-aside { grid-template-columns: 1fr; gap: 9px; }
-      .rutas-progress-card { padding: 9px 14px 11px; gap: 6px; }
+      .rutas-progress-card {
+        flex-direction: row; align-items: center; text-align: left;
+        padding: 10px 12px; gap: 10px;
+      }
       .rutas-progress-card__art { display: none; }
-      .rutas-progress-card__ring { width: 58px; height: 58px; }
-      .rutas-progress-card__ring > div { width: 46px; height: 46px; }
-      .rutas-progress-card__ring strong { font-size: .82rem; }
-      .rutas-progress-card__btn { padding: 7px 12px; }
+      .rutas-progress-card__ring { width: 44px; height: 44px; flex-shrink: 0; }
+      .rutas-progress-card__ring > div { width: 34px; height: 34px; }
+      .rutas-progress-card__ring strong { font-size: .64rem; }
+      .rutas-progress-card__body { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+      .rutas-progress-card__title { font-size: .7rem; }
+      .rutas-progress-card__btn {
+        width: auto; flex-shrink: 0; padding: 7px 12px;
+        font-size: .7rem; white-space: nowrap;
+      }
       .rutas-tip { padding: 10px 12px; }
       .rutas-tip__head { margin-bottom: 3px; }
       .rutas-tip__text { line-height: 1.42; }

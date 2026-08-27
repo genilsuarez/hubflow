@@ -578,9 +578,20 @@ function setupModeTabIndicator() {
       const positionIndicator = () => {
         const barRect = pillBar.getBoundingClientRect();
         const btnRect = active.getBoundingClientRect();
+        // Clamp contra el borde redondeado del contenedor: con bars de
+        // muchos modos (irregular-verbs, phrasal-verbs) scrollIntoView no
+        // siempre deja el padding-right completo visible (queda corto por
+        // 1-2px de redondeo), así que el pill del extremo terminaba pegado
+        // al borde y la curva del contenedor le tapaba la esquina — bug
+        // reportado 2026-08-24. El clamp asegura el mismo aire mínimo que
+        // el padding del bar sin depender de la precisión del scroll.
+        const inset = 3;
+        const rawX = btnRect.left - barRect.left;
+        const maxX = Math.max(barRect.width - btnRect.width - inset, inset);
+        const x = Math.min(Math.max(rawX, inset), maxX);
         indicator.style.width = `${btnRect.width}px`;
         indicator.style.height = `${btnRect.height}px`;
-        indicator.style.transform = `translate(${btnRect.left - barRect.left}px, ${btnRect.top - barRect.top}px)`;
+        indicator.style.transform = `translate(${x}px, ${btnRect.top - barRect.top}px)`;
         indicator.classList.add('is-ready');
       };
 
