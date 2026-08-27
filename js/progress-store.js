@@ -1110,12 +1110,21 @@ function readVisualModeOrder() {
    tienen clase e id a la vez siguen contando cada chip una sola vez. */
 const SECTION_PILL_SELECTOR = '#catBar [data-cat], #levelBar [data-level], .cat-bar [data-cat]';
 
-/** Orden + etiqueta visual de los chips de sección de la página. */
+/** Orden + etiqueta visual de los chips de sección de la página.
+ *  El texto visible del chip manda (incluye ícono + nivel en varios motores).
+ *  Si ese texto no trae ninguna letra — phonics-engine es el único que deja
+ *  el chip solo con el ícono (`formatLabel: (k, cat) => cat.icon`) para
+ *  ahorrar espacio — se cae al `title`, que `renderCatBar()` (exercise-ui.js)
+ *  siempre fija al label completo (`cat.label || k`); sin este fallback el
+ *  modal de progreso mostraba esas filas con ícono y sin texto. */
 function readVisualCategories() {
-  return [...document.querySelectorAll(SECTION_PILL_SELECTOR)].map((btn) => ({
-    key: btn.dataset.cat ?? btn.dataset.level,
-    label: pillLabelText(btn),
-  }));
+  return [...document.querySelectorAll(SECTION_PILL_SELECTOR)].map((btn) => {
+    const text = pillLabelText(btn);
+    return {
+      key: btn.dataset.cat ?? btn.dataset.level,
+      label: /\p{L}/u.test(text) ? text : (btn.title || text),
+    };
+  });
 }
 
 function humanizeCategoryKey(key) {
