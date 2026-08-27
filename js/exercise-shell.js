@@ -583,12 +583,18 @@ function setupModeTabIndicator() {
         // siempre deja el padding-right completo visible (queda corto por
         // 1-2px de redondeo), así que el pill del extremo terminaba pegado
         // al borde y la curva del contenedor le tapaba la esquina — bug
-        // reportado 2026-08-24. El clamp asegura el mismo aire mínimo que
-        // el padding del bar sin depender de la precisión del scroll.
-        const inset = 3;
-        const rawX = btnRect.left - barRect.left;
-        const maxX = Math.max(barRect.width - btnRect.width - inset, inset);
-        const x = Math.min(Math.max(rawX, inset), maxX);
+        // reportado 2026-08-24. El clamp trabaja en coordenadas de viewport
+        // (left/right reales de barRect, border incluido) y al final resta
+        // barLeft + borderW para volver a la coordenada local del transform:
+        // `left:0` en un elemento absolute arranca en el padding-box del
+        // contenedor (adentro del border), mientras que barRect.left es el
+        // border-box — mezclarlos sin restar el border desalinea el clamp.
+        const gap = 3;
+        const borderW = (barRect.width - pillBar.clientWidth) / 2;
+        const minLeft = barRect.left + gap;
+        const maxLeft = barRect.right - gap - btnRect.width;
+        const clampedLeft = Math.min(Math.max(btnRect.left, minLeft), Math.max(maxLeft, minLeft));
+        const x = clampedLeft - barRect.left - borderW;
         indicator.style.width = `${btnRect.width}px`;
         indicator.style.height = `${btnRect.height}px`;
         indicator.style.transform = `translate(${x}px, ${btnRect.top - barRect.top}px)`;

@@ -317,6 +317,27 @@ inventar nada nuevo, solo dejar de bloquearlo.
 Antes de agregar un modo nuevo a un ejercicio con muchos: probarlo a 375px de ancho — si el
 bar tiene 6+ pills, debe scrollear, no aplastarse.
 
+**Corrección 2026-08-24 (misma ronda) — el aro del pill activo se veía cortado en los extremos:**
+`.ex-header__modes .pill-bar` tiene `border-radius` + `border`, y `.ex-mode-indicator` (el fondo
+deslizante) es un `position:absolute` DENTRO de ese contenedor. Bajaron dos cosas:
+- El contenedor pasó de `border-radius-lg` (14px) + `padding:2px` a `radius-md` (10px) +
+  `padding:4px` — con solo 2-3.5px de aire, la curva del contenedor le comía la esquina redondeada
+  al indicador cuando el pill activo era el primero o el último (medialuna en vez de óvalo).
+- `setupModeTabIndicator()` en `js/exercise-shell.js` calculaba `translateX` como
+  `btnRect.left - barRect.left` directo. Bug: `left:0` en un `position:absolute` arranca en el
+  **padding-box** del contenedor (adentro del border), pero `barRect.left` (de
+  `getBoundingClientRect()`) es el **border-box** (el borde exterior) — la resta mezclaba dos
+  orígenes distintos, desplazando el indicador `borderWidth` px de más hacia la derecha SIEMPRE,
+  visible sobre todo en el pill del extremo (donde ya no sobraba margen para absorber el error).
+  Ahora `positionIndicator()` calcula un `gap` mínimo en coordenadas de viewport (`barRect.left/
+  right`), clampea `btnRect.left` contra ese `gap`, y recién al final resta
+  `barRect.left + borderW` (con `borderW` derivado de `barRect.width - pillBar.clientWidth`, no
+  hardcodeado) para volver a la coordenada local del `transform`.
+
+Si se vuelve a tocar `positionIndicator()`: cualquier resta contra `barRect.left` para obtener el
+`translateX` necesita restar también el ancho del borde del `.pill-bar`, o el indicador queda
+corrido hacia la derecha en todos los casos (más notorio en los pills de los extremos).
+
 ### Homologación de opciones de quiz — `.word-opt`/`.word-options` (2026-08-23)
 
 Mismo síntoma que el header: `.word-opt` (opciones de respuesta múltiple, componente compartido
