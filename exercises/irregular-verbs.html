@@ -116,9 +116,17 @@
   .player-score.p1 .p-points { color: var(--lp-cat-blue, #4a9eff); }
   .player-score.p2 .p-points { color: var(--lp-warning, #e85d5d); }
   .vs-badge { font-family: var(--lp-font-display); font-size: .8rem; font-style: italic; color: var(--lp-muted); }
-  .battle-card { max-width: 360px; height: 180px; perspective: 1200px; position: relative; }
-  .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--lp-radius-lg, 12px); transition: transform .55s ease; transform-style: preserve-3d; }
-  .battle-card.flipped .fc-inner { transform: rotateY(180deg); }
+  /* Squeeze + display-swap (NO rotateY/backface-visibility — ver AGENTS.md
+     "Flashcard flip": el flip 3D real muestra la cara contraria espejada un
+     frame en medio de la transición, confirmado en Safari y Chromium. Este
+     card copiaba el rotateY viejo en vez del patrón ya usado en
+     flashcard-shell.css. Bug reportado 2026-08-24: "arise" se veía al revés
+     en Battle. */
+  .battle-card { max-width: 360px; height: 180px; position: relative; }
+  .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--lp-radius-lg, 12px); transition: transform .15s var(--lp-ease); transform-origin: center; }
+  .battle-card.squeeze .fc-inner { transform: scaleX(.02); }
+  .battle-card.flipped .fc-face:not(.fc-back) { display: none; }
+  .battle-card.flipped .fc-face.fc-back { display: flex; }
   .battle-card .fc-face { border-radius: var(--lp-radius-lg, 12px); }
   .battle-card .fc-term { font-size: 1.5rem; }
   .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -315,9 +323,9 @@
           </div>
           <div class="fc-face fc-back">
             <div class="verb-forms">
-              <div class="vf-row"><span class="vf-label">Base</span><span class="vf-val" id="bBackBase"></span></div>
-              <div class="vf-row"><span class="vf-label">Past</span><span class="vf-val" id="bBackPast"></span></div>
-              <div class="vf-row"><span class="vf-label">P. Part.</span><span class="vf-val" id="bBackPP"></span></div>
+              <div class="vf-row vf-row--base"><span class="vf-label">Base</span><span class="vf-val" id="bBackBase"></span></div>
+              <div class="vf-row vf-row--past"><span class="vf-label">Past</span><span class="vf-val" id="bBackPast"></span></div>
+              <div class="vf-row vf-row--pp"><span class="vf-label">P. Part.</span><span class="vf-val" id="bBackPP"></span></div>
             </div>
           </div>
         </div>

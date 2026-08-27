@@ -92,9 +92,13 @@
   .player-score.p1 .p-points { color: var(--lp-cat-blue, #4a9eff); }
   .player-score.p2 .p-points { color: var(--lp-warning, #e85d5d); }
   .vs-badge { font-family: var(--lp-font-display); font-size: .8rem; font-style: italic; color: var(--lp-muted); }
-  .battle-card { max-width: 360px; height: 160px; perspective: 1200px; position: relative; }
-  .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--lp-radius-lg, 12px); transition: transform .55s ease; transform-style: preserve-3d; }
-  .battle-card.flipped .fc-inner { transform: rotateY(180deg); }
+  /* Squeeze + display-swap (NO rotateY/backface-visibility — ver AGENTS.md
+     "Flashcard flip"). Mismo bug/fix que irregular-verbs.html 2026-08-24. */
+  .battle-card { max-width: 360px; height: 160px; position: relative; }
+  .battle-card .fc-inner { position: absolute; inset: 0; border-radius: var(--lp-radius-lg, 12px); transition: transform .15s var(--lp-ease); transform-origin: center; }
+  .battle-card.squeeze .fc-inner { transform: scaleX(.02); }
+  .battle-card.flipped .fc-face:not(.fc-back) { display: none; }
+  .battle-card.flipped .fc-face.fc-back { display: flex; }
   .battle-card .fc-face { border-radius: var(--lp-radius-lg, 12px); }
   .battle-card .fc-term { font-size: 1.3rem; }
   .battle-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }

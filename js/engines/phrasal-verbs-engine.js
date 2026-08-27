@@ -583,7 +583,7 @@ export function initPhrasalVerbs({ categories, scoreKeyPrefix }) {
 
   function battleClaim(player) {
     battle.claimer = player;
-    document.getElementById('battleCard').classList.add('flipped');
+    squeezeToggle(document.getElementById('battleCard'), 'flipped');
     setBattlePhase('judge');
   }
 

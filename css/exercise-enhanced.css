@@ -378,7 +378,7 @@ h1 {
   border-radius: var(--lp-radius-md);
   background: var(--lp-bg-paper);
   padding: 4px;
-  gap: 1px;
+  gap: 6px;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -409,7 +409,16 @@ h1 {
 .ex-header__modes :is(.pill-btn, .lp-pill) {
   position: relative;
   z-index: 1;
-  flex: 1 1 0;
+  /* flex-shrink: 0 (no solo quitar min-width): con 6-7 modos, aun sin
+     min-width:0, el "automatic minimum size" de flexbox seguía dejando que
+     el botón se encogiera algunos px por debajo de su propio texto ("Write"
+     con emoji medía 49px de contenido pero el botón renderizaba a 39px) —
+     el indicador coincide con el ancho REAL del botón, así que el texto se
+     salía de su óvalo y se veía cortado en el borde. flex-basis:auto (en vez
+     de 0) + shrink:0 hace que el ancho de reposo sea el contenido real y
+     nunca se comprima; flex-grow:1 sigue estirando los pills para llenar el
+     ancho cuando sobra espacio (3-4 modos). Bug reportado 2026-08-24. */
+  flex: 1 0 auto;
   min-height: unset;
   padding: 3px 8px;
   font-size: .65rem;
@@ -638,9 +647,6 @@ h1 {
 @media (max-width: 639px) {
   .ex-header__scope { padding: 6px 8px 4px; }
   .ex-header__modes { padding: 4px 6px; }
-  .ex-header__modes :is(.pill-btn, .lp-pill) {
-    flex: 1 1 0;
-  }
   .ex-progress-row { padding: 6px 10px; gap: 3px; }
   .ex-progress-row--session {
     padding: 7px 10px 9px;

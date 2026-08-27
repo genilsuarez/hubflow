@@ -67,7 +67,8 @@
    50% con texto largo lo desbordaba fuera del borde). Misma altura que los
    botones circulares vecinos para quedar alineado con ellos. ─── */
 .ex-bottom-nav__quiz-skip,
-.ex-bottom-nav__quiz-next {
+.ex-bottom-nav__quiz-next,
+.typed-action-btn--check {
   width: auto !important;
   height: var(--ex-bottom-nav-btn-size) !important;
   min-width: calc(var(--ex-bottom-nav-btn-size) * 1.3);
@@ -76,7 +77,12 @@
      esta clase (0,1,0) e impone --lp-navbtn-radius: 50%, que en una píldora
      ancha se dibuja como elipse. */
   border-radius: var(--lp-radius-full) !important;
-  font-size: 0.85rem;
+  /* !important en font-size: irregular-verbs/phrasal-verbs/verb-chunks-engine.js
+     ponen textContent con etiquetas largas ("Check ✓", "Siguiente →", "Ver
+     resultado →") en #checkBtn, y la regla mobile de más abajo
+     (.ex-bottom-nav--answer .typed-action-btn--check) tiene más especificidad
+     y reimpondría --ex-bottom-nav-btn-font-size (~1.17rem), desbordando el botón. */
+  font-size: 0.85rem !important;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;

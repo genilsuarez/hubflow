@@ -338,6 +338,21 @@ Si se vuelve a tocar `positionIndicator()`: cualquier resta contra `barRect.left
 `translateX` necesita restar también el ancho del borde del `.pill-bar`, o el indicador queda
 corrido hacia la derecha en todos los casos (más notorio en los pills de los extremos).
 
+**Corrección 2026-08-24 (ronda 3) — "Write" se veía cortado a la mitad, no solo en los extremos:**
+Con 6-7 modos, cada `.pill-btn` medía `scrollWidth` (contenido real, con emoji+texto) MAYOR que su
+propio `clientWidth` renderizado — el botón se seguía encogiendo por debajo de su texto aun
+después de sacar `min-width: 0` (ronda 1). Motivo: `flex: 1 1 0` deja el `flex-shrink: 1` activo;
+sacar `min-width:0` solo cambia CUÁNTO puede encogerse (el "automatic minimum size" de flexbox lo
+frena en el ancho del contenido para texto `nowrap` en teoría), pero en la práctica seguía
+encogiendo unos px por debajo con 6-7 ítems. Fix real: `flex: 1 0 auto` — `flex-shrink: 0` bloquea
+el encogimiento de raíz (no depende de ninguna heurística de "mínimo automático"), `flex-basis:
+auto` usa el ancho real del contenido como reposo, y `flex-grow: 1` sigue estirando los pills
+cuando sobra espacio (3-4 modos, como antes). Además había un `@media (max-width:639px) { flex:
+1 1 0 }` leftover más abajo en el mismo archivo que revertía este fix en mobile — eliminado (ya
+van tres rondas encontrando código duplicado de una limpieza anterior a esta sesión; si algo de
+`.ex-header__modes` no coincide con lo documentado acá, buscar un SEGUNDO bloque `@media` antes de
+asumir que el fix no se aplicó).
+
 ### Homologación de opciones de quiz — `.word-opt`/`.word-options` (2026-08-23)
 
 Mismo síntoma que el header: `.word-opt` (opciones de respuesta múltiple, componente compartido
