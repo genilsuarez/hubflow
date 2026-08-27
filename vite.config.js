@@ -13,8 +13,8 @@
 import { readdirSync, statSync, mkdirSync, copyFileSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { gatewayRedirectPlugin } from '../scripts/vite-gateway-redirect.mjs';
-import { stripDevSourcemapPlugin } from '../scripts/vite-strip-dev-sourcemap.mjs';
+import { gatewayRedirectPlugin } from './scripts/vite-gateway-redirect.mjs';
+import { stripDevSourcemapPlugin } from './scripts/vite-strip-dev-sourcemap.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
