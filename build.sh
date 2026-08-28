@@ -31,6 +31,15 @@ if ! node scripts/generate-exercise-heads.mjs --check; then
   exit 1
 fi
 
+# Mismo principio que generate-exercise-heads.mjs, pero para el <body> completo
+# de las 59 páginas que usan sentence-quiz-engine.js. Ver
+# scripts/generate-sentence-quiz-bodies.mjs.
+if ! node scripts/generate-sentence-quiz-bodies.mjs --check; then
+  echo "❌ HubFlow — deriva en el <body> de exercises/*.html (sentence-quiz) — correr:"
+  echo "   node scripts/generate-sentence-quiz-bodies.mjs"
+  exit 1
+fi
+
 # ─── Progress-system validation (blocking) ─────────────────────────────────────
 # Invariantes del conteo + deriva de archivos compartidos.
 # docs/progress-counting-system.md

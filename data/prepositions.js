@@ -9,6 +9,11 @@ export const CATEGORIES = {
     label: 'Time',
     icon: '🕐',
     options: ['in', 'on', 'at'],
+    studyCards: [
+      { front: 'in', back: 'periodos largos — meses, años, estaciones, partes del día', detail: 'in 1995 · in summer · in the morning. La trampa: "in the morning" pero "at night" (excepción fija).' },
+      { front: 'on', back: 'días y fechas concretas', detail: 'on Monday · on March 15th · on my birthday. Si se puede señalar un día en el calendario, es "on".' },
+      { front: 'at', back: 'horas exactas y momentos puntuales', detail: 'at 3 o\'clock · at noon · at Christmas (el periodo festivo completo, no el día). En español "en" cubre los tres — el inglés obliga a elegir según qué tan preciso es el momento.' },
+    ],
     items: [
       { sentence: "I was born ___ 1995.", correct: "in", explain: "'In' for years: in 1995, in 2020." },
       { sentence: "The meeting is ___ Monday.", correct: "on", explain: "'On' for days of the week: on Monday, on Friday." },
@@ -26,6 +31,11 @@ export const CATEGORIES = {
     label: 'Place',
     icon: '📍',
     options: ['in', 'on', 'at'],
+    studyCards: [
+      { front: 'in', back: 'dentro de un espacio cerrado — ciudades, países, habitaciones, coches', detail: 'in London · in the car · in a hospital (el edificio, por dentro).' },
+      { front: 'on', back: 'sobre una superficie o en transporte público', detail: 'on the table · on the train · on the second floor. La trampa: "on the bus/train/plane" aunque en español digas "en el autobús".' },
+      { front: 'at', back: 'un punto específico, sin pensar en el interior', detail: 'at the airport · at the door · at university (la institución como punto de referencia, no el edificio).' },
+    ],
     items: [
       { sentence: "She lives ___ London.", correct: "in", explain: "'In' for cities: in London, in Madrid." },
       { sentence: "The book is ___ the table.", correct: "on", explain: "'On' for surfaces: on the table, on the wall." },
@@ -43,6 +53,11 @@ export const CATEGORIES = {
     label: 'Movement',
     icon: '🚶',
     options: ['to', 'into', 'onto', 'towards', 'through'],
+    studyCards: [
+      { front: 'to / into / onto', back: 'destino final · adentro de algo · encima de una superficie', detail: 'go to Paris (destino) · jump into the pool (adentro) · jump onto the table (encima). Todas implican llegar, no solo dirección.' },
+      { front: 'towards', back: 'en dirección a, sin garantía de llegar', detail: 'She ran towards him — se acerca, pero la frase no dice si llegó. Es la única de las cinco que no implica llegada.' },
+      { front: 'through', back: 'atravesar de un lado al otro', detail: 'walk through the park — entra por un lado y sale por el otro. La trampa: "through" cruza, "into" solo entra.' },
+    ],
     items: [
       { sentence: "She walked ___ the door and left.", correct: "through", explain: "'Through' = passing from one side of a space to the other." },
       { sentence: "He jumped ___ the pool.", correct: "into", explain: "'Into' = movement to the inside of something." },
@@ -60,6 +75,10 @@ export const CATEGORIES = {
     label: 'Dependent',
     icon: '🔗',
     options: ['of', 'for', 'about', 'with', 'to', 'in', 'at', 'on'],
+    studyCards: [
+      { front: 'Adjetivo/verbo + preposición fija', back: 'la preposición va pegada a la palabra, no se traduce del español', detail: 'afraid OF · good AT · interested IN · married TO · angry WITH (someone). No hay regla lógica — se memoriza por pares.' },
+      { front: 'La trampa más común', back: 'traducir la preposición española literal', detail: '"interesado EN" → "interested IN" (coincide), pero "responsable DE" → "responsible FOR" (no coincide). Cada par hay que aprenderlo suelto.' },
+    ],
     items: [
       { sentence: "She's afraid ___ spiders.", correct: "of", explain: "'Afraid of' = fixed adjective + preposition." },
       { sentence: "He's responsible ___ the project.", correct: "for", explain: "'Responsible for' = responsable de. Adj + prep fija." },
@@ -77,6 +96,11 @@ export const CATEGORIES = {
     label: 'Duration',
     icon: '⏳',
     options: ['for', 'since', 'during', 'by', 'until'],
+    studyCards: [
+      { front: 'for / since', back: 'duración (cuánto tiempo) vs. punto de partida (desde cuándo)', detail: 'for five years (duración) · since 2020 (desde qué momento). La trampa: en español ambos suenan a "desde/por hace", pero "for" nunca va con una fecha ("for 2020" es incorrecto).' },
+      { front: 'during', back: 'durante un evento o periodo nombrado, no un número', detail: 'during the movie · during the meeting. Va con un sustantivo que nombra el periodo, no con una cantidad ("during three hours" es incorrecto — eso es "for three hours").' },
+      { front: 'by / until', back: 'plazo límite vs. duración continua', detail: 'by Friday = a más tardar el viernes (un solo momento). until Friday = continúa hasta el viernes (toda la duración). "Finish by Friday" ≠ "Wait until Friday".' },
+    ],
     items: [
       { sentence: "I've lived here ___ five years.", correct: "for", explain: "'For' + a length of time: for five years, for two hours." },
       { sentence: "She's been studying ___ 9am.", correct: "since", explain: "'Since' + a starting point in time: since 9am, since Monday." },
