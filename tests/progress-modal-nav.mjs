@@ -12,7 +12,13 @@
  * js/progress-store.js — si esa cambia, este test debe cambiar con ella.
  */
 import { readFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { MODULES, PROGRESS_RULES, MODULE_DEPTH } from '../data/catalog.js';
+
+// mod.exercise son rutas relativas a la raíz de HubFlow. Sin esto el test solo
+// funcionaba lanzado desde esa carpeta (CI) y en el gate local (raíz de Learn)
+// saltaba todos los módulos y pasaba sin comprobar nada.
+process.chdir(fileURLToPath(new URL('..', import.meta.url)));
 
 const KNOWN_MODES = ['quiz', 'match', 'write', 'study', 'challenge', 'timed', 'sort'];
 const ENGINE_FORCED = {
@@ -91,6 +97,8 @@ for (const mod of MODULES) {
     );
   }
 }
+
+if (checked === 0) failures.push('no se comprobó ningún módulo — ¿rutas de mod.exercise rotas?');
 
 if (failures.length) {
   console.error(`\n❌ Navegación del modal de progreso — ${failures.length} fallo(s):\n`);
