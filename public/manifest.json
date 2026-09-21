@@ -4,8 +4,8 @@
   "description": "HubFlow — ejercicios interactivos de inglés gratis, de A1 a C1.",
   "start_url": "/hubflow/",
   "display": "standalone",
-  "background_color": "#fcfbf9",
-  "theme_color": "#fcfbf9",
+  "background_color": "#fafbff",
+  "theme_color": "#fafbff",
   "icons": [
     {
       "src": "./icon-192.png",

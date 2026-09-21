@@ -10,7 +10,7 @@ html {
   background:
     radial-gradient(900px 480px at 50% -8%, rgba(37, 99, 235, .08) 0%, rgba(37, 99, 235, .03) 40%, transparent 64%),
     radial-gradient(620px 460px at 100% 4%, rgba(37, 99, 235, .05) 0%, transparent 58%),
-    linear-gradient(180deg, var(--lp-bg) 0%, #F8F4EE 55%, #F0EBE3 100%);
+    linear-gradient(180deg, var(--lp-bg) 0%, #F4F7FC 55%, #EEF2F9 100%);
   background-attachment: fixed;
   min-height: 100%;
 }

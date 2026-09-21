@@ -72,7 +72,7 @@ body > .top-bar {
   z-index: 10001;
   padding: 12px 16px;
   background: var(--bg, #fff);
-  color: var(--text, #2C2418);
+  color: var(--text, #0F172A);
   font-weight: 700;
   text-decoration: none;
   border: 2px solid var(--blue, #2F6FD8);
