@@ -547,9 +547,37 @@
        montados los dos cuadros" cuando dos banners coinciden). */
     .hero-status-banners { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
+    /* Aviso de examen pendiente: icono en círculo, del mismo tamaño que el
+       anillo del aviso de nivel, para que los dos se lean como pareja. */
+    .level-status-banner--placement { align-items: center; }
+    .level-status-banner--placement .level-status-banner__icon {
+      flex-shrink: 0; width: 40px; height: 40px; display: grid; place-items: center;
+      border-radius: 50%; font-size: 1.15rem; line-height: 1;
+      background: color-mix(in srgb, var(--lp-accent) 12%, var(--lp-surface));
+    }
+
+    /* El layout del hero depende del ancho del contenido, no del viewport: con
+       el sidebar abierto la columna es bastante más angosta que la ventana, y
+       a ~700px de contenido las dos columnas dejaban el saludo y los avisos
+       apretados con el texto partido en cuatro líneas. */
+    [data-key="resumen"] { container: resumen / inline-size; }
+
+    /* Ancho medio: saludo arriba y los avisos lado a lado debajo, cada uno con
+       ancho suficiente para su texto. */
+    @container resumen (min-width: 600px) {
+      .resumen-hero .hero-status-banners { flex-direction: row; flex-wrap: wrap; }
+      .resumen-hero .hero-status-banners > .level-status-banner { flex: 1 1 300px; }
+      .resumen-hero .level-status-banner {
+        align-items: center; gap: 14px; padding: 14px 16px;
+      }
+    }
+
     /* En escritorio va al lado de la hero-card (2ª columna del grid .resumen-hero)
        para tener más impacto visual en vez de una barra angosta debajo. */
-    @media (min-width: 640px) {
+    @container resumen (min-width: 900px) {
+      .resumen-hero .hero-status-banners { flex-direction: column; flex-wrap: nowrap; }
+      .resumen-hero .hero-status-banners > .level-status-banner { flex: 1 1 auto; }
+      .resumen-hero .level-status-banner--placement .level-status-banner__icon { width: 58px; height: 58px; font-size: 1.5rem; }
       .resumen-hero {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
         column-gap: 24px;
@@ -1190,11 +1218,17 @@
     .home-sec-head__link:hover { opacity: .75; }
     .home-sec-head__link:focus-visible { outline: 2px solid var(--lp-accent); outline-offset: 2px; border-radius: var(--lp-radius-sm); }
 
+    /* Cuatro columnas solo con ancho de contenido real para cuatro (container
+       query "resumen", ver el hero): a ~650px de contenido las cuatro dejaban
+       títulos partidos en tres líneas y el chevron montado sobre el texto. */
     .tiles {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-bottom: 12px;
+    }
+    @container resumen (min-width: 900px) {
+      .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     }
     .tile {
       --spine: var(--lp-accent);
