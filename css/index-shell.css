@@ -2317,7 +2317,9 @@
           "cathead  activity"
           "catbody  activity";
         gap: 10px 16px;
-        max-width: 960px;
+        /* Sin tope de 960px: el grid no estaba centrado, así que en pantallas
+           anchas quedaba una franja vacía solo a la derecha. Ocupa el ancho
+           del contenido, igual que el resto de vistas. */
         min-height: 0;
       }
       /* Fila superior — snapshot y Maestría van cada uno a una celda del grid
@@ -2412,6 +2414,16 @@
       .section.active-section[data-key="mi-progreso"] #statsByCefr {
         margin: 0; min-height: 0; height: 100%;
         align-content: start;
+      }
+    }
+
+    /* Con ancho de sobra, dos columnas iguales: desgloses a la izquierda y
+       actividad a la derecha con anchos distintos se leían como un layout
+       descompensado (pedido de simetría, 2026-09). Por debajo de 1200px se
+       mantiene 3fr:2fr: a mitades, los nombres de categoría se cortaban. */
+    @media (min-width: 1200px) {
+      .section.active-section[data-key="mi-progreso"] {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       }
     }
 
