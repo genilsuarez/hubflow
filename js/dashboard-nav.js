@@ -13,6 +13,12 @@ export function initDashboardNav() {
   function upd() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     themeBtns.forEach((button) => {
+      // Fila de Ajustes: interruptor "Modo oscuro" con estado visible; su
+      // etiqueta e icono no cambian (mismo patrón que DeskFlow).
+      if (button.hasAttribute('data-theme-switch')) {
+        button.setAttribute('aria-checked', String(isDark));
+        return;
+      }
       const icon = button.querySelector('.sb-icon');
       const label = button.querySelector('.sb-label');
       if (icon) {
