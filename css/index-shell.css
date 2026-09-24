@@ -562,6 +562,39 @@
        apretados con el texto partido en cuatro líneas. */
     [data-key="resumen"] { container: resumen / inline-size; }
 
+    /* Móvil: cada aviso en una sola franja compacta — anillo/icono, título y
+       texto, y un chevron. La tarjeta entera es el enlace (el ::after del
+       botón la cubre), así que el botón en píldora que ocupaba su propia línea
+       sobra; su texto se conserva para lectores de pantalla (font-size: 0 no
+       lo oculta del árbol de accesibilidad). */
+    @container resumen (max-width: 599px) {
+      .hero-status-banners > .level-status-banner {
+        position: relative; flex-wrap: nowrap; align-items: center;
+        gap: 12px; padding: 10px 12px;
+      }
+      .hero-status-banners .level-status-banner__ring,
+      .hero-status-banners .level-status-banner--placement .level-status-banner__icon {
+        width: 40px; height: 40px;
+      }
+      .hero-status-banners .level-status-banner__title { font-size: 0.88rem; }
+      .hero-status-banners .level-status-banner__text { font-size: 0.74rem; line-height: 1.3; }
+      .hero-status-banners .level-status-banner__btn {
+        position: static; flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+        display: grid; place-items: center; border-radius: 50%;
+        font-size: 0; background: color-mix(in srgb, var(--lp-accent) 14%, var(--lp-surface));
+      }
+      .hero-status-banners .level-status-banner__btn::before {
+        content: '›'; font-size: 1.1rem; font-weight: 700; line-height: 1; color: var(--lp-accent);
+      }
+      .hero-status-banners .level-status-banner__btn::after {
+        content: ''; position: absolute; inset: 0; border-radius: var(--lp-radius-lg);
+      }
+      .hero-status-banners .level-status-banner__btn:focus-visible { outline: none; }
+      .hero-status-banners > .level-status-banner:has(.level-status-banner__btn:focus-visible) {
+        outline: 2px solid var(--lp-accent); outline-offset: 2px;
+      }
+    }
+
     /* Ancho medio: saludo arriba y los avisos lado a lado debajo, cada uno con
        ancho suficiente para su texto. */
     @container resumen (min-width: 600px) {
