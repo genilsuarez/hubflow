@@ -68,6 +68,15 @@
       display: flex; justify-content: center; align-items: center; gap: 10px;
       width: 100%; max-width: 52rem; margin: 0 auto;
     }
+    /* Escritorio: el bloque mide lo que la fila de categorías y el buscador
+       toma ese mismo ancho — antes el buscador llegaba a 52rem mientras los
+       chips terminaban bastante antes, y las dos filas no casaban. Con
+       fit-content el ancho sigue limitado por el disponible, así que en
+       pantallas angostas los chips siguen desplazándose en horizontal. */
+    @media (min-width: 640px) {
+      .catalog-toolbar { width: fit-content; max-width: min(56rem, 100%); }
+      .catalog-toolbar > .catalog-chips { width: auto; max-width: 100%; }
+    }
 
     /* ─── CATEGORY CHIPS (reemplazan las categorías que vivían en el sidebar) ─── */
     .catalog-chips {
