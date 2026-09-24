@@ -29,8 +29,13 @@
       position: absolute; right: 44px; top: 50%; transform: translateY(-50%);
       width: 1px; height: 1.25rem; background: var(--lp-border); pointer-events: none;
     }
+    /* Centrado vertical sin transform: un transform convierte a este
+       contenedor en el bloque de referencia de sus hijos position: fixed, y la
+       hoja inferior del filtro (.tagbar en móvil) quedaba encajada en los 37px
+       del botón en vez de ocupar la pantalla. */
     .search-bar .filter-menu {
-      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      position: absolute; right: 0; top: 0; bottom: 0;
+      display: flex; align-items: center;
     }
     .search-bar .filter-toggle {
       width: 37px; height: 37px; border: none; background: transparent; border-radius: 0 var(--lp-score-radius) var(--lp-score-radius) 0;
