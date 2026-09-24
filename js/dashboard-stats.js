@@ -407,6 +407,18 @@ export function initPathsControls({ onOpenProgress } = {}) {
 
   document.getElementById('rutasProgressBtn')?.addEventListener('click', () => onOpenProgress?.());
 
+  // En escritorio la barra de controles queda fija arriba y la columna
+  // lateral se fija justo debajo (ver .rutas-aside en index-shell.css): su
+  // offset depende del alto real de la barra, que cambia con la fuente y el
+  // zoom, así que se mide en vez de escribirlo a mano.
+  const toolbar = document.querySelector('.rutas-toolbar');
+  const layout = document.querySelector('.rutas-layout');
+  if (toolbar && layout && typeof ResizeObserver === 'function') {
+    new ResizeObserver(() => {
+      layout.style.setProperty('--rutas-toolbar-h', `${toolbar.offsetHeight}px`);
+    }).observe(toolbar);
+  }
+
   // El ⋮ vive dentro del <summary>: sin frenar el evento, abrir el menú
   // también abriría/cerraría el acordeón.
   container.addEventListener('click', (e) => {
