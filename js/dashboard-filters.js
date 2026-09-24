@@ -24,6 +24,8 @@ export function initDashboardFilters() {
   const tagBarPanelSkills = document.getElementById('tagBarPanelSkills');
   const filterStatus = document.getElementById('filterStatus');
   const filterStatusClear = document.getElementById('filterStatusClear');
+  const filterSummary = document.getElementById('filterSummary');
+  const filterClearAll = document.getElementById('filterClearAll');
   const activeTags = new Set((new URLSearchParams(location.search).get('tag') || '').split(',').filter(Boolean));
   const LEVEL_COLORS = { a1: '#22c55e', a2: '#eab308', b1: '#f97316', b2: '#ef4444', c1: '#a855f7', c2: '#374151' };
   let activeFilterTab = 'cefr';
@@ -76,6 +78,12 @@ export function initDashboardFilters() {
     filterToggle.classList.toggle('filter-toggle--active', activeTags.size > 0);
     updateFilterTabCounts();
     if (filterStatus) filterStatus.hidden = activeTags.size === 0;
+    if (filterSummary) {
+      filterSummary.textContent = activeTags.size === 0
+        ? 'Sin filtros: se muestran todos los módulos'
+        : activeTags.size === 1 ? '1 filtro activo' : `${activeTags.size} filtros activos`;
+    }
+    if (filterClearAll) filterClearAll.hidden = activeTags.size === 0;
   }
 
   function clearActiveTags() {
@@ -122,6 +130,7 @@ export function initDashboardFilters() {
     filterClose?.addEventListener('click', closeFilterPanel);
     filterBackdrop?.addEventListener('click', closeFilterPanel);
     filterStatusClear?.addEventListener('click', clearActiveTags);
+    filterClearAll?.addEventListener('click', clearActiveTags);
     tagBar.querySelector('.tagbar__tabs')?.addEventListener('click', (e) => {
       const tabBtn = e.target.closest('[data-filter-tab]');
       if (!tabBtn) return;

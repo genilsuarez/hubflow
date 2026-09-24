@@ -245,6 +245,13 @@
                 <div class="tagbar__chips tagbar__chips--skills" id="tagBarSkills"></div>
               </div>
             </div>
+            <!-- Pie: total de filtros (las pestañas solo cuentan la suya) y
+                 limpiar todos sin desmarcar chip por chip — mismo patrón que el
+                 filtro de FluentFlow. js/dashboard-filters.js lo actualiza. -->
+            <div class="tagbar__footer">
+              <span class="tagbar__summary" id="filterSummary" aria-live="polite">Sin filtros: se muestran todos los módulos</span>
+              <button type="button" class="tagbar__clear" id="filterClearAll" hidden>Limpiar filtros</button>
+            </div>
           </div>
           </div>
         </div>
